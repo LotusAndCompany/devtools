@@ -20,9 +20,13 @@ set(QRC_FILES res/default.qrc)
 #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
 set(PROJECT_SOURCES
         src/main.cpp
-        src/mainwindow.cpp
-        include/mainwindow.h
-        src/mainwindow.ui
+        src/gui/mainwindow.cpp
+        include/gui/mainwindow.h
+        src/gui/mainwindow.ui
+        include/application/application_mixin.h
+        src/application/application_mixin.cpp
+        include/gui/gui_application.h
+        src/gui/gui_application.cpp
         ${TS_FILES}
         ${QRC_FILES}
 )
