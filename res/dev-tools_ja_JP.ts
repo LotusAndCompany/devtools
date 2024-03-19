@@ -4,9 +4,11 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/gui/mainwindow.ui" line="14"/>
+        <location filename="../src/gui/mainwindow.ui" line="+14"/>
+        <location/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>仮</translatorcomment>
+        <translation type="unfinished">メインウィンドウ</translation>
     </message>
 </context>
 </TS>

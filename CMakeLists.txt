@@ -12,13 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-set(TS_FILES res/dev-tools_ja_JP.ts)
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
+    #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
+    qt_add_executable(dev-tools
+        MANUAL_FINALIZATION
+        res/default.qrc
 
-set(QRC_FILES res/default.qrc)
-
-# TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
-#       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
-set(PROJECT_SOURCES
         src/main.cpp
         src/gui/mainwindow.cpp
         include/gui/mainwindow.h
@@ -27,27 +27,13 @@ set(PROJECT_SOURCES
         src/application/application_mixin.cpp
         include/gui/gui_application.h
         src/gui/gui_application.cpp
-        ${TS_FILES}
-        ${QRC_FILES}
-)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(dev-tools
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
     )
     qt_add_translations(dev-tools
-        TS_FILES
-        ${TS_FILES}
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET dev-tools APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-
-    #qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+        RESOURCE_PREFIX "i18n"
+        TS_FILES res/dev-tools_ja_JP.ts)
 else()
-    message(WARNING "Qt5 configuration may not work correctly")
+    # Qt5は使わない予定
+    message(FATAL_ERROR "Qt5 configuration is not supported")
 
     if(ANDROID)
         add_library(dev-tools SHARED
@@ -63,6 +49,9 @@ else()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
+
+add_dependencies(dev-tools_lrelease dev-tools_lupdate)
+add_dependencies(dev-tools dev-tools_lrelease)
 
 target_include_directories(dev-tools
     PRIVATE .

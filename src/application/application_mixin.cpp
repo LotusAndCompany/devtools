@@ -1,5 +1,6 @@
 #include "application/application_mixin.h"
 
+#include <QDirIterator>
 #include <QLocale>
 #include <QTranslator>
 
@@ -7,12 +8,11 @@ ApplicationMixin::ApplicationMixin(int argc, char **argv) {}
 
 void ApplicationMixin::setupApplication(QCoreApplication *app)
 {
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "dev-tools_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            app->installTranslator(&translator);
-        }
+    if (translator.load(":i18n/dev-tools_ja_JP.qm")) {
+        qDebug() << "load :i18n/dev-tools_ja_JP.qm" << Qt::endl;
+        app->installTranslator(&translator);
+    } else {
+        qDebug() << "cannot load :i18n/dev-tools_ja_JP.qm" << Qt::endl;
     }
 
     // TODO: 設定ファイル等を読み込む
