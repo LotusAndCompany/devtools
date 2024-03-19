@@ -17,7 +17,7 @@ public:
     ~ApplicationMixin() = default;
 
     virtual void setup() = 0;
-    virtual int exec() = 0;
+    virtual int start() = 0;
 };
 
 #endif // APPLICATION_MIXIN_H

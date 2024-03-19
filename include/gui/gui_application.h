@@ -18,7 +18,7 @@ public:
     virtual ~GuiApplication() = default;
 
     void setup() override;
-    int exec() override;
+    int start() override;
 
 // Platform specific
 #ifdef Q_OS_MACOS

@@ -22,7 +22,7 @@ void GuiApplication::setup()
     setupApplication(this);
 }
 
-int GuiApplication::exec()
+int GuiApplication::start()
 {
     installEventFilter(this);
 

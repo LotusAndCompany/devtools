@@ -4,5 +4,5 @@ int main(int argc, char *argv[])
 {
     GuiApplication app(argc, argv);
 
-    return app.exec();
+    return app.start();
 }
