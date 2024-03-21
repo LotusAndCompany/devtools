@@ -19,14 +19,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         res/default.qrc
 
-        src/main.cpp
-        src/gui/mainwindow.cpp
-        include/gui/mainwindow.h
-        src/gui/mainwindow.ui
-        include/application/application_mixin.h
-        src/application/application_mixin.cpp
-        include/gui/gui_application.h
-        src/gui/gui_application.cpp
+        main/main.cpp
+        gui/mainwindow.cpp
+        gui/mainwindow.h
+        gui/mainwindow.ui
+        application/application_mixin.h
+        application/application_mixin.cpp
+        gui/gui_application.h
+        gui/gui_application.cpp
     )
     qt_add_translations(dev-tools
         RESOURCE_PREFIX "i18n"
@@ -55,7 +55,6 @@ add_dependencies(dev-tools dev-tools_lrelease)
 
 target_include_directories(dev-tools
     PRIVATE .
-    PRIVATE ./include
 )
 
 target_link_libraries(dev-tools

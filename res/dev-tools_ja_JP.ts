@@ -4,7 +4,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/gui/mainwindow.ui" line="+14"/>
+        <location filename="../gui/mainwindow.ui" line="+14"/>
         <location/>
         <source>MainWindow</source>
         <translatorcomment>仮</translatorcomment>
