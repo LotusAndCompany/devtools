@@ -14,6 +14,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    Ui::MainWindow *const ui;
+
 public:
     MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
@@ -23,7 +25,7 @@ public:
     void closeEvent(QCloseEvent *event) override;
 #endif
 
-private:
-    Ui::MainWindow *const ui;
+private slots:
+    void onActionTriggered(QAction *action);
 };
 #endif // MAINWINDOW_H

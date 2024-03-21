@@ -23,9 +23,30 @@
      <height>36</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDevTools">
+    <property name="title">
+     <string>DevTools</string>
+    </property>
+    <addaction name="actionSettings"/>
+    <addaction name="actionAboutDevTools"/>
+   </widget>
+   <addaction name="menuDevTools"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionAboutDevTools">
+   <property name="text">
+    <string>About DevTools</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
+ <slots>
+  <slot>onActionTriggered(QAction*)</slot>
+ </slots>
 </ui>

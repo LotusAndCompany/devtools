@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->menubar, &QMenuBar::triggered, this, &MainWindow::onActionTriggered);
 }
 
 MainWindow::~MainWindow()
@@ -22,3 +24,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     hide();
 }
 #endif
+
+void MainWindow::onActionTriggered(QAction *action)
+{
+    if (action == ui->actionAboutDevTools) {
+        qDebug() << "About DevTools" << Qt::endl;
+    } else if (action == ui->actionSettings) {
+        qDebug() << "Settings" << Qt::endl;
+    }
+}

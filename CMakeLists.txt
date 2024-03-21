@@ -27,6 +27,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         application/application_mixin.cpp
         gui/gui_application.h
         gui/gui_application.cpp
+        gui/menubar/about_devtools_dialog.h
+        gui/menubar/about_devtools_dialog.cpp
+        gui/menubar/about_devtools_dialog.ui
     )
     qt_add_translations(dev-tools
         RESOURCE_PREFIX "i18n"
