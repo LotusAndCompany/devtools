@@ -12,12 +12,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
+# TODO: アイコンを環境で分ける
+if(APPLE)
+    set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
+    set(APP_ICON_MACOS "res/${MACOSX_BUNDLE_ICON_FILE}")
+    set_source_files_properties(${APP_ICON_MACOS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set(APP_ICON ${APP_ICON_MACOS})
+endif()
+
+set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
     #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
     qt_add_executable(dev-tools
         MANUAL_FINALIZATION
         res/default.qrc
+        ${APP_ICON}
 
         main/main.cpp
         gui/mainwindow.cpp
@@ -63,8 +74,6 @@ target_include_directories(dev-tools
 target_link_libraries(dev-tools
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 )
-
-set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
 set_target_properties(dev-tools PROPERTIES
     ${BUNDLE_ID_OPTION}
