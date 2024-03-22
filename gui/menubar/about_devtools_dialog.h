@@ -11,12 +11,11 @@ class AboutDevToolsDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::AboutDevToolsDialog *const ui;
+
 public:
     explicit AboutDevToolsDialog(QWidget *parent = nullptr);
     ~AboutDevToolsDialog();
-
-private:
-    Ui::AboutDevToolsDialog *ui;
 };
 
 #endif // ABOUT_DEVTOOLS_DIALOG_H

@@ -1,5 +1,6 @@
 #include "gui/mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "gui/menubar/about_devtools_dialog.h"
 
 #include <QCloseEvent>
 
@@ -29,6 +30,8 @@ void MainWindow::onActionTriggered(QAction *action)
 {
     if (action == ui->actionAboutDevTools) {
         qDebug() << "About DevTools" << Qt::endl;
+        QDialog *const aboutDialog = new AboutDevToolsDialog(this);
+        aboutDialog->show();
     } else if (action == ui->actionSettings) {
         qDebug() << "Settings" << Qt::endl;
     }
