@@ -9,7 +9,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+10"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
     </message>
     <message>
         <location line="+10"/>
-        <source>2024 Lotus&amp;Company Inc. All rights reserved.</source>
+        <source>2024 © Lotus&amp;Company Inc. All rights reserved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

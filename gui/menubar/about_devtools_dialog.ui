@@ -196,7 +196,7 @@
          <item row="4" column="1">
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>2024 Lotus&amp;Company Inc. All rights reserved.</string>
+            <string>2024 © Lotus&amp;Company Inc. All rights reserved.</string>
            </property>
           </widget>
          </item>
