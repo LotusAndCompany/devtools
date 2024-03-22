@@ -5,11 +5,11 @@
     <name>AboutDevToolsDialog</name>
     <message>
         <location filename="../gui/menubar/about_devtools_dialog.ui" line="+14"/>
-        <source>Dialog</source>
+        <source>About DevTools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+14"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
