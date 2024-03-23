@@ -48,7 +48,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
     qt_add_executable(DevTools
         MANUAL_FINALIZATION
-        res/default.qrc
+        res/application.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
 
