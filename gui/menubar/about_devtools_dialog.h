@@ -15,8 +15,7 @@ class AboutDevToolsDialog : public QDialog
 
 public:
     explicit AboutDevToolsDialog(QWidget *parent = nullptr);
-    ~AboutDevToolsDialog();
-
+    virtual ~AboutDevToolsDialog();
 private slots:
     void onCopyButtonClicked();
 };
