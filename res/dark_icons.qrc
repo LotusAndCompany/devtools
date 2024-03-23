@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file>dark/index.theme</file>
+        <file>dark/material/home.svg</file>
+    </qresource>
+</RCC>

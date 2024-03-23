@@ -49,6 +49,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(DevTools
         MANUAL_FINALIZATION
         res/application.qrc
+        res/light_icons.qrc
+        res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
 

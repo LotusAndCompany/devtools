@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file>light/index.theme</file>
+        <file>light/material/home.svg</file>
+    </qresource>
+</RCC>
