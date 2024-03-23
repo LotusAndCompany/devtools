@@ -28,5 +28,5 @@ AboutDevToolsDialog::~AboutDevToolsDialog()
 void AboutDevToolsDialog::onCopyButtonClicked()
 {
     // TODO: copy to clip board
-    qDebug() << "Copy" << Qt::endl;
+    qDebug() << "Copy";
 }
