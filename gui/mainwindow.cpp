@@ -29,10 +29,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::onActionTriggered(QAction *action)
 {
     if (action == ui->actionAboutDevTools) {
-        qDebug() << "About DevTools" << Qt::endl;
+        qDebug() << "About DevTools";
         QDialog *const aboutDialog = new AboutDevToolsDialog(this);
         aboutDialog->show();
     } else if (action == ui->actionSettings) {
-        qDebug() << "Settings" << Qt::endl;
+        qDebug() << "Settings";
+    }
+}
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        emit colorSchemeChanged();
+        event->accept();
     }
 }

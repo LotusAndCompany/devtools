@@ -20,10 +20,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
 
+private:
+    void changeEvent(QEvent *event) override;
 #ifdef Q_OS_MACOS
     // MacOSの場合は×ボタンの動作を変える
     void closeEvent(QCloseEvent *event) override;
 #endif
+
+signals:
+    void colorSchemeChanged();
 
 private slots:
     void onActionTriggered(QAction *action);

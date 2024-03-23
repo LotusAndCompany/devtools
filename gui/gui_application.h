@@ -20,6 +20,12 @@ public:
     void setup() override;
     int start() override;
 
+private:
+    static void applyColorScheme();
+
+private slots:
+    static void onWindowColorSchemeChanged();
+
 // Platform specific
 #ifdef Q_OS_MACOS
 public:
