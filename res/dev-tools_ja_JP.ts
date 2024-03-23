@@ -19,53 +19,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+76"/>
         <source>Application Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+34"/>
+        <location line="-33"/>
+        <location line="+46"/>
         <source>x.y.z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-27"/>
+        <location line="+10"/>
         <source>Build Environment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>OS Version, Compiler Version</source>
+        <location line="-33"/>
+        <source>OS, Compiler Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-36"/>
         <source>Qt Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+82"/>
         <source>Revision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+13"/>
         <source>0000000000000000000000000000000000000000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-72"/>
         <source>Copyright</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+82"/>
         <source>2024 © Lotus&amp;Company Inc. All rights reserved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+39"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Thirdparty</source>
         <translation type="unfinished"></translation>
     </message>

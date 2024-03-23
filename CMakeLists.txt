@@ -5,14 +5,17 @@ project(DevTools VERSION 0.0.0 LANGUAGES CXX)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# パッケージを探す
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-# TODO: アイコンを環境で分ける
+# アイコンを設定
+# TODO: 環境で分ける
 if(APPLE)
     set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
     set(APP_ICON_MACOS "res/${MACOSX_BUNDLE_ICON_FILE}")
@@ -22,14 +25,32 @@ endif()
 
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
+# gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
+set(APP_INFO_FILE app_info.autogen.cpp)
+# TODO: 環境毎に分ける
+if(APPLE)
+    if(NOT EXISTS ${APP_INFO_FILE})
+        execute_process(
+            COMMAND "touch" ${APP_INFO_FILE}
+        )
+    endif()
+
+    set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
+    file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
+    add_custom_target(generate_app_info
+        COMMAND ${SH_FILE} ${CMAKE_PROJECT_VERSION} "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
+    )
+endif()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    # ビルド対象のファイルを追加する
     # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
     #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
-    # TODO: 動的リンクになっているか確認する
     qt_add_executable(DevTools
         MANUAL_FINALIZATION
         res/default.qrc
         ${APP_ICON}
+        ${APP_INFO_FILE}
 
         main/main.cpp
         gui/mainwindow.cpp
@@ -65,6 +86,7 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+add_dependencies(DevTools generate_app_info)
 add_dependencies(DevTools_lrelease DevTools_lupdate)
 add_dependencies(DevTools DevTools_lrelease)
 
@@ -72,6 +94,8 @@ target_include_directories(DevTools
     PRIVATE .
 )
 
+# ライブラリをリンクする
+# TODO: 動的リンクになっているか確認する
 target_link_libraries(DevTools
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 )
