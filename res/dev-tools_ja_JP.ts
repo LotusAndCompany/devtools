@@ -96,6 +96,24 @@
     </message>
 </context>
 <context>
+    <name>ContentsArea</name>
+    <message>
+        <location filename="../gui/contents_area.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>T</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>H</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../gui/mainwindow.ui" line="+14"/>
@@ -105,18 +123,36 @@
         <translation type="unfinished">メインウィンドウ</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+29"/>
         <source>DevTools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>About DevTools</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Sidemenu</name>
+    <message>
+        <location filename="../gui/sidemenu.ui" line="+26"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Search tools</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

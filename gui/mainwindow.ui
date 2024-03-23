@@ -13,7 +13,22 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="Sidemenu" name="widget_2" native="true"/>
+    </item>
+    <item>
+     <widget class="ContentsArea" name="widget" native="true"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -32,7 +47,6 @@
    </widget>
    <addaction name="menuDevTools"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
@@ -44,6 +58,20 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Sidemenu</class>
+   <extends>QWidget</extends>
+   <header>gui/sidemenu.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ContentsArea</class>
+   <extends>QWidget</extends>
+   <header>gui/contents_area.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <slots>
