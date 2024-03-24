@@ -1,46 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   height="64"
-   viewBox="0 -960 2560 2560"
-   width="64"
-   version="1.1"
-   id="svg1"
-   sodipodi:docname="dev-tools_logo.svg"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs1" />
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="4.9166667"
-     inkscape:cx="81.762712"
-     inkscape:cy="38.135593"
-     inkscape:window-width="1312"
-     inkscape:window-height="758"
-     inkscape:window-x="68"
-     inkscape:window-y="100"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg1"
-     showguides="false" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:106.667;paint-order:stroke fill markers"
-     id="rect1"
-     width="2560"
-     height="2560"
-     x="0"
-     y="-960" />
-  <path
-     d="M 1173.3333,1112 V 381.33333 L 533.33333,10.66667 v 730.66666 z m 213.3334,0 640,-370.66667 V 10.66667 l -640,370.66666 z M 1280,197.33333 1912,-168 1280,-533.33333 648,-168 Z M 426.66667,928 Q 376,898.66667 348,850.66667 320,802.66667 320,744 v -848 q 0,-58.66667 28,-106.66667 28,-48 78.66667,-77.33333 L 1173.3333,-717.3333 Q 1224,-746.6667 1280,-746.6667 q 56,0 106.6667,29.3334 L 2133.3333,-288 q 50.6667,29.33333 78.6667,77.33333 28,48 28,106.66667 v 848 q 0,58.66667 -28,106.66667 -28,48 -78.6667,77.33333 l -746.6666,429.3333 Q 1336,1386.6667 1280,1386.6667 q -56,0 -106.6667,-29.3334 z M 1280,320 Z"
-     id="path1"
-     style="stroke-width:2.66667" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" viewBox="0 -960 2560 2560" xmlns="http://www.w3.org/2000/svg">
+ <rect y="-960" width="2560" height="2560" fill="#fff" style="paint-order:stroke fill markers"/>
+ <path d="m1173.3 1112v-730.67l-640-370.67v730.67zm213.33 0 640-370.67v-730.67l-640 370.67zm-106.67-914.67 632-365.33-632-365.33-632 365.33zm-853.33 730.67q-50.667-29.333-78.667-77.333t-28-106.67v-848q0-58.667 28-106.67t78.667-77.333l746.67-429.33q50.667-29.333 106.67-29.333t106.67 29.333l746.67 429.33q50.667 29.333 78.667 77.333t28 106.67v848q0 58.667-28 106.67t-78.667 77.333l-746.67 429.33q-50.667 29.333-106.67 29.333t-106.67-29.333z" stroke-width="2.6667"/>
 </svg>
