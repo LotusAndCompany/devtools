@@ -36,6 +36,7 @@ void GuiApplication::setup()
         qDebug() << key;
     }
     */
+    // setStyle(QStyleFactory::create("fusion"));
 
     // リソースの確認
     /*
