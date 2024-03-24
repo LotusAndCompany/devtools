@@ -16,36 +16,19 @@
         <translation>DevToolsについて</translation>
     </message>
     <message>
-        <location line="+67"/>
-        <location/>
-        <source>DevTools</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+76"/>
+        <location line="+143"/>
         <location/>
         <source>Application Version</source>
         <translation>バージョン</translation>
     </message>
     <message>
-        <location line="-33"/>
-        <location line="+46"/>
-        <source>x.y.z</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
+        <location line="+23"/>
         <location/>
         <source>Build Environment</source>
         <translation>ビルド環境</translation>
     </message>
     <message>
-        <location line="-33"/>
-        <source>OS, Compiler Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-36"/>
+        <location line="-69"/>
         <location/>
         <source>Qt Version</source>
         <translation>Qtバージョン</translation>
@@ -56,24 +39,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>0000000000000000000000000000000000000000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-72"/>
-        <location/>
-        <source>Copyright</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+82"/>
-        <location/>
         <source>2024 © Lotus&amp;Company Inc. All rights reserved.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+62"/>
         <location/>
         <source>Copy</source>
         <translation>コピー</translation>
@@ -95,22 +65,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Qt 6.6.2: LGPL v3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Material Icons: Apache License Version 2.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Remix Icons: Apache License Version 2.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
+        <location line="+52"/>
         <location/>
         <source>License</source>
         <translation type="unfinished">ライセンス</translation>
@@ -137,26 +92,13 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/mainwindow.ui" line="+14"/>
-        <location/>
-        <source>MainWindow</source>
-        <translatorcomment>仮</translatorcomment>
-        <translation>メインウィンドウ</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <location/>
-        <source>DevTools</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location filename="../gui/mainwindow.ui" line="+67"/>
         <location/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <location/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
@@ -182,7 +124,7 @@
     <message>
         <location filename="../gui/sidemenu_item.cpp" line="+38"/>
         <source>Home</source>
-        <translation type="unfinished">ホーム</translation>
+        <translation>ホーム</translation>
     </message>
     <message>
         <location line="+1"/>

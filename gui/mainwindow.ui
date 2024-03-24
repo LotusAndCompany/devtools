@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string notr="true">DevTools</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -55,7 +55,7 @@
    </property>
    <widget class="QMenu" name="menuDevTools">
     <property name="title">
-     <string>DevTools</string>
+     <string notr="true">DevTools</string>
     </property>
     <addaction name="actionAboutDevTools"/>
     <addaction name="actionSettings"/>
@@ -66,10 +66,16 @@
    <property name="text">
     <string>Settings</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
   </action>
   <action name="actionAboutDevTools">
    <property name="text">
     <string>About DevTools</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
  </widget>

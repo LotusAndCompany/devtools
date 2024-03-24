@@ -88,7 +88,7 @@
             </font>
            </property>
            <property name="text">
-            <string>DevTools</string>
+            <string notr="true">DevTools</string>
            </property>
            <property name="textFormat">
             <enum>Qt::AutoText</enum>
@@ -131,7 +131,7 @@
          <item row="0" column="1">
           <widget class="QLabel" name="appVersion">
            <property name="text">
-            <string>x.y.z</string>
+            <string notr="true">x.y.z</string>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -141,7 +141,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Copyright</string>
+            <string notr="true">Copyright</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -154,7 +154,7 @@
          <item row="2" column="1">
           <widget class="QLabel" name="buildEnv">
            <property name="text">
-            <string>OS, Compiler Version</string>
+            <string notr="true">OS, Compiler Version</string>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -177,7 +177,7 @@
          <item row="3" column="1">
           <widget class="QLabel" name="qtVersion">
            <property name="text">
-            <string>x.y.z</string>
+            <string notr="true">x.y.z</string>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -213,7 +213,7 @@
          <item row="1" column="1">
           <widget class="QLabel" name="revision">
            <property name="text">
-            <string>0000000000000000000000000000000000000000</string>
+            <string notr="true">0000000000000000000000000000000000000000</string>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -223,7 +223,7 @@
          <item row="4" column="1">
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>2024 © Lotus&amp;Company Inc. All rights reserved.</string>
+            <string notr="true">2024 © Lotus&amp;Company Inc. All rights reserved.</string>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -340,21 +340,21 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Qt 6.6.2: LGPL v3</string>
+              <string notr="true">Qt 6.6.2: LGPL v3</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Material Icons: Apache License Version 2.0</string>
+              <string notr="true">Material Icons: Apache License Version 2.0</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>Remix Icons: Apache License Version 2.0</string>
+              <string notr="true">Remix Icons: Apache License Version 2.0</string>
              </property>
             </widget>
            </item>

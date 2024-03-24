@@ -49,6 +49,8 @@ void MainWindow::changeEvent(QEvent *event)
         event->accept();
         break;
     case QEvent::LanguageChange:
+        // NOTE: メニューバーのAboutRoleとPreferencesRoleは翻訳できない
+        //       ApplicationSpecificRoleにすれば翻訳は可能
         ui->retranslateUi(this);
         event->accept();
         break;
