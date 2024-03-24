@@ -19,6 +19,7 @@ public:
     virtual ~SidemenuItem() = default;
 
     // TODO: 良いデザインパターンがあれば書き直す
+    // FIXME: ホーム画面でツール一覧を表示する時にも使うのでここに置くべきではない
     struct UiData
     {
         QIcon icon;

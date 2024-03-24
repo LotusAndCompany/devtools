@@ -43,7 +43,7 @@ if(APPLE)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    # ビルド対象のファイルを追加する
+    # プロジェクトファイル
     # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
     #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
     set(TRANSLATION_FILES res/dev-tools_ja_JP.ts)
