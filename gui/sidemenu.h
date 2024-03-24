@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QButtonGroup;
+class QAbstractButton;
 class SidemenuItem;
 
 namespace Ui {
@@ -30,11 +31,20 @@ public:
         SAMPLE_1,
         SAMPLE_2,
         SAMPLE_3,
+        MAX, // これ以降値を追加しないこと
     };
+    constexpr static const int ItemID_UNDEFINED = static_cast<int>(ItemID::UNDEFINED);
+    constexpr static const int ItemID_MAX = static_cast<int>(ItemID::MAX);
+
+signals:
+    void itemSelected(ItemID id);
 
 private:
     void changeEvent(QEvent *event) override;
     void registerItem(ItemID id);
+
+private slots:
+    void onButtonToggled(int id, bool checked);
 };
 
 #endif // SIDEMENU_H

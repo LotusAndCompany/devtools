@@ -12,6 +12,8 @@ Sidemenu::Sidemenu(QWidget *parent)
 
     buttonGroup->setExclusive(true);
 
+    connect(buttonGroup, &QButtonGroup::idToggled, this, &Sidemenu::onButtonToggled);
+
     SidemenuItem::UiData::initializeIcon();
     SidemenuItem::UiData::initializeText();
 
@@ -53,4 +55,18 @@ void Sidemenu::changeEvent(QEvent *event)
         QWidget::changeEvent(event);
         break;
     }
+}
+
+void Sidemenu::onButtonToggled(int id, bool checked)
+{
+    if (id == ItemID_UNDEFINED) {
+        qWarning() << "This item is not configured";
+        return;
+    }
+    if (id < ItemID_UNDEFINED || ItemID_MAX <= id) {
+        qWarning() << "Invalid button id:" << id;
+        return;
+    }
+    if (checked)
+        emit itemSelected(static_cast<ItemID>(id));
 }

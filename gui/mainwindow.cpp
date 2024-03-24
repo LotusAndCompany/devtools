@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->menubar, &QMenuBar::triggered, this, &MainWindow::onActionTriggered);
+    connect(ui->sidemenu,
+            &Sidemenu::itemSelected,
+            ui->contentsArea,
+            &ContentsArea::onSidemenuItemChanged);
 }
 
 MainWindow::~MainWindow()

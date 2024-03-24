@@ -124,7 +124,7 @@
 <context>
     <name>ContentsArea</name>
     <message>
-        <location filename="../gui/contents_area.ui" line="+22"/>
+        <location filename="../gui/contents_area.ui" line="+25"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
