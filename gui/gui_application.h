@@ -15,7 +15,6 @@ class GuiApplication : public QApplication, public ApplicationMixin
 public:
     GuiApplication(int argc, char **argv);
     GuiApplication() = delete;
-    virtual ~GuiApplication() = default;
 
     inline QString language() { return translator().language(); }
 

@@ -18,7 +18,7 @@ class ContentsArea : public QWidget
 
 public:
     explicit ContentsArea(QWidget *parent = nullptr);
-    virtual ~ContentsArea();
+    ~ContentsArea();
 
 public slots:
     void onSidemenuItemChanged(Sidemenu::ItemID id);

@@ -22,7 +22,7 @@ class Sidemenu : public QWidget
 
 public:
     explicit Sidemenu(QWidget *parent = nullptr);
-    virtual ~Sidemenu();
+    ~Sidemenu();
 
     enum class ItemID {
         UNDEFINED,

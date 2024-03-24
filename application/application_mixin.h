@@ -15,7 +15,6 @@ protected:
 public:
     ApplicationMixin(int argc, char **argv);
     ApplicationMixin() = delete;
-    ~ApplicationMixin() = default;
 
     virtual void setup() = 0;
     virtual int start() = 0;
