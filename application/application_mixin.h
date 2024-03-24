@@ -6,10 +6,11 @@
 
 class ApplicationMixin
 {
-    QTranslator translator;
+    QTranslator _translator;
 
 protected:
     void setupApplication(QCoreApplication *app);
+    inline const QTranslator &translator() const { return _translator; }
 
 public:
     ApplicationMixin(int argc, char **argv);
