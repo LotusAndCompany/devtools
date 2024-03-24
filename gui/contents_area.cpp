@@ -12,3 +12,16 @@ ContentsArea::~ContentsArea()
 {
     delete ui;
 }
+
+void ContentsArea::changeEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        event->accept();
+        break;
+    default:
+        QWidget::changeEvent(event);
+        break;
+    }
+}

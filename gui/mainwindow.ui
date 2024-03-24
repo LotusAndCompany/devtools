@@ -37,10 +37,10 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="Sidemenu" name="widget_2" native="true"/>
+     <widget class="Sidemenu" name="sidemenu" native="true"/>
     </item>
     <item>
-     <widget class="ContentsArea" name="widget" native="true"/>
+     <widget class="ContentsArea" name="contentsArea" native="true"/>
     </item>
    </layout>
   </widget>

@@ -66,7 +66,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../../res/default.qrc">:/logo/dev-tools_logo.svg</pixmap>
+            <pixmap resource="../../res/application.qrc">:/logo/dev-tools_logo.svg</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -320,10 +320,17 @@
             <height>326</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0">
+          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0">
            <property name="spacing">
             <number>-1</number>
            </property>
+           <item>
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>TODO: Grid Layoutにする、リンクを追加する</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QLabel" name="label_6">
              <property name="sizePolicy">
@@ -334,6 +341,20 @@
              </property>
              <property name="text">
               <string>Qt 6.6.2: LGPL v3</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Material Icons: Apache License Version 2.0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Remix Icons: Apache License Version 2.0</string>
              </property>
             </widget>
            </item>
@@ -407,7 +428,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../res/default.qrc"/>
+  <include location="../../res/application.qrc"/>
  </resources>
  <connections>
   <connection>

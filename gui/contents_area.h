@@ -16,6 +16,9 @@ class ContentsArea : public QWidget
 public:
     explicit ContentsArea(QWidget *parent = nullptr);
     virtual ~ContentsArea();
+
+private:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // CONTENTS_AREA_H

@@ -46,6 +46,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # ビルド対象のファイルを追加する
     # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
     #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
+    set(TRANSLATION_FILES res/dev-tools_ja_JP.ts)
     qt_add_executable(DevTools
         MANUAL_FINALIZATION
         res/application.qrc
@@ -53,6 +54,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
+        ${TRANSLATION_FILES}
 
         main/main.cpp
         gui/mainwindow.h gui/mainwindow.cpp gui/mainwindow.ui
@@ -65,7 +67,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"
-        TS_FILES res/dev-tools_ja_JP.ts)
+        TS_FILES ${TRANSLATION_FILES})
 else()
     # Qt5は使わない予定
     message(FATAL_ERROR "Qt5 configuration is not supported")

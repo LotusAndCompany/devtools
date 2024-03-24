@@ -5,23 +5,27 @@
     <name>AboutDevToolsDialog</name>
     <message>
         <location filename="../gui/menubar/about_devtools_dialog.ui" line="+14"/>
+        <location/>
         <source>About DevTools</source>
-        <translation type="unfinished"></translation>
+        <translation>DevToolsについて</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>DevToolsについて</translation>
     </message>
     <message>
         <location line="+67"/>
+        <location/>
         <source>DevTools</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+76"/>
+        <location/>
         <source>Application Version</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location line="-33"/>
@@ -31,8 +35,9 @@
     </message>
     <message>
         <location line="+10"/>
+        <location/>
         <source>Build Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>ビルド環境</translation>
     </message>
     <message>
         <location line="-33"/>
@@ -41,8 +46,9 @@
     </message>
     <message>
         <location line="-36"/>
+        <location/>
         <source>Qt Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Qtバージョン</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -56,23 +62,27 @@
     </message>
     <message>
         <location line="-72"/>
+        <location/>
         <source>Copyright</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+82"/>
+        <location/>
         <source>2024 © Lotus&amp;Company Inc. All rights reserved.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+39"/>
+        <location/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location/>
         <source>Thirdparty</source>
-        <translation type="unfinished"></translation>
+        <translation>サードパーティ</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -80,14 +90,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+25"/>
+        <source>TODO: Grid Layoutにする、リンクを追加する</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Qt 6.6.2: LGPL v3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>License</source>
+        <location line="+7"/>
+        <source>Material Icons: Apache License Version 2.0</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Remix Icons: Apache License Version 2.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <location/>
+        <source>License</source>
+        <translation type="unfinished">ライセンス</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -98,12 +124,7 @@
 <context>
     <name>ContentsArea</name>
     <message>
-        <location filename="../gui/contents_area.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location filename="../gui/contents_area.ui" line="+22"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,40 +141,40 @@
         <location/>
         <source>MainWindow</source>
         <translatorcomment>仮</translatorcomment>
-        <translation type="unfinished">メインウィンドウ</translation>
+        <translation>メインウィンドウ</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+44"/>
+        <location/>
         <source>DevTools</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
+        <location/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location/>
         <source>About DevTools</source>
-        <translation type="unfinished"></translation>
+        <translation>DevToolsについて</translation>
     </message>
 </context>
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="+26"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
+        <location filename="../gui/sidemenu.ui" line="+41"/>
+        <location/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>ホーム</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+19"/>
+        <location/>
         <source>Search tools</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールを探す</translation>
     </message>
 </context>
 </TS>

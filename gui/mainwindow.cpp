@@ -39,8 +39,17 @@ void MainWindow::onActionTriggered(QAction *action)
 
 void MainWindow::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::PaletteChange) {
+    switch (event->type()) {
+    case QEvent::PaletteChange:
         emit colorSchemeChanged();
         event->accept();
+        break;
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        event->accept();
+        break;
+    default:
+        QMainWindow::changeEvent(event);
+        break;
     }
 }
