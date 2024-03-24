@@ -61,6 +61,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
+        gui/sidemenu_item.h gui/sidemenu_item.cpp
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"
