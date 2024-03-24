@@ -59,6 +59,7 @@ void SidemenuItem::configure(Sidemenu::ItemID id)
     this->id = id;
 
     setIcon(UiData::list[id].icon);
+    setIconSize(QSize(20, 20));
     setText(UiData::list[id].text);
 }
 

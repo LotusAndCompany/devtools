@@ -79,7 +79,7 @@
 <context>
     <name>ContentsArea</name>
     <message>
-        <location filename="../gui/contents_area.ui" line="+25"/>
+        <location filename="../gui/contents_area.ui" line="+37"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,13 +107,13 @@
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="+41"/>
+        <location filename="../gui/sidemenu.ui" line="+53"/>
         <location/>
         <source>Home</source>
         <translation>ホーム</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+28"/>
         <location/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
