@@ -21,10 +21,12 @@ public:
     int start() override;
 
 private:
-    static void applyColorScheme();
+    // NOTE: staticにできる
+    void applyColorScheme();
 
 private slots:
-    static void onWindowColorSchemeChanged();
+    // NOTE: staticにできる
+    void onWindowColorSchemeChanged();
 
 // Platform specific
 #ifdef Q_OS_MACOS

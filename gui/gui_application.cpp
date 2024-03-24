@@ -12,7 +12,7 @@ GuiApplication::GuiApplication(int argc, char **argv)
     connect(&window,
             &MainWindow::colorSchemeChanged,
             this,
-            GuiApplication::onWindowColorSchemeChanged);
+            &GuiApplication::onWindowColorSchemeChanged);
 
 #ifdef Q_OS_MACOS
     /*
