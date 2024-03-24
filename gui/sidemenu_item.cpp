@@ -3,6 +3,9 @@
 #include <QMouseEvent>
 #include "gui/gui_application.h"
 
+QString SidemenuItem::UiData::currentLanguage = "";
+QMap<Sidemenu::ItemID, SidemenuItem::UiData> SidemenuItem::UiData::list;
+
 SidemenuItem::SidemenuItem(QWidget *parent)
     : QPushButton(parent)
 {
@@ -16,25 +19,62 @@ SidemenuItem::SidemenuItem(const QIcon &icon, const QString &text, QWidget *pare
 {
     setIcon(icon);
     setText(text);
+    setStyleSheet("text-align:left;");
 }
 
-void SidemenuItem::mouseReleaseEvent(QMouseEvent *e)
+void SidemenuItem::UiData::initializeIcon()
 {
-    // ユーザー操作で選択解除させない
-    if (e->button() == Qt::LeftButton) {
-        setChecked(true);
-        return;
-    }
-    QPushButton::mouseReleaseEvent(e);
+    list[Sidemenu::ItemID::UNDEFINED].icon = QIcon::fromTheme("question_mark");
+    list[Sidemenu::ItemID::HOME].icon = QIcon::fromTheme("home");
+    list[Sidemenu::ItemID::SAMPLE_0].icon = QIcon::fromTheme("counter_0");
+    list[Sidemenu::ItemID::SAMPLE_1].icon = QIcon::fromTheme("counter_1");
+    list[Sidemenu::ItemID::SAMPLE_2].icon = QIcon::fromTheme("counter_2");
+    list[Sidemenu::ItemID::SAMPLE_3].icon = QIcon::fromTheme("counter_3");
 }
 
-// TODO: 翻訳を実装する
+void SidemenuItem::UiData::initializeText()
+{
+    list[Sidemenu::ItemID::UNDEFINED].text = "<Undefined>";
+    list[Sidemenu::ItemID::HOME].text = tr("Home");
+    list[Sidemenu::ItemID::SAMPLE_0].text = tr("Sample 0");
+    list[Sidemenu::ItemID::SAMPLE_1].text = tr("Sample 1");
+    list[Sidemenu::ItemID::SAMPLE_2].text = tr("Sample 2");
+    list[Sidemenu::ItemID::SAMPLE_3].text = tr("Sample 3");
+
+    // WARNING: 型チェックをしないのでGuiApplicationの時以外は呼んではいけない
+    currentLanguage = static_cast<GuiApplication *>(qApp)->language();
+}
+
+bool SidemenuItem::UiData::isListValid()
+{
+    // WARNING: 型チェックをしないのでGuiApplicationの時以外は呼んではいけない
+    return !list.empty() && static_cast<GuiApplication *>(qApp)->language() == currentLanguage;
+}
+
+void SidemenuItem::configure(Sidemenu::ItemID id)
+{
+    if (isConfigured())
+        qWarning() << "This item is already configured. current id:" << static_cast<int>(this->id);
+
+    this->id = id;
+
+    setIcon(UiData::list[id].icon);
+    setText(UiData::list[id].text);
+}
+
 void SidemenuItem::changeEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::LanguageChange:
-        //ui->retranslateUi(this);
-        //setText(GuiApplication::tran);
+        if (isConfigured()) {
+            if (!UiData::isListValid())
+                UiData::initializeText();
+
+            // アイコンは変更しない想定
+            setText(UiData::list[id].text);
+        } else {
+            qWarning() << "SidemenuItem is not configured";
+        }
         event->accept();
         break;
     default:

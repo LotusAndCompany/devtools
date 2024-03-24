@@ -171,10 +171,38 @@
         <translation>ホーム</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <location/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
+    </message>
+</context>
+<context>
+    <name>SidemenuItem</name>
+    <message>
+        <location filename="../gui/sidemenu_item.cpp" line="+38"/>
+        <source>Home</source>
+        <translation type="unfinished">ホーム</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sample 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sample 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sample 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sample 3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
