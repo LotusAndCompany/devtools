@@ -87,6 +87,8 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
+
 add_dependencies(DevTools generate_app_info)
 add_dependencies(DevTools_lrelease DevTools_lupdate)
 add_dependencies(DevTools DevTools_lrelease)
