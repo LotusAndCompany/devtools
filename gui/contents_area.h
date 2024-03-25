@@ -1,18 +1,19 @@
 #ifndef CONTENTS_AREA_H
 #define CONTENTS_AREA_H
 
-#include <QWidget>
+#include <QFrame>
 #include "gui/sidemenu.h"
 
 namespace Ui {
 class ContentsArea;
 }
 
-class ContentsArea : public QWidget
+class ContentsArea : public QFrame
 {
     Q_OBJECT
 
-    Ui::ContentsArea* const ui;
+    Ui::ContentsArea *const ui;
+
     // TODO: コンテンツページ用の基底クラス作る
     QWidget *currentContent = nullptr;
 

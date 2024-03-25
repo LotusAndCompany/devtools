@@ -77,22 +77,9 @@
     </message>
 </context>
 <context>
-    <name>ContentsArea</name>
-    <message>
-        <location filename="../gui/contents_area.ui" line="+37"/>
-        <source>T</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>H</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/mainwindow.ui" line="+67"/>
+        <location filename="../gui/mainwindow.ui" line="+182"/>
         <location/>
         <source>Settings</source>
         <translation>設定</translation>

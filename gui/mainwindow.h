@@ -32,5 +32,7 @@ signals:
 
 private slots:
     void onActionTriggered(QAction *action);
+    void onSidemenuVisibilityButtonClicked();
+    void onWindowAlwaysOnTopButtonToggled(bool checked);
 };
 #endif // MAINWINDOW_H

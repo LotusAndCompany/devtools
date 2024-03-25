@@ -15,6 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
             &Sidemenu::itemSelected,
             ui->contentsArea,
             &ContentsArea::onSidemenuItemChanged);
+    connect(ui->sidemenuVisibilityButton,
+            &QPushButton::clicked,
+            this,
+            &MainWindow::onSidemenuVisibilityButtonClicked);
+    connect(ui->windowAlwaysOnTopButton,
+            &QPushButton::toggled,
+            this,
+            &MainWindow::onWindowAlwaysOnTopButtonToggled);
 }
 
 MainWindow::~MainWindow()
@@ -58,4 +66,23 @@ void MainWindow::changeEvent(QEvent *event)
         QMainWindow::changeEvent(event);
         break;
     }
+}
+
+void MainWindow::onSidemenuVisibilityButtonClicked()
+{
+    qDebug() << "MainWindow::onSidemenuVisibilityButtonClicked()";
+    if (ui->sidemenu->isVisible()) {
+        ui->sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_open"));
+        ui->sidemenu->hide();
+    } else {
+        ui->sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
+        ui->sidemenu->show();
+    }
+}
+
+void MainWindow::onWindowAlwaysOnTopButtonToggled(bool checked)
+{
+    // TODO: Windowsでの挙動は要確認
+    setWindowFlag(Qt::WindowStaysOnTopHint, checked);
+    show();
 }

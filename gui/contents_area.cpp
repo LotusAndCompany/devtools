@@ -4,7 +4,7 @@
 #include <QLabel>
 
 ContentsArea::ContentsArea(QWidget *parent)
-    : QWidget(parent)
+    : QFrame(parent)
     , ui(new Ui::ContentsArea)
 {
     ui->setupUi(this);
