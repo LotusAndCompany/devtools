@@ -1,4 +1,4 @@
-#include "application/application_mixin.h"
+#include "core/application_mixin.h"
 
 #include <QDirIterator>
 #include <QLocale>

@@ -58,12 +58,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         main/main.cpp
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
-        application/application_mixin.h application/application_mixin.cpp
+        core/application_mixin.h core/application_mixin.cpp
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp
+        core/tool.h core/tool.cpp
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"

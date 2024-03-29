@@ -3,7 +3,7 @@
 
 #include <QApplication>
 #include <QtSystemDetection>
-#include "application/application_mixin.h"
+#include "core/application_mixin.h"
 #include "main_window.h"
 
 class GuiApplication : public QApplication, public ApplicationMixin
