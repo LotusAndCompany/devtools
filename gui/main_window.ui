@@ -64,7 +64,7 @@
        <number>6</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="toolbarLayout">
         <property name="leftMargin">
          <number>0</number>
         </property>

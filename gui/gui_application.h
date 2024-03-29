@@ -4,7 +4,7 @@
 #include <QApplication>
 #include <QtSystemDetection>
 #include "application/application_mixin.h"
-#include "mainwindow.h"
+#include "main_window.h"
 
 class GuiApplication : public QApplication, public ApplicationMixin
 {

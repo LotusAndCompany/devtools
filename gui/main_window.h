@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QMainWindow>
 #include <QtSystemDetection>
@@ -35,4 +35,4 @@ private slots:
     void onSidemenuVisibilityButtonClicked();
     void onWindowAlwaysOnTopButtonToggled(bool checked);
 };
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_H

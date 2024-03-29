@@ -57,7 +57,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${TRANSLATION_FILES}
 
         main/main.cpp
-        gui/mainwindow.h gui/mainwindow.cpp gui/mainwindow.ui
+        gui/main_window.h gui/main_window.cpp gui/main_window.ui
         application/application_mixin.h application/application_mixin.cpp
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui

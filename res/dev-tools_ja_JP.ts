@@ -39,10 +39,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>2024 © Lotus&amp;Company Inc. All rights reserved.</source>
-        <translation></translation>
-    </message>
-    <message>
         <location line="+62"/>
         <location/>
         <source>Copy</source>
@@ -79,7 +75,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/mainwindow.ui" line="+182"/>
+        <location filename="../gui/main_window.ui" line="+182"/>
         <location/>
         <source>Settings</source>
         <translation>設定</translation>

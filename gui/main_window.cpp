@@ -1,5 +1,5 @@
-#include "gui/mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "gui/main_window.h"
+#include "./ui_main_window.h"
 #include "gui/menubar/about_devtools_dialog.h"
 
 #include <QCloseEvent>
