@@ -1,10 +1,12 @@
-#include "core/application_mixin.h"
+#include "application_mixin.h"
 
 #include <QDirIterator>
 #include <QLocale>
 #include <QTranslator>
 
-ApplicationMixin::ApplicationMixin(int argc, char **argv) {}
+ApplicationMixin::ApplicationMixin(AppType appType, int argc, char **argv)
+    : appType(appType)
+{}
 
 void ApplicationMixin::setupApplication(QCoreApplication *app)
 {

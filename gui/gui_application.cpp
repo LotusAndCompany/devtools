@@ -1,4 +1,4 @@
-#include "gui/gui_application.h"
+#include "gui_application.h"
 #include <QApplicationStateChangeEvent>
 #include <QDirIterator>
 #include <QIcon>
@@ -7,7 +7,7 @@
 
 GuiApplication::GuiApplication(int argc, char **argv)
     : QApplication(argc, argv)
-    , ApplicationMixin(argc, argv)
+    , ApplicationMixin(AppType::GUI, argc, argv)
 {
     connect(&window,
             &MainWindow::colorSchemeChanged,
