@@ -22,11 +22,11 @@ public:
     ~ContentsArea();
 
 public slots:
-    void onSidemenuItemChanged(Sidemenu::ItemID id);
+    void onSidemenuItemChanged(Sidemenu::ID id);
 
 private:
     void changeEvent(QEvent *event) override;
-    void changeContent(Sidemenu::ItemID id);
+    void changeContent(Sidemenu::ID id);
 };
 
 #endif // CONTENTS_AREA_H

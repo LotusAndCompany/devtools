@@ -9,7 +9,7 @@ ContentsArea::ContentsArea(QWidget *parent)
 {
     ui->setupUi(this);
 
-    changeContent(Sidemenu::ItemID::HOME);
+    changeContent(Sidemenu::ID::HOME);
 }
 
 ContentsArea::~ContentsArea()
@@ -30,12 +30,12 @@ void ContentsArea::changeEvent(QEvent *event)
     }
 }
 
-void ContentsArea::onSidemenuItemChanged(Sidemenu::ItemID id)
+void ContentsArea::onSidemenuItemChanged(Sidemenu::ID id)
 {
     changeContent(id);
 }
 
-void ContentsArea::changeContent(Sidemenu::ItemID id)
+void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent) {
         ui->contentsAreaLayout->removeWidget(currentContent);
@@ -47,9 +47,10 @@ void ContentsArea::changeContent(Sidemenu::ItemID id)
     content->setAlignment(Qt::AlignCenter);
 
     switch (id) {
-    case Sidemenu::ItemID::HOME:
+    case Sidemenu::ID::HOME:
         content->setText("(´･ω･) ﾎｰﾑﾀﾞﾖｰ");
         break;
+    /*
     case Sidemenu::ItemID::SAMPLE_0:
         content->setText("サンプル0");
         break;
@@ -62,7 +63,9 @@ void ContentsArea::changeContent(Sidemenu::ItemID id)
     case Sidemenu::ItemID::SAMPLE_3:
         content->setText("サンプル3");
         break;
+    */
     default:
+        content->setText("Other");
         break;
     }
 

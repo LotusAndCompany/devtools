@@ -2,6 +2,7 @@
 #define SIDEMENU_H
 
 #include <QWidget>
+#include "core/tool/tool_id_fields.h"
 
 class QButtonGroup;
 class QAbstractButton;
@@ -24,24 +25,21 @@ public:
     explicit Sidemenu(QWidget *parent = nullptr);
     ~Sidemenu();
 
-    enum class ItemID {
+    enum class ID {
         UNDEFINED,
         HOME,
-        SAMPLE_0,
-        SAMPLE_1,
-        SAMPLE_2,
-        SAMPLE_3,
-        MAX, // これ以降値を追加しないこと
+        TOOL_ID_FIELDS, // ここに展開する
+        MAX,
     };
-    constexpr static const int ItemID_UNDEFINED = static_cast<int>(ItemID::UNDEFINED);
-    constexpr static const int ItemID_MAX = static_cast<int>(ItemID::MAX);
+    constexpr static const int ID_UNDEFINED = static_cast<int>(ID::UNDEFINED);
+    constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
 
 signals:
-    void itemSelected(ItemID id);
+    void itemSelected(ID id);
 
 private:
     void changeEvent(QEvent *event) override;
-    void registerItem(ItemID id);
+    void registerItem(ID id);
 
 private slots:
     void onButtonToggled(int id, bool checked);

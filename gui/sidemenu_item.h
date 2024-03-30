@@ -11,7 +11,7 @@ class SidemenuItem : public QPushButton
 {
     Q_OBJECT
 
-    Sidemenu::ItemID id = Sidemenu::ItemID::UNDEFINED;
+    Sidemenu::ID id = Sidemenu::ID::UNDEFINED;
 
 public:
     explicit SidemenuItem(QWidget *parent = nullptr);
@@ -19,12 +19,13 @@ public:
 
     // TODO: 良いデザインパターンがあれば書き直す
     // FIXME: ホーム画面でツール一覧を表示する時にも使うのでここに置くべきではない
+    /*
     struct UiData
     {
         QIcon icon;
         QString text;
 
-        static QMap<Sidemenu::ItemID, UiData> list;
+        static QMap<Sidemenu::ID, UiData> list;
         static void initializeIcon();
         static void initializeText();
         static bool isListValid();
@@ -32,12 +33,13 @@ public:
     private:
         static QString currentLanguage;
     };
+    */
 
-    void configure(Sidemenu::ItemID id);
+    void configure(Sidemenu::ID id);
 
 private:
     void changeEvent(QEvent *event) override;
-    inline bool isConfigured() const { return id != Sidemenu::ItemID::UNDEFINED; }
+    inline bool isConfigured() const { return id != Sidemenu::ID::UNDEFINED; }
 };
 
 #endif // SIDEMENU_ITEM_H
