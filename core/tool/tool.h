@@ -2,6 +2,7 @@
 #define TOOL_H
 
 #include <QObject>
+#include "tool_id_fields.h"
 
 // 各ツールの基底クラスにする
 class Tool : public QObject
@@ -11,15 +12,7 @@ class Tool : public QObject
 public:
     enum class ID {
         UNDEFINED,
-        API_TOOL,
-        COMMAND_GENERATION,
-        IMAGE_RESIZE,
-        IMAGE_ROTATION,
-        IMAGE_SPLIT,
-        IMAGE_TRANSPARENT,
-        IMAGE_TRIM,
-        IMAGE_COMBINE,
-        PHRASE_GENERATION,
+        TOOL_ID_FIELDS, // ここに展開する
         // WIP
         MAX,
     };

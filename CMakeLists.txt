@@ -70,6 +70,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/out_of_range_exception.h
         core/exception/invalid_argument_exception.h
         core/exception/invalid_state_exception.h
+        core/tool/tool_id_fields.h
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"
