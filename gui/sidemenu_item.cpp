@@ -1,7 +1,7 @@
 #include "sidemenu_item.h"
 
 #include <QMouseEvent>
-#include "gui/gui_application.h"
+#include "gui_application.h"
 
 QString SidemenuItem::UiData::currentLanguage = "";
 QMap<Sidemenu::ItemID, SidemenuItem::UiData> SidemenuItem::UiData::list;

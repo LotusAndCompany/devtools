@@ -2,7 +2,7 @@
 #define SIDEMENU_ITEM_H
 
 #include <QPushButton>
-#include "gui/sidemenu.h"
+#include "sidemenu.h"
 
 // TODO: ツールの説明文を表示しようとすると機能が足りないのでQWidgetに変える
 //       uiファイルも作る

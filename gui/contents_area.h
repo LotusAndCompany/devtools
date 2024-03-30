@@ -2,7 +2,7 @@
 #define CONTENTS_AREA_H
 
 #include <QFrame>
-#include "gui/sidemenu.h"
+#include "sidemenu.h"
 
 namespace Ui {
 class ContentsArea;
