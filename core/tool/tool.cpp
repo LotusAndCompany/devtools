@@ -1,4 +1,4 @@
-#include "core/tool.h"
+#include "tool.h"
 
 Tool::Tool(Tool::ID id)
     : id(id)
