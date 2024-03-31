@@ -71,6 +71,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/invalid_state_exception.h
         core/tool/tool_id_fields.h
         core/exception/under_development_exception.h
+        gui/gui_tool.h gui/gui_tool.cpp
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"
