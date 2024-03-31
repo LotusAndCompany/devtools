@@ -8,8 +8,8 @@ template<typename T>
 class InvalidArgumentException : public CommonException
 {
 public:
-    explicit InvalidArgumentException() = default;
-    explicit InvalidArgumentException(const InvalidArgumentException &src) = default;
+    InvalidArgumentException() = default;
+    InvalidArgumentException(const InvalidArgumentException &src) = default;
     explicit InvalidArgumentException(const QString &message)
         : CommonException(message)
     {}
@@ -20,9 +20,9 @@ public:
         message = stream.readAll();
     }
 
-    // NOTE: 明示的に実装しなくても良いはず
-    //virtual void raise() const override { throw *this; }
-    QException *clone() const override { return new InvalidArgumentException(*this); }
+protected:
+    // NOTE: protectedにしたい
+    virtual QException *clone() const override { return new InvalidArgumentException(*this); }
 };
 
 #endif // INVALID_ARGUMENT_EXCEPTION_H

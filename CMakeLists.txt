@@ -65,12 +65,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp
         core/tool/tool.h core/tool/tool.cpp
-        core/tool/tool_factory.h core/tool/tool_factory.cpp
-        core/exception/common_exception.h core/exception/common_exception.cpp
+        core/exception/common_exception.h
         core/exception/out_of_range_exception.h
         core/exception/invalid_argument_exception.h
         core/exception/invalid_state_exception.h
         core/tool/tool_id_fields.h
+        core/exception/under_development_exception.h
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"

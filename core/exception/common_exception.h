@@ -2,26 +2,34 @@
 #define COMMON_EXCEPTION_H
 
 #include <QException>
-
-class QTextStream;
+#include <QTextStream>
 
 // メッセージを設定できる例外
 class CommonException : public QException
 {
 public:
-    explicit CommonException() = default;
-    explicit CommonException(const CommonException &src) = default;
-    explicit CommonException(const QString &message);
+    CommonException() = default;
+    CommonException(const CommonException &src) = default;
+    explicit CommonException(const QString &message)
+        : message(message)
+    {}
 
     QString message;
 
-    // NOTE: 明示的に実装しなくても良いはず
-    //virtual void raise() const override { throw *this; }
-    // NOTE: これも明示的に実装しなくても良いかも知れない
-    QException *clone() const override;
+    // NOTE: overrideする必要があるかは微妙だが、念の為
+    inline virtual void raise() const override { throw *this; }
+
+protected:
+    // NOTE: protectedにしたい
+    virtual QException *clone() const override { return new CommonException(*this); }
 };
 
-QTextStream &operator<<(QTextStream &, const CommonException &exception);
+// FIXME: qDebug()やqWarning()に出力できない
+//        Loggerを作り、そこに出力できるようにする
+inline QTextStream &operator<<(QTextStream &stream, const CommonException &exception)
+{
+    return stream << exception.message;
+}
 // NOTE: QDataStreamには出力しなそうなので未実装
 
 #endif // COMMON_EXCEPTION_H

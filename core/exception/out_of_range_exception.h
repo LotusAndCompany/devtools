@@ -8,8 +8,8 @@ template<typename T>
 class OutOfRangeException : public CommonException
 {
 public:
-    explicit OutOfRangeException() = default;
-    explicit OutOfRangeException(const OutOfRangeException &src) = default;
+    OutOfRangeException() = default;
+    OutOfRangeException(const OutOfRangeException &src) = default;
     explicit OutOfRangeException(const QString &message)
         : CommonException(message)
     {}
@@ -26,9 +26,9 @@ public:
         message = stream.readAll();
     }
 
-    // NOTE: 明示的に実装しなくても良いはず
-    //virtual void raise() const override { throw *this; }
-    QException *clone() const override { return new OutOfRangeException(*this); }
+protected:
+    // NOTE: protectedにしたい
+    virtual QException *clone() const override { return new OutOfRangeException(*this); }
 };
 
 #endif // OUT_OF_RANGE_EXCEPTION_H
