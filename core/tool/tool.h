@@ -15,7 +15,7 @@ public:
 
     enum class ID {
         UNDEFINED,
-        TOOL_ID_FIELDS, // ここに展開する
+        TOOL_ID_FIELDS(), // ここに展開する
         // WIP
         MAX,
     };

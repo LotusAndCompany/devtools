@@ -28,7 +28,7 @@ public:
     enum class ID {
         UNDEFINED,
         HOME,
-        TOOL_ID_FIELDS, // ここに展開する
+        TOOL_ID_FIELDS(), // ここに展開する
         MAX,
     };
     constexpr static const int ID_UNDEFINED = static_cast<int>(ID::UNDEFINED);
