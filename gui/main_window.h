@@ -23,7 +23,8 @@ public:
 private:
     void changeEvent(QEvent *event) override;
 #ifdef Q_OS_MACOS
-    // MacOSの場合は×ボタンの動作を変える
+    // NOTE: MacOSの場合は×ボタンが押された時にウィンドウを隠す
+    //       ウィンドウを表示する処理はGuiApplication::event(QEvent *event)で実装
     void closeEvent(QCloseEvent *event) override;
 #endif
 

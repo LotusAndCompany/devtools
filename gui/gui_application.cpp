@@ -59,8 +59,6 @@ void GuiApplication::setup()
 
 int GuiApplication::start()
 {
-    installEventFilter(this);
-
     // TODO: 前回のウィンドウサイズを記憶しておき、そのサイズで表示する (setWindowFlag(), setWindowFlags())
     window.show();
     return QApplication::exec();
@@ -89,19 +87,17 @@ void GuiApplication::onWindowColorSchemeChanged()
 }
 
 #ifdef Q_OS_MACOS
-bool GuiApplication::eventFilter(QObject *o, QEvent *e)
+bool GuiApplication::event(QEvent *event)
 {
-    if (o == this) {
-        switch (e->type()) {
-        case QEvent::ApplicationStateChange:
-            if (applicationState() == Qt::ApplicationActive)
-                window.show();
-            break;
-        default:
-            break;
-        }
+    switch (event->type()) {
+    case QEvent::ApplicationStateChange:
+        QApplication::event(event);
+        if (applicationState() == Qt::ApplicationActive)
+            window.show();
+        return true;
+    default:
+        return QApplication::event(event);
     }
-    return QApplication::eventFilter(o, e);
 }
 
 // NOTE: これでもDockからウィンドウを表示させる事はできるが、アプリケーション起動時にwindow.show()が2回呼ばれるかも?

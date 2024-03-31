@@ -31,8 +31,10 @@ private slots:
 
 // Platform specific
 #ifdef Q_OS_MACOS
-public:
-    bool eventFilter(QObject *o, QEvent *e) override;
+private:
+    // NOTE: MacOSの場合はDockのアイコンがクリックされた時にウィンドウを表示する
+    //       ウィンドウを隠す処理はMainWindow::closeEvent(QCloseEvent *event)で実装
+    bool event(QEvent *) override;
 /*
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
