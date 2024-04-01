@@ -8,7 +8,7 @@ class UnderDevelopmentException : public CommonException
 {
 public:
     UnderDevelopmentException()
-        : CommonException("Under development...")
+        : CommonException("[UnderDevelopmentException] Under development...")
     {}
     UnderDevelopmentException(const UnderDevelopmentException &src) = default;
     explicit UnderDevelopmentException(const QString &message)

@@ -2,7 +2,6 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
-#include "core/exception/under_development_exception.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
