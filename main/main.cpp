@@ -4,6 +4,7 @@
 #include <iostream>
 __attribute__((destructor)) void destructor(void)
 {
+    // NOTE: これが実行される時点でメニューバーが解放されていないらしく、メモリリークとして検出されるらしい
     // FIXME: QtCreatorから実行するとファイルへの出力が失敗するるらしい
     const int status = system("leaks -q DevTools &> ./leaks.log");
     if (status) {
