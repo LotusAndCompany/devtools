@@ -14,7 +14,7 @@ class ContentsArea : public QFrame
 
     Ui::ContentsArea *const ui;
 
-    // TODO: コンテンツページ用の基底クラス作る
+    // TODO: GuiTool* に置き換える
     QWidget *currentContent = nullptr;
 
 public:

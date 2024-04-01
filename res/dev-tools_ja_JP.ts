@@ -106,7 +106,50 @@
     <name>SidemenuItem</name>
     <message>
         <source>Home</source>
-        <translation>ホーム</translation>
+        <translation type="vanished">ホーム</translation>
+    </message>
+</context>
+<context>
+    <name>Tool</name>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="+32"/>
+        <source>Sample 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This is Sample 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sample 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This is Sample 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sample 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This is Sample 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sample 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This is Sample 3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

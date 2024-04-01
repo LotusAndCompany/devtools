@@ -2,6 +2,7 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
+#include "core/exception/under_development_exception.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -39,8 +40,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent) {
         ui->contentsAreaLayout->removeWidget(currentContent);
-        // TODO: ここで削除してはいけない場合の処理を追加する
+        // NOTE: 解放する
         delete currentContent;
+        currentContent = nullptr;
     }
 
     QLabel *const content = new QLabel(this);
@@ -65,8 +67,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     */
     default:
-        content->setText("Other");
-        break;
+        // NOTE: signal/slotでは例外を投げるべきではない
+        content->setText("Under development...");
     }
 
     currentContent = content;
