@@ -14,7 +14,7 @@ class ContentsArea : public QFrame
 
     Ui::ContentsArea *const ui;
 
-    // TODO: GuiTool* に置き換える
+    // NOTE: ホーム画面はGuiTool型ではないはずなので、QWidgetにしておく
     QWidget *currentContent = nullptr;
 
 public:
@@ -27,6 +27,52 @@ public slots:
 private:
     void changeEvent(QEvent *event) override;
     void changeContent(Sidemenu::ID id);
+};
+
+// NOTE: 各GUIツールの実装サンプル
+// TODO: 要らなくなったら消す
+#include <QHBoxLayout>
+#include <QLabel>
+#include "core/tool/tool.h"
+#include "gui_tool.h"
+
+class SampleTool : public Tool
+{
+    Q_OBJECT
+
+public:
+    // NOTE: 本来はTool::ID, stringIDは渡されない
+    explicit SampleTool(Tool::ID id, const QString &stringID, QObject *parent = nullptr)
+        : Tool(id, stringID, parent)
+    {}
+    ~SampleTool() { qDebug() << "~SampleTool()"; }
+};
+
+class SampleGuiTool : public GuiTool
+{
+    Q_OBJECT
+
+public:
+    // NOTE: 本来はTool::ID, stringIDは渡さずToolクラスのコンストラクタ内で設定する
+    explicit SampleGuiTool(Tool::ID id, const QString &stringID, QWidget *parent = nullptr)
+        : GuiTool(parent)
+        , tool(new SampleTool(id, stringID, this))
+    {
+        QHBoxLayout *const hLayout = new QHBoxLayout(this);
+
+        QLabel *const label = new QLabel(tool->translatable().name, this);
+        label->setAlignment(Qt::AlignCenter);
+        hLayout->addWidget(label);
+        setLayout(hLayout);
+    }
+    ~SampleGuiTool() { qDebug() << "~SampleGuiTool()"; }
+
+private:
+    // NOTE: 基底クラス型のポインタを持っていても不便なので派生クラス型のポインタを持つ
+    Tool *const tool;
+
+    // NOTE: 本来は翻訳の適用等の適切な処理をする
+    void changeEvent(QEvent *event) override { return QWidget::changeEvent(event); }
 };
 
 #endif // CONTENTS_AREA_H

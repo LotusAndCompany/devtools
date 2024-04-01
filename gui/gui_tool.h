@@ -10,10 +10,10 @@ class GuiTool : public QWidget
 public:
     GuiTool() = delete;
     GuiTool(const GuiTool &) = delete;
+    virtual ~GuiTool() = default;
 
 protected:
     explicit GuiTool(QWidget *parent = nullptr);
-    virtual ~GuiTool() = default;
 
     // NOTE: handle QEvent::LanguageChange to update translation
     virtual void changeEvent(QEvent *event) override = 0;

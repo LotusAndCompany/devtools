@@ -12,6 +12,7 @@ class Tool : public QObject
 public:
     Tool() = delete;
     Tool(const Tool &) = delete;
+    virtual ~Tool() = default;
 
     enum class ID {
         MIN,
@@ -36,8 +37,8 @@ public:
 
 protected:
     // NOTE: idによっては例外が発生する
+    //       idもstringIDも一意性は保証されていない
     explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
-    virtual ~Tool() = default;
 
     static const QString invalidToolIDReason;
 

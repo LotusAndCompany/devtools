@@ -44,30 +44,30 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         currentContent = nullptr;
     }
 
-    QLabel *const content = new QLabel(this);
-    content->setAlignment(Qt::AlignCenter);
+    QWidget *content;
 
     switch (id) {
     case Sidemenu::ID::HOME:
-        content->setText("(´･ω･) ﾎｰﾑﾀﾞﾖｰ");
+        content = new QLabel("(´･ω･) ﾎｰﾑﾀﾞﾖｰ", this);
+        static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
         break;
-    /*
-    case Sidemenu::ItemID::SAMPLE_0:
-        content->setText("サンプル0");
+    case Sidemenu::ID::SAMPLE_0:
+        content = new SampleGuiTool(Tool::ID::SAMPLE_0, "sample-0", this);
         break;
-    case Sidemenu::ItemID::SAMPLE_1:
-        content->setText("サンプル1");
+    case Sidemenu::ID::SAMPLE_1:
+        content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
         break;
-    case Sidemenu::ItemID::SAMPLE_2:
-        content->setText("サンプル2");
+    case Sidemenu::ID::SAMPLE_2:
+        content = new SampleGuiTool(Tool::ID::SAMPLE_2, "sample-2", this);
         break;
-    case Sidemenu::ItemID::SAMPLE_3:
-        content->setText("サンプル3");
+    case Sidemenu::ID::SAMPLE_3:
+        content = new SampleGuiTool(Tool::ID::SAMPLE_3, "sample-3", this);
         break;
-    */
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
-        content->setText("Under development...");
+        content = new QLabel("Under development...", this);
+        static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
+        break;
     }
 
     currentContent = content;
