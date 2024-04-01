@@ -16,28 +16,27 @@ public:
     enum class ID {
         UNDEFINED,
         TOOL_ID_FIELDS(), // ここに展開する
-        // WIP
         MAX,
     };
-    const ID id;
     const QString stringID;
 
     // 翻訳が必要な情報
-    struct Info
+    struct Translatable
     {
         QString name;
+        // TODO: ツールの簡単な説明として表示できるようにする
         QString description;
     };
 
     constexpr static const int ID_UNDEFINED = static_cast<int>(ID::UNDEFINED);
     constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
 
-    static const Info info(ID id) noexcept(false);
-    const QString &toolName() const { return _info.name; }
-    const QString &toolDesctiption() const { return _info.description; }
+    static const Translatable translatable(ID id) noexcept(false);
+    const Translatable &translatable() const noexcept(false) { return _translatable; }
 
 protected:
-    explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr);
+    // NOTE: idによっては例外が発生する
+    explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
     virtual ~Tool() = default;
 
     static const QString invalidToolIDReason;
@@ -47,7 +46,8 @@ protected:
     virtual bool event(QEvent *event) override;
 
 private:
-    Info _info;
+    const ID id;
+    Translatable _translatable;
 };
 
 #endif // TOOL_H

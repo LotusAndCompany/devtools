@@ -10,7 +10,7 @@ Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
     : QObject(parent)
     , id(id)
     , stringID(stringID)
-    , _info(info(id))
+    , _translatable(translatable(id))
 {}
 
 void Tool::validateID(ID id)
@@ -21,11 +21,11 @@ void Tool::validateID(ID id)
         throw InvalidArgumentException(intID, invalidToolIDReason);
 }
 
-const Tool::Info Tool::info(ID id)
+const Tool::Translatable Tool::translatable(ID id)
 {
     validateID(id);
 
-    // TODO: return Info{tr("Tool Name"), tr("Tool description")}
+    // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
     switch (id) {
     default:
         throw UnderDevelopmentException();
@@ -37,7 +37,7 @@ bool Tool::event(QEvent *event)
     switch (event->type()) {
     case QEvent::LanguageChange:
         QObject::event(event);
-        _info = info(id);
+        _translatable = translatable(id);
         return true;
     default:
         return QObject::event(event);
