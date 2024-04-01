@@ -7,8 +7,6 @@
 // NOTE: 整数型を(比較的)安全に最小値=UNDEFINED, 最大値=MAXかつ値が連続であるenum型に変換する
 //       要件を満たさないenum型に対しては特殊化が必要
 
-// WARNING: UNDEFINED, MAXへの変換も許可する
-
 // 静的なキャスト
 // 不正な値が与えられたらコンパイルエラーになる
 template<typename enum_type, typename int_type = int>
@@ -17,7 +15,7 @@ struct static_enum_cast
     explicit static_enum_cast(int_type value)
         : result(static_cast<enum_type>(value))
     {
-        static_assert(MIN_VALUE <= value && value <= MAX_VALUE, "invalid cast");
+        static_assert(MIN_VALUE < value && value < MAX_VALUE, "invalid cast");
     }
     static_enum_cast(const static_enum_cast &) = delete;
 
@@ -48,7 +46,7 @@ struct enum_cast
     // NOTE: 暗黙変換を許可
     operator enum_type() const noexcept(false)
     {
-        if (MIN_VALUE <= value && value <= MAX_VALUE) {
+        if (MIN_VALUE < value && value < MAX_VALUE) {
             return static_cast<enum_type>(value);
         } else {
             // NOTE: valueがコンパイル時定数の場合にはコンパイルエラーになるのが望ましいが、恐らく無理
