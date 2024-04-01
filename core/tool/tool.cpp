@@ -4,7 +4,7 @@
 #include "core/exception/under_development_exception.h"
 
 const QString Tool::invalidToolIDReason
-    = QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_UNDEFINED).arg(Tool::ID_MAX);
+    = QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
 
 Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
     : QObject(parent)
@@ -17,7 +17,7 @@ void Tool::validateID(ID id)
 {
     const int intID = static_cast<int>(id);
 
-    if (intID <= ID_UNDEFINED || ID_MAX <= intID)
+    if (intID <= ID_MIN || ID_MAX <= intID)
         throw InvalidArgumentException(intID, invalidToolIDReason);
 }
 

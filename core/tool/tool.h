@@ -14,7 +14,7 @@ public:
     Tool(const Tool &) = delete;
 
     enum class ID {
-        UNDEFINED,
+        MIN,
         TOOL_ID_FIELDS(), // ここに展開する
         MAX,
     };
@@ -28,7 +28,7 @@ public:
         QString description;
     };
 
-    constexpr static const int ID_UNDEFINED = static_cast<int>(ID::UNDEFINED);
+    constexpr static const int ID_MIN = static_cast<int>(ID::MIN);
     constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
 
     static const Translatable translatable(ID id) noexcept(false);

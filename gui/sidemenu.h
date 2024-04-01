@@ -22,12 +22,12 @@ public:
     ~Sidemenu();
 
     enum class ID {
-        UNDEFINED,
+        MIN,
         TOOL_ID_FIELDS(), // ここに展開する
         HOME,             // ↑がTool::IDと一致した方が都合が良い
         MAX,
     };
-    constexpr static const int ID_UNDEFINED = static_cast<int>(ID::UNDEFINED);
+    constexpr static const int ID_MIN = static_cast<int>(ID::MIN);
     constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
 
     static void validateID(ID id) noexcept(false);

@@ -5,7 +5,7 @@
 #include <QTranslator>
 
 enum class AppType {
-    UNDEFINED,
+    MIN,
     GUI,
     CLI,
     MAX,

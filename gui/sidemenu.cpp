@@ -8,10 +8,10 @@
 #include "sidemenu_item.h"
 
 const QString Sidemenu::invalidSidemenuIDReason = QString("Sidemenu::ID must be in range (%1, %2)")
-                                                      .arg(Sidemenu::ID_UNDEFINED)
+                                                      .arg(Sidemenu::ID_MIN)
                                                       .arg(Sidemenu::ID_MAX);
 const QMap<Sidemenu::ID, QString> Sidemenu::iconNames = {
-    {ID::UNDEFINED, "question_mark"}, // NOTE: unused
+    {ID::MIN, "question_mark"}, // NOTE: unused
     {ID::HOME, "home"},               // NOTE: unused, Home icon is set in sidemenu.ui
     // NOTE: sample items
     {ID::SAMPLE_0, "counter_0"},
@@ -52,7 +52,7 @@ void Sidemenu::validateID(Sidemenu::ID id)
 {
     const int intID = static_cast<int>(id);
 
-    if (intID <= ID_UNDEFINED || ID_MAX <= intID)
+    if (intID <= ID_MIN || ID_MAX <= intID)
         throw InvalidArgumentException(intID, invalidSidemenuIDReason);
 }
 

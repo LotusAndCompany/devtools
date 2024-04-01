@@ -4,7 +4,7 @@
 #include "exception/invalid_argument_exception.h"
 #include <type_traits>
 
-// NOTE: 整数型を(比較的)安全に最小値=UNDEFINED, 最大値=MAXかつ値が連続であるenum型に変換する
+// NOTE: 整数型を(比較的)安全に最小値=MIN, 最大値=MAXかつ値が連続であるenum型に変換する
 //       要件を満たさないenum型に対しては特殊化が必要
 
 // 静的なキャスト
@@ -27,7 +27,7 @@ private:
     static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
     static_assert(std::is_integral<int_type>::value, "int_type is not integer");
 
-    static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::UNDEFINED);
+    static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::MIN);
     static constexpr const int_type MAX_VALUE = static_cast<int_type>(enum_type::MAX);
 
     const enum_type result;
@@ -62,7 +62,7 @@ private:
     static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
     static_assert(std::is_integral<int_type>::value, "int_type is not integer");
 
-    static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::UNDEFINED);
+    static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::MIN);
     static constexpr const int_type MAX_VALUE = static_cast<int_type>(enum_type::MAX);
 
     const int_type value;
