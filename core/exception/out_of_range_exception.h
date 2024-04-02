@@ -1,7 +1,6 @@
 #ifndef OUT_OF_RANGE_EXCEPTION_H
 #define OUT_OF_RANGE_EXCEPTION_H
 
-#include <QTextStream>
 #include "common_exception.h"
 
 template<typename T>
@@ -15,15 +14,14 @@ public:
     {}
     OutOfRangeException(const T &actual, const T &max)
     {
-        QTextStream stream;
-        stream << "[OutOfRangeException] actual:" << actual << ", max:" << max;
-        message = stream.readAll();
+        message = QString("[OutOfRangeException] actual: %1, max: %2").arg(actual).arg(max);
     }
     OutOfRangeException(const T &actual, const T &min, const T &max)
     {
-        QTextStream stream;
-        stream << "[OutOfRangeException] actual:" << actual << "min:" << min << ", max:" << max;
-        message = stream.readAll();
+        message = QString("[OutOfRangeException] actual: %1, min: %2, max: %3")
+                      .arg(actual)
+                      .arg(min)
+                      .arg(max);
     }
 
 protected:

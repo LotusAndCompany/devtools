@@ -1,7 +1,6 @@
 #ifndef INVALID_STATE_EXCEPTION_H
 #define INVALID_STATE_EXCEPTION_H
 
-#include <QTextStream>
 #include "common_exception.h"
 
 class InvalidStateException : public CommonException
@@ -14,9 +13,7 @@ public:
     {}
     InvalidStateException(const QString &actual, const QString &expected)
     {
-        QTextStream stream;
-        stream << "[InvalidStateException] actual:" << actual << ", expected:" << expected;
-        message = stream.readAll();
+        message = QString("[InvalidStateException] actual: %1, expected: %2").arg(actual, expected);
     }
 
 protected:

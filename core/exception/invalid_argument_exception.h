@@ -1,7 +1,6 @@
 #ifndef INVALID_ARGUMENT_EXCEPTION_H
 #define INVALID_ARGUMENT_EXCEPTION_H
 
-#include <QTextStream>
 #include "common_exception.h"
 
 template<typename T>
@@ -15,9 +14,7 @@ public:
     {}
     InvalidArgumentException(const T &given, const QString &reason)
     {
-        QTextStream stream;
-        stream << "[InvalidArgumentException] given:" << given << ", reason:" << reason;
-        message = stream.readAll();
+        message = QString("[InvalidArgumentException] given: %1, reason: %2").arg(given).arg(reason);
     }
 
 protected:
