@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # パッケージを探す
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
 
 # アイコンを設定
 # TODO: 環境で分ける
@@ -94,6 +94,21 @@ else()
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+endif()
+
+# TODO: tests/CMakeLists.txtに書きたい
+#add_subdirectory(tests)
+# Tests
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+    macro(guiless_test test_name test_code)
+        add_executable(${test_name} ${test_code})
+        add_test(NAME ${test_name} COMMAND ${test_code})
+
+        target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
+    endmacro(guiless_test)
+
+    #guiless_test(test_example tests/test_example.cpp)
+    guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
 endif()
 
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
