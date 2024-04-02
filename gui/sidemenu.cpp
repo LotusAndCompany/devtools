@@ -10,16 +10,6 @@
 const QString Sidemenu::invalidSidemenuIDReason = QString("Sidemenu::ID must be in range (%1, %2)")
                                                       .arg(Sidemenu::ID_MIN)
                                                       .arg(Sidemenu::ID_MAX);
-const QMap<Sidemenu::ID, QString> Sidemenu::iconNames = {
-    {ID::MIN, "question_mark"}, // NOTE: unused
-    {ID::HOME, "home"},               // NOTE: unused, Home icon is set in sidemenu.ui
-    // NOTE: sample items
-    {ID::SAMPLE_0, "counter_0"},
-    {ID::SAMPLE_1, "counter_1"},
-    {ID::SAMPLE_2, "counter_2"},
-    {ID::SAMPLE_3, "counter_3"},
-    {ID::MAX, "question_mark"}, // NOTE: unused
-};
 
 Sidemenu::Sidemenu(QWidget *parent)
     : QWidget(parent)
@@ -60,10 +50,33 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
 
-    if (iconNames.contains(id))
-        return QIcon::fromTheme(iconNames[id]);
-    else
+    QString iconName;
+    switch (id) {
+    case ID::HOME:
+        // NOTE: unused, Home icon is set in sidemenu.ui
+        qWarning() << "Home icon is set in sidemenu.ui";
+        iconName = "home";
+        break;
+
+        // NOTE: sample items
+    case ID::SAMPLE_0:
+        iconName = "counter_0";
+        break;
+    case ID::SAMPLE_1:
+        iconName = "counter_1";
+        break;
+    case ID::SAMPLE_2:
+        iconName = "counter_2";
+        break;
+    case ID::SAMPLE_3:
+        iconName = "counter_3";
+        break;
+
+    default:
         throw UnderDevelopmentException();
+    }
+
+    return QIcon::fromTheme(iconName);
 }
 
 void Sidemenu::registerItem(ID id)

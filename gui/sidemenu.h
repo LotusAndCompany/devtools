@@ -37,7 +37,6 @@ signals:
     void itemSelected(ID id);
 
 private:
-    static const QMap<ID, QString> iconNames;
     static const QString invalidSidemenuIDReason;
 
     Ui::Sidemenu *const ui;
