@@ -4,6 +4,12 @@
 #include <QException>
 #include <QTextStream>
 
+#ifdef _TEST_CommonException
+namespace Test {
+class TestCommonException;
+}
+#endif
+
 // メッセージを設定できる例外
 class CommonException : public QException
 {
@@ -17,11 +23,15 @@ public:
     QString message;
 
     // NOTE: overrideする必要があるかは微妙だが、念の為
-    inline virtual void raise() const override { throw *this; }
+    virtual void raise() const override { throw *this; }
 
 protected:
     // NOTE: protectedにしたい
-    virtual QException *clone() const override { return new CommonException(*this); }
+    inline virtual QException *clone() const override { return new CommonException(*this); }
+
+#ifdef _TEST_CommonException
+    friend class Test::TestCommonException;
+#endif
 };
 
 // FIXME: qDebug()やqWarning()に出力できない

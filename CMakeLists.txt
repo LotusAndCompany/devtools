@@ -109,6 +109,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWith
 
     #guiless_test(test_example tests/test_example.cpp)
     guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
+    guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
 endif()
 
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})

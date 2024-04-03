@@ -1,6 +1,27 @@
 #include <QtTest>
 
+#define _TEST_Example
 // necessary includes here
+
+// NOTE: 非公開関数のテストを行う場合はTest::TestExampleをfriend classにする必要がある
+//#include "example.h"
+
+// example.h内
+/*
+#ifdef _TEST_Example
+namespace Test {
+class TestExample;
+}
+#endif
+*/
+
+// class Example内
+/*
+#ifdef _TEST_Example
+    friend class Test::TestExample;
+#endif
+*/
+#undef _TEST_Example
 
 namespace Test {
 class TestExample : public QObject
@@ -25,6 +46,15 @@ private slots:
 void TestExample::test_case1() {}
 } // namespace Test
 
+// QCoreApplicationもQApplicationも不要な場合
 QTEST_APPLESS_MAIN(Test::TestExample)
+
+// QCoreApplicationが必要な場合
+// WARNING: gui/gui_application.hの機能は使えない
+//QTEST_GUILESS_MAIN(Test::TestExample)
+
+// QApplicationもしくはQGuiApplicationが必要な場合
+// WARNING: gui/gui_application.hの機能は使えない
+//QTEST_MAIN(Test::TestExample)
 
 #include "test_example.moc"
