@@ -3,6 +3,12 @@
 
 #include "common_exception.h"
 
+#ifdef _TEST_InvalidArgumentException
+namespace Test {
+class TestInvalidArgumentException;
+}
+#endif
+
 template<typename T>
 class InvalidArgumentException : public CommonException
 {
@@ -17,9 +23,15 @@ public:
         message = QString("[InvalidArgumentException] given: %1, reason: %2").arg(given).arg(reason);
     }
 
+    virtual void raise() const override { throw *this; }
+
 protected:
     // NOTE: protectedにしたい
     virtual QException *clone() const override { return new InvalidArgumentException(*this); }
+
+#ifdef _TEST_InvalidArgumentException
+    friend class Test::TestInvalidArgumentException;
+#endif
 };
 
 #endif // INVALID_ARGUMENT_EXCEPTION_H
