@@ -1,4 +1,5 @@
 #include <QScopedPointer>
+#include <QTextStream>
 #include <QtTest>
 
 #define _TEST_CommonException
@@ -18,6 +19,7 @@ private slots:
     void test_messageConstructor();
     void test_clone();
     void test_raise();
+    void test_outputOperator();
 };
 
 void TestCommonException::test_defaultConstructor()
@@ -42,11 +44,11 @@ void TestCommonException::test_clone()
     // QVERIFYはreturn;する可能性があるため、QScopedPointerに入れる
     const QScopedPointer<QException> copied(e.clone());
 
-    // clone()を呼び出しても元のオブジェクトが変わらないこと
+    // clone()を呼び出しても元のインスタンスが変わらないこと
     QVERIFY(e.message == msg);
-    // clone()で返されたオブジェクトのメッセージが想定通りであること
+    // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
     QVERIFY(static_cast<CommonException *>(copied.get())->message == msg);
-    // clone()で返された物が元のオブジェクトとは異なること
+    // clone()で返されたインスタンスが元のインスタンスとは異なること
     QVERIFY(&e != copied.get());
 }
 
@@ -55,17 +57,33 @@ void TestCommonException::test_raise()
     const QString msg = "Custom message";
     CommonException src(msg);
 
-    // try-catchのスコープより寿命が長い例外オブジェクトを投げる
+    // try-catchのスコープより寿命が長い例外インスタンスを投げる
     try {
         src.raise();
     } catch (CommonException &e) {
+        // srcが変更されていないこと
+        QVERIFY(src.message == msg);
+
         // eとsrcとの内容が同じであること
-        QVERIFY(src.message == e.message);
+        QVERIFY(e.message == msg);
 
         return;
     }
 
     QFAIL("raise() did not throw CommonException");
+}
+
+void TestCommonException::test_outputOperator()
+{
+    QString out;
+    QTextStream stream(&out);
+
+    const QString msg = "Custom message";
+    CommonException e(msg);
+
+    stream << e;
+
+    QVERIFY(stream.readAll() == e.message);
 }
 } // namespace Test
 

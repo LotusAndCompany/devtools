@@ -22,7 +22,6 @@ public:
 
     QString message;
 
-    // NOTE: overrideする必要があるかは微妙だが、念の為
     virtual void raise() const override { throw *this; }
 
 protected:
