@@ -6,8 +6,6 @@
 #include "core/exception/common_exception.h"
 #undef _TEST_CommonException
 
-// necessary includes here
-
 namespace Test {
 class TestCommonException : public QObject
 {
