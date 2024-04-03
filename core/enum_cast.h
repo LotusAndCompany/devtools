@@ -9,28 +9,19 @@
 
 // 静的なキャスト
 // 不正な値が与えられたらコンパイルエラーになる
-template<typename enum_type, typename int_type = int>
+template<typename enum_type, int value>
 struct static_enum_cast
 {
-    explicit static_enum_cast(int_type value)
-        : result(static_cast<enum_type>(value))
-    {
-        static_assert(MIN_VALUE < value && value < MAX_VALUE, "invalid cast");
-    }
-    static_enum_cast(const static_enum_cast &) = delete;
-
-    // NOTE: 暗黙変換を許可
-    constexpr operator enum_type() const noexcept(true) { return result; }
+    static constexpr const enum_type result = static_cast<enum_type>(value);
 
 private:
     // 型チェック
     static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
-    static_assert(std::is_integral<int_type>::value, "int_type is not integer");
 
-    static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::MIN);
-    static constexpr const int_type MAX_VALUE = static_cast<int_type>(enum_type::MAX);
+    static constexpr const int MIN_VALUE = static_cast<int>(enum_type::MIN);
+    static constexpr const int MAX_VALUE = static_cast<int>(enum_type::MAX);
 
-    const enum_type result;
+    static_assert(MIN_VALUE < value && value < MAX_VALUE, "invalid cast");
 };
 
 // 静的とは限らないキャスト
