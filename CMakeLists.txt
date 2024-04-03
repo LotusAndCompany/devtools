@@ -100,14 +100,14 @@ endif()
 #add_subdirectory(tests)
 # Tests
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
-    macro(guiless_test test_name test_code)
-        add_executable(${test_name} ${test_code})
-        add_test(NAME ${test_name} COMMAND ${test_code})
+    macro(guiless_test test_name)
+        add_executable(${test_name} ${ARGN})
+        add_test(NAME ${test_name} COMMAND ${test_name})
 
         target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
     endmacro(guiless_test)
 
-    #guiless_test(test_example tests/test_example.cpp)
+    #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
     guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
     guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
     guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)

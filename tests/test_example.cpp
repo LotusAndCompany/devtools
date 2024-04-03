@@ -2,8 +2,10 @@
 
 #define _TEST_Example
 // necessary includes here
+#include "test_example_external.h"
 
 // NOTE: 非公開関数のテストを行う場合はTest::TestExampleをfriend classにする必要がある
+// マクロにできるかも?
 //#include "example.h"
 
 // example.h内
@@ -43,7 +45,10 @@ private slots:
     void test_case1();
 };
 
-void TestExample::test_case1() {}
+void TestExample::test_case1()
+{
+    f();
+}
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
