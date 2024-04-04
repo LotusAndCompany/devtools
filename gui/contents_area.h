@@ -36,16 +36,38 @@ private:
 #include "core/tool/tool.h"
 #include "gui_tool.h"
 
+namespace Interface {
 class SampleTool : public Tool
+{
+    Q_OBJECT
+public:
+    // NOTE: 本来はTool::ID, stringIDは渡されない
+    explicit SampleTool(Tool::ID id, const QString &stringID, QObject *parent = nullptr)
+        : Tool(id, stringID, parent)
+    {}
+
+    virtual ~SampleTool() = default;
+
+    virtual void f() = 0;
+    virtual void g() = 0;
+    virtual void h() = 0;
+};
+} // namespace Interface
+
+class SampleTool : public Interface::SampleTool
 {
     Q_OBJECT
 
 public:
     // NOTE: 本来はTool::ID, stringIDは渡されない
     explicit SampleTool(Tool::ID id, const QString &stringID, QObject *parent = nullptr)
-        : Tool(id, stringID, parent)
+        : Interface::SampleTool(id, stringID, parent)
     {}
     ~SampleTool() { qDebug() << "~SampleTool()"; }
+
+    void f() override {}
+    void g() override {}
+    void h() override {}
 };
 
 class SampleGuiTool : public GuiTool
@@ -64,12 +86,16 @@ public:
         label->setAlignment(Qt::AlignCenter);
         hLayout->addWidget(label);
         setLayout(hLayout);
+
+        tool->f();
+        tool->g();
+        tool->h();
     }
     ~SampleGuiTool() { qDebug() << "~SampleGuiTool()"; }
 
 private:
     // NOTE: 基底クラス型のポインタを持っていても不便なので派生クラス型のポインタを持つ
-    Tool *const tool;
+    Interface::SampleTool *const tool;
 
     // NOTE: 本来は翻訳の適用等の適切な処理をする
     void changeEvent(QEvent *event) override { return QWidget::changeEvent(event); }
