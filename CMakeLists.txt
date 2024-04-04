@@ -101,7 +101,7 @@ endif()
 # Tests
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
     macro(guiless_test test_name)
-        add_executable(${test_name} ${ARGN})
+        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
         add_test(NAME ${test_name} COMMAND ${test_name})
 
         target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)

@@ -1,6 +1,7 @@
 #include <QScopedPointer>
 #include <QTextStream>
 #include <QtTest>
+#include "tests/test_util.h"
 
 #define _TEST_CommonException
 #include "core/exception/common_exception.h"
@@ -10,6 +11,9 @@ namespace Test {
 class TestCommonException : public QObject
 {
     Q_OBJECT
+
+    RandomData rd;
+    static const int length = 64;
 
 private slots:
     // Test cases:
@@ -29,7 +33,7 @@ void TestCommonException::test_defaultConstructor()
 
 void TestCommonException::test_messageConstructor()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     CommonException e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QVERIFY(e.message == msg);
@@ -37,7 +41,7 @@ void TestCommonException::test_messageConstructor()
 
 void TestCommonException::test_clone()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     CommonException e(msg);
     // QVERIFYはreturn;する可能性があるため、QScopedPointerに入れる
     const QScopedPointer<QException> copied(e.clone());
@@ -52,7 +56,7 @@ void TestCommonException::test_clone()
 
 void TestCommonException::test_raise()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     CommonException src(msg);
 
     // try-catchのスコープより寿命が長い例外インスタンスを投げる
@@ -76,7 +80,7 @@ void TestCommonException::test_outputOperator()
     QString out;
     QTextStream stream(&out);
 
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     CommonException e(msg);
 
     stream << e;

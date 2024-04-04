@@ -1,5 +1,6 @@
 #include <QScopedPointer>
 #include <QtTest>
+#include "tests/test_util.h"
 
 #define _TEST_InvalidArgumentException
 #include "core/exception/invalid_argument_exception.h"
@@ -9,6 +10,9 @@ namespace Test {
 class TestInvalidArgumentException : public QObject
 {
     Q_OBJECT
+
+    RandomData rd;
+    static const int length = 64;
 
 private slots:
     // Test cases:
@@ -28,7 +32,7 @@ void TestInvalidArgumentException::test_defaultConstructor()
 
 void TestInvalidArgumentException::test_messageConstructor()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     InvalidArgumentException<int> e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QVERIFY(e.message == msg);
@@ -63,7 +67,7 @@ void TestInvalidArgumentException::test_argumentReasonConstructor()
 
 void TestInvalidArgumentException::test_clone()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     InvalidArgumentException<int> e(msg);
     // QVERIFYはreturn;する可能性があるため、QScopedPointerに入れる
     const QScopedPointer<QException> copied(e.clone());
@@ -78,7 +82,7 @@ void TestInvalidArgumentException::test_clone()
 
 void TestInvalidArgumentException::test_raise()
 {
-    const QString msg = "Custom message";
+    const QString msg = rd.nextQString(length);
     InvalidArgumentException<int> src(msg);
 
     // try-catchのスコープより寿命が長い例外インスタンスを投げる
