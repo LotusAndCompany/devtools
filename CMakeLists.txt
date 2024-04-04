@@ -112,6 +112,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWith
     guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
     guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)
     guiless_test(test_invalid_argument_exception tests/core/exception/test_invalid_argument_exception.cpp)
+    guiless_test(test_invalid_state_exception tests/core/exception/test_invalid_state_exception.cpp)
 endif()
 
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})

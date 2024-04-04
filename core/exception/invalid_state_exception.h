@@ -3,6 +3,12 @@
 
 #include "common_exception.h"
 
+#ifdef _TEST_InvalidStateException
+namespace Test {
+class TestInvalidStateException;
+}
+#endif
+
 class InvalidStateException : public CommonException
 {
 public:
@@ -13,12 +19,19 @@ public:
     {}
     InvalidStateException(const QString &actual, const QString &expected)
     {
-        message = QString("[InvalidStateException] actual: %1, expected: %2").arg(actual, expected);
+        message = QString("[InvalidStateException] actual: ") % actual % QString(", expected: ")
+                  % expected;
     }
+
+    virtual void raise() const override { throw *this; }
 
 protected:
     // NOTE: protectedにしたい
     virtual QException *clone() const override { return new InvalidStateException(*this); }
+
+#ifdef _TEST_InvalidStateException
+    friend class Test::TestInvalidStateException;
+#endif
 };
 
 #endif // INVALID_STATE_EXCEPTION_H
