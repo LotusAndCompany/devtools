@@ -4,13 +4,23 @@
 #include <QCoreApplication>
 #include <QTranslator>
 
+/**
+ * @brief The AppType enum
+ */
 enum class AppType {
+    /// 最小値
     MIN,
+    /// GUIアプリケーション
     GUI,
+    /// CLIアプリケーション
     CLI,
+    /// 最大値
     MAX,
 };
 
+/**
+ * @brief [QCoreApplication](https://doc.qt.io/qt-6/qcoreapplication.html)クラスにmixinとして追加する機能
+ */
 class ApplicationMixin
 {
     QTranslator _translator;
