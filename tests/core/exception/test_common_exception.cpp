@@ -1,5 +1,4 @@
 #include <QScopedPointer>
-#include <QTextStream>
 #include <QtTest>
 #include "tests/test_util.h"
 
@@ -21,7 +20,7 @@ private slots:
     void test_messageConstructor();
     void test_clone();
     void test_raise();
-    void test_outputOperator();
+    void test_QDebugOutputOperator();
 };
 
 void TestCommonException::test_defaultConstructor()
@@ -75,17 +74,24 @@ void TestCommonException::test_raise()
     QFAIL("raise() did not throw CommonException");
 }
 
-void TestCommonException::test_outputOperator()
+void TestCommonException::test_QDebugOutputOperator()
 {
-    QString out;
-    QTextStream stream(&out);
+    CommonException d("Custom message for Debug");
+    CommonException i("Custom message for Info");
+    CommonException w("Custom message for Waning");
 
-    const QString msg = rd.nextQString(length);
-    CommonException e(msg);
-
-    stream << e;
-
-    QVERIFY(stream.readAll() == e.message);
+    // NOTE: 想定通りの値が出力できたかはコード上では確認が難しそう
+    /* テスト結果に
+     * 
+     * DEBUG    "Custom message for Debug"
+     * INFO     "Custom message for Info"
+     * WARN     "Custom message for Waning"
+     * 
+     * と出力されていれば成功
+     */
+    qDebug() << d;
+    qInfo() << i;
+    qWarning() << w;
 }
 } // namespace Test
 

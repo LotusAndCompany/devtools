@@ -1,8 +1,8 @@
 #ifndef COMMON_EXCEPTION_H
 #define COMMON_EXCEPTION_H
 
+#include <QDebug>
 #include <QException>
-#include <QTextStream>
 
 #ifdef _TEST_CommonException
 namespace Test {
@@ -33,12 +33,11 @@ protected:
 #endif
 };
 
-// FIXME: qDebug()やqWarning()に出力できない
-//        Loggerを作り、そこに出力できるようにする
-inline QTextStream &operator<<(QTextStream &stream, const CommonException &exception)
+// NOTE: QDebugに出力する演算子オーバーロード
+// qDebug(), qInfo(), qWarning()等が参照を返さないのでQDebugを受け渡す
+inline QDebug operator<<(QDebug debug, const CommonException &exception)
 {
-    return stream << exception.message;
+    return debug << exception.message;
 }
-// NOTE: QDataStreamには出力しなそうなので未実装
 
 #endif // COMMON_EXCEPTION_H
