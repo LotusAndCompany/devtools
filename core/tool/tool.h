@@ -33,7 +33,7 @@ public:
     constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
 
     static const Translatable translatable(ID id) noexcept(false);
-    const Translatable &translatable() const noexcept(false) { return _translatable; }
+    const Translatable &translatable() const { return _translatable; }
 
 protected:
     // NOTE: idによっては例外が発生する
