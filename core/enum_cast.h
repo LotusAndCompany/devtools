@@ -67,7 +67,7 @@ struct enum_cast
     /**
      * @brief コンストラクタ
      * @param value 変換する整数値
-     * @exception InvalidArgumentException <int_type> value <= enum_type::MIN または enum_type::MAX <= value場合
+     * @exception InvalidArgumentException &lt;int_type&gt; value <= enum_type::MIN または enum_type::MAX <= value の場合
      */
     explicit enum_cast(int_type value) noexcept(false)
     {

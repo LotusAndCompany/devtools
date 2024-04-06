@@ -34,6 +34,7 @@ public:
     ApplicationMixin(AppType appType, int argc, char **argv);
     ApplicationMixin() = delete;
 
+    /// アプリケーションの種類
     const AppType appType;
     /**
      * @brief アプリケーションの種類の判定

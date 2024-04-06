@@ -21,8 +21,8 @@ public:
 
     /**
      * @brief ツールのID
-     * @details ID::MINとID::MAX以外は TOOL_ID_FIELDS()を展開する@n
-     *          定義によって値が変わってしまうため、データの保存等に使う場合はstringIDを使う
+     * @details ID::MIN と ID::MAX 以外は TOOL_ID_FIELDS() を展開する@n
+     *          定義によって値が変わってしまうため、データの保存等に使う場合は #stringID を使う
      */
     enum class ID {
         MIN,              ///<最小値
@@ -88,13 +88,13 @@ protected:
      * @details 原則として正しいIDが渡される想定で、万が一間違ったIDが渡された場合には例外を出す@n
      *          @b 例外が発生する場合はコードの修正が必要
      * @param id 対象のID
-     * @exception InvalidArgumentException <int> 間違ったIDが渡された場合
+     * @exception InvalidArgumentException &lt;int&gt; 間違ったIDが渡された場合
      */
     static void validateID(ID id) noexcept(false);
 
     /**
      * @brief イベント処理
-     * @details 言語が変更された場合に Translatable translatable(ID id)でテキストを更新する処理を実装している
+     * @details 言語が変更された場合に Translatable translatable(ID id) でテキストを更新する処理を実装している
      * @param event 発生したイベント
      * @return 処理した場合は`true`、無視した場合は`false`
      */
