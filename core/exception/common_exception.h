@@ -17,6 +17,7 @@ class TestCommonException;
 
 /**
  * @brief メッセージを設定できる基本的な例外クラス
+ * @details 基底クラスのQExceptionは[std::exception](https://cpprefjp.github.io/reference/exception/exception.html)を継承していて、QObjectは継承していない
  * 
  * @sa [QException](https://doc.qt.io/qt-6/qexception.html)
  */
@@ -56,6 +57,7 @@ protected:
     /**
      * @brief このインスタンスをコピーする
      * @return コピーされたインスタンス
+     * @note この関数で生成されたインスタンスは`delete`等、何らかの方法で解放する必要がある
      * 
      * @sa [QException::clone()](https://doc.qt.io/qt-6/qexception.html#clone)
      */
