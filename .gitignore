@@ -77,3 +77,6 @@ build-*/
 
 # Log files
 *.log
+
+# Doxygen default configuration
+Doxyfile.example
