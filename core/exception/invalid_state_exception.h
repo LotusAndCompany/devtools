@@ -22,7 +22,7 @@ public:
     InvalidStateException() = default;
     /**
      * @brief コピーコンストラクタ
-     * @param コピー元インスタンス
+     * @param src コピー元インスタンス
      */
     InvalidStateException(const InvalidStateException &src) = default;
     /**

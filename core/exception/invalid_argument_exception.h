@@ -25,7 +25,7 @@ public:
     InvalidArgumentException() = default;
     /**
      * @brief コピーコンストラクタ
-     * @param コピー元インスタンス
+     * @param src コピー元インスタンス
      */
     InvalidArgumentException(const InvalidArgumentException &src) = default;
     /**
