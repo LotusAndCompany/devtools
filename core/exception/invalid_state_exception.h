@@ -45,21 +45,9 @@ public:
                   % expected;
     }
 
-    /**
-     * @brief このインスタンスを投げる
-     * 
-     * @sa [QException::raise()](https://doc.qt.io/qt-6/qexception.html#raise)
-     */
     virtual void raise() const override { throw *this; }
 
 protected:
-    /**
-     * @brief このインスタンスをコピーする
-     * @return コピーされたインスタンス
-     * @note この関数で生成されたインスタンスは`delete`等、何らかの方法で解放する必要がある
-     * 
-     * @sa [QException::clone()](https://doc.qt.io/qt-6/qexception.html#clone)
-     */
     virtual QException *clone() const override { return new InvalidStateException(*this); }
 
 #ifdef _TEST_InvalidStateException
