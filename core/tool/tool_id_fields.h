@@ -8,23 +8,36 @@
 
 /**
  * @def TOOL_ID_FIELDS()
- * @brief Tool::ID及びSidemenu::IDに展開する要素
+ * @brief Tool::ID 及び Sidemenu::ID に展開する定数名
  */
 // NOTE: コード整形をこの部分だけ無効化する
 // clang-format off
-#define TOOL_ID_FIELDS()    \
-    SAMPLE_0,               \
-    SAMPLE_1,               \
-    SAMPLE_2,               \
-    SAMPLE_3,               \
-    HTTP_REQUEST,           \
-    COMMAND_GENERATION,     \
-    IMAGE_RESIZE,           \
-    IMAGE_ROTATION,         \
-    IMAGE_SPLIT,            \
-    IMAGE_TRANSPARENT,      \
-    IMAGE_TRIM,             \
-    IMAGE_COMBINE,          \
+#define TOOL_ID_FIELDS()        \
+    /** サンプルとして入れた値その1 */   \
+    SAMPLE_0,                   \
+    /** サンプルとして入れた値その2 */   \
+    SAMPLE_1,                   \
+    /** サンプルとして入れた値その3 */   \
+    SAMPLE_2,                   \
+    /** サンプルとして入れた値その4 */   \
+    SAMPLE_3,                   \
+    /** HTTPリクエスト */        \
+    HTTP_REQUEST,               \
+    /** コマンド生成 */           \
+    COMMAND_GENERATION,         \
+    /** 画像リサイズ */           \
+    IMAGE_RESIZE,               \
+    /** 画像回転・反転 */          \
+    IMAGE_ROTATION,             \
+    /** 画像分割 */             \
+    IMAGE_SPLIT,                \
+    /** 画像透明化 */            \
+    IMAGE_TRANSPARENT,          \
+    /** 画像トリミング */          \
+    IMAGE_TRIM,                 \
+    /** 画像結合・重ね合わせ */   \
+    IMAGE_COMBINE,              \
+    /** 定型文生成 */            \
     PHRASE_GENERATION
 // clang-format on
 
