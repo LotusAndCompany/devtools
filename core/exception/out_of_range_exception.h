@@ -3,11 +3,11 @@
 
 #include "common_exception.h"
 
-#define _TEST_OutOfRangeException
+#ifdef _TEST_OutOfRangeException
 namespace Test {
 class TestOutOfRangeException;
 }
-#undef _TEST_OutOfRangeException
+#endif
 
 template<typename T>
 class OutOfRangeException : public CommonException
@@ -36,9 +36,9 @@ protected:
     // NOTE: protectedにしたい
     virtual QException *clone() const override { return new OutOfRangeException(*this); }
 
-#define _TEST_OutOfRangeException
+#ifdef _TEST_OutOfRangeException
     friend class Test::TestOutOfRangeException;
-#undef _TEST_OutOfRangeException
+#endif
 };
 
 #endif // OUT_OF_RANGE_EXCEPTION_H
