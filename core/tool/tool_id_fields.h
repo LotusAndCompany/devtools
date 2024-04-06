@@ -1,6 +1,15 @@
 #ifndef TOOL_ID_FIELDS_H
 #define TOOL_ID_FIELDS_H
 
+/**
+ * @file
+ * @brief TOOL_ID_FIELDS()を定義している
+ */
+
+/**
+ * @def TOOL_ID_FIELDS()
+ * @brief Tool::ID及びSidemenu::IDに展開する要素
+ */
 // NOTE: コード整形をこの部分だけ無効化する
 // clang-format off
 #define TOOL_ID_FIELDS()    \
