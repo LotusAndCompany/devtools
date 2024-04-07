@@ -29,7 +29,7 @@ set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-too
 # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
 set(APP_INFO_FILE app_info.autogen.cpp)
 # TODO: 環境毎に分ける
-# TODO: configure_file()を使うようにしたい。環境毎に分ける必要は無いはず
+# configure_file()を使うようにしたかったが、ビルド時にCMAKE変数を参照させるのは無理そう?
 if(APPLE)
     if(NOT EXISTS ${APP_INFO_FILE})
         execute_process(
@@ -39,7 +39,7 @@ if(APPLE)
 
     set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
     file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
-    add_custom_target(generate_app_info
+    add_custom_target(DevTools_app_info
         COMMAND ${SH_FILE} ${CMAKE_PROJECT_VERSION} "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
     )
 endif()
@@ -152,18 +152,22 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     endif()
 endif()
 
+# PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
-add_dependencies(DevTools generate_app_info)
+# app_info.autogen.cppを自動で生成させる
+add_dependencies(DevTools DevTools_app_info)
+
+# 翻訳ファイルの更新と生成を自動化
 add_dependencies(DevTools_lrelease DevTools_lupdate)
 add_dependencies(DevTools DevTools_lrelease)
 
+# インクルードディレクトリとしてプロジェクトフォルダを追加
 target_include_directories(DevTools
     PRIVATE .
 )
 
 # ライブラリをリンクする
-# TODO: 動的リンクになっているか確認する
 target_link_libraries(DevTools
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 )
