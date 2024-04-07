@@ -40,7 +40,9 @@ private:
     // 型チェック
     static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
 
+    /// 最小値(比較用)
     static constexpr const int MIN_VALUE = static_cast<int>(enum_type::MIN);
+    /// 最大値(比較用)
     static constexpr const int MAX_VALUE = static_cast<int>(enum_type::MAX);
 
     static_assert(MIN_VALUE < value && value < MAX_VALUE, "invalid cast");
@@ -96,9 +98,13 @@ private:
     static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
     static_assert(std::is_integral<int_type>::value, "int_type is not integer");
 
+    /// 最小値(比較用)
     static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::MIN);
+    /// 最大値(比較用)
     static constexpr const int_type MAX_VALUE = static_cast<int_type>(enum_type::MAX);
 
+    // NOTE: コンストラクタで三項演算子を使えばconstにできるはず
+    /// 結果
     enum_type result;
 };
 
