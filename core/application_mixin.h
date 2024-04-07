@@ -54,9 +54,9 @@ public:
     /**
      * @brief アプリケーションの処理開始
      * @return ステータス(0=正常終了)
-     * GUIアプリケーションの時は[QApplication::exec()](https://doc.qt.io/qt-6/qapplication.html#exec)の結果
-     * CLIアプリケーションの時は[QCoreApplication::exec()](https://doc.qt.io/qt-6/qcoreapplication.html#exec)の結果
-     * を返す
+     * @details GUIアプリケーションの時は[QApplication::exec()](https://doc.qt.io/qt-6/qapplication.html#exec)の結果@n
+     *          CLIアプリケーションの時は[QCoreApplication::exec()](https://doc.qt.io/qt-6/qcoreapplication.html#exec)の結果
+     *          を返す
      */
     virtual int start() = 0;
 
