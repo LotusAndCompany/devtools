@@ -42,6 +42,12 @@ private:
     // NOTE: staticにできる
     /**
      * @brief カラースキームを変更をUIに反映する
+     * @details ライトモードの時には黒いアイコン(res/light/*)@n
+     *          ダークモードの時は白いアイコン(res/dark/*) を使うようにアイコンテーマを変更する@n
+     *          各アイコンテーマは res/light/index.theme, res/dark/index.theme で定義されている
+     * 
+     * @sa [QIcon::setThemeName(const QString &name)](https://doc.qt.io/qt-6/qicon.html#setThemeName)
+     * @sa [Freedesktop The icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html)
      */
     void applyColorScheme();
 

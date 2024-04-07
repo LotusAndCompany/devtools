@@ -22,7 +22,10 @@ public:
     /**
      * @brief ツールのID
      * @details ID::MIN と ID::MAX 以外は TOOL_ID_FIELDS() を展開する@n
-     *          定義によって値が変わってしまうため、データの保存等に使う場合は #stringID を使う
+     *          定義によって値が変わってしまうため、データの保存等に使う場合は #stringID を使う@n
+     *          ID::MAX 以外は Sidemenu::IDと一致する
+     * 
+     * @sa Sidemenu::ID
      */
     enum class ID {
         MIN,              ///<最小値
@@ -84,11 +87,11 @@ protected:
     static const QString invalidToolIDReason;
 
     /**
-     * @brief 渡されたIDが正しいか判定する
-     * @details 原則として正しいIDが渡される想定で、万が一間違ったIDが渡された場合には例外を出す@n
+     * @brief 渡された ID が正しいか判定する
+     * @details 原則として正しいIDが渡される想定で、万が一間違った ID が渡された場合には例外を出す@n
      *          @b 例外が発生する場合はコードの修正が必要
-     * @param id 対象のID
-     * @exception InvalidArgumentException &lt;int&gt; 間違ったIDが渡された場合
+     * @param id 対象の ID
+     * @exception InvalidArgumentException &lt;int&gt; 間違った ID が渡された場合
      */
     static void validateID(ID id) noexcept(false);
 
