@@ -15,6 +15,7 @@ class ContentsArea : public QFrame
 {
     Q_OBJECT
 
+    /// UI(レイアウトの指定のみ)
     Ui::ContentsArea *const ui;
 
 public:

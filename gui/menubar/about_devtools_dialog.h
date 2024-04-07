@@ -14,6 +14,7 @@ class AboutDevToolsDialog : public QDialog
 {
     Q_OBJECT
 
+    /// UI
     Ui::AboutDevToolsDialog *const ui;
 
 public:
