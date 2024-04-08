@@ -47,7 +47,7 @@
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">text-align:left;</string>
+      <string notr="true">text-align: left;</string>
      </property>
      <property name="text">
       <string>Home</string>

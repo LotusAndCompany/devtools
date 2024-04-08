@@ -13,7 +13,7 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent)
 {
     setFlat(true);
     setCheckable(true);
-    setStyleSheet("text-align:left;");
+    setStyleSheet("text-align: left;");
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
