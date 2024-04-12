@@ -47,6 +47,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Sample 3"),
             tr("This is Sample 3"),
         };
+    case ID::IMAGE_RESIZE:
+        return Translatable{
+            tr("Image resize"),
+            tr("Resizing an image"),
+        };
     default:
         throw UnderDevelopmentException();
     }

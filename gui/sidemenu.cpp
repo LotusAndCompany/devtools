@@ -29,6 +29,7 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::SAMPLE_1);
     registerItem(ID::SAMPLE_2);
     registerItem(ID::SAMPLE_3);
+    registerItem(ID::IMAGE_RESIZE);
 
     ui->scrollAreaLayout->addStretch();
 }
@@ -70,6 +71,9 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::SAMPLE_3:
         iconName = "counter_3";
+        break;
+    case ID::IMAGE_RESIZE:
+        iconName = "question_mark";
         break;
 
     default:

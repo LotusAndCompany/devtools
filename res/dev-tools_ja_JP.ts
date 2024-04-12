@@ -65,6 +65,92 @@
     </message>
 </context>
 <context>
+    <name>BasicImageView</name>
+    <message>
+        <location filename="../gui/basic_image_view/basic_image_view.ui" line="+86"/>
+        <location filename="../gui/basic_image_view/basic_image_view.cpp" line="+31"/>
+        <source>No Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BasicImageViewControl</name>
+    <message>
+        <location filename="../gui/basic_image_view/control.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageOpenDialog</name>
+    <message>
+        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="+26"/>
+        <source>Open Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageResizeGUI</name>
+    <message>
+        <location filename="../gui/image_resize/image_resize_gui.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Height:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Horizontal Scale:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Vertical Scale:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Keep aspect ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Smooth scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageSaveDialog</name>
+    <message>
+        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="+15"/>
+        <source>Save Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+182"/>
@@ -75,6 +161,14 @@
         <location line="+8"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
+    </message>
+</context>
+<context>
+    <name>QCoreApplication</name>
+    <message>
+        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="-26"/>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -137,6 +231,16 @@
     <message>
         <location line="+1"/>
         <source>This is Sample 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image resize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Resizing an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
