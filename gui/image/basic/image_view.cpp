@@ -1,5 +1,5 @@
-#include "basic_image_view.h"
-#include "ui_basic_image_view.h"
+#include "image_view.h"
+#include "ui_image_view.h"
 
 #include <QDropEvent>
 #include <QResizeEvent>

@@ -67,8 +67,8 @@
 <context>
     <name>BasicImageView</name>
     <message>
-        <location filename="../gui/basic_image_view/basic_image_view.ui" line="+86"/>
-        <location filename="../gui/basic_image_view/basic_image_view.cpp" line="+31"/>
+        <location filename="../gui/image/basic/image_view.ui" line="+86"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+31"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>BasicImageViewControl</name>
     <message>
-        <location filename="../gui/basic_image_view/control.ui" line="+14"/>
+        <location filename="../gui/image/basic/control.ui" line="+14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,7 +99,7 @@
 <context>
     <name>ImageOpenDialog</name>
     <message>
-        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="+26"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+26"/>
         <source>Open Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,7 +107,7 @@
 <context>
     <name>ImageResizeGUI</name>
     <message>
-        <location filename="../gui/image_resize/image_resize_gui.ui" line="+14"/>
+        <location filename="../gui/image/resize/image_resize_gui.ui" line="+14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -145,7 +145,7 @@
 <context>
     <name>ImageSaveDialog</name>
     <message>
-        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="+15"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
         <source>Save Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -166,7 +166,7 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../gui/basic_image_view/file_dialogs.cpp" line="-26"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="-26"/>
         <source>Images</source>
         <translation type="unfinished"></translation>
     </message>

@@ -222,13 +222,13 @@
   <customwidget>
    <class>BasicImageView</class>
    <extends>QWidget</extends>
-   <header>gui/basic_image_view/basic_image_view.h</header>
+   <header>gui/image/basic/image_view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>BasicImageViewControl</class>
    <extends>QWidget</extends>
-   <header>gui/basic_image_view/control.h</header>
+   <header>gui/image/basic/control.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -2,6 +2,7 @@
 
 #include "core/exception/invalid_argument_exception.h"
 
+#if 0
 ImageResizeInterface::ImageResizeInterface(QObject *parent)
     : Tool(Tool::ID::IMAGE_RESIZE, "image-resize", parent)
 {}
@@ -69,3 +70,4 @@ void ImageResize::setHeight(unsigned int h)
             original.scaled(currentSize().width(), h, Qt::IgnoreAspectRatio, transformationMode()));
     }
 }
+#endif

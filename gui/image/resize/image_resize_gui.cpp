@@ -2,15 +2,17 @@
 #include "ui_image_resize_gui.h"
 
 #include <QSignalBlocker>
-#include "core/image_resize/image_resize.h"
+#include "core/image/resize/image_resize.h"
 
-ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
+ImageResizeGUI::ImageResizeGUI(/*ImageResizeInterface *imageResize, */ QWidget *parent)
     : GuiTool(parent)
     , ui(new Ui::ImageResizeGUI)
-    , imageResize(imageResize)
+//, imageResize(imageResize)
 {
     ui->setupUi(this);
+}
 
+#if 0
     if (imageResize->parent() == nullptr)
         imageResize->setParent(this);
 
@@ -256,3 +258,5 @@ void ImageResizeGUI::syncValues(UpdateMode mode, bool keepAspectRatio)
             ui->vScaleValue->setValue(100.0 * currentSize.height() / originalSize.height());
     }
 }
+
+#endif

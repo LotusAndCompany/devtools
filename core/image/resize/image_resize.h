@@ -3,9 +3,86 @@
 
 #include <QFileInfo>
 #include <QPixmap>
-//#include "core/image_io/image_io.h"
+#include "core/image/basic_image_io.h"
 #include "core/tool/tool.h"
 
+/*
+ * 全体的に見直しが必要。
+ * 1. BasicImageEditInterface→save(), load(), commit()もしくはupdated(), preview()
+ * 2. BasicImageIO復活→save(), load(), original
+ * 3. keepAspectRatioはsetWidth, setHeightに引数として渡す。
+ * 4. 
+ * 5. リサイズ系関数は以下のようにし、別の関数を呼ぶと以前の内容が消えるようにする。
+ *    但し、setWidth→setScaleYなどは許す
+ *    setWidth(w, kar)
+ *    setHeight(h, kar)
+ *    setSize(w, h)
+ *    setScale(s)=setScale(s, s)
+ *    setScale(sx, sy)
+ *    setScaleX(sx)=setScale(sx, 1.0)
+ *    setScaleY(sy)=setScale(1.0, sy)
+ * 6. ↑の関数ではpixmapは更新せず、update()で反映させる
+ * 7. smoothTransformationはupdate()の引数にする
+ */
+
+class ImageResizeInterface : public Tool
+{
+    Q_OBJECT
+
+public:
+    explicit ImageResizeInterface(QObject *parent = nullptr);
+    virtual ~ImageResizeInterface() = default;
+
+    virtual bool load(const QString &path) = 0;
+    virtual bool save(const QString &path, const char *format = nullptr, int quality = -1) const = 0;
+
+    inline void setScaleX(double sx) { setScale(sx, 1.0); }
+    inline void setScaleY(double sy) { setScale(1.0, sy); }
+    inline void setScale(double s) { setScale(s, s); }
+    virtual void setScale(double sx, double sy) = 0;
+    virtual void setSize(const QSize &size) = 0;
+    virtual void setWidth(unsigned int w, bool keepAspectRatio = false) = 0;
+    virtual void setHeight(unsigned int h, bool keepAspectRatio = false) = 0;
+};
+
+class ImageResize : public ImageResizeInterface, private ImageIO
+{
+    Q_OBJECT
+
+public:
+    explicit ImageResize(QObject *parent = nullptr);
+
+    /**
+     * @brief 画像を読み込む
+     * @param path 読み込む画像
+     * @return 成功なら`true`
+     */
+    bool load(const QString &path) override { return ImageIO::load(path); }
+    /**
+     * @brief 画像を保存する(上書き)
+     * @param path 保存先
+     * @param format フォーマット。"PNG"など。nullptrならファイル名から推定する。
+     * @return 
+     */
+    bool save(const QString &path, const char *format = nullptr, int quality = -1);
+
+private:
+    struct ResizeOperation
+    {
+        enum class Type {
+            MIN,
+            SIZE,
+            SCALE,
+            MAX,
+        } type;
+        union {
+            unsigned int size;
+            double scale;
+        };
+    } width, height;
+};
+
+#if 0
 class ImageResizeInterface : public Tool
 {
     Q_OBJECT
@@ -117,5 +194,6 @@ private:
         return smoothTransformation ? Qt::SmoothTransformation : Qt::FastTransformation;
     }
 };
+#endif
 
 #endif // IMAGE_RESIZE_H

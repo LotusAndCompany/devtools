@@ -24,12 +24,16 @@ public:
      * @param ImageResize (ロジック部分)
      * @param 親ウィジェット
      */
-    explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);
+    explicit ImageResizeGUI(/*ImageResizeInterface *imageResize,*/ QWidget *parent = nullptr);
     /**
      * @brief デストラクタ
      */
     ~ImageResizeGUI();
 
+private:
+    Ui::ImageResizeGUI *const ui;
+};
+#if 0
 private slots:
     void onLoadImageSelected(const QString &path);
     void onSaveImageSelected(const QString &path);
@@ -73,5 +77,6 @@ private:
      */
     void syncValues(const UpdateMode mode, bool keepAspectRatio);
 };
+#endif
 
 #endif // IMAGE_RESIZE_GUI_H

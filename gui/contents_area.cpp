@@ -2,8 +2,8 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
-#include "core/image_resize/image_resize.h"
-#include "image_resize/image_resize_gui.h"
+#include "core/image/resize/image_resize.h"
+#include "image/resize/image_resize_gui.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)

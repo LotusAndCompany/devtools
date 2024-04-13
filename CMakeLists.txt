@@ -75,11 +75,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/tool/tool_id_fields.h
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
-        gui/basic_image_view/basic_image_view.h gui/basic_image_view/basic_image_view.cpp gui/basic_image_view/basic_image_view.ui
-        core/image_resize/image_resize.h core/image_resize/image_resize.cpp
-        gui/image_resize/image_resize_gui.h gui/image_resize/image_resize_gui.cpp gui/image_resize/image_resize_gui.ui
-        gui/basic_image_view/control.h gui/basic_image_view/control.cpp gui/basic_image_view/control.ui
-        gui/basic_image_view/file_dialogs.h gui/basic_image_view/file_dialogs.cpp
+        core/image/basic_image_io.h core/image/basic_image_io.cpp
+        core/image/resize/image_resize.h core/image/resize/image_resize.cpp
+        gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
+        gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
+        gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
+        gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
