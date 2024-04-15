@@ -76,6 +76,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
         core/image/basic_image_io.h core/image/basic_image_io.cpp
+        core/image/basic_image_edit_interface.h core/image/basic_image_edit_interface.cpp
         core/image/resize/image_resize.h core/image/resize/image_resize.cpp
         gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
