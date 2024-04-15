@@ -25,11 +25,6 @@ void BasicImageView::setPixmap(const QPixmap &pixmap, bool reset)
 {
     original = pixmap;
 
-    if (!original.isNull())
-        ui->image->setText("");
-    else
-        ui->image->setText(tr("No Image"));
-
     if (reset)
         updateScale(1.0);
     else
@@ -110,5 +105,8 @@ void BasicImageView::updateScale(double newScale)
     ui->scaleLabel->setText('x' + QString::number(scale, 'g', 2));
 
     // FIXME: 画像がnullだと"QPixmap::scaled: Pixmap is a null pixmap"が発生する
-    ui->image->setPixmap(original.scaled(original.size() * scale));
+    if (!original.isNull())
+        ui->image->setPixmap(original.scaled(original.size() * scale));
+    else
+        ui->image->setText(tr("No Image"));
 }

@@ -71,7 +71,7 @@ void ImageResize::setScaleY(double sy)
         qWarning() << "vertical scale is already set";
 
     height.type = ResizeHints::Type::SCALE;
-    width.scale = sy;
+    height.scale = sy;
 
     setOutdated();
 }
@@ -121,8 +121,7 @@ void ImageResize::setHeight(unsigned int h, bool keepAspectRatio)
     }
 }
 
-unsigned int ImageResize::computedSizeInternal(unsigned int originalSize,
-                                               const ResizeHints &hints) const
+unsigned int ImageResize::computedSizeInternal(unsigned int originalSize, const ResizeHints &hints)
 {
     switch (hints.type) {
     case ResizeHints::Type::SCALE:
@@ -137,7 +136,7 @@ unsigned int ImageResize::computedSizeInternal(unsigned int originalSize,
     }
 }
 
-double ImageResize::computedScaleInternal(unsigned int originalSize, const ResizeHints &hints) const
+double ImageResize::computedScaleInternal(unsigned int originalSize, const ResizeHints &hints)
 {
     switch (hints.type) {
     case ResizeHints::Type::SCALE:

@@ -187,8 +187,7 @@ private:
      * @exception InvalidArgumentException &lt;unsigned int&gt; originalSize == 0の場合
      * @return 計算値
      */
-    unsigned int computedSizeInternal(unsigned int originalSize, const ResizeHints &hints) const
-        noexcept(false);
+    static unsigned int computedSizeInternal(unsigned int originalSize, const ResizeHints &hints);
     /**
      * @brief computedScaleX() computedScaleY() の算出に使う
      * @param originalSize 元画像の横もしくは縦のサイズ
@@ -196,8 +195,8 @@ private:
      * @exception InvalidArgumentException &lt;unsigned int&gt; originalSize == 0の場合
      * @return 計算値
      */
-    double computedScaleInternal(unsigned int originalSize, const ResizeHints &hints) const
-        noexcept(false);
+    static double computedScaleInternal(unsigned int originalSize,
+                                        const ResizeHints &hints) noexcept(false);
     /**
      * @brief 縦横比を返す
      * @return 縦横比

@@ -156,7 +156,7 @@ void ImageResizeGUI::onHorizontalScaleEditingFinished()
 
 void ImageResizeGUI::onVerticalScaleEditingFinished()
 {
-    const double vScale = ui->hScaleValue->value();
+    const double vScale = ui->vScaleValue->value();
     qDebug() << "vScale:" << vScale;
 
     if (vScale < 0) {
@@ -225,6 +225,15 @@ void ImageResizeGUI::updateUIValues(UpdateMode mode)
         QSignalBlocker(ui->hScaleValue),
     };
 
+    if (imageResize->original().isNull()) {
+        ui->widthValue->setValue(0);
+        ui->heightValue->setValue(0);
+        ui->hScaleValue->setValue(100.0);
+        ui->vScaleValue->setValue(100.0);
+
+        return;
+    }
+
     const auto size = imageResize->computedSize();
     const double scaleX = imageResize->computedScaleX();
     const double scaleY = imageResize->computedScaleY();
@@ -248,45 +257,3 @@ void ImageResizeGUI::updateUIValues(UpdateMode mode)
             ui->vScaleValue->setValue(100.0 * scaleY);
     }
 }
-
-#if 0
-// FIXME: 画像が設定されていなくても動いてしまう
-void ImageResizeGUI::syncPixmap(bool reset)
-{
-    ui->imageView->setPixmap(imageResize->currentPixmap(), reset);
-}
-
-void ImageResizeGUI::syncValues(UpdateMode mode, bool keepAspectRatio)
-{
-    // NOTE: 値を変更するとsignalが発せられるので、それを防止する
-    const QSignalBlocker blockers[] = {
-        QSignalBlocker(ui->widthValue),
-        QSignalBlocker(ui->heightValue),
-        QSignalBlocker(ui->vScaleValue),
-        QSignalBlocker(ui->hScaleValue),
-    };
-
-    const QSize currentSize = imageResize->currentSize();
-    const QSize originalSize = imageResize->originalSize();
-
-    if (mode != UpdateMode::WIDTH_UPDATE)
-        ui->widthValue->setValue(currentSize.width());
-
-    if (mode != UpdateMode::HEIGHT_UPDATE)
-        ui->heightValue->setValue(currentSize.height());
-
-    // NOTE: 縦横比固定かつ拡大率指定の場合は画像サイズから拡大率を算出しないようにする
-    if (keepAspectRatio && mode == UpdateMode::X_SCALE_UPDATE) {
-        ui->vScaleValue->setValue(ui->hScaleValue->value());
-    } else if (keepAspectRatio && mode == UpdateMode::Y_SCALE_UPDATE) {
-        ui->hScaleValue->setValue(ui->vScaleValue->value());
-    } else {
-        if (mode != UpdateMode::X_SCALE_UPDATE && 0 < originalSize.width())
-            ui->hScaleValue->setValue(100.0 * currentSize.width() / originalSize.width());
-
-        if (mode != UpdateMode::Y_SCALE_UPDATE && 0 < originalSize.height())
-            ui->vScaleValue->setValue(100.0 * currentSize.height() / originalSize.height());
-    }
-}
-
-#endif
