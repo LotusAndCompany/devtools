@@ -9,6 +9,10 @@ ImageResizeInterface::ImageResizeInterface(QObject *parent)
     : Tool(Tool::ID::IMAGE_RESIZE, "image-resize", parent)
 {}
 
+ImageResize::ImageResize(QObject *parent)
+    : ImageResizeInterface(parent)
+{}
+
 const QString ImageResize::invalidImageSize = "invalid image size";
 const QString ImageResize::invalidScale = "invalid scale";
 const QString ImageResize::widthOverwritten = "width is already set";

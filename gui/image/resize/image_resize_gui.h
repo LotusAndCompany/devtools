@@ -24,14 +24,46 @@ public:
      * @param ImageResize (ロジック部分)
      * @param 親ウィジェット
      */
-    explicit ImageResizeGUI(/*ImageResizeInterface *imageResize,*/ QWidget *parent = nullptr);
+    explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);
     /**
      * @brief デストラクタ
      */
     ~ImageResizeGUI();
 
+private slots:
+    void onLoadImageSelected(const QString &path);
+    void onSaveImageSelected(const QString &path);
+    void onResetButtonClicked();
+    void onWidthValueEditingFinished();
+    void onHeightValueEditingFinished();
+    void onHorizontalScaleEditingFinished();
+    void onVerticalScaleEditingFinished();
+    void onKeepAspectRatioChanged(int state);
+    void onSmoothTransformationChanged(int state);
+
 private:
     Ui::ImageResizeGUI *const ui;
+    ImageResizeInterface *const imageResize;
+
+    bool keepAspectRatio;
+
+    enum class UpdateMode {
+        /// 最小値
+        MIN,
+        /// loadやresetによる更新
+        DEFAULT,
+        /// ui->widthValue の編集による更新
+        WIDTH_UPDATE,
+        /// ui->heightValue の編集による更新
+        HEIGHT_UPDATE,
+        /// ui->hScaleValue の編集による更新
+        X_SCALE_UPDATE,
+        /// ui->vScaleValue の編集による更新
+        Y_SCALE_UPDATE,
+        /// 最大値
+        MAX,
+    };
+    void updateUIValues(UpdateMode mode = UpdateMode::DEFAULT);
 };
 #if 0
 private slots:

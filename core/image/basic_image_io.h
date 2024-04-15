@@ -80,11 +80,6 @@ protected:
      * @return 現在読み込まれている画像のファイル情報
      */
     inline const QFileInfo &originalFileInfo() const { return _fileInfo; }
-    /**
-     * @brief 現在読み込まれている画像ファイルのディレクトリを返す
-     * @return 現在読み込まれている画像ファイルのディレクトリ
-     */
-    inline const QString originalDirectory() const { return _fileInfo.dir().canonicalPath(); }
 
 private:
     QImage _original;

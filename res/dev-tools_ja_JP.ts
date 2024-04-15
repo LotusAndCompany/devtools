@@ -194,7 +194,7 @@
 <context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="+32"/>
+        <location filename="../core/tool/tool.cpp" line="+34"/>
         <source>Sample 0</source>
         <translation type="unfinished"></translation>
     </message>

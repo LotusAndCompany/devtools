@@ -87,6 +87,11 @@ public:
      * @param value 設定する値
      */
     virtual void setSmoothTransformationEnabled(bool value = true) = 0;
+    /**
+     * @brief 元の画像を返す
+     * @return 元の画像 
+     */
+    virtual const QImage &original() const = 0;
 
 protected:
     /// Bilinear補完を使うフラグ
@@ -132,6 +137,8 @@ public:
     {
         return ImageIO::originalFileInfo();
     }
+
+    inline const QImage &original() const override { return ImageIO::original(); }
 
 protected:
     bool loadImpl(const QString &path) override;

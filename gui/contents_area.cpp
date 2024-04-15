@@ -66,7 +66,7 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         content = new SampleGuiTool(Tool::ID::SAMPLE_3, "sample-3", this);
         break;
     case Sidemenu::ID::IMAGE_RESIZE:
-        content = new ImageResizeGUI(new ImageResize, this);
+        content = new ImageResizeGUI(new ImageResize(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

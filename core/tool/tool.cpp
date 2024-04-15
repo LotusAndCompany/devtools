@@ -11,7 +11,9 @@ Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
     , id(id)
     , stringID(stringID)
     , _translatable(translatable(id))
-{}
+{
+    validateID(id);
+}
 
 void Tool::validateID(ID id)
 {

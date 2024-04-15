@@ -4,15 +4,13 @@
 #include <QSignalBlocker>
 #include "core/image/resize/image_resize.h"
 
-ImageResizeGUI::ImageResizeGUI(/*ImageResizeInterface *imageResize, */ QWidget *parent)
+ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
     : GuiTool(parent)
     , ui(new Ui::ImageResizeGUI)
-//, imageResize(imageResize)
+    , imageResize(imageResize)
 {
     ui->setupUi(this);
-}
 
-#if 0
     if (imageResize->parent() == nullptr)
         imageResize->setParent(this);
 
@@ -67,24 +65,10 @@ void ImageResizeGUI::onLoadImageSelected(const QString &path)
     qDebug() << "path:" << path;
 
     bool result = imageResize->load(path);
+    imageResize->update();
 
-    {
-        const QSignalBlocker blockers[] = {
-            QSignalBlocker(ui->widthValue),
-            QSignalBlocker(ui->heightValue),
-        };
-
-        if (result) {
-            ui->widthValue->setMinimum(1);
-            ui->heightValue->setMinimum(1);
-        } else {
-            ui->widthValue->setMinimum(0);
-            ui->heightValue->setMinimum(0);
-        }
-    }
-
-    syncPixmap(true);
-    syncValues(UpdateMode::LOAD, imageResize->keepAspectRatio);
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()), true);
+    updateUIValues();
 
     // TODO: load()の結果に応じて何かメッセージを出す
 }
@@ -93,7 +77,7 @@ void ImageResizeGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    imageResize->save(path);
+    imageResize->overwriteSave(path);
 
     // TODO: save()の結果に応じて何かメッセージを出す
 }
@@ -101,27 +85,12 @@ void ImageResizeGUI::onSaveImageSelected(const QString &path)
 void ImageResizeGUI::onResetButtonClicked()
 {
     // NOTE: リセット処理。オリジナル画像は保持し、UIの拡大率などを初期値に戻す。
-    const bool keepAspectRatio = imageResize->keepAspectRatio;
-    imageResize->keepAspectRatio = true;
+    imageResize->reset();
 
-    imageResize->setScaleX(1.0);
-
-    syncPixmap();
-    {
-        const QSignalBlocker blockers[] = {
-            QSignalBlocker(ui->vScaleValue),
-            QSignalBlocker(ui->hScaleValue),
-        };
-        ui->hScaleValue->setValue(100);
-        ui->vScaleValue->setValue(100);
-        syncValues(UpdateMode::X_SCALE_UPDATE, true);
-    }
-
-    // NOTE: syncValues()ではimageResize->keepAspectRatioを参照するので
-    imageResize->keepAspectRatio = keepAspectRatio;
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
+    updateUIValues();
 }
 
-// FIXME: 画像が設定されていなくても動いてしまう
 void ImageResizeGUI::onWidthValueEditingFinished()
 {
     const int width = ui->widthValue->value();
@@ -132,9 +101,14 @@ void ImageResizeGUI::onWidthValueEditingFinished()
         return;
     }
 
-    imageResize->setWidth(width);
-    syncPixmap();
-    syncValues(UpdateMode::WIDTH_UPDATE, imageResize->keepAspectRatio);
+    if (imageResize->original().isNull())
+        return;
+
+    imageResize->setWidth(width, keepAspectRatio);
+    imageResize->update();
+
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
+    updateUIValues(UpdateMode::WIDTH_UPDATE);
 }
 
 void ImageResizeGUI::onHeightValueEditingFinished()
@@ -147,9 +121,14 @@ void ImageResizeGUI::onHeightValueEditingFinished()
         return;
     }
 
-    imageResize->setHeight(height);
-    syncPixmap();
-    syncValues(UpdateMode::HEIGHT_UPDATE, imageResize->keepAspectRatio);
+    if (imageResize->original().isNull())
+        return;
+
+    imageResize->setHeight(height, keepAspectRatio);
+    imageResize->update();
+
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
+    updateUIValues(UpdateMode::HEIGHT_UPDATE);
 }
 
 void ImageResizeGUI::onHorizontalScaleEditingFinished()
@@ -162,9 +141,17 @@ void ImageResizeGUI::onHorizontalScaleEditingFinished()
         return;
     }
 
-    imageResize->setScaleX(hScale / 100.0);
-    syncPixmap();
-    syncValues(UpdateMode::X_SCALE_UPDATE, imageResize->keepAspectRatio);
+    if (imageResize->original().isNull())
+        return;
+
+    if (keepAspectRatio)
+        imageResize->setScale(hScale / 100.0);
+    else
+        imageResize->setScaleX(hScale / 100.0);
+    imageResize->update();
+
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
+    updateUIValues(UpdateMode::X_SCALE_UPDATE);
 }
 
 void ImageResizeGUI::onVerticalScaleEditingFinished()
@@ -177,9 +164,17 @@ void ImageResizeGUI::onVerticalScaleEditingFinished()
         return;
     }
 
-    imageResize->setScaleY(vScale / 100.0);
-    syncPixmap();
-    syncValues(UpdateMode::Y_SCALE_UPDATE, imageResize->keepAspectRatio);
+    if (imageResize->original().isNull())
+        return;
+
+    if (keepAspectRatio)
+        imageResize->setScale(vScale / 100.0);
+    else
+        imageResize->setScaleY(vScale / 100.0);
+    imageResize->update();
+
+    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
+    updateUIValues(UpdateMode::Y_SCALE_UPDATE);
 }
 
 void ImageResizeGUI::onKeepAspectRatioChanged(int state)
@@ -188,10 +183,10 @@ void ImageResizeGUI::onKeepAspectRatioChanged(int state)
 
     switch (state) {
     case Qt::CheckState::Checked:
-        imageResize->keepAspectRatio = true;
+        keepAspectRatio = true;
         break;
     case Qt::CheckState::Unchecked:
-        imageResize->keepAspectRatio = false;
+        keepAspectRatio = false;
         break;
     default:
         // unreachable
@@ -207,10 +202,10 @@ void ImageResizeGUI::onSmoothTransformationChanged(int state)
 
     switch (state) {
     case Qt::CheckState::Checked:
-        imageResize->smoothTransformation = true;
+        imageResize->setSmoothTransformationEnabled(true);
         break;
     case Qt::CheckState::Unchecked:
-        imageResize->smoothTransformation = false;
+        imageResize->setSmoothTransformationEnabled(false);
         break;
     default:
         // unreachable
@@ -220,6 +215,41 @@ void ImageResizeGUI::onSmoothTransformationChanged(int state)
     // TODO: 無理やり更新させる
 }
 
+void ImageResizeGUI::updateUIValues(UpdateMode mode)
+{
+    // NOTE: 値を変更するとsignalが発せられるので、それを防止する
+    const QSignalBlocker blockers[] = {
+        QSignalBlocker(ui->widthValue),
+        QSignalBlocker(ui->heightValue),
+        QSignalBlocker(ui->vScaleValue),
+        QSignalBlocker(ui->hScaleValue),
+    };
+
+    const auto size = imageResize->computedSize();
+    const double scaleX = imageResize->computedScaleX();
+    const double scaleY = imageResize->computedScaleY();
+
+    if (mode != UpdateMode::WIDTH_UPDATE)
+        ui->widthValue->setValue(size.width());
+
+    if (mode != UpdateMode::HEIGHT_UPDATE)
+        ui->heightValue->setValue(size.height());
+
+    // NOTE: 縦横比固定かつ拡大率指定の場合は画像サイズから拡大率を算出しないようにする
+    if (keepAspectRatio && mode == UpdateMode::X_SCALE_UPDATE) {
+        ui->vScaleValue->setValue(ui->hScaleValue->value());
+    } else if (keepAspectRatio && mode == UpdateMode::Y_SCALE_UPDATE) {
+        ui->hScaleValue->setValue(ui->vScaleValue->value());
+    } else {
+        if (mode != UpdateMode::X_SCALE_UPDATE)
+            ui->hScaleValue->setValue(100.0 * scaleX);
+
+        if (mode != UpdateMode::Y_SCALE_UPDATE)
+            ui->vScaleValue->setValue(100.0 * scaleY);
+    }
+}
+
+#if 0
 // FIXME: 画像が設定されていなくても動いてしまう
 void ImageResizeGUI::syncPixmap(bool reset)
 {
