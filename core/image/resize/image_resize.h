@@ -3,29 +3,14 @@
 
 #include <QFileInfo>
 #include <QPixmap>
+#include "core/image/basic_image_edit_interface.h"
 #include "core/image/basic_image_io.h"
 #include "core/tool/tool.h"
 
-/*
- * 全体的に見直しが必要。
- * 1. BasicImageEditInterface→save(), load(), commit()もしくはupdated(), preview()
- * 2. BasicImageIO復活→save(), load(), original
- * 3. keepAspectRatioはsetWidth, setHeightに引数として渡す。
- * 4. 
- * 5. リサイズ系関数は以下のようにし、別の関数を呼ぶと以前の内容が消えるようにする。
- *    但し、setWidth→setScaleYなどは許す
- *    setWidth(w, kar)
- *    setHeight(h, kar)
- *    setSize(w, h)
- *    setScale(s)=setScale(s, s)
- *    setScale(sx, sy)
- *    setScaleX(sx)=setScale(sx, 1.0)
- *    setScaleY(sy)=setScale(1.0, sy)
- * 6. ↑の関数ではpixmapは更新せず、update()で反映させる
- * 7. smoothTransformationはupdate()の引数にする
+/**
+ * @brief 画像をリサイズするツールのインターフェイス
  */
-
-class ImageResizeInterface : public Tool
+class ImageResizeInterface : public Tool, public BasicImageEditInterface
 {
     Q_OBJECT
 
@@ -33,18 +18,84 @@ public:
     explicit ImageResizeInterface(QObject *parent = nullptr);
     virtual ~ImageResizeInterface() = default;
 
-    virtual bool load(const QString &path) = 0;
-    virtual bool save(const QString &path, const char *format = nullptr, int quality = -1) const = 0;
+    /**
+     * @brief 拡大率を設定する。他の設定は上書きされる。
+     * @param sx 横方向の拡大率
+     * @param sy 横方向の拡大率
+     * @exception InvalidArgumentException &lt;double&gt; sx<0またはsy<0の場合
+     */
+    virtual void setScale(double sx, double sy) noexcept(false) = 0;
+    /**
+     * @brief 拡大率を設定する。他の設定は上書きされる。
+     * @exception InvalidArgumentException &lt;double&gt; s<0の場合
+     * @param s 拡大率
+     */
+    inline void setScale(double s) noexcept(false) { setScale(s, s); }
+    /**
+     * @brief 横方向の拡大率を設定する。横方向の設定は上書きされる。
+     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
+     * @param sx 横方向の拡大率
+     */
+    virtual void setScaleX(double sx) noexcept(false) = 0;
+    /**
+     * @brief 縦方向の拡大率を設定する。縦方向の設定は上書きされる。
+     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
+     * @param sy 縦方向の拡大率
+     */
+    virtual void setScaleY(double sy) noexcept(false) = 0;
 
-    inline void setScaleX(double sx) { setScale(sx, 1.0); }
-    inline void setScaleY(double sy) { setScale(1.0, sy); }
-    inline void setScale(double s) { setScale(s, s); }
-    virtual void setScale(double sx, double sy) = 0;
+    /**
+     * @brief サイズを設定する。他の設定は上書きされる。
+     * @param サイズ
+     */
     virtual void setSize(const QSize &size) = 0;
+    /**
+     * @brief 横幅を設定する。横方向の設定は上書きされる。 keepAspectRatio が`true`の場合は縦方向の設定も上書きされる。
+     * @param w 横幅
+     * @param keepAspectRatio 縦横比を保存する。
+     */
     virtual void setWidth(unsigned int w, bool keepAspectRatio = false) = 0;
+    /**
+     * @brief 縦幅を設定する。縦方向の設定は上書きされる。 keepAspectRatio が`true`の場合は横方向の設定も上書きされる。
+     * @param h 縦幅
+     * @param keepAspectRatio 縦横比を保存する。
+     */
     virtual void setHeight(unsigned int h, bool keepAspectRatio = false) = 0;
+
+    /**
+     * @brief 現在の設定に基づいて計算される画像のサイズ
+     * @return 画像のサイズ
+     */
+    virtual QSize computedSize() const = 0;
+    /**
+     * @brief 現在の設定に基づいて計算される画像の横方向の拡大率
+     * @return 画像の横方向の拡大率
+     */
+    virtual double computedScaleX() const = 0;
+    /**
+     * @brief 現在の設定に基づいて計算される画像の縦方向の拡大率
+     * @return 画像の縦方向の拡大率
+     */
+    virtual double computedScaleY() const = 0;
+    /**
+     * @brief smoothTransformationEnabled を返す
+     * @return smoothTransformationEnabled の値
+     */
+    bool isSmoothTransformationEnabled() const { return smoothTransformationEnabled; }
+    /**
+     * @brief smoothTransformationEnabled を設定する
+     * @param value 設定する値
+     */
+    virtual void setSmoothTransformationEnabled(bool value = true) = 0;
+
+protected:
+    /// Bilinear補完を使うフラグ
+    bool smoothTransformationEnabled = false;
 };
 
+/**
+ * @brief 画像をリサイズするツール
+ */
 class ImageResize : public ImageResizeInterface, private ImageIO
 {
     Q_OBJECT
@@ -52,148 +103,108 @@ class ImageResize : public ImageResizeInterface, private ImageIO
 public:
     explicit ImageResize(QObject *parent = nullptr);
 
-    /**
-     * @brief 画像を読み込む
-     * @param path 読み込む画像
-     * @return 成功なら`true`
-     */
-    bool load(const QString &path) override { return ImageIO::load(path); }
-    /**
-     * @brief 画像を保存する(上書き)
-     * @param path 保存先
-     * @param format フォーマット。"PNG"など。nullptrならファイル名から推定する。
-     * @return 
-     */
-    bool save(const QString &path, const char *format = nullptr, int quality = -1);
+    inline bool save(const QString &path,
+                     const char *format = nullptr,
+                     int quality = -1) const override
+    {
+        return ImageIO::save(path, _current, format, quality);
+    }
+    inline bool overwriteSave(const QString &path, const char *format, int quality) const override
+    {
+        return ImageIO::overwriteSave(path, _current, format, quality);
+    }
+
+    void setScale(double sx, double sy) override;
+    void setScaleX(double sx) override;
+    void setScaleY(double sy) override;
+
+    void setSize(const QSize &size) override;
+    void setWidth(unsigned int w, bool keepAspectRatio = false) override;
+    void setHeight(unsigned int h, bool keepAspectRatio = false) override;
+
+    QSize computedSize() const override;
+    double computedScaleX() const override;
+    double computedScaleY() const override;
+
+    void setSmoothTransformationEnabled(bool value = true) override;
+
+    inline const QFileInfo &fileInfo(unsigned int index = 0) const override
+    {
+        return ImageIO::originalFileInfo();
+    }
+
+protected:
+    bool loadImpl(const QString &path) override;
+    bool updateImpl() override;
+    void resetImpl() override;
 
 private:
-    struct ResizeOperation
+    static const QString invalidImageSize;
+    static const QString invalidScale;
+    static const QString widthOverwritten;
+    static const QString heightOverwritten;
+
+    /// サイズ変更系の関数で操作した情報を保存する為の構造体
+    struct ResizeHints
     {
         enum class Type {
+            /// 最小値
             MIN,
+            /// 変更しない
+            DEFAULT,
+            /// サイズ指定による変更
             SIZE,
+            /// 拡大率指定による変更
             SCALE,
+            /// 最大値
             MAX,
-        } type;
+        };
+        /// 値の種類
+        Type type = Type::DEFAULT;
+
         union {
+            /// type == SIZE の時のみ有効
             unsigned int size;
+            /// type == SCALE の時のみ有効
             double scale;
         };
-    } width, height;
-};
+    };
 
-#if 0
-class ImageResizeInterface : public Tool
-{
-    Q_OBJECT
-
-public:
-    explicit ImageResizeInterface(QObject *parent = nullptr);
-    virtual ~ImageResizeInterface() = default;
-
-    virtual const QPixmap &currentPixmap() const = 0;
-    inline QSize currentSize() const { return currentPixmap().size(); }
-    virtual QSize originalSize() const = 0;
-
-    virtual bool load(const QString &path) = 0;
-    virtual bool save(const QString &path, const char *format = nullptr) const = 0;
-
-    virtual void setScaleX(double sx) = 0;
-    virtual void setScaleY(double sy) = 0;
-    virtual void setWidth(unsigned int w) = 0;
-    virtual void setHeight(unsigned int h) = 0;
-
-    /// アスペクト比を固定するフラグ
-    bool keepAspectRatio = false;
-    /// bilinear補完を有効にするフラグ
-    bool smoothTransformation = false;
-};
-
-class ImageResize : public ImageResizeInterface
-{
-    Q_OBJECT
-
-public:
-    explicit ImageResize(QObject *parent = nullptr);
+    /// 横幅のデータと縦幅のデータ
+    ResizeHints width, height;
 
     /**
-     * @brief 現在の画像を返す
-     * @return 現在の画像
+     * @brief computedSize() の算出に使う
+     * @param originalSize 元画像の横もしくは縦のサイズ
+     * @param hints width もしくは height
+     * @exception InvalidArgumentException &lt;unsigned int&gt; originalSize == 0の場合
+     * @return 計算値
      */
-    const QPixmap &currentPixmap() const override { return pixmap; }
+    unsigned int computedSizeInternal(unsigned int originalSize, const ResizeHints &hints) const
+        noexcept(false);
     /**
-     * @brief 編集前の画像サイズを返す
-     * @return 編集前の画像サイズ
+     * @brief computedScaleX() computedScaleY() の算出に使う
+     * @param originalSize 元画像の横もしくは縦のサイズ
+     * @param hints width もしくは height
+     * @exception InvalidArgumentException &lt;unsigned int&gt; originalSize == 0の場合
+     * @return 計算値
      */
-    QSize originalSize() const override { return original.size(); }
+    double computedScaleInternal(unsigned int originalSize, const ResizeHints &hints) const
+        noexcept(false);
     /**
-     * @brief 画像を読み込む
-     * @details original, pixmap は上書きされる
-     * @param path 読み込む画像のパス
-     * @return 成功したら`true`
+     * @brief 縦横比を返す
+     * @return 縦横比
+     * @exception InvalidStateException 画像サイズが無効な場合
      */
-    bool load(const QString &path) override;
-    /**
-     * @brief 現在の画像を指定のパスに保存する
-     * @param path 保存先
-     * @param format 保存形式。PNGなど。
-     * @return 成功したら`true`
-     */
-    bool save(const QString &path, const char *format = nullptr) const override;
-
-    // NOTE: scale<0の時は入力の時点で弾くようにする
-    /**
-     * @brief 横方向の拡大率を設定する
-     * @details keepAspectRatio が`true`の場合は縦方向にも同じ拡大率が適用される
-     * @param sx 拡大率
-     * @exception InvalidArgumentException &lt;double&gt; sx<0の場合
-     */
-    void setScaleX(double sx) noexcept(false) override;
-    /**
-     * @brief 縦方向の拡大率を設定する
-     * @details keepAspectRatio が`true`の場合は横方向にも同じ拡大率が適用される
-     * @param sy 拡大率
-     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
-     */
-    void setScaleY(double sy) noexcept(false) override;
-    /**
-     * @brief 横幅を設定する
-     * @details keepAspectRatio が`true`の場合は縦幅も合わせて変更される
-     * @param w 横幅
-     */
-    void setWidth(unsigned int w) noexcept(false) override;
-    /**
-     * @brief 縦幅を設定する
-     * @details keepAspectRatio が`true`の場合は横幅も合わせて変更される
-     * @param h 縦幅
-     */
-    void setHeight(unsigned int h) noexcept(false) override;
-
-private:
-    /// 拡大率の値が無効
-    static const QString invalidScaleReason;
-    /// サイズが無効
-    static const QString invalidSizeReason;
-
-    /// 編集前の画像。 load() でのみ設定される。
-    QPixmap original;
-
-    // NOTE: これはロジック側で持たない方が良いかも知れない。GUI向けの側面が強い。
-    /// 編集対象の画像。 load() の他、 setScaleX(), setScaleY(), setWidth(), setHeight() で変更される。
-    QPixmap pixmap;
-
-    /// 読み込んだファイルの情報。 load() でのみ設定される。
-    QFileInfo currentFileInfo;
-
+    double aspectRatio() const noexcept(false);
     /**
      * @brief 現在の smoothTransformation を元に変形モードを返す
      * @return 変形モード
      */
     inline Qt::TransformationMode transformationMode() const
     {
-        return smoothTransformation ? Qt::SmoothTransformation : Qt::FastTransformation;
+        return smoothTransformationEnabled ? Qt::SmoothTransformation : Qt::FastTransformation;
     }
 };
-#endif
 
 #endif // IMAGE_RESIZE_H
