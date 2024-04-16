@@ -6,6 +6,12 @@
 #include <QImage>
 #include <QString>
 
+#ifdef _TEST_TestImageIO
+namespace Test {
+class TestImageIO;
+}
+#endif
+
 /**
  * @brief 画像を読み書きする機能を提供するクラス。複数の画像を読み書きするなら不要、というか別の方法を用意する必要がある。
  * @details 保存する画像のデータ型として、
@@ -84,6 +90,10 @@ protected:
 private:
     QImage _original;
     QFileInfo _fileInfo;
+
+#ifdef _TEST_TestImageIO
+    friend class Test::TestImageIO;
+#endif
 };
 
 #endif // IMAGE_IO_H

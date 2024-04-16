@@ -122,22 +122,36 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.h)
     configure_file(${TEST_CONFIG_IN} ${TEST_CONFIG_OUT} @ONLY)
 
+    # GUI independent tests
     macro(guiless_test test_name)
         add_executable(${test_name} ${ARGN} tests/test_util.cpp)
+        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
         add_test(NAME ${test_name} COMMAND ${test_name})
 
-        target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
+        target_link_libraries(${test_name} PRIVATE Qt6::Test)
+    endmacro(guiless_test)
+
+    # depends on GUI, but not on widgets
+    macro(widgetless_test test_name)
+        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
+        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
+        add_test(NAME ${test_name} COMMAND ${test_name})
+
+        target_link_libraries(${test_name} PRIVATE Qt6::Test Qt6::Gui)
     endmacro(guiless_test)
 
     #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
 
     # core
     guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
+    # core/exception
     guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
     guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)
     guiless_test(test_invalid_argument_exception tests/core/exception/test_invalid_argument_exception.cpp)
     guiless_test(test_invalid_state_exception tests/core/exception/test_invalid_state_exception.cpp)
     guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
+    # core/iamge
+    widgetless_test(test_basic_image_io tests/core/image/test_basic_image_io.cpp core/image/basic_image_io.cpp)
 endif()
 
 # Documents
