@@ -1,14 +1,16 @@
 #ifndef TEST_UTIL_H
 #define TEST_UTIL_H
 
-#include <QString>
 #include <QRandomGenerator>
+#include <QString>
+#include "test_config.h"
 
-namespace Test
-{
+namespace Test {
+const QString TEST_SRC_DIR = QString(_TEST_SRC_DIR);
+const QString TEST_BIN_DIR = QString(_TEST_BIN_DIR);
+
 class RandomData
 {
-    QRandomGenerator gen;
 public:
     explicit RandomData() {}
     explicit RandomData(int seed);
@@ -36,6 +38,9 @@ public:
     QString nextQString(int length);
     QString nextQString(const QString& charSets);
     QString nextQString(int length, const QString& charSets);
+
+private:
+    QRandomGenerator gen;
 };
 } // namespace Test
 

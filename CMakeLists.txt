@@ -118,6 +118,10 @@ endif()
 #add_subdirectory(tests)
 # Tests
 if(${ENABLE_DEBUG_BUILD_FEATURES})
+    set(TEST_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_config.h.in)
+    set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.h)
+    configure_file(${TEST_CONFIG_IN} ${TEST_CONFIG_OUT} @ONLY)
+
     macro(guiless_test test_name)
         add_executable(${test_name} ${ARGN} tests/test_util.cpp)
         add_test(NAME ${test_name} COMMAND ${test_name})

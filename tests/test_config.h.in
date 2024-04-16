@@ -1,0 +1,7 @@
+#ifndef TEST_CONFIG_H
+#define TEST_CONFIG_H
+
+constexpr const char *_TEST_SRC_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/tests";
+constexpr const char *_TEST_BIN_DIR = "@CMAKE_CURRENT_BINARY_DIR@";
+
+#endif  // TEST_CONFIG_H
