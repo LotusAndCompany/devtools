@@ -61,12 +61,14 @@ void BasicImageView::dropEvent(QDropEvent *event)
 
 void BasicImageView::onZoomInButtonPressed()
 {
-    zoomIn();
+    if (!original.isNull())
+        zoomIn();
 }
 
 void BasicImageView::onZoomOutButtonPressed()
 {
-    zoomOut();
+    if (!original.isNull())
+        zoomOut();
 }
 
 void BasicImageView::zoomIn()
@@ -99,12 +101,11 @@ void BasicImageView::updateScale(double newScale)
 {
     scale = newScale;
 
-    ui->zoomOutButton->setDisabled(scale == minScale);
-    ui->zoomInButton->setDisabled(scale == maxScale);
+    ui->zoomOutButton->setDisabled(scale <= minScale);
+    ui->zoomInButton->setDisabled(maxScale <= scale);
 
     ui->scaleLabel->setText('x' + QString::number(scale, 'g', 2));
 
-    // FIXME: 画像がnullだと"QPixmap::scaled: Pixmap is a null pixmap"が発生する
     if (!original.isNull())
         ui->image->setPixmap(original.scaled(original.size() * scale));
     else

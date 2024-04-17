@@ -68,7 +68,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+111"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+112"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>

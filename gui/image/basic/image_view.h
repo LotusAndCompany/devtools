@@ -8,6 +8,12 @@ namespace Ui {
 class BasicImageView;
 }
 
+#ifdef _TEST_BasicImageView
+namespace Test {
+class TestBasicImageView;
+}
+#endif
+
 /**
  * @brief 画像編集系のGUIツールで画像を表示する部分
  */
@@ -18,7 +24,7 @@ class BasicImageView : public QWidget
 public:
     /**
      * @brief コンストラクタ
-     * @param 親ウィジェット
+     * @param parent 親ウィジェット
      */
     explicit BasicImageView(QWidget *parent = nullptr);
     /**
@@ -83,6 +89,10 @@ private:
      * @param newScale 新しい scale の値
      */
     void updateScale(double newScale); // NOTE: 関数名を改めた方が良いかも
+
+#ifdef _TEST_BasicImageView
+    friend class Test::TestBasicImageView;
+#endif
 };
 
 #endif // BASIC_IMAGE_VIEW_H
