@@ -9,14 +9,36 @@ class TestInvalidStateException;
 }
 #endif
 
+/**
+ * @brief 不正な状態になった時に発生させる例外
+ * @details これを発生させれば良いという事ではなく、これが発生するようなコードは直すべき
+ */
 class InvalidStateException : public CommonException
 {
 public:
+    /**
+     * @brief デフォルトコンストラクタ
+     */
     InvalidStateException() = default;
+    /**
+     * @brief コピーコンストラクタ
+     * @param src コピー元インスタンス
+     */
     InvalidStateException(const InvalidStateException &src) = default;
+    /**
+     * @brief 任意のメッセージを設定できるコンストラクタ
+     * @param message メッセージ
+     */
     explicit InvalidStateException(const QString &message)
         : CommonException(message)
     {}
+    /**
+     * @brief その状態と理由からメッセージを生成するコンストラクタ
+     * @param actual その引数
+     * @param expected 不正な理由、正しい状態など
+     * 
+     * @details "[InvalidStateException] actual: <actual>, expected: <expected>" の形式のメッセージが設定される
+     */
     InvalidStateException(const QString &actual, const QString &expected)
     {
         message = QString("[InvalidStateException] actual: ") % actual % QString(", expected: ")
@@ -26,7 +48,6 @@ public:
     virtual void raise() const override { throw *this; }
 
 protected:
-    // NOTE: protectedにしたい
     virtual QException *clone() const override { return new InvalidStateException(*this); }
 
 #ifdef _TEST_InvalidStateException

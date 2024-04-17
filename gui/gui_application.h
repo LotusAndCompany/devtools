@@ -6,34 +6,71 @@
 #include "core/application_mixin.h"
 #include "main_window.h"
 
+/**
+ * @brief GUIアプリケーション
+ */
 class GuiApplication : public QApplication, public ApplicationMixin
 {
     Q_OBJECT
 
-    MainWindow window;
-
 public:
+    /**
+     * @brief コンストラクタ
+     * @details シグナルを接続している@n
+     *          MainWindow::colorSchemeChanged() → GuiApplication::onWindowColorSchemeChanged()
+     * @param argc `int main(int argc, char *argv[])`で受け取った `argc`
+     * @param argv `int main(int argc, char *argv[])`で受け取った `argv`
+     */
     GuiApplication(int argc, char **argv);
     GuiApplication() = delete;
 
+    /**
+     * @brief 現在の言語
+     * @return 現在の言語。言語に依るかも知れないが、ja_JPのような形式。
+     */
     inline QString language() { return translator().language(); }
 
     void setup() override;
     int start() override;
 
 private:
+    /**
+     * @brief メインウィンドウ
+     */
+    MainWindow window;
+
     // NOTE: staticにできる
+    /**
+     * @brief カラースキームを変更をUIに反映する
+     * @details ライトモードの時には黒いアイコン(res/light/)@n
+     *          ダークモードの時は白いアイコン(res/dark/) を使うようにアイコンテーマを変更する@n
+     *          各アイコンテーマは res/light/index.theme, res/dark/index.theme で定義されている
+     * 
+     * @sa [QIcon::setThemeName(const QString &name)](https://doc.qt.io/qt-6/qicon.html#setThemeName)
+     * @sa [Freedesktop The icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html)
+     */
     void applyColorScheme();
 
 private slots:
     // NOTE: staticにできる
+    /**
+     * @brief カラースキームが変更された時に呼び出される
+     * @details MainWindow::colorSchemeChanged() と接続される
+     * 
+     * @sa GuiApplication::GuiApplication(int argc, char **argv)
+     */
     void onWindowColorSchemeChanged();
 
 // Platform specific
 #ifdef Q_OS_MACOS
 private:
-    // NOTE: MacOSの場合はDockのアイコンがクリックされた時にウィンドウを表示する
-    //       ウィンドウを隠す処理はMainWindow::closeEvent(QCloseEvent *event)で実装
+    /**
+     * @brief イベント処理
+     * @details MacOSの場合、Dockのアイコンがクリックされた時にウィンドウを表示する
+     * @return 処理した場合は`true`、無視した場合は`false`
+     * 
+     * @sa MainWindow::closeEvent(QCloseEvent *event)
+     */
     bool event(QEvent *) override;
 /*
 private slots:

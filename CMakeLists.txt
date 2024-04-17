@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # パッケージを探す
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
+find_package(Doxygen)
 
 # アイコンを設定
 # TODO: 環境で分ける
@@ -28,6 +29,7 @@ set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-too
 # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
 set(APP_INFO_FILE app_info.autogen.cpp)
 # TODO: 環境毎に分ける
+# configure_file()を使うようにしたかったが、ビルド時にCMAKE変数を参照させるのは無理そう?
 if(APPLE)
     if(NOT EXISTS ${APP_INFO_FILE})
         execute_process(
@@ -37,15 +39,13 @@ if(APPLE)
 
     set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
     file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
-    add_custom_target(generate_app_info
+    add_custom_target(DevTools_app_info
         COMMAND ${SH_FILE} ${CMAKE_PROJECT_VERSION} "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
     )
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    # プロジェクトファイル
-    # TODO: Support unit test -> https://doc.qt.io/qt-6/qttest-index.html
-    #       Debug, RelWithDebInfoの時にテストコードを追加すれば良い?
+    # Project files
     set(TRANSLATION_FILES res/dev-tools_ja_JP.ts)
     qt_add_executable(DevTools
         MANUAL_FINALIZATION
@@ -96,10 +96,17 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+    set(ENABLE_DEBUG_BUILD_FEATURES ON)
+else()
+    set(ENABLE_DEBUG_BUILD_FEATURES OFF)
+endif()
+
 # TODO: tests/CMakeLists.txtに書きたい
 #add_subdirectory(tests)
 # Tests
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+if(${ENABLE_DEBUG_BUILD_FEATURES})
     macro(guiless_test test_name)
         add_executable(${test_name} ${ARGN} tests/test_util.cpp)
         add_test(NAME ${test_name} COMMAND ${test_name})
@@ -118,18 +125,49 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWith
     guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
 endif()
 
+# Documents
+if(${ENABLE_DEBUG_BUILD_FEATURES})
+    if(DOXYGEN_FOUND)
+        # set input and output files
+        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxyfile)
+        SET(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+        # copy icon
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/docs/dev-tools_icon.doxygen.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/)
+
+        # request to configure the file
+        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+        message("Doxygen build started")
+
+        # note the option ALL which allows to build the docs together with the application
+        add_custom_target(DevTools-docs ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM
+        )
+    else()
+      message(WARNING "Doxygen not found")
+    endif()
+endif()
+
+# PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
-add_dependencies(DevTools generate_app_info)
+# app_info.autogen.cppを自動で生成させる
+add_dependencies(DevTools DevTools_app_info)
+
+# 翻訳ファイルの更新と生成を自動化
 add_dependencies(DevTools_lrelease DevTools_lupdate)
 add_dependencies(DevTools DevTools_lrelease)
 
+# インクルードディレクトリとしてプロジェクトフォルダを追加
 target_include_directories(DevTools
     PRIVATE .
 )
 
 # ライブラリをリンクする
-# TODO: 動的リンクになっているか確認する
 target_link_libraries(DevTools
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 )
