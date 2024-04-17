@@ -1,8 +1,13 @@
 #ifndef INVALID_ARGUMENT_EXCEPTION_H
 #define INVALID_ARGUMENT_EXCEPTION_H
 
-#include <QTextStream>
 #include "common_exception.h"
+
+#ifdef _TEST_InvalidArgumentException
+namespace Test {
+class TestInvalidArgumentException;
+}
+#endif
 
 template<typename T>
 class InvalidArgumentException : public CommonException
@@ -15,14 +20,18 @@ public:
     {}
     InvalidArgumentException(const T &given, const QString &reason)
     {
-        QTextStream stream;
-        stream << "[InvalidArgumentException] given:" << given << ", reason:" << reason;
-        message = stream.readAll();
+        message = QString("[InvalidArgumentException] given: %1, reason: %2").arg(given).arg(reason);
     }
+
+    virtual void raise() const override { throw *this; }
 
 protected:
     // NOTE: protectedにしたい
     virtual QException *clone() const override { return new InvalidArgumentException(*this); }
+
+#ifdef _TEST_InvalidArgumentException
+    friend class Test::TestInvalidArgumentException;
+#endif
 };
 
 #endif // INVALID_ARGUMENT_EXCEPTION_H

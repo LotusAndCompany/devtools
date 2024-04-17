@@ -1,0 +1,74 @@
+#include <QScopedPointer>
+#include <QtTest>
+
+#define _TEST_UnderDevelopmentException
+#include "core/exception/under_development_exception.h"
+#undef _TEST_UnderDevelopmentException
+
+namespace Test {
+class TestUnderDevelopmentException : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void test_defaultConstructor();
+    void test_messageConstructor();
+    void test_clone();
+    void test_raise();
+};
+
+void TestUnderDevelopmentException::test_defaultConstructor()
+{
+    UnderDevelopmentException e;
+    // デフォルトコンストラクタの場合、"[UnderDevelopmentException] Under development..."が設定されること
+    QVERIFY(e.message == "[UnderDevelopmentException] Under development...");
+}
+
+void TestUnderDevelopmentException::test_messageConstructor()
+{
+    const QString msg = "Custom message";
+    UnderDevelopmentException e(msg);
+    // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
+    QVERIFY(e.message == msg);
+}
+
+void TestUnderDevelopmentException::test_clone()
+{
+    const QString msg = "Custom message";
+    UnderDevelopmentException e(msg);
+    // QVERIFYはreturn;する可能性があるため、QScopedPointerに入れる
+    const QScopedPointer<QException> copied(e.clone());
+
+    // clone()を呼び出しても元のインスタンスが変わらないこと
+    QVERIFY(e.message == msg);
+    // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
+    QVERIFY(static_cast<UnderDevelopmentException *>(copied.get())->message == msg);
+    // clone()で返された物が元のインスタンスとは異なること
+    QVERIFY(&e != copied.get());
+}
+
+void TestUnderDevelopmentException::test_raise()
+{
+    const QString msg = "Custom message";
+    UnderDevelopmentException src(msg);
+
+    // try-catchのスコープより寿命が長い例外インスタンスを投げる
+    try {
+        src.raise();
+    } catch (UnderDevelopmentException &e) {
+        // srcが変更されていないこと
+        QVERIFY(src.message == msg);
+
+        // eとsrcとの内容が同じであること
+        QVERIFY(e.message == msg);
+
+        return;
+    }
+
+    QFAIL("raise() did not throw UnderDevelopmentException");
+}
+} // namespace Test
+
+QTEST_APPLESS_MAIN(Test::TestUnderDevelopmentException)
+
+#include "test_under_development_exception.moc"

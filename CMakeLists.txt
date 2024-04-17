@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # パッケージを探す
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
 
 # アイコンを設定
 # TODO: 環境で分ける
@@ -94,6 +94,28 @@ else()
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+endif()
+
+# TODO: tests/CMakeLists.txtに書きたい
+#add_subdirectory(tests)
+# Tests
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+    macro(guiless_test test_name)
+        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
+        add_test(NAME ${test_name} COMMAND ${test_name})
+
+        target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
+    endmacro(guiless_test)
+
+    #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
+
+    # core
+    guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
+    guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
+    guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)
+    guiless_test(test_invalid_argument_exception tests/core/exception/test_invalid_argument_exception.cpp)
+    guiless_test(test_invalid_state_exception tests/core/exception/test_invalid_state_exception.cpp)
+    guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
 endif()
 
 target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
