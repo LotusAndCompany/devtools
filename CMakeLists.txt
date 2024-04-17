@@ -138,7 +138,16 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         add_test(NAME ${test_name} COMMAND ${test_name})
 
         target_link_libraries(${test_name} PRIVATE Qt6::Test Qt6::Gui)
-    endmacro(guiless_test)
+    endmacro(widgetless_test)
+
+    # widget dependent tests
+    macro(widget_test test_name)
+        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
+        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
+        add_test(NAME ${test_name} COMMAND ${test_name})
+
+        target_link_libraries(${test_name} PRIVATE Qt6::Test Qt6::Gui Qt6::Widgets)
+    endmacro(widget_test)
 
     #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
 
@@ -152,6 +161,8 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
     # core/iamge
     widgetless_test(test_basic_image_io tests/core/image/test_basic_image_io.cpp core/image/basic_image_io.cpp)
+    # gui/image/basic
+    widget_test(test_basic_image_view_control tests/gui/image/basic/test_control.cpp gui/image/basic/control.cpp gui/image/basic/file_dialogs.cpp)
 endif()
 
 # Documents

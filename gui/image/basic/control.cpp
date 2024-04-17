@@ -9,12 +9,10 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //connect(ui->saveButton, &QPushButton::clicked, this, &BasicImageViewControl::saveButtonClicked);
     connect(ui->resetButton,
             &QPushButton::clicked,
             this,
             &BasicImageViewControl::resetButtonClicked);
-    //connect(ui->loadButton, &QPushButton::clicked, this, &BasicImageViewControl::loadButtonClicked);
 
     connect(ui->saveButton,
             &QPushButton::clicked,
