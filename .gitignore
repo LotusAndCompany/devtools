@@ -74,6 +74,7 @@ CMakeLists.txt.user*
 
 # Build directories
 build-*/
+build/*
 
 # Log files
 *.log
