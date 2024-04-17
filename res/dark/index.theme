@@ -1,0 +1,20 @@
+[Icon Theme]
+Name=dark
+Comment=dark theme icons
+PanelDefault=22
+PanelSizes=22
+Directories=material,remix
+
+[material]
+Size=24
+Context=Applications
+MinSize=16
+MaxSize=512
+Type=Scalable
+
+[remix]
+Size=24
+Context=Applications
+MinSize=16
+MaxSize=512
+Type=Scalable

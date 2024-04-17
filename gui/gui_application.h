@@ -3,8 +3,8 @@
 
 #include <QApplication>
 #include <QtSystemDetection>
-#include "application/application_mixin.h"
-#include "mainwindow.h"
+#include "core/application_mixin.h"
+#include "main_window.h"
 
 class GuiApplication : public QApplication, public ApplicationMixin
 {
@@ -15,15 +15,26 @@ class GuiApplication : public QApplication, public ApplicationMixin
 public:
     GuiApplication(int argc, char **argv);
     GuiApplication() = delete;
-    virtual ~GuiApplication() = default;
+
+    inline QString language() { return translator().language(); }
 
     void setup() override;
     int start() override;
 
+private:
+    // NOTE: staticにできる
+    void applyColorScheme();
+
+private slots:
+    // NOTE: staticにできる
+    void onWindowColorSchemeChanged();
+
 // Platform specific
 #ifdef Q_OS_MACOS
-public:
-    bool eventFilter(QObject *o, QEvent *e) override;
+private:
+    // NOTE: MacOSの場合はDockのアイコンがクリックされた時にウィンドウを表示する
+    //       ウィンドウを隠す処理はMainWindow::closeEvent(QCloseEvent *event)で実装
+    bool event(QEvent *) override;
 /*
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
