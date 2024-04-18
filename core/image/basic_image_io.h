@@ -23,7 +23,13 @@ class TestImageIO;
 class ImageIO
 {
 protected:
+    /**
+     * @brief コンストラクタ
+     */
     ImageIO() = default;
+    /**
+     * @brief デストラクタ
+     */
     ~ImageIO() = default;
 
     /**
@@ -50,7 +56,10 @@ protected:
                                      const char *format = nullptr,
                                      int quality = -1)
     {
-        return image.save(path, format, quality);
+        if (image.isNull())
+            return false;
+        else
+            return image.save(path, format, quality);
     }
     /**
      * @brief 画像を保存する。上書きはせず、既にファイルが存在する場合は失敗する。
@@ -70,7 +79,7 @@ protected:
                             const char *format = nullptr,
                             int quality = -1)
     {
-        if (QFileInfo::exists(path))
+        if (image.isNull() || QFileInfo::exists(path))
             return false;
         else
             return image.save(path, format, quality);
@@ -88,7 +97,9 @@ protected:
     inline const QFileInfo &originalFileInfo() const { return _fileInfo; }
 
 private:
+    /// 読み込んだ画像
     QImage _original;
+    /// 読み込んだ画像ファイルのファイル情報
     QFileInfo _fileInfo;
 
 #ifdef _TEST_TestImageIO

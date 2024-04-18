@@ -192,6 +192,24 @@
     </message>
 </context>
 <context>
+    <name>Test::TestBasicImageViewControl</name>
+    <message>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+28"/>
+        <source>load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Tool</name>
     <message>
         <location filename="../core/tool/tool.cpp" line="+34"/>

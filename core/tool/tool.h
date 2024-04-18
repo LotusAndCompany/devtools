@@ -83,7 +83,7 @@ protected:
      */
     explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
 
-    /// 例外に設定するメッセージ
+    /// ツールIDが無効
     static const QString invalidToolIDReason;
 
     /**
@@ -104,7 +104,9 @@ protected:
     virtual bool event(QEvent *event) override;
 
 private:
+    /// ツールのID
     const ID id;
+    /// 翻訳が必要なテキスト情報
     Translatable _translatable;
 };
 

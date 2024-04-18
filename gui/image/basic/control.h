@@ -26,6 +26,7 @@ public:
     /**
      * @brief コンストラクタ
      * @param parent 親ウィジェット
+     * @details UIを構築し、シグナルを接続する
      */
     explicit BasicImageViewControl(QWidget *parent = nullptr);
     /**
@@ -39,11 +40,25 @@ signals:
      */
     void resetButtonClicked();
 
+    /**
+     * @brief 読み込むファイルが選択された時に発せられる
+     * @param path ファイル名
+     */
     void loadFileSelected(const QString &path);
+    /**
+     * @brief 保存先が選択された時に発せられる
+     * @param path 保存先
+     */
     void saveFileSelected(const QString &path);
 
 private slots:
+    /**
+     * @brief 保存ボタンが押された時の処理
+     */
     void onSaveButtonClicked();
+    /**
+     * @brief 読み込みボタンが押された時の処理
+     */
     void onLoadButtonClicked();
 
 private:

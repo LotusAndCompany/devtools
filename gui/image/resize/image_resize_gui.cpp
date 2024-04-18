@@ -11,6 +11,7 @@ ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *paren
 {
     ui->setupUi(this);
 
+    // NOTE: parentが設定されていなければこのインスタンスで管理する
     if (imageResize->parent() == nullptr)
         imageResize->setParent(this);
 

@@ -23,6 +23,7 @@ public:
      * @brief コンストラクタ
      * @param ImageResize (ロジック部分)
      * @param 親ウィジェット
+     * @details UIを構築し、シグナルを接続する
      */
     explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);
     /**
@@ -31,38 +32,78 @@ public:
     ~ImageResizeGUI();
 
 private slots:
+    /**
+     * @brief 読み込む画像ファイル名が選択された時の処理
+     * @details 画像を読み込み、プレビューとUIを更新する
+     * @param path 読み込む画像ファイル
+     */
     void onLoadImageSelected(const QString &path);
+    /**
+     * @brief 保存先が選択された時の処理
+     * @details 画像を上書き保存する
+     * @param path 保存先
+     */
     void onSaveImageSelected(const QString &path);
+    /**
+     * @brief リセットボタンが押された時に呼び出される
+     * @details 拡大率の設定を初期状態に戻し、プレビューとUIを更新する
+     */
     void onResetButtonClicked();
+    /**
+     * @brief 画像の横幅の入力欄が更新された時の処理
+     * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
+     */
     void onWidthValueEditingFinished();
+    /**
+     * @brief 画像の縦幅の入力欄が更新された時の処理
+     * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
+     */
     void onHeightValueEditingFinished();
+    /**
+     * @brief 水平方向の拡大率の入力欄が更新された時の処理
+     * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
+     */
     void onHorizontalScaleEditingFinished();
+    /**
+     * @brief 垂直方向の拡大率の入力欄が更新された時の処理
+     * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
+     */
     void onVerticalScaleEditingFinished();
+    /**
+     * @brief 縦横比固定のチェックボックスの状態が変化した時の処理
+     * @param state 縦横比固定のチェックボックスの状態
+     */
     void onKeepAspectRatioChanged(Qt::CheckState state);
+    /**
+     * @brief 画素補完のチェックボックスの状態が変化した時の処理
+     * @param state 画素補完のチェックボックスの状態
+     */
     void onSmoothTransformationChanged(Qt::CheckState state);
 
 private:
     Ui::ImageResizeGUI *const ui;
+    /// ロジック部分
     ImageResizeInterface *const imageResize;
 
+    /// 縦横比固定フラグ
     bool keepAspectRatio;
 
+    /**
+     * @brief どの操作により画像サイズが更新されたかを表す列挙体
+     */
     enum class UpdateMode {
-        /// 最小値
-        MIN,
-        /// loadやresetによる更新
-        DEFAULT,
-        /// ui->widthValue の編集による更新
-        WIDTH_UPDATE,
-        /// ui->heightValue の編集による更新
-        HEIGHT_UPDATE,
-        /// ui->hScaleValue の編集による更新
-        X_SCALE_UPDATE,
-        /// ui->vScaleValue の編集による更新
-        Y_SCALE_UPDATE,
-        /// 最大値
-        MAX,
+        MIN,            ///< 最小値
+        DEFAULT,        ///< loadやresetによる更新
+        WIDTH_UPDATE,   ///< ui->widthValue の編集による更新
+        HEIGHT_UPDATE,  ///< ui->heightValue の編集による更新
+        X_SCALE_UPDATE, ///< ui->hScaleValue の編集による更新
+        Y_SCALE_UPDATE, ///< ui->vScaleValue の編集による更新
+        MAX,            ///<最大値
     };
+    /**
+     * @brief UI上の画像サイズ・拡大率を更新する
+     * @param mode 更新モード
+     */
     void updateUIValues(UpdateMode mode = UpdateMode::DEFAULT);
 };
 

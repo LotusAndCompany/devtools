@@ -14,6 +14,7 @@ public:
     /**
      * @brief コンストラクタ
      * @param parent 親ウィジェット
+     * @details ファイルダイアログの設定を行う
      */
     explicit ImageOpenDialog(QWidget *parent = nullptr);
 
@@ -36,6 +37,7 @@ public:
     /**
      * @brief コンストラクタ
      * @param parent 親ウィジェット
+     * @details ファイルダイアログの設定を行う
      */
     explicit ImageSaveDialog(QWidget *parent = nullptr);
 

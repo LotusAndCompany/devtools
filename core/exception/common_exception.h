@@ -41,9 +41,7 @@ public:
         : message(message)
     {}
 
-    /**
-     * @brief メッセージ
-     */
+    /// メッセージ
     QString message;
 
     /**

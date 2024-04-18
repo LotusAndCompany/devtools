@@ -25,6 +25,7 @@ public:
     /**
      * @brief コンストラクタ
      * @param parent 親ウィジェット
+     * @details UIを構築し、シグナルを接続する
      */
     explicit BasicImageView(QWidget *parent = nullptr);
     /**
