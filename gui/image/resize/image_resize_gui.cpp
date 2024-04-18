@@ -44,13 +44,12 @@ ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *paren
             &QDoubleSpinBox::editingFinished,
             this,
             &ImageResizeGUI::onVerticalScaleEditingFinished);
-    // NOTE: Qt 6.7で stateChanged(int) → checkStateChanged(Qt::CheckState) に変更
     connect(ui->keepAspectRatio,
-            &QCheckBox::stateChanged,
+            &QCheckBox::checkStateChanged,
             this,
             &ImageResizeGUI::onKeepAspectRatioChanged);
     connect(ui->smoothScaling,
-            &QCheckBox::stateChanged,
+            &QCheckBox::checkStateChanged,
             this,
             &ImageResizeGUI::onSmoothTransformationChanged);
 }
@@ -177,7 +176,7 @@ void ImageResizeGUI::onVerticalScaleEditingFinished()
     updateUIValues(UpdateMode::Y_SCALE_UPDATE);
 }
 
-void ImageResizeGUI::onKeepAspectRatioChanged(int state)
+void ImageResizeGUI::onKeepAspectRatioChanged(Qt::CheckState state)
 {
     qDebug() << "state:" << state;
 
@@ -196,7 +195,7 @@ void ImageResizeGUI::onKeepAspectRatioChanged(int state)
     // TODO: 無理やり更新させる
 }
 
-void ImageResizeGUI::onSmoothTransformationChanged(int state)
+void ImageResizeGUI::onSmoothTransformationChanged(Qt::CheckState state)
 {
     qDebug() << "state:" << state;
 
