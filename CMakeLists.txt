@@ -15,6 +15,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
 find_package(Doxygen)
 
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP)
+
 # アイコンを設定
 # TODO: 環境で分ける
 if(APPLE)
@@ -39,15 +41,15 @@ if(APPLE)
 
     set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
     file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
-    add_custom_target(DevTools_app_info
+    add_custom_target(${PROJECT_NAME}_app_info
         COMMAND ${SH_FILE} ${CMAKE_PROJECT_VERSION} "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
     )
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Project files
-    set(TRANSLATION_FILES res/dev-tools_ja_JP.ts)
-    qt_add_executable(DevTools
+    set(TRANSLATION_FILES res/dev-tools_ja_JP.ts res/dev-tools_en.ts)
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
         res/light_icons.qrc
@@ -74,9 +76,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
     )
-    qt_add_translations(DevTools
-        RESOURCE_PREFIX "i18n"
-        TS_FILES ${TRANSLATION_FILES})
+    qt_add_translations(
+        TARGETS ${PROJECT_NAME}
+        TS_FILE_DIR res/
+        TS_FILE_BASE "dev-tools"
+    )
 else()
     # Qt5は使わない予定
     message(FATAL_ERROR "Qt5 configuration is not supported")
@@ -141,7 +145,7 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         message("Doxygen build started")
 
         # note the option ALL which allows to build the docs together with the application
-        add_custom_target(DevTools-docs ALL
+        add_custom_target(${PROJECT_NAME}_docs ALL
             COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
@@ -153,26 +157,27 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
 endif()
 
 # PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
-target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
+target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
-# app_info.autogen.cppを自動で生成させる
-add_dependencies(DevTools DevTools_app_info)
+# app_info.autogen.cppを自動生成
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # 翻訳ファイルの更新と生成を自動化
-add_dependencies(DevTools_lrelease DevTools_lupdate)
-add_dependencies(DevTools DevTools_lrelease)
+# NOTE: 今の所動いているが、必ずしもupdate_translations→release_translationsの順に処理されるとは限らない可能性はある
+add_dependencies(${PROJECT_NAME} update_translations)
+add_dependencies(${PROJECT_NAME} release_translations)
 
 # インクルードディレクトリとしてプロジェクトフォルダを追加
-target_include_directories(DevTools
+target_include_directories(${PROJECT_NAME}
     PRIVATE .
 )
 
 # ライブラリをリンクする
-target_link_libraries(DevTools
+target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 )
 
-set_target_properties(DevTools PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -181,12 +186,12 @@ set_target_properties(DevTools PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS DevTools
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(DevTools)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
