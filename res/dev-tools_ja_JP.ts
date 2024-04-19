@@ -106,7 +106,7 @@
     <name>SidemenuItem</name>
     <message>
         <source>Home</source>
-        <translation type="vanished">ホーム</translation>
+        <translation>ホーム</translation>
     </message>
 </context>
 <context>
@@ -149,6 +149,49 @@
     <message>
         <location line="+1"/>
         <source>This is Sample 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>api_tool</name>
+    <message>
+        <location filename="../gui/api_tool.ui" line="+14"/>
+        <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-33"/>
+        <source>GET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>PUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>DELETE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Tab 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tab 2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

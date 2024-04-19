@@ -1,4 +1,5 @@
 #include "contents_area.h"
+#include "api_tool.h"
 #include "ui_contents_area.h"
 
 #include <QLabel>
@@ -44,7 +45,7 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         currentContent = nullptr;
     }
 
-    QWidget *content;
+    QWidget *content = nullptr;
 
     switch (id) {
     case Sidemenu::ID::HOME:
@@ -55,7 +56,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         content = new SampleGuiTool(Tool::ID::SAMPLE_0, "sample-0", this);
         break;
     case Sidemenu::ID::SAMPLE_1:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
+        // content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
+        content = new api_tool(this);
         break;
     case Sidemenu::ID::SAMPLE_2:
         content = new SampleGuiTool(Tool::ID::SAMPLE_2, "sample-2", this);

@@ -1,0 +1,124 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-88c108bb6feedb696f19.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "DevTools",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "DevTools::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DevTools-Debug-ee6dbee3595621d9da12.json",
+					"name" : "DevTools",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "DevTools_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DevTools_autogen-Debug-1fde2d922b4f8742756f.json",
+					"name" : "DevTools_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "DevTools_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DevTools_autogen_timestamp_deps-Debug-99fd6c89bb7ed6e025d7.json",
+					"name" : "DevTools_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "DevTools_lrelease::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DevTools_lrelease-Debug-0922106988027303f336.json",
+					"name" : "DevTools_lrelease",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "DevTools_lupdate::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DevTools_lupdate-Debug-4224c0560f33b8ab0c6c.json",
+					"name" : "DevTools_lupdate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "generate_app_info::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-generate_app_info-Debug-dc41bb8da96fbb15c74b.json",
+					"name" : "generate_app_info",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "release_translations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-release_translations-Debug-2bab52aac1053400ef03.json",
+					"name" : "release_translations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "update_translations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-update_translations-Debug-fc07cf8a5349f48a5c19.json",
+					"name" : "update_translations",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug",
+		"source" : "/Users/jim/Product/RD/devtools"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
