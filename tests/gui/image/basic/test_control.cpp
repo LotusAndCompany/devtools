@@ -4,7 +4,6 @@
 #include "gui/image/basic/control.h"
 #undef _TEST_BasicImageViewControl
 
-#include <QObject>
 #include <QSignalSpy>
 
 namespace Test {
