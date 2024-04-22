@@ -25,9 +25,6 @@ class TestImageIO : public QObject
         "578px-Qt_logo_2016.png",     // 7
     };
 
-public:
-    TestImageIO();
-
 private slots:
     void init();    // will be called before each test function is executed.
     void cleanup(); // will be called after every test function.
@@ -40,16 +37,13 @@ private slots:
     void test_overwriteSave();
 };
 
-TestImageIO::TestImageIO() {}
-
 void TestImageIO::init()
 {
     QDir dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames) {
-        QFile::copy(Test::TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
-    }
+    for (const QString &src : resourceNames)
+        QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
 }
 
 void TestImageIO::cleanup()
@@ -151,6 +145,9 @@ void TestImageIO::test_save()
     const QString filePath = testDirPath + resourceNames[0];
     io.load(filePath);
 
+    // 空の画像の保存が失敗すること
+    QVERIFY(ImageIO::save(testDirPath + "test_save.png", QImage()) == false);
+
     // png形式の保存ができること
     QVERIFY(ImageIO::save(testDirPath + "test_save.png", io.original()));
 
@@ -167,7 +164,11 @@ void TestImageIO::test_overwriteSave()
     const QString filePath = testDirPath + resourceNames[0];
     io.load(filePath);
 
-    ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", io.original());
+    // 空の画像の保存が失敗すること
+    QVERIFY(ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", QImage()) == false);
+
+    // 保存が成功すること
+    QVERIFY(ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", io.original()));
 
     // 同名ファイルの保存が成功すること
     QVERIFY(ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", io.original()));
