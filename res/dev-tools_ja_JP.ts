@@ -192,9 +192,18 @@
     </message>
 </context>
 <context>
+    <name>Test::TestBasicImageView</name>
+    <message>
+        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+66"/>
+        <location line="+26"/>
+        <source>No Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Test::TestBasicImageViewControl</name>
     <message>
-        <location filename="../tests/gui/image/basic/test_control.cpp" line="+28"/>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>load</source>
         <translation type="unfinished"></translation>
     </message>

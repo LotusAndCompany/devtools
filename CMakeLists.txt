@@ -163,6 +163,7 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     widgetless_test(test_basic_image_io tests/core/image/test_basic_image_io.cpp core/image/basic_image_io.cpp)
     # gui/image/basic
     widget_test(test_basic_image_view_control tests/gui/image/basic/test_control.cpp gui/image/basic/control.cpp gui/image/basic/file_dialogs.cpp)
+    widget_test(test_basic_image_view tests/gui/image/basic/test_basic_image_view.cpp gui/image/basic/image_view.cpp)
 endif()
 
 # Documents
