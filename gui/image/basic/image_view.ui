@@ -138,6 +138,12 @@
         <height>32</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Zoom In</string>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -179,6 +185,12 @@
        <font>
         <pointsize>13</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Zoom Out</string>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
       </property>
       <property name="styleSheet">
        <string notr="true"/>

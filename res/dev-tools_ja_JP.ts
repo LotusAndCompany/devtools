@@ -68,8 +68,18 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+112"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+124"/>
         <source>No Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+56"/>
+        <source>Zoom In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

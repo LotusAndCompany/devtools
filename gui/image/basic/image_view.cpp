@@ -2,15 +2,27 @@
 #include "ui_image_view.h"
 
 #include <QDropEvent>
+#include <QGraphicsOpacityEffect>
 #include <QResizeEvent>
 #include <QWheelEvent>
 #include <cmath>
 
+// TODO: ScrollAreaをドラッグで操作できるようにする
 BasicImageView::BasicImageView(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::BasicImageView)
 {
     ui->setupUi(this);
+    ui->scalingUI->raise();
+
+    // NOTE: 少しだけ透明にする
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui->zoomInButton);
+    opacityEffect->setOpacity(0.8);
+    ui->zoomInButton->setGraphicsEffect(opacityEffect);
+
+    opacityEffect = new QGraphicsOpacityEffect(ui->zoomOutButton);
+    opacityEffect->setOpacity(0.8);
+    ui->zoomOutButton->setGraphicsEffect(opacityEffect);
 
     connect(ui->zoomInButton, &QToolButton::clicked, this, &BasicImageView::onZoomInButtonPressed);
     connect(ui->zoomOutButton, &QToolButton::clicked, this, &BasicImageView::onZoomOutButtonPressed);
