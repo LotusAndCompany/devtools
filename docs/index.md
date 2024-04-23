@@ -14,5 +14,5 @@ cd BUILD_DIR
 ```
 3. htmlを生成
 ```bash
-make DevTools-docs
+make DevTools_docs
 ```
