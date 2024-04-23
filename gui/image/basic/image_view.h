@@ -69,7 +69,7 @@ private:
     Ui::BasicImageView *const ui;
 
     /// 実際の拡大率
-    double scale;
+    double scale = 1.0;
     /// 拡大縮小前の画像データ。 setPixmap() によってのみ変更される
     QPixmap original;
 

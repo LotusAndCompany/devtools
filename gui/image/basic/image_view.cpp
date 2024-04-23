@@ -116,6 +116,7 @@ void BasicImageView::updateScale(double newScale)
     ui->zoomOutButton->setDisabled(scale <= minScale);
     ui->zoomInButton->setDisabled(maxScale <= scale);
 
+    // https://doc.qt.io/qt-6/qlocale.html#toString-8
     ui->scaleLabel->setText('x' + QString::number(scale, 'g', 2));
 
     if (!original.isNull())
