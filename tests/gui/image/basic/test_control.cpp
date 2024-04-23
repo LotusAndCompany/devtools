@@ -13,14 +13,14 @@ class TestBasicImageViewControl : public QObject
 
 private slots:
     // Test cases:
-    void test_text();
+    void test_constructor();
     void test_reset();
     // NOTE: dialogが上手く閉じられない
     void test_load();
     void test_save();
 };
 
-void TestBasicImageViewControl::test_text()
+void TestBasicImageViewControl::test_constructor()
 {
     BasicImageViewControl control;
 
