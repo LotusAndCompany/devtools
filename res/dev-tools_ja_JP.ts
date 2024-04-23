@@ -68,7 +68,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+124"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,8 +204,10 @@
 <context>
     <name>Test::TestBasicImageView</name>
     <message>
-        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+66"/>
+        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+71"/>
+        <location line="+17"/>
         <location line="+26"/>
+        <location line="+152"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
