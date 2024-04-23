@@ -29,22 +29,17 @@ ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *paren
             this,
             &ImageResizeGUI::onResetButtonClicked);
 
-    connect(ui->widthValue,
-            &QSpinBox::editingFinished,
-            this,
-            &ImageResizeGUI::onWidthValueEditingFinished);
-    connect(ui->heightValue,
-            &QSpinBox::editingFinished,
-            this,
-            &ImageResizeGUI::onHeightValueEditingFinished);
+    connect(ui->widthValue, &QSpinBox::valueChanged, this, &ImageResizeGUI::onWidthValueChanged);
+    connect(ui->heightValue, &QSpinBox::valueChanged, this, &ImageResizeGUI::onHeightValueChanged);
     connect(ui->hScaleValue,
-            &QDoubleSpinBox::editingFinished,
+            &QDoubleSpinBox::valueChanged,
             this,
-            &ImageResizeGUI::onHorizontalScaleEditingFinished);
+            &ImageResizeGUI::onHorizontalScaleChanged);
     connect(ui->vScaleValue,
-            &QDoubleSpinBox::editingFinished,
+            &QDoubleSpinBox::valueChanged,
             this,
-            &ImageResizeGUI::onVerticalScaleEditingFinished);
+            &ImageResizeGUI::onVerticalScaleChanged);
+
     connect(ui->keepAspectRatio,
             &QCheckBox::checkStateChanged,
             this,
@@ -91,9 +86,8 @@ void ImageResizeGUI::onResetButtonClicked()
     updateUIValues();
 }
 
-void ImageResizeGUI::onWidthValueEditingFinished()
+void ImageResizeGUI::onWidthValueChanged(int width)
 {
-    const int width = ui->widthValue->value();
     qDebug() << "width:" << width;
 
     if (width < 0) {
@@ -111,9 +105,8 @@ void ImageResizeGUI::onWidthValueEditingFinished()
     updateUIValues(UpdateMode::WIDTH_UPDATE);
 }
 
-void ImageResizeGUI::onHeightValueEditingFinished()
+void ImageResizeGUI::onHeightValueChanged(int height)
 {
-    const int height = ui->heightValue->value();
     qDebug() << "height:" << height;
 
     if (height < 0) {
@@ -131,9 +124,8 @@ void ImageResizeGUI::onHeightValueEditingFinished()
     updateUIValues(UpdateMode::HEIGHT_UPDATE);
 }
 
-void ImageResizeGUI::onHorizontalScaleEditingFinished()
+void ImageResizeGUI::onHorizontalScaleChanged(double hScale)
 {
-    const double hScale = ui->hScaleValue->value();
     qDebug() << "hScale:" << hScale;
 
     if (hScale < 0) {
@@ -154,9 +146,8 @@ void ImageResizeGUI::onHorizontalScaleEditingFinished()
     updateUIValues(UpdateMode::X_SCALE_UPDATE);
 }
 
-void ImageResizeGUI::onVerticalScaleEditingFinished()
+void ImageResizeGUI::onVerticalScaleChanged(double vScale)
 {
-    const double vScale = ui->vScaleValue->value();
     qDebug() << "vScale:" << vScale;
 
     if (vScale < 0) {
