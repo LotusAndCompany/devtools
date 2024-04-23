@@ -3,11 +3,10 @@
 
 #include <QRandomGenerator>
 #include <QString>
-#include "test_config.h"
 
 namespace Test {
-const QString TEST_SRC_DIR = QString(_TEST_SRC_DIR);
-const QString TEST_BIN_DIR = QString(_TEST_BIN_DIR);
+extern const QString TEST_SRC_DIR;
+extern const QString TEST_BIN_DIR;
 
 class RandomData
 {

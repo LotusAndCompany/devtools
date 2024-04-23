@@ -118,52 +118,100 @@ endif()
 #add_subdirectory(tests)
 # Tests
 if(${ENABLE_DEBUG_BUILD_FEATURES})
-    set(TEST_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_config.h.in)
-    set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.h)
+    set(TEST_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_config.cpp.in)
+    set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.cpp)
     configure_file(${TEST_CONFIG_IN} ${TEST_CONFIG_OUT} @ONLY)
 
-    # GUI independent tests
-    macro(guiless_test test_name)
-        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
-        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
-        add_test(NAME ${test_name} COMMAND ${test_name})
+    add_library(${PROJECT_NAME}_test_util SHARED tests/test_util.cpp)
+    target_include_directories(${PROJECT_NAME}_test_util PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/tests)
+    target_link_libraries(${PROJECT_NAME}_test_util PUBLIC Qt6::Core)
 
-        target_link_libraries(${test_name} PRIVATE Qt6::Test)
-    endmacro(guiless_test)
+    add_library(${PROJECT_NAME}_tool SHARED core/tool/tool.cpp)
+    target_link_libraries(${PROJECT_NAME}_tool PUBLIC Qt6::Core)
 
-    # depends on GUI, but not on widgets
-    macro(widgetless_test test_name)
-        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
-        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
-        add_test(NAME ${test_name} COMMAND ${test_name})
+    function(DevTools_add_test TEST_NAME)
+        cmake_parse_arguments(
+            DEVTOOLS_TEST
+            "NO_UTIL;NO_TOOL;GUI;WIDGETS"    # options (NO_UTIL: test_util.hを使わない, NO_TOOL: tool.hに依存しない, GUI: guiに依存する, WIDGETS: QWidgetに依存する)
+            ""  # one value keywords
+            "SOURCES"   # multi value keywords
+            ${ARGN}
+        )
 
-        target_link_libraries(${test_name} PRIVATE Qt6::Test Qt6::Gui)
-    endmacro(widgetless_test)
+        #message(NOTICE "TEST_NAME=${TEST_NAME}")
+        #message(NOTICE ARGN=${ARGN})
+        #message(NOTICE DEVTOOLS_TEST_SOURCES=${DEVTOOLS_TEST_SOURCES})
+        #message(NOTICE "DEVTOOLS_TEST_NO_UTIL=${DEVTOOLS_TEST_NO_UTIL}")
+        #message(NOTICE "DEVTOOLS_TEST_NO_TOOL=${DEVTOOLS_TEST_NO_TOOL}")
+        #message(NOTICE "DEVTOOLS_TEST_GUI=${DEVTOOLS_TEST_GUI}")
+        #message(NOTICE "DEVTOOLS_TEST_WIDGETS=${DEVTOOLS_TEST_WIDGETS}")
+        #message(NOTICE "DEVTOOLS_TEST_UNPARSED_ARGUMENTS=${DEVTOOLS_TEST_UNPARSED_ARGUMENTS}")
+        #message(NOTICE "DEVTOOLS_TEST_KEYWORDS_MISSING_VALUES=${DEVTOOLS_TEST_KEYWORDS_MISSING_VALUES}")
 
-    # widget dependent tests
-    macro(widget_test test_name)
-        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
-        target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/tests)
-        add_test(NAME ${test_name} COMMAND ${test_name})
+        add_executable(${TEST_NAME} ${DEVTOOLS_TEST_SOURCES})
+        add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 
-        target_link_libraries(${test_name} PRIVATE Qt6::Test Qt6::Gui Qt6::Widgets)
-    endmacro(widget_test)
+        target_link_libraries(${TEST_NAME} PRIVATE Qt6::Test)
 
-    #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
+        if(NOT ${DEVTOOLS_TEST_NO_UTIL})
+            target_link_libraries(${TEST_NAME} PRIVATE ${PROJECT_NAME}_test_util)
+        endif()
 
+        if(NOT ${DEVTOOLS_TEST_NO_TOOL})
+            target_link_libraries(${TEST_NAME} PRIVATE ${PROJECT_NAME}_tool)
+        endif()
+
+        if(${DEVTOOLS_TEST_GUI} OR ${DEVTOOLS_TEST_WIDGETS})
+            target_link_libraries(${TEST_NAME} PRIVATE Qt6::Gui)
+        endif()
+
+        if(${DEVTOOLS_TEST_WIDGETS})
+            target_link_libraries(${TEST_NAME} PRIVATE Qt6::Widgets)
+        endif()
+    endfunction()
+    
     # core
-    guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
+    DevTools_add_test(test_enum_cast NO_UTIL NO_TOOL
+        SOURCES tests/core/test_enum_cast.cpp
+    )
+
     # core/exception
-    guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
-    guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)
-    guiless_test(test_invalid_argument_exception tests/core/exception/test_invalid_argument_exception.cpp)
-    guiless_test(test_invalid_state_exception tests/core/exception/test_invalid_state_exception.cpp)
-    guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
+    DevTools_add_test(test_common_exception NO_TOOL
+        SOURCES tests/core/exception/test_common_exception.cpp
+    )
+    DevTools_add_test(test_under_development_exception NO_TOOL
+        SOURCES tests/core/exception/test_under_development_exception.cpp
+    )
+    DevTools_add_test(test_invalid_argument_exception NO_TOOL
+        SOURCES tests/core/exception/test_invalid_argument_exception.cpp
+    )
+    DevTools_add_test(test_invalid_state_exception NO_TOOL
+        SOURCES tests/core/exception/test_invalid_state_exception.cpp
+    )
+    DevTools_add_test(test_out_of_range_exception NO_TOOL
+        SOURCES tests/core/exception/test_out_of_range_exception.cpp
+    )
+
     # core/iamge
-    widgetless_test(test_basic_image_io tests/core/image/test_basic_image_io.cpp core/image/basic_image_io.cpp)
+    DevTools_add_test(test_basic_image_io NO_TOOL GUI
+        SOURCES
+        tests/core/image/test_basic_image_io.cpp
+        core/image/basic_image_io.cpp
+    )
+    DevTools_add_test(test_image_reisze GUI
+        SOURCES
+        tests/core/image/resize/test_image_resize.cpp
+        core/image/basic_image_io.cpp
+        core/image/resize/image_resize.cpp
+    )
+
     # gui/image/basic
-    widget_test(test_basic_image_view_control tests/gui/image/basic/test_control.cpp gui/image/basic/control.cpp gui/image/basic/file_dialogs.cpp)
-    widget_test(test_basic_image_view tests/gui/image/basic/test_basic_image_view.cpp gui/image/basic/image_view.cpp)
+    DevTools_add_test(test_basic_image_view_control WIDGETS
+        SOURCES
+        tests/gui/image/basic/test_control.cpp
+        gui/image/basic/control.cpp
+        gui/image/basic/file_dialogs.cpp
+    )
 endif()
 
 # Documents

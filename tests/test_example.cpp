@@ -1,4 +1,5 @@
 #include <QtTest>
+#include "tests/test_util.h"
 
 #define _TEST_Example
 // necessary includes here
