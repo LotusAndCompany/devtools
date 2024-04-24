@@ -192,6 +192,12 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         SOURCES tests/core/exception/test_out_of_range_exception.cpp
     )
 
+    # core/tool
+    DevTools_add_test(test_tool NO_UTIL
+        SOURCES
+        tests/core/tool/test_tool.cpp
+    )
+
     # core/iamge
     DevTools_add_test(test_basic_image_io NO_TOOL GUI
         SOURCES
