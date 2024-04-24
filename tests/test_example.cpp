@@ -31,6 +31,8 @@ class TestExample;
 */
 #undef _TEST_Example
 
+#include <QObject>
+
 namespace Test {
 class TestExample : public QObject
 {

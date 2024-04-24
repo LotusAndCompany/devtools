@@ -122,11 +122,14 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.cpp)
     configure_file(${TEST_CONFIG_IN} ${TEST_CONFIG_OUT} @ONLY)
 
-    add_library(${PROJECT_NAME}_test_util SHARED tests/test_util.cpp)
+    add_library(${PROJECT_NAME}_test_util SHARED
+        tests/test_util.h tests/test_util.cpp
+        tests/random_data.h tests/random_data.cpp)
     target_include_directories(${PROJECT_NAME}_test_util PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/tests)
     target_link_libraries(${PROJECT_NAME}_test_util PUBLIC Qt6::Core)
 
-    add_library(${PROJECT_NAME}_tool SHARED core/tool/tool.cpp)
+    add_library(${PROJECT_NAME}_tool SHARED
+        core/tool/tool.h core/tool/tool.cpp)
     target_link_libraries(${PROJECT_NAME}_tool PUBLIC Qt6::Core)
 
     function(DevTools_add_test TEST_NAME)
@@ -172,37 +175,51 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     
     # core
     DevTools_add_test(test_enum_cast NO_UTIL NO_TOOL
-        SOURCES tests/core/test_enum_cast.cpp
+        SOURCES
+        core/enum_cast.h
+        tests/core/test_enum_cast.cpp
     )
 
     # core/exception
     DevTools_add_test(test_common_exception NO_TOOL
-        SOURCES tests/core/exception/test_common_exception.cpp
+        SOURCES
+        core/exception/common_exception.h
+        tests/core/exception/test_common_exception.cpp
     )
     DevTools_add_test(test_under_development_exception NO_TOOL
-        SOURCES tests/core/exception/test_under_development_exception.cpp
+        SOURCES
+        core/exception/under_development_exception.h
+        tests/core/exception/test_under_development_exception.cpp
     )
     DevTools_add_test(test_invalid_argument_exception NO_TOOL
-        SOURCES tests/core/exception/test_invalid_argument_exception.cpp
+        SOURCES
+        core/exception/invalid_argument_exception.h
+        tests/core/exception/test_invalid_argument_exception.cpp
     )
     DevTools_add_test(test_invalid_state_exception NO_TOOL
-        SOURCES tests/core/exception/test_invalid_state_exception.cpp
+        SOURCES
+        core/exception/invalid_state_exception.h
+        tests/core/exception/test_invalid_state_exception.cpp
     )
     DevTools_add_test(test_out_of_range_exception NO_TOOL
-        SOURCES tests/core/exception/test_out_of_range_exception.cpp
+        SOURCES
+        core/exception/out_of_range_exception.h
+        tests/core/exception/test_out_of_range_exception.cpp
     )
 
     # core/tool
     DevTools_add_test(test_tool NO_UTIL
         SOURCES
+        core/tool/tool.h
         tests/core/tool/test_tool.cpp
     )
 
     # core/iamge
     DevTools_add_test(test_basic_image_io NO_TOOL GUI
         SOURCES
-        tests/core/image/test_basic_image_io.cpp
+        core/image/basic_image_io.h
         core/image/basic_image_io.cpp
+        tests/core/image/test_basic_image_io.cpp
     )
     DevTools_add_test(test_image_reisze GUI
         SOURCES
