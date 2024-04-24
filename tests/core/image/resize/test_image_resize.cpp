@@ -23,8 +23,6 @@ class TestImageResize : public QObject
 
     RandomData rd;
 
-    static bool isEqaulApprox(double a, double b, double errorRatio = 1.0 / 256.0);
-
 private slots:
     void initTestCase(); // will be called before the first test function is executed.
     void init();    // will be called before each test function is executed.
@@ -44,30 +42,10 @@ private slots:
     void test_setWidth();
     void test_setHeight();
     void test_computedSize();
-    void test_computedScaleX();
-    void test_computedScaleY();
+    void test_computedScale();
     void test_setSmoothTransformationEnabled();
     void test_aspectRatio();
 };
-
-bool TestImageResize::isEqaulApprox(double a, double b, double errorRatio)
-{
-    if (errorRatio < 0) {
-        qCritical() << "errorRatio must be grater or equal to 0";
-        return false;
-    }
-
-    if (a == 0.0 || b == 0.0) {
-        qCritical() << "both a and b must not be 0";
-        return false;
-    }
-
-    const double max = 1.0 + errorRatio;
-    const double min = 1.0 - errorRatio;
-    const double r = abs(a / b);
-
-    return min <= r && r <= max;
-}
 
 void TestImageResize::initTestCase()
 {
@@ -170,7 +148,11 @@ void TestImageResize::test_overwriteSave()
 void TestImageResize::test_reset()
 {
     ImageResize imageResize;
-    imageResize.setSize(QSize(1, 1));
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
+
+    imageResize.setSize(QSize(32, 32));
 
     imageResize.reset();
 
@@ -471,22 +453,51 @@ void TestImageResize::test_computedSize()
             == QSize(size320.width() * randomScaleX, size320.height() * randomScaleY));
 }
 
-void TestImageResize::test_computedScaleX()
+void TestImageResize::test_computedScale()
 {
-    QSKIP("WIP");
-}
+    ImageResize imageResize;
 
-void TestImageResize::test_computedScaleY()
-{
-    QSKIP("WIP");
+    // 画像が空の場合はQSize(0, 0)が返ってくること
+    QVERIFY(imageResize.computedSize() == QSize(0, 0));
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
+
+    // DEFAULTの場合は1.0を返すこと
+    QVERIFY(imageResize.computedScaleX() == 1.0);
+    QVERIFY(imageResize.computedScaleY() == 1.0);
+
+    // 設定した幅が反映されること
+    const int randomWidth = rd.nextInt(32, 3200);
+    imageResize.setWidth(randomWidth);
+    QVERIFY(isEqaulApprox(imageResize.computedScaleX(), (double) randomWidth / size320.width()));
+
+    // 設定した高さが反映されること
+    const int randomHeight = rd.nextInt(32, 3200);
+    imageResize.setHeight(randomHeight);
+    QVERIFY(isEqaulApprox(imageResize.computedScaleY(), (double) randomHeight / size320.height()));
+
+    // 設定した横の拡大率が反映されること
+    const double randomScaleX = rd.nextDouble(0.1, 10);
+    imageResize.setScaleX(randomScaleX);
+    QVERIFY(imageResize.computedScaleX() == randomScaleX);
+
+    // 設定した縦の拡大率が反映されること
+    const double randomScaleY = rd.nextDouble(0.1, 10);
+    imageResize.setScaleY(randomScaleY);
+    QVERIFY(imageResize.computedScaleY() == randomScaleY);
 }
 
 void TestImageResize::test_setSmoothTransformationEnabled()
 {
     ImageResize imageResize;
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
 
-    imageResize.setSmoothTransformationEnabled(true);
     // trueを設定できること
+    imageResize.setSmoothTransformationEnabled(true);
     QVERIFY(imageResize.isSmoothTransformationEnabled() == true);
     // outdatedがtrueに設定されること
     QVERIFY(imageResize.isOutdated() == true);
@@ -494,7 +505,8 @@ void TestImageResize::test_setSmoothTransformationEnabled()
     imageResize.update(); // outdatedをfalseにする
 
     // falseを設定できること
-    QVERIFY(imageResize.isSmoothTransformationEnabled() == true);
+    imageResize.setSmoothTransformationEnabled(false);
+    QVERIFY(imageResize.isSmoothTransformationEnabled() == false);
     // outdatedがtrueに設定されること
     QVERIFY(imageResize.isOutdated() == true);
 }
