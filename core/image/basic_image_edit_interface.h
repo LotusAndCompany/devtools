@@ -3,6 +3,12 @@
 
 #include <QImage>
 
+#ifdef _TEST_BasicImageEditInterface
+namespace Test {
+class TestBasicImageEditInterface;
+}
+#endif
+
 class QFileInfo;
 
 /**
@@ -90,6 +96,9 @@ private:
 
     /// update() の最後の結果
     bool updateResult;
+#ifdef _TEST_BasicImageEditInterface
+    friend class Test::TestBasicImageEditInterface;
+#endif
 };
 
 #endif // BASIC_IMAGE_EDIT_INTERFACE_H

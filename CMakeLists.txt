@@ -124,7 +124,9 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
 
     add_library(${PROJECT_NAME}_test_util SHARED
         tests/test_util.h tests/test_util.cpp
-        tests/random_data.h tests/random_data.cpp)
+        tests/random_data.h tests/random_data.cpp
+        tests/mock_helper.h
+    )
     target_include_directories(${PROJECT_NAME}_test_util PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/tests)
     target_link_libraries(${PROJECT_NAME}_test_util PUBLIC Qt6::Core)
 
@@ -220,6 +222,12 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         core/image/basic_image_io.h
         core/image/basic_image_io.cpp
         tests/core/image/test_basic_image_io.cpp
+    )
+    DevTools_add_test(test_basic_image_edit_interface NO_TOOL NO_UTIL GUI
+        SOURCES
+        core/image/basic_image_edit_interface.h
+        core/image/basic_image_edit_interface.cpp
+        tests/core/image/test_basic_image_edit_interface.cpp
     )
     DevTools_add_test(test_image_reisze GUI
         SOURCES

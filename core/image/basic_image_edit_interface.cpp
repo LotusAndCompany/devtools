@@ -11,7 +11,7 @@ bool BasicImageEditInterface::load(const QString &path)
 void BasicImageEditInterface::reset()
 {
     resetImpl();
-    updateImpl();
+    updateResult = updateImpl();
 
     outdated = false;
 }

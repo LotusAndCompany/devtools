@@ -2,6 +2,7 @@
 #define TEST_UTIL_H
 
 #include <QString>
+#include "mock_helper.h"
 #include "random_data.h"
 
 namespace Test {
