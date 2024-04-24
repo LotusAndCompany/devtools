@@ -30,6 +30,7 @@ private slots:
     void cleanup(); // will be called after every test function.
 
     // Test cases:
+    void test_constructor();
     void test_load();
     void test_original();
     void test_originalFileInfo();
@@ -50,6 +51,16 @@ void TestImageIO::cleanup()
 {
     QDir testDir(testDirPath);
     testDir.removeRecursively();
+}
+
+void TestImageIO::test_constructor()
+{
+    ImageIO io;
+
+    // 画像が空であること
+    QVERIFY(io.original().isNull());
+    // ファイル情報が空であること
+    QVERIFY(io.originalFileInfo().filePath() == "");
 }
 
 void TestImageIO::test_load()

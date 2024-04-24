@@ -149,8 +149,10 @@ void TestBasicImageView::test_resizeEvent()
 
 bool TestBasicImageView::isLinear(const QMap<double, double> &pairs, double errorRatio)
 {
-    if (errorRatio < 0)
+    if (errorRatio < 0) {
+        qCritical() << "errorRatio must be grater or equal to 0";
         return false;
+    }
     if (pairs.size() <= 2)
         return true;
 

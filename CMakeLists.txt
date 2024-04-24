@@ -231,17 +231,27 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     )
     DevTools_add_test(test_image_reisze GUI
         SOURCES
-        tests/core/image/resize/test_image_resize.cpp
-        core/image/basic_image_io.cpp
+        core/image/resize/image_resize.h
         core/image/resize/image_resize.cpp
+        core/image/basic_image_io.cpp
+        core/image/basic_image_edit_interface.cpp
+        tests/core/image/resize/test_image_resize.cpp
     )
 
     # gui/image/basic
     DevTools_add_test(test_basic_image_view_control WIDGETS
         SOURCES
-        tests/gui/image/basic/test_control.cpp
+        gui/image/basic/control.h
+        gui/image/basic/file_dialogs.h
         gui/image/basic/control.cpp
         gui/image/basic/file_dialogs.cpp
+        tests/gui/image/basic/test_control.cpp
+    )
+    DevTools_add_test(test_basic_image_view WIDGETS
+        SOURCES
+        gui/image/basic/image_view.h
+        tests/gui/image/basic/test_basic_image_view.cpp
+        gui/image/basic/image_view.cpp
     )
 endif()
 

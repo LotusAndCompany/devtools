@@ -207,7 +207,7 @@
         <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+71"/>
         <location line="+17"/>
         <location line="+26"/>
-        <location line="+152"/>
+        <location line="+154"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,6 +227,19 @@
     <message>
         <location line="+1"/>
         <source>save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestTool</name>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+44"/>
+        <source>Image Resize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Image resizing and scaling</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -274,12 +287,12 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Image resize</source>
+        <source>Image Resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Resizing an image</source>
+        <source>Image resizing and scaling</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

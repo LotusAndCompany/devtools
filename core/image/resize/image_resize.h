@@ -7,6 +7,12 @@
 #include "core/image/basic_image_io.h"
 #include "core/tool/tool.h"
 
+#ifdef _TEST_ImageResize
+namespace Test {
+class TestImageResize;
+}
+#endif
+
 /**
  * @brief 画像をリサイズするツールのインターフェイス
  */
@@ -27,28 +33,29 @@ public:
     virtual void setScale(double sx, double sy) noexcept(false) = 0;
     /**
      * @brief 拡大率を設定する。他の設定は上書きされる。
-     * @exception InvalidArgumentException &lt;double&gt; s<0の場合
      * @param s 拡大率
+     * @exception InvalidArgumentException &lt;double&gt; s<0の場合
      */
     inline void setScale(double s) noexcept(false) { setScale(s, s); }
     /**
      * @brief 横方向の拡大率を設定する。横方向の設定は上書きされる。
-     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
      * @param sx 横方向の拡大率
+     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
      */
     virtual void setScaleX(double sx) noexcept(false) = 0;
     /**
      * @brief 縦方向の拡大率を設定する。縦方向の設定は上書きされる。
-     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
      * @param sy 縦方向の拡大率
+     * @exception InvalidArgumentException &lt;double&gt; sy<0の場合
      */
     virtual void setScaleY(double sy) noexcept(false) = 0;
 
     /**
      * @brief サイズを設定する。他の設定は上書きされる。
-     * @param サイズ
+     * @param size サイズ
+     * @exception InvalidArgumentException &lt;QSize&gt; サイズが無効な場合
      */
-    virtual void setSize(const QSize &size) = 0;
+    virtual void setSize(const QSize &size) noexcept(false) = 0;
     /**
      * @brief 横幅を設定する。横方向の設定は上書きされる。 keepAspectRatio が`true`の場合は縦方向の設定も上書きされる。
      * @param w 横幅
@@ -70,11 +77,13 @@ public:
     /**
      * @brief 現在の設定に基づいて計算される画像の横方向の拡大率
      * @return 画像の横方向の拡大率
+     * @exception InvalidStateException 画像が空の場合
      */
     virtual double computedScaleX() const = 0;
     /**
      * @brief 現在の設定に基づいて計算される画像の縦方向の拡大率
      * @return 画像の縦方向の拡大率
+     * @exception InvalidStateException 画像が空の場合
      */
     virtual double computedScaleY() const = 0;
     /**
@@ -106,6 +115,10 @@ class ImageResize : public ImageResizeInterface, private ImageIO
     Q_OBJECT
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
     explicit ImageResize(QObject *parent = nullptr);
 
     inline bool save(const QString &path,
@@ -114,11 +127,14 @@ public:
     {
         return ImageIO::save(path, _current, format, quality);
     }
-    inline bool overwriteSave(const QString &path, const char *format, int quality) const override
+    inline bool overwriteSave(const QString &path,
+                              const char *format = nullptr,
+                              int quality = -1) const override
     {
         return ImageIO::overwriteSave(path, _current, format, quality);
     }
 
+    void setScale(double s) { ImageResizeInterface::setScale(s); }
     void setScale(double sx, double sy) override;
     void setScaleX(double sx) override;
     void setScaleY(double sy) override;
@@ -146,14 +162,21 @@ protected:
     void resetImpl() override;
 
 private:
+    /// サイズ指定が不正
+    static const QString invalidSize;
+    /// 画像サイズが不正
     static const QString invalidImageSize;
+    /// 拡大率指定が不正
     static const QString invalidScale;
+    /// 横幅の指定を上書きする
     static const QString widthOverwritten;
+    /// 縦幅の指定を上書きする
     static const QString heightOverwritten;
 
     /// サイズ変更系の関数で操作した情報を保存する為の構造体
     struct ResizeHints
     {
+        /// 指定なし/サイズ指定/拡大率指定を表す列挙体
         enum class Type {
             /// 最小値
             MIN,
@@ -170,15 +193,17 @@ private:
         Type type = Type::DEFAULT;
 
         union {
-            /// type == SIZE の時のみ有効
+            /// サイズ指定。type == SIZE の時のみ有効
             unsigned int size;
-            /// type == SCALE の時のみ有効
+            /// 拡大率指定。type == SCALE の時のみ有効
             double scale;
         };
     };
 
-    /// 横幅のデータと縦幅のデータ
-    ResizeHints width, height;
+    /// 横幅のデータ
+    ResizeHints width;
+    /// 縦幅のデータ
+    ResizeHints height;
 
     /**
      * @brief computedSize() の算出に使う
@@ -211,6 +236,10 @@ private:
     {
         return smoothTransformationEnabled ? Qt::SmoothTransformation : Qt::FastTransformation;
     }
+
+#ifdef _TEST_ImageResize
+    friend class Test::TestImageResize;
+#endif
 };
 
 #endif // IMAGE_RESIZE_H

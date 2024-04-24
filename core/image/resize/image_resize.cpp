@@ -13,6 +13,7 @@ ImageResize::ImageResize(QObject *parent)
     : ImageResizeInterface(parent)
 {}
 
+const QString ImageResize::invalidSize = "invalid size";
 const QString ImageResize::invalidImageSize = "invalid image size";
 const QString ImageResize::invalidScale = "invalid scale";
 const QString ImageResize::widthOverwritten = "width is already set";
@@ -78,6 +79,9 @@ void ImageResize::setScaleY(double sy)
 
 void ImageResize::setSize(const QSize &size)
 {
+    if (size.isEmpty())
+        throw InvalidArgumentException<QSize>(invalidSize);
+
     if (width.type != ResizeHints::Type::DEFAULT)
         qWarning() << widthOverwritten;
     if (height.type != ResizeHints::Type::DEFAULT)

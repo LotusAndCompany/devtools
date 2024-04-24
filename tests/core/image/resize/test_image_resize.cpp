@@ -1,0 +1,521 @@
+#include <QtTest>
+#include "tests/test_util.h"
+
+#define _TEST_ImageResize
+#include "core/image/resize/image_resize.h"
+#undef _TEST_ImageResize
+
+#include "core/exception/invalid_argument_exception.h"
+#include "core/exception/invalid_state_exception.h"
+
+namespace Test {
+class TestImageResize : public QObject
+{
+    Q_OBJECT
+
+    const QString testDirName = "test_image_resize_resources";
+    const QString testDirPath = TEST_BIN_DIR + "/" + testDirName + "/";
+    const QStringList resourceNames = {
+        "320px-Qt_logo_2016.png", // 0
+        "578px-Qt_logo_2016.png", // 1
+    };
+    QSize size320, size578;
+
+    RandomData rd;
+
+    static bool isEqaulApprox(double a, double b, double errorRatio = 1.0 / 256.0);
+
+private slots:
+    void initTestCase(); // will be called before the first test function is executed.
+    void init();    // will be called before each test function is executed.
+    void cleanup(); // will be called after every test function.
+
+    // Test cases:
+    void test_constructor();
+    void test_load();
+    void test_save();
+    void test_overwriteSave();
+    void test_reset();
+    void test_update();
+    void test_setScale();
+    void test_setScaleX();
+    void test_setScaleY();
+    void test_setSize();
+    void test_setWidth();
+    void test_setHeight();
+    void test_computedSize();
+    void test_computedScaleX();
+    void test_computedScaleY();
+    void test_setSmoothTransformationEnabled();
+    void test_aspectRatio();
+};
+
+bool TestImageResize::isEqaulApprox(double a, double b, double errorRatio)
+{
+    if (errorRatio < 0) {
+        qCritical() << "errorRatio must be grater or equal to 0";
+        return false;
+    }
+
+    if (a == 0.0 || b == 0.0) {
+        qCritical() << "both a and b must not be 0";
+        return false;
+    }
+
+    const double max = 1.0 + errorRatio;
+    const double min = 1.0 - errorRatio;
+    const double r = abs(a / b);
+
+    return min <= r && r <= max;
+}
+
+void TestImageResize::initTestCase()
+{
+    size320 = QImage(TEST_SRC_DIR + "/core/image/" + resourceNames[0]).size();
+    size578 = QImage(TEST_SRC_DIR + "/core/image/" + resourceNames[1]).size();
+}
+
+void TestImageResize::init()
+{
+    QDir dir(TEST_BIN_DIR);
+    dir.mkpath(testDirName);
+
+    for (const QString &src : resourceNames)
+        QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+}
+
+void TestImageResize::cleanup()
+{
+    QDir testDir(testDirPath);
+    testDir.removeRecursively();
+}
+
+void TestImageResize::test_constructor()
+{
+    ImageResize imageResize;
+
+    // stringIDが想定通り設定されていること
+    QVERIFY(imageResize.stringID == "image-resize");
+
+    // 初期値がfalseであること
+    QVERIFY(imageResize.isSmoothTransformationEnabled() == false);
+
+    // 画像が空であること
+    QVERIFY(imageResize.current().isNull());
+
+    // 初期値がtype == DEFEAULTであること
+    QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::DEFAULT);
+    QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::DEFAULT);
+}
+
+void TestImageResize::test_load()
+{
+    ImageResize imageResize;
+
+    // 読み込みが成功すること
+    QVERIFY(imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]));
+    QVERIFY(imageResize.original().size() == size320);
+    QVERIFY(imageResize.current().size() == size320);
+
+    // 別の画像を読み込むとoriginalとcurrentとが上書きされること
+    QVERIFY(imageResize.ImageResizeInterface::load(testDirPath + resourceNames[1]));
+    QVERIFY(imageResize.original().size() == size578);
+    QVERIFY(imageResize.current().size() == size578);
+}
+
+void TestImageResize::test_save()
+{
+    ImageResize imageResize;
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+
+    // 保存できること
+    QVERIFY(imageResize.save(testDirPath + "save.png"));
+
+    // 同名ファイルで保存できないこと
+    QVERIFY(imageResize.save(testDirPath + "save.png") == false);
+
+    // currentが保存されていること
+    imageResize.setScale(2.0);
+    imageResize.update();
+    const QSize size640 = imageResize.current().size();
+    if (size640.isEmpty())
+        QFAIL("image is empty");
+    imageResize.save(testDirPath + "save2.png");
+    QVERIFY(QImage(testDirPath + "save2.png").size() == size640);
+}
+
+void TestImageResize::test_overwriteSave()
+{
+    ImageResize imageResize;
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+
+    // 保存できること
+    QVERIFY(imageResize.overwriteSave(testDirPath + "overwriteSave.png"));
+
+    // 同名ファイルで保存できること
+    QVERIFY(imageResize.overwriteSave(testDirPath + "overwriteSave.png") == true);
+
+    // currentが保存されていること
+    imageResize.setScale(2.0);
+    imageResize.update();
+    const QSize size640 = imageResize.current().size();
+    if (size640.isEmpty())
+        QFAIL("image is empty");
+    imageResize.overwriteSave(testDirPath + "overwriteSave2.png");
+    QVERIFY(QImage(testDirPath + "overwriteSave2.png").size() == size640);
+}
+
+void TestImageResize::test_reset()
+{
+    ImageResize imageResize;
+    imageResize.setSize(QSize(1, 1));
+
+    imageResize.reset();
+
+    // typeがDEFAULTに戻ること
+    QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::DEFAULT);
+    QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::DEFAULT);
+}
+
+void TestImageResize::test_update()
+{
+    ImageResize imageResize;
+
+    // 画像が空でも実行できること
+    QVERIFY(imageResize.update() == true);
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
+
+    imageResize.setScale(2.0);
+
+    // currentが更新されること
+    QVERIFY(imageResize.update() == true);
+    QVERIFY(imageResize.current().size() == size320 * 2);
+}
+
+void TestImageResize::test_setScale()
+{
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const double randomScaleX = rd.nextDouble(0.1, 10);
+        const double randomScaleY = rd.nextDouble(0.1, 10);
+
+        // 縦横に拡大率が設定されていること
+        imageResize.setScale(randomScaleX, randomScaleY);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SCALE);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SCALE);
+        QVERIFY(imageResize.width.scale == randomScaleX);
+        QVERIFY(imageResize.height.scale == randomScaleY);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const double randomScale = rd.nextDouble(0.1, 10);
+
+        // 縦横に同じ拡大率が設定されていること
+        imageResize.setScale(randomScale);
+        QVERIFY(imageResize.width.scale == randomScale);
+        QVERIFY(imageResize.height.scale == randomScale);
+    }
+}
+
+void TestImageResize::test_setScaleX()
+{
+    {
+        ImageResize imageResize;
+
+        // 0未満の拡大率を渡すと例外が発生すること
+        QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<double>, imageResize.setScaleX(-1));
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const double randomScale = rd.nextDouble(0.1, 10);
+
+        // 横にのみ拡大率が設定されていること
+        imageResize.setScaleX(randomScale);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SCALE);
+        QVERIFY(imageResize.width.scale == randomScale);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::DEFAULT);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+}
+
+void TestImageResize::test_setScaleY()
+{
+    {
+        ImageResize imageResize;
+
+        // 0未満の拡大率を渡すと例外が発生すること
+        QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<double>, imageResize.setScaleY(-1));
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const double randomScale = rd.nextDouble(0.1, 10);
+
+        // 縦にのみ拡大率が設定されていること
+        imageResize.setScaleY(randomScale);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::DEFAULT);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SCALE);
+        QVERIFY(imageResize.height.scale == randomScale);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+}
+
+void TestImageResize::test_setSize()
+{
+    {
+        ImageResize imageResize;
+
+        // 無効な画像サイズを渡すと例外が発生すること
+        QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<QSize>,
+                                 imageResize.setSize(QSize(-1, -1)));
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const int randomWidth = rd.nextInt(32, 3200);
+        const int randomHeight = rd.nextInt(32, 3200);
+
+        // 縦横にサイズが設定されること
+        imageResize.setSize(QSize(randomWidth, randomHeight));
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.width.size == randomWidth);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.height.size == randomHeight);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+}
+
+void TestImageResize::test_setWidth()
+{
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const int randomWidth = rd.nextInt(32, 3200);
+
+        // 横にのみサイズが設定されること
+        imageResize.setWidth(randomWidth);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.width.size == randomWidth);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::DEFAULT);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const int randomWidth = rd.nextInt(32, 3200);
+
+        // 縦横比固定フラグがtrueの場合、縦横両方にサイズが設定されること
+        imageResize.setWidth(randomWidth, true);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.width.size == randomWidth);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SIZE);
+
+        // 縦横比が凡そ保存されていること
+        QVERIFY(isEqaulApprox((double) imageResize.width.size / (double) imageResize.height.size,
+                              imageResize.aspectRatio(),
+                              1.0 / 16.0));
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+}
+
+void TestImageResize::test_setHeight()
+{
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const int randomHeight = rd.nextInt(32, 3200);
+
+        // 縦にのみサイズが設定されること
+        imageResize.setHeight(randomHeight);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::DEFAULT);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.height.size == randomHeight);
+
+        // outdatedがtrueに設定されること
+        QVERIFY(imageResize.isOutdated() == true);
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+
+    {
+        ImageResize imageResize;
+        imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+        if (imageResize.current().isNull())
+            QFAIL("image is empty");
+
+        const int randomHeight = rd.nextInt(32, 3200);
+
+        // 縦横比固定フラグがtrueの場合、縦横両方にサイズが設定されること
+        imageResize.setHeight(randomHeight, true);
+        QVERIFY(imageResize.width.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.height.type == ImageResize::ResizeHints::Type::SIZE);
+        QVERIFY(imageResize.height.size == randomHeight);
+
+        // 縦横比が凡そ保存されていること
+        QVERIFY(isEqaulApprox((double) imageResize.width.size / (double) imageResize.height.size,
+                              imageResize.aspectRatio(),
+                              1.0 / 16.0));
+
+        // 画像のサイズが想定通りであること
+        imageResize.update();
+        QVERIFY(imageResize.current().size() == imageResize.computedSize());
+    }
+}
+
+void TestImageResize::test_computedSize()
+{
+    ImageResize imageResize;
+
+    // 画像が空の場合はQSize(0, 0)が返ってくること
+    QVERIFY(imageResize.computedSize() == QSize(0, 0));
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
+
+    // DEFAULTの場合はそのままの値を返すこと
+    QVERIFY(imageResize.computedSize() == size320);
+
+    // 設定した幅が反映されること
+    const int randomWidth = rd.nextInt(32, 3200);
+    imageResize.setWidth(randomWidth);
+    QVERIFY(imageResize.computedSize() == QSize(randomWidth, size320.height()));
+
+    // 設定した高さが反映されること
+    const int randomHeight = rd.nextInt(32, 3200);
+    imageResize.setHeight(randomHeight);
+    QVERIFY(imageResize.computedSize() == QSize(randomWidth, randomHeight));
+
+    // 設定した横の拡大率が反映されること
+    const double randomScaleX = rd.nextDouble(0.1, 10);
+    imageResize.setScaleX(randomScaleX);
+    QVERIFY(imageResize.computedSize() == QSize(size320.width() * randomScaleX, randomHeight));
+
+    // 設定した縦の拡大率が反映されること
+    const double randomScaleY = rd.nextDouble(0.1, 10);
+    imageResize.setScaleY(randomScaleY);
+    QVERIFY(imageResize.computedSize()
+            == QSize(size320.width() * randomScaleX, size320.height() * randomScaleY));
+}
+
+void TestImageResize::test_computedScaleX()
+{
+    QSKIP("WIP");
+}
+
+void TestImageResize::test_computedScaleY()
+{
+    QSKIP("WIP");
+}
+
+void TestImageResize::test_setSmoothTransformationEnabled()
+{
+    ImageResize imageResize;
+
+    imageResize.setSmoothTransformationEnabled(true);
+    // trueを設定できること
+    QVERIFY(imageResize.isSmoothTransformationEnabled() == true);
+    // outdatedがtrueに設定されること
+    QVERIFY(imageResize.isOutdated() == true);
+
+    imageResize.update(); // outdatedをfalseにする
+
+    // falseを設定できること
+    QVERIFY(imageResize.isSmoothTransformationEnabled() == true);
+    // outdatedがtrueに設定されること
+    QVERIFY(imageResize.isOutdated() == true);
+}
+
+void TestImageResize::test_aspectRatio()
+{
+    ImageResize imageResize;
+
+    // 画像が空の場合は例外が発生すること
+    QVERIFY_THROWS_EXCEPTION(InvalidStateException, imageResize.aspectRatio());
+
+    imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
+    if (imageResize.current().isNull())
+        QFAIL("image is empty");
+
+    // 横/縦の値を返すこと
+    QVERIFY(isEqaulApprox(imageResize.aspectRatio(), (double) size320.width() / size320.height()));
+}
+} // namespace Test
+
+// QCoreApplicationもQApplicationも不要な場合
+QTEST_APPLESS_MAIN(Test::TestImageResize)
+
+#include "test_image_resize.moc"
