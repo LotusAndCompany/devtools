@@ -183,8 +183,8 @@ void TestImageResize::test_update()
 {
     ImageResize imageResize;
 
-    // 画像が空でも実行できること
-    QVERIFY(imageResize.update() == true);
+    // 画像が空の場合は失敗すること
+    QVERIFY(imageResize.update() == false);
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
     if (imageResize.current().isNull())

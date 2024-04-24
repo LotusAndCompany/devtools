@@ -95,7 +95,7 @@ private:
     bool outdated = false;
 
     /// update() の最後の結果
-    bool updateResult;
+    bool updateResult = false;
 #ifdef _TEST_BasicImageEditInterface
     friend class Test::TestBasicImageEditInterface;
 #endif
