@@ -12,19 +12,19 @@
 namespace Test {
 
 // function mocks
-FunctionMock<bool, const QString &, const char *, int> mock_save, mock_overwriteSave;
-FunctionMock<const QFileInfo &, unsigned int> mock_fileInfo;
-FunctionMock<void, double, double> mock_setScale;
-FunctionMock<void, double> mock_setScaleX, mock_setScaleY;
-FunctionMock<void, const QSize &> mock_setSize;
-FunctionMock<void, unsigned int, bool> mock_setWidth, mock_setHeight;
-FunctionMock<QSize> mock_computedSize;
-FunctionMock<double> mock_computedScaleX, mock_computedScaleY;
-FunctionMock<void, bool> mock_setSmoothTransformationEnabled;
-FunctionMock<const QImage &> mock_original;
-FunctionMock<bool, const QString &> mock_loadImpl;
-FunctionMock<> mock_resetImpl;
-FunctionMock<bool> mock_updateImpl;
+FunctionMock<bool(const QString &, const char *, int)> mock_save, mock_overwriteSave;
+FunctionMock<const QFileInfo &(unsigned int)> mock_fileInfo;
+FunctionMock<void(double, double)> mock_setScale;
+FunctionMock<void(double)> mock_setScaleX, mock_setScaleY;
+FunctionMock<void(const QSize &)> mock_setSize;
+FunctionMock<void(unsigned int, bool)> mock_setWidth, mock_setHeight;
+FunctionMock<QSize()> mock_computedSize;
+FunctionMock<double()> mock_computedScaleX, mock_computedScaleY;
+FunctionMock<void(bool)> mock_setSmoothTransformationEnabled;
+FunctionMock<const QImage &()> mock_original;
+FunctionMock<bool(const QString &)> mock_loadImpl;
+FunctionMock<void()> mock_resetImpl;
+FunctionMock<bool()> mock_updateImpl;
 
 class ImageResizeMock : public ImageResizeInterface
 {
@@ -80,10 +80,9 @@ class TestImageResizeGUI : public QObject
     const QString testDirPath = TEST_BIN_DIR + "/" + testDirName + "/";
     const QStringList resourceNames = {
         "320px-Qt_logo_2016.png", // 0
-        "578px-Qt_logo_2016.png", // 1
     };
-    QImage image320, image578;
-    //QSize size320, size578;
+    QImage image320;
+    QSize size320;
 
     const std::function<const QImage &(void)> original320 = [this]() { return this->image320; };
 
@@ -93,7 +92,6 @@ private slots:
     void initTestCase(); // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
     void init();         // will be called before each test function is executed.
-    void cleanup();      // will be called after every test function.
 
     // Test cases:
     void test_constructor();
@@ -118,10 +116,8 @@ void TestImageResizeGUI::initTestCase()
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
 
     image320 = QImage(testDirPath + resourceNames[0]);
-    image578 = QImage(testDirPath + resourceNames[1]);
 
-    //size320 = QImage(TEST_SRC_DIR + "/core/image/" + resourceNames[0]).size();
-    //size578 = QImage(TEST_SRC_DIR + "/core/image/" + resourceNames[1]).size();
+    size320 = image320.size();
 }
 
 void TestImageResizeGUI::cleanupTestCase()
@@ -149,22 +145,6 @@ void TestImageResizeGUI::init()
     mock_loadImpl.clearFunction();
     mock_resetImpl.clearFunction();
     mock_updateImpl.clearFunction();
-
-    /*
-    QDir dir(TEST_BIN_DIR);
-    dir.mkpath(testDirName);
-
-    for (const QString &src : resourceNames)
-        QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
-    */
-}
-
-void TestImageResizeGUI::cleanup()
-{
-    /*
-    QDir testDir(testDirPath);
-    testDir.removeRecursively();
-    */
 }
 
 void TestImageResizeGUI::test_constructor()
@@ -341,14 +321,16 @@ void TestImageResizeGUI::test_onSmoothTransformationChanged()
     // チェックされた時はsetSmoothTransformationEnabledにtrueが渡されること
     gui.onSmoothTransformationChanged(Qt::Checked);
     QVERIFY(mock_setSmoothTransformationEnabled.isInvoked() == true);
-    QVERIFY(std::get<0>(mock_setSmoothTransformationEnabled.argumentsHistory()) == true);
+    auto history = mock_setSmoothTransformationEnabled.argumentsHistory();
+    QVERIFY(std::get<0>(history) == true);
 
     mock_setSmoothTransformationEnabled.resetCount();
 
     // チェックが外された時はsetSmoothTransformationEnabledにfalseが渡されること
     gui.onSmoothTransformationChanged(Qt::Unchecked);
     QVERIFY(mock_setSmoothTransformationEnabled.isInvoked() == true);
-    QVERIFY(std::get<0>(mock_setSmoothTransformationEnabled.argumentsHistory()) == false);
+    history = mock_setSmoothTransformationEnabled.argumentsHistory();
+    QVERIFY(std::get<0>(history) == false);
 }
 
 void TestImageResizeGUI::test_updateUIValues()

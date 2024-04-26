@@ -13,11 +13,11 @@
 namespace Test {
 
 // function mocks
-FunctionMock<bool, const QString &, const char *, int> mock_save, mock_overwriteSave;
-FunctionMock<const QFileInfo &, unsigned int> mock_fileInfo;
-FunctionMock<bool, const QString &> mock_loadImpl;
-FunctionMock<void> mock_resetImpl;
-FunctionMock<bool> mock_updateImpl;
+FunctionMock<bool(const QString &, const char *, int)> mock_save, mock_overwriteSave;
+FunctionMock<const QFileInfo &(unsigned int)> mock_fileInfo;
+FunctionMock<bool(const QString &)> mock_loadImpl;
+FunctionMock<void()> mock_resetImpl;
+FunctionMock<bool()> mock_updateImpl;
 
 class TestBasicImageEditInterface : public QObject
 {
