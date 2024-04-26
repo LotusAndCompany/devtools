@@ -9,6 +9,13 @@ class ImageResizeGUI;
 }
 class ImageResizeInterface;
 
+#ifdef _TEST_ImageResizeGUI
+#include "ui_image_resize_gui.h"
+namespace Test {
+class TestImageResizeGUI;
+}
+#endif
+
 // TODO: Undoをサポートする
 // TODO: ショートカットをサポートする
 /**
@@ -90,7 +97,7 @@ private:
     ImageResizeInterface *const imageResize;
 
     /// 縦横比固定フラグ
-    bool keepAspectRatio;
+    bool keepAspectRatio = false;
 
     /**
      * @brief どの操作により画像サイズが更新されたかを表す列挙体
@@ -109,6 +116,9 @@ private:
      * @param mode 更新モード
      */
     void updateUIValues(UpdateMode mode = UpdateMode::DEFAULT);
+#ifdef _TEST_ImageResizeGUI
+    friend class Test::TestImageResizeGUI;
+#endif
 };
 
 #endif // IMAGE_RESIZE_GUI_H

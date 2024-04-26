@@ -250,8 +250,24 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
     DevTools_add_test(test_basic_image_view WIDGETS
         SOURCES
         gui/image/basic/image_view.h
-        tests/gui/image/basic/test_basic_image_view.cpp
         gui/image/basic/image_view.cpp
+        tests/gui/image/basic/test_basic_image_view.cpp
+    )
+
+    # gui/image/resize
+    # NOTE: 数が多いので何とかしたい。↑と共通しているものもある。
+    DevTools_add_test(test_image_resize_gui WIDGETS
+        SOURCES
+        gui/image/resize/image_resize_gui.h
+        gui/image/resize/image_resize_gui.cpp
+        gui/image/basic/control.cpp
+        gui/image/basic/file_dialogs.cpp
+        gui/image/basic/image_view.cpp
+        core/image/resize/image_resize.h
+        core/image/resize/image_resize.cpp
+        core/image/basic_image_io.cpp
+        core/image/basic_image_edit_interface.cpp
+        tests/gui/image/resize/test_image_resize_gui.cpp
     )
 endif()
 
@@ -284,6 +300,12 @@ endif()
 
 # PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
 target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
+
+# 有効にするのが望ましいが、mocまで対象になるのでやめておく
+# 未定義動作の静的チェックを有効にする
+#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=undefined)
+# メモリアドレス関連の静的チェックを有効にする
+#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
