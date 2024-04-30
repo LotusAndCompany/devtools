@@ -153,6 +153,14 @@
     </message>
 </context>
 <context>
+    <name>ImageRotationGUI</name>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ImageSaveDialog</name>
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
