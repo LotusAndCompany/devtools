@@ -21,7 +21,7 @@ void TestUnderDevelopmentException::test_defaultConstructor()
 {
     UnderDevelopmentException e;
     // デフォルトコンストラクタの場合、"[UnderDevelopmentException] Under development..."が設定されること
-    QVERIFY(e.message == "[UnderDevelopmentException] Under development...");
+    QCOMPARE_EQ(e.message, "[UnderDevelopmentException] Under development...");
 }
 
 void TestUnderDevelopmentException::test_messageConstructor()
@@ -29,7 +29,7 @@ void TestUnderDevelopmentException::test_messageConstructor()
     const QString msg = "Custom message";
     UnderDevelopmentException e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
 }
 
 void TestUnderDevelopmentException::test_clone()
@@ -40,11 +40,11 @@ void TestUnderDevelopmentException::test_clone()
     const QScopedPointer<QException> copied(e.clone());
 
     // clone()を呼び出しても元のインスタンスが変わらないこと
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QVERIFY(static_cast<UnderDevelopmentException *>(copied.get())->message == msg);
+    QCOMPARE_EQ(static_cast<UnderDevelopmentException *>(copied.get())->message, msg);
     // clone()で返された物が元のインスタンスとは異なること
-    QVERIFY(&e != copied.get());
+    QCOMPARE_NE(&e, copied.get());
 }
 
 void TestUnderDevelopmentException::test_raise()
@@ -57,10 +57,10 @@ void TestUnderDevelopmentException::test_raise()
         src.raise();
     } catch (UnderDevelopmentException &e) {
         // srcが変更されていないこと
-        QVERIFY(src.message == msg);
+        QCOMPARE_EQ(src.message, msg);
 
         // eとsrcとの内容が同じであること
-        QVERIFY(e.message == msg);
+        QCOMPARE_EQ(e.message, msg);
 
         return;
     }

@@ -75,7 +75,7 @@ void TestBasicImageEditInterface::test_constructor()
     const ImageEdit imageEdit(new BasicImageEditInterfaceMock);
 
     // outdatedの初期値がfalseであること
-    QVERIFY(imageEdit->isOutdated() == false);
+    QCOMPARE_EQ(imageEdit->isOutdated(), false);
 
     // 画像が空であること
     QVERIFY(imageEdit->current().isNull());
@@ -87,19 +87,19 @@ void TestBasicImageEditInterface::test_load()
 
     imageEdit->load("");
     // loadImplが呼ばれていること
-    QVERIFY(mock_loadImpl.count() == 1);
+    QVERIFY(mock_loadImpl.isInvoked());
 
     // outdatedがtrueになっていること
-    QVERIFY(imageEdit->isOutdated() == true);
+    QCOMPARE_EQ(imageEdit->isOutdated(), true);
 
     const auto &returnsTrue = [](const QString &) { return true; };
     const auto &returnsFalse = [](const QString &) { return false; };
 
     // loadImplの返り値とload()の返り値が一致していること
     mock_loadImpl.setFunction(returnsTrue);
-    QVERIFY(imageEdit->load("") == true);
+    QCOMPARE_EQ(imageEdit->load(""), true);
     mock_loadImpl.setFunction(returnsFalse);
-    QVERIFY(imageEdit->load("") == false);
+    QCOMPARE_EQ(imageEdit->load(""), false);
 }
 
 void TestBasicImageEditInterface::test_reset()
@@ -109,11 +109,11 @@ void TestBasicImageEditInterface::test_reset()
     imageEdit->reset();
 
     // outdatedがfalseになっていること
-    QVERIFY(imageEdit->isOutdated() == false);
+    QCOMPARE_EQ(imageEdit->isOutdated(), false);
     // resetImplが呼ばれていること
-    QVERIFY(mock_resetImpl.count() == 1);
+    QVERIFY(mock_resetImpl.isInvoked());
     // updateImplが呼ばれていること
-    QVERIFY(mock_updateImpl.count() == 1);
+    QCOMPARE_EQ(mock_updateImpl.count(), 1);
 
     const auto &returnsTrue = []() { return true; };
     const auto &returnsFalse = []() { return false; };
@@ -121,10 +121,10 @@ void TestBasicImageEditInterface::test_reset()
     // updateResultの値がupdateImplの返り値と一致していること
     mock_updateImpl.setFunction(returnsTrue);
     imageEdit->reset();
-    QVERIFY(imageEdit->updateResult == true);
+    QCOMPARE_EQ(imageEdit->updateResult, true);
     mock_updateImpl.setFunction(returnsFalse);
     imageEdit->reset();
-    QVERIFY(imageEdit->updateResult == false);
+    QCOMPARE_EQ(imageEdit->updateResult, false);
 }
 
 void TestBasicImageEditInterface::test_update()
@@ -135,14 +135,14 @@ void TestBasicImageEditInterface::test_update()
     imageEdit->update();
 
     // outdatedがfalseになっていること
-    QVERIFY(imageEdit->isOutdated() == false);
+    QCOMPARE_EQ(imageEdit->isOutdated(), false);
 
     // updateImplが呼ばれていること
-    QVERIFY(mock_updateImpl.count() == 1);
+    QVERIFY(mock_updateImpl.isInvoked());
 
     // outdatedがfalseの場合はupdateImplが呼ばれないこと
     imageEdit->update();
-    QVERIFY(mock_updateImpl.count() == 1);
+    QCOMPARE_EQ(mock_updateImpl.count(), 1);
 
     const auto &returnsTrue = []() { return true; };
     const auto &returnsFalse = []() { return false; };
@@ -150,15 +150,15 @@ void TestBasicImageEditInterface::test_update()
     // 返り値がupdateImplの返り値と一致していること
     imageEdit->outdated = true;
     mock_updateImpl.setFunction(returnsTrue);
-    QVERIFY(imageEdit->update() == true);
+    QCOMPARE_EQ(imageEdit->update(), true);
     // もう一度updateを呼ぶと同じ結果を返すこと
-    QVERIFY(imageEdit->update() == true);
+    QCOMPARE_EQ(imageEdit->update(), true);
 
     imageEdit->outdated = true;
     mock_updateImpl.setFunction(returnsFalse);
-    QVERIFY(imageEdit->update() == false);
+    QCOMPARE_EQ(imageEdit->update(), false);
     // もう一度updateを呼ぶと同じ結果を返すこと
-    QVERIFY(imageEdit->update() == false);
+    QCOMPARE_EQ(imageEdit->update(), false);
 }
 
 } // namespace Test

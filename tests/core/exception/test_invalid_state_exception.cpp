@@ -27,7 +27,7 @@ void TestInvalidStateException::test_defaultConstructor()
 {
     InvalidStateException e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
-    QVERIFY(e.message == "");
+    QCOMPARE_EQ(e.message, "");
 }
 
 void TestInvalidStateException::test_messageConstructor()
@@ -35,14 +35,14 @@ void TestInvalidStateException::test_messageConstructor()
     const QString msg = rd.nextQString(length);
     InvalidStateException e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
 }
 
 void TestInvalidStateException::test_actualExpectedConstructor()
 {
     InvalidStateException e("_actual_", "_expected_");
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-    QVERIFY(e.message == "[InvalidStateException] actual: _actual_, expected: _expected_");
+    QCOMPARE_EQ(e.message, "[InvalidStateException] actual: _actual_, expected: _expected_");
 }
 
 void TestInvalidStateException::test_clone()
@@ -53,11 +53,11 @@ void TestInvalidStateException::test_clone()
     const QScopedPointer<QException> copied(e.clone());
 
     // clone()を呼び出しても元のインスタンスが変わらないこと
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QVERIFY(static_cast<InvalidStateException *>(copied.get())->message == msg);
+    QCOMPARE_EQ(static_cast<InvalidStateException *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
-    QVERIFY(&e != copied.get());
+    QCOMPARE_NE(&e, copied.get());
 }
 
 void TestInvalidStateException::test_raise()
@@ -70,10 +70,10 @@ void TestInvalidStateException::test_raise()
         src.raise();
     } catch (InvalidStateException &e) {
         // srcが変更されていないこと
-        QVERIFY(src.message == msg);
+        QCOMPARE_EQ(src.message, msg);
 
         // eとsrcとの内容が同じであること
-        QVERIFY(e.message == msg);
+        QCOMPARE_EQ(e.message, msg);
 
         return;
     }

@@ -41,8 +41,8 @@ void TestTool::test_validateID()
         const auto t = Tool::translatable(Tool::ID::IMAGE_RESIZE);
 
         // Translatableの内容が正しいこと
-        QVERIFY(t.name == tr("Image Resize"));
-        QVERIFY(t.description == tr("Image resizing and scaling"));
+        QCOMPARE_EQ(t.name, tr("Image Resize"));
+        QCOMPARE_EQ(t.description, tr("Image resizing and scaling"));
     } catch (CommonException &e) {
         // InvalidArgumentException<int>, UnderDevelopmentExceptionが発生する可能性がある
         QFAIL("Tool::translatable(Tool::ID::IMAGE_RESIZE) failed unexpectedly");

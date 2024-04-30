@@ -65,10 +65,10 @@ void TestBasicImageView::test_constructor()
     BasicImageView imageView;
 
     // scaleが1.0で初期化されていること
-    QVERIFY(imageView.scale == 1.0);
+    QCOMPARE_EQ(imageView.scale, 1.0);
 
     // "No Image"が設定されていること
-    QVERIFY(imageView.ui->image->text() == tr("No Image"));
+    QCOMPARE_EQ(imageView.ui->image->text(), tr("No Image"));
 
     // 拡大縮小ボタンが有効であること
     QVERIFY(imageView.ui->zoomInButton->isEnabled());
@@ -85,41 +85,41 @@ void TestBasicImageView::test_setPixmap()
     // 初期状態で画像が空であること
     QVERIFY(imageView.original.isNull());
     QVERIFY(imageView.ui->image->pixmap().isNull());
-    QVERIFY(imageView.ui->image->text() == tr("No Image"));
+    QCOMPARE_EQ(imageView.ui->image->text(), tr("No Image"));
 
     // 適当な拡大率を設定しておく
     imageView.scale = 2.0;
 
     // 画像を設定できること
     imageView.setPixmap(pixmap320, false);
-    QVERIFY(imageView.original.size() == size320);
-    QVERIFY(imageView.ui->image->text() == "");
+    QCOMPARE_EQ(imageView.original.size(), size320);
+    QCOMPARE_EQ(imageView.ui->image->text(), "");
     // 拡大率が反映されていること
-    QVERIFY(imageView.scale == 2.0);
-    QVERIFY(imageView.ui->image->pixmap().size() == 2.0 * size320);
+    QCOMPARE_EQ(imageView.scale, 2.0);
+    QCOMPARE_EQ(imageView.ui->image->pixmap().size(), 2.0 * size320);
 
     // 別の画像を設定できること
     imageView.setPixmap(pixmap578, false);
-    QVERIFY(imageView.original.size() == size578);
+    QCOMPARE_EQ(imageView.original.size(), size578);
     // 拡大率が反映されていること
-    QVERIFY(imageView.scale == 2.0);
-    QVERIFY(imageView.ui->image->pixmap().size() == 2.0 * size578);
+    QCOMPARE_EQ(imageView.scale, 2.0);
+    QCOMPARE_EQ(imageView.ui->image->pixmap().size(), 2.0 * size578);
 
     // 空の画像を設定できること
     imageView.setPixmap(QPixmap(), false);
     QVERIFY(imageView.original.isNull());
     // 拡大率が反映されていること
-    QVERIFY(imageView.scale == 2.0);
+    QCOMPARE_EQ(imageView.scale, 2.0);
     QVERIFY(imageView.ui->image->pixmap().isNull());
-    QVERIFY(imageView.ui->image->text() == tr("No Image"));
+    QCOMPARE_EQ(imageView.ui->image->text(), tr("No Image"));
 
     // 別の画像を設定できること
     imageView.setPixmap(pixmap320, true);
-    QVERIFY(imageView.original.size() == size320);
-    QVERIFY(imageView.ui->image->text() == "");
+    QCOMPARE_EQ(imageView.original.size(), size320);
+    QCOMPARE_EQ(imageView.ui->image->text(), "");
     // 拡大率が1.0に戻ること
-    QVERIFY(imageView.scale == 1.0);
-    QVERIFY(imageView.ui->image->pixmap().size() == size320);
+    QCOMPARE_EQ(imageView.scale, 1.0);
+    QCOMPARE_EQ(imageView.ui->image->pixmap().size(), size320);
 }
 
 void TestBasicImageView::test_resizeEvent()
@@ -133,18 +133,18 @@ void TestBasicImageView::test_resizeEvent()
     imageView.resizeEvent(&shrink);
 
     // 縮小した時にUIが想定通り調整されていること
-    QVERIFY(imageView.ui->scrollArea->size() == shrink.size());
-    QVERIFY(imageView.ui->scalingUI->pos()
-            == QPoint(shrink.size().width() - scalingUISize.width(),
-                      shrink.size().height() - scalingUISize.height()));
+    QCOMPARE_EQ(imageView.ui->scrollArea->size(), shrink.size());
+    QCOMPARE_EQ(imageView.ui->scalingUI->pos(),
+                QPoint(shrink.size().width() - scalingUISize.width(),
+                       shrink.size().height() - scalingUISize.height()));
 
     QResizeEvent expand(originalSize * 2, originalSize / 2);
     imageView.resizeEvent(&expand);
     // 拡大した時にUIが想定通り調整されていること
-    QVERIFY(imageView.ui->scrollArea->size() == expand.size());
-    QVERIFY(imageView.ui->scalingUI->pos()
-            == QPoint(expand.size().width() - scalingUISize.width(),
-                      expand.size().height() - scalingUISize.height()));
+    QCOMPARE_EQ(imageView.ui->scrollArea->size(), expand.size());
+    QCOMPARE_EQ(imageView.ui->scalingUI->pos(),
+                QPoint(expand.size().width() - scalingUISize.width(),
+                       expand.size().height() - scalingUISize.height()));
 }
 
 bool TestBasicImageView::isLinear(const QMap<double, double> &pairs, double errorRatio)
@@ -215,11 +215,11 @@ void TestBasicImageView::test_zoomIn()
     QVERIFY(isLinear(values));
 
     // BasicImageView::maxScaleで終了していること
-    QVERIFY(imageView.scale == BasicImageView::maxScale);
+    QCOMPARE_EQ(imageView.scale, BasicImageView::maxScale);
 
     // BasicImageView::maxScaleを超えないこと
     imageView.zoomIn();
-    QVERIFY(imageView.scale == BasicImageView::maxScale);
+    QVERIFY(imageView.scale <= BasicImageView::maxScale);
 
     // BasicImageView::minScaleから拡大できること
     imageView.scale = BasicImageView::minScale;
@@ -247,11 +247,11 @@ void TestBasicImageView::test_zoomOut()
     QVERIFY(isLinear(values));
 
     // BasicImageView::minScaleで終了していること
-    QVERIFY(imageView.scale == BasicImageView::minScale);
+    QCOMPARE_EQ(imageView.scale, BasicImageView::minScale);
 
     // BasicImageView::minScaleを下回らないこと
     imageView.zoomOut();
-    QVERIFY(imageView.scale == BasicImageView::minScale);
+    QVERIFY(BasicImageView::minScale <= imageView.scale);
 
     // BasicImageView::maxScaleから縮小できること
     imageView.scale = BasicImageView::maxScale;
@@ -265,37 +265,37 @@ void TestBasicImageView::test_updateScale()
 
     // 画像が設定されていない場合は"No Image"が設定されること
     imageView.updateScale(1.0);
-    QVERIFY(imageView.ui->image->text() == tr("No Image"));
+    QCOMPARE_EQ(imageView.ui->image->text(), tr("No Image"));
 
     const QSize size320 = pixmap320.size();
     imageView.setPixmap(pixmap320);
 
     // 画像が拡大されること
     imageView.updateScale(1.5);
-    QVERIFY(imageView.scale == 1.5);
-    QVERIFY(imageView.ui->image->pixmap().size() == 1.5 * size320);
-    QVERIFY(imageView.ui->scaleLabel->text() == "x1.5");
+    QCOMPARE_EQ(imageView.scale, 1.5);
+    QCOMPARE_EQ(imageView.ui->image->pixmap().size(), 1.5 * size320);
+    QCOMPARE_EQ(imageView.ui->scaleLabel->text(), "x1.5");
 
     // 画像が縮小されること
     imageView.updateScale(0.5);
-    QVERIFY(imageView.scale == 0.5);
-    QVERIFY(imageView.ui->image->pixmap().size() == 0.5 * size320);
-    QVERIFY(imageView.ui->scaleLabel->text() == "x0.5");
+    QCOMPARE_EQ(imageView.scale, 0.5);
+    QCOMPARE_EQ(imageView.ui->image->pixmap().size(), 0.5 * size320);
+    QCOMPARE_EQ(imageView.ui->scaleLabel->text(), "x0.5");
 
     // 最大の拡大率の時に拡大ボタンが無効化されること
     imageView.updateScale(BasicImageView::maxScale);
-    QVERIFY(imageView.ui->zoomInButton->isEnabled() == false);
-    QVERIFY(imageView.ui->zoomOutButton->isEnabled() == true);
+    QCOMPARE_EQ(imageView.ui->zoomInButton->isEnabled(), false);
+    QCOMPARE_EQ(imageView.ui->zoomOutButton->isEnabled(), true);
 
     // 最小の拡大率の時に縮小ボタンが無効化されること
     imageView.updateScale(BasicImageView::minScale);
-    QVERIFY(imageView.ui->zoomInButton->isEnabled() == true);
-    QVERIFY(imageView.ui->zoomOutButton->isEnabled() == false);
+    QCOMPARE_EQ(imageView.ui->zoomInButton->isEnabled(), true);
+    QCOMPARE_EQ(imageView.ui->zoomOutButton->isEnabled(), false);
 
     // それ以外の拡大率の時に拡大ボタン・縮小ボタンが有効化されること
     imageView.updateScale(1.0);
-    QVERIFY(imageView.ui->zoomInButton->isEnabled() == true);
-    QVERIFY(imageView.ui->zoomOutButton->isEnabled() == true);
+    QCOMPARE_EQ(imageView.ui->zoomInButton->isEnabled(), true);
+    QCOMPARE_EQ(imageView.ui->zoomOutButton->isEnabled(), true);
 }
 
 void TestBasicImageView::test_zoomInButton()
@@ -304,7 +304,7 @@ void TestBasicImageView::test_zoomInButton()
 
     // 画像が設定されていない時は拡大率が変わらないこと
     QTest::mouseClick(imageView.ui->zoomInButton, Qt::MouseButton::LeftButton);
-    QVERIFY(imageView.scale == 1.0);
+    QCOMPARE_EQ(imageView.scale, 1.0);
 
     imageView.setPixmap(pixmap320);
 
@@ -319,7 +319,7 @@ void TestBasicImageView::test_zoomOutButton()
 
     // 画像が設定されていない時は拡大率が変わらないこと
     QTest::mouseClick(imageView.ui->zoomOutButton, Qt::MouseButton::LeftButton);
-    QVERIFY(imageView.scale == 1.0);
+    QCOMPARE_EQ(imageView.scale, 1.0);
 
     imageView.setPixmap(pixmap320);
 

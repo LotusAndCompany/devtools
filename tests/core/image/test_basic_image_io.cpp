@@ -60,7 +60,7 @@ void TestImageIO::test_constructor()
     // 画像が空であること
     QVERIFY(io.original().isNull());
     // ファイル情報が空であること
-    QVERIFY(io.originalFileInfo().filePath() == "");
+    QCOMPARE_EQ(io.originalFileInfo().filePath(), "");
 }
 
 void TestImageIO::test_load()
@@ -110,7 +110,7 @@ void TestImageIO::test_load()
     {
         ImageIO io;
         // 存在しないファイルで失敗すること
-        QVERIFY(io.load(testDirPath + "qwert_yui.op") == false);
+        QVERIFY(!io.load(testDirPath + "qwert_yui.op"));
     }
 
     {
@@ -124,10 +124,10 @@ void TestImageIO::test_load()
         io.load(testDirPath + resourceNames[7]);
 
         // sizeが更新されていること
-        QVERIFY(io.original().size() != sizeBefore);
+        QCOMPARE_NE(io.original().size(), sizeBefore);
 
         // filePathが更新されていること
-        QVERIFY(io.originalFileInfo().filePath() != filePathBefore);
+        QCOMPARE_NE(io.originalFileInfo().filePath(), filePathBefore);
     }
 }
 
@@ -137,7 +137,7 @@ void TestImageIO::test_original()
     io.load(testDirPath + resourceNames[0]);
 
     // 読み込んだ画像のサイズが正しいこと
-    QVERIFY(io.original().size() == QSize(320, 235));
+    QCOMPARE_EQ(io.original().size(), QSize(320, 235));
 }
 
 void TestImageIO::test_originalFileInfo()
@@ -147,7 +147,7 @@ void TestImageIO::test_originalFileInfo()
     io.load(filePath);
 
     // 読み込んだ画像のファイルパスが正しいこと
-    QVERIFY(io.originalFileInfo().filePath() == filePath);
+    QCOMPARE_EQ(io.originalFileInfo().filePath(), filePath);
 }
 
 void TestImageIO::test_save()
@@ -157,7 +157,7 @@ void TestImageIO::test_save()
     io.load(filePath);
 
     // 空の画像の保存が失敗すること
-    QVERIFY(ImageIO::save(testDirPath + "test_save.png", QImage()) == false);
+    QVERIFY(!ImageIO::save(testDirPath + "test_save.png", QImage()));
 
     // png形式の保存ができること
     QVERIFY(ImageIO::save(testDirPath + "test_save.png", io.original()));
@@ -166,7 +166,7 @@ void TestImageIO::test_save()
     QVERIFY(ImageIO::save(testDirPath + "test_save.jpg", io.original()));
 
     // 同名ファイルの保存が失敗すること
-    QVERIFY(ImageIO::save(testDirPath + "test_save.png", io.original()) == false);
+    QVERIFY(!ImageIO::save(testDirPath + "test_save.png", io.original()));
 }
 
 void TestImageIO::test_overwriteSave()
@@ -176,7 +176,7 @@ void TestImageIO::test_overwriteSave()
     io.load(filePath);
 
     // 空の画像の保存が失敗すること
-    QVERIFY(ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", QImage()) == false);
+    QVERIFY(!ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", QImage()));
 
     // 保存が成功すること
     QVERIFY(ImageIO::overwriteSave(testDirPath + "test_overwriteSave.png", io.original()));

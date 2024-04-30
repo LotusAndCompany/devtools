@@ -24,9 +24,9 @@ void TestBasicImageViewControl::test_constructor()
 {
     BasicImageViewControl control;
 
-    QVERIFY(control.ui->loadButton->text() == tr("load"));
-    QVERIFY(control.ui->resetButton->text() == tr("reset"));
-    QVERIFY(control.ui->saveButton->text() == tr("save"));
+    QCOMPARE_EQ(control.ui->loadButton->text(), tr("load"));
+    QCOMPARE_EQ(control.ui->resetButton->text(), tr("reset"));
+    QCOMPARE_EQ(control.ui->saveButton->text(), tr("save"));
 }
 
 void TestBasicImageViewControl::test_reset()
@@ -34,9 +34,9 @@ void TestBasicImageViewControl::test_reset()
     BasicImageViewControl control;
 
     QSignalSpy spy(&control, &BasicImageViewControl::resetButtonClicked);
-    QVERIFY(spy.count() == 0);
+    QCOMPARE_EQ(spy.count(), 0);
     QTest::mouseClick(control.ui->resetButton, Qt::MouseButton::LeftButton);
-    QVERIFY(spy.count() == 1);
+    QCOMPARE_EQ(spy.count(), 1);
 }
 
 void TestBasicImageViewControl::test_load()
