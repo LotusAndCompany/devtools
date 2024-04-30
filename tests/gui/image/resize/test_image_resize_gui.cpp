@@ -89,9 +89,9 @@ class TestImageResizeGUI : public QObject
     RandomData rd;
 
 private slots:
-    void initTestCase(); // will be called before the first test function is executed.
+    void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void init();         // will be called before each test function is executed.
+    void init();            // will be called before each test function is executed.
 
     // Test cases:
     void test_constructor();

@@ -21,7 +21,6 @@ class ImageResizeInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
-    explicit ImageResizeInterface(QObject *parent = nullptr);
     virtual ~ImageResizeInterface() = default;
 
     /**
@@ -103,7 +102,9 @@ public:
     virtual const QImage &original() const = 0;
 
 protected:
-    /// Bilinear補完を使うフラグ
+    explicit ImageResizeInterface(QObject *parent = nullptr);
+
+    /// Bilinear補完有効化フラグ
     bool smoothTransformationEnabled = false;
 };
 

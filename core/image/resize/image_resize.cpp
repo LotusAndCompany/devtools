@@ -39,8 +39,6 @@ void ImageResize::resetImpl()
 {
     width.type = ResizeHints::Type::DEFAULT;
     height.type = ResizeHints::Type::DEFAULT;
-
-    _current = original();
 }
 
 void ImageResize::setScale(double sx, double sy)
