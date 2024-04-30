@@ -23,7 +23,11 @@ bool isEqaulApprox(double a, double b, double errorRatio)
     }
 
     const double r = abs(a / b) - 1.0;
+    const bool result = (-errorRatio <= r && r <= errorRatio);
 
-    return -errorRatio <= r && r <= errorRatio;
+    if (!result)
+        qWarning() << "a=" << a << ", b=" << b << ", r=" << r;
+
+    return result;
 }
 }

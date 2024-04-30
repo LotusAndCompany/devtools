@@ -1,5 +1,7 @@
 #include "random_data.h"
 
+#include <QDateTime>
+
 using namespace Test;
 
 const QString RandomData::numbers = "1234567890";
@@ -12,6 +14,10 @@ const QString RandomData::symbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 const QString RandomData::defaultCharsets = numbers + lowerAlphabets + upperAlphabets + " "
                                             + symbols;
 const QString RandomData::ascii = numbers + lowerAlphabets + upperAlphabets + whitespaces + symbols;
+
+RandomData::RandomData()
+    : RandomData(QDateTime::currentMSecsSinceEpoch())
+{}
 
 RandomData::RandomData(int seed)
     : gen(seed)

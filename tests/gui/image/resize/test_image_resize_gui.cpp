@@ -153,29 +153,29 @@ void TestImageResizeGUI::test_constructor()
         ImageResizeGUI gui(new ImageResizeMock);
 
         // 親オブジェクトが設定されていない場合は自身が設定されること
-        QVERIFY(gui.imageResize->parent() == &gui);
+        QCOMPARE_EQ(gui.imageResize->parent(), &gui);
 
         // 初期値がfalseであること
-        QVERIFY(gui.keepAspectRatio == false);
+        QCOMPARE_EQ(gui.keepAspectRatio, false);
 
         // 初期状態でOFFであること
-        QVERIFY(gui.ui->keepAspectRatio->checkState() == Qt::Unchecked);
-        QVERIFY(gui.ui->smoothScaling->checkState() == Qt::Unchecked);
+        QCOMPARE_EQ(gui.ui->keepAspectRatio->checkState(), Qt::Unchecked);
+        QCOMPARE_EQ(gui.ui->smoothScaling->checkState(), Qt::Unchecked);
 
         // 初期値が0であること
-        QVERIFY(gui.ui->widthValue->value() == 0);
-        QVERIFY(gui.ui->heightValue->value() == 0);
+        QCOMPARE_EQ(gui.ui->widthValue->value(), 0);
+        QCOMPARE_EQ(gui.ui->heightValue->value(), 0);
 
         // 初期値が100.0であること
-        QVERIFY(gui.ui->hScaleValue->value() == 100.0);
-        QVERIFY(gui.ui->vScaleValue->value() == 100.0);
+        QCOMPARE_EQ(gui.ui->hScaleValue->value(), 100.0);
+        QCOMPARE_EQ(gui.ui->vScaleValue->value(), 100.0);
     }
 
     {
         ImageResizeGUI gui(new ImageResizeMock(this));
 
         // 親オブジェクトが設定されている場合はそれが変わらないこと
-        QVERIFY(gui.imageResize->parent() == this);
+        QCOMPARE_EQ(gui.imageResize->parent(), this);
     }
 }
 
@@ -207,6 +207,14 @@ void TestImageResizeGUI::test_onResetButtonClicked()
 
     // reset() が呼ばれていること
     QVERIFY(mock_resetImpl.isInvoked());
+
+    gui.ui->keepAspectRatio->setCheckState(Qt::Checked);
+    gui.ui->smoothScaling->setCheckState(Qt::Checked);
+
+    // reset() によりチェックボックスが戻らないこと
+    QCOMPARE_EQ(gui.keepAspectRatio, true);
+    QCOMPARE_EQ(gui.ui->keepAspectRatio->checkState(), Qt::Checked);
+    QCOMPARE_EQ(gui.ui->smoothScaling->checkState(), Qt::Checked);
 }
 
 void TestImageResizeGUI::test_onWidthValueChanged()
@@ -215,11 +223,11 @@ void TestImageResizeGUI::test_onWidthValueChanged()
 
     // 0未満の値が渡された場合は何もしないこと
     gui.onWidthValueChanged(-1);
-    QVERIFY(mock_setWidth.isInvoked() == false);
+    QVERIFY(!mock_setWidth.isInvoked());
 
     // 画像が設定されていない場合も何もしないこと
     gui.onWidthValueChanged(1);
-    QVERIFY(mock_setWidth.isInvoked() == false);
+    QVERIFY(!mock_setWidth.isInvoked());
 
     // 画像が設定されている場合、setWidthが呼ばれること
     mock_original.setFunction(original320);
@@ -233,16 +241,16 @@ void TestImageResizeGUI::test_onHeightValueChanged()
 
     // 0未満の値が渡された場合は何もしないこと
     gui.onHeightValueChanged(-1);
-    QVERIFY(mock_setHeight.isInvoked() == false);
+    QVERIFY(!mock_setHeight.isInvoked());
 
     // 画像が設定されていない場合も何もしないこと
     gui.onHeightValueChanged(1);
-    QVERIFY(mock_setHeight.isInvoked() == false);
+    QVERIFY(!mock_setHeight.isInvoked());
 
     // 画像が設定されている場合、setHeightが呼ばれること
     mock_original.setFunction(original320);
     gui.onHeightValueChanged(1);
-    QVERIFY(mock_setHeight.isInvoked() == true);
+    QVERIFY(mock_setHeight.isInvoked());
 }
 
 void TestImageResizeGUI::test_onHScaleValueChanged()
@@ -251,26 +259,26 @@ void TestImageResizeGUI::test_onHScaleValueChanged()
 
     // 0未満の値が渡された場合は何もしないこと
     gui.onHorizontalScaleChanged(-1);
-    QVERIFY(mock_setScaleX.isInvoked() == false);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(!mock_setScaleX.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     // 画像が設定されていない場合も何もしないこと
     gui.onHorizontalScaleChanged(2);
-    QVERIFY(mock_setScaleX.isInvoked() == false);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(!mock_setScaleX.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     // 画像が設定されていてkeepAspectRatio == falseの場合、setScaleXが呼ばれること
     mock_original.setFunction(original320);
     gui.onHorizontalScaleChanged(2);
-    QVERIFY(mock_setScaleX.isInvoked() == true);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(mock_setScaleX.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     mock_setScaleX.resetCount();
 
     // 画像が設定されていてkeepAspectRatio == trueの場合、setScaleが呼ばれること
     gui.keepAspectRatio = true;
     gui.onHorizontalScaleChanged(2);
-    QVERIFY(mock_setScale.isInvoked() == true);
+    QVERIFY(mock_setScale.isInvoked());
 }
 
 void TestImageResizeGUI::test_onVScaleValueChanged()
@@ -279,26 +287,26 @@ void TestImageResizeGUI::test_onVScaleValueChanged()
 
     // 0未満の値が渡された場合は何もしないこと
     gui.onVerticalScaleChanged(-1);
-    QVERIFY(mock_setScaleY.isInvoked() == false);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(!mock_setScaleY.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     // 画像が設定されていない場合も何もしないこと
     gui.onVerticalScaleChanged(2);
-    QVERIFY(mock_setScaleY.isInvoked() == false);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(!mock_setScaleY.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     // 画像が設定されていてkeepAspectRatio == falseの場合、setScaleYが呼ばれること
     mock_original.setFunction(original320);
     gui.onVerticalScaleChanged(2);
-    QVERIFY(mock_setScaleY.isInvoked() == true);
-    QVERIFY(mock_setScale.isInvoked() == false);
+    QVERIFY(mock_setScaleY.isInvoked());
+    QVERIFY(!mock_setScale.isInvoked());
 
     mock_setScaleY.resetCount();
 
     // 画像が設定されていてkeepAspectRatio == trueの場合、setScaleが呼ばれること
     gui.keepAspectRatio = true;
     gui.onVerticalScaleChanged(2);
-    QVERIFY(mock_setScale.isInvoked() == true);
+    QVERIFY(mock_setScale.isInvoked());
 }
 
 void TestImageResizeGUI::test_onKeepAspectRatioChanged()
@@ -307,11 +315,11 @@ void TestImageResizeGUI::test_onKeepAspectRatioChanged()
 
     // チェックされた時はkeepAspectRatioがtrueになること
     gui.onKeepAspectRatioChanged(Qt::Checked);
-    QVERIFY(gui.keepAspectRatio == true);
+    QCOMPARE_EQ(gui.keepAspectRatio, true);
 
     // チェックが外された時はkeepAspectRatioがfalseになること
     gui.onKeepAspectRatioChanged(Qt::Unchecked);
-    QVERIFY(gui.keepAspectRatio == false);
+    QCOMPARE_EQ(gui.keepAspectRatio, false);
 }
 
 void TestImageResizeGUI::test_onSmoothTransformationChanged()
@@ -320,57 +328,63 @@ void TestImageResizeGUI::test_onSmoothTransformationChanged()
 
     // チェックされた時はsetSmoothTransformationEnabledにtrueが渡されること
     gui.onSmoothTransformationChanged(Qt::Checked);
-    QVERIFY(mock_setSmoothTransformationEnabled.isInvoked() == true);
+    QVERIFY(mock_setSmoothTransformationEnabled.isInvoked());
     auto history = mock_setSmoothTransformationEnabled.argumentsHistory();
-    QVERIFY(std::get<0>(history) == true);
+    QCOMPARE_EQ(std::get<0>(history), true);
 
     mock_setSmoothTransformationEnabled.resetCount();
 
     // チェックが外された時はsetSmoothTransformationEnabledにfalseが渡されること
     gui.onSmoothTransformationChanged(Qt::Unchecked);
-    QVERIFY(mock_setSmoothTransformationEnabled.isInvoked() == true);
+    QVERIFY(mock_setSmoothTransformationEnabled.isInvoked());
     history = mock_setSmoothTransformationEnabled.argumentsHistory();
-    QVERIFY(std::get<0>(history) == false);
+    QCOMPARE_EQ(std::get<0>(history), false);
 }
 
 void TestImageResizeGUI::test_updateUIValues()
 {
-    QSKIP("WIP");
+    ImageResizeGUI gui(new ImageResizeMock);
 
-    /*
     QSignalSpy spyWidthValueChanged(gui.ui->widthValue, &QSpinBox::valueChanged),
         spyHeightValueChanged(gui.ui->heightValue, &QSpinBox::valueChanged),
         spyHScaleValueChanged(gui.ui->hScaleValue, &QDoubleSpinBox::valueChanged),
         spyVScaleValueChanged(gui.ui->vScaleValue, &QDoubleSpinBox::valueChanged);
 
-    const double randomScaleX = rd.nextDouble(0.1, 10.0);
-    const double randomScaleY = rd.nextDouble(0.1, 10.0);
-    mock_computedScaleX.setFunction([randomScaleX]() { return randomScaleX; });
-    mock_computedScaleY.setFunction([randomScaleY]() { return randomScaleY; });
+    const double randomScaleX = rd.nextDouble(10.0, 1000.0);
+    const double randomScaleY = rd.nextDouble(10.0, 1000.0);
+    mock_computedScaleX.setFunction([randomScaleX]() { return randomScaleX / 100.0; });
+    mock_computedScaleY.setFunction([randomScaleY]() { return randomScaleY / 100.0; });
 
     const QSize randomSize = QSize(rd.nextInt(3200), rd.nextInt(3200));
     mock_computedSize.setFunction([&randomSize]() { return randomSize; });
 
+    gui.updateUIValues();
+
     // 各シグナルが発せられないこと
-    QVERIFY(spyWidthValueChanged.count() == 0);
-    QVERIFY(spyHeightValueChanged.count() == 0);
-    QVERIFY(spyHScaleValueChanged.count() == 0);
-    QVERIFY(spyVScaleValueChanged.count() == 0);
+    QCOMPARE_EQ(spyWidthValueChanged.count(), 0);
+    QCOMPARE_EQ(spyHeightValueChanged.count(), 0);
+    QCOMPARE_EQ(spyHScaleValueChanged.count(), 0);
+    QCOMPARE_EQ(spyVScaleValueChanged.count(), 0);
 
     // originalが空の場合はサイズ0、拡大率100になること
-    QVERIFY(gui.ui->widthValue->value() == 0);
-    QVERIFY(gui.ui->heightValue->value() == 0);
-    QVERIFY(gui.ui->hScaleValue->value() == 100.0);
-    QVERIFY(gui.ui->vScaleValue->value() == 100.0);
+    QCOMPARE_EQ(gui.ui->widthValue->value(), 0);
+    QCOMPARE_EQ(gui.ui->heightValue->value(), 0);
+    QCOMPARE_EQ(gui.ui->hScaleValue->value(), 100.0);
+    QCOMPARE_EQ(gui.ui->vScaleValue->value(), 100.0);
 
-    QImage original(TEST_SRC_DIR + "/core/image/" + resourceNames[0]);
+    QImage original(testDirPath + resourceNames[0]);
     if (original.isNull())
         QFAIL("image is empty");
     mock_original.setFunction([&original]() { return original; });
-    gui.onResetButtonClicked();
 
-    // computedSize, computedScaleが設定されていること
-    */
+    gui.onLoadImageSelected(testDirPath + resourceNames[0]);
+
+    // width, height, hScale, vScaleが設定されていること
+    gui.updateUIValues();
+    QCOMPARE_EQ(gui.ui->widthValue->value(), randomSize.width());
+    QCOMPARE_EQ(gui.ui->heightValue->value(), randomSize.height());
+    QVERIFY(isEqaulApprox(gui.ui->hScaleValue->value(), randomScaleX));
+    QVERIFY(isEqaulApprox(gui.ui->vScaleValue->value(), randomScaleY));
 }
 } // namespace Test
 

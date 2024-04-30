@@ -8,7 +8,7 @@ namespace Test {
 class RandomData
 {
 public:
-    explicit RandomData() {}
+    explicit RandomData();
     explicit RandomData(int seed);
 
     static const QString numbers;
