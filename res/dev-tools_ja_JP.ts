@@ -233,7 +233,7 @@
 <context>
     <name>Test::TestTool</name>
     <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="+44"/>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+46"/>
         <source>Image Resize</source>
         <translation type="unfinished">画像サイズ変更</translation>
     </message>
@@ -241,6 +241,16 @@
         <location line="+1"/>
         <source>Image resizing and scaling</source>
         <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Image Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Image rotation and flipping</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -294,6 +304,16 @@
         <location line="+1"/>
         <source>Image resizing and scaling</source>
         <translation>画像のサイズ変更や拡大縮小</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Image rotation and flipping</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

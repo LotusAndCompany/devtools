@@ -82,6 +82,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
         gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
         gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
+        core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
@@ -229,13 +230,28 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         core/image/basic_image_edit_interface.cpp
         tests/core/image/test_basic_image_edit_interface.cpp
     )
+
+    set(IMAGE_TOOL_SRC
+        core/image/basic_image_io.cpp
+        core/image/basic_image_edit_interface.cpp
+    )
+
+    # core/image/reseize
     DevTools_add_test(test_image_reisze GUI
         SOURCES
         core/image/resize/image_resize.h
         core/image/resize/image_resize.cpp
-        core/image/basic_image_io.cpp
-        core/image/basic_image_edit_interface.cpp
+        ${IMAGE_TOOL_SRC}
         tests/core/image/resize/test_image_resize.cpp
+    )
+
+    # core/image/rotation
+    DevTools_add_test(test_image_rotation GUI
+        SOURCES
+        core/image/rotation/image_rotation.h
+        core/image/rotation/image_rotation.cpp
+        ${IMAGE_TOOL_SRC}
+        tests/core/image/rotation/test_image_rotation.cpp
     )
 
     # gui/image/basic
@@ -254,19 +270,21 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/gui/image/basic/test_basic_image_view.cpp
     )
 
+    set(IMAGE_TOOL_GUI_SRC
+        gui/image/basic/control.cpp
+        gui/image/basic/file_dialogs.cpp
+        gui/image/basic/image_view.cpp
+        ${IMAGE_TOOL_SRC}
+    )
+
     # gui/image/resize
-    # NOTE: 数が多いので何とかしたい。↑と共通しているものもある。
     DevTools_add_test(test_image_resize_gui WIDGETS
         SOURCES
         gui/image/resize/image_resize_gui.h
         gui/image/resize/image_resize_gui.cpp
-        gui/image/basic/control.cpp
-        gui/image/basic/file_dialogs.cpp
-        gui/image/basic/image_view.cpp
         core/image/resize/image_resize.h
         core/image/resize/image_resize.cpp
-        core/image/basic_image_io.cpp
-        core/image/basic_image_edit_interface.cpp
+        ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/resize/test_image_resize_gui.cpp
     )
 endif()
