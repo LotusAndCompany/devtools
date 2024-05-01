@@ -124,32 +124,32 @@
     <message>
         <location line="+60"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>横幅:</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation>縦幅:</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>Horizontal Scale:</source>
-        <translation type="unfinished"></translation>
+        <translation>横の拡大率:</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Vertical Scale:</source>
-        <translation type="unfinished"></translation>
+        <translation>縦の拡大率:</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Keep aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>縦横比を維持</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Smooth scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>バイリニア補完</translation>
     </message>
 </context>
 <context>
@@ -235,12 +235,12 @@
     <message>
         <location filename="../tests/core/tool/test_tool.cpp" line="+44"/>
         <source>Image Resize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画像サイズ変更</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Image resizing and scaling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
     </message>
 </context>
 <context>
@@ -288,12 +288,12 @@
     <message>
         <location line="+4"/>
         <source>Image Resize</source>
-        <translation type="unfinished"></translation>
+        <translation>画像サイズ変更</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Image resizing and scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>画像のサイズ変更や拡大縮小</translation>
     </message>
 </context>
 </TS>
