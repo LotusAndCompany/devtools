@@ -1,0 +1,151 @@
+#ifndef IMAGE_SPLIT_H
+#define IMAGE_SPLIT_H
+
+#include <QFileInfo>
+#include <QPixmap>
+#include "core/image/basic_image_edit_interface.h"
+#include "core/image/basic_image_io.h"
+#include "core/tool/tool.h"
+
+#ifdef _TEST_ImageSplit
+namespace Test {
+class TestImageSplit;
+}
+#endif
+
+/**
+ * @brief 画像を分割するツールのインターフェイス
+ */
+class ImageSplitInterface : public Tool, public BasicImageEditInterface
+{
+    Q_OBJECT
+
+public:
+    virtual ~ImageSplitInterface() = default;
+
+    /**
+     * @brief 横の分割数を設定する
+     * @param n 横の分割数
+     * @exception InvalidArgumentException &lt;unsigned int&gt; nが不正の場合
+     */
+    virtual void setHorizontalSplit(unsigned int n) = 0;
+    /**
+     * @brief 縦の分割数を設定する
+     * @param m 縦の分割数
+     * @exception InvalidArgumentException &lt;unsigned int&gt; mが不正の場合
+     */
+    virtual void setVerticalSplit(unsigned int m) = 0;
+    /**
+     * @brief 分割後の横の長さを設定する
+     * @param width 分割後の横の長さ
+     * @exception InvalidArgumentException &lt;unsigned int&gt; widthが不正の場合
+     */
+    virtual void setCellWidth(unsigned int width) = 0;
+    /**
+     * @brief 分割後の縦の長さを設定する
+     * @param width 分割後の縦の長さ
+     * @exception InvalidArgumentException &lt;unsigned int&gt; heightが不正の場合
+     */
+    virtual void setCellHeight(unsigned int height) = 0;
+
+    /**
+     * @brief 元の画像を返す
+     * @return 元の画像 
+     */
+    virtual const QImage &original() const = 0;
+
+    /**
+     * @brief 現在の設定に基づいて計算される分割後の画像サイズ
+     * @return 分割後の画像サイズ
+     */
+    virtual QSizeF computedCellSize() const = 0;
+
+    /// 分割後に画像の端の部分の大きさが十分でない場合、保存対象にしない
+    bool discardRemainders = true;
+
+protected:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
+    explicit ImageSplitInterface(QObject *parent = nullptr);
+};
+
+/**
+ * @brief 画像を分割するツール
+ */
+class ImageSplit : public ImageSplitInterface, private ImageIO
+{
+    Q_OBJECT
+
+public:
+    explicit ImageSplit(QObject *parent = nullptr);
+
+    bool save(const QString &path, const char *format, int quality) const override;
+    bool overwriteSave(const QString &path, const char *format, int quality) const override;
+    inline const QFileInfo &fileInfo(unsigned int index = 0) const override
+    {
+        return ImageIO::originalFileInfo();
+    }
+
+    void setHorizontalSplit(unsigned int n) noexcept(false) override;
+    void setVerticalSplit(unsigned int m) noexcept(false) override;
+    void setCellWidth(unsigned int width) noexcept(false) override;
+    void setCellHeight(unsigned int height) noexcept(false) override;
+    const QImage &original() const override { return ImageIO::original(); }
+    QSizeF computedCellSize() const noexcept(false) override;
+
+protected:
+    bool loadImpl(const QString &path) override;
+    void resetImpl() override;
+    inline bool updateImpl() override { return !current().isNull(); } // 特に何もしない
+
+private:
+    static const QString invalidSplitNumber;
+    static const QString invalidCellSize;
+
+    /// 分割数指定かサイズ指定かを保存する構造体
+    struct SplitHints
+    {
+        bool isSpecifiedWithSize = false;
+        unsigned int value = 1;
+    };
+    /// 横の分割指定
+    SplitHints horizontal;
+    /// 縦の分割指定
+    SplitHints vertical;
+
+    /**
+     * @brief 現在の設定に基づき、出力ファイル名のリストを返す
+     * @return 出力ファイル名のリスト
+     */
+    QStringList outputFilenames() const;
+
+    /**
+     * @brief computedCellSize() の算出に使う
+     * @param sourceSize 分割前のサイズ
+     * @param hint 分割方法
+     * @return 分割後のサイズ
+     * @exception InvalidArgumentException &lt;unsigned int&gt; sourceSizeが不正の場合
+     * @exception InvalidStateException 画像が空の場合
+     */
+    static double computedCellSizeInternal(unsigned int sourceSize,
+                                           const SplitHints &hint) noexcept(false);
+
+    /**
+     * @brief 現在の設定に基づき、画像の分割数を算出する
+     * @param sourceSize 分割前のサイズ
+     * @param hint 分割方法
+     * @return 分割数
+     * @exception InvalidArgumentException &lt;unsigned int&gt; sourceSizeが不正の場合
+     * @exception InvalidStateException 画像が空の場合
+     */
+    unsigned int numberOfSplit(unsigned int sourceSize, const SplitHints &hint) const
+        noexcept(false);
+
+#ifdef _TEST_ImageSplit
+    friend class Test::TestImageSplit;
+#endif
+};
+
+#endif // IMAGE_SPLIT_H

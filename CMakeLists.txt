@@ -84,6 +84,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
         gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
+        core/image/split/image_split.h core/image/split/image_split.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
