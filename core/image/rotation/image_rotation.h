@@ -99,7 +99,7 @@ public:
         return ImageIO::overwriteSave(path, current(), format, quality);
     }
 
-    inline const QFileInfo &fileInfo(unsigned int index) const override
+    inline const QFileInfo &fileInfo(unsigned int index = 0) const override
     {
         return ImageIO::originalFileInfo();
     }

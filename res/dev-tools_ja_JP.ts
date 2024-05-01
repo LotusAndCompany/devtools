@@ -70,17 +70,17 @@
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
         <source>No Image</source>
-        <translation type="unfinished"></translation>
+        <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>縮小</translation>
     </message>
 </context>
 <context>
@@ -93,17 +93,17 @@
     <message>
         <location line="+6"/>
         <source>load</source>
-        <translation type="unfinished"></translation>
+        <translation>読み込み</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>reset</source>
-        <translation type="unfinished"></translation>
+        <translation>リセット</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>save</source>
-        <translation type="unfinished"></translation>
+        <translation>保存</translation>
     </message>
 </context>
 <context>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="+26"/>
         <source>Open Image</source>
-        <translation type="unfinished"></translation>
+        <translation>画像を開く</translation>
     </message>
 </context>
 <context>
@@ -159,13 +159,53 @@
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+66"/>
+        <source>Rotate clockwise by 90°</source>
+        <translation>右に90°回転</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Rotate Clockwise</source>
+        <translation>右に90°回転</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Rotate anti-clockwise by 90°</source>
+        <translation>左に90°回転</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Rotate Anti-clockwise</source>
+        <translation>左に90°回転</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Flip holizontally</source>
+        <translation>左右反転</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Flip Horizontal</source>
+        <translation>左右反転</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Flip vertically</source>
+        <translation>上下反転</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Flip Vertical</source>
+        <translation>上下反転</translation>
+    </message>
 </context>
 <context>
     <name>ImageSaveDialog</name>
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
         <source>Save Image</source>
-        <translation type="unfinished"></translation>
+        <translation>画像を保存</translation>
     </message>
 </context>
 <context>
@@ -217,7 +257,7 @@
         <location line="+26"/>
         <location line="+154"/>
         <source>No Image</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
@@ -225,17 +265,17 @@
     <message>
         <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>load</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">読み込み</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>reset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">リセット</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存</translation>
     </message>
 </context>
 <context>
@@ -253,12 +293,12 @@
     <message>
         <location line="+5"/>
         <source>Image Rotation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画像回転</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Image rotation and flipping</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画像の回転と反転</translation>
     </message>
 </context>
 <context>
@@ -316,12 +356,12 @@
     <message>
         <location line="+4"/>
         <source>Image Rotation</source>
-        <translation type="unfinished"></translation>
+        <translation>画像回転</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Image rotation and flipping</source>
-        <translation type="unfinished"></translation>
+        <translation>画像の回転と反転</translation>
     </message>
 </context>
 </TS>

@@ -288,6 +288,17 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/resize/test_image_resize_gui.cpp
     )
+
+    # gui/image/rotation
+    DevTools_add_test(test_image_rotation_gui WIDGETS
+        SOURCES
+        gui/image/rotation/image_rotation_gui.h
+        gui/image/rotation/image_rotation_gui.cpp
+        core/image/rotation/image_rotation.h
+        core/image/rotation/image_rotation.cpp
+        ${IMAGE_TOOL_GUI_SRC}
+        tests/gui/image/rotation/test_image_rotation_gui.cpp
+    )
 endif()
 
 # Documents
