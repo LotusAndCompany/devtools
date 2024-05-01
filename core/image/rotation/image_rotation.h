@@ -37,11 +37,11 @@ public:
     /**
      * @brief 左右反転する
      */
-    virtual void flipHorizontally() = 0;
+    virtual void flipHorizontal() = 0;
     /**
      * @brief 上下反転させる
      */
-    virtual void flipVertically() = 0;
+    virtual void flipVertical() = 0;
 
     /**
      * @brief 元の画像を返す
@@ -107,8 +107,8 @@ public:
     inline const QImage &original() const override { return ImageIO::original(); }
 
     void rotateDegrees(double deg) override;
-    void flipHorizontally() override;
-    void flipVertically() override;
+    void flipHorizontal() override;
+    void flipVertical() override;
 
     void setSmoothTransformationEnabled(bool value = true) override;
 

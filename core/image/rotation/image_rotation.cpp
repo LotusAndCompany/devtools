@@ -32,28 +32,22 @@ bool ImageRotation::updateImpl()
 
 void ImageRotation::rotateDegrees(double deg)
 {
-    const auto size = current().size();
-    const double tx = size.width() / 2.0, ty = size.height() / 2.0;
-
-    transform.translate(-tx, -ty).rotate(deg);
-    const QRectF rect(QPoint(-tx, -ty), size);
-    const QRectF transformedRect = transform.mapRect(rect);
-    const QSizeF newSize = transformedRect.size();
-    transform.translate(newSize.width() / 2.0, newSize.height() / 2.0);
+    // NOTE: 各座標ではなく座標系の方を回転させるらしい
+    transform.rotate(-deg);
 
     setOutdated();
 }
 
-void ImageRotation::flipHorizontally()
+void ImageRotation::flipHorizontal()
 {
-    transform *= QTransform(-1.0, 0.0, 0.0, 1.0, current().size().width(), 0.0);
+    transform *= QTransform(-1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
 
     setOutdated();
 }
 
-void ImageRotation::flipVertically()
+void ImageRotation::flipVertical()
 {
-    transform *= QTransform(1.0, 0.0, 0.0, -1.0, 0.0, current().size().height());
+    transform *= QTransform(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
 
     setOutdated();
 }

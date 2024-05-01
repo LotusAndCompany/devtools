@@ -33,8 +33,8 @@ private slots:
     void test_reset();
     void test_update();
     void test_rotateDegrees();
-    void test_flipHorizontally();
-    void test_flipVertically();
+    void test_flipHorizontal();
+    void test_flipVertical();
     void test_setSmoothTransformationEnabled();
 };
 
@@ -203,7 +203,7 @@ void TestImageRotation::test_rotateDegrees()
     QVERIFY(imageRotation.transform.isIdentity());
 }
 
-void TestImageRotation::test_flipHorizontally()
+void TestImageRotation::test_flipHorizontal()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
@@ -211,17 +211,17 @@ void TestImageRotation::test_flipHorizontally()
         QFAIL("image is empty");
 
     // 左右反転できること
-    imageRotation.flipHorizontally();
+    imageRotation.flipHorizontal();
     QVERIFY(imageRotation.update());
     QCOMPARE_EQ(imageRotation.current().size(), size320);
 
     // もう一度反転すると元に戻ること
-    imageRotation.flipHorizontally();
+    imageRotation.flipHorizontal();
     QVERIFY(imageRotation.update());
     QVERIFY(imageRotation.transform.isIdentity());
 }
 
-void TestImageRotation::test_flipVertically()
+void TestImageRotation::test_flipVertical()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
@@ -229,12 +229,12 @@ void TestImageRotation::test_flipVertically()
         QFAIL("image is empty");
 
     // 上下反転できること
-    imageRotation.flipVertically();
+    imageRotation.flipVertical();
     QVERIFY(imageRotation.update());
     QCOMPARE_EQ(imageRotation.current().size(), size320);
 
     // もう一度反転すると元に戻ること
-    imageRotation.flipVertically();
+    imageRotation.flipVertical();
     QVERIFY(imageRotation.update());
     QVERIFY(imageRotation.transform.isIdentity());
 }
