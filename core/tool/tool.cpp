@@ -47,6 +47,12 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Sample 3"),
             tr("This is Sample 3"),
         };
+    case ID::COMMAND_GENERATION:
+        return Translatable{
+            tr("COMMAND GENERATION"),
+            tr("This is Command Genetation."),
+        };
+
     default:
         throw UnderDevelopmentException();
     }
