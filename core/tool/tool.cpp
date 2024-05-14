@@ -47,6 +47,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Sample 3"),
             tr("This is Sample 3"),
         };
+    case ID::PHRASE_GENERATION:
+        return Translatable{
+            tr("Phrase Generation"),
+            tr("Generate and manage Phrase"),
+        };
     default:
         throw UnderDevelopmentException();
     }

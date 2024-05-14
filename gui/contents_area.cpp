@@ -2,6 +2,7 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
+#include "phrase_generation/home.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -62,6 +63,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::SAMPLE_3:
         content = new SampleGuiTool(Tool::ID::SAMPLE_3, "sample-3", this);
+        break;
+    case Sidemenu::ID::PHRASE_GENERATION:
+        content = new home(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

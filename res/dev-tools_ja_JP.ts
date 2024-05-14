@@ -139,5 +139,68 @@
         <source>This is Sample 3</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+4"/>
+        <source>Phrase Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Generate and manage Phrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>home</name>
+    <message>
+        <location filename="../gui/phrase_generation/home.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+231"/>
+        <source>+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>Enter title...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-167"/>
+        <source>Enter text...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>新年の挨拶</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>お礼文</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>依頼文</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>何か</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>三</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
