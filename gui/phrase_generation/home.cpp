@@ -6,10 +6,11 @@ home::home(QWidget *parent)
     , ui(new Ui::home)
 {
     ui->setupUi(this);
-    // ui->templateText->hide();
-    // ui->templateTitle->hide();
+
     ui->templateText->setHidden(true);
     ui->templateTitle->setHidden(true);
+    ui->saveButton->setHidden(true);
+    ui->saveButton->raise();
     ui->collectionListArea->raise();
     ui->collectionListArea->setHidden(true);
     ui->closeCollectionListButton->setHidden(true);
@@ -27,10 +28,9 @@ home::~home()
 
 void home::on_addButton_clicked()
 {
-    // ui->templateText->show();
-    // ui->templateTitle->show();
     ui->templateText->setHidden(false);
     ui->templateTitle->setHidden(false);
+    ui->saveButton->setHidden(false);
 }
 
 

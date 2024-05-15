@@ -202,5 +202,10 @@
         <source>三</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+16"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
