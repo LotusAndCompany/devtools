@@ -281,7 +281,7 @@
 <context>
     <name>Test::TestTool</name>
     <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="+46"/>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
         <source>Image Resize</source>
         <translation type="unfinished">画像サイズ変更</translation>
     </message>

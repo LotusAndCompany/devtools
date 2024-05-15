@@ -43,7 +43,7 @@ public:
     virtual void setCellWidth(unsigned int width) = 0;
     /**
      * @brief 分割後の縦の長さを設定する
-     * @param width 分割後の縦の長さ
+     * @param height 分割後の縦の長さ
      * @exception InvalidArgumentException &lt;unsigned int&gt; heightが不正の場合
      */
     virtual void setCellHeight(unsigned int height) = 0;
@@ -79,10 +79,24 @@ class ImageSplit : public ImageSplitInterface, private ImageIO
     Q_OBJECT
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
     explicit ImageSplit(QObject *parent = nullptr);
 
-    bool save(const QString &path, const char *format, int quality) const override;
-    bool overwriteSave(const QString &path, const char *format, int quality) const override;
+    inline bool save(const QString &path,
+                     const char *format = nullptr,
+                     int quality = -1) const override
+    {
+        return saveImpl(ImageIO::save, path, format, quality);
+    }
+    inline bool overwriteSave(const QString &path,
+                              const char *format = nullptr,
+                              int quality = -1) const override
+    {
+        return saveImpl(ImageIO::overwriteSave, path, format, quality);
+    }
     inline const QFileInfo &fileInfo(unsigned int index = 0) const override
     {
         return ImageIO::originalFileInfo();
@@ -101,25 +115,25 @@ protected:
     inline bool updateImpl() override { return !current().isNull(); } // 特に何もしない
 
 private:
+    /// 分割数が不正
     static const QString invalidSplitNumber;
+    /// 分割後のサイズが不正
     static const QString invalidCellSize;
+    /// 元の画像サイズが不正
+    static const QString invalidImageSize;
 
     /// 分割数指定かサイズ指定かを保存する構造体
     struct SplitHints
     {
+        /// `true`ならサイズで指定、`false`なら分割数指定
         bool isSpecifiedWithSize = false;
+        /// サイズもしくは分割数
         unsigned int value = 1;
     };
     /// 横の分割指定
     SplitHints horizontal;
     /// 縦の分割指定
     SplitHints vertical;
-
-    /**
-     * @brief 現在の設定に基づき、出力ファイル名のリストを返す
-     * @return 出力ファイル名のリスト
-     */
-    QStringList outputFilenames() const;
 
     /**
      * @brief computedCellSize() の算出に使う
@@ -142,6 +156,19 @@ private:
      */
     unsigned int numberOfSplit(unsigned int sourceSize, const SplitHints &hint) const
         noexcept(false);
+
+    /**
+     * @brief 保存処理の共通部分
+     * @param saveFunc 保存処理の関数ポインタ
+     * @param path ファイルパス
+     * @param format フォーマット
+     * @param quality 画質
+     * @return 成功なら`true`
+     */
+    bool saveImpl(bool (*saveFunc)(const QString &, const QImage &, const char *, int),
+                  const QString &path,
+                  const char *format,
+                  int quality) const;
 
 #ifdef _TEST_ImageSplit
     friend class Test::TestImageSplit;
