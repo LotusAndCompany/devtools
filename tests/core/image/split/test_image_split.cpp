@@ -141,6 +141,9 @@ void TestImageSplit::test_overwriteSave()
 void TestImageSplit::test_reset()
 {
     ImageSplit imageSplit;
+    imageSplit.ImageSplitInterface::load(testDirPath + resourceNames[0]);
+    if (imageSplit.current().isNull())
+        QFAIL("image is empty");
 
     imageSplit.setHorizontalSplit(2);
     imageSplit.setVerticalSplit(2);

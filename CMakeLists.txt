@@ -256,6 +256,15 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/core/image/rotation/test_image_rotation.cpp
     )
 
+    # core/image/split
+    DevTools_add_test(test_image_split GUI
+        SOURCES
+        core/image/split/image_split.h
+        core/image/split/image_split.cpp
+        ${IMAGE_TOOL_SRC}
+        tests/core/image/split/test_image_split.cpp
+    )
+
     # gui/image/basic
     DevTools_add_test(test_basic_image_view_control WIDGETS
         SOURCES

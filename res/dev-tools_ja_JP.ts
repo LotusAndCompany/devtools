@@ -363,5 +363,15 @@
         <source>Image rotation and flipping</source>
         <translation>画像の回転と反転</translation>
     </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Split</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Divide images into smaller rect</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

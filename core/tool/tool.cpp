@@ -59,6 +59,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Image Rotation"),
             tr("Image rotation and flipping"),
         };
+    case ID::IMAGE_SPLIT:
+        return Translatable{
+            tr("Image Split"),
+            tr("Divide images into smaller rect"),
+        };
     default:
         throw UnderDevelopmentException();
     }
