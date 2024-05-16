@@ -19,7 +19,7 @@ bool ImageSplit::saveImpl(bool (*saveFunc)(const QString &, const QImage &, cons
                           const char *format,
                           int quality) const
 {
-    if (current().size().isEmpty())
+    if (current().isNull())
         return false;
 
     QFileInfo info(path);
@@ -27,9 +27,8 @@ bool ImageSplit::saveImpl(bool (*saveFunc)(const QString &, const QImage &, cons
         const QString base = fileInfo().baseName();
 
         if (!base.isEmpty()) {
-            const QSize size = current().size();
-            const unsigned int yMax = numberOfSplit(size.height(), vertical);
-            const unsigned int xMax = numberOfSplit(size.width(), horizontal);
+            const unsigned int yMax = numberOfVerticalSplit();
+            const unsigned int xMax = numberOfHorizontalSplit();
 
             if (yMax == 0 || xMax == 0)
                 return false;
@@ -73,9 +72,6 @@ void ImageSplit::resetImpl()
 
 void ImageSplit::setHorizontalSplit(unsigned int n)
 {
-    if (n == 0 || current().size().width() < n)
-        throw InvalidArgumentException(n, invalidSplitNumber);
-
     horizontal.isSpecifiedWithSize = false;
     horizontal.value = n;
 
@@ -84,9 +80,6 @@ void ImageSplit::setHorizontalSplit(unsigned int n)
 
 void ImageSplit::setVerticalSplit(unsigned int m)
 {
-    if (m == 0 || current().size().height() < m)
-        throw InvalidArgumentException(m, invalidSplitNumber);
-
     vertical.isSpecifiedWithSize = false;
     vertical.value = m;
 
@@ -95,9 +88,6 @@ void ImageSplit::setVerticalSplit(unsigned int m)
 
 void ImageSplit::setCellWidth(unsigned int width)
 {
-    if (width == 0 || current().size().width() < width)
-        throw InvalidArgumentException(width, invalidCellSize);
-
     horizontal.isSpecifiedWithSize = true;
     horizontal.value = width;
 
@@ -106,9 +96,6 @@ void ImageSplit::setCellWidth(unsigned int width)
 
 void ImageSplit::setCellHeight(unsigned int height)
 {
-    if (height == 0 || current().size().height() < height)
-        throw InvalidArgumentException(height, invalidCellSize);
-
     vertical.isSpecifiedWithSize = true;
     vertical.value = height;
 
@@ -118,6 +105,8 @@ void ImageSplit::setCellHeight(unsigned int height)
 QSizeF ImageSplit::computedCellSize() const
 {
     const QSize size = current().size();
+    if (size.isEmpty())
+        return QSizeF(0, 0);
 
     return QSizeF(computedCellSizeInternal(size.width(), horizontal),
                   computedCellSizeInternal(size.height(), vertical));
@@ -130,17 +119,37 @@ double ImageSplit::computedCellSizeInternal(unsigned int sourceSize, const Split
 
     if (hint.isSpecifiedWithSize)
         return hint.value;
-    else
+    else {
+        if (sourceSize < hint.value)
+            throw InvalidArgumentException(hint.value, invalidSplitNumber);
+
         return (double) sourceSize / (double) hint.value;
+    }
 }
 
-unsigned int ImageSplit::numberOfSplit(unsigned int sourceSize, const SplitHints &hint) const
+unsigned int ImageSplit::numberOfHorizontalSplit() const
+{
+    if (current().size().isEmpty())
+        return 0;
+    else
+        return numberOfSplitInternal(current().size().width(), horizontal);
+}
+
+unsigned int ImageSplit::numberOfVerticalSplit() const
+{
+    if (current().size().isEmpty())
+        return 0;
+    else
+        return numberOfSplitInternal(current().size().height(), vertical);
+}
+
+unsigned int ImageSplit::numberOfSplitInternal(unsigned int sourceSize, const SplitHints &hint) const
 {
     if (sourceSize == 0 || hint.value == 0)
         throw InvalidArgumentException(0, invalidImageSize);
 
     if (hint.isSpecifiedWithSize) {
-        if (hint.value < sourceSize)
+        if (sourceSize < hint.value)
             throw InvalidArgumentException(hint.value, invalidSplitNumber);
 
         const unsigned int result = sourceSize / hint.value;

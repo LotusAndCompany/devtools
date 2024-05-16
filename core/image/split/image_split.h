@@ -60,6 +60,18 @@ public:
      */
     virtual QSizeF computedCellSize() const = 0;
 
+    /**
+     * @brief 現在の設定に基づいて計算される画像の横の分割数
+     * @return 横の分割数。 `discardRemainders == false` の場合は端数を含む
+     */
+    virtual unsigned int numberOfHorizontalSplit() const = 0;
+
+    /**
+     * @brief 現在の設定に基づいて計算される画像の縦の分割数
+     * @return 縦の分割数。 `discardRemainders == false` の場合は端数を含む
+     */
+    virtual unsigned int numberOfVerticalSplit() const = 0;
+
     /// 分割後に画像の端の部分の大きさが十分でない場合、保存対象にしない
     bool discardRemainders = true;
 
@@ -107,7 +119,9 @@ public:
     void setCellWidth(unsigned int width) noexcept(false) override;
     void setCellHeight(unsigned int height) noexcept(false) override;
     const QImage &original() const override { return ImageIO::original(); }
-    QSizeF computedCellSize() const noexcept(false) override;
+    QSizeF computedCellSize() const override;
+    unsigned int numberOfHorizontalSplit() const override;
+    unsigned int numberOfVerticalSplit() const override;
 
 protected:
     bool loadImpl(const QString &path) override;
@@ -140,8 +154,6 @@ private:
      * @param sourceSize 分割前のサイズ
      * @param hint 分割方法
      * @return 分割後のサイズ
-     * @exception InvalidArgumentException &lt;unsigned int&gt; sourceSizeが不正の場合
-     * @exception InvalidStateException 画像が空の場合
      */
     static double computedCellSizeInternal(unsigned int sourceSize,
                                            const SplitHints &hint) noexcept(false);
@@ -151,10 +163,8 @@ private:
      * @param sourceSize 分割前のサイズ
      * @param hint 分割方法
      * @return 分割数
-     * @exception InvalidArgumentException &lt;unsigned int&gt; sourceSizeが不正の場合
-     * @exception InvalidStateException 画像が空の場合
      */
-    unsigned int numberOfSplit(unsigned int sourceSize, const SplitHints &hint) const
+    unsigned int numberOfSplitInternal(unsigned int sourceSize, const SplitHints &hint) const
         noexcept(false);
 
     /**
