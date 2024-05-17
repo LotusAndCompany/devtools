@@ -1,11 +1,11 @@
-#include "image_view_for_image_split.h"
+#include "image_view_for_image_division.h"
 
 #include <QPainter>
 #include "gui/image/basic/ui_image_view.h"
 
-using namespace _ImageViewForImageSplitInternal;
+using namespace _ImageViewForImageDivisionInternal;
 
-ImageViewForImageSplit::ImageViewForImageSplit(QWidget *parent)
+ImageViewForImageDivision::ImageViewForImageDivision(QWidget *parent)
     : BasicImageView(parent)
 {
     // ui->imageを置き換える
@@ -14,12 +14,12 @@ ImageViewForImageSplit::ImageViewForImageSplit(QWidget *parent)
     ui->scrollArea->setWidget(ui->image);
 }
 
-LabelWithGrid *ImageViewForImageSplit::ui_image() const
+LabelWithGrid *ImageViewForImageDivision::ui_image() const
 {
     return static_cast<LabelWithGrid *>(ui->image);
 }
 
-void ImageViewForImageSplit::setGridSize(const QSize &newGridSize)
+void ImageViewForImageDivision::setGridSize(const QSize &newGridSize)
 {
     ui_image()->setGridSize(newGridSize.scaled(QSize(scale, scale), Qt::KeepAspectRatio));
 }

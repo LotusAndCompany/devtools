@@ -1,5 +1,5 @@
-#ifndef IMAGE_SPLIT_H
-#define IMAGE_SPLIT_H
+#ifndef IMAGE_DIVISION_H
+#define IMAGE_DIVISION_H
 
 #include <QFileInfo>
 #include <QPixmap>
@@ -7,34 +7,34 @@
 #include "core/image/basic_image_io.h"
 #include "core/tool/tool.h"
 
-#ifdef _TEST_ImageSplit
+#ifdef _TEST_ImageDivision
 namespace Test {
-class TestImageSplit;
+class TestImageDivision;
 }
 #endif
 
 /**
  * @brief 画像を分割するツールのインターフェイス
  */
-class ImageSplitInterface : public Tool, public BasicImageEditInterface
+class ImageDivisionInterface : public Tool, public BasicImageEditInterface
 {
     Q_OBJECT
 
 public:
-    virtual ~ImageSplitInterface() = default;
+    virtual ~ImageDivisionInterface() = default;
 
     /**
      * @brief 横の分割数を設定する
      * @param n 横の分割数
      * @exception InvalidArgumentException &lt;unsigned int&gt; nが不正の場合
      */
-    virtual void setHorizontalSplit(unsigned int n) = 0;
+    virtual void setHorizontalDivision(unsigned int n) = 0;
     /**
      * @brief 縦の分割数を設定する
      * @param m 縦の分割数
      * @exception InvalidArgumentException &lt;unsigned int&gt; mが不正の場合
      */
-    virtual void setVerticalSplit(unsigned int m) = 0;
+    virtual void setVerticalDivision(unsigned int m) = 0;
     /**
      * @brief 分割後の横の長さを設定する
      * @param width 分割後の横の長さ
@@ -64,13 +64,13 @@ public:
      * @brief 現在の設定に基づいて計算される画像の横の分割数
      * @return 横の分割数。 `discardRemainders == false` の場合は端数を含む
      */
-    virtual unsigned int numberOfHorizontalSplit() const = 0;
+    virtual unsigned int numberOfHorizontalDivision() const = 0;
 
     /**
      * @brief 現在の設定に基づいて計算される画像の縦の分割数
      * @return 縦の分割数。 `discardRemainders == false` の場合は端数を含む
      */
-    virtual unsigned int numberOfVerticalSplit() const = 0;
+    virtual unsigned int numberOfVerticalDivision() const = 0;
 
     /// 分割後に画像の端の部分の大きさが十分でない場合、保存対象にしない
     bool discardRemainders = true;
@@ -80,13 +80,13 @@ protected:
      * @brief コンストラクタ
      * @param parent 親オブジェクト
      */
-    explicit ImageSplitInterface(QObject *parent = nullptr);
+    explicit ImageDivisionInterface(QObject *parent = nullptr);
 };
 
 /**
  * @brief 画像を分割するツール
  */
-class ImageSplit : public ImageSplitInterface, private ImageIO
+class ImageDivision : public ImageDivisionInterface, private ImageIO
 {
     Q_OBJECT
 
@@ -95,7 +95,7 @@ public:
      * @brief コンストラクタ
      * @param parent 親オブジェクト
      */
-    explicit ImageSplit(QObject *parent = nullptr);
+    explicit ImageDivision(QObject *parent = nullptr);
 
     inline bool save(const QString &path,
                      const char *format = nullptr,
@@ -114,14 +114,14 @@ public:
         return ImageIO::originalFileInfo();
     }
 
-    void setHorizontalSplit(unsigned int n) noexcept(false) override;
-    void setVerticalSplit(unsigned int m) noexcept(false) override;
+    void setHorizontalDivision(unsigned int n) noexcept(false) override;
+    void setVerticalDivision(unsigned int m) noexcept(false) override;
     void setCellWidth(unsigned int width) noexcept(false) override;
     void setCellHeight(unsigned int height) noexcept(false) override;
     const QImage &original() const override { return ImageIO::original(); }
     QSizeF computedCellSize() const override;
-    unsigned int numberOfHorizontalSplit() const override;
-    unsigned int numberOfVerticalSplit() const override;
+    unsigned int numberOfHorizontalDivision() const override;
+    unsigned int numberOfVerticalDivision() const override;
 
 protected:
     bool loadImpl(const QString &path) override;
@@ -130,14 +130,14 @@ protected:
 
 private:
     /// 分割数が不正
-    static const QString invalidSplitNumber;
+    static const QString invalidDivisionNumber;
     /// 分割後のサイズが不正
     static const QString invalidCellSize;
     /// 元の画像サイズが不正
     static const QString invalidImageSize;
 
     /// 分割数指定かサイズ指定かを保存する構造体
-    struct SplitHints
+    struct DivisionHints
     {
         /// `true`ならサイズで指定、`false`なら分割数指定
         bool isSpecifiedWithSize = false;
@@ -145,9 +145,9 @@ private:
         unsigned int value = 1;
     };
     /// 横の分割指定
-    SplitHints horizontal;
+    DivisionHints horizontal;
     /// 縦の分割指定
-    SplitHints vertical;
+    DivisionHints vertical;
 
     /**
      * @brief computedCellSize() の算出に使う
@@ -156,7 +156,7 @@ private:
      * @return 分割後のサイズ
      */
     static double computedCellSizeInternal(unsigned int sourceSize,
-                                           const SplitHints &hint) noexcept(false);
+                                           const DivisionHints &hint) noexcept(false);
 
     /**
      * @brief 現在の設定に基づき、画像の分割数を算出する
@@ -164,7 +164,7 @@ private:
      * @param hint 分割方法
      * @return 分割数
      */
-    unsigned int numberOfSplitInternal(unsigned int sourceSize, const SplitHints &hint) const
+    unsigned int numberOfDivisionInternal(unsigned int sourceSize, const DivisionHints &hint) const
         noexcept(false);
 
     /**
@@ -180,9 +180,9 @@ private:
                   const char *format,
                   int quality) const;
 
-#ifdef _TEST_ImageSplit
-    friend class Test::TestImageSplit;
+#ifdef _TEST_ImageDivision
+    friend class Test::TestImageDivision;
 #endif
 };
 
-#endif // IMAGE_SPLIT_H
+#endif // IMAGE_DIVISION_H

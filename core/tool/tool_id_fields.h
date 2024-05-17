@@ -30,7 +30,7 @@
     /** 画像回転・反転 */          \
     IMAGE_ROTATION,             \
     /** 画像分割 */             \
-    IMAGE_SPLIT,                \
+    IMAGE_DIVISION,                \
     /** 画像透明化 */            \
     IMAGE_TRANSPARENT,          \
     /** 画像トリミング */          \

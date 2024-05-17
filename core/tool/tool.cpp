@@ -59,9 +59,9 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Image Rotation"),
             tr("Image rotation and flipping"),
         };
-    case ID::IMAGE_SPLIT:
+    case ID::IMAGE_DIVISION:
         return Translatable{
-            tr("Image Split"),
+            tr("Image Division"),
             tr("Divide images into smaller rect"),
         };
     default:

@@ -2,10 +2,10 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
+#include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
-#include "core/image/split/image_split.h"
-#include "gui/image/split/image_split_gui.h"
+#include "gui/image/division/image_division_gui.h"
 #include "image/resize/image_resize_gui.h"
 #include "image/rotation/image_rotation_gui.h"
 
@@ -75,8 +75,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::IMAGE_ROTATION:
         content = new ImageRotationGUI(new ImageRotation(), this);
         break;
-    case Sidemenu::ID::IMAGE_SPLIT:
-        content = new ImageSplitGUI(new ImageSplit(), this);
+    case Sidemenu::ID::IMAGE_DIVISION:
+        content = new ImageDivisionGUI(new ImageDivision(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

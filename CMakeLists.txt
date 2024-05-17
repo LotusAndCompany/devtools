@@ -90,9 +90,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
         gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
-        core/image/split/image_split.h core/image/split/image_split.cpp
-        gui/image/split/image_split_gui.h gui/image/split/image_split_gui.cpp gui/image/split/image_split_gui.ui
-        gui/image/split/image_view_for_image_split.h gui/image/split/image_view_for_image_split.cpp
+        core/image/division/image_division.h core/image/division/image_division.cpp
+        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
+        gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
@@ -264,13 +264,13 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/core/image/rotation/test_image_rotation.cpp
     )
 
-    # core/image/split
-    DevTools_add_test(test_image_split GUI
+    # core/image/division
+    DevTools_add_test(test_image_division GUI
         SOURCES
-        core/image/split/image_split.h
-        core/image/split/image_split.cpp
+        core/image/division/image_division.h
+        core/image/division/image_division.cpp
         ${IMAGE_TOOL_SRC}
-        tests/core/image/split/test_image_split.cpp
+        tests/core/image/division/test_image_division.cpp
     )
 
     # gui/image/basic

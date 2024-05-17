@@ -31,7 +31,7 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::SAMPLE_3);
     registerItem(ID::IMAGE_RESIZE);
     registerItem(ID::IMAGE_ROTATION);
-    registerItem(ID::IMAGE_SPLIT);
+    registerItem(ID::IMAGE_DIVISION);
 
     ui->scrollAreaLayout->addStretch();
 }
@@ -76,7 +76,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::IMAGE_RESIZE:
     case ID::IMAGE_ROTATION:
-    case ID::IMAGE_SPLIT:
+    case ID::IMAGE_DIVISION:
         iconName = "question_mark";
         break;
 

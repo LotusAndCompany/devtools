@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ImageSplitGUI</class>
- <widget class="QWidget" name="ImageSplitGUI">
+ <class>ImageDivisionGUI</class>
+ <widget class="QWidget" name="ImageDivisionGUI">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="ImageViewForImageSplit" name="imageView" native="true"/>
+    <widget class="ImageViewForImageDivision" name="imageView" native="true"/>
    </item>
    <item>
     <widget class="QFrame" name="uiArea">
@@ -166,9 +166,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ImageViewForImageSplit</class>
+   <class>ImageViewForImageDivision</class>
    <extends>QWidget</extends>
-   <header>gui/image/split/image_view_for_image_split.h</header>
+   <header>gui/image/division/image_view_for_image_division.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
