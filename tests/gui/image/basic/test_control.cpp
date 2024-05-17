@@ -27,6 +27,8 @@ void TestBasicImageViewControl::test_constructor()
     QCOMPARE_EQ(control.ui->loadButton->text(), tr("load"));
     QCOMPARE_EQ(control.ui->resetButton->text(), tr("reset"));
     QCOMPARE_EQ(control.ui->saveButton->text(), tr("save"));
+
+    QCOMPARE_EQ(control.saveFileDailogType, BasicImageViewControl::DialogType::SELECT_FILE);
 }
 
 void TestBasicImageViewControl::test_reset()

@@ -69,16 +69,25 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_basic_image_view_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_resize_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_rotation_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_basic_image_view_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_resize_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_rotation_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_basic_image_view_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_resize_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/test_image_rotation_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -160,7 +169,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+72"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
@@ -206,6 +215,49 @@
         <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
         <source>Save Image</source>
         <translation>画像を保存</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSplitGUI</name>
+    <message>
+        <location filename="../gui/image/split/image_split_gui.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Image size: 0x0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Division</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Horizontal:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Vertical:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Width:</source>
+        <translation type="unfinished">横幅:</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Height:</source>
+        <translation type="unfinished">縦幅:</translation>
     </message>
 </context>
 <context>

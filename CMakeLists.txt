@@ -10,6 +10,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
+#       the user interface file "*.ui" could not be found in the following directories "SRC:..."
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    gui/image/basic/
+)
+
 # パッケージを探す
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
@@ -85,6 +91,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
         gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
         core/image/split/image_split.h core/image/split/image_split.cpp
+        gui/image/split/image_split_gui.h gui/image/split/image_split_gui.cpp gui/image/split/image_split_gui.ui
+        gui/image/split/image_view_for_image_split.h gui/image/split/image_view_for_image_split.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}

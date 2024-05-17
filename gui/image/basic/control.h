@@ -34,6 +34,17 @@ public:
      */
     ~BasicImageViewControl();
 
+    /**
+     * @brief save/loadで開くダイアログの種類
+     */
+    enum class DialogType {
+        MIN,           ///< 最小値
+        SELECT_FILE,   ///< ファイルを選択するダイアログ
+        SELECT_FOLDER, ///< フォルダを選択するダイアログ
+        MAX,           ///< 最大値
+    } saveFileDailogType
+        = DialogType::SELECT_FILE;
+
 signals:
     /**
      * @brief reset ボタンが押された時に発せられる
@@ -62,6 +73,8 @@ private slots:
     void onLoadButtonClicked();
 
 private:
+    static const QString invalidDialogType;
+
     Ui::BasicImageViewControl *const ui;
 
 #ifdef _TEST_BasicImageViewControl

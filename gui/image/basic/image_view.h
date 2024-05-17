@@ -33,7 +33,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~BasicImageView();
+    virtual ~BasicImageView();
 
     /**
      * @brief 画像データを設定する。空の画像データを指定すると "No Image" になる
@@ -41,6 +41,12 @@ public:
      * @param reset `true`なら拡大率をリセットする
      */
     void setPixmap(const QPixmap &pixmap, bool reset = false);
+
+protected:
+    Ui::BasicImageView *const ui;
+
+    /// 実際の拡大率
+    double scale = 1.0;
 
 private slots:
     /**
@@ -66,10 +72,6 @@ private:
     /// 一回の zoomIn() zoomOut() で変化する拡大率(対数スケール)
     static constexpr const double zoomStep = 0.2;
 
-    Ui::BasicImageView *const ui;
-
-    /// 実際の拡大率
-    double scale = 1.0;
     /// 拡大縮小前の画像データ。 setPixmap() によってのみ変更される
     QPixmap original;
 

@@ -1,7 +1,13 @@
 #include "control.h"
 #include "ui_control.h"
 
+#include "core/exception/invalid_state_exception.h"
 #include "file_dialogs.h"
+
+const QString BasicImageViewControl::invalidDialogType
+    = QString("DialogType::SELECT_FILE=%1, DialogType::SELECT_FOLDER=%2")
+          .arg(static_cast<int>(DialogType::SELECT_FILE))
+          .arg(static_cast<int>(DialogType::SELECT_FOLDER));
 
 BasicImageViewControl::BasicImageViewControl(QWidget *parent)
     : QWidget(parent)
@@ -31,10 +37,28 @@ BasicImageViewControl::~BasicImageViewControl()
 
 void BasicImageViewControl::onSaveButtonClicked()
 {
-    ImageSaveDialog dialog;
-    connect(&dialog, &ImageSaveDialog::fileSelected, this, &BasicImageViewControl::saveFileSelected);
+    switch (saveFileDailogType) {
+    case DialogType::SELECT_FILE: {
+        ImageSaveDialog dialog;
+        connect(&dialog,
+                &ImageSaveDialog::fileSelected,
+                this,
+                &BasicImageViewControl::saveFileSelected);
 
-    dialog.exec();
+        dialog.exec();
+    } break;
+    case DialogType::SELECT_FOLDER: {
+        QFileDialog dialog;
+        dialog.setAcceptMode(QFileDialog::AcceptSave);
+        dialog.setFileMode(QFileDialog::Directory);
+        connect(&dialog, &QFileDialog::fileSelected, this, &BasicImageViewControl::saveFileSelected);
+        dialog.exec();
+    } break;
+    default:
+        throw InvalidStateException(QString::number(static_cast<int>(saveFileDailogType)),
+                                    invalidDialogType);
+        break;
+    }
 }
 
 void BasicImageViewControl::onLoadButtonClicked()
