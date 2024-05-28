@@ -20,9 +20,9 @@ private slots:
 
     void on_addButton_clicked();
 
-    void on_showCollectionListButton_clicked();
+    void on_showTitleListButton_clicked();
 
-    void on_closeCollectionListButton_clicked();
+    void on_closeTitleListButton_clicked();
 
 private:
     Ui::home *ui;

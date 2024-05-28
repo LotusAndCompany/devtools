@@ -53,7 +53,7 @@
     <string>Enter text...</string>
    </property>
   </widget>
-  <widget class="QScrollArea" name="collectionListArea">
+  <widget class="QScrollArea" name="titleList">
    <property name="geometry">
     <rect>
      <x>820</x>
@@ -77,7 +77,7 @@
       <height>349</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="closeCollectionListButton">
+    <widget class="QPushButton" name="closeTitleListButton">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -247,7 +247,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="showCollectionListButton">
+     <widget class="QPushButton" name="showTitleListButton">
       <property name="font">
        <font>
         <family>Symbol</family>

@@ -11,9 +11,9 @@ home::home(QWidget *parent)
     ui->templateTitle->setHidden(true);
     // ui->pushButton->setHidden(true);
     // ui->pushButton->raise();
-    ui->collectionListArea->raise();
-    ui->collectionListArea->setHidden(true);
-    ui->closeCollectionListButton->setHidden(true);
+    ui->titleList->raise();
+    ui->titleList->setHidden(true);
+    ui->closeTitleListButton->setHidden(true);
     ui->label->setHidden(true);
     ui->label_2->setHidden(true);
     ui->label_3->setHidden(true);
@@ -34,10 +34,10 @@ void home::on_addButton_clicked()
 }
 
 
-void home::on_showCollectionListButton_clicked()
+void home::on_showTitleListButton_clicked()
 {
-    ui->collectionListArea->setHidden(false);
-    ui->closeCollectionListButton->setHidden(false);
+    ui->titleList->setHidden(false);
+    ui->closeTitleListButton->setHidden(false);
     ui->label->setHidden(false);
     ui->label_2->setHidden(false);
     ui->label_3->setHidden(false);
@@ -45,10 +45,10 @@ void home::on_showCollectionListButton_clicked()
 }
 
 
-void home::on_closeCollectionListButton_clicked()
+void home::on_closeTitleListButton_clicked()
 {
-    ui->collectionListArea->setHidden(true);
-    ui->closeCollectionListButton->setHidden(true);
+    ui->titleList->setHidden(true);
+    ui->closeTitleListButton->setHidden(true);
     ui->label->setHidden(true);
     ui->label_2->setHidden(true);
     ui->label_3->setHidden(true);
