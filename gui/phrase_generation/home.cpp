@@ -13,11 +13,12 @@ home::home(QWidget *parent)
     // ui->pushButton->raise();
     ui->titleList->raise();
     ui->titleList->setHidden(true);
+    ui->closeTitleListButton->raise();
     ui->closeTitleListButton->setHidden(true);
-    ui->label->setHidden(true);
-    ui->label_2->setHidden(true);
-    ui->label_3->setHidden(true);
-    ui->label_4->setHidden(true);
+    // ui->label->setHidden(true);
+    // ui->label_2->setHidden(true);
+    // ui->label_3->setHidden(true);
+    // ui->label_4->setHidden(true);
 
 }
 
@@ -38,10 +39,10 @@ void home::on_showTitleListButton_clicked()
 {
     ui->titleList->setHidden(false);
     ui->closeTitleListButton->setHidden(false);
-    ui->label->setHidden(false);
-    ui->label_2->setHidden(false);
-    ui->label_3->setHidden(false);
-    ui->label_4->setHidden(false);
+    // ui->label->setHidden(false);
+    // ui->label_2->setHidden(false);
+    // ui->label_3->setHidden(false);
+    // ui->label_4->setHidden(false);
 }
 
 
@@ -49,9 +50,9 @@ void home::on_closeTitleListButton_clicked()
 {
     ui->titleList->setHidden(true);
     ui->closeTitleListButton->setHidden(true);
-    ui->label->setHidden(true);
-    ui->label_2->setHidden(true);
-    ui->label_3->setHidden(true);
-    ui->label_4->setHidden(true);
+    // ui->label->setHidden(true);
+    // ui->label_2->setHidden(true);
+    // ui->label_3->setHidden(true);
+    // ui->label_4->setHidden(true);
 }
 

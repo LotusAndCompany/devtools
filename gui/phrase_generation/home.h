@@ -2,6 +2,7 @@
 #define HOME_H
 
 #include <QWidget>
+#include <QScrollArea>
 
 namespace Ui {
 class home;
