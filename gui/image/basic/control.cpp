@@ -49,8 +49,8 @@ void BasicImageViewControl::onSaveButtonClicked()
     } break;
     case DialogType::SELECT_FOLDER: {
         QFileDialog dialog;
-        dialog.setAcceptMode(QFileDialog::AcceptSave);
         dialog.setFileMode(QFileDialog::Directory);
+        dialog.setLabelText(QFileDialog::Accept, tr("Save"));
         connect(&dialog, &QFileDialog::fileSelected, this, &BasicImageViewControl::saveFileSelected);
         dialog.exec();
     } break;
