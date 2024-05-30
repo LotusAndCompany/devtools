@@ -220,15 +220,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BasicImageView</class>
-   <extends>QWidget</extends>
-   <header>gui/image/basic/image_view.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>BasicImageViewControl</class>
    <extends>QWidget</extends>
    <header>gui/image/basic/control.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BasicImageView</class>
+   <extends>QWidget</extends>
+   <header>gui/image/basic/image_view.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

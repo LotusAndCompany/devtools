@@ -48,6 +48,12 @@ protected:
     /// 実際の拡大率
     double scale = 1.0;
 
+    /**
+     * @brief scale を変更し、UIに反映する
+     * @param newScale 新しい scale の値
+     */
+    virtual void updateScale(double newScale); // NOTE: 関数名を改めた方が良いかも
+
 private slots:
     /**
      * @brief 拡大ボタンが押された時の処理
@@ -89,11 +95,6 @@ private:
      * @brief 拡大率を@f$ scaleBase^{zoomStep} @f$だけ下げる。 scale が minScale と等しければ何もしない。
      */
     void zoomOut();
-    /**
-     * @brief scale を変更し、UIに反映する
-     * @param newScale 新しい scale の値
-     */
-    void updateScale(double newScale); // NOTE: 関数名を改めた方が良いかも
 
 #ifdef _TEST_BasicImageView
     friend class Test::TestBasicImageView;

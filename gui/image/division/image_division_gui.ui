@@ -14,6 +14,18 @@
    <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="ImageViewForImageDivision" name="imageView" native="true"/>
    </item>
@@ -54,17 +66,49 @@
        <number>12</number>
       </property>
       <item>
-       <widget class="QLabel" name="sizeLabel">
-        <property name="text">
-         <string>Image size: 0x0</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>4</number>
         </property>
-       </widget>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Image size:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="sizeLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>0x0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QRadioButton" name="useDivisionButton">
         <property name="text">
          <string>Division</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">divisionModeButtonGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
@@ -83,7 +127,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="hDivValue"/>
+         <widget class="QSpinBox" name="hDivValue">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
@@ -96,7 +144,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="vDivValue"/>
+         <widget class="QSpinBox" name="vDivValue">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -105,12 +157,15 @@
         <property name="text">
          <string>Size</string>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">divisionModeButtonGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="label_4">
           <property name="text">
            <string>Width:</string>
           </property>
@@ -120,10 +175,17 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="widthValue"/>
+         <widget class="QSpinBox" name="widthValue">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string notr="true">px</string>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Height:</string>
           </property>
@@ -133,9 +195,26 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="heightValue"/>
+         <widget class="QSpinBox" name="heightValue">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string notr="true">px</string>
+          </property>
+         </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ignoreRemainders">
+        <property name="text">
+         <string>Ignore remainders</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer">
@@ -174,4 +253,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="divisionModeButtonGroup"/>
+ </buttongroups>
 </ui>

@@ -19,41 +19,41 @@ bool ImageDivision::saveImpl(bool (*saveFunc)(const QString &, const QImage &, c
                           const char *format,
                           int quality) const
 {
-    if (current().isNull())
+    if (current().isNull() || fileInfo().path().isEmpty())
+        return false;
+
+    const unsigned int yMax = numberOfVerticalDivision();
+    const unsigned int xMax = numberOfHorizontalDivision();
+    if (yMax == 0 || xMax == 0)
         return false;
 
     QFileInfo info(path);
     if (info.exists() && info.isDir()) {
-        const QString base = fileInfo().baseName();
+        const QSizeF cellSize = computedCellSize();
+        const QDir dir(path);
 
-        if (!base.isEmpty()) {
-            const unsigned int yMax = numberOfVerticalDivision();
-            const unsigned int xMax = numberOfHorizontalDivision();
+        bool result = true;
 
-            if (yMax == 0 || xMax == 0)
-                return false;
+        for (unsigned int y = 0; y < yMax; y++)
+            for (unsigned int x = 0; x < xMax; x++) {
+                const QRect rect(QPoint(x * cellSize.width(), y * cellSize.height()),
+                                 cellSize.toSize());
+                const QString filename = saveFilename(dir, x, y);
 
-            const QString extension = fileInfo().suffix();
-            const QSizeF cellSize = computedCellSize();
-            const QDir dir(path);
+                result = result && saveFunc(filename, current().copy(rect), format, quality);
+            }
 
-            bool result = true;
-
-            for (unsigned int y = 0; y < yMax; y++)
-                for (unsigned int x = 0; x < xMax; x++) {
-                    const QRect rect(QPoint(x * cellSize.width(), y * cellSize.height()),
-                                     cellSize.toSize());
-                    const QString filename = dir.filePath(base % QString("_%3_%4.").arg(x).arg(y)
-                                                          % extension);
-
-                    result = result && saveFunc(filename, current().copy(rect), format, quality);
-                }
-
-            return result;
-        }
+        return result;
     }
 
     return false;
+}
+
+QString ImageDivision::saveFilename(const QDir &location, unsigned int x, unsigned int y) const
+{
+    const QString base = fileInfo().baseName();
+    const QString extension = fileInfo().suffix();
+    return location.filePath(base % QString("_%1_%2.").arg(x).arg(y) % extension);
 }
 
 bool ImageDivision::loadImpl(const QString &path)
@@ -114,6 +114,8 @@ QSizeF ImageDivision::computedCellSize() const
 
 double ImageDivision::computedCellSizeInternal(unsigned int sourceSize, const DivisionHints &hint)
 {
+    qDebug() << "sourceSize=" << sourceSize << ", hint.isSpecifiedWithSize"
+             << hint.isSpecifiedWithSize << ", hint.value=" << hint.value;
     if (sourceSize == 0 || hint.value == 0)
         throw InvalidArgumentException(0, invalidImageSize);
 

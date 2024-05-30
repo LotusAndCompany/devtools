@@ -39,7 +39,9 @@ public:
      * @brief グリッドの大きさを設定する。大きさ0のグリッドを設定すると非表示になる。
      * @param newGridSize グリッドの大きさ
      */
-    void setGridSize(const QSize &newGridSize);
+    void setGridSize(const QSizeF &newGridSize);
+
+    void updateScale(double newScale) override;
 
 private:
     /**
@@ -47,6 +49,9 @@ private:
      * @return ui->image
      */
     _ImageViewForImageDivisionInternal::LabelWithGrid *ui_image() const;
+
+    /// 拡大率を適用していないグリッドの大きさ
+    QSizeF gridSize;
 
 #ifdef _TEST_ImageViewForImageDivision
     friend class Test::TestImageViewForImageDivision;
@@ -56,6 +61,7 @@ private:
 namespace _ImageViewForImageDivisionInternal {
 /**
  * @brief グリッドを表示できるQLabel
+ * @todo グレーに塗りつぶせるようにする
  */
 class LabelWithGrid : public QLabel
 {
@@ -75,11 +81,11 @@ public:
      * @brief グリッドの大きさを設定する。大きさ0のグリッドを設定すると非表示になる。
      * @param scaledGridSize グリッドの大きさ(拡大済み)
      */
-    void setGridSize(const QSize &scaledGridSize);
+    void setGridSize(const QSizeF &scaledGridSize);
 
 private:
-    /// グリッドの大きさ
-    QSize gridSize;
+    /// 実際に描画されるグリッドの大きさ
+    QSizeF gridSize;
 };
 } // namespace _ImageViewForImageDivisionInternal
 

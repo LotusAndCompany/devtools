@@ -105,6 +105,11 @@
         <source>save</source>
         <translation>保存</translation>
     </message>
+    <message>
+        <location filename="../gui/image/basic/control.cpp" line="+53"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageDivisionGUI</name>
@@ -114,39 +119,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
-        <source>Image size: 0x0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Division</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Horizontal:</source>
+        <location line="+68"/>
+        <source>Image size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>Vertical:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Size</source>
+        <source>0x0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
+        <source>Division</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Horizontal:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Vertical:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Width:</source>
         <translation type="unfinished">横幅:</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+20"/>
         <source>Height:</source>
         <translation type="unfinished">縦幅:</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Ignore remainders</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -53,19 +53,25 @@ public:
      * @return 元の画像 
      */
     virtual const QImage &original() const = 0;
+    /**
+     * @brief fileInfo() に基づいて保存するファイル名を返す
+     * @param location 保存先フォルダ
+     * @param x x位置
+     * @param y y位置
+     * @return 保存するファイル名
+     */
+    virtual QString saveFilename(const QDir &location, unsigned int x, unsigned int y) const = 0;
 
     /**
      * @brief 現在の設定に基づいて計算される分割後の画像サイズ
      * @return 分割後の画像サイズ
      */
     virtual QSizeF computedCellSize() const = 0;
-
     /**
      * @brief 現在の設定に基づいて計算される画像の横の分割数
      * @return 横の分割数。 `discardRemainders == false` の場合は端数を含む
      */
     virtual unsigned int numberOfHorizontalDivision() const = 0;
-
     /**
      * @brief 現在の設定に基づいて計算される画像の縦の分割数
      * @return 縦の分割数。 `discardRemainders == false` の場合は端数を含む
@@ -119,6 +125,7 @@ public:
     void setCellWidth(unsigned int width) noexcept(false) override;
     void setCellHeight(unsigned int height) noexcept(false) override;
     const QImage &original() const override { return ImageIO::original(); }
+    QString saveFilename(const QDir &location, unsigned int x, unsigned int y) const override;
     QSizeF computedCellSize() const override;
     unsigned int numberOfHorizontalDivision() const override;
     unsigned int numberOfVerticalDivision() const override;
