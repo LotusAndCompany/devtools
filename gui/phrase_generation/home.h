@@ -2,7 +2,10 @@
 #define HOME_H
 
 #include <QWidget>
-#include <QScrollArea>
+// #include <QScrollArea>
+#include <QFile>
+#include <QDir>
+#include <QListWidgetItem>
 
 namespace Ui {
 class home;
@@ -25,8 +28,15 @@ private slots:
 
     void on_closeTitleListButton_clicked();
 
+    void on_saveButton_clicked();
+
+    void on_titleList_itemClicked(QListWidgetItem *item);
+
 private:
     Ui::home *ui;
+    void loadTitles();
+    void saveContent(const QString &title, const QString &content);
+    QString loadContent(const QString &title);
 };
 
 #endif // HOME_H
