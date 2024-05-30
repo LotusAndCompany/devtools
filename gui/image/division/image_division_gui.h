@@ -92,7 +92,7 @@ private:
     /**
      * @brief UI上の数値を更新する処理
      */
-    void updateUIValues();
+    void updateUI();
 
 #ifdef _TEST_ImageDivisionGUI
     friend class Test::TestImageDivisionGUI;

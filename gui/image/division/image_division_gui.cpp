@@ -86,7 +86,7 @@ void ImageDivisionGUI::onLoadImageSelected(const QString &path)
     ui->heightValue->setMaximum(size.height());
     ui->heightValue->setMinimum(1);
 
-    updateUIValues();
+    updateUI();
 
     // TODO: load()の結果に応じて何かメッセージを出す
 }
@@ -103,7 +103,7 @@ void ImageDivisionGUI::onSaveLocationSelected(const QString &path)
 void ImageDivisionGUI::onResetButtonClicked()
 {
     imageDivision->reset();
-    updateUIValues();
+    updateUI();
 }
 
 void ImageDivisionGUI::onDivisionModeClicked(QAbstractButton *button)
@@ -128,7 +128,7 @@ void ImageDivisionGUI::onDivisionModeClicked(QAbstractButton *button)
         throw InvalidArgumentException<void *>("Unknown button is clicked");
     }
 
-    updateUIValues();
+    updateUI();
 }
 
 void ImageDivisionGUI::onHorizontalDivisionValueChanged(int hDiv)
@@ -137,7 +137,7 @@ void ImageDivisionGUI::onHorizontalDivisionValueChanged(int hDiv)
         throw InvalidStateException("useDivisionButton expected to be checked");
 
     imageDivision->setHorizontalDivision(hDiv);
-    updateUIValues();
+    updateUI();
 }
 
 void ImageDivisionGUI::onVerticalDivisionValueChanged(int vDiv)
@@ -146,7 +146,7 @@ void ImageDivisionGUI::onVerticalDivisionValueChanged(int vDiv)
         throw InvalidStateException("useDivisionButton expected to be checked");
 
     imageDivision->setVerticalDivision(vDiv);
-    updateUIValues();
+    updateUI();
 }
 
 void ImageDivisionGUI::onWidthValueChanged(int width)
@@ -155,7 +155,7 @@ void ImageDivisionGUI::onWidthValueChanged(int width)
         throw InvalidStateException("useSizeButton expected to be checked");
 
     imageDivision->setCellWidth(width);
-    updateUIValues();
+    updateUI();
 }
 
 void ImageDivisionGUI::onHeightValueChanged(int height)
@@ -164,10 +164,10 @@ void ImageDivisionGUI::onHeightValueChanged(int height)
         throw InvalidStateException("useSizeButton expected to be checked");
 
     imageDivision->setCellHeight(height);
-    updateUIValues();
+    updateUI();
 }
 
-void ImageDivisionGUI::updateUIValues()
+void ImageDivisionGUI::updateUI()
 {
     const auto cellSize = imageDivision->computedCellSize();
     QSignalBlocker blockers[] = {
