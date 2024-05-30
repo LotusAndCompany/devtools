@@ -119,7 +119,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+71"/>
         <source>Image size:</source>
         <translation type="unfinished"></translation>
     </message>
