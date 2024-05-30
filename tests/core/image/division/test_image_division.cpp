@@ -40,6 +40,7 @@ private slots:
     void test_computedCellSize();
     void test_numberOfHorizontalDivision();
     void test_numberOfVerticalDivision();
+    void test_saveFilename();
 };
 
 void TestImageDivision::initTestCase()
@@ -100,6 +101,10 @@ void TestImageDivision::test_load()
 void TestImageDivision::test_save()
 {
     ImageDivision imageDivision;
+
+    // ファイルが設定されていない場合、失敗すること
+    QVERIFY(!imageDivision.save(""));
+
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
     if (imageDivision.current().isNull())
         QFAIL("image is empty");
@@ -148,6 +153,10 @@ void TestImageDivision::test_save()
 void TestImageDivision::test_overwriteSave()
 {
     ImageDivision imageDivision;
+
+    // ファイルが設定されていない場合、失敗すること
+    QVERIFY(!imageDivision.overwriteSave(""));
+
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
     if (imageDivision.current().isNull())
         QFAIL("image is empty");
@@ -156,7 +165,7 @@ void TestImageDivision::test_overwriteSave()
     QVERIFY(!info.exists());
 
     // パスが存在しない場合、失敗すること
-    QVERIFY(!imageDivision.save(info.filePath()));
+    QVERIFY(!imageDivision.overwriteSave(info.filePath()));
 
     QDir dir(testDirPath);
     dir.mkpath("overwriteSave");
@@ -378,6 +387,38 @@ void TestImageDivision::test_numberOfVerticalDivision()
     // 割り切れない場合は分割数が+1されること
     imageDivision.discardRemainders = false;
     QCOMPARE_EQ(imageDivision.numberOfVerticalDivision(), 1 + size320.height() / 30);
+}
+
+void TestImageDivision::test_saveFilename()
+{
+    ImageDivision imageDivision;
+    imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
+    if (imageDivision.current().isNull())
+        QFAIL("image is empty");
+
+    RandomData rd;
+    const unsigned int randomX = rd.nextInt(64);
+    const unsigned int randomY = rd.nextInt(64);
+    const QString randomLocation = rd.nextQString(48,
+                                                  RandomData::lowerAlphabets
+                                                      + RandomData::upperAlphabets
+                                                      + RandomData::numbers + "/_-")
+                                   + "/"
+                                   + rd.nextQString(16,
+                                                    RandomData::lowerAlphabets
+                                                        + RandomData::upperAlphabets
+                                                        + RandomData::numbers);
+
+    const QFileInfo result = QFileInfo(imageDivision.saveFilename(randomLocation, randomX, randomY));
+    //qDebug() << result;
+
+    // フォルダ名が想定通りであること
+    QCOMPARE_EQ(result.dir(), randomLocation);
+    // ファイル名が想定通りであること
+    QCOMPARE_EQ(result.baseName(),
+                (imageDivision.fileInfo().baseName() + "_%1_%2").arg(randomX).arg(randomY));
+    // 拡張子が想定通りであること
+    QCOMPARE_EQ(result.suffix(), imageDivision.fileInfo().suffix());
 }
 
 } // namespace Test
