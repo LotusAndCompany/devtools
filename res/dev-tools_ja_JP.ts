@@ -86,82 +86,67 @@
 <context>
     <name>BasicImageViewControl</name>
     <message>
-        <location filename="../gui/image/basic/control.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>load</source>
+        <location filename="../gui/image/basic/control.ui" line="+20"/>
+        <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>reset</source>
+        <source>Reset</source>
         <translation>リセット</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>save</source>
-        <translation>保存</translation>
+        <translation type="vanished">保存</translation>
     </message>
     <message>
+        <location line="+7"/>
         <location filename="../gui/image/basic/control.cpp" line="+53"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>保存</translation>
     </message>
 </context>
 <context>
     <name>ImageDivisionGUI</name>
     <message>
-        <location filename="../gui/image/division/image_division_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+71"/>
+        <location filename="../gui/image/division/image_division_gui.ui" line="+85"/>
         <source>Image size:</source>
-        <translation type="unfinished"></translation>
+        <translation>画像サイズ:</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>0x0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location line="+22"/>
         <source>Division</source>
-        <translation type="unfinished"></translation>
+        <translation>分割数</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Horizontal:</source>
-        <translation type="unfinished"></translation>
+        <translation>横:</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Vertical:</source>
-        <translation type="unfinished"></translation>
+        <translation>縦:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Width:</source>
-        <translation type="unfinished">横幅:</translation>
+        <translation>横幅:</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Height:</source>
-        <translation type="unfinished">縦幅:</translation>
+        <translation>縦幅:</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Ignore remainders</source>
-        <translation type="unfinished"></translation>
+        <translation>余りを切り捨て</translation>
     </message>
 </context>
 <context>
@@ -175,12 +160,7 @@
 <context>
     <name>ImageResizeGUI</name>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+60"/>
+        <location filename="../gui/image/resize/image_resize_gui.ui" line="+74"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
@@ -213,12 +193,7 @@
 <context>
     <name>ImageRotationGUI</name>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+72"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+86"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
@@ -284,7 +259,7 @@
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="-26"/>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>画像</translation>
     </message>
 </context>
 <context>
@@ -292,7 +267,7 @@
     <message>
         <location filename="../gui/sidemenu.ui" line="+53"/>
         <source>Home</source>
-        <translation type="unfinished">ホーム</translation>
+        <translation>ホーム</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -424,12 +399,12 @@
     <message>
         <location line="+4"/>
         <source>Image Division</source>
-        <translation type="unfinished"></translation>
+        <translation>画像分割</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Divide images into smaller rect</source>
-        <translation type="unfinished"></translation>
+        <source>Divide image into n x m</source>
+        <translation>画像をn×mに分割する</translation>
     </message>
 </context>
 </TS>

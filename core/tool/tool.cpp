@@ -62,7 +62,7 @@ const Tool::Translatable Tool::translatable(ID id)
     case ID::IMAGE_DIVISION:
         return Translatable{
             tr("Image Division"),
-            tr("Divide images into smaller rect"),
+            tr("Divide image into n x m"),
         };
     default:
         throw UnderDevelopmentException();
