@@ -69,7 +69,7 @@ void ImageDivisionGUI::onLoadImageSelected(const QString &path)
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageDivision->current()), true);
     const auto size = imageDivision->current().size();
-    ui->sizeLabel->setText(QString("%1x%2").arg(size.width()).arg(size.height()));
+    ui->sizeLabel->setText(tr("%1 x %2").arg(size.width()).arg(size.height()));
 
     // NOTE: 最大値・最小値を設定する
     QSignalBlocker blockers[] = {

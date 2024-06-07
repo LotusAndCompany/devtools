@@ -95,7 +95,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string notr="true">0x0</string>
+           <string>0 x 0</string>
           </property>
          </widget>
         </item>

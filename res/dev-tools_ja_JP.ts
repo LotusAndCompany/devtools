@@ -69,16 +69,22 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -114,7 +120,12 @@
         <translation>画像サイズ:</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+13"/>
+        <source>0 x 0</source>
+        <translation>0 × 0</translation>
+    </message>
+    <message>
+        <location line="+9"/>
         <source>Division</source>
         <translation>分割数</translation>
     </message>
@@ -147,6 +158,11 @@
         <location line="+22"/>
         <source>Ignore remainders</source>
         <translation>余りを切り捨て</translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+72"/>
+        <source>%1 x %2</source>
+        <translation>%1 × %2</translation>
     </message>
 </context>
 <context>
@@ -296,19 +312,51 @@
 <context>
     <name>Test::TestBasicImageViewControl</name>
     <message>
-        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>load</source>
+        <translation type="obsolete">読み込み</translation>
+    </message>
+    <message>
+        <source>reset</source>
+        <translation type="obsolete">リセット</translation>
+    </message>
+    <message>
+        <source>save</source>
+        <translation type="obsolete">保存</translation>
+    </message>
+    <message>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
+        <source>Load</source>
         <translation type="unfinished">読み込み</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>reset</source>
+        <source>Reset</source>
         <translation type="unfinished">リセット</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>save</source>
+        <source>Save</source>
         <translation type="unfinished">保存</translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestImageDivisionGUI</name>
+    <message>
+        <source>%1x%2</source>
+        <translation type="obsolete">%1×%2</translation>
+    </message>
+    <message>
+        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+159"/>
+        <source>%1 x %2</source>
+        <translation type="unfinished">%1 × %2</translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestImageViewForImageDivision</name>
+    <message>
+        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+55"/>
+        <source>No Image</source>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
