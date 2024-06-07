@@ -86,6 +86,10 @@ public:
 private:
     /// 実際に描画されるグリッドの大きさ
     QSizeF gridSize;
+
+#ifdef _TEST_ImageViewForImageDivision
+    friend class Test::TestImageViewForImageDivision;
+#endif
 };
 } // namespace _ImageViewForImageDivisionInternal
 

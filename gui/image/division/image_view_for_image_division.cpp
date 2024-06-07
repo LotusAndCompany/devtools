@@ -12,8 +12,8 @@ ImageViewForImageDivision::ImageViewForImageDivision(QWidget *parent)
     delete ui->image;
     ui->image = new LabelWithGrid(this);
     ui->image->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-    BasicImageView::updateScale(1);
     ui->scrollArea->setWidget(ui->image);
+    BasicImageView::updateScale(1);
 }
 
 void ImageViewForImageDivision::updateScale(double newScale)
@@ -54,9 +54,14 @@ void LabelWithGrid::paintEvent(QPaintEvent *event)
     const auto topLeft = QPointF(width() - xMax, height() - yMax) / 2;
     painter.setTransform(QTransform::fromTranslate(topLeft.x(), topLeft.y()));
 
-    for (double x = gridSize.width(); x < xMax - 1; x += gridSize.width())
+    /* NOTE: 警告が出ているが、gridSizeがxLimit, yLimitに対して小さ過ぎたり丸め誤差が1に近いことは無い想定なので問題無いはず
+     *  Variable 'x' with floating point type 'double' should not be used as a loop counter [clang-analyzer-security.FloatLoopCounter]
+     *  Variable 'y' with floating point type 'double' should not be used as a loop counter [clang-analyzer-security.FloatLoopCounter]
+     */
+    const double xLimit = xMax - 1, yLimit = yMax - 1;
+    for (double x = gridSize.width(); x < xLimit; x += gridSize.width())
         painter.drawLine(QPointF(x, 0), QPointF(x, yMax));
-    for (double y = gridSize.height(); y < yMax - 1; y += gridSize.height())
+    for (double y = gridSize.height(); y < yLimit; y += gridSize.height())
         painter.drawLine(QPointF(0, y), QPointF(xMax, y));
 }
 

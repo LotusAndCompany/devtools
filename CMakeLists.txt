@@ -317,6 +317,16 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/rotation/test_image_rotation_gui.cpp
     )
+
+    # gui/image/division
+    DevTools_add_test(test_image_view_for_image_division WIDGETS
+        SOURCES
+        gui/image/basic/image_view.h
+        gui/image/basic/image_view.cpp
+        gui/image/division/image_view_for_image_division.h
+        gui/image/division/image_view_for_image_division.cpp
+        tests/gui/image/division/test_image_view_for_image_division.cpp
+    )
 endif()
 
 # Documents
