@@ -327,6 +327,17 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         gui/image/division/image_view_for_image_division.cpp
         tests/gui/image/division/test_image_view_for_image_division.cpp
     )
+    DevTools_add_test(test_image_division_gui WIDGETS
+        SOURCES
+        gui/image/division/image_division_gui.h
+        gui/image/division/image_division_gui.cpp
+        core/image/division/image_division.h
+        core/image/division/image_division.cpp
+        gui/image/division/image_view_for_image_division.h
+        gui/image/division/image_view_for_image_division.cpp
+        ${IMAGE_TOOL_GUI_SRC}
+        tests/gui/image/division/test_image_division_gui.cpp
+    )
 endif()
 
 # Documents

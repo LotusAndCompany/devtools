@@ -346,7 +346,7 @@
         <translation type="obsolete">%1×%2</translation>
     </message>
     <message>
-        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+159"/>
+        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+170"/>
         <source>%1 x %2</source>
         <translation type="unfinished">%1 × %2</translation>
     </message>
@@ -354,7 +354,7 @@
 <context>
     <name>Test::TestImageViewForImageDivision</name>
     <message>
-        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+55"/>
+        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+54"/>
         <source>No Image</source>
         <translation type="unfinished">画像がありません</translation>
     </message>
