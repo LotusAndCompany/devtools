@@ -158,7 +158,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+88"/>
+        <location line="+82"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,42 +173,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+162"/>
-        <source>Ather1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Ather2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Ather3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+34"/>
+        <location line="+107"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-143"/>
-        <source>新年の挨拶</source>
+        <location line="+13"/>
+        <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
-        <source>お礼文</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>依頼文</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-79"/>
+        <location line="-57"/>
         <source>三</source>
         <translation type="unfinished"></translation>
     </message>

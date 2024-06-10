@@ -94,6 +94,12 @@ QString home::loadContent(const QString &title)
     return "";
 }
 
+void home::deleteContent(const QString &title)
+{
+    QFile file("content/" + title + ".txt");
+    file.remove();
+}
+
 void home::on_saveButton_clicked()
 {
     QString title = ui->templateTitle->text();
@@ -110,6 +116,21 @@ void home::on_saveButton_clicked()
     ui->templateText->clear();
 }
 
+void home::on_deleteButton_clicked()
+{
+    QListWidgetItem *item = ui->titleList->currentItem();
+    if (!item) {
+        QMessageBox::warning(this, "Warning", "No title selected.");
+        return;
+    }
+
+    QString title = item->text();
+    deleteContent(title);
+    loadTitles();
+    ui->templateTitle->clear();
+    ui->templateText->clear();
+}
+
 void home::on_titleList_itemClicked(QListWidgetItem *item)
 {
     QString title = item->text();
@@ -117,3 +138,4 @@ void home::on_titleList_itemClicked(QListWidgetItem *item)
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);
 }
+

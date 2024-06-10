@@ -26,7 +26,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QTextEdit" name="templateText">
+  <widget class="QPlainTextEdit" name="templateText">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -42,12 +42,6 @@
     <font>
      <pointsize>20</pointsize>
     </font>
-   </property>
-   <property name="tabChangesFocus">
-    <bool>false</bool>
-   </property>
-   <property name="readOnly">
-    <bool>false</bool>
    </property>
    <property name="placeholderText">
     <string>Enter text...</string>
@@ -141,135 +135,6 @@
      <height>351</height>
     </rect>
    </property>
-   <item>
-    <property name="text">
-     <string>新年の挨拶</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="background">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>0</red>
-       <green>0</green>
-       <blue>0</blue>
-      </color>
-     </brush>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="Dense7Pattern">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>お礼文</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>依頼文</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Ather1</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Ather2</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Ather3</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <underline>true</underline>
-     </font>
-    </property>
-    <property name="foreground">
-     <brush brushstyle="NoBrush">
-      <color alpha="255">
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </brush>
-    </property>
-   </item>
   </widget>
   <widget class="QPushButton" name="closeTitleListButton">
    <property name="geometry">
@@ -287,6 +152,19 @@
    </property>
    <property name="text">
     <string>X</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="deleteButton">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>50</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Delete</string>
    </property>
   </widget>
  </widget>
