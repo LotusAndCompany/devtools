@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::Command *ui;
+    void init();
+    void reset();
 };
 
 #endif // COMMAND_H
