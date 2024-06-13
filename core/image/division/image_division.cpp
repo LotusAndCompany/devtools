@@ -14,6 +14,7 @@ const QString ImageDivision::invalidDivisionNumber = "invalid division number";
 const QString ImageDivision::invalidCellSize = "invalid cell size";
 const QString ImageDivision::invalidImageSize = "invalid image";
 
+// FIXME: 出力に対応していないフォーマットの考慮が漏れている
 bool ImageDivision::saveImpl(bool (*saveFunc)(const QString &, const QImage &, const char *, int),
                           const QString &path,
                           const char *format,
