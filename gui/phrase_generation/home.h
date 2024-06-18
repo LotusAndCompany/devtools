@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QDir>
 #include <QListWidgetItem>
+#include <QClipboard>
 
 namespace Ui {
 class home;
@@ -33,6 +34,8 @@ private slots:
     void on_titleList_itemClicked(QListWidgetItem *item);
 
     void on_deleteButton_clicked();
+
+    void on_copyButton_clicked();
 
 private:
     Ui::home *ui;

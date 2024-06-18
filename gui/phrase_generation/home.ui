@@ -167,6 +167,19 @@
     <string>Delete</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="copyButton">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>50</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
