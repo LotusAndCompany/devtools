@@ -93,6 +93,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/image/division/image_division.h core/image/division/image_division.cpp
         gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
         gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
+        core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
