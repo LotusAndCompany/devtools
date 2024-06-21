@@ -126,7 +126,7 @@ private:
      * @details 透明度は考慮しない
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗
+     * @return 色の差の2乗(0-3.0)
      */
     static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
 
@@ -135,7 +135,7 @@ private:
      * @details Hは0.0-1.0の範囲に変換して計算する。透明度は考慮しない。
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗
+     * @return 色の差の2乗(0-3.0)
      */
     static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
 
@@ -144,7 +144,7 @@ private:
      * @details Hは0.0-1.0の範囲に変換して計算する。透明度は考慮しない。
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗
+     * @return 色の差の2乗(0-3.0)
      */
     static double colorDiffSquaredHsl(const QColor &a, const QColor &b);
 

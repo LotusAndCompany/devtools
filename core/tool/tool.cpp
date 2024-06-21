@@ -64,6 +64,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Image Division"),
             tr("Divide image into n x m"),
         };
+    case ID::IMAGE_TRANSPARENT:
+        return Translatable{
+            tr("Image Transparent"),
+            tr("Make image transparent"),
+        };
     default:
         throw UnderDevelopmentException();
     }

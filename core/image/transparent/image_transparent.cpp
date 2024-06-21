@@ -87,6 +87,81 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
 
     const double tolerance2 = tolerance * tolerance;
 
+    // labelsとlookupを設定する。連続領域に同じラベルを設定する。
+    QList<int> labels(current().width() * current().height(), 0);
+    QMap<int, int> lookup;
+    uchar *const data = _current.bits();
+    int nextLabel = 1;
+    for (unsigned int y = 0; y < current().height(); y++) {
+        for (unsigned int x = 0; x < current().width(); x++) {
+            const int pixelIndex = current().pixelIndex(x, y);
+            const int dataIndex = depth * pixelIndex;
+
+            const uchar r = data[dataIndex];
+            const uchar g = data[dataIndex + 1];
+            const uchar b = data[dataIndex + 2];
+
+            if (comparison(QColor(r, g, b), targetColor) <= tolerance2) {
+                int refLabels[] = {
+                    0,
+                    0,
+                };
+                // 四近傍法を使う
+                if (0 < y)
+                    refLabels[0] = labels[current().pixelIndex(x, y - 1)];
+                if (0 < x)
+                    refLabels[1] = labels[current().pixelIndex(x - 1, y)];
+
+                if (refLabels[0] == 0 && refLabels[1] == 0) {
+                    nextLabel++;
+                    labels[pixelIndex] = nextLabel;
+                } else {
+                    if (0 < refLabels[0] && 0 < refLabels[1]) {
+                        // 小さい方のラベルを設定し、大きい方のラベルをlookupに登録する。
+                        // lookupTable[置き換え元] = 置き換え先
+                        if (refLabels[0] < refLabels[1]) {
+                            labels[pixelIndex] = refLabels[0];
+                            lookup[refLabels[1]] = refLabels[0];
+                        } else if (refLabels[1] < refLabels[0]) {
+                            labels[pixelIndex] = refLabels[1];
+                            lookup[refLabels[0]] = refLabels[1];
+                        } else {
+                            labels[pixelIndex] = refLabels[0];
+                        }
+                    } else if (0 < refLabels[0] && refLabels[1] == 0) {
+                        labels[pixelIndex] = refLabels[0];
+                    } else if (refLabels[0] == 0 && 0 < refLabels[1]) {
+                        labels[pixelIndex] = refLabels[1];
+                    }
+                }
+            }
+        }
+    }
+
+    // lookupをlabelsに適用する。lookupは空になる想定。
+    while (lookup.size()) {
+        const auto &it = std::prev(lookup.end());
+        const int from = it.key();
+        const int to = it.value();
+
+        for (int &label : labels) {
+            if (label == from)
+                label = to;
+        }
+
+        lookup.erase(it);
+    }
+
+    // labelsに基づき透明化する
+    const int targetLabel = labels[current().pixelIndex(start)];
+    for (unsigned int y = 0; y < current().height(); y++) {
+        for (unsigned int x = 0; x < current().width(); x++) {
+            const int pixelIndex = current().pixelIndex(x, y);
+            if (labels[pixelIndex] == targetLabel)
+                data[depth * pixelIndex + 3] = transparency;
+        }
+    }
+
     // NOTE: _currentは更新済みだが、形式的に設定する
     setOutdated();
 }
