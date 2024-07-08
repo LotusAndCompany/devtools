@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -255,6 +249,39 @@
         <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
         <source>Save Image</source>
         <translation>画像を保存</translation>
+    </message>
+</context>
+<context>
+    <name>ImageTransparentGUI</name>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+79"/>
+        <source>Color mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>HSL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>HSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Hex:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>\#HHHHHH</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -453,6 +480,16 @@
         <location line="+1"/>
         <source>Divide image into n x m</source>
         <translation>画像をn×mに分割する</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Transparent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Make image transparent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

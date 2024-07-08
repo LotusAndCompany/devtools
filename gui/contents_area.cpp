@@ -5,9 +5,11 @@
 #include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
+#include "core/image/transparent/image_transparent.h"
 #include "gui/image/division/image_division_gui.h"
-#include "image/resize/image_resize_gui.h"
-#include "image/rotation/image_rotation_gui.h"
+#include "gui/image/resize/image_resize_gui.h"
+#include "gui/image/rotation/image_rotation_gui.h"
+#include "gui/image/transparent/image_transparent_gui.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -77,6 +79,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::IMAGE_DIVISION:
         content = new ImageDivisionGUI(new ImageDivision(), this);
+        break;
+    case Sidemenu::ID::IMAGE_TRANSPARENT:
+        content = new ImageTransparentGUI(new ImageTransparent(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

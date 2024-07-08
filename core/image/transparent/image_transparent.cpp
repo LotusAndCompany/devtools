@@ -9,6 +9,10 @@ ImageTransparentInterface::ImageTransparentInterface(QObject *parent)
     : Tool(Tool::ID::IMAGE_TRANSPARENT, "image-transparent", parent)
 {}
 
+ImageTransparent::ImageTransparent(QObject *parent)
+    : ImageTransparentInterface(parent)
+{}
+
 bool ImageTransparent::loadImpl(const QString &path)
 {
     const bool result = ImageIO::load(path);
@@ -71,9 +75,9 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
         return;
 
     if (!current().valid(start))
-        throw InvalidArgumentException<QPoint>(start,
-                                               pixelOutOfImage.arg(current().width())
-                                                   .arg(current().height()));
+        throw InvalidArgumentException<QString>(
+            QString("start=(%1, %2)").arg(start.x()).arg(start.y()),
+            pixelOutOfImage.arg(current().width()).arg(current().height()));
 
     // 色空間を揃える
     const QColor targetColor = QColor(current().pixelColor(start)).convertTo(colorSpec);
