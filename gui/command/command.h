@@ -18,7 +18,12 @@ public:
 private:
     Ui::Command *ui;
     void init();
+    void selectedFunction();
+    void generate();
     void reset();
+    void clear();
+    void copy();
+    void adjustCommandBoxWidth();
 };
 
 #endif // COMMAND_H
