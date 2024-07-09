@@ -61,7 +61,7 @@ void ImageTransparent::addTransparentColor(const QColor &targetColor)
             const uchar b = pixel[2];
 
             if (comparison(QColor(r, g, b), targetColor) <= tolerance2)
-                pixel[3] = transparency;
+                pixel[3] = opacity;
         }
     }
 
@@ -162,7 +162,7 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
         for (unsigned int x = 0; x < current().width(); x++) {
             const int pixelIndex = current().pixelIndex(x, y);
             if (labels[pixelIndex] == targetLabel)
-                data[depth * pixelIndex + 3] = transparency;
+                data[depth * pixelIndex + 3] = opacity;
         }
     }
 

@@ -50,9 +50,9 @@ public:
      */
     double tolerance = 0.1;
     /**
-     * @brief 透明度(0=透明, 255=不透明)
+     * @brief 不透明度(0=透明, 255=不透明)
      */
-    uint8_t transparency = 0;
+    uint8_t opacity = 0;
 
 protected:
     explicit ImageTransparentInterface(QObject *parent = nullptr);
