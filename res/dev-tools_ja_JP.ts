@@ -65,6 +65,24 @@
     </message>
 </context>
 <context>
+    <name>ItemWidget</name>
+    <message>
+        <location filename="../gui/phrase_generation/ItemWidget.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Copy</source>
+        <translation type="unfinished">コピー</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+182"/>

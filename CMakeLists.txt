@@ -74,6 +74,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
         gui/phrase_generation/home.h gui/phrase_generation/home.cpp gui/phrase_generation/home.ui
+        gui/phrase_generation/ItemWidget.h gui/phrase_generation/ItemWidget.cpp gui/phrase_generation/ItemWidget.ui
     )
     qt_add_translations(DevTools
         RESOURCE_PREFIX "i18n"

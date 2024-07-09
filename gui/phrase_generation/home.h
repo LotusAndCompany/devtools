@@ -2,11 +2,12 @@
 #define HOME_H
 
 #include <QWidget>
-// #include <QScrollArea>
 #include <QFile>
 #include <QDir>
+#include <QTextStream>
 #include <QListWidgetItem>
 #include <QClipboard>
+#include "ItemWidget.h"
 
 namespace Ui {
 class home;
@@ -21,7 +22,6 @@ public:
     ~home();
 
 private slots:
-    // void on_addButton_clicked();
 
     void on_addButton_clicked();
 
@@ -36,6 +36,8 @@ private slots:
     void on_deleteButton_clicked();
 
     void on_copyButton_clicked();
+
+    void on_listCopyButton_clicked(const QString &title);
 
 private:
     Ui::home *ui;

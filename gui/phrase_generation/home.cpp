@@ -1,5 +1,6 @@
 #include "home.h"
 #include "ui_home.h"
+#include "ItemWidget.h"
 
 #include <QFile>
 #include <QDir>
@@ -13,18 +14,12 @@ home::home(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->templateText->setHidden(true);
-    ui->templateTitle->setHidden(true);
-    // ui->pushButton->setHidden(true);
-    // ui->pushButton->raise();
-    ui->titleList->raise();
-    ui->titleList->setHidden(true);
-    ui->closeTitleListButton->raise();
-    ui->closeTitleListButton->setHidden(true);
-    // ui->label->setHidden(true);
-    // ui->label_2->setHidden(true);
-    // ui->label_3->setHidden(true);
-    // ui->label_4->setHidden(true);
+    // ui->templateText->setHidden(true);
+    // ui->templateTitle->setHidden(true);
+    // ui->titleList->raise();
+    // ui->titleList->setHidden(true);
+    // ui->closeTitleListButton->raise();
+    // ui->closeTitleListButton->setHidden(true);
     loadTitles();
 
 }
@@ -63,13 +58,28 @@ void home::on_closeTitleListButton_clicked()
     // ui->label_4->setHidden(true);
 }
 
+// void home::loadTitles()
+// {
+//     ui->titleList->clear();
+//     QDir directory("content");
+//     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+//     foreach(QString filename, files) {
+//         ui->titleList->addItem(filename.chopped(4));
+//     }
+// }
+
 void home::loadTitles()
 {
     ui->titleList->clear();
     QDir directory("content");
     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach(QString filename, files) {
-        ui->titleList->addItem(filename.chopped(4));
+        QString title = filename.chopped(4);
+        QListWidgetItem *item = new QListWidgetItem(ui->titleList);
+        ItemWidget *itemWidget = new ItemWidget(title, this);
+        connect(itemWidget, &ItemWidget::listCopyButtonClicked, this, &home::on_copyButton_clicked);
+        item->setSizeHint(itemWidget->sizeHint());
+        ui->titleList->setItemWidget(item, itemWidget);
     }
 }
 
@@ -132,19 +142,38 @@ void home::on_deleteButton_clicked()
     ui->templateText->clear();
 }
 
+// void home::on_titleList_itemClicked(QListWidgetItem *item)
+// {
+//     QString title = item->text();
+//     QString content = loadContent(title);
+//     ui->templateTitle->setText(title);
+//     ui->templateText->setPlainText(content);
+// }
+
 void home::on_titleList_itemClicked(QListWidgetItem *item)
 {
-    QString title = item->text();
-    QString content = loadContent(title);
-    ui->templateTitle->setText(title);
-    ui->templateText->setPlainText(content);
+    QWidget *widget = ui->titleList->itemWidget(item);
+    ItemWidget *itemWidget = qobject_cast<ItemWidget*>(widget);
+    if (itemWidget) {
+        QString title = itemWidget->getTitle();
+        QString content = loadContent(title);
+        ui->templateTitle->setText(title);
+        ui->templateText->setPlainText(content);
+    }
 }
-
 
 void home::on_copyButton_clicked()
 {
     QClipboard *clipboard = QApplication::clipboard();
     QString content = ui->templateText->toPlainText();
+    clipboard->setText(content);
+    QMessageBox::information(this, "Copied", "Text copied to clipboard.");
+}
+
+void home::on_listCopyButton_clicked(const QString &title)
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    QString content = loadContent(title);
     clipboard->setText(content);
     QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
