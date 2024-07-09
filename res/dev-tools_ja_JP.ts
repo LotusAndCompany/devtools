@@ -259,7 +259,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>RGB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,13 +274,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>Hex:</source>
+        <location line="+31"/>
+        <source>Tolerance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>\#HHHHHH</source>
+        <location line="+54"/>
+        <source>Auto color picker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Only contiguous area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-87"/>
+        <source>Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Transparency:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

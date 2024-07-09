@@ -28,17 +28,27 @@ public:
     /**
      * @brief コンストラクタ
      * @param imageTransparent ロジック部分
-     * @param 親ウィジェット
+     * @param parent 親ウィジェット
      * @details UIを構築し、シグナルを接続する
      */
     explicit ImageTransparentGUI(ImageTransparentInterface *imageTransparent,
                                  QWidget *parent = nullptr);
     ~ImageTransparentGUI();
 
+protected slots:
+    void onColorModeTextChanged(const QString &);
+    void onColorChanged(const QColor &);
+    void onToleranceValueChanged(double);
+    void onTransparencyValueChanged(double);
+    void onAutoColorPickCheckStateChanged(Qt::CheckState);
+    void onContiguousAreaCheckStateChanged(Qt::CheckState);
+
 private:
     Ui::ImageTransparentGUI *const ui;
     /// ロジック部分
     ImageTransparentInterface *const imageTransparent;
+    /// 連続領域を透明化するフラグ
+    bool onlyContiguousArea = true;
 };
 
 #endif // IMAGE_TRANSPARENT_GUI_H

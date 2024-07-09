@@ -1,24 +1,23 @@
 #ifndef COLOR_SAMPLE_H
 #define COLOR_SAMPLE_H
 
-#include <QWidget>
+#include <QFrame>
 
 /**
  * @brief 色付きの四角を表示するだけのウィジェット
  * @details クリックすると `QColorDialog` が開き、色を変更できる
  * @todo 必要があれば `QColorDialog` の色のセットを保存/読み込みする機能を追加する
  */
-class ColorSample : public QWidget
+class ColorSample : public QFrame
 {
     Q_OBJECT
 
 public:
     /**
      * @brief コンストラクタ
-     * @param initialColor 初期化に使う色
      * @param parent 親ウィジェット
      */
-    explicit ColorSample(const QColor &initialColor, QWidget *parent = nullptr);
+    explicit ColorSample(QWidget *parent = nullptr);
     ~ColorSample() = default;
 
     /**
@@ -32,6 +31,10 @@ public:
      */
     const QColor &color() const { return _color; }
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+
 signals:
     /**
      * @brief 色が変更された時に発せられる
@@ -42,6 +45,15 @@ signals:
 private:
     /// 表示する色
     QColor _color;
+
+    /**
+     * @brief 線の幅を除いた領域を返す
+     * @return 線の幅を除いた領域
+     */
+    inline QRect contentRect() const
+    {
+        return frameRect().marginsRemoved(QMargins(1, 1, 1, 1) * (lineWidth() + midLineWidth()));
+    }
 };
 
 #endif // COLOR_SAMPLE_H
