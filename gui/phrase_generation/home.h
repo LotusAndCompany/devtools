@@ -32,6 +32,7 @@ private slots:
     void on_titleList_itemClicked(QListWidgetItem *item);
 
     void on_deleteButton_clicked();
+
 private:
     Ui::home *ui;
     void loadTitles();

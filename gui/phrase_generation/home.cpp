@@ -151,12 +151,8 @@ void home::on_deleteButton_clicked()
 
 void home::on_titleList_itemClicked(QListWidgetItem *item)
 {
-    QWidget *widget = ui->titleList->itemWidget(item);
-    ItemWidget *itemWidget = qobject_cast<ItemWidget*>(widget);
-    if (itemWidget) {
-        QString title = itemWidget->getTitle();
-        QString content = loadContent(title);
-        ui->templateTitle->setText(title);
-        ui->templateText->setPlainText(content);
-    }
+    QString title = item->text();
+    QString content = loadContent(title);
+    ui->templateTitle->setText(title);
+    ui->templateText->setPlainText(content);
 }
