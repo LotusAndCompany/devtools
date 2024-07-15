@@ -6,7 +6,6 @@
 #include <QDir>
 #include <QTextStream>
 #include <QMessageBox>
-#include <QClipboard>
 
 home::home(QWidget *parent)
     : QWidget(parent)
@@ -160,20 +159,4 @@ void home::on_titleList_itemClicked(QListWidgetItem *item)
         ui->templateTitle->setText(title);
         ui->templateText->setPlainText(content);
     }
-}
-
-void home::on_copyButton_clicked()
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    QString content = ui->templateText->toPlainText();
-    clipboard->setText(content);
-    QMessageBox::information(this, "Copied", "Text copied to clipboard.");
-}
-
-void home::on_listCopyButton_clicked(const QString &title)
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    QString content = loadContent(title);
-    clipboard->setText(content);
-    QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }

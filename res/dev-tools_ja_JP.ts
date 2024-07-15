@@ -201,12 +201,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
-    </message>
-    <message>
-        <location line="-70"/>
+        <location line="-57"/>
         <source>三</source>
         <translation type="unfinished"></translation>
     </message>
