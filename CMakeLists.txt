@@ -96,6 +96,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
         gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
+        gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
