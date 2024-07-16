@@ -54,6 +54,13 @@ private:
     {
         return frameRect().marginsRemoved(QMargins(1, 1, 1, 1) * (lineWidth() + midLineWidth()));
     }
+
+private slots:
+    /**
+     * @brief カラーピッカーで色が選択された時の処理
+     * @param newColor 選択された色
+     */
+    void onColorSelected(const QColor &newColor);
 };
 
 #endif // COLOR_SAMPLE_H

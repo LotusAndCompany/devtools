@@ -25,8 +25,14 @@ void ColorSample::mousePressEvent(QMouseEvent *event)
     QColorDialog dialog;
     dialog.setOption(QColorDialog::ShowAlphaChannel, false);
     dialog.setCurrentColor(color());
-    connect(&dialog, &QColorDialog::colorSelected, this, &ColorSample::setColor);
+    connect(&dialog, &QColorDialog::colorSelected, this, &ColorSample::onColorSelected);
     dialog.exec();
+}
+
+void ColorSample::onColorSelected(const QColor &newColor)
+{
+    setColor(newColor);
+    emit colorChanged(color());
 }
 
 void ColorSample::setColor(const QColor &newColor)
@@ -36,7 +42,6 @@ void ColorSample::setColor(const QColor &newColor)
         setColor(QColor(newColor.red(), newColor.green(), newColor.blue()));
     } else {
         _color = newColor;
-        emit colorChanged(_color);
         update();
     }
 }
