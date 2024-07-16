@@ -44,7 +44,7 @@ void ImageTransparent::addTransparentColor(const QColor &targetColor)
 
     // NOTE: RGBA8888に変換しているので1pixel=4bytesの想定
     validateImageFormat(current().format());
-    const int depth = current().depth();
+    const int bytesPerPixel = current().depth() / 8;
 
     // NOTE: 色の形式はRGB, HSV, HSLを想定
     color_comp_function_type const comparison = colorComparisonFunction(colorSpec);
@@ -55,7 +55,7 @@ void ImageTransparent::addTransparentColor(const QColor &targetColor)
         //       reinterpret_cast<QRgb*>を使っているが、これが使えるかどうかはフォーマット次第のはず
         uchar *const line = _current.scanLine(y);
         for (unsigned int x = 0; x < current().width(); x++) {
-            uchar *const pixel = line + depth * x;
+            uchar *const pixel = line + bytesPerPixel * x;
             const uchar r = pixel[0];
             const uchar g = pixel[1];
             const uchar b = pixel[2];
@@ -84,7 +84,7 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
 
     // NOTE: RGBA8888に変換しているので1pixel=4bytesの想定
     validateImageFormat(current().format());
-    const int depth = current().depth();
+    const int bytesPerPixel = current().depth() / 8;
 
     // NOTE: 色の形式はRGB, HSV, HSLを想定
     color_comp_function_type const comparison = colorComparisonFunction(colorSpec);
@@ -95,11 +95,25 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
     QList<int> labels(current().width() * current().height(), 0);
     QMap<int, int> lookup;
     uchar *const data = _current.bits();
-    int nextLabel = 1;
+    int nextLabel = 0;
+
+    const auto &pixelIndex = [=](int x, int y) {
+        if (x < 0 || current().width() <= x)
+            throw InvalidArgumentException<int>(x,
+                                                QString("x value must be in [0, %1)")
+                                                    .arg(current().width()));
+        else if (y < 0 || current().height() <= y)
+            throw InvalidArgumentException<int>(y,
+                                                QString("y value must be in [0, %1)")
+                                                    .arg(current().height()));
+
+        return current().width() * y + x;
+    };
+
     for (unsigned int y = 0; y < current().height(); y++) {
         for (unsigned int x = 0; x < current().width(); x++) {
-            const int pixelIndex = current().pixelIndex(x, y);
-            const int dataIndex = depth * pixelIndex;
+            const int currentPixelIndex = pixelIndex(x, y);
+            const int dataIndex = bytesPerPixel * currentPixelIndex;
 
             const uchar r = data[dataIndex];
             const uchar g = data[dataIndex + 1];
@@ -112,30 +126,31 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
                 };
                 // 四近傍法を使う
                 if (0 < y)
-                    refLabels[0] = labels[current().pixelIndex(x, y - 1)];
+                    refLabels[0] = labels[pixelIndex(x, y - 1)];
                 if (0 < x)
-                    refLabels[1] = labels[current().pixelIndex(x - 1, y)];
+                    refLabels[1] = labels[pixelIndex(x - 1, y)];
 
                 if (refLabels[0] == 0 && refLabels[1] == 0) {
                     nextLabel++;
-                    labels[pixelIndex] = nextLabel;
+                    labels[currentPixelIndex] = nextLabel;
                 } else {
                     if (0 < refLabels[0] && 0 < refLabels[1]) {
                         // 小さい方のラベルを設定し、大きい方のラベルをlookupに登録する。
                         // lookupTable[置き換え元] = 置き換え先
                         if (refLabels[0] < refLabels[1]) {
-                            labels[pixelIndex] = refLabels[0];
+                            labels[currentPixelIndex] = refLabels[0];
                             lookup[refLabels[1]] = refLabels[0];
                         } else if (refLabels[1] < refLabels[0]) {
-                            labels[pixelIndex] = refLabels[1];
+                            labels[currentPixelIndex] = refLabels[1];
                             lookup[refLabels[0]] = refLabels[1];
                         } else {
-                            labels[pixelIndex] = refLabels[0];
+                            // 0<refLabels[0]=refLabels[1]
+                            labels[currentPixelIndex] = refLabels[0];
                         }
                     } else if (0 < refLabels[0] && refLabels[1] == 0) {
-                        labels[pixelIndex] = refLabels[0];
+                        labels[currentPixelIndex] = refLabels[0];
                     } else if (refLabels[0] == 0 && 0 < refLabels[1]) {
-                        labels[pixelIndex] = refLabels[1];
+                        labels[currentPixelIndex] = refLabels[1];
                     }
                 }
             }
@@ -144,7 +159,7 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
 
     // lookupをlabelsに適用する。lookupは空になる想定。
     while (lookup.size()) {
-        const auto &it = std::prev(lookup.end());
+        const auto &it = std::prev(lookup.cend());
         const int from = it.key();
         const int to = it.value();
 
@@ -157,12 +172,12 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
     }
 
     // labelsに基づき透明化する
-    const int targetLabel = labels[current().pixelIndex(start)];
+    const int targetLabel = labels[pixelIndex(start.x(), start.y())];
     for (unsigned int y = 0; y < current().height(); y++) {
         for (unsigned int x = 0; x < current().width(); x++) {
-            const int pixelIndex = current().pixelIndex(x, y);
-            if (labels[pixelIndex] == targetLabel)
-                data[depth * pixelIndex + 3] = opacity;
+            const int currentPixelIndex = pixelIndex(x, y);
+            if (labels[currentPixelIndex] == targetLabel)
+                data[bytesPerPixel * currentPixelIndex + 3] = opacity;
         }
     }
 
