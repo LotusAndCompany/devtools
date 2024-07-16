@@ -67,7 +67,7 @@ const Tool::Translatable Tool::translatable(ID id)
     case ID::IMAGE_TRANSPARENT:
         return Translatable{
             tr("Image Transparent"),
-            tr("Make image transparent"),
+            tr("Make the selected color transparent"),
         };
     default:
         throw UnderDevelopmentException();

@@ -112,17 +112,17 @@
           </property>
           <item>
            <property name="text">
-            <string>RGB</string>
+            <string notr="true">RGB</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>HSL</string>
+            <string notr="true">HSL</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>HSV</string>
+            <string notr="true">HSV</string>
            </property>
           </item>
          </widget>

@@ -254,49 +254,30 @@
 <context>
     <name>ImageTransparentGUI</name>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+79"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+98"/>
         <source>Color mode:</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>しっくり来ない</translatorcomment>
+        <translation>色空間:</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>RGB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>HSL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>HSV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+31"/>
+        <location line="+58"/>
         <source>Tolerance:</source>
-        <translation type="unfinished"></translation>
+        <translation>許容誤差:</translation>
     </message>
     <message>
         <location line="+54"/>
-        <source>Auto color picker</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
         <source>Only contiguous area</source>
-        <translation type="unfinished"></translation>
+        <translation>連続領域のみ</translation>
     </message>
     <message>
-        <location line="-87"/>
+        <location line="-77"/>
         <source>Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>色:</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>Transparency:</source>
-        <translation type="unfinished"></translation>
+        <translation>透明度:</translation>
     </message>
 </context>
 <context>
@@ -499,12 +480,12 @@
     <message>
         <location line="+4"/>
         <source>Image Transparent</source>
-        <translation type="unfinished"></translation>
+        <translation>画像透明化</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Make image transparent</source>
-        <translation type="unfinished"></translation>
+        <source>Make the selected color transparent</source>
+        <translation>選択した色を透明化する</translation>
     </message>
 </context>
 </TS>
