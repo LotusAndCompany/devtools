@@ -28,21 +28,24 @@ ClickableLabel *ImageViewForImageTransparent::ui_image() const
 
 void ImageViewForImageTransparent::onLabelClicked(const QPoint &point)
 {
-    if (point.x() < 0 || point.y() < 0)
-        return;
-
     if (!ui_image()->pixmap().isNull()) {
-        const auto pixel = QPoint(point.x() / scale, point.y() / scale);
-        const QImage image = std::move(original.toImage());
+        const qreal xOffset = (ui_image()->width() - ui_image()->pixmap().width()) / 2.0;
+        const qreal yOffset = (ui_image()->height() - ui_image()->pixmap().height()) / 2.0;
 
-        if (pixel.x() < image.width() && pixel.y() < image.height())
+        const auto pixel = QPoint((point.x() - xOffset) / scale, (point.y() - yOffset) / scale);
+
+        if (0 <= pixel.x() && 0 <= pixel.y() && pixel.x() < original.width()
+            && pixel.y() < original.height()) {
+            const QImage image = std::move(original.toImage());
             emit pixelSelected(pixel, image.pixelColor(pixel));
+        }
     }
 }
 
 void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::MouseButton::LeftButton) {
+        // NOTE: ウィジェットの左上を原点とした座標で、見た目の左上とは一致しない
         emit clicked(event->pos());
     }
 }
