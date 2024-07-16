@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>480</width>
     <height>300</height>
    </rect>
   </property>
@@ -30,10 +30,29 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="BasicImageView" name="imageView" native="true"/>
+    <widget class="ImageViewForImageTransparent" name="imageView" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>240</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QFrame" name="uiArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>240</width>
@@ -186,16 +205,6 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="autoColorPick">
-        <property name="text">
-         <string>Auto color picker</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QCheckBox" name="contiguousArea">
         <property name="text">
          <string>Only contiguous area</string>
@@ -234,15 +243,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>BasicImageView</class>
+   <class>ColorSample</class>
    <extends>QWidget</extends>
-   <header>gui/image/basic/image_view.h</header>
+   <header>gui/image/transparent/color_sample.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ColorSample</class>
+   <class>ImageViewForImageTransparent</class>
    <extends>QWidget</extends>
-   <header location="global">gui/image/transparent/color_sample.h</header>
+   <header location="global">gui/image/transparent/image_view_for_image_transparent.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
