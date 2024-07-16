@@ -5,8 +5,6 @@
 
 /**
  * @brief 色付きの四角を表示するだけのウィジェット
- * @details クリックすると `QColorDialog` が開き、色を変更できる
- * @todo 必要があれば `QColorDialog` の色のセットを保存/読み込みする機能を追加する
  */
 class ColorSample : public QFrame
 {
@@ -33,14 +31,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-
-signals:
-    /**
-     * @brief 色が変更された時に発せられる
-     * @param color 変更後の色
-     */
-    void colorChanged(const QColor color);
 
 private:
     /// 表示する色
@@ -54,13 +44,6 @@ private:
     {
         return frameRect().marginsRemoved(QMargins(1, 1, 1, 1) * (lineWidth() + midLineWidth()));
     }
-
-private slots:
-    /**
-     * @brief カラーピッカーで色が選択された時の処理
-     * @param newColor 選択された色
-     */
-    void onColorSelected(const QColor &newColor);
 };
 
 #endif // COLOR_SAMPLE_H

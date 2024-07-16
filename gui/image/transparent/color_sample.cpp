@@ -1,6 +1,5 @@
 #include "color_sample.h"
 
-#include <QColorDialog>
 #include <QPainter>
 
 ColorSample::ColorSample(QWidget *parent)
@@ -18,21 +17,6 @@ void ColorSample::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setPen(color());
     painter.fillRect(contentRect(), color());
-}
-
-void ColorSample::mousePressEvent(QMouseEvent *event)
-{
-    QColorDialog dialog;
-    dialog.setOption(QColorDialog::ShowAlphaChannel, false);
-    dialog.setCurrentColor(color());
-    connect(&dialog, &QColorDialog::colorSelected, this, &ColorSample::onColorSelected);
-    dialog.exec();
-}
-
-void ColorSample::onColorSelected(const QColor &newColor)
-{
-    setColor(newColor);
-    emit colorChanged(color());
 }
 
 void ColorSample::setColor(const QColor &newColor)
