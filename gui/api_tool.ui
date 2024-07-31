@@ -11,112 +11,95 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string>API Tool</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>10</y>
-     <width>941</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QComboBox" name="comboBox">
-      <item>
-       <property name="text">
-        <string>GET</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>POST</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>PUT</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>DELETE</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTextEdit" name="textEdit">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>29</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Send</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>120</y>
-     <width>1011</width>
-     <height>391</height>
+     <x>30</x>
+     <y>20</y>
+     <width>951</width>
+     <height>551</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QFrame" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+     <widget class="QSplitter" name="mainSplitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>1011</width>
-         <height>191</height>
-        </rect>
-       </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
+      <widget class="QWidget" name="horizontalContainer">
+       <layout class="QHBoxLayout" name="MainContent">
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>GET</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>POST</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>PUT</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>DELETE</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="textEdit">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>29</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendButton">
+          <property name="text">
+           <string>Send</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="frame_2">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
+      <widget class="QWidget" name="tabWidgetContainer">
+       <layout class="QVBoxLayout" name="tabWidgetLayout">
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_1">
+           <attribute name="title">
+            <string>Parameters</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QTableView" name="tableView"/>
+            </item>
+           </layout>
+          </widget>
+          <layout class="QVBoxLayout" name="authLayout">
+           <item>
+            <widget class="QLineEdit" name="authLineEdit"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QListView" name="listView"/>
      </widget>
     </item>
    </layout>

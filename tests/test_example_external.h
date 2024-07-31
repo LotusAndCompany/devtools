@@ -1,0 +1,4 @@
+#ifndef TEST_EXAMPLE_EXTERNAL_H
+#define TEST_EXAMPLE_EXTERNAL_H
+void f();
+#endif // TEST_EXAMPLE_EXTERNAL_H

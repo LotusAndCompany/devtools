@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -66,9 +66,11 @@ include CMakeFiles/DevTools_lupdate.dir/compiler_depend.make
 # Include the progress variables for this target.
 include CMakeFiles/DevTools_lupdate.dir/progress.make
 
-CMakeFiles/DevTools_lupdate: /Users/jim/Qt/6.6.2/macos/bin/lupdate
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -DIN_FILE=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_project.cmake -DOUT_FILE=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_project.json -P /Users/jim/Qt/6.6.2/macos/lib/cmake/Qt6LinguistTools/GenerateLUpdateProject.cmake
-	/Users/jim/Qt/6.6.2/macos/bin/lupdate -project /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_project.json
+CMakeFiles/DevTools_lupdate: /opt/homebrew/bin/lupdate
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -DIN_FILE=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_lupdate_project.cmake -DOUT_FILE=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_lupdate_project.json -P /opt/homebrew/lib/cmake/Qt6LinguistTools/GenerateLUpdateProject.cmake
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E copy /Users/jim/Product/RD/devtools/res/dev-tools_en.ts /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/dev-tools_en.ts
+	/opt/homebrew/bin/lupdate -project /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/DevTools_lupdate_project.json
+	/opt/homebrew/bin/lconvert -pluralonly -i /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.lupdate/dev-tools_en.ts -o /Users/jim/Product/RD/devtools/res/dev-tools_en.ts
 
 DevTools_lupdate: CMakeFiles/DevTools_lupdate
 DevTools_lupdate: CMakeFiles/DevTools_lupdate.dir/build.make

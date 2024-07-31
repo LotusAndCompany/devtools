@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -70,25 +70,26 @@ include CMakeFiles/DevTools.dir/progress.make
 include CMakeFiles/DevTools.dir/flags.make
 
 .rcc/qrc_DevTools_translations.cpp: dev-tools_ja_JP.qm
+.rcc/qrc_DevTools_translations.cpp: dev-tools_en.qm
 .rcc/qrc_DevTools_translations.cpp: .rcc/DevTools_translations.qrc
-.rcc/qrc_DevTools_translations.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
+.rcc/qrc_DevTools_translations.cpp: /opt/homebrew/share/qt/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running rcc for resource DevTools_translations"
-	/Users/jim/Qt/6.6.2/macos/libexec/rcc --output /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp --name DevTools_translations /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/DevTools_translations.qrc --no-zstd
+	/opt/homebrew/share/qt/libexec/rcc --output /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp --name DevTools_translations /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/DevTools_translations.qrc
 
-DevTools_autogen/timestamp: /Users/jim/Qt/6.6.2/macos/./libexec/moc
-DevTools_autogen/timestamp: /Users/jim/Qt/6.6.2/macos/./libexec/uic
+DevTools_autogen/timestamp: /opt/homebrew/share/qt/libexec/moc
+DevTools_autogen/timestamp: /opt/homebrew/share/qt/libexec/uic
 DevTools_autogen/timestamp: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic MOC and UIC for target DevTools"
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E cmake_autogen /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutogenInfo.json Debug
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E touch /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/timestamp
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E cmake_autogen /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutogenInfo.json ""
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E touch /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/timestamp
 
 DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /Users/jim/Product/RD/devtools/res/application.qrc
 DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: CMakeFiles/DevTools_autogen.dir/AutoRcc_application_PNK5WDWK6L_Info.json
 DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /Users/jim/Product/RD/devtools/res/dev-tools_logo.svg
-DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
-DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /opt/homebrew/share/qt/libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_application.cpp: /opt/homebrew/share/qt/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Automatic RCC for res/application.qrc"
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_application_PNK5WDWK6L_Info.json Debug
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_application_PNK5WDWK6L_Info.json 
 
 DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Product/RD/devtools/res/light_icons.qrc
 DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: CMakeFiles/DevTools_autogen.dir/AutoRcc_light_icons_PNK5WDWK6L_Info.json
@@ -102,10 +103,10 @@ DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Product/RD/devtools/
 DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Product/RD/devtools/res/light/material/left_panel_close.svg
 DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Product/RD/devtools/res/light/material/home.svg
 DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Product/RD/devtools/res/light/material/left_panel_open.svg
-DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
-DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /opt/homebrew/share/qt/libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp: /opt/homebrew/share/qt/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Automatic RCC for res/light_icons.qrc"
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_light_icons_PNK5WDWK6L_Info.json Debug
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_light_icons_PNK5WDWK6L_Info.json 
 
 DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Product/RD/devtools/res/dark_icons.qrc
 DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: CMakeFiles/DevTools_autogen.dir/AutoRcc_dark_icons_PNK5WDWK6L_Info.json
@@ -119,10 +120,10 @@ DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Product/RD/devtools/r
 DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Product/RD/devtools/res/dark/material/left_panel_close.svg
 DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Product/RD/devtools/res/dark/material/home.svg
 DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Product/RD/devtools/res/dark/material/left_panel_open.svg
-DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
-DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /Users/jim/Qt/6.6.2/macos/./libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /opt/homebrew/share/qt/libexec/rcc
+DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp: /opt/homebrew/share/qt/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Automatic RCC for res/dark_icons.qrc"
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_dark_icons_PNK5WDWK6L_Info.json Debug
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E cmake_autorcc /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutoRcc_dark_icons_PNK5WDWK6L_Info.json 
 
 DevTools.app/Contents/Resources/dev-tools.icns: /Users/jim/Product/RD/devtools/res/dev-tools.icns
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Copying OS X content DevTools.app/Contents/Resources/dev-tools.icns"
@@ -132,239 +133,239 @@ CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o: CMakeFiles/DevT
 CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o: DevTools_autogen/mocs_compilation.cpp
 CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp
 
 CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.i
 
 CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/mocs_compilation.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/mocs_compilation.cpp.s
 
 CMakeFiles/DevTools.dir/app_info.autogen.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/app_info.autogen.cpp.o: app_info.autogen.cpp
 CMakeFiles/DevTools.dir/app_info.autogen.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/DevTools.dir/app_info.autogen.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/app_info.autogen.cpp.o -MF CMakeFiles/DevTools.dir/app_info.autogen.cpp.o.d -o CMakeFiles/DevTools.dir/app_info.autogen.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/app_info.autogen.cpp.o -MF CMakeFiles/DevTools.dir/app_info.autogen.cpp.o.d -o CMakeFiles/DevTools.dir/app_info.autogen.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp
 
 CMakeFiles/DevTools.dir/app_info.autogen.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/app_info.autogen.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp > CMakeFiles/DevTools.dir/app_info.autogen.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp > CMakeFiles/DevTools.dir/app_info.autogen.cpp.i
 
 CMakeFiles/DevTools.dir/app_info.autogen.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/app_info.autogen.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp -o CMakeFiles/DevTools.dir/app_info.autogen.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/app_info.autogen.cpp -o CMakeFiles/DevTools.dir/app_info.autogen.cpp.s
 
 CMakeFiles/DevTools.dir/main/main.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/main/main.cpp.o: /Users/jim/Product/RD/devtools/main/main.cpp
 CMakeFiles/DevTools.dir/main/main.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/DevTools.dir/main/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/main/main.cpp.o -MF CMakeFiles/DevTools.dir/main/main.cpp.o.d -o CMakeFiles/DevTools.dir/main/main.cpp.o -c /Users/jim/Product/RD/devtools/main/main.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/main/main.cpp.o -MF CMakeFiles/DevTools.dir/main/main.cpp.o.d -o CMakeFiles/DevTools.dir/main/main.cpp.o -c /Users/jim/Product/RD/devtools/main/main.cpp
 
 CMakeFiles/DevTools.dir/main/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/main/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/main/main.cpp > CMakeFiles/DevTools.dir/main/main.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/main/main.cpp > CMakeFiles/DevTools.dir/main/main.cpp.i
 
 CMakeFiles/DevTools.dir/main/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/main/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/main/main.cpp -o CMakeFiles/DevTools.dir/main/main.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/main/main.cpp -o CMakeFiles/DevTools.dir/main/main.cpp.s
 
 CMakeFiles/DevTools.dir/gui/main_window.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/main_window.cpp.o: /Users/jim/Product/RD/devtools/gui/main_window.cpp
 CMakeFiles/DevTools.dir/gui/main_window.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/DevTools.dir/gui/main_window.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/main_window.cpp.o -MF CMakeFiles/DevTools.dir/gui/main_window.cpp.o.d -o CMakeFiles/DevTools.dir/gui/main_window.cpp.o -c /Users/jim/Product/RD/devtools/gui/main_window.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/main_window.cpp.o -MF CMakeFiles/DevTools.dir/gui/main_window.cpp.o.d -o CMakeFiles/DevTools.dir/gui/main_window.cpp.o -c /Users/jim/Product/RD/devtools/gui/main_window.cpp
 
 CMakeFiles/DevTools.dir/gui/main_window.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/main_window.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/main_window.cpp > CMakeFiles/DevTools.dir/gui/main_window.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/main_window.cpp > CMakeFiles/DevTools.dir/gui/main_window.cpp.i
 
 CMakeFiles/DevTools.dir/gui/main_window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/main_window.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/main_window.cpp -o CMakeFiles/DevTools.dir/gui/main_window.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/main_window.cpp -o CMakeFiles/DevTools.dir/gui/main_window.cpp.s
 
 CMakeFiles/DevTools.dir/core/application_mixin.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/core/application_mixin.cpp.o: /Users/jim/Product/RD/devtools/core/application_mixin.cpp
 CMakeFiles/DevTools.dir/core/application_mixin.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/DevTools.dir/core/application_mixin.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/core/application_mixin.cpp.o -MF CMakeFiles/DevTools.dir/core/application_mixin.cpp.o.d -o CMakeFiles/DevTools.dir/core/application_mixin.cpp.o -c /Users/jim/Product/RD/devtools/core/application_mixin.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/core/application_mixin.cpp.o -MF CMakeFiles/DevTools.dir/core/application_mixin.cpp.o.d -o CMakeFiles/DevTools.dir/core/application_mixin.cpp.o -c /Users/jim/Product/RD/devtools/core/application_mixin.cpp
 
 CMakeFiles/DevTools.dir/core/application_mixin.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/core/application_mixin.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/core/application_mixin.cpp > CMakeFiles/DevTools.dir/core/application_mixin.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/core/application_mixin.cpp > CMakeFiles/DevTools.dir/core/application_mixin.cpp.i
 
 CMakeFiles/DevTools.dir/core/application_mixin.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/core/application_mixin.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/core/application_mixin.cpp -o CMakeFiles/DevTools.dir/core/application_mixin.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/core/application_mixin.cpp -o CMakeFiles/DevTools.dir/core/application_mixin.cpp.s
 
 CMakeFiles/DevTools.dir/gui/gui_application.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/gui_application.cpp.o: /Users/jim/Product/RD/devtools/gui/gui_application.cpp
 CMakeFiles/DevTools.dir/gui/gui_application.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/DevTools.dir/gui/gui_application.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/gui_application.cpp.o -MF CMakeFiles/DevTools.dir/gui/gui_application.cpp.o.d -o CMakeFiles/DevTools.dir/gui/gui_application.cpp.o -c /Users/jim/Product/RD/devtools/gui/gui_application.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/gui_application.cpp.o -MF CMakeFiles/DevTools.dir/gui/gui_application.cpp.o.d -o CMakeFiles/DevTools.dir/gui/gui_application.cpp.o -c /Users/jim/Product/RD/devtools/gui/gui_application.cpp
 
 CMakeFiles/DevTools.dir/gui/gui_application.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/gui_application.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/gui_application.cpp > CMakeFiles/DevTools.dir/gui/gui_application.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/gui_application.cpp > CMakeFiles/DevTools.dir/gui/gui_application.cpp.i
 
 CMakeFiles/DevTools.dir/gui/gui_application.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/gui_application.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/gui_application.cpp -o CMakeFiles/DevTools.dir/gui/gui_application.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/gui_application.cpp -o CMakeFiles/DevTools.dir/gui/gui_application.cpp.s
 
 CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o: /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp
 CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o -MF CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o.d -o CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o -c /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o -MF CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o.d -o CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.o -c /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp
 
 CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp > CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp > CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.i
 
 CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp -o CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/menubar/about_devtools_dialog.cpp -o CMakeFiles/DevTools.dir/gui/menubar/about_devtools_dialog.cpp.s
 
 CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o: /Users/jim/Product/RD/devtools/gui/sidemenu.cpp
 CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o -MF CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o.d -o CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o -c /Users/jim/Product/RD/devtools/gui/sidemenu.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o -MF CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o.d -o CMakeFiles/DevTools.dir/gui/sidemenu.cpp.o -c /Users/jim/Product/RD/devtools/gui/sidemenu.cpp
 
 CMakeFiles/DevTools.dir/gui/sidemenu.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/sidemenu.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/sidemenu.cpp > CMakeFiles/DevTools.dir/gui/sidemenu.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/sidemenu.cpp > CMakeFiles/DevTools.dir/gui/sidemenu.cpp.i
 
 CMakeFiles/DevTools.dir/gui/sidemenu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/sidemenu.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/sidemenu.cpp -o CMakeFiles/DevTools.dir/gui/sidemenu.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/sidemenu.cpp -o CMakeFiles/DevTools.dir/gui/sidemenu.cpp.s
 
 CMakeFiles/DevTools.dir/gui/contents_area.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/contents_area.cpp.o: /Users/jim/Product/RD/devtools/gui/contents_area.cpp
 CMakeFiles/DevTools.dir/gui/contents_area.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/DevTools.dir/gui/contents_area.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/contents_area.cpp.o -MF CMakeFiles/DevTools.dir/gui/contents_area.cpp.o.d -o CMakeFiles/DevTools.dir/gui/contents_area.cpp.o -c /Users/jim/Product/RD/devtools/gui/contents_area.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/contents_area.cpp.o -MF CMakeFiles/DevTools.dir/gui/contents_area.cpp.o.d -o CMakeFiles/DevTools.dir/gui/contents_area.cpp.o -c /Users/jim/Product/RD/devtools/gui/contents_area.cpp
 
 CMakeFiles/DevTools.dir/gui/contents_area.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/contents_area.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/contents_area.cpp > CMakeFiles/DevTools.dir/gui/contents_area.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/contents_area.cpp > CMakeFiles/DevTools.dir/gui/contents_area.cpp.i
 
 CMakeFiles/DevTools.dir/gui/contents_area.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/contents_area.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/contents_area.cpp -o CMakeFiles/DevTools.dir/gui/contents_area.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/contents_area.cpp -o CMakeFiles/DevTools.dir/gui/contents_area.cpp.s
 
 CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o: /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp
 CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o -MF CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o.d -o CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o -c /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o -MF CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o.d -o CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.o -c /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp
 
 CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp > CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp > CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.i
 
 CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp -o CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/sidemenu_item.cpp -o CMakeFiles/DevTools.dir/gui/sidemenu_item.cpp.s
 
 CMakeFiles/DevTools.dir/core/tool/tool.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/core/tool/tool.cpp.o: /Users/jim/Product/RD/devtools/core/tool/tool.cpp
 CMakeFiles/DevTools.dir/core/tool/tool.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/DevTools.dir/core/tool/tool.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/core/tool/tool.cpp.o -MF CMakeFiles/DevTools.dir/core/tool/tool.cpp.o.d -o CMakeFiles/DevTools.dir/core/tool/tool.cpp.o -c /Users/jim/Product/RD/devtools/core/tool/tool.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/core/tool/tool.cpp.o -MF CMakeFiles/DevTools.dir/core/tool/tool.cpp.o.d -o CMakeFiles/DevTools.dir/core/tool/tool.cpp.o -c /Users/jim/Product/RD/devtools/core/tool/tool.cpp
 
 CMakeFiles/DevTools.dir/core/tool/tool.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/core/tool/tool.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/core/tool/tool.cpp > CMakeFiles/DevTools.dir/core/tool/tool.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/core/tool/tool.cpp > CMakeFiles/DevTools.dir/core/tool/tool.cpp.i
 
 CMakeFiles/DevTools.dir/core/tool/tool.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/core/tool/tool.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/core/tool/tool.cpp -o CMakeFiles/DevTools.dir/core/tool/tool.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/core/tool/tool.cpp -o CMakeFiles/DevTools.dir/core/tool/tool.cpp.s
 
 CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o: /Users/jim/Product/RD/devtools/gui/gui_tool.cpp
 CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o -MF CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o.d -o CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o -c /Users/jim/Product/RD/devtools/gui/gui_tool.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o -MF CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o.d -o CMakeFiles/DevTools.dir/gui/gui_tool.cpp.o -c /Users/jim/Product/RD/devtools/gui/gui_tool.cpp
 
 CMakeFiles/DevTools.dir/gui/gui_tool.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/gui_tool.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/gui_tool.cpp > CMakeFiles/DevTools.dir/gui/gui_tool.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/gui_tool.cpp > CMakeFiles/DevTools.dir/gui/gui_tool.cpp.i
 
 CMakeFiles/DevTools.dir/gui/gui_tool.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/gui_tool.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/gui_tool.cpp -o CMakeFiles/DevTools.dir/gui/gui_tool.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/gui_tool.cpp -o CMakeFiles/DevTools.dir/gui/gui_tool.cpp.s
 
 CMakeFiles/DevTools.dir/gui/api_tool.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/gui/api_tool.cpp.o: /Users/jim/Product/RD/devtools/gui/api_tool.cpp
 CMakeFiles/DevTools.dir/gui/api_tool.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/DevTools.dir/gui/api_tool.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/api_tool.cpp.o -MF CMakeFiles/DevTools.dir/gui/api_tool.cpp.o.d -o CMakeFiles/DevTools.dir/gui/api_tool.cpp.o -c /Users/jim/Product/RD/devtools/gui/api_tool.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/gui/api_tool.cpp.o -MF CMakeFiles/DevTools.dir/gui/api_tool.cpp.o.d -o CMakeFiles/DevTools.dir/gui/api_tool.cpp.o -c /Users/jim/Product/RD/devtools/gui/api_tool.cpp
 
 CMakeFiles/DevTools.dir/gui/api_tool.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/gui/api_tool.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/api_tool.cpp > CMakeFiles/DevTools.dir/gui/api_tool.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/gui/api_tool.cpp > CMakeFiles/DevTools.dir/gui/api_tool.cpp.i
 
 CMakeFiles/DevTools.dir/gui/api_tool.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/gui/api_tool.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/api_tool.cpp -o CMakeFiles/DevTools.dir/gui/api_tool.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/gui/api_tool.cpp -o CMakeFiles/DevTools.dir/gui/api_tool.cpp.s
 
 CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o: .rcc/qrc_DevTools_translations.cpp
 CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o -MF CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o.d -o CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o -MF CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o.d -o CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp
 
 CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp > CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp > CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.i
 
 CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp -o CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp -o CMakeFiles/DevTools.dir/build/Qt_6_6_2_for_macOS-Debug/.rcc/qrc_DevTools_translations.cpp.s
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o: DevTools_autogen/PNK5WDWK6L/qrc_application.cpp
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.i
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_application.cpp.s
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o: DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.i
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.s
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o: CMakeFiles/DevTools.dir/flags.make
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o: DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o: CMakeFiles/DevTools.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o -MF CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o.d -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o -c /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp > CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.i
 
 CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp -o CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.s
 
 # Object files for target DevTools
 DevTools_OBJECTS = \
@@ -407,9 +408,10 @@ DevTools.app/Contents/MacOS/DevTools: CMakeFiles/DevTools.dir/DevTools_autogen/P
 DevTools.app/Contents/MacOS/DevTools: CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_light_icons.cpp.o
 DevTools.app/Contents/MacOS/DevTools: CMakeFiles/DevTools.dir/DevTools_autogen/PNK5WDWK6L/qrc_dark_icons.cpp.o
 DevTools.app/Contents/MacOS/DevTools: CMakeFiles/DevTools.dir/build.make
-DevTools.app/Contents/MacOS/DevTools: /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Versions/A/QtWidgets
-DevTools.app/Contents/MacOS/DevTools: /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Versions/A/QtGui
-DevTools.app/Contents/MacOS/DevTools: /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Versions/A/QtCore
+DevTools.app/Contents/MacOS/DevTools: /opt/homebrew/lib/QtWidgets.framework/Versions/A/QtWidgets
+DevTools.app/Contents/MacOS/DevTools: /opt/homebrew/lib/QtNetwork.framework/Versions/A/QtNetwork
+DevTools.app/Contents/MacOS/DevTools: /opt/homebrew/lib/QtGui.framework/Versions/A/QtGui
+DevTools.app/Contents/MacOS/DevTools: /opt/homebrew/lib/QtCore.framework/Versions/A/QtCore
 DevTools.app/Contents/MacOS/DevTools: CMakeFiles/DevTools.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Linking CXX executable DevTools.app/Contents/MacOS/DevTools"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DevTools.dir/link.txt --verbose=$(VERBOSE)

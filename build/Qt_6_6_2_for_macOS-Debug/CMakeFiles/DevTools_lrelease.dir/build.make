@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,13 +67,22 @@ include CMakeFiles/DevTools_lrelease.dir/compiler_depend.make
 include CMakeFiles/DevTools_lrelease.dir/progress.make
 
 CMakeFiles/DevTools_lrelease: dev-tools_ja_JP.qm
+CMakeFiles/DevTools_lrelease: dev-tools_en.qm
 
-dev-tools_ja_JP.qm: /Users/jim/Qt/6.6.2/macos/bin/lrelease
+dev-tools_en.qm: /opt/homebrew/bin/lrelease
+dev-tools_en.qm: /Users/jim/Product/RD/devtools/res/dev-tools_en.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating dev-tools_en.qm"
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E make_directory /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug
+	/opt/homebrew/bin/lrelease /Users/jim/Product/RD/devtools/res/dev-tools_en.ts -qm /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/dev-tools_en.qm
+
+dev-tools_ja_JP.qm: /opt/homebrew/bin/lrelease
 dev-tools_ja_JP.qm: /Users/jim/Product/RD/devtools/res/dev-tools_ja_JP.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating dev-tools_ja_JP.qm"
-	/Users/jim/Qt/6.6.2/macos/bin/lrelease /Users/jim/Product/RD/devtools/res/dev-tools_ja_JP.ts -qm /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/dev-tools_ja_JP.qm
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating dev-tools_ja_JP.qm"
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E make_directory /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug
+	/opt/homebrew/bin/lrelease /Users/jim/Product/RD/devtools/res/dev-tools_ja_JP.ts -qm /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/dev-tools_ja_JP.qm
 
 DevTools_lrelease: CMakeFiles/DevTools_lrelease
+DevTools_lrelease: dev-tools_en.qm
 DevTools_lrelease: dev-tools_ja_JP.qm
 DevTools_lrelease: CMakeFiles/DevTools_lrelease.dir/build.make
 .PHONY : DevTools_lrelease

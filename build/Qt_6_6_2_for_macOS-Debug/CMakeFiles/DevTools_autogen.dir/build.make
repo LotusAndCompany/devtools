@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -68,12 +68,12 @@ include CMakeFiles/DevTools_autogen.dir/progress.make
 
 CMakeFiles/DevTools_autogen: DevTools_autogen/timestamp
 
-DevTools_autogen/timestamp: /Users/jim/Qt/6.6.2/macos/./libexec/moc
-DevTools_autogen/timestamp: /Users/jim/Qt/6.6.2/macos/./libexec/uic
+DevTools_autogen/timestamp: /opt/homebrew/share/qt/libexec/moc
+DevTools_autogen/timestamp: /opt/homebrew/share/qt/libexec/uic
 DevTools_autogen/timestamp: CMakeFiles/DevTools_autogen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target DevTools"
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E cmake_autogen /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutogenInfo.json Debug
-	/opt/homebrew/Cellar/cmake/3.29.0/bin/cmake -E touch /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/timestamp
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E cmake_autogen /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_autogen.dir/AutogenInfo.json ""
+	/opt/homebrew/Cellar/cmake/3.29.3/bin/cmake -E touch /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/DevTools_autogen/timestamp
 
 DevTools_autogen: CMakeFiles/DevTools_autogen
 DevTools_autogen: DevTools_autogen/timestamp

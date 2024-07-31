@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/DevTools_lrelease"
+  "dev-tools_en.qm"
   "dev-tools_ja_JP.qm"
 )
 

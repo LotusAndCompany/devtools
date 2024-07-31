@@ -1,9 +1,10 @@
-/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/generate_app_info.dir
+/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_app_info.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_lupdate.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/update_translations.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_lrelease.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/release_translations.dir
+/Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/DevTools_other_files.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/edit_cache.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
 /Users/jim/Product/RD/devtools/build/Qt_6_6_2_for_macOS-Debug/CMakeFiles/list_install_components.dir

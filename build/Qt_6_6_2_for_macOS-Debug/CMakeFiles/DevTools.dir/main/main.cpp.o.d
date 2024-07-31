@@ -1,11 +1,11 @@
 CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Users/jim/Product/RD/devtools/main/main.cpp \
   /Users/jim/Product/RD/devtools/gui/gui_application.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QApplication \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qapplication.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qtguiglobal.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qglobal.h \
+  /opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+  /opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+  /opt/homebrew/include/QtWidgets/qtwidgetsglobal.h \
+  /opt/homebrew/include/QtGui/qtguiglobal.h \
+  /opt/homebrew/include/QtCore/qglobal.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/type_traits \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__assert \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__config \
@@ -274,27 +274,27 @@ CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/assert.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/stdbool.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.3/include/stdbool.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtversionchecks.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtconfiginclude.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qconfig.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtcore-config.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtconfigmacros.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtcoreexports.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcompilerdetection.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qsystemdetection.h \
+  /opt/homebrew/include/QtCore/qtversionchecks.h \
+  /opt/homebrew/include/QtCore/qtconfiginclude.h \
+  /opt/homebrew/include/QtCore/qconfig.h \
+  /opt/homebrew/include/QtCore/qtcore-config.h \
+  /opt/homebrew/include/QtCore/qtconfigmacros.h \
+  /opt/homebrew/include/QtCore/qtcoreexports.h \
+  /opt/homebrew/include/QtCore/qcompilerdetection.h \
+  /opt/homebrew/include/QtCore/qsystemdetection.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/TargetConditionals.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/AvailabilityMacros.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qprocessordetection.h \
+  /opt/homebrew/include/QtCore/qprocessordetection.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/atomic \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtdeprecationmarkers.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtpreprocessorsupport.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qassert.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtnoop.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtypes.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtversion.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtclasshelpermacros.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtypeinfo.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcontainerfwd.h \
+  /opt/homebrew/include/QtCore/qtdeprecationmarkers.h \
+  /opt/homebrew/include/QtCore/qtpreprocessorsupport.h \
+  /opt/homebrew/include/QtCore/qassert.h \
+  /opt/homebrew/include/QtCore/qtnoop.h \
+  /opt/homebrew/include/QtCore/qtypes.h \
+  /opt/homebrew/include/QtCore/qtversion.h \
+  /opt/homebrew/include/QtCore/qtclasshelpermacros.h \
+  /opt/homebrew/include/QtCore/qtypeinfo.h \
+  /opt/homebrew/include/QtCore/qcontainerfwd.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/variant \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/hash.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/unary_function.h \
@@ -472,37 +472,38 @@ CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__memory/unique_ptr.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__memory/temporary_buffer.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/cassert \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qsysinfo.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qlogging.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qflags.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcompare_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qatomic.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbasicatomic.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qatomic_cxx11.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qgenericatomic.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qconstructormacros.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdarwinhelpers.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qexceptionhandling.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qforeach.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qttypetraits.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qfunctionpointer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qglobalstatic.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmalloc.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qminmax.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qnumeric.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qoverload.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qswap.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtenvironmentvariables.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtresource.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qttranslation.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qversiontagging.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qtgui-config.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qtguiexports.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtwidgets-config.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtwidgetsexports.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcoreapplication.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstring.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qchar.h \
+  /opt/homebrew/include/QtCore/qsysinfo.h \
+  /opt/homebrew/include/QtCore/qlogging.h \
+  /opt/homebrew/include/QtCore/qflags.h \
+  /opt/homebrew/include/QtCore/qcompare_impl.h \
+  /opt/homebrew/include/QtCore/qatomic.h \
+  /opt/homebrew/include/QtCore/qbasicatomic.h \
+  /opt/homebrew/include/QtCore/qatomic_cxx11.h \
+  /opt/homebrew/include/QtCore/qgenericatomic.h \
+  /opt/homebrew/include/QtCore/qyieldcpu.h \
+  /opt/homebrew/include/QtCore/qconstructormacros.h \
+  /opt/homebrew/include/QtCore/qdarwinhelpers.h \
+  /opt/homebrew/include/QtCore/qexceptionhandling.h \
+  /opt/homebrew/include/QtCore/qforeach.h \
+  /opt/homebrew/include/QtCore/qttypetraits.h \
+  /opt/homebrew/include/QtCore/qfunctionpointer.h \
+  /opt/homebrew/include/QtCore/qglobalstatic.h \
+  /opt/homebrew/include/QtCore/qmalloc.h \
+  /opt/homebrew/include/QtCore/qminmax.h \
+  /opt/homebrew/include/QtCore/qnumeric.h \
+  /opt/homebrew/include/QtCore/qoverload.h \
+  /opt/homebrew/include/QtCore/qswap.h \
+  /opt/homebrew/include/QtCore/qtenvironmentvariables.h \
+  /opt/homebrew/include/QtCore/qtresource.h \
+  /opt/homebrew/include/QtCore/qttranslation.h \
+  /opt/homebrew/include/QtCore/qversiontagging.h \
+  /opt/homebrew/include/QtGui/qtgui-config.h \
+  /opt/homebrew/include/QtGui/qtguiexports.h \
+  /opt/homebrew/include/QtWidgets/qtwidgets-config.h \
+  /opt/homebrew/include/QtWidgets/qtwidgetsexports.h \
+  /opt/homebrew/include/QtCore/qcoreapplication.h \
+  /opt/homebrew/include/QtCore/qstring.h \
+  /opt/homebrew/include/QtCore/qchar.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/functional \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__algorithm/search.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__algorithm/comp.h \
@@ -722,22 +723,22 @@ CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/pointer_to_binary_function.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/pointer_to_unary_function.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/unary_negate.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringview.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbytearray.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qrefcount.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qnamespace.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtmetamacros.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qarraydata.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qpair.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qarraydatapointer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qarraydataops.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcontainertools_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qxptype_traits.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/q20functional.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/q20memory.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbytearrayalgorithms.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbytearrayview.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringfwd.h \
+  /opt/homebrew/include/QtCore/qstringview.h \
+  /opt/homebrew/include/QtCore/qbytearray.h \
+  /opt/homebrew/include/QtCore/qrefcount.h \
+  /opt/homebrew/include/QtCore/qnamespace.h \
+  /opt/homebrew/include/QtCore/qtmetamacros.h \
+  /opt/homebrew/include/QtCore/qarraydata.h \
+  /opt/homebrew/include/QtCore/qpair.h \
+  /opt/homebrew/include/QtCore/qarraydatapointer.h \
+  /opt/homebrew/include/QtCore/qarraydataops.h \
+  /opt/homebrew/include/QtCore/qcontainertools_impl.h \
+  /opt/homebrew/include/QtCore/qxptype_traits.h \
+  /opt/homebrew/include/QtCore/q20functional.h \
+  /opt/homebrew/include/QtCore/q20memory.h \
+  /opt/homebrew/include/QtCore/qbytearrayalgorithms.h \
+  /opt/homebrew/include/QtCore/qbytearrayview.h \
+  /opt/homebrew/include/QtCore/qstringfwd.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/string \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__ios/fpos.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__string/char_traits.h \
@@ -751,22 +752,30 @@ CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__string/extern_template_lists.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/string_view \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__fwd/string_view.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/q20type_traits.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringliteral.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringalgorithms.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qlatin1stringview.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qanystringview.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qutf8stringview.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringtokenizer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringbuilder.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcoreevent.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qobjectdefs.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qobjectdefs_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qfunctionaltools_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qeventloop.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qobject.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qlist.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qhashfunctions.h \
+  /opt/homebrew/include/QtCore/q20type_traits.h \
+  /opt/homebrew/include/QtCore/qstringliteral.h \
+  /opt/homebrew/include/QtCore/qstringalgorithms.h \
+  /opt/homebrew/include/QtCore/qlatin1stringview.h \
+  /opt/homebrew/include/QtCore/qanystringview.h \
+  /opt/homebrew/include/QtCore/qutf8stringview.h \
+  /opt/homebrew/include/QtCore/qstringtokenizer.h \
+  /opt/homebrew/include/QtCore/qstringbuilder.h \
+  /opt/homebrew/include/QtCore/qstringconverter.h \
+  /opt/homebrew/include/QtCore/qstringconverter_base.h \
+  /opt/homebrew/include/QtCore/qcoreevent.h \
+  /opt/homebrew/include/QtCore/qobjectdefs.h \
+  /opt/homebrew/include/QtCore/qobjectdefs_impl.h \
+  /opt/homebrew/include/QtCore/qfunctionaltools_impl.h \
+  /opt/homebrew/include/QtCore/qdeadlinetimer.h \
+  /opt/homebrew/include/QtCore/qelapsedtimer.h \
+  /opt/homebrew/include/QtCore/qmetatype.h \
+  /opt/homebrew/include/QtCore/qcompare.h \
+  /opt/homebrew/include/QtCore/qcomparehelpers.h \
+  /opt/homebrew/include/QtCore/qdatastream.h \
+  /opt/homebrew/include/QtCore/qscopedpointer.h \
+  /opt/homebrew/include/QtCore/qiodevicebase.h \
+  /opt/homebrew/include/QtCore/qfloat16.h \
+  /opt/homebrew/include/QtCore/qhashfunctions.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/numeric \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/accumulate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/adjacent_difference.h \
@@ -781,137 +790,81 @@ CMakeFiles/DevTools.dir/main/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/transform_exclusive_scan.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/transform_inclusive_scan.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/transform_reduce.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qiterator.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbytearraylist.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringlist.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qalgorithms.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringmatcher.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qscopedpointer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmetatype.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcompare.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdatastream.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qiodevicebase.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qfloat16.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmath.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qiterable.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmetacontainer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcontainerinfo.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtaggedpointer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qscopeguard.h \
+  /opt/homebrew/include/QtCore/qmath.h \
+  /opt/homebrew/include/QtCore/qalgorithms.h \
+  /opt/homebrew/include/QtCore/qiterable.h \
+  /opt/homebrew/include/QtCore/qmetacontainer.h \
+  /opt/homebrew/include/QtCore/qcontainerinfo.h \
+  /opt/homebrew/include/QtCore/qtaggedpointer.h \
+  /opt/homebrew/include/QtCore/qscopeguard.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/list \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__tree \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qobject_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qbindingstorage.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qnativeinterface.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtextstream.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstringconverter_base.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcontiguouscache.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qsharedpointer.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qshareddata.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qsharedpointer_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmap.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qshareddata_impl.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qset.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qhash.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvarlengtharray.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qcoreapplication_platform.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qwindowdefs.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qpoint.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/q23utility.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qsize.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qmargins.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qcursor.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qbitmap.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpixmap.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpaintdevice.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qrect.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qcolor.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qrgb.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qrgba64.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qimage.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpixelformat.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qtransform.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpolygon.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qregion.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qline.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qguiapplication.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qinputmethod.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qlocale.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvariant.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/QtSystemDetection \
+  /opt/homebrew/include/QtCore/qeventloop.h \
+  /opt/homebrew/include/QtCore/qobject.h \
+  /opt/homebrew/include/QtCore/qlist.h \
+  /opt/homebrew/include/QtCore/qiterator.h \
+  /opt/homebrew/include/QtCore/qbytearraylist.h \
+  /opt/homebrew/include/QtCore/qstringlist.h \
+  /opt/homebrew/include/QtCore/qstringmatcher.h \
+  /opt/homebrew/include/QtCore/qobject_impl.h \
+  /opt/homebrew/include/QtCore/qbindingstorage.h \
+  /opt/homebrew/include/QtCore/qnativeinterface.h \
+  /opt/homebrew/include/QtCore/qdebug.h \
+  /opt/homebrew/include/QtCore/qtextstream.h \
+  /opt/homebrew/include/QtCore/qcontiguouscache.h \
+  /opt/homebrew/include/QtCore/qsharedpointer.h \
+  /opt/homebrew/include/QtCore/qshareddata.h \
+  /opt/homebrew/include/QtCore/qsharedpointer_impl.h \
+  /opt/homebrew/include/QtCore/qmap.h \
+  /opt/homebrew/include/QtCore/qshareddata_impl.h \
+  /opt/homebrew/include/QtCore/qset.h \
+  /opt/homebrew/include/QtCore/qhash.h \
+  /opt/homebrew/include/QtCore/qvarlengtharray.h \
+  /opt/homebrew/include/QtCore/qcoreapplication_platform.h \
+  /opt/homebrew/include/QtGui/qwindowdefs.h \
+  /opt/homebrew/include/QtCore/qpoint.h \
+  /opt/homebrew/include/QtCore/q23utility.h \
+  /opt/homebrew/include/QtCore/qsize.h \
+  /opt/homebrew/include/QtCore/qmargins.h \
+  /opt/homebrew/include/QtGui/qcursor.h \
+  /opt/homebrew/include/QtGui/qbitmap.h \
+  /opt/homebrew/include/QtGui/qpixmap.h \
+  /opt/homebrew/include/QtGui/qpaintdevice.h \
+  /opt/homebrew/include/QtCore/qrect.h \
+  /opt/homebrew/include/QtGui/qcolor.h \
+  /opt/homebrew/include/QtGui/qrgb.h \
+  /opt/homebrew/include/QtGui/qrgba64.h \
+  /opt/homebrew/include/QtGui/qimage.h \
+  /opt/homebrew/include/QtGui/qpixelformat.h \
+  /opt/homebrew/include/QtGui/qtransform.h \
+  /opt/homebrew/include/QtGui/qpolygon.h \
+  /opt/homebrew/include/QtGui/qregion.h \
+  /opt/homebrew/include/QtCore/qline.h \
+  /opt/homebrew/include/QtGui/qguiapplication.h \
+  /opt/homebrew/include/QtGui/qinputmethod.h \
+  /opt/homebrew/include/QtCore/qlocale.h \
+  /opt/homebrew/include/QtCore/qvariant.h \
+  /opt/homebrew/include/QtGui/qguiapplication_platform.h \
+  /opt/homebrew/lib/QtCore.framework/Headers/QtSystemDetection \
+  /opt/homebrew/lib/QtCore.framework/Headers/qsystemdetection.h \
   /Users/jim/Product/RD/devtools/core/application_mixin.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/QCoreApplication \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/QTranslator \
-  /Users/jim/Qt/6.6.2/macos/lib/QtCore.framework/Headers/qtranslator.h \
+  /opt/homebrew/lib/QtCore.framework/Headers/QCoreApplication \
+  /opt/homebrew/lib/QtCore.framework/Headers/qcoreapplication.h \
+  /opt/homebrew/lib/QtCore.framework/Headers/QTranslator \
+  /opt/homebrew/lib/QtCore.framework/Headers/qtranslator.h \
   /Users/jim/Product/RD/devtools/gui/main_window.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qaction.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qkeysequence.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qicon.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpalette.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qbrush.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qfont.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qfontmetrics.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtGui.framework/Headers/qfontinfo.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qsizepolicy.h \
-  /Users/jim/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtabwidget.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/iostream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/ios \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__locale \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/locale.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/locale.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/_locale.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/mutex \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__mutex_base \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/system_error \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__errc \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/cerrno \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/_xlocale.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_ctype.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/__wctype.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_stdio.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_stdlib.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_string.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_time.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_wchar.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/xlocale/_wctype.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/istream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/ostream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/bitset \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/locale \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/cstdarg \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/streambuf \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/nl_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_u_char.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_u_short.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_u_int.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_caddr_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_blkcnt_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_blksize_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_gid_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_in_addr_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_in_port_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_ino_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_ino64_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_key_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_nlink_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_useconds_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_suseconds_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_def.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_setsize.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_set.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_clr.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_zero.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_isset.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fd_copy.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fsblkcnt_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/_types/_nl_item.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h
+  /opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+  /opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+  /opt/homebrew/include/QtWidgets/qwidget.h \
+  /opt/homebrew/include/QtGui/qaction.h \
+  /opt/homebrew/include/QtGui/qkeysequence.h \
+  /opt/homebrew/include/QtGui/qicon.h \
+  /opt/homebrew/include/QtGui/qpalette.h \
+  /opt/homebrew/include/QtGui/qbrush.h \
+  /opt/homebrew/include/QtGui/qfont.h \
+  /opt/homebrew/include/QtCore/qendian.h \
+  /opt/homebrew/include/QtGui/qfontmetrics.h \
+  /opt/homebrew/include/QtGui/qfontinfo.h \
+  /opt/homebrew/include/QtWidgets/qsizepolicy.h \
+  /opt/homebrew/include/QtWidgets/qtabwidget.h
