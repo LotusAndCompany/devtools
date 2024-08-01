@@ -195,32 +195,44 @@ double ImageTransparent::colorDiffSquaredRgb(const QColor &a, const QColor &b)
     return diffR * diffR + diffG * diffG + diffB * diffB;
 }
 
+constexpr const double M_TAU = 2.0 * M_PI;
+
 double ImageTransparent::colorDiffSquaredHsv(const QColor &a, const QColor &b)
 {
-    const QVector3D va = QVector3D(a.hsvSaturationF() * cos(M_PI * a.hsvHueF()),
-                                   a.hsvSaturationF() * sin(M_PI * a.hsvHueF()),
-                                   a.valueF());
-    const QVector3D vb = QVector3D(b.hsvSaturationF() * cos(M_PI * b.hsvHueF()),
-                                   b.hsvSaturationF() * sin(M_PI * b.hsvHueF()),
-                                   b.valueF());
-
-    qDebug() << "a:" << a.convertTo(QColor::Hsv) << ", b:" << b.convertTo(QColor::Hsv) << Qt::endl
-             << "va:" << va << ", vb:" << vb;
+    QVector3D va;
+    if (a.hsvHueF() < 0)
+        va = QVector3D(0, 0, a.valueF());
+    else
+        va = QVector3D(a.hsvSaturationF() * cos(M_TAU * a.hsvHueF()),
+                       a.hsvSaturationF() * sin(M_TAU * a.hsvHueF()),
+                       a.valueF());
+    QVector3D vb;
+    if (b.hsvHueF() < 0)
+        vb = QVector3D(0, 0, b.valueF());
+    else
+        vb = QVector3D(b.hsvSaturationF() * cos(M_TAU * b.hsvHueF()),
+                       b.hsvSaturationF() * sin(M_TAU * b.hsvHueF()),
+                       b.valueF());
 
     return (vb - va).lengthSquared();
 }
 
 double ImageTransparent::colorDiffSquaredHsl(const QColor &a, const QColor &b)
 {
-    const QVector3D va = QVector3D(a.hslSaturationF() * cos(M_PI * a.hslHueF()),
-                                   a.hslSaturationF() * sin(M_PI * a.hslHueF()),
-                                   a.lightnessF());
-    const QVector3D vb = QVector3D(b.hslSaturationF() * cos(M_PI * b.hslHueF()),
-                                   b.hslSaturationF() * sin(M_PI * b.hslHueF()),
-                                   b.lightnessF());
-
-    qDebug() << "a:" << a.convertTo(QColor::Hsl) << ", b:" << b.convertTo(QColor::Hsl) << Qt::endl
-             << "va:" << va << ", vb:" << vb;
+    QVector3D va;
+    if (a.hslHueF() < 0)
+        va = QVector3D(0, 0, a.lightnessF());
+    else
+        va = QVector3D(a.hslSaturationF() * cos(M_TAU * a.hslHueF()),
+                       a.hslSaturationF() * sin(M_TAU * a.hslHueF()),
+                       a.lightnessF());
+    QVector3D vb;
+    if (b.hslHueF() < 0)
+        vb = QVector3D(0, 0, b.lightnessF());
+    else
+        vb = QVector3D(b.hslSaturationF() * cos(M_TAU * b.hslHueF()),
+                       b.hslSaturationF() * sin(M_TAU * b.hslHueF()),
+                       b.lightnessF());
 
     return (vb - va).lengthSquared();
 }

@@ -203,22 +203,63 @@ void TestImageTransparent::test_validateImageFormat()
 
 void TestImageTransparent::test_addTransparentColor()
 {
-    QSKIP("TODO");
-
     ImageTransparent imageTransparent;
 
     imageTransparent._current = std::move(
         sampleImage(QColorConstants::White, QColorConstants::Black));
+
+    int countTransparentPixels = 0;
+    for (int y = 0; y < imageTransparent.current().height(); y++) {
+        for (int x = 0; x < imageTransparent.current().width(); x++) {
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0)
+                countTransparentPixels++;
+        }
+    }
+    QCOMPARE_EQ(countTransparentPixels, 0);
+
+    imageTransparent.addTransparentColor(QColorConstants::Black);
+
+    for (int y = 0; y < imageTransparent.current().height(); y++) {
+        for (int x = 0; x < imageTransparent.current().width(); x++) {
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
+                if (!((1 <= x && x <= 2 && 1 <= y && y <= 2)
+                      || (3 <= x && x <= 5 && 3 <= y && y <= 5))) {
+                    qWarning() << "at:" << x << y;
+                    QFAIL("unexpected transparent pixel");
+                }
+            }
+        }
+    }
 }
 
 void TestImageTransparent::test_addTransparentPixel()
 {
-    QSKIP("TODO");
-
     ImageTransparent imageTransparent;
 
     imageTransparent._current = std::move(
         sampleImage(QColorConstants::White, QColorConstants::Black));
+
+    int countTransparentPixels = 0;
+    for (int y = 0; y < imageTransparent.current().height(); y++) {
+        for (int x = 0; x < imageTransparent.current().width(); x++) {
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0)
+                countTransparentPixels++;
+        }
+    }
+    QCOMPARE_EQ(countTransparentPixels, 0);
+
+    imageTransparent.addTransparentPixel(QPoint(1, 1));
+
+    for (int y = 0; y < imageTransparent.current().height(); y++) {
+        for (int x = 0; x < imageTransparent.current().width(); x++) {
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
+                if (!(1 <= x && x <= 2 && 1 <= y && y <= 2)) {
+                    qWarning() << "at:" << x << y;
+                    QFAIL("unexpected transparent pixel");
+                }
+            }
+        }
+    }
 }
 
 void TestImageTransparent::test_colorComparisonFunction()
@@ -367,20 +408,19 @@ void TestImageTransparent::test_colorDiffSquaredHsl()
                                                                 QColorConstants::White),
                           1.25));
 
-    const double diffExpected = sqrt(3.0) + 2.0;
-    // 赤と緑との差が√3+2であること
+    // 赤と緑との差が3.0であること
     qDebug() << "赤 緑";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsl(QColorConstants::Red,
                                                                 QColorConstants::Green)));
-    // 緑と青との差が√3+2であること
+    // 緑と青との差が3.0であること
     qDebug() << "緑 青";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsl(QColorConstants::Green,
                                                                 QColorConstants::Blue)));
-    // 青と赤との差が√3+2であること
+    // 青と赤との差が3.0であること
     qDebug() << "青 赤";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsl(QColorConstants::Blue,
                                                                 QColorConstants::Red)));
 }
@@ -401,7 +441,7 @@ void TestImageTransparent::test_colorDiffSquaredHsv()
     QVERIFY(isEqaulApprox(ImageTransparent::colorDiffSquaredHsv(QColorConstants::Red,
                                                                 QColorConstants::Black),
                           2.0));
-    // 赤と白との差が1.25であること
+    // 赤と白との差が1.0であること
     QVERIFY(isEqaulApprox(ImageTransparent::colorDiffSquaredHsv(QColorConstants::Red,
                                                                 QColorConstants::White),
                           1.0));
@@ -424,20 +464,19 @@ void TestImageTransparent::test_colorDiffSquaredHsv()
                                                                 QColorConstants::White),
                           1.0));
 
-    const double diffExpected = sqrt(3.0) + 2.0;
-    // 赤と緑との差が√3+2であること
+    // 赤と緑との差が3.0であること
     qDebug() << "赤 緑";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsv(QColorConstants::Red,
                                                                 QColorConstants::Green)));
-    // 緑と青との差が√3+2であること
+    // 緑と青との差が3.0であること
     qDebug() << "緑 青";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsv(QColorConstants::Green,
                                                                 QColorConstants::Blue)));
-    // 青と赤との差が√3+2であること
+    // 青と赤との差が3.0であること
     qDebug() << "青 赤";
-    QVERIFY(isEqaulApprox(diffExpected,
+    QVERIFY(isEqaulApprox(3.0,
                           ImageTransparent::colorDiffSquaredHsv(QColorConstants::Blue,
                                                                 QColorConstants::Red)));
 }
