@@ -277,6 +277,15 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/core/image/division/test_image_division.cpp
     )
 
+    # core/image/transparent
+    DevTools_add_test(test_image_transparent GUI
+        SOURCES
+        core/image/transparent/image_transparent.h
+        core/image/transparent/image_transparent.cpp
+        ${IMAGE_TOOL_SRC}
+        tests/core/image/transparent/test_image_transparent.cpp
+    )
+
     # gui/image/basic
     DevTools_add_test(test_basic_image_view_control WIDGETS
         SOURCES

@@ -55,6 +55,10 @@ public:
     uint8_t opacity = 0;
 
 protected:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
     explicit ImageTransparentInterface(QObject *parent = nullptr);
 };
 
@@ -66,14 +70,20 @@ class ImageTransparent : public ImageTransparentInterface, private ImageIO
     Q_OBJECT
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
     ImageTransparent(QObject *parent = nullptr);
 
-    bool save(const QString &path, const char *format, int quality) const override
+    bool save(const QString &path, const char *format = nullptr, int quality = -1) const override
     {
         return ImageIO::save(path, current(), format, quality);
     }
 
-    bool overwriteSave(const QString &path, const char *format, int quality) const override
+    bool overwriteSave(const QString &path,
+                       const char *format = nullptr,
+                       int quality = -1) const override
     {
         return ImageIO::overwriteSave(path, current(), format, quality);
     }
@@ -101,9 +111,7 @@ private:
     /// 指定された点が無効
     static const QString pixelOutOfImage;
 
-    /**
-     * @brief original()のフォーマットを変換して_currentに設定する
-     */
+    /// @brief original()のフォーマットを変換して_currentに設定する
     void fetchOriginal();
 
     /**
@@ -116,35 +124,33 @@ private:
             throw InvalidArgumentException<int>(format, expectedImageFormat);
     }
 
-    /**
-     * colorDiffSquared*の関数ポインタ型
-     */
+    /// colorDiffSquared*の関数ポインタ型
     using color_comp_function_type = double (*)(const QColor &, const QColor &);
 
     /**
-     * @brief RGB色空間での色の差の2乗を計算する
-     * @details 透明度は考慮しない
+     * @brief RGB色空間での色の差の2乗を計算する。透明度は考慮しない。
+     * @details 立方体上の点同士の距離として計算する
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗(0-3.0)
+     * @return 色の差の2乗 [0.0-3.0]
      */
     static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
 
     /**
-     * @brief HSV色空間での色の差の2乗を計算する
-     * @details Hは0.0-1.0の範囲に変換して計算する。透明度は考慮しない。
+     * @brief HSV色空間での色の差の2乗を計算する。透明度は考慮しない。
+     * @details 円錐上の点同士の距離として計算する
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗(0-3.0)
+     * @return 色の差の2乗 [0.0-4.0]
      */
     static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
 
     /**
-     * @brief HSL色空間での色の差の2乗を計算する。Hは0.0-1.0の範囲に変換して計算する。
-     * @details Hは0.0-1.0の範囲に変換して計算する。透明度は考慮しない。
+     * @brief HSL色空間での色の差の2乗を計算する。透明度は考慮しない。
+     * @details 双円錐上の点同士の距離として計算する
      * @param a 色1
      * @param b 色2
-     * @return 色の差の2乗(0-3.0)
+     * @return 色の差の2乗 [0.0-4.0]
      */
     static double colorDiffSquaredHsl(const QColor &a, const QColor &b);
 
@@ -152,9 +158,22 @@ private:
      * @brief colorDiffSquared*を返す
      * @param colorSpec 色空間
      * @return 色空間に対応した関数ポインタ
-     * @exception InvalidStateException `colorSpec` が `QColor::Spec::Rgb`, `QColor::Spec::Hsv`, `QColor::Spec::Hsl` 以外の場合
      */
     static color_comp_function_type colorComparisonFunction(QColor::Spec colorSpec);
+
+    /**
+     * @brief colorDiffSquaredの最大値を返す
+     * @param colorSpec 色空間
+     * @return RGB→3.0, HSL, HSV→4.0
+     */
+    static double maxColorDiffSquared(QColor::Spec colorSpec);
+
+    /**
+     * @brief 色空間が正しくない場合に例外を投げる
+     * @param colorSpec 色空間
+     * @exception InvalidArgumentException `colorSpec` が `QColor::Spec::Rgb`, `QColor::Spec::Hsv`, `QColor::Spec::Hsl` 以外の場合
+     */
+    static void validateColorSpec(QColor::Spec colorSpec) noexcept(false);
 
 #ifdef _TEST_ImageTransparent
     friend class Test::TestImageTransparent;

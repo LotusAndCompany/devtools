@@ -17,6 +17,7 @@ class TestImageTransparentGUI;
 #endif
 
 // TODO: Undoをサポートする
+// FIXME: 処理を別のスレッドで行うようにする
 /**
  * @brief 画像を透明化するツールのGUI
  */
