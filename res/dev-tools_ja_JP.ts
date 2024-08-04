@@ -176,12 +176,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+176"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-25"/>
+        <location line="-119"/>
         <source>Enter title...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,22 +191,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+107"/>
-        <source>X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location line="+66"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-57"/>
+        <location line="+13"/>
+        <source>Copy</source>
+        <translation type="unfinished">コピー</translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>三</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="-72"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
