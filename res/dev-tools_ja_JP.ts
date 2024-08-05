@@ -383,6 +383,14 @@
     </message>
 </context>
 <context>
+    <name>Test::TestImageViewForImageTransparent</name>
+    <message>
+        <location filename="../tests/gui/image/transparent/test_image_view_for_image_transparent.cpp" line="+45"/>
+        <source>No Image</source>
+        <translation type="unfinished">画像がありません</translation>
+    </message>
+</context>
+<context>
     <name>Test::TestTool</name>
     <message>
         <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>

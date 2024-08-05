@@ -351,6 +351,22 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/division/test_image_division_gui.cpp
     )
+
+    # gui/image/transparent
+    DevTools_add_test(test_color_sample WIDGETS
+        SOURCES
+        gui/image/transparent/color_sample.h
+        gui/image/transparent/color_sample.cpp
+        tests/gui/image/transparent/test_color_sample.cpp
+    )
+    DevTools_add_test(test_image_view_for_image_transparent WIDGETS
+        SOURCES
+        gui/image/basic/image_view.h
+        gui/image/basic/image_view.cpp
+        gui/image/transparent/image_view_for_image_transparent.h
+        gui/image/transparent/image_view_for_image_transparent.cpp
+        tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
+    )
 endif()
 
 # Documents

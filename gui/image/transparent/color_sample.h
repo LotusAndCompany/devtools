@@ -3,6 +3,12 @@
 
 #include <QFrame>
 
+#ifdef _TEST_ColorSample
+namespace Test {
+class TestColorSample;
+}
+#endif
+
 /**
  * @brief 色付きの四角を表示するだけのウィジェット
  */
@@ -44,6 +50,10 @@ private:
     {
         return frameRect().marginsRemoved(QMargins(1, 1, 1, 1) * (lineWidth() + midLineWidth()));
     }
+
+#ifdef _TEST_ColorSample
+    friend class Test::TestColorSample;
+#endif
 };
 
 #endif // COLOR_SAMPLE_H

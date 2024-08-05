@@ -5,14 +5,12 @@
 
 #include <QLabel>
 
-/*
+#ifdef _TEST_ImageViewForImageTransparent
+#include "gui/image/basic/ui_image_view.h"
+
 namespace Ui {
 class BasicImageView;
 }
-*/
-
-#ifdef _TEST_ImageViewForImageTransparent
-#include "gui/image/basic/ui_image_view.h"
 
 namespace Test {
 class TestImageViewForImageTransparent;
