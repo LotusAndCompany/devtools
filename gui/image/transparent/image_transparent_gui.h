@@ -89,6 +89,10 @@ private:
 
     /// 連続領域を透明化するフラグ
     bool onlyContiguousArea = true;
+
+#ifdef _TEST_ImageTransparentGUI
+    friend class Test::TestImageTransparentGUI;
+#endif
 };
 
 #endif // IMAGE_TRANSPARENT_GUI_H

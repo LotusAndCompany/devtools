@@ -367,6 +367,19 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         gui/image/transparent/image_view_for_image_transparent.cpp
         tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
     )
+    DevTools_add_test(test_image_transparent_gui WIDGETS
+        SOURCES
+        core/image/transparent/image_transparent.h
+        core/image/transparent/image_transparent.cpp
+        gui/image/transparent/image_transparent_gui.h
+        gui/image/transparent/image_transparent_gui.cpp
+        gui/image/transparent/image_view_for_image_transparent.h
+        gui/image/transparent/image_view_for_image_transparent.cpp
+        gui/image/transparent/color_sample.h
+        gui/image/transparent/color_sample.cpp
+        ${IMAGE_TOOL_GUI_SRC}
+        tests/gui/image/transparent/test_image_transparent_gui.cpp
+    )
 endif()
 
 # Documents

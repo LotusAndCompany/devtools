@@ -13,6 +13,10 @@ ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTranspa
 {
     ui->setupUi(this);
 
+    // NOTE: parentが設定されていなければこのインスタンスで管理する
+    if (imageTransparent->parent() == nullptr)
+        imageTransparent->setParent(this);
+
     connect(ui->control,
             &BasicImageViewControl::loadFileSelected,
             this,
