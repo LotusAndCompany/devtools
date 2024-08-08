@@ -72,7 +72,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+31"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
@@ -87,13 +87,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+13"/>
         <source>Generate command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+13"/>
         <location line="+13"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>

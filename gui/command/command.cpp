@@ -11,8 +11,8 @@ Command::Command(QWidget *parent)
 
     Command::init();
 
-    connect(ui->commandBox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->functionsList,
+            &QComboBox::currentIndexChanged,
             this,
             &Command::selectedFunction);
     connect(ui->resetButton,
@@ -39,7 +39,7 @@ Command::~Command()
 }
 
 void Command::init() {
-    const QStringList CommandList {
+    const QStringList functionsList {
         "Functions list",
         "1: 変更を追加",
         "2: コミット",
@@ -51,54 +51,38 @@ void Command::init() {
         "8: マージする際、コンフリクトの編集を破棄",
     };
 
-    ui->commandBox->addItems(CommandList);
+    ui->functionsList->addItems(functionsList);
     // adjust commnadBox minmun width
     adjustCommandBoxWidth();
 
-    // hidden unused object
-    //ui->categoryBox->setVisible(false);
-    //ui->optionsBox->setVisible(false);
-
     // all label default hidden
     ui->label->setVisible(false);
-    ui->label_2->setVisible(false);
-    ui->label_3->setVisible(false);
 
     // all textBox default hidden
     ui->textEdit->setVisible(false);
-    ui->textEdit_2->setVisible(false);
-    ui->textEdit_3->setVisible(false);
 }
 
 void Command::selectedFunction()
 {
     // all textBox clear
     ui->textEdit->clear();
-    ui->textEdit_2->clear();
-    ui->textEdit_3->clear();
 
-    const int selectedIndex = ui->commandBox->currentIndex();
+    const int selectedIndex = ui->functionsList->currentIndex();
     switch (selectedIndex) {
     case 1:
         ui->label->setText("Path");
         ui->label->setVisible(true);
         ui->textEdit->setVisible(true);
-        ui->textEdit_2->setVisible(false);
-        ui->textEdit_3->setVisible(false);
         break;
     case 3:
         ui->label->setText("Comment");
         ui->label->setVisible(true);
         ui->textEdit->setVisible(true);
-        ui->textEdit_2->setVisible(false);
-        ui->textEdit_3->setVisible(false);
         break;
     case 7:
         ui->label->setText("Branch");
         ui->label->setVisible(true);
         ui->textEdit->setVisible(true);
-        ui->textEdit_2->setVisible(false);
-        ui->textEdit_3->setVisible(false);
         break;
     case 2:
     case 4:
@@ -107,37 +91,23 @@ void Command::selectedFunction()
     case 8:
     default:
         ui->label->setVisible(false);
-        ui->label_2->setVisible(false);
-        ui->label_3->setVisible(false);
         ui->textEdit->setVisible(false);
-        ui->textEdit_2->setVisible(false);
-        ui->textEdit_3->setVisible(false);
         break;
     }
 }
 
 void Command::reset()
 {
-    ui->commandBox->setCurrentIndex(0);
+    ui->functionsList->setCurrentIndex(0);
 
-    // all textBox clear
+    // all lineEdit clear
     ui->textEdit->clear();
-    ui->textEdit_2->clear();
-    ui->textEdit_3->clear();
-
-    // hidden unused object
-    //ui->categoryBox->setVisible(false);
-    //ui->optionsBox->setVisible(false);
 
     // all label default hidden
     ui->label->setVisible(false);
-    ui->label_2->setVisible(false);
-    ui->label_3->setVisible(false);
 
-    // all textBox default hidden
+    // all lineEdit default hidden
     ui->textEdit->setVisible(false);
-    ui->textEdit_2->setVisible(false);
-    ui->textEdit_3->setVisible(false);
 }
 
 void Command::clear()
@@ -155,10 +125,9 @@ void Command::generate()
     const QString gitResetHard = "git reset --hard HEAD^";
     const QString gitMerge = "git merge ";
     const QString gitMergeAbort = "git merge --abort";
-    const int selectedIndex = ui->commandBox->currentIndex();
-    const QString value1 = ui->textEdit->toPlainText();
-    //const QString value2 = ui->textEdit_2->toPlainText();
-    //const QString value3 = ui->textEdit_3->toPlainText();
+    const int selectedIndex = ui->functionsList->currentIndex();
+    const QString value1 = ui->textEdit->text();
+    // Todo: Add validation to check input value.
 
     switch (selectedIndex) {
     case 1:
@@ -200,12 +169,12 @@ void Command::copy()
 void Command::adjustCommandBoxWidth()
 {
     int maxWidth = 0;
-    QFontMetrics fontMetrics(ui->commandBox->font());
-    for (int i = 0; i < ui->commandBox->count(); ++i) {
-        int width = fontMetrics.horizontalAdvance(ui->commandBox->itemText(i));
+    QFontMetrics fontMetrics(ui->functionsList->font());
+    for (int i = 0; i < ui->functionsList->count(); ++i) {
+        int width = fontMetrics.horizontalAdvance(ui->functionsList->itemText(i));
         if (width > maxWidth) {
             maxWidth = width;
         }
     }
-    ui->commandBox->setMinimumWidth(maxWidth + 40);
+    ui->functionsList->setMinimumWidth(maxWidth + 40);
 }
