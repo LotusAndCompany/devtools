@@ -36,7 +36,7 @@ home::home(QWidget *parent)
     );
 
     ui->titleTreeWidget->setVisible(false);
-    connect(ui->copyButton, &QPushButton::clicked, this, &home::on_copyButton_clicked);
+    // connect(ui->copyButton, &QPushButton::clicked, this, &home::on_copyButton_clicked);
     loadTitles();
 }
 
@@ -325,8 +325,10 @@ void home::copyContent()
         QTreeWidgetItem *item = ui->titleTreeWidget->itemAt(pos);
 
         if (item) {
-            QString title = item->text(0);
-            QString content = loadContent(title);
+            // QString title = item->text(0);
+            QString filename = item->data(0, Qt::UserRole).toString();
+            // QString content = loadContent(title);
+            QString content = loadContent(filename);
             QClipboard *clipboard = QApplication::clipboard();
             clipboard->setText(content);
             QMessageBox::information(this, "Copied", "Text copied to clipboard.");
