@@ -7,12 +7,17 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QClipboard>
+#include <QUuid>
 
 home::home(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::home)
 {
     ui->setupUi(this);
+
+    ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->titleTreeWidget->setColumnWidth(1, 40);
 
     ui->titleTreeWidget->setStyleSheet(
         "QTreeWidget {"
@@ -31,12 +36,6 @@ home::home(QWidget *parent)
     );
 
     ui->titleTreeWidget->setVisible(false);
-    // ui->templateText->setHidden(true);
-    // ui->templateTitle->setHidden(true);
-    // ui->titleList->raise();
-    // ui->titleList->setHidden(true);
-    // ui->closeTitleListButton->raise();
-    // ui->closeTitleListButton->setHidden(true);
     connect(ui->copyButton, &QPushButton::clicked, this, &home::on_copyButton_clicked);
     loadTitles();
 }
@@ -48,9 +47,8 @@ home::~home()
 
 void home::on_addButton_clicked()
 {
-    ui->templateText->setHidden(false);
-    ui->templateTitle->setHidden(false);
-    // ui->pushButton->setHidden(false);
+    ui->templateText->clear();
+    ui->templateTitle->clear();
 }
 
 
@@ -127,10 +125,14 @@ void home::loadTitles()
     QDir directory("content");
     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach(QString filename, files) {
-        QString title = filename.chopped(4); // remove .txt
+        // QString title = filename.chopped(4);
+        QString title = filename.section('_', 0, 0);
 
         QTreeWidgetItem *item = new QTreeWidgetItem(ui->titleTreeWidget);
         item->setText(0, title);
+
+        // ファイル名全体をユーザーデータとして保持
+        item->setData(0, Qt::UserRole, filename);
 
         QPushButton *copyButton = new QPushButton("Copy");
         connect(copyButton, &QPushButton::clicked, this, &home::copyContent);
@@ -139,10 +141,28 @@ void home::loadTitles()
     }
 }
 
+// void home::saveContent(const QString &title, const QString &content)
+// {
+//     QDir().mkpath("content");
+//     QFile file("content/" + title + ".txt");
+//     if (file.open(QIODevice::WriteOnly)) {
+//         QTextStream out(&file);
+//         out << content;
+//         file.close();
+//     }
+// }
+
 void home::saveContent(const QString &title, const QString &content)
 {
     QDir().mkpath("content");
-    QFile file("content/" + title + ".txt");
+
+    // UUIDを生成
+    QString uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+
+    // タイトルにUUIDを追加してファイル名を一意化
+    QString uniqueTitle = title + "_" + uuid;
+    QFile file("content/" + uniqueTitle + ".txt");
+
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
         out << content;
@@ -150,10 +170,34 @@ void home::saveContent(const QString &title, const QString &content)
     }
 }
 
+// QString home::loadContent(const QString &title)
+// {
+//     QFile file("content/" + title + ".txt");
+//     if (file.open(QIODevice::ReadOnly)) {
+//         QTextStream in(&file);
+//         return in.readAll();
+//     }
+//     return "";
+// }
 
-QString home::loadContent(const QString &title)
+// QString home::loadContent(const QString &title)
+// {
+//     QDir directory("content");
+//     QStringList files = directory.entryList(QStringList() << title + "_*.txt", QDir::Files);
+
+//     if (!files.isEmpty()) {
+//         QFile file("content/" + files.first());
+//         if (file.open(QIODevice::ReadOnly)) {
+//             QTextStream in(&file);
+//             return in.readAll();
+//         }
+//     }
+//     return "";
+// }
+
+QString home::loadContent(const QString &filename)
 {
-    QFile file("content/" + title + ".txt");
+    QFile file("content/" + filename);
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
         return in.readAll();
@@ -161,9 +205,26 @@ QString home::loadContent(const QString &title)
     return "";
 }
 
-void home::deleteContent(const QString &title)
+// void home::deleteContent(const QString &title)
+// {
+//     QFile file("content/" + title + ".txt");
+//     file.remove();
+// }
+
+// void home::deleteContent(const QString &title)
+// {
+//     QDir directory("content");
+//     QStringList files = directory.entryList(QStringList() << title + "_*.txt", QDir::Files);
+
+//     if (!files.isEmpty()) {
+//         QFile file("content/" + files.first());
+//         file.remove();
+//     }
+// }
+
+void home::deleteContent(const QString &filename)
 {
-    QFile file("content/" + title + ".txt");
+    QFile file("content/" + filename);
     file.remove();
 }
 
@@ -198,6 +259,21 @@ void home::on_saveButton_clicked()
 //     ui->templateText->clear();
 // }
 
+// void home::on_deleteButton_clicked()
+// {
+//     QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
+//     if (!item) {
+//         QMessageBox::warning(this, "Warning", "No title selected.");
+//         return;
+//     }
+
+//     QString title = item->text(0);
+//     deleteContent(title);
+//     loadTitles();
+//     ui->templateTitle->clear();
+//     ui->templateText->clear();
+// }
+
 void home::on_deleteButton_clicked()
 {
     QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
@@ -206,8 +282,8 @@ void home::on_deleteButton_clicked()
         return;
     }
 
-    QString title = item->text(0);
-    deleteContent(title);
+    QString filename = item->data(0, Qt::UserRole).toString();
+    deleteContent(filename);
     loadTitles();
     ui->templateTitle->clear();
     ui->templateText->clear();
@@ -221,10 +297,20 @@ void home::on_deleteButton_clicked()
 //     ui->templateText->setPlainText(content);
 // }
 
+// void home::on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column)
+// {
+//     QString title = item->text(0);
+//     QString content = loadContent(title);
+//     ui->templateTitle->setText(title);
+//     ui->templateText->setPlainText(content);
+// }
+
 void home::on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
+    QString filename = item->data(0, Qt::UserRole).toString();
+    QString content = loadContent(filename);
     QString title = item->text(0);
-    QString content = loadContent(title);
+
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);
 }
