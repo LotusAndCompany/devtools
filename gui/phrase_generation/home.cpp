@@ -139,7 +139,9 @@ void home::on_deleteButton_clicked()
 void home::deleteContent(const QString &filename)
 {
     QFile file("content/" + filename);
-    file.remove();
+    if (!file.remove()) {
+        QMessageBox::warning(this, "Error", "Failed to delete the file.");
+    }
 }
 
 void home::on_toggleTreeButton_clicked()
@@ -169,8 +171,17 @@ void home::copyContent()
 {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (button) {
-        QPoint pos = button->parentWidget()->pos();
-        QTreeWidgetItem *item = ui->titleTreeWidget->itemAt(pos);
+        // ボタンから直接アイテムを取得
+        QWidget *parentWidget = button->parentWidget();
+        QTreeWidgetItem *item = nullptr;
+
+        for (int i = 0; i < ui->titleTreeWidget->topLevelItemCount(); ++i) {
+            QTreeWidgetItem *currentItem = ui->titleTreeWidget->topLevelItem(i);
+            if (ui->titleTreeWidget->itemWidget(currentItem, 1) == button) {
+                item = currentItem;
+                break;
+            }
+        }
 
         if (item) {
             QString filename = item->data(0, Qt::UserRole).toString();
@@ -178,6 +189,8 @@ void home::copyContent()
             QClipboard *clipboard = QApplication::clipboard();
             clipboard->setText(content);
             QMessageBox::information(this, "Copied", "Text copied to clipboard.");
+        } else {
+            QMessageBox::warning(this, "Error", "Unable to find the corresponding item.");
         }
     }
 }
