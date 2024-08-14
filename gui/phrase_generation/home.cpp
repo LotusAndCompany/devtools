@@ -1,6 +1,5 @@
 #include "home.h"
 #include "ui_home.h"
-// #include "ItemWidget.h"
 
 #include <QFile>
 #include <QDir>
@@ -35,7 +34,6 @@ home::home(QWidget *parent)
     );
 
     ui->titleTreeWidget->setVisible(false);
-    // connect(ui->copyButton, &QPushButton::clicked, this, &home::on_copyButton_clicked);
     loadTitles();
 }
 
@@ -44,87 +42,12 @@ home::~home()
     delete ui;
 }
 
-void home::on_addButton_clicked()
-{
-    ui->templateText->clear();
-    ui->templateTitle->clear();
-}
-
-
-// void home::on_showTitleListButton_clicked()
-// {
-//     ui->titleList->setHidden(false);
-//     ui->closeTitleListButton->setHidden(false);
-//     // ui->label->setHidden(false);
-//     // ui->label_2->setHidden(false);
-//     // ui->label_3->setHidden(false);
-//     // ui->label_4->setHidden(false);
-// }
-
-// void home::on_showTitleTreeWidgetButton_clicked()
-// {
-//     ui->titleTreeWidget->setHidden(false);
-//     ui->closeTitleTreeWidgetButton->setHidden(false);
-// }
-
-// void home::on_closeTitleListButton_clicked()
-// {
-//     ui->titleList->setHidden(true);
-//     ui->closeTitleTreeWidgetButton->setHidden(true);
-//     // ui->label->setHidden(true);
-//     // ui->label_2->setHidden(true);
-//     // ui->label_3->setHidden(true);
-//     // ui->label_4->setHidden(true);
-// }
-
-// void home::on_closeTitleTreeWidgetButton_clicked()
-// {
-//     ui->titleTreeWidget->setHidden(true);
-//     ui->closeTitleTreeWidgetButton->setHidden(true);
-// }
-
-// void home::loadTitles()
-// {
-//     ui->titleList->clear();
-//     QDir directory("content");
-//     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
-//     foreach(QString filename, files) {
-//         ui->titleList->addItem(filename.chopped(4));
-//     }
-// }
-
-// void home::loadTitles()
-// {
-//     ui->titleList->clear();
-//     QDir directory("content");
-//     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
-//     foreach(QString filename, files) {
-//         QString title = filename.chopped(4);
-//         QListWidgetItem *item = new QListWidgetItem(ui->titleList);
-//         ItemWidget *itemWidget = new ItemWidget(title, this);
-//         connect(itemWidget, &ItemWidget::listCopyButtonClicked, this, &home::on_copyButton_clicked);
-//         item->setSizeHint(itemWidget->sizeHint());
-//         ui->titleList->setItemWidget(item, itemWidget);
-//     }
-// }
-
-// void home::loadTitles()
-// {
-//     ui->titleList->clear();
-//     QDir directory("content");
-//     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
-//     foreach(QString filename, files) {
-//         ui->titleList->addItem(filename.chopped(4));
-//     }
-// }
-
 void home::loadTitles()
 {
     ui->titleTreeWidget->clear();
     QDir directory("content");
     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach(QString filename, files) {
-        // QString title = filename.chopped(4);
         QString title = filename.section('_', 0, 0);
 
         QTreeWidgetItem *item = new QTreeWidgetItem(ui->titleTreeWidget);
@@ -140,16 +63,37 @@ void home::loadTitles()
     }
 }
 
-// void home::saveContent(const QString &title, const QString &content)
-// {
-//     QDir().mkpath("content");
-//     QFile file("content/" + title + ".txt");
-//     if (file.open(QIODevice::WriteOnly)) {
-//         QTextStream out(&file);
-//         out << content;
-//         file.close();
-//     }
-// }
+QString home::loadContent(const QString &filename)
+{
+    QFile file("content/" + filename);
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream in(&file);
+        return in.readAll();
+    }
+    return "";
+}
+
+void home::on_addButton_clicked()
+{
+    ui->templateText->clear();
+    ui->templateTitle->clear();
+}
+
+void home::on_saveButton_clicked()
+{
+    QString title = ui->templateTitle->text();
+    QString content = ui->templateText->toPlainText();
+
+    if (title.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Title cannot be empty.");
+        return;
+    }
+
+    saveContent(title, content);
+    loadTitles();
+    ui->templateTitle->clear();
+    ui->templateText->clear();
+}
 
 void home::saveContent(const QString &title, const QString &content)
 {
@@ -169,109 +113,13 @@ void home::saveContent(const QString &title, const QString &content)
     }
 }
 
-// QString home::loadContent(const QString &title)
-// {
-//     QFile file("content/" + title + ".txt");
-//     if (file.open(QIODevice::ReadOnly)) {
-//         QTextStream in(&file);
-//         return in.readAll();
-//     }
-//     return "";
-// }
-
-// QString home::loadContent(const QString &title)
-// {
-//     QDir directory("content");
-//     QStringList files = directory.entryList(QStringList() << title + "_*.txt", QDir::Files);
-
-//     if (!files.isEmpty()) {
-//         QFile file("content/" + files.first());
-//         if (file.open(QIODevice::ReadOnly)) {
-//             QTextStream in(&file);
-//             return in.readAll();
-//         }
-//     }
-//     return "";
-// }
-
-QString home::loadContent(const QString &filename)
+void home::on_copyButton_clicked()
 {
-    QFile file("content/" + filename);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-        return in.readAll();
-    }
-    return "";
-}
-
-// void home::deleteContent(const QString &title)
-// {
-//     QFile file("content/" + title + ".txt");
-//     file.remove();
-// }
-
-// void home::deleteContent(const QString &title)
-// {
-//     QDir directory("content");
-//     QStringList files = directory.entryList(QStringList() << title + "_*.txt", QDir::Files);
-
-//     if (!files.isEmpty()) {
-//         QFile file("content/" + files.first());
-//         file.remove();
-//     }
-// }
-
-void home::deleteContent(const QString &filename)
-{
-    QFile file("content/" + filename);
-    file.remove();
-}
-
-void home::on_saveButton_clicked()
-{
-    QString title = ui->templateTitle->text();
+    QClipboard *clipboard = QApplication::clipboard();
     QString content = ui->templateText->toPlainText();
-
-    if (title.isEmpty()) {
-        QMessageBox::warning(this, "Warning", "Title cannot be empty.");
-        return;
-    }
-
-    saveContent(title, content);
-    loadTitles();
-    ui->templateTitle->clear();
-    ui->templateText->clear();
+    clipboard->setText(content);
+    QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
-
-// void home::on_deleteButton_clicked()
-// {
-//     QListWidgetItem *item = ui->titleList->currentItem();
-//     if (!item) {
-//         QMessageBox::warning(this, "Warning", "No title selected.");
-//         return;
-//     }
-
-//     QString title = item->text();
-//     deleteContent(title);
-//     loadTitles();
-//     ui->templateTitle->clear();
-//     ui->templateText->clear();
-// }
-
-// void home::on_deleteButton_clicked()
-// {
-//     QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
-//     if (!item) {
-//         QMessageBox::warning(this, "Warning", "No title selected.");
-//         return;
-//     }
-
-//     QString title = item->text(0);
-//     deleteContent(title);
-//     loadTitles();
-//     ui->templateTitle->clear();
-//     ui->templateText->clear();
-// }
 
 void home::on_deleteButton_clicked()
 {
@@ -288,21 +136,24 @@ void home::on_deleteButton_clicked()
     ui->templateText->clear();
 }
 
-// void home::on_titleList_itemClicked(QListWidgetItem *item)
-// {
-//     QString title = item->text();
-//     QString content = loadContent(title);
-//     ui->templateTitle->setText(title);
-//     ui->templateText->setPlainText(content);
-// }
+void home::deleteContent(const QString &filename)
+{
+    QFile file("content/" + filename);
+    file.remove();
+}
 
-// void home::on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column)
-// {
-//     QString title = item->text(0);
-//     QString content = loadContent(title);
-//     ui->templateTitle->setText(title);
-//     ui->templateText->setPlainText(content);
-// }
+void home::on_toggleTreeButton_clicked()
+{
+    bool isVisible = ui->titleTreeWidget->isVisible();
+    ui->titleTreeWidget->setVisible(!isVisible);
+
+    // ボタンのテキストを切り替える
+    if (ui->titleTreeWidget->isVisible()) {
+        ui->toggleTreeButton->setText("X");
+    } else {
+        ui->toggleTreeButton->setText("三");
+    }
+}
 
 void home::on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
@@ -318,15 +169,11 @@ void home::copyContent()
 {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (button) {
-        QWidget *itemWidget = button->parentWidget();
         QPoint pos = button->parentWidget()->pos();
-        // QTreeWidgetItem *item = ui->titleTreeWidget->indexOfTopLevelItem(itemWidget);
         QTreeWidgetItem *item = ui->titleTreeWidget->itemAt(pos);
 
         if (item) {
-            // QString title = item->text(0);
             QString filename = item->data(0, Qt::UserRole).toString();
-            // QString content = loadContent(title);
             QString content = loadContent(filename);
             QClipboard *clipboard = QApplication::clipboard();
             clipboard->setText(content);
@@ -334,26 +181,3 @@ void home::copyContent()
         }
     }
 }
-
-void home::on_copyButton_clicked()
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    QString content = ui->templateText->toPlainText();
-    clipboard->setText(content);
-    QMessageBox::information(this, "Copied", "Text copied to clipboard.");
-}
-
-
-void home::on_toggleTreeButton_clicked()
-{
-    bool isVisible = ui->titleTreeWidget->isVisible();
-    ui->titleTreeWidget->setVisible(!isVisible);
-
-    // ボタンのテキストを切り替える
-    if (ui->titleTreeWidget->isVisible()) {
-        ui->toggleTreeButton->setText("X");
-    } else {
-        ui->toggleTreeButton->setText("三");
-    }
-}
-

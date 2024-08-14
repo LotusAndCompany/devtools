@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
-// #include <QListWidgetItem>
 #include <QTreeWidgetItem>
 #include <QClipboard>
 
@@ -24,34 +23,18 @@ public:
 private slots:
 
     void on_addButton_clicked();
-
-    // void on_showTitleListButton_clicked();
-
-    // void on_showTitleTreeWidgetButton_clicked();
-
-    // void on_closeTitleListButton_clicked();
-
-    // void on_closeTitleTreeWidgetButton_clicked();
-
     void on_saveButton_clicked();
-
-    // void on_titleList_itemClicked(QListWidgetItem *item);
-
-    void on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column);
-
-    void on_deleteButton_clicked();
-
     void on_copyButton_clicked();
-
-    void copyContent();
-
+    void on_deleteButton_clicked();
     void on_toggleTreeButton_clicked();
+    void on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column);
+    void copyContent();
 
 private:
     Ui::home *ui;
     void loadTitles();
-    void saveContent(const QString &title, const QString &content);
     QString loadContent(const QString &title);
+    void saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &title);
 };
 
