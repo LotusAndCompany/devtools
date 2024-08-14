@@ -18,7 +18,6 @@ home::home(QWidget *parent)
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     ui->titleTreeWidget->setColumnWidth(1, 40);
-
     ui->titleTreeWidget->setStyleSheet(
         "QTreeWidget {"
         "   background-color: #555555;"
@@ -349,5 +348,12 @@ void home::on_toggleTreeButton_clicked()
 {
     bool isVisible = ui->titleTreeWidget->isVisible();
     ui->titleTreeWidget->setVisible(!isVisible);
+
+    // ボタンのテキストを切り替える
+    if (ui->titleTreeWidget->isVisible()) {
+        ui->toggleTreeButton->setText("X");
+    } else {
+        ui->toggleTreeButton->setText("三");
+    }
 }
 
