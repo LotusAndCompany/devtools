@@ -14,6 +14,14 @@ home::home(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // 入力したテキストがボタンと被らないように表示範囲を調整
+    ui->templateText->setStyleSheet(
+        "QPlainTextEdit {"
+        "   padding: 25px 240px 25px 0px;"
+        "   background-color: #000000;"
+        "}"
+    );
+
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     ui->titleTreeWidget->setColumnWidth(1, 40);
