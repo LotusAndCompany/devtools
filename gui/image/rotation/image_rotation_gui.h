@@ -28,7 +28,7 @@ public:
     /**
      * @brief コンストラクタ
      * @param imageRotation ロジック部分
-     * @param 親ウィジェット
+     * @param parent 親ウィジェット
      * @details UIを構築し、シグナルを接続する
      */
     explicit ImageRotationGUI(ImageRotationInterface *imageRotation, QWidget *parent = nullptr);
