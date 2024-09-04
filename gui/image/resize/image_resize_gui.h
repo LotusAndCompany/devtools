@@ -28,8 +28,8 @@ class ImageResizeGUI : public GuiTool
 public:
     /**
      * @brief コンストラクタ
-     * @param ImageResize (ロジック部分)
-     * @param 親ウィジェット
+     * @param imageResize (ロジック部分)
+     * @param parent 親ウィジェット
      * @details UIを構築し、シグナルを接続する
      */
     explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);

@@ -102,6 +102,10 @@ public:
     virtual const QImage &original() const = 0;
 
 protected:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親オブジェクト
+     */
     explicit ImageResizeInterface(QObject *parent = nullptr);
 
     /// Bilinear補完有効化フラグ

@@ -28,6 +28,7 @@ public:
      * @brief _current を保存する(上書き)
      * @param path 保存先
      * @param format フォーマット。"PNG"など。nullptrならファイル名から推定する。
+     * @param quality 画質。-1ならデフォルト値を使用する。
      * @return 成功なら`true`
      */
     virtual bool save(const QString &path, const char *format = nullptr, int quality = -1) const = 0;
@@ -35,6 +36,7 @@ public:
      * @brief _current を保存する。既にファイルが存在する場合は失敗する。
      * @param path 保存先
      * @param format フォーマット。"PNG"など。nullptrならファイル名から推定する。
+     * @param quality 画質。-1ならデフォルト値を使用する。
      * @return 成功なら`true`
      */
     virtual bool overwriteSave(const QString &path,
