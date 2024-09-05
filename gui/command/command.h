@@ -23,7 +23,7 @@ private:
     void reset();
     void clear();
     void copy();
-    void adjustCommandBoxWidth();
+    void adjustCommandBoxWidth();    
 };
 
 #endif // COMMAND_H

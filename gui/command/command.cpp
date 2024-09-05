@@ -2,6 +2,7 @@
 #include "ui_command.h"
 #include <QClipboard>
 #include <QApplication>
+#include <QMessageBox>
 
 Command::Command(QWidget *parent)
     : QGroupBox(parent)
@@ -115,6 +116,27 @@ void Command::clear()
     ui->textBrowser->clear();
 }
 
+
+/**
+ * @brief Make sure the string does not contain "'`
+ * @param Qstring ui->textEdit->text()
+ * @return bool
+ */
+bool containsNoQuotes(const QString &str) {
+    QString quotes = "\"'`";
+
+    for (const QChar &quote : quotes) {
+        if (str.contains(quote)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void showErrorAlert() {
+    QMessageBox::critical(nullptr, "Error", "This value is invalid. Please check and try again.");
+}
+
 void Command::generate()
 {
     const QString gitAdd = "git add ";
@@ -127,35 +149,39 @@ void Command::generate()
     const QString gitMergeAbort = "git merge --abort";
     const int selectedIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
-    // Todo: Add validation to check input value.
 
-    switch (selectedIndex) {
-    case 1:
-        ui->textBrowser->setText(gitAdd + value1);
-        break;
-    case 2:
-        ui->textBrowser->setText(gitCommit);
-        break;
-    case 3:
-        ui->textBrowser->setText(gitCommitComment + "'" + value1 + "'");
-        break;
-    case 4:
-        ui->textBrowser->setText(gitStatus);
-        break;
-    case 5:
-        ui->textBrowser->setText(gitResetSoft);
-        break;
-    case 6:
-        ui->textBrowser->setText(gitResetHard);
-        break;
-    case 7:
-        ui->textBrowser->setText(gitMerge + value1);
-        break;
-    case 8:
-        ui->textBrowser->setText(gitMergeAbort);
-        break;
-    default:
-        break;
+    // simple validation
+    if (!containsNoQuotes(value1)) {
+        showErrorAlert();
+    } else {
+        switch (selectedIndex) {
+        case 1:
+            ui->textBrowser->setText(gitAdd + value1);
+            break;
+        case 2:
+            ui->textBrowser->setText(gitCommit);
+            break;
+        case 3:
+            ui->textBrowser->setText(gitCommitComment + "'" + value1 + "'");
+            break;
+        case 4:
+            ui->textBrowser->setText(gitStatus);
+            break;
+        case 5:
+            ui->textBrowser->setText(gitResetSoft);
+            break;
+        case 6:
+            ui->textBrowser->setText(gitResetHard);
+            break;
+        case 7:
+            ui->textBrowser->setText(gitMerge + value1);
+            break;
+        case 8:
+            ui->textBrowser->setText(gitMergeAbort);
+            break;
+        default:
+            break;
+        }
     }
 }
 
