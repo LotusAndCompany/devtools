@@ -22,12 +22,12 @@ public:
 
 private slots:
 
-    void on_addButton_clicked();
-    void on_saveButton_clicked();
-    void on_copyButton_clicked();
-    void on_deleteButton_clicked();
-    void on_toggleTreeButton_clicked();
-    void on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column);
+    void handleAddButtonClick();
+    void handleSaveButtonClick();
+    void handleCopyButtonClick();
+    void handleDeleteButtonClick();
+    void handleToggleTreeButtonClick();
+    void handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column);
     void copyContent();
 
 private:

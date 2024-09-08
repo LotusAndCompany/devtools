@@ -13,11 +13,29 @@ home::home(QWidget *parent)
     , ui(new Ui::home)
 {
     ui->setupUi(this);
+    // disconnect(this);
+    // disconnect(ui->saveButton, &QPushButton::clicked, this, &home::on_saveButton_clicked);
+
+    connect(ui->addButton, &QPushButton::clicked, this, &home::handleAddButtonClick);
+    connect(ui->saveButton, &QPushButton::clicked, this, &home::handleSaveButtonClick);
+    connect(ui->copyButton, &QPushButton::clicked, this, &home::handleCopyButtonClick);
+    connect(ui->deleteButton, &QPushButton::clicked, this, &home::handleDeleteButtonClick);
+    connect(ui->toggleTreeButton, &QPushButton::clicked, this, &home::handleToggleTreeButtonClick);
+    connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this, &home::handleTitleTreeWidgetItemClick);
+
+    // templateTextを親ウィジェットに設定
+    // ui->saveButton->setParent(ui->templateText);
+    // ui->titleTreeWidget->setParent(ui->templateText);
+
+    ui->copyButton->raise();
+    ui->deleteButton->raise();
+    ui->saveButton->raise();
+    ui->titleTreeWidget->raise();
 
     // 入力したテキストがボタンと被らないように表示範囲を調整
     ui->templateText->setStyleSheet(
         "QPlainTextEdit {"
-        "   padding: 25px 240px 25px 0px;"
+        "   padding: 0px 335px 5px 0px;"
         "   background-color: #000000;"
         "}"
     );
@@ -81,13 +99,13 @@ QString home::loadContent(const QString &filename)
     return "";
 }
 
-void home::on_addButton_clicked()
+void home::handleAddButtonClick()
 {
     ui->templateText->clear();
     ui->templateTitle->clear();
 }
 
-void home::on_saveButton_clicked()
+void home::handleSaveButtonClick()
 {
     QString title = ui->templateTitle->text();
     QString content = ui->templateText->toPlainText();
@@ -121,7 +139,7 @@ void home::saveContent(const QString &title, const QString &content)
     }
 }
 
-void home::on_copyButton_clicked()
+void home::handleCopyButtonClick()
 {
     QClipboard *clipboard = QApplication::clipboard();
     QString content = ui->templateText->toPlainText();
@@ -129,7 +147,7 @@ void home::on_copyButton_clicked()
     QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
 
-void home::on_deleteButton_clicked()
+void home:: handleDeleteButtonClick()
 {
     QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
     if (!item) {
@@ -152,7 +170,7 @@ void home::deleteContent(const QString &filename)
     }
 }
 
-void home::on_toggleTreeButton_clicked()
+void home::handleToggleTreeButtonClick()
 {
     bool isVisible = ui->titleTreeWidget->isVisible();
     ui->titleTreeWidget->setVisible(!isVisible);
@@ -165,7 +183,7 @@ void home::on_toggleTreeButton_clicked()
     }
 }
 
-void home::on_titleTreeWidget_itemClicked(QTreeWidgetItem *item, int column)
+void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
 {
     QString filename = item->data(0, Qt::UserRole).toString();
     QString content = loadContent(filename);
