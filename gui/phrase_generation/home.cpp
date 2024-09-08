@@ -13,8 +13,6 @@ home::home(QWidget *parent)
     , ui(new Ui::home)
 {
     ui->setupUi(this);
-    // disconnect(this);
-    // disconnect(ui->saveButton, &QPushButton::clicked, this, &home::on_saveButton_clicked);
 
     connect(ui->addButton, &QPushButton::clicked, this, &home::handleAddButtonClick);
     connect(ui->saveButton, &QPushButton::clicked, this, &home::handleSaveButtonClick);
@@ -74,12 +72,14 @@ void home::loadTitles()
     QDir directory("content");
     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach(QString filename, files) {
-        QString title = filename.section('_', 0, 0);
+        // QString title = filename.section('_', 0, 0);
+        QString title;
+        QString content = loadContent(filename, &title);
 
         QTreeWidgetItem *item = new QTreeWidgetItem(ui->titleTreeWidget);
         item->setText(0, title);
 
-        // ファイル名全体をユーザーデータとして保持
+        // UUIDをユーザーデータとして保持
         item->setData(0, Qt::UserRole, filename);
 
         QPushButton *copyButton = new QPushButton("Copy");
@@ -89,11 +89,14 @@ void home::loadTitles()
     }
 }
 
-QString home::loadContent(const QString &filename)
+QString home::loadContent(const QString &filename, QString *title)
 {
     QFile file("content/" + filename);
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
+        if (title) {
+            *title = in.readLine();
+        }
         return in.readAll();
     }
     return "";
@@ -115,6 +118,11 @@ void home::handleSaveButtonClick()
         return;
     }
 
+    // if (ui->templateTitle->text().isEmpty()) {
+    //     QMessageBox::warning(this, "Warning", "Title cannot be empty.");
+    //     return;
+    // }
+
     saveContent(title, content);
     loadTitles();
     ui->templateTitle->clear();
@@ -129,12 +137,15 @@ void home::saveContent(const QString &title, const QString &content)
     QString uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
 
     // タイトルにUUIDを追加してファイル名を一意化
-    QString uniqueTitle = title + "_" + uuid;
-    QFile file("content/" + uniqueTitle + ".txt");
+    // QString uniqueTitle = title + "_" + uuid;
+    // UUIDでファイルを一意化
+    QString filename = uuid + ".txt";
+    QFile file("content/" + filename);
 
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
-        out << content;
+        // out << content;
+        out << title << "\n" << content;
         file.close();
     }
 }
@@ -186,8 +197,10 @@ void home::handleToggleTreeButtonClick()
 void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
 {
     QString filename = item->data(0, Qt::UserRole).toString();
-    QString content = loadContent(filename);
-    QString title = item->text(0);
+    QString title;
+    // QString content = loadContent(filename);
+    QString content = loadContent(filename, &title);
+    // QString title = item->text(0);
 
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);
