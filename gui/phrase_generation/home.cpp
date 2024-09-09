@@ -72,7 +72,6 @@ void home::loadTitles()
     QDir directory("content");
     QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach(QString filename, files) {
-        // QString title = filename.section('_', 0, 0);
         QString title;
         QString content = loadContent(filename, &title);
 
@@ -104,6 +103,7 @@ QString home::loadContent(const QString &filename, QString *title)
 
 void home::handleAddButtonClick()
 {
+    currentFile.clear();
     ui->templateText->clear();
     ui->templateTitle->clear();
 }
@@ -126,11 +126,6 @@ void home::handleSaveButtonClick()
         }
     }
 
-    // if (ui->templateTitle->text().isEmpty()) {
-    //     QMessageBox::warning(this, "Warning", "Title cannot be empty.");
-    //     return;
-    // }
-
     saveContent(title, content);
     loadTitles();
     ui->templateTitle->clear();
@@ -145,16 +140,12 @@ void home::saveContent(const QString &title, const QString &content)
 
     // UUIDを生成
     QString uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-
-    // タイトルにUUIDを追加してファイル名を一意化
-    // QString uniqueTitle = title + "_" + uuid;
     // UUIDでファイルを一意化
     QString filename = uuid + ".txt";
     QFile file("content/" + filename);
 
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
-        // out << content;
         out << title << "\n" << content;
         file.close();
     }
@@ -208,9 +199,7 @@ void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
 {
     QString filename = item->data(0, Qt::UserRole).toString();
     QString title;
-    // QString content = loadContent(filename);
     QString content = loadContent(filename, &title);
-    // QString title = item->text(0);
 
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);

@@ -33,7 +33,6 @@ private slots:
 private:
     Ui::home *ui;
     void loadTitles();
-    // QString loadContent(const QString &title);
     QString loadContent(const QString &filename, QString *title = nullptr);
     void saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &title);
