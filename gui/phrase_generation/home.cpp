@@ -118,6 +118,14 @@ void home::handleSaveButtonClick()
         return;
     }
 
+    // 既存ファイルを選択している場合は一旦削除したのちに新しい内容で更新
+    if (!currentFile.isEmpty()) {
+        QFile file("content/" + currentFile);
+        if (file.exists()) {
+            file.remove();
+        }
+    }
+
     // if (ui->templateTitle->text().isEmpty()) {
     //     QMessageBox::warning(this, "Warning", "Title cannot be empty.");
     //     return;
@@ -127,6 +135,8 @@ void home::handleSaveButtonClick()
     loadTitles();
     ui->templateTitle->clear();
     ui->templateText->clear();
+
+    currentFile.clear();
 }
 
 void home::saveContent(const QString &title, const QString &content)
@@ -204,6 +214,8 @@ void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
 
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);
+
+    currentFile = filename;
 }
 
 void home::copyContent()

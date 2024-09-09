@@ -37,6 +37,8 @@ private:
     QString loadContent(const QString &filename, QString *title = nullptr);
     void saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &title);
+    QString currentFile; //現在のファイル名を保持
+
 };
 
 #endif // HOME_H
