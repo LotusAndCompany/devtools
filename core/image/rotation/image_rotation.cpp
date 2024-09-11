@@ -25,7 +25,7 @@ void ImageRotation::resetImpl()
 
 bool ImageRotation::updateImpl()
 {
-    _current = std::move(original().transformed(transform, transformationMode()));
+    _current = original().transformed(transform, transformationMode());
 
     return !_current.isNull();
 }
