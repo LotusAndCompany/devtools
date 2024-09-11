@@ -30,7 +30,7 @@ void ImageTransparent::resetImpl()
 
 void ImageTransparent::fetchOriginal()
 {
-    _current = std::move(original().convertToFormat(QImage::Format_RGBA8888));
+    _current = original().convertToFormat(QImage::Format_RGBA8888);
 }
 
 void ImageTransparent::addTransparentColor(const QColor &targetColor)

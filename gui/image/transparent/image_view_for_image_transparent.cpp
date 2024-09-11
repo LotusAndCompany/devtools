@@ -36,7 +36,7 @@ void ImageViewForImageTransparent::onLabelClicked(const QPoint &point)
 
         if (0 <= pixel.x() && 0 <= pixel.y() && pixel.x() < original.width()
             && pixel.y() < original.height()) {
-            const QImage image = std::move(original.toImage());
+            const QImage image = original.toImage();
             emit pixelSelected(pixel, image.pixelColor(pixel));
         }
     }

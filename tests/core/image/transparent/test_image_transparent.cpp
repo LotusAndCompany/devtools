@@ -205,8 +205,7 @@ void TestImageTransparent::test_addTransparentColor()
 {
     ImageTransparent imageTransparent;
 
-    imageTransparent._current = std::move(
-        sampleImage(QColorConstants::White, QColorConstants::Black));
+    imageTransparent._current = sampleImage(QColorConstants::White, QColorConstants::Black);
 
     int countTransparentPixels = 0;
     for (int y = 0; y < imageTransparent.current().height(); y++) {
@@ -236,8 +235,7 @@ void TestImageTransparent::test_addTransparentPixel()
 {
     ImageTransparent imageTransparent;
 
-    imageTransparent._current = std::move(
-        sampleImage(QColorConstants::White, QColorConstants::Black));
+    imageTransparent._current = sampleImage(QColorConstants::White, QColorConstants::Black);
 
     int countTransparentPixels = 0;
     for (int y = 0; y < imageTransparent.current().height(); y++) {

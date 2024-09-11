@@ -67,7 +67,7 @@ void TestImageViewForImageTransparent::test_onLabelClicked()
             image.setPixelColor(x, y, QColor(rd.nextInt(256), rd.nextInt(256), rd.nextInt(256)));
 
     const QSize labelSize = gui.ui_image()->size();
-    gui.setPixmap(std::move(QPixmap::fromImage(image)));
+    gui.setPixmap(QPixmap::fromImage(image));
 
     QTest::mouseClick(gui.ui_image(),
                       Qt::LeftButton,
