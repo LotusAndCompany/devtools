@@ -29,8 +29,7 @@ bool ImageResize::loadImpl(const QString &path)
 
 bool ImageResize::updateImpl()
 {
-    _current = std::move(
-        original().scaled(computedSize(), Qt::IgnoreAspectRatio, transformationMode()));
+    _current = original().scaled(computedSize(), Qt::IgnoreAspectRatio, transformationMode());
 
     return !_current.isNull();
 }

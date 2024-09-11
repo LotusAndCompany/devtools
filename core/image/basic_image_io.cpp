@@ -3,6 +3,6 @@
 bool ImageIO::load(const QString &path)
 {
     _fileInfo = QFileInfo(path);
-    _original = std::move(QImage(path));
+    _original = QImage(path);
     return !_original.isNull();
 }

@@ -50,8 +50,8 @@ void TestBasicImageView::initTestCase()
     for (const QString &src : resourceNames)
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
 
-    pixmap320 = std::move(QPixmap(testDirPath + resourceNames[0]));
-    pixmap578 = std::move(QPixmap(testDirPath + resourceNames[1]));
+    pixmap320 = QPixmap(testDirPath + resourceNames[0]);
+    pixmap578 = QPixmap(testDirPath + resourceNames[1]);
 }
 
 void TestBasicImageView::cleanupTestCase()
