@@ -25,37 +25,9 @@ home::home(QWidget *parent)
     // ui->saveButton->setParent(ui->templateText);
     // ui->titleTreeWidget->setParent(ui->templateText);
 
-    ui->copyButton->raise();
-    ui->deleteButton->raise();
-    ui->saveButton->raise();
-    ui->titleTreeWidget->raise();
-
-    // 入力したテキストがボタンと被らないように表示範囲を調整
-    ui->templateText->setStyleSheet(
-        "QPlainTextEdit {"
-        "   padding: 0px 335px 5px 0px;"
-        "   background-color: #000000;"
-        "}"
-    );
-
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     ui->titleTreeWidget->setColumnWidth(1, 40);
-    ui->titleTreeWidget->setStyleSheet(
-        "QTreeWidget {"
-        "   background-color: #555555;"
-        "   color: #333333;"
-        "}"
-        "QTreeWidget::item {"
-        "   background-color: #999999;"
-        "   color: #000000;"
-        "   border-bottom: 1px solid #d3d3d3;"
-        "}"
-        "QTreeWidget::item:selected {"
-        "   background-color: #0078d7;"
-        "   color: #ffffff;"
-        "}"
-    );
 
     ui->titleTreeWidget->setVisible(false);
     loadTitles();

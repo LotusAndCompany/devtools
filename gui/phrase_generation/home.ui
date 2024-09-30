@@ -44,9 +44,26 @@
     <rect>
      <x>890</x>
      <y>50</y>
-     <width>231</width>
+     <width>241</width>
      <height>571</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTreeWidget {
+    background-color: #555555;
+    color: #333333;
+}
+
+QTreeWidget::item {
+    background-color: #999999;
+    color: #000000;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+QTreeWidget::item:selected {
+    background-color: #0078d7;
+    color: #ffffff;
+}</string>
    </property>
    <property name="headerHidden">
     <bool>true</bool>
@@ -71,7 +88,7 @@
      <x>0</x>
      <y>-4</y>
      <width>1131</width>
-     <height>631</height>
+     <height>805</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -144,6 +161,12 @@
         <pointsize>20</pointsize>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPlainTextEdit {
+    padding: 0px 335px 5px 0px;
+    background-color: #000000;
+}</string>
+      </property>
       <property name="placeholderText">
        <string>Enter text...</string>
       </property>
@@ -151,6 +174,10 @@
     </item>
    </layout>
   </widget>
+  <zorder>line</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>saveButton</zorder>
+  <zorder>titleTreeWidget</zorder>
  </widget>
  <resources/>
  <connections/>

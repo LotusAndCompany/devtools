@@ -165,7 +165,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+120"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
@@ -175,12 +175,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+63"/>
         <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-50"/>
+        <location line="-56"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -195,7 +195,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-92"/>
+        <location line="-109"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
