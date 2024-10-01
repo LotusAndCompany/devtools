@@ -7,7 +7,7 @@
 # Sample:
 #
 #   namespace DevTools {
-#   constexpr const char* APP_VERSION = "x.y.z";
+#   constexpr const char* APP_VERSION = "x.y.z[-suffix]";
 #   constexpr const char* GIT_REVISION = "0000000000000000000000000000000000000000";
 #   constexpr const char* OS_NAME = "OS";
 #   constexpr const char* OS_VERSION = "x.y.z";
