@@ -29,26 +29,6 @@ const Tool::Translatable Tool::translatable(ID id)
 
     // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
     switch (id) {
-    case ID::SAMPLE_0:
-        return Translatable{
-            tr("Sample 0"),
-            tr("This is Sample 0"),
-        };
-    case ID::SAMPLE_1:
-        return Translatable{
-            tr("Sample 1"),
-            tr("This is Sample 1"),
-        };
-    case ID::SAMPLE_2:
-        return Translatable{
-            tr("Sample 2"),
-            tr("This is Sample 2"),
-        };
-    case ID::SAMPLE_3:
-        return Translatable{
-            tr("Sample 3"),
-            tr("This is Sample 3"),
-        };
     case ID::IMAGE_RESIZE:
         return Translatable{
             tr("Image Resize"),

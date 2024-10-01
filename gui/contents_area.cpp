@@ -59,18 +59,6 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         content = new QLabel("(´･ω･) ﾎｰﾑﾀﾞﾖｰ", this);
         static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
         break;
-    case Sidemenu::ID::SAMPLE_0:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_0, "sample-0", this);
-        break;
-    case Sidemenu::ID::SAMPLE_1:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
-        break;
-    case Sidemenu::ID::SAMPLE_2:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_2, "sample-2", this);
-        break;
-    case Sidemenu::ID::SAMPLE_3:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_3, "sample-3", this);
-        break;
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
         break;

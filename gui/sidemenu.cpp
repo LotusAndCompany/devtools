@@ -25,10 +25,6 @@ Sidemenu::Sidemenu(QWidget *parent)
     buttonGroup->addButton(ui->homeButton, static_cast<int>(ID::HOME));
 
     // WIP: 適当なボタンを追加する
-    registerItem(ID::SAMPLE_0);
-    registerItem(ID::SAMPLE_1);
-    registerItem(ID::SAMPLE_2);
-    registerItem(ID::SAMPLE_3);
     registerItem(ID::IMAGE_RESIZE);
     registerItem(ID::IMAGE_ROTATION);
     registerItem(ID::IMAGE_DIVISION);
@@ -62,19 +58,6 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "home";
         break;
 
-        // NOTE: sample items
-    case ID::SAMPLE_0:
-        iconName = "counter_0";
-        break;
-    case ID::SAMPLE_1:
-        iconName = "counter_1";
-        break;
-    case ID::SAMPLE_2:
-        iconName = "counter_2";
-        break;
-    case ID::SAMPLE_3:
-        iconName = "counter_3";
-        break;
     case ID::IMAGE_RESIZE:
     case ID::IMAGE_ROTATION:
     case ID::IMAGE_DIVISION:
