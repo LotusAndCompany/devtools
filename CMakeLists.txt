@@ -116,6 +116,7 @@ endif()
 if(${ENABLE_DEBUG_BUILD_FEATURES})
     macro(guiless_test test_name)
         add_executable(${test_name} ${ARGN} tests/test_util.cpp)
+        set_property(TARGET ${TEST_NAME} PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
         add_test(NAME ${test_name} COMMAND ${test_name})
 
         target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
