@@ -12,12 +12,12 @@ add_library(${PROJECT_NAME}_test_util SHARED
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
 )
-target_include_directories(${PROJECT_NAME}_test_util PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/tests)
-target_link_libraries(${PROJECT_NAME}_test_util PUBLIC Qt6::Core)
-
-add_library(${PROJECT_NAME}_tool SHARED
-    core/tool/tool.h core/tool/tool.cpp)
-target_link_libraries(${PROJECT_NAME}_tool PUBLIC Qt6::Core)
+target_link_libraries(${PROJECT_NAME}_test_util PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+target_include_directories(${PROJECT_NAME}_test_util PUBLIC
+    ${CMAKE_CURRENT_BINARY_DIR}/tests
+)
 
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
@@ -47,41 +47,24 @@ function(DevTools_add_test TEST_NAME)
     add_executable(${TEST_NAME} ${DEVTOOLS_TEST_SOURCES})
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 
-    target_link_libraries(${TEST_NAME} PRIVATE Qt6::Test)
-
-    if(NOT ${DEVTOOLS_TEST_NO_UTIL})
-        target_link_libraries(${TEST_NAME} PRIVATE ${PROJECT_NAME}_test_util)
-    endif()
-
-    if(NOT ${DEVTOOLS_TEST_NO_TOOL})
-        target_link_libraries(${TEST_NAME} PRIVATE ${PROJECT_NAME}_tool)
-    endif()
-
-    if(${DEVTOOLS_TEST_GUI} OR ${DEVTOOLS_TEST_WIDGETS})
-        target_link_libraries(${TEST_NAME} PRIVATE Qt6::Gui)
-    endif()
-
-    if(${DEVTOOLS_TEST_WIDGETS})
-        target_link_libraries(${TEST_NAME} PRIVATE Qt6::Widgets)
-    endif()
-
-    if(${DEVTOOLS_TEST_VCPKG_YAML})
-        target_include_directories(${TEST_NAME}
-            PRIVATE
-            ${YAML_CPP_INCLUDE_DIR}
-        )
-
-        target_link_libraries(${TEST_NAME}
-            PRIVATE ${YAML_CPP_LIBRARIES}
-        )
-    endif()
-    if(${DEVTOOLS_TEST_VCPKG_TOML})
-        target_include_directories(${TEST_NAME}
-            PRIVATE
-            ${TOML11_INCLUDE_DIR}
-        )
-    endif()
-
+    target_link_libraries(${TEST_NAME} PRIVATE
+        Qt${QT_VERSION_MAJOR}::Core
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt6::Test
+        ${YAML_CPP_LIBRARIES}
+        ${PROJECT_NAME}_lib
+        ${PROJECT_NAME}_test_util
+    )
+    target_include_directories(${TEST_NAME} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_BINARY_DIR}/tests
+        ${Qt6Core_INCLUDE_DIRS}
+        ${Qt6Gui_INCLUDE_DIRS}
+        ${Qt6Widgets_INCLUDE_DIRS}
+        ${YAML_CPP_INCLUDE_DIR}
+        ${TOML11_INCLUDE_DIR}
+    )
 endfunction()
 
 # core

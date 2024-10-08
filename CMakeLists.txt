@@ -58,7 +58,7 @@ endif()
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Project files
     set(TRANSLATION_FILES res/dev-tools_ja_JP.ts res/dev-tools_en.ts)
-    qt_add_executable(${PROJECT_NAME}
+    qt6_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
         res/light_icons.qrc
@@ -68,6 +68,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${TRANSLATION_FILES}
 
         main/main.cpp
+    )
+    qt6_add_library(${PROJECT_NAME}_lib SHARED
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         core/application_mixin.h core/application_mixin.cpp
         gui/gui_application.h gui/gui_application.cpp
@@ -163,14 +165,33 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} update_translations)
 add_dependencies(${PROJECT_NAME} release_translations)
 
-# インクルードディレクトリとしてプロジェクトフォルダを追加
-target_include_directories(${PROJECT_NAME}
-    PRIVATE .
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    #message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
+# インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_include_directories(${PROJECT_NAME}_lib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Gui_INCLUDE_DIRS}
+    ${Qt6Widgets_INCLUDE_DIRS}
 )
 
 # ライブラリをリンクする
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+target_link_libraries(${PROJECT_NAME}_lib PUBLIC
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    ${PROJECT_NAME}_lib
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
