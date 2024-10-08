@@ -167,9 +167,9 @@ add_dependencies(${PROJECT_NAME} release_translations)
 
 get_cmake_property(_variableNames VARIABLES)
 list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
+#foreach (_variableName ${_variableNames})
     #message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
+#endforeach()
 
 # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
 target_include_directories(${PROJECT_NAME} PRIVATE
