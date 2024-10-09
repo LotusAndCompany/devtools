@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.21.1)
 
 project(DevTools VERSION 0.0.0 LANGUAGES CXX)
 
