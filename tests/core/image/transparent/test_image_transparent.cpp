@@ -265,29 +265,36 @@ void TestImageTransparent::test_colorComparisonFunction()
     const int min = QColor::Spec::Invalid, max = QColor::Spec::ExtendedRgb;
 
     for (int spec = min; spec <= max; spec++) {
+        void *actual = nullptr;
+        void *expected = nullptr;
         switch (spec) {
         case QColor::Spec::Rgb:
             // ImageTransparent::colorDiffSquaredRgbを返すこと
-            QCOMPARE_EQ(ImageTransparent::colorComparisonFunction(QColor::Spec::Rgb),
-                        ImageTransparent::colorDiffSquaredRgb);
+            actual = reinterpret_cast<void *>(
+                ImageTransparent::colorComparisonFunction(QColor::Spec::Rgb));
+            expected = reinterpret_cast<void *>(ImageTransparent::colorDiffSquaredRgb);
             break;
         case QColor::Spec::Hsl:
             // ImageTransparent::colorDiffSquaredHslを返すこと
-            QCOMPARE_EQ(ImageTransparent::colorComparisonFunction(QColor::Spec::Hsl),
-                        ImageTransparent::colorDiffSquaredHsl);
+            actual = reinterpret_cast<void *>(
+                ImageTransparent::colorComparisonFunction(QColor::Spec::Hsl));
+            expected = reinterpret_cast<void *>(ImageTransparent::colorDiffSquaredHsl);
             break;
         case QColor::Spec::Hsv:
             // ImageTransparent::colorDiffSquaredHsvを返すこと
-            QCOMPARE_EQ(ImageTransparent::colorComparisonFunction(QColor::Spec::Hsv),
-                        ImageTransparent::colorDiffSquaredHsv);
+            actual = reinterpret_cast<void *>(
+                ImageTransparent::colorComparisonFunction(QColor::Spec::Hsv));
+            expected = reinterpret_cast<void *>(ImageTransparent::colorDiffSquaredHsv);
             break;
         default:
             // 例外が発生すること
             QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<int>,
                                      ImageTransparent::colorComparisonFunction(
                                          static_cast<QColor::Spec>(spec)));
-            break;
+            continue;
         }
+
+        QCOMPARE_EQ(actual, expected);
     }
 }
 
