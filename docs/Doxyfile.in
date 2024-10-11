@@ -1,5 +1,5 @@
 PROJECT_NAME = "DevTools"
-PROJECT_NUMBER = @CMAKE_PROJECT_VERSION@
+PROJECT_NUMBER = @CMAKE_PROJECT_VERSION@@DevTools_VERSION_SUFFIX@
 PROJECT_BRIEF = "New Development Tools"
 # ビルドディレクトリからの相対パス
 PROJECT_ICON = "docs/dev-tools_icon.doxygen.png"
