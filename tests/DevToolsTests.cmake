@@ -22,30 +22,15 @@ target_include_directories(${PROJECT_NAME}_test_util PUBLIC
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
         DEVTOOLS_TEST
-        # NO_UTIL: test_util.hを使わない
-        # NO_TOOL: tool.hに依存しない
-        # GUI: guiに依存する
-        # WIDGETS: QWidgetに依存する
-        # VCPKG_YAML: yaml-cppに依存する
-        # VCPKG_TOML: toml11に依存する
-        "NO_UTIL;NO_TOOL;GUI;WIDGETS;VCPKG_YAML;VCPKG_TOML" # options
+        "" # options
         ""  # one value keywords
         "SOURCES"   # multi value keywords
         ${ARGN}
     )
 
-    #message(NOTICE "TEST_NAME=${TEST_NAME}")
-    #message(NOTICE ARGN=${ARGN})
-    #message(NOTICE DEVTOOLS_TEST_SOURCES=${DEVTOOLS_TEST_SOURCES})
-    #message(NOTICE "DEVTOOLS_TEST_NO_UTIL=${DEVTOOLS_TEST_NO_UTIL}")
-    #message(NOTICE "DEVTOOLS_TEST_NO_TOOL=${DEVTOOLS_TEST_NO_TOOL}")
-    #message(NOTICE "DEVTOOLS_TEST_GUI=${DEVTOOLS_TEST_GUI}")
-    #message(NOTICE "DEVTOOLS_TEST_WIDGETS=${DEVTOOLS_TEST_WIDGETS}")
-    #message(NOTICE "DEVTOOLS_TEST_UNPARSED_ARGUMENTS=${DEVTOOLS_TEST_UNPARSED_ARGUMENTS}")
-    #message(NOTICE "DEVTOOLS_TEST_KEYWORDS_MISSING_VALUES=${DEVTOOLS_TEST_KEYWORDS_MISSING_VALUES}")
-
     add_executable(${TEST_NAME} ${DEVTOOLS_TEST_SOURCES})
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+    set_property(TARGET ${TEST_NAME} PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
 
     target_link_libraries(${TEST_NAME} PRIVATE
         Qt${QT_VERSION_MAJOR}::Core
@@ -68,54 +53,54 @@ function(DevTools_add_test TEST_NAME)
 endfunction()
 
 # core
-DevTools_add_test(test_enum_cast NO_UTIL NO_TOOL
+DevTools_add_test(test_enum_cast
     SOURCES
     core/enum_cast.h
     tests/core/test_enum_cast.cpp
 )
 
 # core/exception
-DevTools_add_test(test_common_exception NO_TOOL
+DevTools_add_test(test_common_exception
     SOURCES
     core/exception/common_exception.h
     tests/core/exception/test_common_exception.cpp
 )
-DevTools_add_test(test_under_development_exception NO_TOOL
+DevTools_add_test(test_under_development_exception
     SOURCES
     core/exception/under_development_exception.h
     tests/core/exception/test_under_development_exception.cpp
 )
-DevTools_add_test(test_invalid_argument_exception NO_TOOL
+DevTools_add_test(test_invalid_argument_exception
     SOURCES
     core/exception/invalid_argument_exception.h
     tests/core/exception/test_invalid_argument_exception.cpp
 )
-DevTools_add_test(test_invalid_state_exception NO_TOOL
+DevTools_add_test(test_invalid_state_exception
     SOURCES
     core/exception/invalid_state_exception.h
     tests/core/exception/test_invalid_state_exception.cpp
 )
-DevTools_add_test(test_out_of_range_exception NO_TOOL
+DevTools_add_test(test_out_of_range_exception
     SOURCES
     core/exception/out_of_range_exception.h
     tests/core/exception/test_out_of_range_exception.cpp
 )
 
 # core/tool
-DevTools_add_test(test_tool NO_UTIL
+DevTools_add_test(test_tool
     SOURCES
     core/tool/tool.h
     tests/core/tool/test_tool.cpp
 )
 
 # core/iamge
-DevTools_add_test(test_basic_image_io NO_TOOL GUI
+DevTools_add_test(test_basic_image_io
     SOURCES
     core/image/basic_image_io.h
     core/image/basic_image_io.cpp
     tests/core/image/test_basic_image_io.cpp
 )
-DevTools_add_test(test_basic_image_edit_interface NO_TOOL NO_UTIL GUI
+DevTools_add_test(test_basic_image_edit_interface
     SOURCES
     core/image/basic_image_edit_interface.h
     core/image/basic_image_edit_interface.cpp
@@ -128,7 +113,7 @@ set(IMAGE_TOOL_SRC
 )
 
 # core/image/reseize
-DevTools_add_test(test_image_reisze GUI
+DevTools_add_test(test_image_reisze
     SOURCES
     core/image/resize/image_resize.h
     core/image/resize/image_resize.cpp
@@ -137,7 +122,7 @@ DevTools_add_test(test_image_reisze GUI
 )
 
 # core/image/rotation
-DevTools_add_test(test_image_rotation GUI
+DevTools_add_test(test_image_rotation
     SOURCES
     core/image/rotation/image_rotation.h
     core/image/rotation/image_rotation.cpp
@@ -146,7 +131,7 @@ DevTools_add_test(test_image_rotation GUI
 )
 
 # core/image/division
-DevTools_add_test(test_image_division GUI
+DevTools_add_test(test_image_division
     SOURCES
     core/image/division/image_division.h
     core/image/division/image_division.cpp
@@ -155,7 +140,7 @@ DevTools_add_test(test_image_division GUI
 )
 
 # core/image/transparent
-DevTools_add_test(test_image_transparent GUI
+DevTools_add_test(test_image_transparent
     SOURCES
     core/image/transparent/image_transparent.h
     core/image/transparent/image_transparent.cpp
@@ -163,53 +148,8 @@ DevTools_add_test(test_image_transparent GUI
     tests/core/image/transparent/test_image_transparent.cpp
 )
 
-# core/data_conversion/parser
-DevTools_add_test(test_basic_parser
-    SOURCES
-    core/data_conversion/parser/basic_parser.h
-    core/data_conversion/parser/basic_parser.cpp
-    tests/core/data_conversion/parser/test_basic_parser.cpp
-)
-DevTools_add_test(test_json_parser
-    SOURCES
-    core/data_conversion/parser/basic_parser.h
-    core/data_conversion/parser/basic_parser.cpp
-    core/data_conversion/parser/json_parser.h
-    core/data_conversion/parser/json_parser.cpp
-    tests/core/data_conversion/parser/test_json_parser.cpp
-)
-DevTools_add_test(test_yaml_parser VCPKG_YAML
-    SOURCES
-    core/data_conversion/parser/basic_parser.h
-    core/data_conversion/parser/basic_parser.cpp
-    core/data_conversion/parser/yaml_parser.h
-    core/data_conversion/parser/yaml_parser.cpp
-    tests/core/data_conversion/parser/test_yaml_parser.cpp
-)
-DevTools_add_test(test_toml_parser VCPKG_YAML
-    SOURCES
-    core/data_conversion/parser/basic_parser.h
-    core/data_conversion/parser/basic_parser.cpp
-    core/data_conversion/parser/toml_parser.h
-    core/data_conversion/parser/toml_parser.cpp
-    tests/core/data_conversion/parser/test_toml_parser.cpp
-)
-# core/data_conversion
-DevTools_add_test(test_data_conversion VCPKG_YAML VCPKG_TOML
-    SOURCES
-    core/data_conversion/data_conversion.h
-    core/data_conversion/data_conversion.cpp
-    core/data_conversion/parser/basic_parser.h
-    core/data_conversion/parser/basic_parser.cpp
-    core/data_conversion/parser/json_parser.h
-    core/data_conversion/parser/json_parser.cpp
-    core/data_conversion/parser/yaml_parser.h
-    core/data_conversion/parser/yaml_parser.cpp
-    tests/core/data_conversion/test_data_conversion.cpp
-)
-
 # gui/image/basic
-DevTools_add_test(test_basic_image_view_control WIDGETS
+DevTools_add_test(test_basic_image_view_control
     SOURCES
     gui/image/basic/control.h
     gui/image/basic/file_dialogs.h
@@ -217,7 +157,7 @@ DevTools_add_test(test_basic_image_view_control WIDGETS
     gui/image/basic/file_dialogs.cpp
     tests/gui/image/basic/test_control.cpp
 )
-DevTools_add_test(test_basic_image_view WIDGETS
+DevTools_add_test(test_basic_image_view
     SOURCES
     gui/image/basic/image_view.h
     gui/image/basic/image_view.cpp
@@ -232,7 +172,7 @@ set(IMAGE_TOOL_GUI_SRC
 )
 
 # gui/image/resize
-DevTools_add_test(test_image_resize_gui WIDGETS
+DevTools_add_test(test_image_resize_gui
     SOURCES
     gui/image/resize/image_resize_gui.h
     gui/image/resize/image_resize_gui.cpp
@@ -243,7 +183,7 @@ DevTools_add_test(test_image_resize_gui WIDGETS
 )
 
 # gui/image/rotation
-DevTools_add_test(test_image_rotation_gui WIDGETS
+DevTools_add_test(test_image_rotation_gui
     SOURCES
     gui/image/rotation/image_rotation_gui.h
     gui/image/rotation/image_rotation_gui.cpp
@@ -254,7 +194,7 @@ DevTools_add_test(test_image_rotation_gui WIDGETS
 )
 
 # gui/image/division
-DevTools_add_test(test_image_view_for_image_division WIDGETS
+DevTools_add_test(test_image_view_for_image_division
     SOURCES
     gui/image/basic/image_view.h
     gui/image/basic/image_view.cpp
@@ -262,7 +202,7 @@ DevTools_add_test(test_image_view_for_image_division WIDGETS
     gui/image/division/image_view_for_image_division.cpp
     tests/gui/image/division/test_image_view_for_image_division.cpp
 )
-DevTools_add_test(test_image_division_gui WIDGETS
+DevTools_add_test(test_image_division_gui
     SOURCES
     gui/image/division/image_division_gui.h
     gui/image/division/image_division_gui.cpp
@@ -275,13 +215,13 @@ DevTools_add_test(test_image_division_gui WIDGETS
 )
 
 # gui/image/transparent
-DevTools_add_test(test_color_sample WIDGETS
+DevTools_add_test(test_color_sample
     SOURCES
     gui/image/transparent/color_sample.h
     gui/image/transparent/color_sample.cpp
     tests/gui/image/transparent/test_color_sample.cpp
 )
-DevTools_add_test(test_image_view_for_image_transparent WIDGETS
+DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     gui/image/basic/image_view.h
     gui/image/basic/image_view.cpp
@@ -289,7 +229,7 @@ DevTools_add_test(test_image_view_for_image_transparent WIDGETS
     gui/image/transparent/image_view_for_image_transparent.cpp
     tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
 )
-DevTools_add_test(test_image_transparent_gui WIDGETS
+DevTools_add_test(test_image_transparent_gui
     SOURCES
     core/image/transparent/image_transparent.h
     core/image/transparent/image_transparent.cpp
