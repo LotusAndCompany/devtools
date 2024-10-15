@@ -68,7 +68,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "division";
         break;
     case ID::IMAGE_TRANSPARENT:
-        iconName = "question_mark";
+        iconName = "transparent";
         break;
 
     default:
