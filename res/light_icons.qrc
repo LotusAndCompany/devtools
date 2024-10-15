@@ -20,11 +20,5 @@
         <file>light/remix/clockwise.svg</file>
         <file>light/remix/flip_horizontal.svg</file>
         <file>light/remix/flip_vertical.svg</file>
-
-        <!--サンプルデータ用。不要になったら削除する-->
-        <file>light/material/counter_0.svg</file>
-        <file>light/material/counter_1.svg</file>
-        <file>light/material/counter_2.svg</file>
-        <file>light/material/counter_3.svg</file>
     </qresource>
 </RCC>
