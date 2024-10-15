@@ -1,0 +1,31 @@
+#include "color_sample.h"
+
+#include <QPainter>
+
+ColorSample::ColorSample(QWidget *parent)
+    : QFrame(parent)
+    , _color(QColorConstants::White)
+{
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
+}
+
+void ColorSample::paintEvent(QPaintEvent *event)
+{
+    // NOTE: ここで呼んで問題無いか?
+    QFrame::paintEvent(event);
+
+    QPainter painter(this);
+    painter.setPen(color());
+    painter.fillRect(contentRect(), color());
+}
+
+void ColorSample::setColor(const QColor &newColor)
+{
+    if (newColor.alpha() < 255) {
+        // 不透明色を設定する
+        setColor(QColor(newColor.red(), newColor.green(), newColor.blue()));
+    } else {
+        _color = newColor;
+        update();
+    }
+}

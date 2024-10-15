@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
-        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -258,6 +252,35 @@
     </message>
 </context>
 <context>
+    <name>ImageTransparentGUI</name>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+98"/>
+        <source>Color mode:</source>
+        <translatorcomment>しっくり来ない</translatorcomment>
+        <translation>色空間:</translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <source>Tolerance:</source>
+        <translation>許容誤差:</translation>
+    </message>
+    <message>
+        <location line="+54"/>
+        <source>Only contiguous area</source>
+        <translation>連続領域のみ</translation>
+    </message>
+    <message>
+        <location line="-77"/>
+        <source>Color:</source>
+        <translation>色:</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Transparency:</source>
+        <translation>透明度:</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+182"/>
@@ -360,6 +383,14 @@
     </message>
 </context>
 <context>
+    <name>Test::TestImageViewForImageTransparent</name>
+    <message>
+        <location filename="../tests/gui/image/transparent/test_image_view_for_image_transparent.cpp" line="+45"/>
+        <source>No Image</source>
+        <translation type="unfinished">画像がありません</translation>
+    </message>
+</context>
+<context>
     <name>Test::TestTool</name>
     <message>
         <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
@@ -453,6 +484,16 @@
         <location line="+1"/>
         <source>Divide image into n x m</source>
         <translation>画像をn×mに分割する</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Transparent</source>
+        <translation>画像透明化</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Make the selected color transparent</source>
+        <translation>選択した色を透明化する</translation>
     </message>
 </context>
 </TS>

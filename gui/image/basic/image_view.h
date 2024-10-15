@@ -48,6 +48,9 @@ protected:
     /// 実際の拡大率
     double scale = 1.0;
 
+    /// 拡大縮小前の画像データ。 setPixmap() によってのみ変更される
+    QPixmap original;
+
     /**
      * @brief scale を変更し、UIに反映する
      * @param newScale 新しい scale の値
@@ -77,9 +80,6 @@ private:
     static constexpr const double scaleBase = 10.0;
     /// 一回の zoomIn() zoomOut() で変化する拡大率(対数スケール)
     static constexpr const double zoomStep = 0.2;
-
-    /// 拡大縮小前の画像データ。 setPixmap() によってのみ変更される
-    QPixmap original;
 
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;

@@ -96,6 +96,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/image/division/image_division.h core/image/division/image_division.cpp
         gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
         gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
+        core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
+        gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
+        gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
+        gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
@@ -276,6 +280,15 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/core/image/division/test_image_division.cpp
     )
 
+    # core/image/transparent
+    DevTools_add_test(test_image_transparent GUI
+        SOURCES
+        core/image/transparent/image_transparent.h
+        core/image/transparent/image_transparent.cpp
+        ${IMAGE_TOOL_SRC}
+        tests/core/image/transparent/test_image_transparent.cpp
+    )
+
     # gui/image/basic
     DevTools_add_test(test_basic_image_view_control WIDGETS
         SOURCES
@@ -340,6 +353,35 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         gui/image/division/image_view_for_image_division.cpp
         ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/division/test_image_division_gui.cpp
+    )
+
+    # gui/image/transparent
+    DevTools_add_test(test_color_sample WIDGETS
+        SOURCES
+        gui/image/transparent/color_sample.h
+        gui/image/transparent/color_sample.cpp
+        tests/gui/image/transparent/test_color_sample.cpp
+    )
+    DevTools_add_test(test_image_view_for_image_transparent WIDGETS
+        SOURCES
+        gui/image/basic/image_view.h
+        gui/image/basic/image_view.cpp
+        gui/image/transparent/image_view_for_image_transparent.h
+        gui/image/transparent/image_view_for_image_transparent.cpp
+        tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
+    )
+    DevTools_add_test(test_image_transparent_gui WIDGETS
+        SOURCES
+        core/image/transparent/image_transparent.h
+        core/image/transparent/image_transparent.cpp
+        gui/image/transparent/image_transparent_gui.h
+        gui/image/transparent/image_transparent_gui.cpp
+        gui/image/transparent/image_view_for_image_transparent.h
+        gui/image/transparent/image_view_for_image_transparent.cpp
+        gui/image/transparent/color_sample.h
+        gui/image/transparent/color_sample.cpp
+        ${IMAGE_TOOL_GUI_SRC}
+        tests/gui/image/transparent/test_image_transparent_gui.cpp
     )
 endif()
 
