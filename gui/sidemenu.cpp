@@ -59,6 +59,8 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
 
     case ID::IMAGE_RESIZE:
+        iconName = "resize";
+        break;
     case ID::IMAGE_ROTATION:
     case ID::IMAGE_DIVISION:
     case ID::IMAGE_TRANSPARENT:
