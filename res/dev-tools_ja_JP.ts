@@ -324,12 +324,8 @@
 <context>
     <name>Test::TestBasicImageView</name>
     <message>
-        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+71"/>
-        <location line="+17"/>
-        <location line="+26"/>
-        <location line="+154"/>
         <source>No Image</source>
-        <translation type="unfinished">画像がありません</translation>
+        <translation type="obsolete">画像がありません</translation>
     </message>
 </context>
 <context>
@@ -347,19 +343,16 @@
         <translation type="obsolete">保存</translation>
     </message>
     <message>
-        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>Load</source>
-        <translation type="unfinished">読み込み</translation>
+        <translation type="obsolete">読み込み</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Reset</source>
-        <translation type="unfinished">リセット</translation>
+        <translation type="obsolete">リセット</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Save</source>
-        <translation type="unfinished">保存</translation>
+        <translation type="obsolete">保存</translation>
     </message>
 </context>
 <context>
@@ -369,48 +362,41 @@
         <translation type="obsolete">%1×%2</translation>
     </message>
     <message>
-        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+170"/>
         <source>%1 x %2</source>
-        <translation type="unfinished">%1 × %2</translation>
+        <translation type="obsolete">%1 × %2</translation>
     </message>
 </context>
 <context>
     <name>Test::TestImageViewForImageDivision</name>
     <message>
-        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+54"/>
         <source>No Image</source>
-        <translation type="unfinished">画像がありません</translation>
+        <translation type="obsolete">画像がありません</translation>
     </message>
 </context>
 <context>
     <name>Test::TestImageViewForImageTransparent</name>
     <message>
-        <location filename="../tests/gui/image/transparent/test_image_view_for_image_transparent.cpp" line="+45"/>
         <source>No Image</source>
-        <translation type="unfinished">画像がありません</translation>
+        <translation type="obsolete">画像がありません</translation>
     </message>
 </context>
 <context>
     <name>Test::TestTool</name>
     <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
         <source>Image Resize</source>
-        <translation type="unfinished">画像サイズ変更</translation>
+        <translation type="obsolete">画像サイズ変更</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Image resizing and scaling</source>
-        <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
+        <translation type="obsolete">画像のサイズ変更や拡大縮小</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Image Rotation</source>
-        <translation type="unfinished">画像回転</translation>
+        <translation type="obsolete">画像回転</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Image rotation and flipping</source>
-        <translation type="unfinished">画像の回転と反転</translation>
+        <translation type="obsolete">画像の回転と反転</translation>
     </message>
 </context>
 <context>

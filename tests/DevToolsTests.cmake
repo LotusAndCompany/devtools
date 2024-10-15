@@ -28,7 +28,7 @@ function(DevTools_add_test TEST_NAME)
         ${ARGN}
     )
 
-    add_executable(${TEST_NAME} ${DEVTOOLS_TEST_SOURCES})
+    add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${DEVTOOLS_TEST_SOURCES})
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
     set_property(TARGET ${TEST_NAME} PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
 
@@ -37,7 +37,6 @@ function(DevTools_add_test TEST_NAME)
         Qt${QT_VERSION_MAJOR}::Gui
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt6::Test
-        ${YAML_CPP_LIBRARIES}
         ${PROJECT_NAME}_lib
         ${PROJECT_NAME}_test_util
     )
@@ -47,8 +46,6 @@ function(DevTools_add_test TEST_NAME)
         ${Qt6Core_INCLUDE_DIRS}
         ${Qt6Gui_INCLUDE_DIRS}
         ${Qt6Widgets_INCLUDE_DIRS}
-        ${YAML_CPP_INCLUDE_DIR}
-        ${TOML11_INCLUDE_DIR}
     )
 endfunction()
 

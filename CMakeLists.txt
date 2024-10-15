@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.21.1)
 
+# vcpkgを使わない間は一旦止める
+set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP ON)
+
 project(DevTools VERSION 0.0.0 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
-set(DevTools_VERSION_SUFFIX "-test01")
+set(DevTools_VERSION_SUFFIX "-test")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -26,22 +29,17 @@ find_package(Doxygen)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP)
 
-# アイコンを設定
 # TODO: 環境で分ける
 if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+
+    # アイコンを設定
     set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
     set(APP_ICON_MACOS "res/${MACOSX_BUNDLE_ICON_FILE}")
     set_source_files_properties(${APP_ICON_MACOS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set(APP_ICON ${APP_ICON_MACOS})
-endif()
 
-set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
-
-# gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
-set(APP_INFO_FILE app_info.autogen.cpp)
-# TODO: 環境毎に分ける
-# configure_file()を使うようにしたかったが、ビルド時にCMAKE変数を参照させるのは無理そう?
-if(APPLE)
+    # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
     if(NOT EXISTS ${APP_INFO_FILE})
         execute_process(
             COMMAND "touch" ${APP_INFO_FILE}
@@ -57,7 +55,7 @@ endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Project files
-    set(TRANSLATION_FILES res/dev-tools_ja_JP.ts res/dev-tools_en.ts)
+    # main
     qt6_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
@@ -65,10 +63,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
-        ${TRANSLATION_FILES}
+        res/dev-tools_ja_JP.ts
+        res/dev-tools_en.ts
 
         main/main.cpp
     )
+
+    # source
     qt6_add_library(${PROJECT_NAME}_lib SHARED
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         core/application_mixin.h core/application_mixin.cpp
@@ -111,20 +112,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
     # Qt5は使わない予定
     message(FATAL_ERROR "Qt5 configuration is not supported")
-
-    if(ANDROID)
-        add_library(DevTools SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(DevTools
-            ${PROJECT_SOURCES}
-        )
-    endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
 
@@ -134,13 +121,14 @@ else()
     set(ENABLE_DEBUG_BUILD_FEATURES OFF)
 endif()
 
-# Tests
 if(${ENABLE_DEBUG_BUILD_FEATURES})
+    # Tests
     enable_testing()
 
     # TODO: submoduleに書きたいが... コードの一部を共有しているから無理か?
     include(tests/DevToolsTests.cmake)
 
+    # Doxygen
     if(DOXYGEN_FOUND)
         include(docs/DevToolsDocs.cmake)
     else()
