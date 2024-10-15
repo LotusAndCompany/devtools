@@ -79,7 +79,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     case ID::IMAGE_ROTATION:
     case ID::IMAGE_DIVISION:
     case ID::IMAGE_TRANSPARENT:
-        iconName = "question_mark";
+        iconName = "transparent";
         break;
 
     default:

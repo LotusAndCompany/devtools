@@ -11,6 +11,7 @@
         <file>light/material/left_panel_open.svg</file>
         <file>light/material/zoom_in.svg</file>
         <file>light/material/zoom_out.svg</file>
+        <file>light/material/transparent.svg</file>
 
         <!-- remix -->
         <file>light/remix/anticlockwise.svg</file>
