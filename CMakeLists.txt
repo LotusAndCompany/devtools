@@ -13,6 +13,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
+#       the user interface file "*.ui" could not be found in the following directories "SRC:..."
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    gui/image/basic/
+)
+
 # パッケージを探す
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
@@ -87,6 +93,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
         gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
+        core/image/division/image_division.h core/image/division/image_division.cpp
+        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
+        gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
     )
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
@@ -258,6 +267,15 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         tests/core/image/rotation/test_image_rotation.cpp
     )
 
+    # core/image/division
+    DevTools_add_test(test_image_division GUI
+        SOURCES
+        core/image/division/image_division.h
+        core/image/division/image_division.cpp
+        ${IMAGE_TOOL_SRC}
+        tests/core/image/division/test_image_division.cpp
+    )
+
     # gui/image/basic
     DevTools_add_test(test_basic_image_view_control WIDGETS
         SOURCES
@@ -301,6 +319,27 @@ if(${ENABLE_DEBUG_BUILD_FEATURES})
         core/image/rotation/image_rotation.cpp
         ${IMAGE_TOOL_GUI_SRC}
         tests/gui/image/rotation/test_image_rotation_gui.cpp
+    )
+
+    # gui/image/division
+    DevTools_add_test(test_image_view_for_image_division WIDGETS
+        SOURCES
+        gui/image/basic/image_view.h
+        gui/image/basic/image_view.cpp
+        gui/image/division/image_view_for_image_division.h
+        gui/image/division/image_view_for_image_division.cpp
+        tests/gui/image/division/test_image_view_for_image_division.cpp
+    )
+    DevTools_add_test(test_image_division_gui WIDGETS
+        SOURCES
+        gui/image/division/image_division_gui.h
+        gui/image/division/image_division_gui.cpp
+        core/image/division/image_division.h
+        core/image/division/image_division.cpp
+        gui/image/division/image_view_for_image_division.h
+        gui/image/division/image_view_for_image_division.cpp
+        ${IMAGE_TOOL_GUI_SRC}
+        tests/gui/image/division/test_image_division_gui.cpp
     )
 endif()
 

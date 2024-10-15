@@ -69,16 +69,22 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_view_for_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
+        <location filename="../build/Qt_6_7_1_for_macOS-Debug/test_image_division_gui_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -86,24 +92,77 @@
 <context>
     <name>BasicImageViewControl</name>
     <message>
-        <location filename="../gui/image/basic/control.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>load</source>
+        <location filename="../gui/image/basic/control.ui" line="+20"/>
+        <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>reset</source>
+        <source>Reset</source>
         <translation>リセット</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>save</source>
+        <translation type="vanished">保存</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <location filename="../gui/image/basic/control.cpp" line="+53"/>
+        <source>Save</source>
         <translation>保存</translation>
+    </message>
+</context>
+<context>
+    <name>ImageDivisionGUI</name>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.ui" line="+85"/>
+        <source>Image size:</source>
+        <translation>画像サイズ:</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>0 x 0</source>
+        <translation>0 × 0</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Division</source>
+        <translation>分割数</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Horizontal:</source>
+        <translation>横:</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Vertical:</source>
+        <translation>縦:</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Size</source>
+        <translation>サイズ</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Width:</source>
+        <translation>横幅:</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Height:</source>
+        <translation>縦幅:</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Ignore remainders</source>
+        <translation>余りを切り捨て</translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+72"/>
+        <source>%1 x %2</source>
+        <translation>%1 × %2</translation>
     </message>
 </context>
 <context>
@@ -117,12 +176,7 @@
 <context>
     <name>ImageResizeGUI</name>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+60"/>
+        <location filename="../gui/image/resize/image_resize_gui.ui" line="+74"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
@@ -155,12 +209,7 @@
 <context>
     <name>ImageRotationGUI</name>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+66"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+86"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
@@ -226,7 +275,7 @@
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="-26"/>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>画像</translation>
     </message>
 </context>
 <context>
@@ -234,7 +283,7 @@
     <message>
         <location filename="../gui/sidemenu.ui" line="+53"/>
         <source>Home</source>
-        <translation type="unfinished">ホーム</translation>
+        <translation>ホーム</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -263,25 +312,57 @@
 <context>
     <name>Test::TestBasicImageViewControl</name>
     <message>
-        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>load</source>
+        <translation type="obsolete">読み込み</translation>
+    </message>
+    <message>
+        <source>reset</source>
+        <translation type="obsolete">リセット</translation>
+    </message>
+    <message>
+        <source>save</source>
+        <translation type="obsolete">保存</translation>
+    </message>
+    <message>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
+        <source>Load</source>
         <translation type="unfinished">読み込み</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>reset</source>
+        <source>Reset</source>
         <translation type="unfinished">リセット</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>save</source>
+        <source>Save</source>
         <translation type="unfinished">保存</translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestImageDivisionGUI</name>
+    <message>
+        <source>%1x%2</source>
+        <translation type="obsolete">%1×%2</translation>
+    </message>
+    <message>
+        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+170"/>
+        <source>%1 x %2</source>
+        <translation type="unfinished">%1 × %2</translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestImageViewForImageDivision</name>
+    <message>
+        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+54"/>
+        <source>No Image</source>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
     <name>Test::TestTool</name>
     <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="+46"/>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
         <source>Image Resize</source>
         <translation type="unfinished">画像サイズ変更</translation>
     </message>
@@ -362,6 +443,16 @@
         <location line="+1"/>
         <source>Image rotation and flipping</source>
         <translation>画像の回転と反転</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Division</source>
+        <translation>画像分割</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Divide image into n x m</source>
+        <translation>画像をn×mに分割する</translation>
     </message>
 </context>
 </TS>

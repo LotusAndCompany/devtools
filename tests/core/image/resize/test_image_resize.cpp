@@ -148,6 +148,10 @@ void TestImageResize::test_overwriteSave()
 void TestImageResize::test_reset()
 {
     ImageResize imageResize;
+
+    // 画像を設定していなくても呼び出せること
+    imageResize.reset();
+
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
     if (imageResize.current().isNull())
         QFAIL("image is empty");
