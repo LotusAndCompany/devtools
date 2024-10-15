@@ -77,7 +77,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     case ID::IMAGE_RESIZE:
     case ID::IMAGE_ROTATION:
     case ID::IMAGE_DIVISION:
-        iconName = "question_mark";
+        iconName = "division";
         break;
 
     default:
