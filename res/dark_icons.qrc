@@ -8,6 +8,8 @@
         <file>dark/material/flip_to_front.svg</file>
         <file>dark/material/left_panel_close.svg</file>
         <file>dark/material/left_panel_open.svg</file>
+        <file>dark/material/zoom_in.svg</file>
+        <file>dark/material/zoom_out.svg</file>
         <!--サンプルデータ用。不要になったら削除する-->
         <file>dark/material/counter_0.svg</file>
         <file>dark/material/counter_1.svg</file>

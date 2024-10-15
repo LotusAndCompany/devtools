@@ -11,7 +11,9 @@ Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
     , id(id)
     , stringID(stringID)
     , _translatable(translatable(id))
-{}
+{
+    validateID(id);
+}
 
 void Tool::validateID(ID id)
 {
@@ -46,6 +48,11 @@ const Tool::Translatable Tool::translatable(ID id)
         return Translatable{
             tr("Sample 3"),
             tr("This is Sample 3"),
+        };
+    case ID::IMAGE_RESIZE:
+        return Translatable{
+            tr("Image Resize"),
+            tr("Image resizing and scaling"),
         };
     default:
         throw UnderDevelopmentException();

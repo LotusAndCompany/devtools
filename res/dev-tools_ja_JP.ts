@@ -65,6 +65,102 @@
     </message>
 </context>
 <context>
+    <name>BasicImageView</name>
+    <message>
+        <location filename="../gui/image/basic/image_view.ui" line="+86"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
+        <source>No Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+56"/>
+        <source>Zoom In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>Zoom Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BasicImageViewControl</name>
+    <message>
+        <location filename="../gui/image/basic/control.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageOpenDialog</name>
+    <message>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+26"/>
+        <source>Open Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageResizeGUI</name>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Width:</source>
+        <translation>横幅:</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Height:</source>
+        <translation>縦幅:</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Horizontal Scale:</source>
+        <translation>横の拡大率:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Vertical Scale:</source>
+        <translation>縦の拡大率:</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Keep aspect ratio</source>
+        <translation>縦横比を維持</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Smooth scaling</source>
+        <translation>バイリニア補完</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSaveDialog</name>
+    <message>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
+        <source>Save Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+182"/>
@@ -75,6 +171,14 @@
         <location line="+8"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
+    </message>
+</context>
+<context>
+    <name>QCoreApplication</name>
+    <message>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="-26"/>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -98,9 +202,51 @@
     </message>
 </context>
 <context>
+    <name>Test::TestBasicImageView</name>
+    <message>
+        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+71"/>
+        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+154"/>
+        <source>No Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestBasicImageViewControl</name>
+    <message>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
+        <source>load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Test::TestTool</name>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+44"/>
+        <source>Image Resize</source>
+        <translation type="unfinished">画像サイズ変更</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Image resizing and scaling</source>
+        <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
+    </message>
+</context>
+<context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="+32"/>
+        <location filename="../core/tool/tool.cpp" line="+34"/>
         <source>Sample 0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -138,6 +284,16 @@
         <location line="+1"/>
         <source>This is Sample 3</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Image Resize</source>
+        <translation>画像サイズ変更</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Image resizing and scaling</source>
+        <translation>画像のサイズ変更や拡大縮小</translation>
     </message>
 </context>
 </TS>
