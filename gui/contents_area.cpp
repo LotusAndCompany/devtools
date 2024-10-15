@@ -3,7 +3,9 @@
 
 #include <QLabel>
 #include "core/image/resize/image_resize.h"
+#include "core/image/rotation/image_rotation.h"
 #include "image/resize/image_resize_gui.h"
+#include "image/rotation/image_rotation_gui.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -67,6 +69,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
+        break;
+    case Sidemenu::ID::IMAGE_ROTATION:
+        content = new ImageRotationGUI(new ImageRotation(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

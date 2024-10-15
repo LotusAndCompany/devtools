@@ -2,6 +2,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/icons">
+        <!-- material -->
         <file>light/index.theme</file>
         <file>light/material/home.svg</file>
         <file>light/material/question_mark.svg</file>
@@ -10,6 +11,13 @@
         <file>light/material/left_panel_open.svg</file>
         <file>light/material/zoom_in.svg</file>
         <file>light/material/zoom_out.svg</file>
+
+        <!-- remix -->
+        <file>light/remix/anticlockwise.svg</file>
+        <file>light/remix/clockwise.svg</file>
+        <file>light/remix/flip_horizontal.svg</file>
+        <file>light/remix/flip_vertical.svg</file>
+
         <!--サンプルデータ用。不要になったら削除する-->
         <file>light/material/counter_0.svg</file>
         <file>light/material/counter_1.svg</file>

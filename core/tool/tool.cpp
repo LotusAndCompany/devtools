@@ -54,6 +54,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Image Resize"),
             tr("Image resizing and scaling"),
         };
+    case ID::IMAGE_ROTATION:
+        return Translatable{
+            tr("Image Rotation"),
+            tr("Image rotation and flipping"),
+        };
     default:
         throw UnderDevelopmentException();
     }
