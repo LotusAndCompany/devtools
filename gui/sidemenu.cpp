@@ -73,7 +73,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "counter_3";
         break;
     case ID::IMAGE_RESIZE:
-        iconName = "question_mark";
+        iconName = "resize";
         break;
 
     default:

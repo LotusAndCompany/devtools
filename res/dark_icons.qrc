@@ -10,6 +10,7 @@
         <file>dark/material/left_panel_open.svg</file>
         <file>dark/material/zoom_in.svg</file>
         <file>dark/material/zoom_out.svg</file>
+        <file>dark/material/resize.svg</file>
         <!--サンプルデータ用。不要になったら削除する-->
         <file>dark/material/counter_0.svg</file>
         <file>dark/material/counter_1.svg</file>
