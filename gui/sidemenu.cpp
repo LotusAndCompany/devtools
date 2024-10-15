@@ -77,7 +77,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "question_mark";
         break;
     case ID::IMAGE_ROTATION:
-        iconName = "question_mark";
+        iconName = "clockwise";
         break;
 
     default:
