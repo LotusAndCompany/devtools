@@ -62,6 +62,8 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "resize";
         break;
     case ID::IMAGE_ROTATION:
+        iconName = "clockwise";
+        break;
     case ID::IMAGE_DIVISION:
     case ID::IMAGE_TRANSPARENT:
         iconName = "question_mark";
