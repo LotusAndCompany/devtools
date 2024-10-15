@@ -12,6 +12,7 @@
         <file>light/material/zoom_in.svg</file>
         <file>light/material/zoom_out.svg</file>
         <file>light/material/resize.svg</file>
+        <file>light/material/division.svg</file>
 
         <!-- remix -->
         <file>light/remix/anticlockwise.svg</file>
