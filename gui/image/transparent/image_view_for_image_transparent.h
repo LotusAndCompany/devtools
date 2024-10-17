@@ -6,12 +6,6 @@
 #include <QLabel>
 
 #ifdef _TEST_ImageViewForImageTransparent
-#include "gui/image/basic/ui_image_view.h"
-
-namespace Ui {
-class BasicImageView;
-}
-
 namespace Test {
 class TestImageViewForImageTransparent;
 }

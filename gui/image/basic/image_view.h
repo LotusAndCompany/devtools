@@ -9,8 +9,6 @@ class BasicImageView;
 }
 
 #ifdef _TEST_BasicImageView
-#include "ui_image_view.h"
-
 namespace Test {
 class TestBasicImageView;
 }

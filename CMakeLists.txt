@@ -16,6 +16,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
+
 # NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
 #       the user interface file "*.ui" could not be found in the following directories "SRC:..."
 set(CMAKE_AUTOUIC_SEARCH_PATHS
@@ -104,7 +106,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
-    qt_add_translations(
+    set_target_properties(${PROJECT_NAME}_lib PROPERTIES
+        AUTOMOC ON
+        AUTOUIC ON
+    )
+
+    qt6_add_translations(
         TARGETS ${PROJECT_NAME}
         TS_FILE_DIR res/
         TS_FILE_BASE "dev-tools"
@@ -114,29 +121,22 @@ else()
     message(FATAL_ERROR "Qt5 configuration is not supported")
 endif()
 
-
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
-    set(ENABLE_DEBUG_BUILD_FEATURES ON)
-else()
-    set(ENABLE_DEBUG_BUILD_FEATURES OFF)
-endif()
-
-if(${ENABLE_DEBUG_BUILD_FEATURES})
+if(${ENABLE_UNIT_TEST})
     # Tests
     enable_testing()
 
     # TODO: submoduleに書きたいが... コードの一部を共有しているから無理か?
     include(tests/DevToolsTests.cmake)
-
-    # Doxygen
-    if(DOXYGEN_FOUND)
-        include(docs/DevToolsDocs.cmake)
-    else()
-        message(WARNING "Doxygen not found")
-    endif()
 endif()
 
-# PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
+# Doxygen
+if(DOXYGEN_FOUND)
+    include(docs/DevToolsDocs.cmake)
+else()
+    message(WARNING "Doxygen not found")
+endif()
+
+# BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
 target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
 # 有効にするのが望ましいが、mocまで対象になるのでやめておく
@@ -153,8 +153,13 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} update_translations)
 add_dependencies(${PROJECT_NAME} release_translations)
 
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
+
+# vcpkgのパッケージを探す
+find_package(toml11 CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
+
+#get_cmake_property(_variableNames VARIABLES)
+#list (SORT _variableNames)
 #foreach (_variableName ${_variableNames})
     #message(STATUS "${_variableName}=${${_variableName}}")
 #endforeach()
@@ -164,7 +169,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_include_directories(${PROJECT_NAME}_lib PRIVATE
+target_include_directories(${PROJECT_NAME}_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Qt6Core_INCLUDE_DIRS}
     ${Qt6Gui_INCLUDE_DIRS}

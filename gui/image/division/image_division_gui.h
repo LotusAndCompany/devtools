@@ -12,7 +12,6 @@ class ImageDivisionGUI;
 class ImageDivisionInterface;
 
 #ifdef _TEST_ImageDivisionGUI
-#include "ui_image_division_gui.h"
 namespace Test {
 class TestImageDivisionGUI;
 }

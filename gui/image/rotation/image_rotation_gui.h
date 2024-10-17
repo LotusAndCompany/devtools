@@ -10,7 +10,6 @@ class ImageRotationGUI;
 class ImageRotationInterface;
 
 #ifdef _TEST_ImageRotationGUI
-#include "ui_image_rotation_gui.h"
 namespace Test {
 class TestImageRotationGUI;
 }

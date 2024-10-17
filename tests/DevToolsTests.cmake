@@ -7,15 +7,15 @@ set(TEST_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_config.cpp.in)
 set(TEST_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/tests/test_config.cpp)
 configure_file(${TEST_CONFIG_IN} ${TEST_CONFIG_OUT} @ONLY)
 
-add_library(${PROJECT_NAME}_test_util SHARED
+qt6_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/test_util.h tests/test_util.cpp
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
 )
-target_link_libraries(${PROJECT_NAME}_test_util PRIVATE
+target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
 )
-target_include_directories(${PROJECT_NAME}_test_util PUBLIC
+target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}/tests
 )
 
@@ -28,9 +28,14 @@ function(DevTools_add_test TEST_NAME)
         ${ARGN}
     )
 
-    add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${DEVTOOLS_TEST_SOURCES})
+    add_executable(${TEST_NAME}
+        ${DEVTOOLS_TEST_SOURCES}
+    )
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
-    set_property(TARGET ${TEST_NAME} PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
+    add_dependencies(${TEST_NAME}
+        ${PROJECT_NAME}_lib
+        ${PROJECT_NAME}_test_lib
+    )
 
     target_link_libraries(${TEST_NAME} PRIVATE
         Qt${QT_VERSION_MAJOR}::Core
@@ -38,14 +43,11 @@ function(DevTools_add_test TEST_NAME)
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt6::Test
         ${PROJECT_NAME}_lib
-        ${PROJECT_NAME}_test_util
+        ${PROJECT_NAME}_test_lib
     )
     target_include_directories(${TEST_NAME} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests
-        ${CMAKE_CURRENT_BINARY_DIR}/tests
-        ${Qt6Core_INCLUDE_DIRS}
-        ${Qt6Gui_INCLUDE_DIRS}
-        ${Qt6Widgets_INCLUDE_DIRS}
+        ${Qt6Test_INCLUDE_DIRS}
+        ${CMAKE_AUTOUIC_SEARCH_PATHS}
     )
 endfunction()
 

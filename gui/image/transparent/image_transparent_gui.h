@@ -10,7 +10,6 @@ class ImageTransparentGUI;
 class ImageTransparentInterface;
 
 #ifdef _TEST_ImageTransparentGUI
-#include "ui_image_transparent_gui.h"
 namespace Test {
 class TestImageTransparentGUI;
 }

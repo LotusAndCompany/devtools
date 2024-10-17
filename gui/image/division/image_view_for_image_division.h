@@ -10,8 +10,6 @@ class BasicImageView;
 }
 
 #ifdef _TEST_ImageViewForImageDivision
-#include "gui/image/basic/ui_image_view.h"
-
 namespace Test {
 class TestImageViewForImageDivision;
 }

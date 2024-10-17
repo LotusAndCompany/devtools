@@ -3,15 +3,13 @@
 
 #include <QWidget>
 
-#ifdef _TEST_BasicImageViewControl
-#include "ui_control.h"
-
-namespace Test {
-class TestBasicImageViewControl;
-}
-#else
 namespace Ui {
 class BasicImageViewControl;
+}
+
+#ifdef _TEST_BasicImageViewControl
+namespace Test {
+class TestBasicImageViewControl;
 }
 #endif
 

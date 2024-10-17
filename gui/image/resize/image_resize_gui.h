@@ -10,7 +10,6 @@ class ImageResizeGUI;
 class ImageResizeInterface;
 
 #ifdef _TEST_ImageResizeGUI
-#include "ui_image_resize_gui.h"
 namespace Test {
 class TestImageResizeGUI;
 }
