@@ -5,15 +5,14 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-//#include <toml.hpp>
+#include <toml.hpp>
 #include <yaml-cpp/yaml.h>
 
-#include "core/data_conversion/parser/yaml_parser.h"
-#include "parser/basic_parser.h"
-//#include "core/exception/common_exception.h"
 #include "core/exception/invalid_argument_exception.h"
-//#include "core/exception/invalid_state_exception.h"
+#include "parser/basic_parser.h"
 #include "parser/json_parser.h"
+#include "parser/toml_parser.h"
+#include "parser/yaml_parser.h"
 
 DataConversionInterface::DataConversionInterface(QObject *parent)
     : Tool(Tool::ID::DATA_CONVERSION, "data-conversion", parent)
@@ -163,6 +162,16 @@ void DataConversion::parseInputText()
         return;
     }
 
+    TomlParser tp;
+    // TOMLで解析できるか試す
+    result = tp.tryParse(inputText());
+    if (result) {
+        inputFormat = Format::TOML;
+        intermediateData = std::move(result.data);
+        outdated = true;
+        return;
+    }
+
     // YAMLで解析できるか試す
     YamlParser yp;
     result = yp.tryParse(inputText());
@@ -178,37 +187,8 @@ void DataConversion::parseInputText()
         return;
     }
 
-#if 0
-    // TOMLで解析できるか試す
-    tryParseTOML(&result);
-    if (result.format == Format::TOML) {
-        inputFormat = Format::TOML;
-        intermediateData = std::move(result.data);
-        outdated = true;
-        return;
-    }
-#endif
-
     // 解析失敗
     inputFormat = Format::ERROR;
     intermediateData = QVariant();
     outdated = true;
 }
-
-#if 0
-void DataConversion::tryParseTOML(ParseResult *result) const
-{
-    validatePointer(result);
-
-    const std::string stdStr(std::move(inputText().toStdString()));
-    try {
-        const auto tml = toml::parse_str(stdStr);
-        // TODO
-    } catch (toml::exception &e) {
-        qInfo() << e.what();
-
-        result->data = QVariant();
-        result->format = Format::UNKNOWN;
-    }
-}
-#endif

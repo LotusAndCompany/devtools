@@ -268,6 +268,28 @@ void TestDataConversion::test_parseInputText()
     } else {
         QFAIL(("failed to load " + file.fileName()).toStdString().c_str());
     }
+
+    file.close();
+    file.setFileName(TEST_SRC_DIR + "/core/data_conversion/test.toml");
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&file);
+        const QString toml = stream.readAll();
+
+        DataConversion dataConversion;
+        dataConversion.setInputText(toml);
+
+        dataConversion.parseInputText();
+        // inputFormatがJSONになっていること
+        QCOMPARE_EQ(dataConversion.inputFormat, DataConversion::Format::TOML);
+        // dataConversion.intermediateDataが設定されていること
+        QVERIFY(dataConversion.intermediateData.isValid());
+        // dataConversion.intermediateDataが想定通りであること
+        QCOMPARE_EQ(dataConversion.intermediateData.typeId(), QMetaType::Type::QVariantMap);
+        // outdatedがtrueになっていること
+        QCOMPARE_EQ(dataConversion.outdated, true);
+    } else {
+        QFAIL(("failed to load " + file.fileName()).toStdString().c_str());
+    }
 }
 } // namespace Test
 

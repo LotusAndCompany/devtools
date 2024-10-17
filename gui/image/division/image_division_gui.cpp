@@ -8,7 +8,7 @@
 #include <core/exception/invalid_argument_exception.h>
 
 ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidget *parent)
-    : QWidget(parent)
+    : GuiTool(parent)
     , imageDivision(imageDivision)
     , ui(new Ui::ImageDivisionGUI)
 {

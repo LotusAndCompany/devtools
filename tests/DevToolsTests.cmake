@@ -22,13 +22,6 @@ target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
     ${Qt6Test_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME}_tool SHARED
-    core/tool/tool.h core/tool/tool.cpp
-)
-target_link_libraries(${PROJECT_NAME}_tool PUBLIC
-    Qt6::Core
-)
-
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
         DEVTOOLS_TEST
@@ -81,7 +74,6 @@ DevTools_add_test(test_out_of_range_exception
 # core/tool
 DevTools_add_test(test_tool
     SOURCES
-    core/tool/tool.h
     tests/core/tool/test_tool.cpp
 )
 
@@ -119,6 +111,29 @@ DevTools_add_test(test_image_transparent
     tests/core/image/transparent/test_image_transparent.cpp
 )
 
+# core/data_conversion/parser
+DevTools_add_test(test_basic_parser
+    SOURCES
+    tests/core/data_conversion/parser/test_basic_parser.cpp
+)
+DevTools_add_test(test_json_parser
+    SOURCES
+    tests/core/data_conversion/parser/test_json_parser.cpp
+)
+DevTools_add_test(test_yaml_parser VCPKG_YAML
+    SOURCES
+    tests/core/data_conversion/parser/test_yaml_parser.cpp
+)
+DevTools_add_test(test_toml_parser VCPKG_YAML
+    SOURCES
+    tests/core/data_conversion/parser/test_toml_parser.cpp
+)
+# core/data_conversion
+DevTools_add_test(test_data_conversion VCPKG_YAML VCPKG_TOML
+    SOURCES
+    tests/core/data_conversion/test_data_conversion.cpp
+)
+
 # gui/image/basic
 DevTools_add_test(test_basic_image_view_control
     SOURCES
@@ -127,13 +142,6 @@ DevTools_add_test(test_basic_image_view_control
 DevTools_add_test(test_basic_image_view
     SOURCES
     tests/gui/image/basic/test_basic_image_view.cpp
-)
-
-set(IMAGE_TOOL_GUI_SRC
-    gui/image/basic/control.cpp
-    gui/image/basic/file_dialogs.cpp
-    gui/image/basic/image_view.cpp
-    ${IMAGE_TOOL_SRC}
 )
 
 # gui/image/resize

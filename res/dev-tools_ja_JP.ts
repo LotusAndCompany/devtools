@@ -400,8 +400,12 @@
 <context>
     <name>Test::TestBasicImageView</name>
     <message>
+        <location filename="../tests/gui/image/basic/test_basic_image_view.cpp" line="+71"/>
+        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+154"/>
         <source>No Image</source>
-        <translation type="obsolete">画像がありません</translation>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
@@ -419,16 +423,19 @@
         <translation type="obsolete">保存</translation>
     </message>
     <message>
+        <location filename="../tests/gui/image/basic/test_control.cpp" line="+27"/>
         <source>Load</source>
-        <translation type="obsolete">読み込み</translation>
+        <translation type="unfinished">読み込み</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Reset</source>
-        <translation type="obsolete">リセット</translation>
+        <translation type="unfinished">リセット</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Save</source>
-        <translation type="obsolete">保存</translation>
+        <translation type="unfinished">保存</translation>
     </message>
 </context>
 <context>
@@ -438,22 +445,25 @@
         <translation type="obsolete">%1×%2</translation>
     </message>
     <message>
+        <location filename="../tests/gui/image/division/test_image_division_gui.cpp" line="+170"/>
         <source>%1 x %2</source>
-        <translation type="obsolete">%1 × %2</translation>
+        <translation type="unfinished">%1 × %2</translation>
     </message>
 </context>
 <context>
     <name>Test::TestImageViewForImageDivision</name>
     <message>
+        <location filename="../tests/gui/image/division/test_image_view_for_image_division.cpp" line="+54"/>
         <source>No Image</source>
-        <translation type="obsolete">画像がありません</translation>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
     <name>Test::TestImageViewForImageTransparent</name>
     <message>
+        <location filename="../tests/gui/image/transparent/test_image_view_for_image_transparent.cpp" line="+45"/>
         <source>No Image</source>
-        <translation type="obsolete">画像がありません</translation>
+        <translation type="unfinished">画像がありません</translation>
     </message>
 </context>
 <context>
