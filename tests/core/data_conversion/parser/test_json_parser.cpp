@@ -24,12 +24,12 @@ void TestJsonParser::test_tryParse()
     JsonParser::ParseResult result;
 
     result = jp.tryParse("");
-    // 空文字列の解析が成功すること
-    QVERIFY(result.success);
-    //QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariant);
-    QCOMPARE_EQ(result.type, JsonParser::ParseResult::DataType::VARIANT);
+    // 空文字列の解析が失敗すること
+    QVERIFY(!result.success);
+    QCOMPARE_EQ(result.type, JsonParser::ParseResult::DataType::UNKNOWN);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::UnknownType);
     QCOMPARE_EQ(result.data, QVariant());
-    QVERIFY(result.errors.empty());
+    QCOMPARE_GT(result.errors.size(), 0);
 
     const QVariantMap data = {
         {"null_key", QVariant::fromValue(nullptr)},

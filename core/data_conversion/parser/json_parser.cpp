@@ -10,7 +10,7 @@ BasicParser::ParseResult JsonParser::tryParse(const QString &src) const
 
     QJsonParseError *jsonError = nullptr;
     QJsonDocument doc = QJsonDocument::fromJson(src.toUtf8(), jsonError);
-    if (jsonError == nullptr) {
+    if (jsonError == nullptr && !doc.isNull()) {
         if (doc.isObject()) {
             result.type = ParseResult::DataType::MAP;
             result.data = doc.object().toVariantMap();
@@ -19,18 +19,23 @@ BasicParser::ParseResult JsonParser::tryParse(const QString &src) const
             result.data = doc.array().toVariantList();
         } else {
             // このパターンがあり得るのかは不明。data.typeId()はQMetaType::UnknownTypeになる。
-            result.type = ParseResult::DataType::VARIANT;
+            result.type = ParseResult::DataType::UNKNOWN;
             result.data = QVariant();
         }
 
         result.success = true;
     } else {
-        qInfo() << jsonError->errorString();
+        if (jsonError) {
+            result.errors.push_back(jsonError->errorString());
+            qInfo() << jsonError->errorString();
+        } else {
+            result.errors.push_back("Failed to parse JSON (no detail information available)");
+            qInfo() << result.errors.back();
+        }
 
         result.type = ParseResult::DataType::UNKNOWN;
         result.data = QVariant();
         result.success = false;
-        result.errors.push_back(jsonError->errorString());
     }
 
     return result;
