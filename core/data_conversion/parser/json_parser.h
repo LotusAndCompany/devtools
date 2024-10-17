@@ -9,7 +9,7 @@
 class JsonParser : public BasicParser
 {
 public:
-    void tryParse(const QString &src, ParseResult *result) const override;
+    ParseResult tryParse(const QString &src) const override;
 };
 
 #endif // JSON_PARSER_H

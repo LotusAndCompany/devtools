@@ -87,7 +87,7 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::HTTP_REQUEST:
         content = new api_tool(this);
         break;
-    case Sidemenu::ID::DATA_COVERSION:
+    case Sidemenu::ID::DATA_CONVERSION:
         content = new DataConversionGUI(new DataConversion(), this);
         break;
     default:

@@ -23,7 +23,7 @@ void TestJsonParser::test_tryParse()
     JsonParser jp;
     JsonParser::ParseResult result;
 
-    jp.tryParse("", &result);
+    result = jp.tryParse("");
     // 空文字列の解析が成功すること
     QVERIFY(result.success);
     //QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariant);
@@ -62,7 +62,7 @@ void TestJsonParser::test_tryParse()
         QTextStream stream(&file);
         const QString json = stream.readAll();
 
-        jp.tryParse(json, &result);
+        result = jp.tryParse(json);
         // mapの解析が成功すること
         QVERIFY(result.success);
         QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);

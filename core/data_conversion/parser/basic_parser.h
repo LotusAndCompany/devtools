@@ -35,6 +35,8 @@ public:
             MAX,     ///< 最大値
         } type
             = DataType::UNKNOWN; ///< 格納されているデータ型
+        /// 補足情報など
+        QVariantMap extras;
         /// エラーメッセージ
         QStringList errors;
     };
@@ -42,16 +44,9 @@ public:
     /**
      * @brief 入力文字列を解析できるなら解析する
      * @param src 入力文字列
-     * @param result 結果
+     * @return 結果
      */
-    virtual void tryParse(const QString &src, ParseResult *result) const = 0;
-
-protected:
-    /**
-     * @brief pがnullptrなら例外を投げる
-     * @param p チェック対象
-     */
-    static void validatePointer(void *p) noexcept(false);
+    virtual ParseResult tryParse(const QString &src) const = 0;
 
 #ifdef _TEST_BasicParser
     friend class Test::TestBasicParser;

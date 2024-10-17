@@ -60,7 +60,6 @@ public:
         JSON,       ///< JSON
         YAML_BLOCK, ///< YAML (block style)
         YAML_FLOW,  ///< YAML (flow style)
-        /*XML,        ///< XML*/
         TOML,  ///< TOML
         ERROR, ///< 不正なフォーマット
         MAX,   ///< 最大値
@@ -172,63 +171,6 @@ private:
 
     /// 入力文字列を解析し、 `inputFormat`, `intermediateData` を設定する
     void parseInputText();
-
-    /// 解析結果を格納する構造体
-    struct ParseResult
-    {
-        Format format = Format::ERROR; ///< フォーマット
-        QString error;                 ///< エラーメッセージ
-        QVariant data;                 ///< データ
-    };
-
-    /**
-     * @brief pがnullptrなら例外を投げる
-     * @param p チェック対象
-     */
-    static void validatePointer(void *p) noexcept(false);
-
-    /**
-     * @brief JSONで解析できるか試す
-     * @param result 結果の出力先
-     */
-    void tryParseJSON(ParseResult *result) const;
-
-    /**
-     * @brief YAMLで解析できるか試す
-     * @param result 結果の出力先
-     */
-    void tryParseYAML(ParseResult *result) const;
-    /**
-     * @brief nodeを `QVariant` に変換する
-     * @param src 変換前の値
-     * @param dst 変換後の値の格納先
-     */
-    static bool yamlNodeToQVariant(const YAML::Node &src, QVariant *dst);
-    /**
-     * @brief scalarを `QVariant` に変換する
-     * @details 基本的にはQStringを返す
-     * @param src 変換前の値
-     * @param dst 変換後の値の格納先
-     */
-    static bool yamlScalarToQVariant(const YAML::Node &src, QVariant *dst) noexcept(false);
-    /**
-     * @brief mapを `QVariantMap` に変換する
-     * @param src 変換前の値
-     * @param dst 変換後の値の格納先
-     */
-    static bool yamlMapToQVariantMap(const YAML::Node &src, QVariantMap *dst) noexcept(false);
-    /**
-     * @brief mapを `QVariantList` に変換する
-     * @param src 変換前の値
-     * @param dst 変換後の値の格納先
-     */
-    static bool yamlMapToQVariantList(const YAML::Node &src, QVariantList *dst) noexcept(false);
-
-    /**
-     * @brief TOMLで解析できるか試す
-     * @param result 結果の出力先
-     */
-    void tryParseTOML(ParseResult *result) const;
 
 #ifdef _TEST_DataConversion
     friend class Test::TestDataConversion;

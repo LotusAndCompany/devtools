@@ -23,7 +23,6 @@ private slots:
     void test_constructor();
     void test_validateFormat();
     void test_validateIndentation();
-    void test_validatePointer();
     void test_setInputText();
     void test_load();
     void test_save();
@@ -101,23 +100,11 @@ void TestDataConversion::test_validateIndentation()
                              DataConversion::validateIndentation(DataConversion::Indentation::MAX));
 }
 
-void TestDataConversion::test_validatePointer()
-{
-    // nullptr以外が渡された時は何もしないこと
-    char *const byte = new char;
-    QVERIFY_THROWS_NO_EXCEPTION(DataConversion::validatePointer(byte));
-    delete byte;
-
-    // nullptrが渡された時は例外を投げること
-    QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<nullptr_t>,
-                             DataConversion::validatePointer(nullptr));
-}
-
 void TestDataConversion::test_setInputText()
 {
     DataConversion dataConversion;
 
-    QString randomQString = std::move(rd.nextQString());
+    QString randomQString = rd.nextQString();
 
     dataConversion.setInputText(randomQString);
     // inputTextが設定されること
@@ -132,7 +119,7 @@ void TestDataConversion::test_setInputText()
     // outdatedが変わらないこと
     QCOMPARE_EQ(dataConversion.outdated, false);
 
-    randomQString = std::move(rd.nextQString());
+    randomQString = rd.nextQString();
     dataConversion.setInputText(randomQString);
     // inputTextが設定されること
     QCOMPARE_EQ(dataConversion.inputText(), randomQString);
@@ -157,7 +144,7 @@ void TestDataConversion::test_load()
     QVERIFY(dataConversion.load(file.fileName()));
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
-        const QString json = std::move(stream.readAll());
+        const QString json = stream.readAll();
 
         // 読み込んだファイルの内容が設定されていること
         QCOMPARE_EQ(dataConversion.inputText(), json);
@@ -220,7 +207,7 @@ void TestDataConversion::test_parseInputText()
     QFile file(TEST_SRC_DIR + "/core/data_conversion/test.json");
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
-        const QString json = std::move(stream.readAll());
+        const QString json = stream.readAll();
 
         DataConversion dataConversion;
         dataConversion.setInputText(json);

@@ -13,19 +13,28 @@ class TestBasicParser : public QObject
     Q_OBJECT
 
 private slots:
-    void test_validatePointer();
+    // test cases
+    void test_ParseResult();
 };
 
-void TestBasicParser::test_validatePointer()
+void TestBasicParser::test_ParseResult()
 {
-    // nullptr以外が渡された時は何もしないこと
-    char *const byte = new char;
-    QVERIFY_THROWS_NO_EXCEPTION(BasicParser::validatePointer(byte));
-    delete byte;
+    const BasicParser::ParseResult result;
 
-    // nullptrが渡された時は例外を投げること
-    QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<nullptr_t>,
-                             BasicParser::validatePointer(nullptr));
+    // successの初期値がfalseであること
+    QCOMPARE_EQ(result.success, false);
+
+    // dataの初期値がQVariantの初期値であること
+    QCOMPARE_EQ(result.data, QVariant());
+
+    // errorsの初期値が空の配列であること
+    QVERIFY(result.errors.isEmpty());
+
+    // typeの初期値がUNKNOWNであること
+    QCOMPARE_EQ(result.type, BasicParser::ParseResult::DataType::UNKNOWN);
+
+    // extrasの初期値が空の連想配列であること
+    QVERIFY(result.extras.empty());
 }
 } // namespace Test
 
