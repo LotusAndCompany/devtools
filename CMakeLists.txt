@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.1)
 
-# vcpkgを使わない間は一旦止める
+# vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP ON)
 
 project(DevTools VERSION 0.0.0 LANGUAGES CXX)
