@@ -58,6 +58,10 @@ const Tool::Translatable Tool::translatable(ID id)
         return Translatable{
             tr("Command Genration"),
             tr("Generate command from command list"),
+    case ID::DATA_COVERSION:
+        return Translatable{
+            tr("Data/Format Conversion"),
+            tr("Conversion and formatting of text-serialized data"),
         };
     default:
         throw UnderDevelopmentException();

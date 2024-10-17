@@ -119,7 +119,6 @@
         <translation type="unfinished">コマンド生成</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
@@ -137,6 +136,43 @@
         <location line="-15"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Input Text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Load</source>
+        <translation type="unfinished">読み込み</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+79"/>
+        <source>Output Text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Save</source>
+        <translation type="unfinished">保存</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">コピー</translation>
     </message>
 </context>
 <context>
@@ -632,6 +668,13 @@
     <message>
         <source>Generate command from command list</source>
         <translation type="vanished">コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <source>Data/Format Conversion</source>
+    </message>
+    <message>
+        <source>Conversion and formatting of text-serialized data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

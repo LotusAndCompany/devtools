@@ -19,18 +19,20 @@
     COMMAND_GENERATION,         \
     /** 画像リサイズ */           \
     IMAGE_RESIZE,               \
-    /** 画像回転・反転 */          \
+    /** 画像回転・反転 */         \
     IMAGE_ROTATION,             \
-    /** 画像分割 */             \
-    IMAGE_DIVISION,                \
-    /** 画像透明化 */            \
+    /** 画像分割 */              \
+    IMAGE_DIVISION,             \
+    /** 画像透明化 */             \
     IMAGE_TRANSPARENT,          \
-    /** 画像トリミング */          \
+    /** 画像トリミング */         \
     IMAGE_TRIM,                 \
-    /** 画像結合・重ね合わせ */   \
+    /** 画像結合・重ね合わせ */    \
     IMAGE_COMBINE,              \
-    /** 定型文生成 */            \
-    PHRASE_GENERATION
+    /** 定型文生成 */             \
+    PHRASE_GENERATION,          \
+    /** データ・フォーマット変換 */ \
+    DATA_COVERSION              // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H
