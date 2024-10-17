@@ -15,13 +15,11 @@ YamlParser::ParseResult YamlParser::tryParse(const QString &src) const
     } catch (YAML::Exception &e) {
         result.success = false;
         result.data = QVariant();
-        result.type = ParseResult::DataType::UNKNOWN;
         result.errors.push_back(e.what());
         qInfo() << "YAML::Exception:" << e.what();
     } catch (CommonException &e) {
         result.success = false;
         result.data = QVariant();
-        result.type = ParseResult::DataType::UNKNOWN;
         result.errors.push_back(e.message);
         qInfo() << "CommonException:" << e.message;
     }
@@ -70,7 +68,6 @@ YamlParser::ParseResult YamlParser::yamlNodeToQVariant(const YAML::Node &node)
         else if (node.IsNull()) {
             // NOTE: このパターンがあり得るのか分からない
             result.success = true;
-            result.type = ParseResult::DataType::VARIANT;
             result.data = QVariant::fromValue(nullptr);
         }
     }
@@ -86,7 +83,6 @@ YamlParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node)
         if (node.IsScalar()) {
             // TODO: データ型を自動で判別する
             result.success = true;
-            result.type = ParseResult::DataType::VARIANT;
             result.data = QString::fromStdString(node.Scalar());
             return result;
         } else {
@@ -112,12 +108,11 @@ YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
                     const auto keyParseResult = yamlScalarToQVariant(keyNode);
                     const auto valueParseResult = yamlNodeToQVariant(valueNode);
 
-                    if (keyParseResult.success && valueParseResult.success) {
+                    if (keyParseResult && valueParseResult) {
                         map[keyParseResult.data.toString()] = std::move(valueParseResult.data);
                     } else {
                         // keyもしくはvalueが不正
                         result.success = false;
-                        result.type = ParseResult::DataType::MAP;
                         result.data = std::move(map);
                         result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
                         result.errors.append(std::move(keyParseResult.errors));
@@ -127,7 +122,6 @@ YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
                 } else {
                     // NOTE: yamlでは文字列以外のkeyも認められるが、今のところはサポートしない
                     result.success = false;
-                    result.type = ParseResult::DataType::MAP;
                     result.data = std::move(map);
                     result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
                     result.errors.push_back("no-scaler type key is not supported currently"
@@ -137,7 +131,6 @@ YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
             }
 
             result.success = true;
-            result.type = ParseResult::DataType::MAP;
             result.data = std::move(map);
             result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
             return result;
@@ -160,12 +153,11 @@ YamlParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node 
             for (YAML::const_iterator it = node.begin(); it != node.end(); it++) {
                 const auto valueParseResult = yamlNodeToQVariant(*it);
 
-                if (valueParseResult.success) {
+                if (valueParseResult) {
                     list.push_back(std::move(valueParseResult.data));
                 } else {
                     // valueが不正
                     result.success = false;
-                    result.type = ParseResult::DataType::LIST;
                     result.data = std::move(list);
                     result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
                     result.errors.append(std::move(valueParseResult.errors));
@@ -174,7 +166,6 @@ YamlParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node 
             }
 
             result.success = true;
-            result.type = ParseResult::DataType::LIST;
             result.data = std::move(list);
             result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
             return result;

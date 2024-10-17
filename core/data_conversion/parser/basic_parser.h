@@ -25,20 +25,13 @@ public:
         bool success = false;
         /// データ
         QVariant data;
-        /// 格納されているデータ型を表す列挙体
-        enum class DataType {
-            MIN,     ///< 最小値
-            UNKNOWN, ///< 未設定
-            VARIANT, ///< QVariant
-            MAP,     ///< QVariantMap
-            LIST,    ///< QVariantList
-            MAX,     ///< 最大値
-        } type
-            = DataType::UNKNOWN; ///< 格納されているデータ型
         /// 補足情報など
         QVariantMap extras;
         /// エラーメッセージ
         QStringList errors;
+
+        /// 真偽値に変換する
+        operator bool() const { return success; }
     };
 
     /**

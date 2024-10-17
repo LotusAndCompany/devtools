@@ -12,14 +12,11 @@ JsonParser::ParseResult JsonParser::tryParse(const QString &src) const
     QJsonDocument doc = QJsonDocument::fromJson(src.toUtf8(), jsonError);
     if (jsonError == nullptr && !doc.isNull()) {
         if (doc.isObject()) {
-            result.type = ParseResult::DataType::MAP;
             result.data = doc.object().toVariantMap();
         } else if (doc.isArray()) {
-            result.type = ParseResult::DataType::LIST;
             result.data = doc.array().toVariantList();
         } else {
             // このパターンがあり得るのかは不明。data.typeId()はQMetaType::UnknownTypeになる。
-            result.type = ParseResult::DataType::UNKNOWN;
             result.data = QVariant();
         }
 
@@ -33,7 +30,6 @@ JsonParser::ParseResult JsonParser::tryParse(const QString &src) const
             qInfo() << result.errors.back();
         }
 
-        result.type = ParseResult::DataType::UNKNOWN;
         result.data = QVariant();
         result.success = false;
     }

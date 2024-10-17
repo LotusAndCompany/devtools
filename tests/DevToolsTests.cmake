@@ -22,6 +22,13 @@ target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
     ${Qt6Test_INCLUDE_DIRS}
 )
 
+add_library(${PROJECT_NAME}_tool SHARED
+    core/tool/tool.h core/tool/tool.cpp
+)
+target_link_libraries(${PROJECT_NAME}_tool PUBLIC
+    Qt6::Core
+)
+
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
         DEVTOOLS_TEST

@@ -15,6 +15,7 @@ class TestBasicParser : public QObject
 private slots:
     // test cases
     void test_ParseResult();
+    void test_operator_bool();
 };
 
 void TestBasicParser::test_ParseResult()
@@ -30,11 +31,20 @@ void TestBasicParser::test_ParseResult()
     // errorsの初期値が空の配列であること
     QVERIFY(result.errors.isEmpty());
 
-    // typeの初期値がUNKNOWNであること
-    QCOMPARE_EQ(result.type, BasicParser::ParseResult::DataType::UNKNOWN);
-
     // extrasの初期値が空の連想配列であること
     QVERIFY(result.extras.empty());
+}
+
+void TestBasicParser::test_operator_bool()
+{
+    BasicParser::ParseResult result;
+
+    // success=falseの時はfalseであること
+    QVERIFY(!result);
+
+    // success=trueの時はtrueであること
+    result.success = true;
+    QVERIFY(result);
 }
 } // namespace Test
 

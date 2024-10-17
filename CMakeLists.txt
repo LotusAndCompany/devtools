@@ -147,6 +147,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/data_conversion/parser/basic_parser.h core/data_conversion/parser/basic_parser.cpp
         core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
         core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
+        core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
         gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
     )
     # toml11, yaml-cppのインクルードディレクトリ
@@ -191,15 +192,15 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} update_translations)
 add_dependencies(${PROJECT_NAME} release_translations)
 
+# vcpkgのパッケージを探す
+find_package(toml11 CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
+
 #get_cmake_property(_variableNames VARIABLES)
 #list (SORT _variableNames)
 #foreach (_variableName ${_variableNames})
     #message(STATUS "${_variableName}=${${_variableName}}")
 #endforeach()
-
-# vcpkgのパッケージを探す
-find_package(toml11 CONFIG REQUIRED)
-find_package(yaml-cpp CONFIG REQUIRED)
 
 # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
 target_include_directories(${PROJECT_NAME} PRIVATE

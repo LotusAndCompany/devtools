@@ -25,8 +25,7 @@ void TestJsonParser::test_tryParse()
 
     result = jp.tryParse("");
     // 空文字列の解析が失敗すること
-    QVERIFY(!result.success);
-    QCOMPARE_EQ(result.type, JsonParser::ParseResult::DataType::UNKNOWN);
+    QVERIFY(!result);
     QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::UnknownType);
     QCOMPARE_EQ(result.data, QVariant());
     QCOMPARE_GT(result.errors.size(), 0);
@@ -64,9 +63,8 @@ void TestJsonParser::test_tryParse()
 
         result = jp.tryParse(json);
         // mapの解析が成功すること
-        QVERIFY(result.success);
+        QVERIFY(result);
         QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);
-        QCOMPARE_EQ(result.type, JsonParser::ParseResult::DataType::MAP);
         QVERIFY(result.errors.empty());
         // 読み込んだ内容がdataと一致していること
         const auto map = result.data.toMap();

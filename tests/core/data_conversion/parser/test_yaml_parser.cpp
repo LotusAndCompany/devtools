@@ -65,8 +65,8 @@ void TestYamlParser::test_tryParse()
 
         const auto result = yp.tryParse(yaml);
         // mapの解析が成功すること
-        QVERIFY(result.success);
-        QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::MAP);
+        QVERIFY(result);
+        QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);
         QVERIFY(result.errors.empty());
         // flow styleであること
         QVERIFY(result.extras.contains(YamlParser::EXTRAS_YAML_STYLE));
@@ -129,8 +129,8 @@ void TestYamlParser::test_tryParse()
 
         const auto result = yp.tryParse(yaml);
         // mapの解析が成功すること
-        QVERIFY(result.success);
-        QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::MAP);
+        QVERIFY(result);
+        QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);
         QVERIFY(result.errors.empty());
         // block styleであること
         QVERIFY(result.extras.contains(YamlParser::EXTRAS_YAML_STYLE));
@@ -181,22 +181,22 @@ void TestYamlParser::test_yamlNodeToQVariant()
     const auto scalarNode = YAML::Node("scalar");
     QVERIFY(scalarNode.IsScalar());
     auto result = YamlParser::yamlNodeToQVariant(scalarNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::VARIANT);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QString);
 
     // Sequenceを変換できること
     const auto sequenceNode = YAML::Node(std::vector<std::string>{"a", "b"});
     QVERIFY(sequenceNode.IsSequence());
     result = YamlParser::yamlNodeToQVariant(sequenceNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::LIST);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantList);
 
     // Mapを変換できること
     const auto mapNode = YAML::Node(std::map<std::string, std::string>{{"a", "b"}});
     QVERIFY(mapNode.IsMap());
     result = YamlParser::yamlNodeToQVariant(mapNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::MAP);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);
 }
 
 void TestYamlParser::test_yamlScalarToQVariant()
@@ -208,8 +208,8 @@ void TestYamlParser::test_yamlScalarToQVariant()
     QVERIFY(scalarNode.IsScalar());
 
     auto result = YamlParser::yamlScalarToQVariant(scalarNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::VARIANT);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QString);
     QCOMPARE_EQ(result.data, "scalar");
     QVERIFY(result.errors.empty());
 
@@ -218,8 +218,8 @@ void TestYamlParser::test_yamlScalarToQVariant()
     QVERIFY(scalarNode.IsScalar());
 
     result = YamlParser::yamlScalarToQVariant(scalarNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::VARIANT);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QString);
     QCOMPARE_EQ(result.data, "255");
     QVERIFY(result.errors.empty());
 
@@ -228,8 +228,8 @@ void TestYamlParser::test_yamlScalarToQVariant()
     QVERIFY(scalarNode.IsScalar());
 
     result = YamlParser::yamlScalarToQVariant(scalarNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::VARIANT);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QString);
     QCOMPARE_EQ(result.data, "2.71828");
     QVERIFY(result.errors.empty());
 
@@ -249,8 +249,8 @@ void TestYamlParser::test_yamlMapToQVariantMap()
     QVERIFY(mapNode.IsMap());
 
     const auto result = YamlParser::yamlMapToQVariantMap(mapNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::MAP);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantMap);
     QVERIFY(result.errors.empty());
     const auto resultMap = result.data.toMap();
     QCOMPARE_EQ(resultMap.size(), 3);
@@ -277,8 +277,8 @@ void TestYamlParser::test_yamlSequenceToQVariantList()
     });
     QVERIFY(sequenceNode.IsSequence());
     auto result = YamlParser::yamlSequenceToQVariantList(sequenceNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::LIST);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantList);
     QVERIFY(result.errors.empty());
     auto resultList = result.data.toList();
     QCOMPARE_EQ(resultList.size(), 3);
@@ -294,8 +294,8 @@ void TestYamlParser::test_yamlSequenceToQVariantList()
     });
     QVERIFY(sequenceNode.IsSequence());
     result = YamlParser::yamlSequenceToQVariantList(sequenceNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::LIST);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantList);
     QVERIFY(result.errors.empty());
     resultList = result.data.toList();
     QCOMPARE_EQ(resultList.size(), 3);
@@ -311,8 +311,8 @@ void TestYamlParser::test_yamlSequenceToQVariantList()
     });
     QVERIFY(sequenceNode.IsSequence());
     result = YamlParser::yamlSequenceToQVariantList(sequenceNode);
-    QVERIFY(result.success);
-    QCOMPARE_EQ(result.type, YamlParser::ParseResult::DataType::LIST);
+    QVERIFY(result);
+    QCOMPARE_EQ(result.data.typeId(), QMetaType::Type::QVariantList);
     QVERIFY(result.errors.empty());
     resultList = result.data.toList();
     QCOMPARE_EQ(resultList.size(), 3);

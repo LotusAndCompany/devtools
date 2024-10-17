@@ -156,7 +156,7 @@ void DataConversion::parseInputText()
     // JSONで解析できるか試す
     JsonParser jp;
     result = jp.tryParse(inputText());
-    if (result.success) {
+    if (result) {
         inputFormat = Format::JSON;
         intermediateData = std::move(result.data);
         outdated = true;
@@ -166,7 +166,7 @@ void DataConversion::parseInputText()
     // YAMLで解析できるか試す
     YamlParser yp;
     result = yp.tryParse(inputText());
-    if (result.success) {
+    if (result) {
         if (result.extras[YamlParser::EXTRAS_YAML_STYLE].toInt()
             == static_cast<int>(YAML::EmitterStyle::Flow))
             inputFormat = Format::YAML_FLOW;
