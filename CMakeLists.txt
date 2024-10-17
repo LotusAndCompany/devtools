@@ -144,7 +144,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # data_conversion
     qt_add_library(${PROJECT_NAME}_data_conversion STATIC
         core/data_conversion/data_conversion.h core/data_conversion/data_conversion.cpp
-        core/data_conversion/parser/basic_parser.h core/data_conversion/parser/basic_parser.cpp
+        core/data_conversion/parser/basic_parser.h
         core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
         core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
         core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
