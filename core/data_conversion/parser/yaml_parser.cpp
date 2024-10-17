@@ -5,7 +5,7 @@
 
 const QString YamlParser::EXTRAS_YAML_STYLE = "yaml_style";
 
-BasicParser::ParseResult YamlParser::tryParse(const QString &src) const
+YamlParser::ParseResult YamlParser::tryParse(const QString &src) const
 {
     ParseResult result;
 
@@ -56,7 +56,7 @@ bool YamlParser::validateYamlNode(const YAML::Node &node, ParseResult *result)
     return true;
 }
 
-BasicParser::ParseResult YamlParser::yamlNodeToQVariant(const YAML::Node &node)
+YamlParser::ParseResult YamlParser::yamlNodeToQVariant(const YAML::Node &node)
 {
     ParseResult result;
 
@@ -78,7 +78,7 @@ BasicParser::ParseResult YamlParser::yamlNodeToQVariant(const YAML::Node &node)
     return result;
 }
 
-BasicParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node)
+YamlParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node)
 {
     ParseResult result;
 
@@ -98,7 +98,7 @@ BasicParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node
     return result;
 }
 
-BasicParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
+YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
 {
     ParseResult result;
 
@@ -150,7 +150,7 @@ BasicParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node
     return result;
 }
 
-BasicParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node &node)
+YamlParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node &node)
 {
     ParseResult result;
 

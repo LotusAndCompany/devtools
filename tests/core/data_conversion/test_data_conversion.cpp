@@ -217,7 +217,51 @@ void TestDataConversion::test_parseInputText()
         QCOMPARE_EQ(dataConversion.inputFormat, DataConversion::Format::JSON);
         // dataConversion.intermediateDataが設定されていること
         QVERIFY(dataConversion.intermediateData.isValid());
-        // dataConversion.intermediateDataの構造が想定通りであること
+        // dataConversion.intermediateDataが想定通りであること
+        QCOMPARE_EQ(dataConversion.intermediateData.typeId(), QMetaType::Type::QVariantMap);
+        // outdatedがtrueになっていること
+        QCOMPARE_EQ(dataConversion.outdated, true);
+    } else {
+        QFAIL(("failed to load " + file.fileName()).toStdString().c_str());
+    }
+
+    file.close();
+    file.setFileName(TEST_SRC_DIR + "/core/data_conversion/test_block.yaml");
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&file);
+        const QString yaml = stream.readAll();
+
+        DataConversion dataConversion;
+        dataConversion.setInputText(yaml);
+
+        dataConversion.parseInputText();
+        // inputFormatがYAML_BLOCKになっていること
+        QCOMPARE_EQ(dataConversion.inputFormat, DataConversion::Format::YAML_BLOCK);
+        // dataConversion.intermediateDataが設定されていること
+        QVERIFY(dataConversion.intermediateData.isValid());
+        // dataConversion.intermediateDataが想定通りであること
+        QCOMPARE_EQ(dataConversion.intermediateData.typeId(), QMetaType::Type::QVariantMap);
+        // outdatedがtrueになっていること
+        QCOMPARE_EQ(dataConversion.outdated, true);
+    } else {
+        QFAIL(("failed to load " + file.fileName()).toStdString().c_str());
+    }
+
+    file.close();
+    file.setFileName(TEST_SRC_DIR + "/core/data_conversion/test_flow.yaml");
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&file);
+        const QString yaml = stream.readAll();
+
+        DataConversion dataConversion;
+        dataConversion.setInputText(yaml);
+
+        dataConversion.parseInputText();
+        // inputFormatがYAML_FLOWになっていること
+        QCOMPARE_EQ(dataConversion.inputFormat, DataConversion::Format::YAML_FLOW);
+        // dataConversion.intermediateDataが設定されていること
+        QVERIFY(dataConversion.intermediateData.isValid());
+        // dataConversion.intermediateDataが想定通りであること
         QCOMPARE_EQ(dataConversion.intermediateData.typeId(), QMetaType::Type::QVariantMap);
         // outdatedがtrueになっていること
         QCOMPARE_EQ(dataConversion.outdated, true);

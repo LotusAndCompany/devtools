@@ -4,7 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-BasicParser::ParseResult JsonParser::tryParse(const QString &src) const
+JsonParser::ParseResult JsonParser::tryParse(const QString &src) const
 {
     ParseResult result;
 
