@@ -2,26 +2,34 @@
 #define BASE_EMITTER_H
 
 #include <QString>
+#include "core/data_conversion/data_conversion.h"
 
+/// データを文字列に変換するクラスの基底クラス
 class BaseEmitter
 {
 public:
-    virtual ~BaseEmitter();
+    /// デストラクタ
+    virtual ~BaseEmitter() = default;
 
-    /// 出力形式を定義した列挙体
-    enum class Style {
-        MIN,             ///<最小値
-        INDENT_2_SPACES, ///<2スペースでインデント
-        INDENT_4_SPACES, ///<4スペースでインデント
-        INDNENT_TABS,    ///<tabでインデント
-        OPTIMIZED,       ///<可能な限り小さくする
-        MAX,             ///<最大値
-    };
+    /**
+     * @brief データを文字列に変換する
+     * @param data 入力データ
+     * @param style 出力スタイル(一部非対応あり)
+     * @return 結果
+     */
+    virtual QString emitQString(const QVariant &data, DataConversion::Indentation style) const = 0;
 
-    virtual QString emitSerialized(const QVariant &input, Style style) = 0;
+protected:
+    /**
+     * @brief 4スペースのインデントを指定のインデントに置換する
+     * @param src 入力
+     * @param newIndent 置換先の文字列
+     * @return 結果
+     */
+    virtual QString replace4spaceIndentation(const QString &src, const QString &newIndent) const;
 
 #ifdef _TEST_BasicEmitter
-    friend class Test::TestBasicParser;
+    friend class Test::TestBasicEmitter;
 #endif
 };
 

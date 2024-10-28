@@ -91,7 +91,7 @@ void TestDataConversion::test_validateIndentation()
     QVERIFY_THROWS_NO_EXCEPTION(
         DataConversion::validateIndentation(DataConversion::Indentation::SPACES_4));
     QVERIFY_THROWS_NO_EXCEPTION(
-        DataConversion::validateIndentation(DataConversion::Indentation::TAB));
+        DataConversion::validateIndentation(DataConversion::Indentation::TABS));
 
     // MIN, MAXの場合は例外を投げること
     QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<int>,
