@@ -33,6 +33,14 @@ private:
 
     /// ロジック部分
     DataConversionInterface *const dataConversion;
+
+private slots:
+    void onInputTextChanged();
+    void onPastePressed();
+    void onLoadPressed();
+    void onClearPressed();
+    void onSavePressed();
+    void onCopyPressed();
 };
 
 #endif // DATA_CONVERSION_GUI_H

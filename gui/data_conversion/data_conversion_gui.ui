@@ -29,7 +29,7 @@
     </sizepolicy>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
    <property name="opaqueResize">
     <bool>true</bool>
@@ -40,7 +40,7 @@
    <property name="childrenCollapsible">
     <bool>false</bool>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
       <number>4</number>
@@ -63,7 +63,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -163,7 +163,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
       <number>4</number>
@@ -184,9 +184,57 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <number>4</number>
        </property>
        <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>JSON</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>YAML (Blobk style)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>YAML (Flow style)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TOML</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_2">
+         <item>
+          <property name="text">
+           <string>4 Spaces</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2 Spaces</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Tabs</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Minified</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -237,7 +285,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
        </property>
        <property name="openLinks">
         <bool>false</bool>
