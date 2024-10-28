@@ -25,11 +25,11 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 )
 
 # パッケージを探す
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Doxygen)
 
-qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP)
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
 # TODO: 環境で分ける
 if(APPLE)
@@ -58,7 +58,7 @@ endif()
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Project files
     # main
-    qt6_add_executable(${PROJECT_NAME}
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
         res/light_icons.qrc
@@ -69,10 +69,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res/dev-tools_en.ts
 
         main/main.cpp
+        # ここには基本的に追加しないこと
+        # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )
 
-    # source
-    qt6_add_library(${PROJECT_NAME}_lib SHARED
+    # modules
+    qt_add_library(${PROJECT_NAME}_core STATIC
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         core/application_mixin.h core/application_mixin.cpp
         gui/gui_application.h gui/gui_application.cpp
@@ -89,35 +91,51 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/tool/tool_id_fields.h
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
+    )
+    # image
+    qt_add_library(${PROJECT_NAME}_image_core STATIC
         core/image/basic_image_io.h core/image/basic_image_io.cpp
         core/image/basic_image_edit_interface.h core/image/basic_image_edit_interface.cpp
-        core/image/resize/image_resize.h core/image/resize/image_resize.cpp
         gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
         gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_resize STATIC
+        core/image/resize/image_resize.h core/image/resize/image_resize.cpp
         gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_rotation STATIC
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
         gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_division STATIC
         core/image/division/image_division.h core/image/division/image_division.cpp
         gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
         gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
+    )
+    qt_add_library(${PROJECT_NAME}_image_transparent STATIC
         core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
         gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
-    set_target_properties(${PROJECT_NAME}_lib PROPERTIES
+    # 画像関係の依存関係
+    add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+    set_target_properties(${PROJECT_NAME}_core PROPERTIES
         AUTOMOC ON
         AUTOUIC ON
     )
 
-    qt6_add_translations(
+    qt_add_translations(
         TARGETS ${PROJECT_NAME}
         TS_FILE_DIR res/
         TS_FILE_BASE "dev-tools"
     )
 else()
-    # Qt5は使わない予定
+    # Qt5以下は使わない予定
     message(FATAL_ERROR "Qt5 configuration is not supported")
 endif()
 
@@ -153,11 +171,6 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} update_translations)
 add_dependencies(${PROJECT_NAME} release_translations)
 
-
-# vcpkgのパッケージを探す
-find_package(toml11 CONFIG REQUIRED)
-find_package(yaml-cpp CONFIG REQUIRED)
-
 #get_cmake_property(_variableNames VARIABLES)
 #list (SORT _variableNames)
 #foreach (_variableName ${_variableNames})
@@ -169,22 +182,50 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_include_directories(${PROJECT_NAME}_lib PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${Qt6Core_INCLUDE_DIRS}
-    ${Qt6Gui_INCLUDE_DIRS}
-    ${Qt6Widgets_INCLUDE_DIRS}
+# [モジュール一覧]
+set(MODULE_LIST
+    ${PROJECT_NAME}_core
+    ${PROJECT_NAME}_image_core
+    ${PROJECT_NAME}_image_resize
+    ${PROJECT_NAME}_image_rotation
+    ${PROJECT_NAME}_image_division
+    ${PROJECT_NAME}_image_transparent
 )
 
-# ライブラリをリンクする
-target_link_libraries(${PROJECT_NAME}_lib PUBLIC
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Widgets
+foreach (MODULE ${MODULE_LIST})
+    add_dependencies(${PROJECT_NAME} ${MODULE})
+    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
+        add_dependencies(${MODULE} ${PROJECT_NAME}_core)
+    endif()
+
+    # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
+    target_include_directories(${MODULE} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${Qt6Core_INCLUDE_DIRS}
+        ${Qt6Bus_INCLUDE_DIRS}
+        ${Qt6Gui_INCLUDE_DIRS}
+        ${Qt6Widgets_INCLUDE_DIRS}
+    )
+
+    # ライブラリをリンクする
+    target_link_libraries(${MODULE} PUBLIC
+        Qt6::Core
+        Qt6::DBus
+        Qt6::Gui
+        Qt6::Widgets
+    )
+endforeach()
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_dependencies(${PROJECT_NAME}
+    ${MODULE_LIST}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${PROJECT_NAME}_lib
+    ${MODULE_LIST}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
