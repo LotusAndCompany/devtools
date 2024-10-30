@@ -136,6 +136,84 @@
     </message>
 </context>
 <context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="51"/>
+        <source>Input Text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="82"/>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="95"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="174"/>
+        <source>Output Text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
+        <source>JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="195"/>
+        <source>YAML (Blobk style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="200"/>
+        <source>YAML (Flow style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="205"/>
+        <source>TOML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="214"/>
+        <source>4 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="219"/>
+        <source>2 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="224"/>
+        <source>Tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="229"/>
+        <source>Minified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="253"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="266"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ImageDivisionGUI</name>
     <message>
         <location filename="../gui/image/division/image_division_gui.ui" line="85"/>
@@ -397,11 +475,19 @@
     <message>
         <location filename="../core/tool/tool.cpp" line="60"/>
         <source>Generate command from command list</source>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="54"/>
+        <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/tool/tool.cpp" line="55"/>
         <source>Generate and manage Phrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="55"/>
+        <source>Conversion and formatting of text-serialized data</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -519,7 +605,6 @@
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
         <source>Enter text...</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
