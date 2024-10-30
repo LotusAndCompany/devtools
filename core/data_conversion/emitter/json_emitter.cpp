@@ -17,7 +17,7 @@ QString JsonEmitter::emitQString(const QVariant &data, DataConversion::Indentati
     case DataConversion::Indentation::MINIFIED:
         return doc.toJson(QJsonDocument::JsonFormat::Compact);
     default:
-        QString json = doc.toJson(QJsonDocument::JsonFormat::Indented);
+        const QString json = doc.toJson(QJsonDocument::JsonFormat::Indented);
         switch (style) {
         case DataConversion::Indentation::SPACES_4:
             return json;

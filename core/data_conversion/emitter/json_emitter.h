@@ -11,7 +11,9 @@ public:
 
     // BaseEmitter interface
 public:
-    QString emitQString(const QVariant &data, DataConversion::Indentation style) const override;
+    QString emitQString(
+        const QVariant &data,
+        DataConversion::Indentation style = DataConversion::Indentation::SPACES_4) const override;
 };
 
 #endif // JSON_EMITTER_H

@@ -149,6 +149,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
         core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
         core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
+        core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
         gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
     )
     # toml11, yaml-cppのインクルードディレクトリ

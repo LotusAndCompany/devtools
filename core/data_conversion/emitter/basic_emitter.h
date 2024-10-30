@@ -23,7 +23,10 @@ public:
      * @param style 出力スタイル(一部非対応あり)
      * @return 結果
      */
-    virtual QString emitQString(const QVariant &data, DataConversion::Indentation style) const = 0;
+    virtual QString emitQString(
+        const QVariant &data,
+        DataConversion::Indentation style = DataConversion::Indentation::SPACES_4) const
+        = 0;
 
 protected:
     /**

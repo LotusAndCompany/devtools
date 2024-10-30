@@ -37,6 +37,11 @@ void TestBasicEmitter::test_replace4spaceIndentation()
     // 4スペース→タブの変換の変換ができること
     const QString srcTabs = QString("a    \n\tbb    \n\t\tccc    \n\t\tdddd    \neeeee    ");
     QCOMPARE_EQ(emitter.replace4spaceIndentation(src4spaces, "\t"), srcTabs);
+
+    // 空文字列を扱えること
+    QVERIFY_THROWS_NO_EXCEPTION(emitter.replace4spaceIndentation("", "  "));
+    // 空文字列+改行を扱えること
+    QVERIFY_THROWS_NO_EXCEPTION(emitter.replace4spaceIndentation("\n", "  "));
 }
 } // namespace Test
 
