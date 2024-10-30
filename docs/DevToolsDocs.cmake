@@ -3,7 +3,7 @@
 # set input and output files
 set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
 set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxyfile)
-SET(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # copy icon
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/docs/dev-tools_icon.doxygen.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/)
