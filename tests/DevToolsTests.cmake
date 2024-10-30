@@ -128,8 +128,13 @@ DevTools_add_test(test_toml_parser VCPKG_YAML
     SOURCES
     tests/core/data_conversion/parser/test_toml_parser.cpp
 )
+# core/data_conversion/emitter
+DevTools_add_test(test_basic_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_basic_emitter.cpp
+)
 # core/data_conversion
-DevTools_add_test(test_data_conversion VCPKG_YAML VCPKG_TOML
+DevTools_add_test(test_data_conversion
     SOURCES
     tests/core/data_conversion/test_data_conversion.cpp
 )

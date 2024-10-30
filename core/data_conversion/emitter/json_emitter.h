@@ -1,10 +1,10 @@
 #ifndef JSON_EMITTER_H
 #define JSON_EMITTER_H
 
-#include "base_emitter.h"
+#include "basic_emitter.h"
 
 /// QVariantをJSONにする
-class JsonEmitter : public BaseEmitter
+class JsonEmitter : public BasicEmitter
 {
 public:
     JsonEmitter() {}

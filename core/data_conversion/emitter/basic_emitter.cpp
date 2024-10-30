@@ -1,8 +1,8 @@
-#include "base_emitter.h"
+#include "basic_emitter.h"
 
 #include <QRegularExpression>
 
-QString BaseEmitter::replace4spaceIndentation(const QString &src, const QString &newIndent) const
+QString BasicEmitter::replace4spaceIndentation(const QString &src, const QString &newIndent) const
 {
     static QRegularExpression lineEndRegEx("[\r\n]");
     QStringList lines = src.split(lineEndRegEx, Qt::SkipEmptyParts);
@@ -20,5 +20,10 @@ QString BaseEmitter::replace4spaceIndentation(const QString &src, const QString 
         stream << newIndent.repeated(count / 4) + line.mid(count) << Qt::endl;
     }
 
-    return stream.readAll();
+    result = stream.readAll();
+    // 最後の改行を取り除く
+    if (!result.isEmpty())
+        return result.mid(0, result.length() - 1);
+    else
+        return "";
 }

@@ -1,15 +1,21 @@
-#ifndef BASE_EMITTER_H
-#define BASE_EMITTER_H
+#ifndef BASIC_EMITTER_H
+#define BASIC_EMITTER_H
 
 #include <QString>
 #include "core/data_conversion/data_conversion.h"
 
+#ifdef _TEST_BasicEmitter
+namespace Test {
+class TestBasicEmitter;
+}
+#endif
+
 /// データを文字列に変換するクラスの基底クラス
-class BaseEmitter
+class BasicEmitter
 {
 public:
     /// デストラクタ
-    virtual ~BaseEmitter() = default;
+    virtual ~BasicEmitter() = default;
 
     /**
      * @brief データを文字列に変換する
@@ -33,4 +39,4 @@ protected:
 #endif
 };
 
-#endif // BASE_EMITTER_H
+#endif // BASIC_EMITTER_H

@@ -148,16 +148,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
         core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
         core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
-        core/data_conversion/emitter/base_emitter.h core/data_conversion/emitter/base_emitter.cpp
+        core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
         gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
     )
     # toml11, yaml-cppのインクルードディレクトリ
-    target_include_directories(${PROJECT_NAME}_data_conversion PRIVATE
+    target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC
         ${TOML11_INCLUDE_DIR}   # 何故か大文字
         ${YAML_CPP_INCLUDE_DIR} # 何故か大文字
     )
     # toml11はヘッダーのみなのでリンクしなくて良い、yaml-cppはリンクが必要
-    target_link_libraries(${PROJECT_NAME}_data_conversion PRIVATE
+    target_link_libraries(${PROJECT_NAME}_data_conversion PUBLIC
         ${YAML_CPP_LIBRARIES}
     )
 

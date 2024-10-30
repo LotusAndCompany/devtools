@@ -35,12 +35,13 @@ private:
     DataConversionInterface *const dataConversion;
 
 private slots:
+    /*
     void onInputTextChanged();
     void onPastePressed();
     void onLoadPressed();
     void onClearPressed();
     void onSavePressed();
-    void onCopyPressed();
+    void onCopyPressed();*/
 };
 
 #endif // DATA_CONVERSION_GUI_H
