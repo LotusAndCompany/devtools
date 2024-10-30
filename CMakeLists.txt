@@ -139,21 +139,6 @@ else()
     message(FATAL_ERROR "Qt5 configuration is not supported")
 endif()
 
-if(${ENABLE_UNIT_TEST})
-    # Tests
-    enable_testing()
-
-    # TODO: submoduleに書きたいが... コードの一部を共有しているから無理か?
-    include(tests/DevToolsTests.cmake)
-endif()
-
-# Doxygen
-if(DOXYGEN_FOUND)
-    include(docs/DevToolsDocs.cmake)
-else()
-    message(WARNING "Doxygen not found")
-endif()
-
 # BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
 target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
@@ -215,6 +200,21 @@ foreach (MODULE ${MODULE_LIST})
         Qt6::Widgets
     )
 endforeach()
+
+# Tests
+if(${ENABLE_UNIT_TEST})
+    enable_testing()
+
+    # TODO: submoduleに書きたいが... コードの一部を共有しているから無理か?
+    include(tests/DevToolsTests.cmake)
+endif()
+
+# Doxygen
+if(DOXYGEN_FOUND)
+    include(docs/DevToolsDocs.cmake)
+else()
+    message(WARNING "Doxygen not found")
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}

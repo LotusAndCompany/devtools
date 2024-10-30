@@ -310,6 +310,29 @@
     </message>
 </context>
 <context>
+    <name>Test::TestTool</name>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="31"/>
+        <source>Image Resize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="32"/>
+        <source>Image resizing and scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="37"/>
+        <source>Image Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="38"/>
+        <source>Image rotation and flipping</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Tool</name>
     <message>
         <location filename="../core/tool/tool.cpp" line="34"/>

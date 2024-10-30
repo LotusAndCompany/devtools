@@ -1,4 +1,4 @@
-#include <QTest>
+#include <QtTest>
 
 #define _TEST_BasicImageViewControl
 #include "gui/image/basic/control.h"

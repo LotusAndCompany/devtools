@@ -383,20 +383,24 @@
 <context>
     <name>Test::TestTool</name>
     <message>
+        <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
         <source>Image Resize</source>
-        <translation type="obsolete">画像サイズ変更</translation>
+        <translation type="unfinished">画像サイズ変更</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Image resizing and scaling</source>
-        <translation type="obsolete">画像のサイズ変更や拡大縮小</translation>
+        <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Image Rotation</source>
-        <translation type="obsolete">画像回転</translation>
+        <translation type="unfinished">画像回転</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Image rotation and flipping</source>
-        <translation type="obsolete">画像の回転と反転</translation>
+        <translation type="unfinished">画像の回転と反転</translation>
     </message>
 </context>
 <context>

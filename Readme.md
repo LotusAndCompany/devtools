@@ -45,8 +45,6 @@ tests/DevToolsTests.cmakeに以下のように追加します。
 ```cmake
 DevTools_add_test(test_basic_image_io   # テスト名
     SOURCES
-    core/image/basic_image_io.h # テスト対象のコードとそれに依存するコード1
-    core/image/basic_image_io.cpp   # テスト対象のコードとそれに依存するコード2
     tests/core/image/test_basic_image_io.cpp    # テストコード
 )
 ```
