@@ -2,6 +2,14 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
+#include "core/image/division/image_division.h"
+#include "core/image/resize/image_resize.h"
+#include "core/image/rotation/image_rotation.h"
+#include "core/image/transparent/image_transparent.h"
+#include "gui/image/division/image_division_gui.h"
+#include "gui/image/resize/image_resize_gui.h"
+#include "gui/image/rotation/image_rotation_gui.h"
+#include "gui/image/transparent/image_transparent_gui.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -51,17 +59,17 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         content = new QLabel("(´･ω･) ﾎｰﾑﾀﾞﾖｰ", this);
         static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
         break;
-    case Sidemenu::ID::SAMPLE_0:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_0, "sample-0", this);
+    case Sidemenu::ID::IMAGE_RESIZE:
+        content = new ImageResizeGUI(new ImageResize(), this);
         break;
-    case Sidemenu::ID::SAMPLE_1:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
+    case Sidemenu::ID::IMAGE_ROTATION:
+        content = new ImageRotationGUI(new ImageRotation(), this);
         break;
-    case Sidemenu::ID::SAMPLE_2:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_2, "sample-2", this);
+    case Sidemenu::ID::IMAGE_DIVISION:
+        content = new ImageDivisionGUI(new ImageDivision(), this);
         break;
-    case Sidemenu::ID::SAMPLE_3:
-        content = new SampleGuiTool(Tool::ID::SAMPLE_3, "sample-3", this);
+    case Sidemenu::ID::IMAGE_TRANSPARENT:
+        content = new ImageTransparentGUI(new ImageTransparent(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

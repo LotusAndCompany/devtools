@@ -11,7 +11,9 @@ Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
     , id(id)
     , stringID(stringID)
     , _translatable(translatable(id))
-{}
+{
+    validateID(id);
+}
 
 void Tool::validateID(ID id)
 {
@@ -27,25 +29,25 @@ const Tool::Translatable Tool::translatable(ID id)
 
     // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
     switch (id) {
-    case ID::SAMPLE_0:
+    case ID::IMAGE_RESIZE:
         return Translatable{
-            tr("Sample 0"),
-            tr("This is Sample 0"),
+            tr("Image Resize"),
+            tr("Image resizing and scaling"),
         };
-    case ID::SAMPLE_1:
+    case ID::IMAGE_ROTATION:
         return Translatable{
-            tr("Sample 1"),
-            tr("This is Sample 1"),
+            tr("Image Rotation"),
+            tr("Image rotation and flipping"),
         };
-    case ID::SAMPLE_2:
+    case ID::IMAGE_DIVISION:
         return Translatable{
-            tr("Sample 2"),
-            tr("This is Sample 2"),
+            tr("Image Division"),
+            tr("Divide image into n x m"),
         };
-    case ID::SAMPLE_3:
+    case ID::IMAGE_TRANSPARENT:
         return Translatable{
-            tr("Sample 3"),
-            tr("This is Sample 3"),
+            tr("Image Transparent"),
+            tr("Make the selected color transparent"),
         };
     default:
         throw UnderDevelopmentException();

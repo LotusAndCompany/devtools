@@ -13,14 +13,6 @@
 // NOTE: コード整形をこの部分だけ無効化する
 // clang-format off
 #define TOOL_ID_FIELDS()        \
-    /** サンプルとして入れた値その1 */   \
-    SAMPLE_0,                   \
-    /** サンプルとして入れた値その2 */   \
-    SAMPLE_1,                   \
-    /** サンプルとして入れた値その3 */   \
-    SAMPLE_2,                   \
-    /** サンプルとして入れた値その4 */   \
-    SAMPLE_3,                   \
     /** HTTPリクエスト */        \
     HTTP_REQUEST,               \
     /** コマンド生成 */           \
@@ -30,7 +22,7 @@
     /** 画像回転・反転 */          \
     IMAGE_ROTATION,             \
     /** 画像分割 */             \
-    IMAGE_SPLIT,                \
+    IMAGE_DIVISION,                \
     /** 画像透明化 */            \
     IMAGE_TRANSPARENT,          \
     /** 画像トリミング */          \
