@@ -73,7 +73,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/tool/tool_id_fields.h
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
-        gui/phrase_generation/home.h gui/phrase_generation/home.cpp gui/phrase_generation/home.ui
+        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
 
     )
     qt_add_translations(DevTools

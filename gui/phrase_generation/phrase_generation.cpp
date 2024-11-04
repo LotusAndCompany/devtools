@@ -1,5 +1,6 @@
-#include "home.h"
-#include "ui_home.h"
+#include "phrase_generation.h"
+// #include "ui_phrase_generation.h"
+#include "ui_phrase_generation.h"
 
 #include <QFile>
 #include <QDir>
@@ -8,18 +9,18 @@
 #include <QClipboard>
 #include <QUuid>
 
-home::home(QWidget *parent)
+phraseGeneration::phraseGeneration(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::home)
+    , ui(new Ui::phraseGeneration)
 {
     ui->setupUi(this);
 
-    connect(ui->addButton, &QPushButton::clicked, this, &home::handleAddButtonClick);
-    connect(ui->saveButton, &QPushButton::clicked, this, &home::handleSaveButtonClick);
-    connect(ui->copyButton, &QPushButton::clicked, this, &home::handleCopyButtonClick);
-    connect(ui->deleteButton, &QPushButton::clicked, this, &home::handleDeleteButtonClick);
-    connect(ui->toggleTreeButton, &QPushButton::clicked, this, &home::handleToggleTreeButtonClick);
-    connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this, &home::handleTitleTreeWidgetItemClick);
+    connect(ui->addButton, &QPushButton::clicked, this, &phraseGeneration::handleAddButtonClick);
+    connect(ui->saveButton, &QPushButton::clicked, this, &phraseGeneration::handleSaveButtonClick);
+    connect(ui->copyButton, &QPushButton::clicked, this, &phraseGeneration::handleCopyButtonClick);
+    connect(ui->deleteButton, &QPushButton::clicked, this, &phraseGeneration::handleDeleteButtonClick);
+    connect(ui->toggleTreeButton, &QPushButton::clicked, this, &phraseGeneration::handleToggleTreeButtonClick);
+    connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this, &phraseGeneration::handleTitleTreeWidgetItemClick);
 
     QGridLayout *gridLayout = new QGridLayout(this);
 
@@ -41,12 +42,12 @@ home::home(QWidget *parent)
     loadTitles();
 }
 
-home::~home()
+phraseGeneration::~phraseGeneration()
 {
     delete ui;
 }
 
-void home::loadTitles()
+void phraseGeneration::loadTitles()
 {
     ui->titleTreeWidget->clear();
     QDir directory("content");
@@ -62,13 +63,13 @@ void home::loadTitles()
         item->setData(0, Qt::UserRole, filename);
 
         QPushButton *copyButton = new QPushButton("Copy", ui->titleTreeWidget);
-        connect(copyButton, &QPushButton::clicked, this, &home::copyContent);
+        connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
 
         ui->titleTreeWidget->setItemWidget(item, 1, copyButton);
     }
 }
 
-QString home::loadContent(const QString &filename, QString *title)
+QString phraseGeneration::loadContent(const QString &filename, QString *title)
 {
     QFile file("content/" + filename);
     if (file.open(QIODevice::ReadOnly)) {
@@ -81,14 +82,14 @@ QString home::loadContent(const QString &filename, QString *title)
     return "";
 }
 
-void home::handleAddButtonClick()
+void phraseGeneration::handleAddButtonClick()
 {
     currentFile.clear();
     ui->templateText->clear();
     ui->templateTitle->clear();
 }
 
-void home::handleSaveButtonClick()
+void phraseGeneration::handleSaveButtonClick()
 {
     QString title = ui->templateTitle->text();
     QString content = ui->templateText->toPlainText();
@@ -114,7 +115,7 @@ void home::handleSaveButtonClick()
     currentFile.clear();
 }
 
-void home::saveContent(const QString &title, const QString &content)
+void phraseGeneration::saveContent(const QString &title, const QString &content)
 {
     QDir().mkpath("content");
 
@@ -131,7 +132,7 @@ void home::saveContent(const QString &title, const QString &content)
     }
 }
 
-void home::handleCopyButtonClick()
+void phraseGeneration::handleCopyButtonClick()
 {
     QClipboard *clipboard = QApplication::clipboard();
     QString content = ui->templateText->toPlainText();
@@ -139,7 +140,7 @@ void home::handleCopyButtonClick()
     QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
 
-void home:: handleDeleteButtonClick()
+void phraseGeneration:: handleDeleteButtonClick()
 {
     QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
     if (!item) {
@@ -154,7 +155,7 @@ void home:: handleDeleteButtonClick()
     ui->templateText->clear();
 }
 
-void home::deleteContent(const QString &filename)
+void phraseGeneration::deleteContent(const QString &filename)
 {
     QFile file("content/" + filename);
     if (!file.remove()) {
@@ -162,7 +163,7 @@ void home::deleteContent(const QString &filename)
     }
 }
 
-void home::handleToggleTreeButtonClick()
+void phraseGeneration::handleToggleTreeButtonClick()
 {
     bool isVisible = ui->titleTreeWidget->isVisible();
     ui->titleTreeWidget->setVisible(!isVisible);
@@ -183,7 +184,7 @@ void home::handleToggleTreeButtonClick()
     }
 }
 
-void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
+void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
 {
     QString filename = item->data(0, Qt::UserRole).toString();
     QString title;
@@ -195,7 +196,7 @@ void home::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
     currentFile = filename;
 }
 
-void home::copyContent()
+void phraseGeneration::copyContent()
 {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (button) {

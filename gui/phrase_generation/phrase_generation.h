@@ -1,5 +1,5 @@
-#ifndef HOME_H
-#define HOME_H
+#ifndef PHRASE_GENERATION_H
+#define PHRASE_GENERATION_H
 
 #include <QWidget>
 #include <QFile>
@@ -9,16 +9,16 @@
 #include <QClipboard>
 
 namespace Ui {
-class home;
+class phraseGeneration;
 }
 
-class home : public QWidget
+class phraseGeneration : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit home(QWidget *parent = nullptr);
-    ~home();
+    explicit phraseGeneration(QWidget *parent = nullptr);
+    ~phraseGeneration();
 
 private slots:
 
@@ -31,7 +31,7 @@ private slots:
     void copyContent();
 
 private:
-    Ui::home *ui;
+    Ui::phraseGeneration *ui;
     void loadTitles();
     QString loadContent(const QString &filename, QString *title = nullptr);
     void saveContent(const QString &title, const QString &content);
@@ -40,4 +40,4 @@ private:
 
 };
 
-#endif // HOME_H
+#endif // PHRASE_GENERATION_H

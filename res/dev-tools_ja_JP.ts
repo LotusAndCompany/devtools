@@ -160,27 +160,29 @@
 <context>
     <name>home</name>
     <message>
-        <location filename="../gui/phrase_generation/home.ui" line="+20"/>
+        <source>Copy</source>
+        <translation type="obsolete">コピー</translation>
+    </message>
+</context>
+<context>
+    <name>phraseGeneration</name>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+129"/>
-        <source>+</source>
+        <location line="+36"/>
+        <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-26"/>
+        <location line="+67"/>
         <source>Enter title...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+70"/>
-        <source>Enter text...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-63"/>
+        <location line="+7"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -190,13 +192,18 @@
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+12"/>
+        <source>+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>三</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-107"/>
-        <source>Save</source>
+        <location line="+30"/>
+        <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
