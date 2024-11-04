@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1139</width>
-    <height>621</height>
+    <width>1012</width>
+    <height>633</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -29,11 +35,22 @@
   <widget class="QPushButton" name="saveButton">
    <property name="geometry">
     <rect>
-     <x>785</x>
-     <y>581</y>
+     <x>665</x>
+     <y>595</y>
      <width>100</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-right: 30px; margin-bottom: 15px;
+padding-top: 3px; padding-bottom: 3px;
+padding-left: 10px; padding-right: 10px;
+background-color: rgb(175, 174, 177);</string>
    </property>
    <property name="text">
     <string>Save</string>
@@ -42,10 +59,10 @@
   <widget class="QTreeWidget" name="titleTreeWidget">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>770</x>
      <y>50</y>
      <width>241</width>
-     <height>571</height>
+     <height>600</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -86,94 +103,97 @@ QTreeWidget::item:selected {
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>-4</y>
-     <width>1131</width>
-     <height>805</height>
+     <y>0</y>
+     <width>516</width>
+     <height>52</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLineEdit" name="templateTitle">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="placeholderText">
-         <string>Enter title...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="deleteButton">
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="copyButton">
-        <property name="text">
-         <string>Copy</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="addButton">
-        <property name="font">
-         <font>
-          <pointsize>30</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>+</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="toggleTreeButton">
-        <property name="font">
-         <font>
-          <family>Symbol</family>
-          <pointsize>27</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>三</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QPlainTextEdit" name="templateText">
+     <widget class="QLineEdit" name="templateTitle">
       <property name="enabled">
        <bool>true</bool>
       </property>
       <property name="font">
        <font>
-        <pointsize>20</pointsize>
+        <pointsize>28</pointsize>
        </font>
       </property>
-      <property name="styleSheet">
-       <string notr="true">QPlainTextEdit {
-    padding: 0px 335px 5px 0px;
-    background-color: #000000;
-}</string>
-      </property>
       <property name="placeholderText">
-       <string>Enter text...</string>
+       <string>Enter title...</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="deleteButton">
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="copyButton">
+      <property name="text">
+       <string>Copy</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="addButton">
+      <property name="font">
+       <font>
+        <pointsize>30</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>+</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="toggleTreeButton">
+      <property name="font">
+       <font>
+        <family>Symbol</family>
+        <pointsize>27</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>三</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
+  <widget class="QPlainTextEdit" name="templateText">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>60</y>
+     <width>1011</width>
+     <height>571</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPlainTextEdit {
+    padding: 0px 335px 5px 0px;
+    background-color: #000000;
+}</string>
+   </property>
+   <property name="placeholderText">
+    <string>Enter text...</string>
+   </property>
+  </widget>
+  <zorder>templateText</zorder>
   <zorder>line</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>saveButton</zorder>

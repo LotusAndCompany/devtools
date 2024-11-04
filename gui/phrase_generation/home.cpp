@@ -21,9 +21,17 @@ home::home(QWidget *parent)
     connect(ui->toggleTreeButton, &QPushButton::clicked, this, &home::handleToggleTreeButtonClick);
     connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this, &home::handleTitleTreeWidgetItemClick);
 
-    // templateTextを親ウィジェットに設定
-    // ui->saveButton->setParent(ui->templateText);
-    // ui->titleTreeWidget->setParent(ui->templateText);
+    QGridLayout *gridLayout = new QGridLayout(this);
+
+    QWidget *horizontalWidget = new QWidget(this);
+    horizontalWidget->setLayout(ui->horizontalLayout);
+    gridLayout->addWidget(horizontalWidget, 0, 0, 1, 6);
+    gridLayout->addWidget(ui->line, 1, 0, 1, 6);
+    gridLayout->addWidget(ui->templateText, 2, 0, 7, 6);
+    gridLayout->addWidget(ui->titleTreeWidget, 2, 5, 7, 1);
+    gridLayout->addWidget(ui->saveButton, 8, 5, Qt::AlignBottom | Qt::AlignRight);
+
+    this->setLayout(gridLayout);
 
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
@@ -162,8 +170,16 @@ void home::handleToggleTreeButtonClick()
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
         ui->toggleTreeButton->setText("X");
+        this->layout()->removeWidget(ui->templateText);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
+        this->layout()->removeWidget(ui->saveButton);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, Qt::AlignBottom | Qt::AlignRight);
     } else {
         ui->toggleTreeButton->setText("三");
+        this->layout()->removeWidget(ui->templateText);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 6);
+        this->layout()->removeWidget(ui->saveButton);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 5, Qt::AlignBottom | Qt::AlignRight);
     }
 }
 

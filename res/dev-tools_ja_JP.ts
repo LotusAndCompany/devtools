@@ -160,12 +160,12 @@
 <context>
     <name>home</name>
     <message>
-        <location filename="../gui/phrase_generation/home.ui" line="+14"/>
+        <location filename="../gui/phrase_generation/home.ui" line="+20"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+129"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
@@ -175,12 +175,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+70"/>
         <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-63"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -195,7 +195,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-109"/>
+        <location line="-107"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
