@@ -8,6 +8,7 @@
 #include <toml.hpp>
 #include <yaml-cpp/yaml.h>
 
+#include "core/data_conversion/emitter/json_emitter.h"
 #include "core/exception/invalid_argument_exception.h"
 #include "parser/basic_parser.h"
 #include "parser/json_parser.h"
@@ -58,6 +59,8 @@ void DataConversion::setInputText(const QString &inputText)
         _inputText = inputText;
         outdated = true;
     }
+    parseInputText();
+    updateOutputText();
 }
 
 bool DataConversion::load(const QString &path)
@@ -123,9 +126,11 @@ void DataConversion::updateOutputText()
         _outputText = "";
     } else {
         switch (outputFormat()) {
-        case Format::JSON:
-            // TODO
+        case Format::JSON: {
+            JsonEmitter je;
+            _outputText = je.emitQString(intermediateData, indentation());
             break;
+        }
         case Format::YAML_BLOCK:
         case Format::YAML_FLOW:
             // TODO

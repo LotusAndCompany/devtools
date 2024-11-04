@@ -10,6 +10,15 @@ namespace Ui {
 class DataConversionGUI;
 }
 
+class QTextEdit;
+class QTextBrowser;
+
+#ifdef _TEST_ImageDivisionGUI
+namespace Test {
+class TestDataConversionGUI;
+}
+#endif
+
 /// シリアライズされたデータの変換、フォーマットを行うツールのGUI
 class DataConversionGUI : public GuiTool
 {
@@ -28,20 +37,29 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
+private slots:
+    void onInputTextChanged();
+    /*
+    void onPastePressed();
+    void onLoadPressed();
+    void onClearPressed();
+    void onSavePressed();
+    void onCopyPressed();*/
+
 private:
     Ui::DataConversionGUI *const ui;
 
     /// ロジック部分
     DataConversionInterface *const dataConversion;
 
-private slots:
-    /*
-    void onInputTextChanged();
-    void onPastePressed();
-    void onLoadPressed();
-    void onClearPressed();
-    void onSavePressed();
-    void onCopyPressed();*/
+    /// テキスト入力UI
+    QTextEdit *inputTextEdit;
+    /// テキスト表示UI
+    QTextBrowser *outputTextView;
+
+#ifdef _TEST_ImageDivisionGUI
+    frientd class Test::TestDataConversionGUI;
+#endif
 };
 
 #endif // DATA_CONVERSION_GUI_H

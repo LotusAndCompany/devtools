@@ -158,57 +158,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="174"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="177"/>
         <source>Output Text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="193"/>
         <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="195"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="198"/>
         <source>YAML (Blobk style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="200"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="203"/>
         <source>YAML (Flow style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="205"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="208"/>
         <source>TOML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="214"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="217"/>
         <source>4 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="219"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="222"/>
         <source>2 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="224"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="227"/>
         <source>Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="229"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="232"/>
         <source>Minified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="253"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="256"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="266"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="269"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>

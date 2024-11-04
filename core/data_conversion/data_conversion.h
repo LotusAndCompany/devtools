@@ -95,6 +95,9 @@ public:
      */
     Indentation indentation() const { return _indentation; }
 
+    /// 現在の設定で出力文字列を更新する
+    virtual void updateOutputText() = 0;
+
 protected:
     /**
      * @brief コンストラクタ
@@ -110,9 +113,6 @@ protected:
     Format _outputFormat = Format::JSON;
     /// 出力文字列のインデント
     Indentation _indentation = Indentation::SPACES_4;
-
-    /// 現在の設定で出力文字列を更新する
-    virtual void updateOutputText() = 0;
 
     /**
      * @brief 出力形式が不正なら例外を投げる
@@ -153,8 +153,6 @@ public:
     bool save(const QString &path, bool overwrite = false) const override;
     void setOutputFormat(Format format) override;
     void setIndentation(Indentation indentation) override;
-
-protected:
     void updateOutputText() override;
 
 private:

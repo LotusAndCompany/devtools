@@ -161,7 +161,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+79"/>
+        <location line="+82"/>
         <source>Output Text:</source>
         <translation type="unfinished"></translation>
     </message>

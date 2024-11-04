@@ -10,8 +10,16 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
 {
     ui->setupUi(this);
 
+    inputTextEdit = ui->inputTextEdit;
+    outputTextView = ui->outputTextView;
+
     if (dataConversion->parent() == nullptr)
         dataConversion->setParent(this);
+
+    connect(ui->inputTextEdit,
+            &QTextEdit::textChanged,
+            this,
+            &DataConversionGUI::onInputTextChanged);
 }
 
 DataConversionGUI::~DataConversionGUI()
@@ -35,4 +43,11 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
 
     ui->splitter->resize(size);
     event->accept();
+}
+
+void DataConversionGUI::onInputTextChanged()
+{
+    qDebug() << inputTextEdit->toPlainText();
+    dataConversion->setInputText(inputTextEdit->toPlainText());
+    outputTextView->setPlainText(dataConversion->outputText());
 }
