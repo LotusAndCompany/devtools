@@ -17,6 +17,8 @@ AboutDevToolsDialog::AboutDevToolsDialog(QWidget *parent)
                           + QString(DevTools::COMPILER_VERSION));
     ui->qtVersion->setText(qVersion());
 
+    ui->qtInfo->setText(QString("Qt %1: LGPL v3").arg(qVersion()));
+
     connect(ui->copyButton, &QPushButton::clicked, this, &AboutDevToolsDialog::onCopyButtonClicked);
 }
 

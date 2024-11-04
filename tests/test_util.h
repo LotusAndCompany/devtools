@@ -2,41 +2,14 @@
 #define TEST_UTIL_H
 
 #include <QString>
-#include <QRandomGenerator>
+#include "mock_helper.h"
+#include "random_data.h"
 
-namespace Test
-{
-class RandomData
-{
-    QRandomGenerator gen;
-public:
-    explicit RandomData() {}
-    explicit RandomData(int seed);
+namespace Test {
+extern const QString TEST_SRC_DIR;
+extern const QString TEST_BIN_DIR;
 
-    static const QString numbers;
-    static const QString lowerAlphabets;
-    static const QString upperAlphabets;
-    static const QString symbols;
-    static const QString whitespaces;
-    static const QString ascii;
-    static const QString defaultCharsets;
-    static const int defaultQStringLength = 8;
-
-    void setSeed(int seed);
-
-    int nextInt();
-    int nextInt(int max);
-    int nextInt(int min, int max);
-
-    double nextDouble();
-    double nextDouble(double max);
-    double nextDouble(double min, double max);
-
-    QString nextQString();
-    QString nextQString(int length);
-    QString nextQString(const QString& charSets);
-    QString nextQString(int length, const QString& charSets);
-};
+bool isEqaulApprox(double a, double b, double errorRatio = 1.0 / 256.0);
 } // namespace Test
 
 #endif  // TEST_UTIL_H
