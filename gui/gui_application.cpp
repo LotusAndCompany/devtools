@@ -72,11 +72,11 @@ void GuiApplication::applyColorScheme()
         break;
     case Qt::ColorScheme::Light:
         qDebug() << "theme=Light";
-        QIcon::setThemeName(QStringLiteral("light"));
+        QIcon::setThemeName("light");
         break;
     case Qt::ColorScheme::Dark:
         qDebug() << "theme=Dark";
-        QIcon::setThemeName(QStringLiteral("dark"));
+        QIcon::setThemeName("dark");
         break;
     }
 }

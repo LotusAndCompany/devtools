@@ -1,5 +1,5 @@
 PROJECT_NAME = "DevTools"
-PROJECT_NUMBER = @CMAKE_PROJECT_VERSION@
+PROJECT_NUMBER = @CMAKE_PROJECT_VERSION@@DevTools_VERSION_SUFFIX@
 PROJECT_BRIEF = "New Development Tools"
 # ビルドディレクトリからの相対パス
 PROJECT_ICON = "docs/dev-tools_icon.doxygen.png"
@@ -22,6 +22,16 @@ FORCE_LOCAL_INCLUDES = YES
 
 # LaTeXを無効化
 GENERATE_LATEX = NO
+
+# MathJaxを有効化
+USE_MATHJAX = YES
+# MathJax_2の場合
+#MATHJAX_VERSION = MathJax_2
+#MATHJAX_EXTENSIONS = TeX/AMSmath TeX/AMSsymbols
+# MathJax_3の場合
+MATHJAX_VERSION = MathJax_3
+MATHJAX_EXTENSIONS = ams
+HTML_FORMULA_FORMAT = svg
 
 # ソースコードを含めない
 VERBATIM_HEADERS = NO

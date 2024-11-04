@@ -28,7 +28,7 @@ void TestOutOfRangeException::test_defaultConstructor()
 {
     OutOfRangeException<int> e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
-    QVERIFY(e.message == "");
+    QCOMPARE_EQ(e.message, "");
 }
 
 void TestOutOfRangeException::test_messageConstructor()
@@ -36,7 +36,7 @@ void TestOutOfRangeException::test_messageConstructor()
     const QString msg = rd.nextQString(length);
     OutOfRangeException<int> e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
 }
 
 void TestOutOfRangeException::test_actualMaxConstructor()
@@ -44,13 +44,13 @@ void TestOutOfRangeException::test_actualMaxConstructor()
     {
         OutOfRangeException e(0x10, 10);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e.message == "[OutOfRangeException] actual: 16, max: 10");
+        QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: 16, max: 10");
     }
 
     {
         OutOfRangeException e(6.28318530718, 1.0);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e.message == "[OutOfRangeException] actual: 6.28319, max: 1");
+        QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: 6.28319, max: 1");
     }
 }
 
@@ -59,13 +59,13 @@ void TestOutOfRangeException::test_actualMinMaxConstructor()
     {
         OutOfRangeException e(-1, 0, 10);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e.message == "[OutOfRangeException] actual: -1, min: 0, max: 10");
+        QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: -1, min: 0, max: 10");
     }
 
     {
         OutOfRangeException e(-0.5, 0.0, 1.0);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e.message == "[OutOfRangeException] actual: -0.5, min: 0, max: 1");
+        QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: -0.5, min: 0, max: 1");
     }
 }
 
@@ -77,11 +77,11 @@ void TestOutOfRangeException::test_clone()
     const QScopedPointer<QException> copied(e.clone());
 
     // clone()を呼び出しても元のインスタンスが変わらないこと
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QVERIFY(static_cast<OutOfRangeException<int> *>(copied.get())->message == msg);
+    QCOMPARE_EQ(static_cast<OutOfRangeException<int> *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
-    QVERIFY(&e != copied.get());
+    QCOMPARE_NE(&e, copied.get());
 }
 
 void TestOutOfRangeException::test_raise()
@@ -94,10 +94,10 @@ void TestOutOfRangeException::test_raise()
         src.raise();
     } catch (OutOfRangeException<int> &e) {
         // srcが変更されていないこと
-        QVERIFY(src.message == msg);
+        QCOMPARE_EQ(src.message, msg);
 
         // eとsrcとの内容が同じであること
-        QVERIFY(e.message == msg);
+        QCOMPARE_EQ(e.message, msg);
 
         return;
     }

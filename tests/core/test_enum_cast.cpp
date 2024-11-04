@@ -1,4 +1,4 @@
-#include <QTest>
+#include <QtTest>
 
 #include "core/enum_cast.h"
 

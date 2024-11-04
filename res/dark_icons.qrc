@@ -2,16 +2,23 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/icons">
+        <!-- material -->
         <file>dark/index.theme</file>
         <file>dark/material/home.svg</file>
         <file>dark/material/question_mark.svg</file>
         <file>dark/material/flip_to_front.svg</file>
         <file>dark/material/left_panel_close.svg</file>
         <file>dark/material/left_panel_open.svg</file>
-        <!--サンプルデータ用。不要になったら削除する-->
-        <file>dark/material/counter_0.svg</file>
-        <file>dark/material/counter_1.svg</file>
-        <file>dark/material/counter_2.svg</file>
-        <file>dark/material/counter_3.svg</file>
+        <file>dark/material/zoom_in.svg</file>
+        <file>dark/material/zoom_out.svg</file>
+        <file>dark/material/resize.svg</file>
+        <file>dark/material/division.svg</file>
+        <file>dark/material/transparent.svg</file>
+
+        <!-- remix -->
+        <file>dark/remix/anticlockwise.svg</file>
+        <file>dark/remix/clockwise.svg</file>
+        <file>dark/remix/flip_horizontal.svg</file>
+        <file>dark/remix/flip_vertical.svg</file>
     </qresource>
 </RCC>
