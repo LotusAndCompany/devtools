@@ -25,11 +25,18 @@ Sidemenu::Sidemenu(QWidget *parent)
     buttonGroup->addButton(ui->homeButton, static_cast<int>(ID::HOME));
 
     // WIP: 適当なボタンを追加する
+<<<<<<< HEAD
     registerItem(ID::SAMPLE_0);
     registerItem(ID::SAMPLE_1);
     registerItem(ID::SAMPLE_2);
     registerItem(ID::SAMPLE_3);
     registerItem(ID::PHRASE_GENERATION);
+=======
+    registerItem(ID::IMAGE_RESIZE);
+    registerItem(ID::IMAGE_ROTATION);
+    registerItem(ID::IMAGE_DIVISION);
+    registerItem(ID::IMAGE_TRANSPARENT);
+>>>>>>> develop
 
     ui->scrollAreaLayout->addStretch();
 }
@@ -59,18 +66,17 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "home";
         break;
 
-        // NOTE: sample items
-    case ID::SAMPLE_0:
-        iconName = "counter_0";
+    case ID::IMAGE_RESIZE:
+        iconName = "resize";
         break;
-    case ID::SAMPLE_1:
-        iconName = "counter_1";
+    case ID::IMAGE_ROTATION:
+        iconName = "clockwise";
         break;
-    case ID::SAMPLE_2:
-        iconName = "counter_2";
+    case ID::IMAGE_DIVISION:
+        iconName = "division";
         break;
-    case ID::SAMPLE_3:
-        iconName = "counter_3";
+    case ID::IMAGE_TRANSPARENT:
+        iconName = "transparent";
         break;
     case ID::PHRASE_GENERATION:
         iconName = "phrase_generation";

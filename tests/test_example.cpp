@@ -1,8 +1,14 @@
 #include <QtTest>
+#include "tests/test_util.h"
 
 #define _TEST_Example
 // necessary includes here
 #include "test_example_external.h"
+
+/*
+ * 参考: https://doc.qt.io/qt-6/qtest-overview.html
+ *      https://doc.qt.io/qt-6/qtest.html
+ */
 
 // NOTE: 非公開関数のテストを行う場合はTest::TestExampleをfriend classにする必要がある
 // マクロにできるかも?
@@ -24,6 +30,8 @@ class TestExample;
 #endif
 */
 #undef _TEST_Example
+
+#include <QObject>
 
 namespace Test {
 class TestExample : public QObject

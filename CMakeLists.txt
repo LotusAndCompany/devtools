@@ -1,6 +1,12 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.21.1)
+
+# vcpkgを使わない時はONにする
+set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP ON)
 
 project(DevTools VERSION 0.0.0 LANGUAGES CXX)
+
+# -test, -alpha, -beta, -rcなど。無しでも良い。
+set(DevTools_VERSION_SUFFIX "-test")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -10,27 +16,32 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
+
+# NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
+#       the user interface file "*.ui" could not be found in the following directories "SRC:..."
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    gui/image/basic/
+)
+
 # パッケージを探す
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Test)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Test)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Doxygen)
 
-# アイコンを設定
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
+
 # TODO: 環境で分ける
 if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+
+    # アイコンを設定
     set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
     set(APP_ICON_MACOS "res/${MACOSX_BUNDLE_ICON_FILE}")
     set_source_files_properties(${APP_ICON_MACOS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set(APP_ICON ${APP_ICON_MACOS})
-endif()
 
-set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
-
-# gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
-set(APP_INFO_FILE app_info.autogen.cpp)
-# TODO: 環境毎に分ける
-# configure_file()を使うようにしたかったが、ビルド時にCMAKE変数を参照させるのは無理そう?
-if(APPLE)
+    # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
     if(NOT EXISTS ${APP_INFO_FILE})
         execute_process(
             COMMAND "touch" ${APP_INFO_FILE}
@@ -39,24 +50,31 @@ if(APPLE)
 
     set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
     file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
-    add_custom_target(DevTools_app_info
-        COMMAND ${SH_FILE} ${CMAKE_PROJECT_VERSION} "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
+    add_custom_target(${PROJECT_NAME}_app_info
+        COMMAND ${SH_FILE} "${CMAKE_PROJECT_VERSION}${DevTools_VERSION_SUFFIX}" "MacOS" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
     )
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Project files
-    set(TRANSLATION_FILES res/dev-tools_ja_JP.ts)
-    qt_add_executable(DevTools
+    # main
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
         res/light_icons.qrc
         res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
-        ${TRANSLATION_FILES}
+        res/dev-tools_ja_JP.ts
+        res/dev-tools_en.ts
 
         main/main.cpp
+        # ここには基本的に追加しないこと
+        # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
+    )
+
+    # modules
+    qt_add_library(${PROJECT_NAME}_core STATIC
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         core/application_mixin.h core/application_mixin.cpp
         gui/gui_application.h gui/gui_application.cpp
@@ -76,105 +94,143 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
 
     )
-    qt_add_translations(DevTools
-        RESOURCE_PREFIX "i18n"
-        TS_FILES ${TRANSLATION_FILES})
+    # image
+    qt_add_library(${PROJECT_NAME}_image_core STATIC
+        core/image/basic_image_io.h core/image/basic_image_io.cpp
+        core/image/basic_image_edit_interface.h core/image/basic_image_edit_interface.cpp
+        gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
+        gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
+        gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_resize STATIC
+        core/image/resize/image_resize.h core/image/resize/image_resize.cpp
+        gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_rotation STATIC
+        core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
+        gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
+    )
+    qt_add_library(${PROJECT_NAME}_image_division STATIC
+        core/image/division/image_division.h core/image/division/image_division.cpp
+        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
+        gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
+    )
+    qt_add_library(${PROJECT_NAME}_image_transparent STATIC
+        core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
+        gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
+        gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
+        gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
+    )
+    # 画像関係の依存関係
+    add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+    set_target_properties(${PROJECT_NAME}_core PROPERTIES
+        AUTOMOC ON
+        AUTOUIC ON
+    )
+
+    qt_add_translations(
+        TARGETS ${PROJECT_NAME}
+        TS_FILE_DIR res/
+        TS_FILE_BASE "dev-tools"
+    )
 else()
-    # Qt5は使わない予定
+    # Qt5以下は使わない予定
     message(FATAL_ERROR "Qt5 configuration is not supported")
-
-    if(ANDROID)
-        add_library(DevTools SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(DevTools
-            ${PROJECT_SOURCES}
-        )
-    endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+# BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
+target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
-    set(ENABLE_DEBUG_BUILD_FEATURES ON)
-else()
-    set(ENABLE_DEBUG_BUILD_FEATURES OFF)
-endif()
+# 有効にするのが望ましいが、mocまで対象になるのでやめておく
+# 未定義動作の静的チェックを有効にする
+#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=undefined)
+# メモリアドレス関連の静的チェックを有効にする
+#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
-# TODO: tests/CMakeLists.txtに書きたい
-#add_subdirectory(tests)
-# Tests
-if(${ENABLE_DEBUG_BUILD_FEATURES})
-    macro(guiless_test test_name)
-        add_executable(${test_name} ${ARGN} tests/test_util.cpp)
-        add_test(NAME ${test_name} COMMAND ${test_name})
-
-        target_link_libraries(${test_name} PRIVATE Qt${QT_VERSION_MAJOR}::Test)
-    endmacro(guiless_test)
-
-    #guiless_test(test_example tests/test_example.cpp tests/test_example_external.cpp)
-
-    # core
-    guiless_test(test_enum_cast tests/core/test_enum_cast.cpp)
-    guiless_test(test_common_exception tests/core/exception/test_common_exception.cpp)
-    guiless_test(test_under_development_exception tests/core/exception/test_under_development_exception.cpp)
-    guiless_test(test_invalid_argument_exception tests/core/exception/test_invalid_argument_exception.cpp)
-    guiless_test(test_invalid_state_exception tests/core/exception/test_invalid_state_exception.cpp)
-    guiless_test(test_out_of_range_exception tests/core/exception/test_out_of_range_exception.cpp)
-endif()
-
-# Documents
-if(${ENABLE_DEBUG_BUILD_FEATURES})
-    if(DOXYGEN_FOUND)
-        # set input and output files
-        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
-        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxyfile)
-        SET(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-
-        # copy icon
-        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/docs/dev-tools_icon.doxygen.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/)
-
-        # request to configure the file
-        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        message("Doxygen build started")
-
-        # note the option ALL which allows to build the docs together with the application
-        add_custom_target(DevTools-docs ALL
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating API documentation with Doxygen"
-            VERBATIM
-        )
-    else()
-      message(WARNING "Doxygen not found")
-    endif()
-endif()
-
-# PRIVATE BUILD_TYPE_* というプリプロセッサ定義を追加する(ビルドタイプ判別用)
-target_compile_definitions(DevTools PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE})
-
-# app_info.autogen.cppを自動で生成させる
-add_dependencies(DevTools DevTools_app_info)
+# app_info.autogen.cppを自動生成
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # 翻訳ファイルの更新と生成を自動化
-add_dependencies(DevTools_lrelease DevTools_lupdate)
-add_dependencies(DevTools DevTools_lrelease)
+# NOTE: 今の所動いているが、必ずしもupdate_translations→release_translationsの順に処理されるとは限らない可能性はある
+add_dependencies(${PROJECT_NAME} update_translations)
+add_dependencies(${PROJECT_NAME} release_translations)
 
-# インクルードディレクトリとしてプロジェクトフォルダを追加
-target_include_directories(DevTools
-    PRIVATE .
+#get_cmake_property(_variableNames VARIABLES)
+#list (SORT _variableNames)
+#foreach (_variableName ${_variableNames})
+    #message(STATUS "${_variableName}=${${_variableName}}")
+#endforeach()
+
+# インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# ライブラリをリンクする
-target_link_libraries(DevTools
-    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+# [モジュール一覧]
+set(MODULE_LIST
+    ${PROJECT_NAME}_core
+    ${PROJECT_NAME}_image_core
+    ${PROJECT_NAME}_image_resize
+    ${PROJECT_NAME}_image_rotation
+    ${PROJECT_NAME}_image_division
+    ${PROJECT_NAME}_image_transparent
 )
 
-set_target_properties(DevTools PROPERTIES
+foreach (MODULE ${MODULE_LIST})
+    add_dependencies(${PROJECT_NAME} ${MODULE})
+    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
+        add_dependencies(${MODULE} ${PROJECT_NAME}_core)
+    endif()
+
+    # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
+    target_include_directories(${MODULE} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${Qt6Core_INCLUDE_DIRS}
+        ${Qt6Bus_INCLUDE_DIRS}
+        ${Qt6Gui_INCLUDE_DIRS}
+        ${Qt6Widgets_INCLUDE_DIRS}
+    )
+
+    # ライブラリをリンクする
+    target_link_libraries(${MODULE} PUBLIC
+        Qt6::Core
+        Qt6::DBus
+        Qt6::Gui
+        Qt6::Widgets
+    )
+endforeach()
+
+# Tests
+if(${ENABLE_UNIT_TEST})
+    enable_testing()
+
+    # TODO: submoduleに書きたいが... コードの一部を共有しているから無理か?
+    include(tests/DevToolsTests.cmake)
+endif()
+
+# Doxygen
+if(DOXYGEN_FOUND)
+    include(docs/DevToolsDocs.cmake)
+else()
+    message(WARNING "Doxygen not found")
+endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_dependencies(${PROJECT_NAME}
+    ${MODULE_LIST}
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    ${MODULE_LIST}
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -183,12 +239,12 @@ set_target_properties(DevTools PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS DevTools
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(DevTools)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
