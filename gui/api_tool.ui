@@ -77,6 +77,11 @@
        <layout class="QVBoxLayout" name="tabWidgetLayout">
         <item>
          <widget class="QTabWidget" name="tabWidget">
+          <property name="font">
+           <font>
+            <family>.AppleSystemUIFont</family>
+           </font>
+          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -90,11 +95,47 @@
             </item>
            </layout>
           </widget>
-          <layout class="QVBoxLayout" name="authLayout">
-           <item>
-            <widget class="QLineEdit" name="authLineEdit"/>
-           </item>
-          </layout>
+          <widget class="QWidget" name="tab_authentication">
+           <attribute name="title">
+            <string>Authentication</string>
+           </attribute>
+           <layout class="QFormLayout" name="authLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="usernameLabel">
+              <property name="text">
+               <string>Username:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="usernameEdit"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="passwordLabel">
+              <property name="text">
+               <string>Password:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="passwordEdit">
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_body">
+           <attribute name="title">
+            <string>Body</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="bodyLayout">
+            <item>
+             <widget class="QTextEdit" name="bodyTextEdit"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>

@@ -2,31 +2,26 @@
 #define API_TOOL_H
 
 #include <QFrame>
+#include <QWidget>
+#include <QLineEdit>
 #include <QLabel>
-#include <QVBoxLayout>
-#include <QFormLayout>
-#include <QListView>
-#include <QTextEdit>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QAuthenticator>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QStringListModel>
-#include <QStandardItemModel>
-#include <QDateTime>
-#include "customsplitter.h"
+#include <QStringList>
 
 namespace Ui {
 class api_tool;
 }
 
+class QNetworkAccessManager;
+class QNetworkReply;
+class QStandardItemModel;
+class QStringListModel;
+class QVBoxLayout;
+class QTextEdit;
+
 class api_tool : public QFrame
 {
     Q_OBJECT
     QWidget *currentContent = nullptr;
-    CustomSplitter *mainSplitter;
 
 public:
     explicit api_tool(QWidget *parent = nullptr);
@@ -34,9 +29,6 @@ public:
 
 private slots:
     void setupParametersTable();
-    void setupBodyTab();
-    void setupAuthenticationTab();
-    void setupMainSplitter();
     void handleSendButtonClick();  // sendButton
     void handleNetworkReplyFinished(QNetworkReply *reply);
     void updateUrlFromParams(); // パラメータ

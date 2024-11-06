@@ -173,12 +173,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+38"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="+37"/>
+        <location line="+10"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,12 +188,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+15"/>
+        <source>Body</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="+43"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -208,7 +213,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+97"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>

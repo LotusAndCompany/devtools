@@ -1,6 +1,16 @@
 #include "api_tool.h"
 #include "ui_api_tool.h"
-#include "customsplitter.h"
+#include <QVBoxLayout>
+#include <QAuthenticator>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QDateTime>
+#include <QNetworkRequest>
+#include <QFormLayout>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QStandardItemModel>
+#include <QStringListModel>
 
 api_tool::api_tool(QWidget *parent)
     : QFrame(parent)
@@ -18,10 +28,6 @@ api_tool::api_tool(QWidget *parent)
     qDebug() << "api_tool UI setup complete";
 
     setupParametersTable();
-    setupBodyTab();
-    setupAuthenticationTab();
-
-    setupMainSplitter();
     setupResponseView();
 
 }
@@ -30,40 +36,6 @@ api_tool::~api_tool()
 {
     qDebug() << "Destroying api_tool";
     delete ui;
-}
-
-void api_tool::setupAuthenticationTab() {
-    QWidget *authTab = new QWidget();
-    ui->tabWidget->addTab(authTab, tr("Authentication"));
-
-    QFormLayout *authLayout = new QFormLayout(authTab);
-    authTab->setLayout(authLayout);
-
-    // Username field
-    QLabel *usernameLabel = new QLabel(tr("Username:"));
-    usernameEdit = new QLineEdit();
-    authLayout->addRow(usernameLabel, usernameEdit);
-
-    // Password field
-    QLabel *passwordLabel = new QLabel(tr("Password:"));
-    passwordEdit = new QLineEdit();
-    passwordEdit->setEchoMode(QLineEdit::Password);  // パスワードを隠す
-    authLayout->addRow(passwordLabel, passwordEdit);
-
-    // Apply styling
-    QString stylesheet = "QLabel { font: bold 14px; } QLineEdit { border: 1px solid gray; border-radius: 5px; padding: 5px; }";
-    authTab->setStyleSheet(stylesheet);
-}
-
-void api_tool::setupBodyTab() {
-    QWidget *bodyTab = new QWidget();  // Bodyタブ用のウィジェットを生成
-    ui->tabWidget->addTab(bodyTab, "Body");  // タブウィジェットにBodyタブを追加
-
-    QVBoxLayout *bodyLayout = new QVBoxLayout();  // QVBoxLayoutを作成
-    bodyTab->setLayout(bodyLayout);  // Bodyタブにレイアウトをセット
-
-    bodyTextEdit = new QTextEdit();  // QTextEditを作成
-    bodyLayout->addWidget(bodyTextEdit);  // レイアウトにQTextEditを追加
 }
 
 void api_tool::setupParametersTable() {
@@ -75,56 +47,13 @@ void api_tool::setupParametersTable() {
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
-void api_tool::setupMainSplitter() {
-    // mainSplitterをカスタムクラスに置き換える
-    CustomSplitter *customSplitter = new CustomSplitter(this);
-    customSplitter->setOrientation(Qt::Vertical);
-
-    // horizontalContainerを追加
-    customSplitter->addWidget(ui->horizontalContainer);
-
-    // タブウィジェットのスタイルシートを設定してタブを左寄せに
-    ui->tabWidget->setStyleSheet("QTabBar::tab { width: 100px; } QTabBar { left: 0px; }");
-
-    // 残りのUI要素を追加
-    customSplitter->addWidget(ui->tabWidget);
-
-    // スタイルシートの設定
-    customSplitter->setStyleSheet(
-        "QSplitter::handle { "
-        "background-color: #d3d3d3; "
-        "border: none; "
-        "} "
-        "QSplitter::handle:vertical { "
-        "height: 2px; "
-        "margin: 0px; "
-        "padding: 0px; "
-        "}"
-        );
-
-    // レイアウトにカスタムSplitterを追加
-    ui->verticalLayout->addWidget(customSplitter);
-
-    // MainContent（horizontalContainer）の最小高さを設定
-    ui->horizontalContainer->setMinimumHeight(100);
-
-    // QSplitterのストレッチファクターを設定
-    customSplitter->setStretchFactor(0, 1);  // horizontalContainer
-    customSplitter->setStretchFactor(1, 2);  // tabWidget
-    customSplitter->setStretchFactor(2, 5);  // listView
-
-    // 旧Splitterを削除
-    delete ui->mainSplitter;
-    ui->mainSplitter = customSplitter;
-}
-
 void api_tool::handleSendButtonClick() {
     qDebug() << "Button clicked";
 
     requestStartTime = QDateTime::currentMSecsSinceEpoch();
 
-    QString username = usernameEdit->text();
-    QString password = passwordEdit->text();
+    QString username = ui->usernameEdit->text();
+    QString password = ui->passwordEdit->text();
 
     QString selectedMethod = ui->comboBox->currentText();
     QString url = ui->textEdit->toPlainText();
@@ -140,7 +69,7 @@ void api_tool::handleSendButtonClick() {
     QByteArray payload;
     // Bodyテキストエリアからデータを取得してpayloadに設定
     if (selectedMethod == "POST" || selectedMethod == "PUT") {
-        QString bodyText = bodyTextEdit->toPlainText();
+        QString bodyText = ui->bodyTextEdit->toPlainText();
         payload = bodyText.toUtf8();
     }
 
