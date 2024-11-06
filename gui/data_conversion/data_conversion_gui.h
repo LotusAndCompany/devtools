@@ -42,8 +42,8 @@ private slots:
     void onInputTextChanged();
     void onFormatSelected(int index);
     void onStyleSelected(int index);
-    /*
     void onPastePressed();
+    /*
     void onLoadPressed();
     void onClearPressed();
     void onSavePressed();

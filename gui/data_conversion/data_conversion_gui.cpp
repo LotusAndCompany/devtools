@@ -1,6 +1,7 @@
 #include "data_conversion_gui.h"
 #include "ui_data_conversion_gui.h"
 
+#include <QClipboard>
 #include <QResizeEvent>
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
@@ -22,6 +23,7 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
             &QTextEdit::textChanged,
             this,
             &DataConversionGUI::onInputTextChanged);
+    connect(ui->pasteButton, &QPushButton::pressed, this, &DataConversionGUI::onPastePressed);
     connect(ui->formatSelector,
             &QComboBox::currentIndexChanged,
             this,
@@ -40,8 +42,8 @@ DataConversionGUI::~DataConversionGUI()
 void DataConversionGUI::resizeEvent(QResizeEvent *event)
 {
     // NOTE: ここで最小幅を設定する
-    const int width = ui->horizontalLayout->minimumSize().width()
-                      + ui->horizontalLayout_2->minimumSize().width();
+    const int width = ui->inputActionButtonLayout->minimumSize().width()
+                      + ui->outputActionButtonLayout->minimumSize().width();
     ui->splitter->setMinimumWidth(width);
     setMinimumWidth(width);
 
@@ -57,10 +59,15 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
 
 void DataConversionGUI::onInputTextChanged()
 {
-    qDebug() << inputTextEdit->toPlainText();
     dataConversion->setInputText(inputTextEdit->toPlainText());
     dataConversion->updateOutputText();
     outputTextView->setPlainText(dataConversion->outputText());
+}
+
+void DataConversionGUI::onPastePressed()
+{
+    QClipboard *const clipboard = QGuiApplication::clipboard();
+    inputTextEdit->setText(clipboard->text()); // onInputTextChanged()
 }
 
 void DataConversionGUI::onFormatSelected(int index)
