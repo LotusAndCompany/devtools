@@ -121,6 +121,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
+    # phrase_generation
+    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
+        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
+        gui/phrase_generation/phrase_generation.ui
+    )
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
     add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
@@ -177,6 +182,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_image_rotation
     ${PROJECT_NAME}_image_division
     ${PROJECT_NAME}_image_transparent
+    ${PROJECT_NAME}_phrase_generation
 )
 
 foreach (MODULE ${MODULE_LIST})

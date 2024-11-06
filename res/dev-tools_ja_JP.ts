@@ -65,12 +65,6 @@
     </message>
 </context>
 <context>
-<<<<<<< HEAD
-    <name>ItemWidget</name>
-    <message>
-        <source>Copy</source>
-        <translation type="obsolete">コピー</translation>
-=======
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
@@ -284,7 +278,13 @@
         <location line="+49"/>
         <source>Transparency:</source>
         <translation>透明度:</translation>
->>>>>>> develop
+    </message>
+</context>
+<context>
+    <name>ItemWidget</name>
+    <message>
+        <source>Copy</source>
+        <translation type="obsolete">コピー</translation>
     </message>
 </context>
 <context>
@@ -390,24 +390,20 @@
 <context>
     <name>Test::TestTool</name>
     <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="+31"/>
         <source>Image Resize</source>
-        <translation type="unfinished">画像サイズ変更</translation>
+        <translation type="obsolete">画像サイズ変更</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Image resizing and scaling</source>
-        <translation type="unfinished">画像のサイズ変更や拡大縮小</translation>
+        <translation type="obsolete">画像のサイズ変更や拡大縮小</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Image Rotation</source>
-        <translation type="unfinished">画像回転</translation>
+        <translation type="obsolete">画像回転</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Image rotation and flipping</source>
-        <translation type="unfinished">画像の回転と反転</translation>
+        <translation type="obsolete">画像の回転と反転</translation>
     </message>
 </context>
 <context>
@@ -480,7 +476,7 @@
     <message>
         <location line="+36"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存</translation>
     </message>
     <message>
         <location line="+67"/>

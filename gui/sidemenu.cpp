@@ -25,19 +25,11 @@ Sidemenu::Sidemenu(QWidget *parent)
     buttonGroup->addButton(ui->homeButton, static_cast<int>(ID::HOME));
 
     // WIP: 適当なボタンを追加する
-<<<<<<< HEAD
-    registerItem(ID::SAMPLE_0);
-    registerItem(ID::SAMPLE_1);
-    registerItem(ID::SAMPLE_2);
-    registerItem(ID::SAMPLE_3);
-    registerItem(ID::PHRASE_GENERATION);
-=======
     registerItem(ID::IMAGE_RESIZE);
     registerItem(ID::IMAGE_ROTATION);
     registerItem(ID::IMAGE_DIVISION);
     registerItem(ID::IMAGE_TRANSPARENT);
->>>>>>> develop
-
+    registerItem(ID::PHRASE_GENERATION);
     ui->scrollAreaLayout->addStretch();
 }
 

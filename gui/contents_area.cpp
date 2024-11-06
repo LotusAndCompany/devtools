@@ -2,9 +2,6 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
-<<<<<<< HEAD
-#include "phrase_generation/phrase_generation.h"
-=======
 #include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
@@ -13,7 +10,7 @@
 #include "gui/image/resize/image_resize_gui.h"
 #include "gui/image/rotation/image_rotation_gui.h"
 #include "gui/image/transparent/image_transparent_gui.h"
->>>>>>> develop
+#include "phrase_generation/phrase_generation.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
