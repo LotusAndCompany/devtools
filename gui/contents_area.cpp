@@ -63,14 +63,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
         break;
-<<<<<<< HEAD
-    case Sidemenu::ID::SAMPLE_1:
-        // content = new SampleGuiTool(Tool::ID::SAMPLE_1, "sample-1", this);
-        content = new api_tool(this);
-=======
     case Sidemenu::ID::IMAGE_ROTATION:
         content = new ImageRotationGUI(new ImageRotation(), this);
->>>>>>> develop
         break;
     case Sidemenu::ID::IMAGE_DIVISION:
         content = new ImageDivisionGUI(new ImageDivision(), this);

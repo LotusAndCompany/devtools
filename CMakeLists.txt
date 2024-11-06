@@ -26,7 +26,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 # パッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Network)
 find_package(Doxygen)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
@@ -201,6 +201,7 @@ foreach (MODULE ${MODULE_LIST})
         Qt6::DBus
         Qt6::Gui
         Qt6::Widgets
+        Qt6::Network
     )
 endforeach()
 

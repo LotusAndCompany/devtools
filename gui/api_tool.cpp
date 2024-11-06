@@ -106,7 +106,7 @@ QString formatDataSize(qint64 bytes) {
     const double GB = 1024.0 * MB;
 
     if (bytes < KB) {
-        return QString::number(bytes) + " bytes";
+        return QString::number(bytes) + " B";
     } else if (bytes < MB) {
         return QString::number(bytes / KB, 'f', 2) + " KB";
     } else if (bytes < GB) {
