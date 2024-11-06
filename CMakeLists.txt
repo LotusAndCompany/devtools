@@ -143,14 +143,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # data_conversion
     qt_add_library(${PROJECT_NAME}_data_conversion STATIC
+        # core
         core/data_conversion/data_conversion.h core/data_conversion/data_conversion.cpp
         core/data_conversion/parser/basic_parser.h
-        core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
-        core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
-        core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
         core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
-        core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
         gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
+        # json
+        core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
+        core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
+        # yaml
+        core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
+        # toml
+        core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
+        core/data_conversion/emitter/toml_emitter.h core/data_conversion/emitter/toml_emitter.cpp
     )
     # toml11, yaml-cppのインクルードディレクトリ
     target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC

@@ -12,6 +12,7 @@ class DataConversionGUI;
 
 class QTextEdit;
 class QTextBrowser;
+class QComboBox;
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {
@@ -39,6 +40,8 @@ protected:
 
 private slots:
     void onInputTextChanged();
+    void onFormatSelected(int index);
+    void onStyleSelected(int index);
     /*
     void onPastePressed();
     void onLoadPressed();
@@ -56,6 +59,10 @@ private:
     QTextEdit *inputTextEdit;
     /// テキスト表示UI
     QTextBrowser *outputTextView;
+    /// 出力フォーマット選択UI
+    QComboBox *formatSelector;
+    /// インデント選択UI
+    QComboBox *styleSelector;
 
 #ifdef _TEST_ImageDivisionGUI
     frientd class Test::TestDataConversionGUI;

@@ -60,7 +60,6 @@ void DataConversion::setInputText(const QString &inputText)
         outdated = true;
     }
     parseInputText();
-    updateOutputText();
 }
 
 bool DataConversion::load(const QString &path)
