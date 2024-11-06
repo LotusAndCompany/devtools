@@ -4,6 +4,12 @@
 #include <QObject>
 #include "tool_id_fields.h"
 
+#ifdef _TEST_Tool
+namespace Test {
+class TestTool;
+}
+#endif
+
 /**
  * @brief 各ツールのロジック部分の基底クラス
  */
@@ -83,7 +89,7 @@ protected:
      */
     explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
 
-    /// 例外に設定するメッセージ
+    /// ツールIDが無効
     static const QString invalidToolIDReason;
 
     /**
@@ -104,8 +110,13 @@ protected:
     virtual bool event(QEvent *event) override;
 
 private:
+    /// ツールのID。現状使う予定がないため非公開にする。
     const ID id;
+    /// 翻訳が必要なテキスト情報
     Translatable _translatable;
+#ifdef _TEST_Tool
+    friend class Test::TestTool;
+#endif
 };
 
 #endif // TOOL_H

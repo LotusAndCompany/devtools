@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -47,7 +47,7 @@
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">text-align: left;</string>
+      <string notr="true">text-align:left;</string>
      </property>
      <property name="text">
       <string>Home</string>

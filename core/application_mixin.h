@@ -73,6 +73,7 @@ protected:
     inline const QTranslator &translator() const { return _translator; }
 
 private:
+    /// 翻訳ファイルを読み込むオブジェクト
     QTranslator _translator;
 };
 

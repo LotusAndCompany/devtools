@@ -1,0 +1,70 @@
+#include "control.h"
+#include "ui_control.h"
+
+#include "core/exception/invalid_state_exception.h"
+#include "file_dialogs.h"
+
+const QString BasicImageViewControl::invalidDialogType
+    = QString("DialogType::SELECT_FILE=%1, DialogType::SELECT_FOLDER=%2")
+          .arg(static_cast<int>(DialogType::SELECT_FILE))
+          .arg(static_cast<int>(DialogType::SELECT_FOLDER));
+
+BasicImageViewControl::BasicImageViewControl(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::BasicImageViewControl)
+{
+    ui->setupUi(this);
+
+    connect(ui->resetButton,
+            &QPushButton::clicked,
+            this,
+            &BasicImageViewControl::resetButtonClicked);
+
+    connect(ui->saveButton,
+            &QPushButton::clicked,
+            this,
+            &BasicImageViewControl::onSaveButtonClicked);
+    connect(ui->loadButton,
+            &QPushButton::clicked,
+            this,
+            &BasicImageViewControl::onLoadButtonClicked);
+}
+
+BasicImageViewControl::~BasicImageViewControl()
+{
+    delete ui;
+}
+
+void BasicImageViewControl::onSaveButtonClicked()
+{
+    switch (saveFileDailogType) {
+    case DialogType::SELECT_FILE: {
+        ImageSaveDialog dialog;
+        connect(&dialog,
+                &ImageSaveDialog::fileSelected,
+                this,
+                &BasicImageViewControl::saveFileSelected);
+
+        dialog.exec();
+    } break;
+    case DialogType::SELECT_FOLDER: {
+        QFileDialog dialog;
+        dialog.setFileMode(QFileDialog::Directory);
+        dialog.setLabelText(QFileDialog::Accept, tr("Save"));
+        connect(&dialog, &QFileDialog::fileSelected, this, &BasicImageViewControl::saveFileSelected);
+        dialog.exec();
+    } break;
+    default:
+        throw InvalidStateException(QString::number(static_cast<int>(saveFileDailogType)),
+                                    invalidDialogType);
+        break;
+    }
+}
+
+void BasicImageViewControl::onLoadButtonClicked()
+{
+    ImageOpenDialog dialog;
+    connect(&dialog, &ImageOpenDialog::fileSelected, this, &BasicImageViewControl::loadFileSelected);
+
+    dialog.exec();
+}

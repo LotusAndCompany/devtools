@@ -27,7 +27,7 @@ void TestInvalidArgumentException::test_defaultConstructor()
 {
     InvalidArgumentException<int> e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
-    QVERIFY(e.message == "");
+    QCOMPARE_EQ(e.message, "");
 }
 
 void TestInvalidArgumentException::test_messageConstructor()
@@ -35,7 +35,7 @@ void TestInvalidArgumentException::test_messageConstructor()
     const QString msg = rd.nextQString(length);
     InvalidArgumentException<int> e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
 }
 
 void TestInvalidArgumentException::test_argumentReasonConstructor()
@@ -44,7 +44,7 @@ void TestInvalidArgumentException::test_argumentReasonConstructor()
         const QString reason_int = "int_why?";
         InvalidArgumentException e_int(0xf, reason_int);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e_int.message == "[InvalidArgumentException] given: 15, reason: int_why?");
+        QCOMPARE_EQ(e_int.message, "[InvalidArgumentException] given: 15, reason: int_why?");
     }
 
     {
@@ -52,16 +52,15 @@ void TestInvalidArgumentException::test_argumentReasonConstructor()
         InvalidArgumentException e_double(2.718281828459045235360287471352, reason_double);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
         // NOTE: 浮動小数点型をQStringにする時のデフォルトの精度は6桁
-        QVERIFY2(e_double.message
-                     == "[InvalidArgumentException] given: 2.71828, reason: double_why?",
-                 e_double.message.toStdString().c_str());
+        QCOMPARE_EQ(e_double.message,
+                    "[InvalidArgumentException] given: 2.71828, reason: double_why?");
     }
 
     {
         const QString reason_str = "str_why?";
         InvalidArgumentException e_str(QString("qwerty"), reason_str);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
-        QVERIFY(e_str.message == "[InvalidArgumentException] given: qwerty, reason: str_why?");
+        QCOMPARE_EQ(e_str.message, "[InvalidArgumentException] given: qwerty, reason: str_why?");
     }
 }
 
@@ -73,11 +72,11 @@ void TestInvalidArgumentException::test_clone()
     const QScopedPointer<QException> copied(e.clone());
 
     // clone()を呼び出しても元のインスタンスが変わらないこと
-    QVERIFY(e.message == msg);
+    QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QVERIFY(static_cast<InvalidArgumentException<int> *>(copied.get())->message == msg);
+    QCOMPARE_EQ(static_cast<InvalidArgumentException<int> *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
-    QVERIFY(&e != copied.get());
+    QCOMPARE_NE(&e, copied.get());
 }
 
 void TestInvalidArgumentException::test_raise()
@@ -90,10 +89,10 @@ void TestInvalidArgumentException::test_raise()
         src.raise();
     } catch (InvalidArgumentException<int> &e) {
         // srcが変更されていないこと
-        QVERIFY(src.message == msg);
+        QCOMPARE_EQ(src.message, msg);
 
         // eとsrcとの内容が同じであること
-        QVERIFY(e.message == msg);
+        QCOMPARE_EQ(e.message, msg);
 
         return;
     }
