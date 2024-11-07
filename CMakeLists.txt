@@ -86,6 +86,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp
+        gui/welcome_page.h gui/welcome_page.cpp gui/welcome_page.ui
         core/tool/tool.h core/tool/tool.cpp
         core/exception/common_exception.h
         core/exception/out_of_range_exception.h

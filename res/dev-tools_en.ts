@@ -471,12 +471,7 @@
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="53"/>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/sidemenu.ui" line="81"/>
+        <location filename="../gui/sidemenu.ui" line="50"/>
         <source>Search tools</source>
         <translation type="unfinished"></translation>
     </message>
@@ -551,6 +546,20 @@
     <message>
         <location filename="../core/tool/tool.cpp" line="65"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../gui/welcome_page.ui" line="14"/>
+        <source>DevTools - Welcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/welcome_page.ui" line="51"/>
+        <source>Welcome to DevTools!
+Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

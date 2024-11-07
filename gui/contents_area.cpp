@@ -17,6 +17,7 @@
 #include "phrase_generation/phrase_generation.h"
 #include "gui/command/command.h"
 #include "api_tool.h"
+#include "gui/welcome_page.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -24,7 +25,7 @@ ContentsArea::ContentsArea(QWidget *parent)
 {
     ui->setupUi(this);
 
-    changeContent(Sidemenu::ID::HOME);
+    changeContent(Sidemenu::ID::WELCOME);
 }
 
 ContentsArea::~ContentsArea()
@@ -62,9 +63,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     QWidget *content = nullptr;
 
     switch (id) {
-    case Sidemenu::ID::HOME:
-        content = new QLabel("(´･ω･) ﾎｰﾑﾀﾞﾖｰ", this);
-        static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
+    case Sidemenu::ID::WELCOME:
+        content = new WelcomePage(this);
         break;
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
