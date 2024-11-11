@@ -69,16 +69,22 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="125"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="142"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="190"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,6 +105,51 @@
         <location filename="../gui/image/basic/control.ui" line="34"/>
         <location filename="../gui/image/basic/control.cpp" line="53"/>
         <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Command</name>
+    <message>
+        <location filename="../gui/command/command.ui" line="14"/>
+        <source>GroupBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="76"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="83"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="48"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="55"/>
+        <source>Generate command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="33"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="62"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.AppleSystemUIFont&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -310,29 +361,6 @@
     </message>
 </context>
 <context>
-    <name>Test::TestTool</name>
-    <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="31"/>
-        <source>Image Resize</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="32"/>
-        <source>Image resizing and scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="37"/>
-        <source>Image Rotation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tests/core/tool/test_tool.cpp" line="38"/>
-        <source>Image rotation and flipping</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Tool</name>
     <message>
         <location filename="../core/tool/tool.cpp" line="34"/>
@@ -372,6 +400,16 @@
     <message>
         <location filename="../core/tool/tool.cpp" line="50"/>
         <source>Make the selected color transparent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="54"/>
+        <source>Command Genration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="55"/>
+        <source>Generate command from command list</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

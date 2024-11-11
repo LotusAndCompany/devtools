@@ -49,6 +49,12 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Image Transparent"),
             tr("Make the selected color transparent"),
         };
+    case ID::COMMAND_GENERATION:
+        return Translatable{
+            tr("Command Genration"),
+            tr("Generate command from command list"),
+        };
+
     default:
         throw UnderDevelopmentException();
     }
