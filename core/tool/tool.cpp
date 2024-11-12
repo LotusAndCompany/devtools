@@ -54,6 +54,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Phrase Generation"),
             tr("Generate and manage Phrase"),
         };
+    case ID::COMMAND_GENERATION:
+        return Translatable{
+            tr("Command Genration"),
+            tr("Generate command from command list"),
+        };
     default:
         throw UnderDevelopmentException();
     }
