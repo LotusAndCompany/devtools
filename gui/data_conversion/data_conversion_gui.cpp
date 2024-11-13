@@ -33,6 +33,7 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
             &QComboBox::currentIndexChanged,
             this,
             &DataConversionGUI::onStyleSelected);
+    connect(ui->clearButton, &QPushButton::pressed, this, &DataConversionGUI::onClearPressed);
 }
 
 DataConversionGUI::~DataConversionGUI()
@@ -47,10 +48,6 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
                       + ui->outputActionButtonLayout->minimumSize().width();
     ui->splitter->setMinimumWidth(width);
     setMinimumWidth(width);
-    /*
-    if (ui->inputActionButtonLayout->minimumSize().height()
-        < ui->outputActionButtonLayout->minimumSize().height())
-        ui->inputActionButtonLayout*/
 
     QSize size = event->size();
     if (size.width() < ui->splitter->minimumSizeHint().width())
@@ -121,6 +118,7 @@ void DataConversionGUI::onStyleSelected(int index)
 
 void DataConversionGUI::onClearPressed()
 {
+    ui->inputTextEdit->setText("");
     dataConversion->setInputText("");
     ui->inputMessageTextView->setText("");
     dataConversion->updateOutputText();

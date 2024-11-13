@@ -207,73 +207,79 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="36"/>
-        <source>Input Text:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="86"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="66"/>
         <source>Load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="99"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="79"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="192"/>
-        <source>Output Text:</source>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="164"/>
+        <source>Input text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="215"/>
-        <source>JSON</source>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="354"/>
+        <source>Error &amp; waning messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="220"/>
-        <source>YAML (Blobk style)</source>
+        <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
-        <source>YAML (Flow style)</source>
+        <source>YAML (Blobk style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="230"/>
+        <source>YAML (Flow style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="235"/>
         <source>TOML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="239"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="244"/>
         <source>4 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="244"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="249"/>
         <source>2 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="249"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="254"/>
         <source>Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="254"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="259"/>
         <source>Minified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="278"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="283"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="291"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="296"/>
         <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="325"/>
+        <source>Output text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

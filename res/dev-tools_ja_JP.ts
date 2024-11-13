@@ -210,12 +210,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
-        <source>Input Text:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+50"/>
+        <location line="+52"/>
         <source>Load</source>
         <translation type="unfinished">読み込み</translation>
     </message>
@@ -225,12 +220,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+93"/>
-        <source>Output Text:</source>
+        <location line="+85"/>
+        <source>Input text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+26"/>
+        <location line="+164"/>
+        <source>Error &amp; waning messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-134"/>
         <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>
@@ -275,7 +276,12 @@
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="+29"/>
+        <source>Output text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-42"/>
         <source>Save</source>
         <translation type="unfinished">保存</translation>
     </message>
