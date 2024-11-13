@@ -43,9 +43,9 @@ private slots:
     void onFormatSelected(int index);
     void onStyleSelected(int index);
     void onPastePressed();
+    void onClearPressed();
     /*
     void onLoadPressed();
-    void onClearPressed();
     void onSavePressed();
     void onCopyPressed();*/
 

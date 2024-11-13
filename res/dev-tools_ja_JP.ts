@@ -139,6 +139,70 @@
     </message>
 </context>
 <context>
+    <name>DataConversion</name>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
+        <source>Invalid input value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>JSON does not support top level value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+14"/>
+        <source>TOML does not support top level array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>ignore null value in array: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <source>ignore null value of key: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="+76"/>
+        <source>Invalid file path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Cannot open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>Parsed as JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Parsed as TOML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Parsed as flow style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Parsed as block style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Cannot parse input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DataConversionGUI</name>
     <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+14"/>
@@ -146,12 +210,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+22"/>
         <source>Input Text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+50"/>
         <source>Load</source>
         <translation type="unfinished">読み込み</translation>
     </message>
@@ -161,12 +225,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+93"/>
         <source>Output Text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+23"/>
         <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>

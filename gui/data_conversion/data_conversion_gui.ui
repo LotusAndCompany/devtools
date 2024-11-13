@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>252</height>
+    <width>715</width>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,30 +18,15 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>516</width>
-     <height>252</height>
+     <width>715</width>
+     <height>256</height>
     </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
    </property>
    <property name="orientation">
     <enum>Qt::Orientation::Horizontal</enum>
    </property>
-   <property name="opaqueResize">
-    <bool>true</bool>
-   </property>
-   <property name="handleWidth">
-    <number>6</number>
-   </property>
-   <property name="childrenCollapsible">
-    <bool>false</bool>
-   </property>
    <widget class="QWidget" name="layoutWidget">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
      <property name="spacing">
       <number>4</number>
      </property>
@@ -53,96 +38,116 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="inputActionButtonLayout">
-       <property name="leftMargin">
-        <number>4</number>
+      <widget class="QWidget" name="widget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="rightMargin">
-        <number>4</number>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>38</height>
+        </size>
        </property>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="loadButton">
-         <property name="styleSheet">
-          <string notr="true">padding: 8px;</string>
-         </property>
-         <property name="text">
-          <string>Load</string>
-         </property>
-         <property name="icon">
-          <iconset theme="file"/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pasteButton">
-         <property name="styleSheet">
-          <string notr="true">padding: 8px;</string>
-         </property>
-         <property name="text">
-          <string>Paste</string>
-         </property>
-         <property name="icon">
-          <iconset theme="content_paste"/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="closeButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>34</width>
-           <height>34</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>34</width>
-           <height>34</height>
-          </size>
-         </property>
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">padding: 8px;</string>
-         </property>
-         <property name="text">
-          <string notr="true"/>
-         </property>
-         <property name="icon">
-          <iconset theme="close"/>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <layout class="QHBoxLayout" name="inputActionButtonLayout">
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="loadButton">
+          <property name="styleSheet">
+           <string notr="true">padding: 8px;</string>
+          </property>
+          <property name="text">
+           <string>Load</string>
+          </property>
+          <property name="icon">
+           <iconset theme="file"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pasteButton">
+          <property name="styleSheet">
+           <string notr="true">padding: 8px;</string>
+          </property>
+          <property name="text">
+           <string>Paste</string>
+          </property>
+          <property name="icon">
+           <iconset theme="content_paste"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="closeButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>34</width>
+            <height>34</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>34</width>
+            <height>34</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">padding: 8px;</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset theme="close"/>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
       <widget class="QTextEdit" name="inputTextEdit">
@@ -164,6 +169,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QTextBrowser" name="inputMessageTextView">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>64</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -179,101 +194,109 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="outputActionButtonLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <item>
-        <widget class="QComboBox" name="formatSelector">
-         <item>
-          <property name="text">
-           <string>JSON</string>
+      <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QHBoxLayout" name="outputActionButtonLayout">
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QComboBox" name="formatSelector">
+          <item>
+           <property name="text">
+            <string>JSON</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>YAML (Blobk style)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>YAML (Flow style)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>TOML</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="styleSelector">
+          <item>
+           <property name="text">
+            <string>4 Spaces</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2 Spaces</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tabs</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Minified</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>YAML (Blobk style)</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
           </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>YAML (Flow style)</string>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="saveButton">
+          <property name="styleSheet">
+           <string notr="true">padding: 8px;</string>
           </property>
-         </item>
-         <item>
           <property name="text">
-           <string>TOML</string>
+           <string>Save</string>
           </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="styleSelector">
-         <item>
+          <property name="icon">
+           <iconset theme="save"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="copyButton">
+          <property name="styleSheet">
+           <string notr="true">padding: 8px;</string>
+          </property>
           <property name="text">
-           <string>4 Spaces</string>
+           <string>Copy</string>
           </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>2 Spaces</string>
+          <property name="icon">
+           <iconset theme="content_copy"/>
           </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Tabs</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Minified</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveButton">
-         <property name="styleSheet">
-          <string notr="true">padding: 8px;</string>
-         </property>
-         <property name="text">
-          <string>Save</string>
-         </property>
-         <property name="icon">
-          <iconset theme="save"/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="copyButton">
-         <property name="styleSheet">
-          <string notr="true">padding: 8px;</string>
-         </property>
-         <property name="text">
-          <string>Copy</string>
-         </property>
-         <property name="icon">
-          <iconset theme="content_copy"/>
-         </property>
-        </widget>
-       </item>
-      </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
       <widget class="QTextBrowser" name="outputTextView">
@@ -295,6 +318,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="openLinks">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="outputMessageTextView">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>64</height>
+        </size>
        </property>
       </widget>
      </item>

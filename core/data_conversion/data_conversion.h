@@ -98,6 +98,8 @@ public:
     /// 現在の設定で出力文字列を更新する
     virtual void updateOutputText() = 0;
 
+    QString messages() const;
+
 protected:
     /**
      * @brief コンストラクタ
@@ -113,6 +115,8 @@ protected:
     Format _outputFormat = Format::JSON;
     /// 出力文字列のインデント
     Indentation _indentation = Indentation::SPACES_4;
+    /// エラーメッセージ等
+    QStringList _messages;
 
     /**
      * @brief 出力形式が不正なら例外を投げる

@@ -1,30 +1,46 @@
 #include "json_emitter.h"
 
+#include <QCoreApplication>
 #include <QJsonDocument>
 #include <QVariant>
 
 #include "core/exception/invalid_argument_exception.h"
 
-QString JsonEmitter::emitQString(const QVariant &data, DataConversion::Indentation style) const
+JsonEmitter::EmitResult JsonEmitter::emitQString(const QVariant &data,
+                                                 DataConversion::Indentation style)
 {
+    warnings.clear();
+
     if (data.typeId() == QMetaType::Type::UnknownType) {
-        return "";
+        return EmitResult{
+            "",
+            {},
+            QCoreApplication::instance()->translate("DataConversion", "Invalid input value"),
+        };
+    } else if (data.typeId() != QMetaType::Type::QVariantList
+               && data.typeId() != QMetaType::Type::QVariantMap) {
+        return EmitResult{
+            "",
+            {},
+            QCoreApplication::instance()->translate("DataConversion",
+                                                    "JSON does not support top level value"),
+        };
     }
 
     QJsonDocument doc = QJsonDocument::fromVariant(data);
 
     switch (style) {
     case DataConversion::Indentation::MINIFIED:
-        return doc.toJson(QJsonDocument::JsonFormat::Compact);
+        return EmitResult{doc.toJson(QJsonDocument::JsonFormat::Compact), warnings, ""};
     default:
         const QString json = doc.toJson(QJsonDocument::JsonFormat::Indented);
         switch (style) {
         case DataConversion::Indentation::SPACES_4:
-            return json;
+            return EmitResult{json, warnings, ""};
         case DataConversion::Indentation::SPACES_2:
-            return replace4spaceIndentation(json, "  ");
+            return EmitResult{replace4spaceIndentation(json, "  "), warnings, ""};
         case DataConversion::Indentation::TABS:
-            return replace4spaceIndentation(json, "\t");
+            return EmitResult{replace4spaceIndentation(json, "\t"), warnings, ""};
         default:
             // unreachable
             throw InvalidArgumentException<int>(

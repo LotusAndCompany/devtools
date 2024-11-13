@@ -3,6 +3,7 @@
 
 #include <QClipboard>
 #include <QResizeEvent>
+#include <cmath>
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
     : GuiTool(parent)
@@ -46,6 +47,10 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
                       + ui->outputActionButtonLayout->minimumSize().width();
     ui->splitter->setMinimumWidth(width);
     setMinimumWidth(width);
+    /*
+    if (ui->inputActionButtonLayout->minimumSize().height()
+        < ui->outputActionButtonLayout->minimumSize().height())
+        ui->inputActionButtonLayout*/
 
     QSize size = event->size();
     if (size.width() < ui->splitter->minimumSizeHint().width())
@@ -60,7 +65,9 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
 void DataConversionGUI::onInputTextChanged()
 {
     dataConversion->setInputText(inputTextEdit->toPlainText());
+    ui->inputMessageTextView->setText(dataConversion->messages());
     dataConversion->updateOutputText();
+    ui->outputMessageTextView->setText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
 }
 
@@ -87,6 +94,7 @@ void DataConversionGUI::onFormatSelected(int index)
         break;
     }
     dataConversion->updateOutputText();
+    ui->outputMessageTextView->setText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
 }
 
@@ -107,5 +115,15 @@ void DataConversionGUI::onStyleSelected(int index)
         break;
     }
     dataConversion->updateOutputText();
+    ui->outputMessageTextView->setText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
+}
+
+void DataConversionGUI::onClearPressed()
+{
+    dataConversion->setInputText("");
+    ui->inputMessageTextView->setText("");
+    dataConversion->updateOutputText();
+    ui->outputMessageTextView->setText("");
+    outputTextView->setPlainText("");
 }

@@ -17,15 +17,23 @@ public:
     /// デストラクタ
     virtual ~BasicEmitter() = default;
 
+    /// 出力結果を格納する構造体
+    struct EmitResult
+    {
+        QString text;         ///< 結果
+        QStringList warnings; ///< 警告
+        QString error;        ///< エラー
+    };
+
     /**
      * @brief データを文字列に変換する
      * @param data 入力データ
      * @param style 出力スタイル(一部非対応あり)
      * @return 結果
      */
-    virtual QString emitQString(
+    virtual EmitResult emitQString(
         const QVariant &data,
-        DataConversion::Indentation style = DataConversion::Indentation::SPACES_4) const
+        DataConversion::Indentation style = DataConversion::Indentation::SPACES_4)
         = 0;
 
 protected:
@@ -36,6 +44,9 @@ protected:
      * @return 結果
      */
     virtual QString replace4spaceIndentation(const QString &src, const QString &newIndent) const;
+
+    /// 警告
+    QStringList warnings;
 
 #ifdef _TEST_BasicEmitter
     friend class Test::TestBasicEmitter;

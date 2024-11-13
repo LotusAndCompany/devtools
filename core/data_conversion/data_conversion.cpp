@@ -9,6 +9,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "core/data_conversion/emitter/json_emitter.h"
+#include "core/data_conversion/emitter/toml_emitter.h"
 #include "core/exception/invalid_argument_exception.h"
 #include "parser/basic_parser.h"
 #include "parser/json_parser.h"
@@ -18,6 +19,11 @@
 DataConversionInterface::DataConversionInterface(QObject *parent)
     : Tool(Tool::ID::DATA_CONVERSION, "data-conversion", parent)
 {}
+
+QString DataConversionInterface::messages() const
+{
+    return _messages.join('\n');
+}
 
 void DataConversionInterface::validateFormat(Format format)
 {
@@ -55,6 +61,8 @@ DataConversion::DataConversion(QObject *parent)
 
 void DataConversion::setInputText(const QString &inputText)
 {
+    _messages.clear();
+
     if (_inputText != inputText) {
         _inputText = inputText;
         outdated = true;
@@ -64,8 +72,10 @@ void DataConversion::setInputText(const QString &inputText)
 
 bool DataConversion::load(const QString &path)
 {
-    if (!QFileInfo::exists(path))
+    if (!QFileInfo::exists(path)) {
+        _messages = {tr("Invalid file path")};
         return false;
+    }
 
     QFile file(path);
     if (file.open(QIODevice::ReadOnly)) {
@@ -76,6 +86,8 @@ bool DataConversion::load(const QString &path)
             outdated = true;
         }
         return stream.status() == QTextStream::Status::Ok;
+    } else {
+        _messages = {tr("Cannot open %1").arg(path)};
     }
 
     return false;
@@ -121,24 +133,37 @@ void DataConversion::updateOutputText()
     if (!outdated)
         return;
 
+    _messages.clear();
+
     if (inputText().trimmed() == "") {
         _outputText = "";
     } else {
+        BasicEmitter::EmitResult result;
         switch (outputFormat()) {
         case Format::JSON: {
-            JsonEmitter je;
-            _outputText = je.emitQString(intermediateData, indentation());
+            JsonEmitter emitter;
+            result = emitter.emitQString(intermediateData, indentation());
+            _outputText = result.text;
             break;
         }
         case Format::YAML_BLOCK:
         case Format::YAML_FLOW:
             // TODO
             break;
-        case Format::TOML:
-            // TODO
+        case Format::TOML: {
+            TomlEmitter emitter;
+            result = emitter.emitQString(intermediateData, indentation());
+            _outputText = result.text;
             break;
+        }
         default:
             break;
+        }
+
+        if (result.error != "") {
+            _messages = {result.error};
+        } else {
+            _messages = result.warnings;
         }
     }
 
@@ -162,6 +187,7 @@ void DataConversion::parseInputText()
     if (result) {
         inputFormat = Format::JSON;
         intermediateData = std::move(result.data);
+        _messages = {tr("Parsed as JSON")};
         outdated = true;
         return;
     }
@@ -172,6 +198,7 @@ void DataConversion::parseInputText()
     if (result) {
         inputFormat = Format::TOML;
         intermediateData = std::move(result.data);
+        _messages = {tr("Parsed as TOML")};
         outdated = true;
         return;
     }
@@ -181,10 +208,13 @@ void DataConversion::parseInputText()
     result = yp.tryParse(inputText());
     if (result) {
         if (result.extras[YamlParser::EXTRAS_YAML_STYLE].toInt()
-            == static_cast<int>(YAML::EmitterStyle::Flow))
+            == static_cast<int>(YAML::EmitterStyle::Flow)) {
             inputFormat = Format::YAML_FLOW;
-        else
+            _messages = {tr("Parsed as flow style YAML")};
+        } else {
             inputFormat = Format::YAML_BLOCK;
+            _messages = {tr("Parsed as block style YAML")};
+        }
 
         intermediateData = std::move(result.data);
         outdated = true;
@@ -194,5 +224,6 @@ void DataConversion::parseInputText()
     // 解析失敗
     inputFormat = Format::ERROR;
     intermediateData = QVariant();
+    _messages = {tr("Cannot parse input text")};
     outdated = true;
 }
