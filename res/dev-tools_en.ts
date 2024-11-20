@@ -69,16 +69,22 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="125"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="142"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="190"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -457,6 +463,89 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="193"/>
         <source>Enter text...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>api_tool</name>
+    <message>
+        <location filename="../gui/api_tool.ui" line="14"/>
+        <source>API Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="37"/>
+        <source>GET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="42"/>
+        <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="47"/>
+        <source>PUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="52"/>
+        <source>DELETE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="70"/>
+        <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="90"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="100"/>
+        <source>Authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="106"/>
+        <source>Username:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="116"/>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="131"/>
+        <source>Body</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="43"/>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="44"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="45"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="142"/>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="146"/>
+        <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
