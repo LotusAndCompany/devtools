@@ -3,6 +3,8 @@
 #include "ui_contents_area.h"
 
 #include <QLabel>
+
+
 #include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
@@ -11,6 +13,8 @@
 #include "gui/image/resize/image_resize_gui.h"
 #include "gui/image/rotation/image_rotation_gui.h"
 #include "gui/image/transparent/image_transparent_gui.h"
+#include "phrase_generation/phrase_generation.h"
+#include "gui/command/command.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -71,6 +75,12 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::IMAGE_TRANSPARENT:
         content = new ImageTransparentGUI(new ImageTransparent(), this);
+        break;
+    case Sidemenu::ID::PHRASE_GENERATION:
+        content = new phraseGeneration(this);
+        break;
+    case Sidemenu::ID::COMMAND_GENERATION:
+        content = new Command(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

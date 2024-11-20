@@ -94,6 +94,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/api_tool.h gui/api_tool.cpp gui/api_tool.ui
         gui/customsplitter.h
         gui/customsplitter.cpp
+        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
+        gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.ui gui/contents_area.cpp gui/contents_area.h gui/contents_area.ui gui/gui_application.cpp gui/gui_application.h gui/gui_tool.cpp gui/gui_tool.h gui/main_window.cpp gui/main_window.h gui/main_window.ui gui/sidemenu.cpp gui/sidemenu.h gui/sidemenu.ui gui/sidemenu_item.cpp gui/sidemenu_item.h
+        gui/command/command.h gui/command/command.cpp gui/command/command.ui
     )
     # image
     qt_add_library(${PROJECT_NAME}_image_core STATIC
@@ -121,6 +124,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
+    )
+    # phrase_generation
+    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
+        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
+        gui/phrase_generation/phrase_generation.ui
     )
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
@@ -178,6 +186,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_image_rotation
     ${PROJECT_NAME}_image_division
     ${PROJECT_NAME}_image_transparent
+    ${PROJECT_NAME}_phrase_generation
 )
 
 foreach (MODULE ${MODULE_LIST})

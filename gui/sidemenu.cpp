@@ -29,7 +29,8 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::IMAGE_ROTATION);
     registerItem(ID::IMAGE_DIVISION);
     registerItem(ID::IMAGE_TRANSPARENT);
-
+    registerItem(ID::PHRASE_GENERATION);
+    registerItem(ID::COMMAND_GENERATION);
     ui->scrollAreaLayout->addStretch();
 }
 
@@ -69,6 +70,12 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::IMAGE_TRANSPARENT:
         iconName = "transparent";
+        break;
+    case ID::PHRASE_GENERATION:
+        iconName = "phrase_generation";
+        break;
+    case ID::COMMAND_GENERATION:
+        iconName = "terminal";
         break;
 
     default:
