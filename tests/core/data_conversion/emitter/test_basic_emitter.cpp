@@ -12,10 +12,10 @@ class BasicEmitterMock : public BasicEmitter
 {
     // BasicEmitter interface
 public:
-    QString emitQString(const QVariant &data,
-                        DataConversionInterface::Indentation style) const override
+    BasicEmitter::EmitResult emitQString(const QVariant &data,
+                                         DataConversionInterface::Indentation style) override
     {
-        return "";
+        return EmitResult();
     }
 };
 
@@ -32,10 +32,10 @@ void TestBasicEmitter::test_replace4spaceIndentation()
     const QString src4spaces = QString("a    \n    bb    \n        ccc    \n        dddd    \neeeee    ");
     BasicEmitterMock emitter;
     // 4スペース→2スペースの変換ができること
-    const QString src2spaces = QString("a    \n  bb    \n    ccc    \n    dddd    \neeeee    ");
+    const QString src2spaces = QString("a    \n  bb    \n    ccc    \n    dddd    \neeeee    \n");
     QCOMPARE_EQ(emitter.replace4spaceIndentation(src4spaces, "  "), src2spaces);
     // 4スペース→タブの変換の変換ができること
-    const QString srcTabs = QString("a    \n\tbb    \n\t\tccc    \n\t\tdddd    \neeeee    ");
+    const QString srcTabs = QString("a    \n\tbb    \n\t\tccc    \n\t\tdddd    \neeeee    \n");
     QCOMPARE_EQ(emitter.replace4spaceIndentation(src4spaces, "\t"), srcTabs);
 
     // 空文字列を扱えること

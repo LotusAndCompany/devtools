@@ -20,6 +20,7 @@ private slots:
 
 void TestJsonEmitter::test_emitQString(){
     JsonEmitter emitter;
+    JsonEmitter::EmitResult result;
 
     // 配列を変換できること
     QVariantList list = QVariantList{
@@ -33,7 +34,8 @@ void TestJsonEmitter::test_emitQString(){
         QVariantList(),
         QVariantMap(),
     };
-    QCOMPARE_EQ(emitter.emitQString(list, DataConversion::Indentation::MINIFIED),
+    result = emitter.emitQString(list, DataConversion::Indentation::MINIFIED);
+    QCOMPARE_EQ(result.text,
                 QString("[null,true,false,%1,1.25,\"%2\",[],{}]")
                     .arg(list[3].toInt())
                     .arg(list[5].toString()));
@@ -52,7 +54,8 @@ void TestJsonEmitter::test_emitQString(){
         {"o", QVariantMap()},
     };
     // FIXME: 順番が変わってしまう
-    QCOMPARE_EQ(emitter.emitQString(map, DataConversion::Indentation::MINIFIED),
+    result = emitter.emitQString(map, DataConversion::Indentation::MINIFIED);
+    QCOMPARE_EQ(result.text,
                 QString("{\"a\":[],\"d\":2.25,\"f\":false,\"i\":%1,\"n\":null,\"o\":{},\"s\":\"%"
                         "2\",\"t\":true}")
                     .arg(map["i"].toInt())
@@ -62,27 +65,28 @@ void TestJsonEmitter::test_emitQString(){
     map = {{"a", 0}, {"b", 1}};
 
     // 4スペースで出力されること
-    QCOMPARE_EQ(emitter.emitQString(list, DataConversion::Indentation::SPACES_4),
-                QString("[\n    0,\n    1\n]\n"));
-    QCOMPARE_EQ(emitter.emitQString(map, DataConversion::Indentation::SPACES_4),
-                QString("{\n    \"a\": 0,\n    \"b\": 1\n}\n"));
+    result = emitter.emitQString(list, DataConversion::Indentation::SPACES_4);
+    QCOMPARE_EQ(result.text, QString("[\n    0,\n    1\n]\n"));
+    result = emitter.emitQString(map, DataConversion::Indentation::SPACES_4);
+    QCOMPARE_EQ(result.text, QString("{\n    \"a\": 0,\n    \"b\": 1\n}\n"));
 
     // 2スペースで出力されること
-    QCOMPARE_EQ(emitter.emitQString(list, DataConversion::Indentation::SPACES_2),
-                QString("[\n  0,\n  1\n]\n"));
-    QCOMPARE_EQ(emitter.emitQString(map, DataConversion::Indentation::SPACES_2),
-                QString("{\n  \"a\": 0,\n  \"b\": 1\n}\n"));
+    result = emitter.emitQString(list, DataConversion::Indentation::SPACES_2);
+    QCOMPARE_EQ(result.text, QString("[\n  0,\n  1\n]\n"));
+    result = emitter.emitQString(map, DataConversion::Indentation::SPACES_2);
+    QCOMPARE_EQ(result.text, QString("{\n  \"a\": 0,\n  \"b\": 1\n}\n"));
 
     // タブで出力されること
-    QCOMPARE_EQ(emitter.emitQString(list, DataConversion::Indentation::TABS),
-                QString("[\n\t0,\n\t1\n]\n"));
-    QCOMPARE_EQ(emitter.emitQString(map, DataConversion::Indentation::TABS),
-                QString("{\n\t\"a\": 0,\n\t\"b\": 1\n}\n"));
+    result = emitter.emitQString(list, DataConversion::Indentation::TABS);
+    QCOMPARE_EQ(result.text, QString("[\n\t0,\n\t1\n]\n"));
+    result = emitter.emitQString(map, DataConversion::Indentation::TABS);
+    QCOMPARE_EQ(result.text, QString("{\n\t\"a\": 0,\n\t\"b\": 1\n}\n"));
 
     // インデント無しで出力されること
-    QCOMPARE_EQ(emitter.emitQString(list, DataConversion::Indentation::MINIFIED), QString("[0,1]"));
-    QCOMPARE_EQ(emitter.emitQString(map, DataConversion::Indentation::MINIFIED),
-                QString("{\"a\":0,\"b\":1}"));
+    result = emitter.emitQString(list, DataConversion::Indentation::MINIFIED);
+    QCOMPARE_EQ(result.text, QString("[0,1]"));
+    result = emitter.emitQString(map, DataConversion::Indentation::MINIFIED);
+    QCOMPARE_EQ(result.text, QString("{\"a\":0,\"b\":1}"));
 }
 } // namespace Test
 

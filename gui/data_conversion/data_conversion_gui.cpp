@@ -3,7 +3,6 @@
 
 #include <QClipboard>
 #include <QResizeEvent>
-#include <cmath>
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
     : GuiTool(parent)
@@ -61,6 +60,7 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
 
 void DataConversionGUI::onInputTextChanged()
 {
+    // TODO: 呼び出し頻度に制限を設ける
     dataConversion->setInputText(inputTextEdit->toPlainText());
     ui->inputMessageTextView->setText(dataConversion->messages());
     dataConversion->updateOutputText();
