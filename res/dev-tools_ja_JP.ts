@@ -496,7 +496,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location line="+4"/>
         <source>Phrase Generation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">定型文生成</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -536,15 +536,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location line="+67"/>
         <source>Enter title...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">タイトルを入力...</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+65"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
@@ -561,7 +562,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location line="+30"/>
         <source>Enter text...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">テキストを入力...</translation>
     </message>
     <message>
         <source>Command Genration</source>

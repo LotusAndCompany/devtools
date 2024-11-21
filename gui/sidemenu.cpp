@@ -72,7 +72,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "transparent";
         break;
     case ID::PHRASE_GENERATION:
-        iconName = "phrase_generation";
+        iconName = "library_books";
         break;
     case ID::COMMAND_GENERATION:
         iconName = "terminal";
