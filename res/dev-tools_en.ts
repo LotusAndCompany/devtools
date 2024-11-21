@@ -149,17 +149,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="34"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="37"/>
         <source>TOML does not support top level array</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="125"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="128"/>
         <source>ignore null value in array: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="183"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="186"/>
         <source>ignore null value of key: %1</source>
         <translation type="unfinished"></translation>
     </message>

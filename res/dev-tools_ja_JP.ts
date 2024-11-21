@@ -152,7 +152,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+14"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+17"/>
         <source>TOML does not support top level array</source>
         <translation type="unfinished"></translation>
     </message>

@@ -23,7 +23,10 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
 
     try {
         const auto toml = variantToTomlValue("", data, style);
-        return EmitResult{QString::fromStdString(toml::format(toml)), warnings, ""};
+        QString text = QString::fromStdString(toml::format(toml));
+        if (text.endsWith("\n\n"))
+            text = text.mid(0, text.length() - 1);
+        return EmitResult{text, warnings, ""};
     } catch (InvalidArgumentException<int> e) {
         qCritical() << e.message;
         return EmitResult{"", warnings, e.message};
@@ -191,6 +194,7 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(const QString &key,
         value.as_table_fmt().indent_type = toml::indent_char::none;
         value.as_table_fmt().body_indent = 0;
         value.as_table_fmt().closing_indent = 0;
+        value.as_table_fmt().name_indent = 0;
     } else {
         value.as_table_fmt().fmt = toml::table_format::multiline;
         value.as_table_fmt().closing_indent = 0;

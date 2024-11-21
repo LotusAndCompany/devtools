@@ -98,7 +98,7 @@ QTime TestTomlParser::getRandomQTime()
 QDate TestTomlParser::getRandomQDate()
 {
     const int16_t randomAD = rd.nextInt(1970, 3000);
-    const uint8_t randomMon = rd.nextInt(0, 12), randomDay = rd.nextInt(1, 29);
+    const uint8_t randomMon = rd.nextInt(1, 13), randomDay = rd.nextInt(1, 29);
 
     return QDate(randomAD, randomMon, randomDay);
 }

@@ -137,6 +137,10 @@ DevTools_add_test(test_json_emitter
     SOURCES
     tests/core/data_conversion/emitter/test_json_emitter.cpp
 )
+DevTools_add_test(test_toml_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_toml_emitter.cpp
+)
 # core/data_conversion
 DevTools_add_test(test_data_conversion
     SOURCES
