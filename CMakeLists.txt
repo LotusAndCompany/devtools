@@ -26,7 +26,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 # パッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Network)
 find_package(Doxygen)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
@@ -91,6 +91,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/tool/tool_id_fields.h
         core/enum_cast.h
         gui/gui_tool.h gui/gui_tool.cpp
+        gui/api_tool.h gui/api_tool.cpp gui/api_tool.ui
+        gui/customsplitter.h
+        gui/customsplitter.cpp
         gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
         gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.ui gui/contents_area.cpp gui/contents_area.h gui/contents_area.ui gui/gui_application.cpp gui/gui_application.h gui/gui_tool.cpp gui/gui_tool.h gui/main_window.cpp gui/main_window.h gui/main_window.ui gui/sidemenu.cpp gui/sidemenu.h gui/sidemenu.ui gui/sidemenu_item.cpp gui/sidemenu_item.h
         gui/command/command.h gui/command/command.cpp gui/command/command.ui
@@ -207,6 +210,7 @@ foreach (MODULE ${MODULE_LIST})
         Qt6::DBus
         Qt6::Gui
         Qt6::Widgets
+        Qt6::Network
     )
 endforeach()
 

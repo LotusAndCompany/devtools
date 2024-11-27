@@ -12,9 +12,7 @@ const QString Sidemenu::invalidSidemenuIDReason = QString("Sidemenu::ID must be 
                                                       .arg(Sidemenu::ID_MAX);
 
 Sidemenu::Sidemenu(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Sidemenu)
-    , buttonGroup(new QButtonGroup(this))
+    : QWidget(parent), ui(new Ui::Sidemenu), buttonGroup(new QButtonGroup(this))
 {
     ui->setupUi(this);
 
@@ -52,13 +50,16 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     validateID(id);
 
     QString iconName;
-    switch (id) {
+    switch (id)
+    {
     case ID::HOME:
         // NOTE: unused, Home icon is set in sidemenu.ui
         qWarning() << "Home icon is set in sidemenu.ui";
         iconName = "home";
         break;
-
+    case ID::HTTP_REQUEST:
+        iconName = "terminal";
+        break;
     case ID::IMAGE_RESIZE:
         iconName = "resize";
         break;
@@ -77,7 +78,6 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     case ID::COMMAND_GENERATION:
         iconName = "terminal";
         break;
-
     default:
         throw UnderDevelopmentException();
     }
@@ -94,7 +94,8 @@ void Sidemenu::registerItem(ID id)
 
 void Sidemenu::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
+    switch (event->type())
+    {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
         event->accept();
@@ -108,14 +109,17 @@ void Sidemenu::changeEvent(QEvent *event)
 void Sidemenu::onButtonToggled(int intID, bool checked)
 {
     // NOTE: signal/slotでは例外を投げるべきではない
-    try {
+    try
+    {
         const ID id = enum_cast<ID>(intID);
 
         validateID(id);
 
         if (checked)
             emit itemSelected(id);
-    } catch (InvalidArgumentException<int> &e) {
+    }
+    catch (InvalidArgumentException<int> &e)
+    {
         qWarning() << e.message;
     }
 }

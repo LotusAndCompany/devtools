@@ -69,16 +69,22 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="125"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="142"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="190"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
+        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -110,6 +116,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/command/command.ui" line="55"/>
+        <source>Generate command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/command/command.ui" line="76"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
@@ -125,25 +136,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="55"/>
-        <source>Generate command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../gui/command/command.ui" line="33"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/command/command.ui" line="62"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.AppleSystemUIFont&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -414,6 +408,89 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../core/tool/tool.cpp" line="55"/>
         <source>Generate and manage Phrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>api_tool</name>
+    <message>
+        <location filename="../gui/api_tool.ui" line="14"/>
+        <source>API Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="37"/>
+        <source>GET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="42"/>
+        <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="47"/>
+        <source>PUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="52"/>
+        <source>DELETE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="70"/>
+        <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="90"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="100"/>
+        <source>Authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="106"/>
+        <source>Username:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="116"/>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.ui" line="131"/>
+        <source>Body</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="43"/>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="44"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="45"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="142"/>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/api_tool.cpp" line="146"/>
+        <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
