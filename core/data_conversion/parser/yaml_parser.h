@@ -41,21 +41,21 @@ private:
     /**
      * @brief scalarを `QVariant` に変換する
      * @param node 変換前の値
-     * @exception InvalidStateException nodeが不正な場合
+     * @exception InvalidArgumentException<bool> nodeが不正な場合
      * @return 変換後の値 (dataは基本的に `QString` )
      */
     static ParseResult yamlScalarToQVariant(const YAML::Node &node) noexcept(false);
     /**
      * @brief mapを `QVariantMap` に変換する
      * @param node 変換前の値
-     * @exception InvalidStateException nodeが不正な場合
+     * @exception InvalidArgumentException<bool> nodeが不正な場合
      * @return 変換後の値
      */
     static ParseResult yamlMapToQVariantMap(const YAML::Node &node) noexcept(false);
     /**
      * @brief mapを `QVariantList` に変換する
      * @param node 変換前の値
-     * @exception InvalidStateException nodeが不正な場合
+     * @exception InvalidArgumentException<bool> nodeが不正な場合
      * @return 変換後の値
      */
     static ParseResult yamlSequenceToQVariantList(const YAML::Node &node) noexcept(false);
