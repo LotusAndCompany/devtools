@@ -518,6 +518,7 @@
     </message>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="137"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="65"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>

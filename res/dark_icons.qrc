@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/icons">
-        <!-- material -->
         <file>dark/index.theme</file>
         <file>dark/material/home.svg</file>
         <file>dark/material/question_mark.svg</file>
@@ -14,11 +11,10 @@
         <file>dark/material/resize.svg</file>
         <file>dark/material/division.svg</file>
         <file>dark/material/transparent.svg</file>
-
-        <!-- remix -->
         <file>dark/remix/anticlockwise.svg</file>
         <file>dark/remix/clockwise.svg</file>
         <file>dark/remix/flip_horizontal.svg</file>
         <file>dark/remix/flip_vertical.svg</file>
+        <file>dark/material/library_books.svg</file>
     </qresource>
 </RCC>

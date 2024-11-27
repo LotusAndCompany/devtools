@@ -62,7 +62,7 @@ void phraseGeneration::loadTitles()
         // UUIDをユーザーデータとして保持
         item->setData(0, Qt::UserRole, filename);
 
-        QPushButton *copyButton = new QPushButton("Copy", ui->titleTreeWidget);
+        QPushButton *copyButton = new QPushButton(tr("Copy"), ui->titleTreeWidget);
         connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
 
         ui->titleTreeWidget->setItemWidget(item, 1, copyButton);
