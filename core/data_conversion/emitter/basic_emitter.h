@@ -25,17 +25,6 @@ public:
         QString error;        ///< エラー
     };
 
-    /**
-     * @brief データを文字列に変換する
-     * @param data 入力データ
-     * @param style 出力スタイル(一部非対応あり)
-     * @return 結果
-     */
-    virtual EmitResult emitQString(
-        const QVariant &data,
-        DataConversion::Indentation style = DataConversion::Indentation::SPACES_4)
-        = 0;
-
 protected:
     /**
      * @brief 4スペースのインデントを指定のインデントに置換する

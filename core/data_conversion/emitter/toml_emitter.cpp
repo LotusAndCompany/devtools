@@ -9,7 +9,7 @@
 #include <toml.hpp>
 
 TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
-                                                 DataConversionInterface::Indentation style)
+                                                 DataConversionInterface::Indentation indentation)
 {
     warnings.clear();
 
@@ -22,7 +22,7 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
     }
 
     try {
-        const auto toml = variantToTomlValue("", data, style);
+        const auto toml = variantToTomlValue("", data, indentation);
         QString text = QString::fromStdString(toml::format(toml));
         if (text.endsWith("\n\n"))
             text = text.mid(0, text.length() - 1);
@@ -65,7 +65,7 @@ struct Util
 using namespace _TomlEmitterPrivate;
 
 TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
-    const QString &key, const QVariant &value, DataConversionInterface::Indentation style)
+    const QString &key, const QVariant &value, DataConversionInterface::Indentation indentation)
 {
     switch (value.typeId()) {
     case QMetaType::Type::Nullptr:
@@ -106,9 +106,9 @@ TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
         }
     }
     case QMetaType::Type::QVariantList:
-        return listToTomlArray(key, value.toList(), style);
+        return listToTomlArray(key, value.toList(), indentation);
     case QMetaType::Type::QVariantMap:
-        return mapToTomlTable(key, value.toMap(), style);
+        return mapToTomlTable(key, value.toMap(), indentation);
     default:
         throw InvalidArgumentException<int>(static_cast<int>(value.typeId()), "Unsupported type");
     }
@@ -116,13 +116,13 @@ TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
 
 TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(const QString &key,
                                                           const QVariantList &list,
-                                                          DataConversionInterface::Indentation style)
+                                                          DataConversionInterface::Indentation indentation)
 {
     toml_value_type::array_type array;
     for (const auto &elem : list) {
         // null値は無視
         if (!elem.isNull())
-            array.push_back(variantToTomlValue(key, elem, style));
+            array.push_back(variantToTomlValue(key, elem, indentation));
         else {
             warnings.push_back(QCoreApplication::instance()
                                    ->translate("DataConversion", "ignore null value in array: %1")
@@ -132,7 +132,7 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(const QString &key,
     }
 
     toml_value_type value = std::move(array);
-    if (style == DataConversion::Indentation::MINIFIED) {
+    if (indentation == DataConversion::Indentation::MINIFIED) {
         if (value.is_array_of_tables()) {
             value.as_array_fmt().fmt = toml::array_format::array_of_tables;
         } else {
@@ -147,14 +147,14 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(const QString &key,
         else
             value.as_array_fmt().fmt = toml::array_format::multiline;
 
-        if (style == DataConversion::Indentation::TABS) {
+        if (indentation == DataConversion::Indentation::TABS) {
             value.as_array_fmt().indent_type = toml::indent_char::tab;
             value.as_array_fmt().body_indent = 1;
             value.as_array_fmt().closing_indent = 0;
         } else {
             value.as_array_fmt().indent_type = toml::indent_char::space;
             value.as_array_fmt().closing_indent = 0;
-            switch (style) {
+            switch (indentation) {
             case DataConversion::Indentation::SPACES_2:
                 value.as_array_fmt().body_indent = 2;
                 break;
@@ -173,14 +173,16 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(const QString &key,
 
 TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(const QString &key,
                                                          const QVariantMap &map,
-                                                         DataConversionInterface::Indentation style)
+                                                         DataConversionInterface::Indentation indentation)
 {
     toml_value_type::table_type table;
     for (const auto &entry : map.asKeyValueRange()) {
         const auto childKey = key == "" ? entry.first : key + "." + entry.first;
         // null値は無視
         if (!entry.second.isNull())
-            table[entry.first.toStdString()] = variantToTomlValue(childKey, entry.second, style);
+            table[entry.first.toStdString()] = variantToTomlValue(childKey,
+                                                                  entry.second,
+                                                                  indentation);
         else {
             warnings.push_back(QCoreApplication::instance()
                                    ->translate("DataConversion", "ignore null value of key: %1")
@@ -190,7 +192,7 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(const QString &key,
     }
 
     toml_value_type value = std::move(table);
-    if (style == DataConversion::Indentation::MINIFIED) {
+    if (indentation == DataConversion::Indentation::MINIFIED) {
         value.as_table_fmt().indent_type = toml::indent_char::none;
         value.as_table_fmt().body_indent = 0;
         value.as_table_fmt().closing_indent = 0;
@@ -201,12 +203,12 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(const QString &key,
         if (key == "")
             value.as_table_fmt().body_indent = 0;
         else {
-            if (style == DataConversion::Indentation::TABS) {
+            if (indentation == DataConversion::Indentation::TABS) {
                 value.as_table_fmt().indent_type = toml::indent_char::tab;
                 value.as_table_fmt().body_indent = 1;
             } else {
                 value.as_table_fmt().indent_type = toml::indent_char::space;
-                switch (style) {
+                switch (indentation) {
                 case DataConversion::Indentation::SPACES_2:
                     value.as_table_fmt().body_indent = 2;
                     break;

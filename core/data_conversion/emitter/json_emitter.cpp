@@ -7,7 +7,7 @@
 #include "core/exception/invalid_argument_exception.h"
 
 JsonEmitter::EmitResult JsonEmitter::emitQString(const QVariant &data,
-                                                 DataConversion::Indentation style)
+                                                 DataConversion::Indentation indentation)
 {
     warnings.clear();
 
@@ -29,12 +29,12 @@ JsonEmitter::EmitResult JsonEmitter::emitQString(const QVariant &data,
 
     QJsonDocument doc = QJsonDocument::fromVariant(data);
 
-    switch (style) {
+    switch (indentation) {
     case DataConversion::Indentation::MINIFIED:
         return EmitResult{doc.toJson(QJsonDocument::JsonFormat::Compact), warnings, ""};
     default:
         const QString json = doc.toJson(QJsonDocument::JsonFormat::Indented);
-        switch (style) {
+        switch (indentation) {
         case DataConversion::Indentation::SPACES_4:
             return EmitResult{json, warnings, ""};
         case DataConversion::Indentation::SPACES_2:

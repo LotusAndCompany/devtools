@@ -8,17 +8,6 @@
 #include <QObject>
 
 namespace Test {
-class BasicEmitterMock : public BasicEmitter
-{
-    // BasicEmitter interface
-public:
-    BasicEmitter::EmitResult emitQString(const QVariant &data,
-                                         DataConversionInterface::Indentation style) override
-    {
-        return EmitResult();
-    }
-};
-
 class TestBasicEmitter : public QObject
 {
     Q_OBJECT
@@ -30,7 +19,7 @@ private slots:
 void TestBasicEmitter::test_replace4spaceIndentation()
 {
     const QString src4spaces = QString("a    \n    bb    \n        ccc    \n        dddd    \neeeee    ");
-    BasicEmitterMock emitter;
+    BasicEmitter emitter;
     // 4スペース→2スペースの変換ができること
     const QString src2spaces = QString("a    \n  bb    \n    ccc    \n    dddd    \neeeee    \n");
     QCOMPARE_EQ(emitter.replace4spaceIndentation(src4spaces, "  "), src2spaces);

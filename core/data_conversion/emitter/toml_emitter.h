@@ -26,10 +26,15 @@ class TomlEmitter : public BasicEmitter
 public:
     TomlEmitter(){}
 
-    // BasicEmitter interface
+    /**
+     * @brief データを文字列に変換する
+     * @param data 入力データ
+     * @param indentation 出力時のインデント(一部非対応あり)
+     * @return 結果
+     */
     EmitResult emitQString(
         const QVariant &data,
-        DataConversionInterface::Indentation style = DataConversion::Indentation::SPACES_4) override;
+        DataConversionInterface::Indentation indentation = DataConversion::Indentation::SPACES_4);
 
 private:
     /// tomlのデータ型
@@ -39,35 +44,35 @@ private:
      * @brief QVaritant型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param value QVaritant型の値
-     * @param style 出力スタイル(一部非対応あり)
+     * @param style 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */
     toml_value_type variantToTomlValue(const QString &key,
                                        const QVariant &value,
-                                       DataConversionInterface::Indentation style) noexcept(false);
+                                       DataConversionInterface::Indentation indentation) noexcept(false);
     /**
      * @brief QVariantList型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param list QVariantList型の値
-     * @param style 出力スタイル(一部非対応あり)
+     * @param style 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */
     toml_value_type listToTomlArray(const QString &key,
                                     const QVariantList &list,
-                                    DataConversionInterface::Indentation style) noexcept(false);
+                                    DataConversionInterface::Indentation indentation) noexcept(false);
     /**
      * @brief QVariantMap型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param map QVariantMap型の値
-     * @param style 出力スタイル(一部非対応あり)
+     * @param style 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */
     toml_value_type mapToTomlTable(const QString &key,
                                    const QVariantMap &map,
-                                   DataConversionInterface::Indentation style) noexcept(false);
+                                   DataConversionInterface::Indentation indentation) noexcept(false);
 
     friend struct _TomlEmitterPrivate::Util;
 #ifdef _TEST_TomlEmitter
