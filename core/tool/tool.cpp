@@ -59,6 +59,11 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Command Genration"),
             tr("Generate command from command list"),
         };
+    case ID::HTTP_REQUEST:
+        return Translatable{
+            tr("HTTP Request"),
+            tr("Send HTTP Request"),
+        };
     default:
         throw UnderDevelopmentException();
     }
