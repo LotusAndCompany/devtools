@@ -41,7 +41,7 @@ Command::~Command()
 
 void Command::init() {
     const QStringList functionsList {
-        "Functions list",
+        "機能一覧",
         "1: 変更を追加",
         "2: コミット",
         "3: コミット & コメント",
