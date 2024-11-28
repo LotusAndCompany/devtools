@@ -142,6 +142,7 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+17"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
         <source>Invalid input value</source>
         <translation type="unfinished"></translation>
@@ -162,7 +163,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+60"/>
         <source>ignore null value of key: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -177,7 +178,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+103"/>
         <source>Parsed as JSON</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,6 +200,11 @@
     <message>
         <location line="+11"/>
         <source>Cannot parse input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+20"/>
+        <source>YAML does not support tab indentation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

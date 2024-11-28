@@ -8,10 +8,10 @@
 #include <toml.hpp>
 #include <yaml-cpp/yaml.h>
 
-#include "core/data_conversion/emitter/json_emitter.h"
-#include "core/data_conversion/emitter/toml_emitter.h"
 #include "core/exception/invalid_argument_exception.h"
-#include "parser/basic_parser.h"
+#include "emitter/json_emitter.h"
+#include "emitter/toml_emitter.h"
+#include "emitter/yaml_emitter.h"
 #include "parser/json_parser.h"
 #include "parser/toml_parser.h"
 #include "parser/yaml_parser.h"
@@ -147,9 +147,12 @@ void DataConversion::updateOutputText()
             break;
         }
         case Format::YAML_BLOCK:
-        case Format::YAML_FLOW:
-            // TODO
+        case Format::YAML_FLOW: {
+            YamlEmitter emitter;
+            result = emitter.emitQString(intermediateData, outputFormat(), indentation());
+            _outputText = result.text;
             break;
+        }
         case Format::TOML: {
             TomlEmitter emitter;
             result = emitter.emitQString(intermediateData, indentation());

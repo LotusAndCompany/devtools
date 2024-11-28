@@ -139,6 +139,7 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="17"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="20"/>
         <source>Invalid input value</source>
         <translation type="unfinished"></translation>
@@ -159,7 +160,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="186"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="188"/>
         <source>ignore null value of key: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -174,28 +175,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="190"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="193"/>
         <source>Parsed as JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="201"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="204"/>
         <source>Parsed as TOML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="213"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="216"/>
         <source>Parsed as flow style YAML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="216"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="219"/>
         <source>Parsed as block style YAML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="227"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="230"/>
         <source>Cannot parse input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="37"/>
+        <source>YAML does not support tab indentation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

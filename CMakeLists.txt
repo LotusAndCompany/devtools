@@ -153,6 +153,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
         # yaml
         core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
+        core/data_conversion/emitter/yaml_emitter.h core/data_conversion/emitter/yaml_emitter.cpp
         # toml
         core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
         core/data_conversion/emitter/toml_emitter.h core/data_conversion/emitter/toml_emitter.cpp
