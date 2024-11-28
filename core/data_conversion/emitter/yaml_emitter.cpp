@@ -40,7 +40,7 @@ YamlEmitter::EmitResult YamlEmitter::emitQString(const QVariant &data,
         }
         out << variantToYamlNode(data, style, indentation);
         return EmitResult{
-            out.c_str(),
+            out.c_str() + QString("\n"),
             {},
             "",
         };
