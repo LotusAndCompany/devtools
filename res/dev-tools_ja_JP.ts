@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -627,17 +621,7 @@
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>三</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="+62"/>
         <source>Enter text...</source>
         <translation type="unfinished">テキストを入力...</translation>
     </message>

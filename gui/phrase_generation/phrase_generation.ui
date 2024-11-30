@@ -146,7 +146,10 @@ QTreeWidget::item:selected {
        </font>
       </property>
       <property name="text">
-       <string>+</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset theme="add"/>
       </property>
      </widget>
     </item>
@@ -160,7 +163,10 @@ QTreeWidget::item:selected {
        </font>
       </property>
       <property name="text">
-       <string>三</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset theme="menu"/>
       </property>
      </widget>
     </item>

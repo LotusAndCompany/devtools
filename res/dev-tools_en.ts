@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="125"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="142"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="190"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -523,17 +517,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="149"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="163"/>
-        <source>三</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="193"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
         <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>

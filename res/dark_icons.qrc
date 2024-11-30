@@ -16,5 +16,8 @@
         <file>dark/remix/flip_horizontal.svg</file>
         <file>dark/remix/flip_vertical.svg</file>
         <file>dark/material/library_books.svg</file>
+        <file>dark/material/add.svg</file>
+        <file>dark/material/close.svg</file>
+        <file>dark/material/menu.svg</file>
     </qresource>
 </RCC>
