@@ -16,5 +16,8 @@
         <file>light/remix/flip_horizontal.svg</file>
         <file>light/remix/flip_vertical.svg</file>
         <file>light/material/library_books.svg</file>
+        <file>light/material/add.svg</file>
+        <file>light/material/close.svg</file>
+        <file>light/material/menu.svg</file>
     </qresource>
 </RCC>

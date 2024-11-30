@@ -170,13 +170,13 @@ void phraseGeneration::handleToggleTreeButtonClick()
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
-        ui->toggleTreeButton->setText("X");
+        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, Qt::AlignBottom | Qt::AlignRight);
     } else {
-        ui->toggleTreeButton->setText("三");
+        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/menu.svg"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 6);
         this->layout()->removeWidget(ui->saveButton);
