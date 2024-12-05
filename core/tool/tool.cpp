@@ -58,6 +58,7 @@ const Tool::Translatable Tool::translatable(ID id)
         return Translatable{
             tr("Command Generation"),
             tr("Generate command from command list"),
+        };
     case ID::DATA_CONVERSION:
         return Translatable{
             tr("Data/Format Conversion"),

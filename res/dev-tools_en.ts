@@ -529,15 +529,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="59"/>
-        <source>Command Genration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../core/tool/tool.cpp" line="60"/>
         <source>Generate command from command list</source>
+        <translation></translation>
+    </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="54"/>
+        <location filename="../core/tool/tool.cpp" line="64"/>
         <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
@@ -547,7 +544,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="55"/>
+        <location filename="../core/tool/tool.cpp" line="59"/>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="65"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -666,6 +668,7 @@
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
         <source>Enter text...</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

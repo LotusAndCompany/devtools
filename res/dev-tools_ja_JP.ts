@@ -119,6 +119,7 @@
         <translation type="unfinished">コマンド生成</translation>
     </message>
     <message>
+        <location line="+21"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
@@ -275,10 +276,6 @@
         <location line="-42"/>
         <source>Save</source>
         <translation>保存</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
     </message>
 </context>
 <context>
@@ -635,11 +632,25 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Command Genration</source>
-        <translation>コマンド生成</translation>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Data/Format Conversion</source>
+        <translation type="unfinished">データ変換/フォーマット変換</translation>
     </message>
     <message>
         <location line="+1"/>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="unfinished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
+    </message>
+    <message>
+        <source>Command Genration</source>
+        <translation type="vanished">コマンド生成</translation>
+    </message>
+    <message>
+        <location line="-5"/>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
     </message>
@@ -777,15 +788,11 @@
     </message>
     <message>
         <source>Data/Format Conversion</source>
+        <translation type="vanished">データ変換/フォーマット変換</translation>
     </message>
     <message>
-        <source>Data/Format Conversion</source>
-        <translation>データ変換/フォーマット変換</translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
-        <translation>JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
+        <translation type="vanished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
 </context>
 </TS>
