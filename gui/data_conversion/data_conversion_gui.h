@@ -13,6 +13,7 @@ class DataConversionGUI;
 class QTextEdit;
 class QTextBrowser;
 class QComboBox;
+class QPushButton;
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {
@@ -44,10 +45,9 @@ private slots:
     void onStyleSelected(int index);
     void onPastePressed();
     void onClearPressed();
-    /*
     void onLoadPressed();
     void onSavePressed();
-    void onCopyPressed();*/
+    void onCopyPressed();
 
 private:
     Ui::DataConversionGUI *const ui;
@@ -57,12 +57,23 @@ private:
 
     /// テキスト入力UI
     QTextEdit *inputTextEdit;
+    /// 貼り付けボタン
+    QPushButton *pasteButton;
+    /// 読み込みボタン
+    QPushButton *loadButton;
+    /// 消去ボタン
+    QPushButton *clearButton;
+
     /// テキスト表示UI
     QTextBrowser *outputTextView;
     /// 出力フォーマット選択UI
     QComboBox *formatSelector;
     /// インデント選択UI
     QComboBox *styleSelector;
+    /// コピーボタン
+    QPushButton *copyButton;
+    /// 保存ボタン
+    QPushButton *saveButton;
 
 #ifdef _TEST_ImageDivisionGUI
     frientd class Test::TestDataConversionGUI;

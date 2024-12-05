@@ -2,7 +2,9 @@
 #include "ui_data_conversion_gui.h"
 
 #include <QClipboard>
+#include <QFileDialog>
 #include <QResizeEvent>
+#include <QStandardPaths>
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
     : GuiTool(parent)
@@ -12,27 +14,34 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
     ui->setupUi(this);
 
     inputTextEdit = ui->inputTextEdit;
+    pasteButton = ui->pasteButton;
+    loadButton = ui->loadButton;
+    clearButton = ui->clearButton;
+
     outputTextView = ui->outputTextView;
     formatSelector = ui->formatSelector;
     styleSelector = ui->styleSelector;
+    copyButton = ui->copyButton;
+    saveButton = ui->saveButton;
 
     if (dataConversion->parent() == nullptr)
         dataConversion->setParent(this);
 
-    connect(ui->inputTextEdit,
-            &QTextEdit::textChanged,
-            this,
-            &DataConversionGUI::onInputTextChanged);
-    connect(ui->pasteButton, &QPushButton::pressed, this, &DataConversionGUI::onPastePressed);
-    connect(ui->formatSelector,
+    connect(inputTextEdit, &QTextEdit::textChanged, this, &DataConversionGUI::onInputTextChanged);
+    connect(loadButton, &QPushButton::pressed, this, &DataConversionGUI::onLoadPressed);
+    connect(pasteButton, &QPushButton::pressed, this, &DataConversionGUI::onPastePressed);
+    connect(clearButton, &QPushButton::pressed, this, &DataConversionGUI::onClearPressed);
+
+    connect(formatSelector,
             &QComboBox::currentIndexChanged,
             this,
             &DataConversionGUI::onFormatSelected);
-    connect(ui->styleSelector,
+    connect(styleSelector,
             &QComboBox::currentIndexChanged,
             this,
             &DataConversionGUI::onStyleSelected);
-    connect(ui->clearButton, &QPushButton::pressed, this, &DataConversionGUI::onClearPressed);
+    connect(copyButton, &QPushButton::pressed, this, &DataConversionGUI::onCopyPressed);
+    connect(saveButton, &QPushButton::pressed, this, &DataConversionGUI::onSavePressed);
 }
 
 DataConversionGUI::~DataConversionGUI()
@@ -60,7 +69,7 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
 
 void DataConversionGUI::onInputTextChanged()
 {
-    // TODO: 呼び出し頻度に制限を設ける
+    // TODO: 処理が重くなるため、呼び出し頻度に制限を設ける
     dataConversion->setInputText(inputTextEdit->toPlainText());
     ui->inputMessageTextView->setText(dataConversion->messages());
     dataConversion->updateOutputText();
@@ -72,6 +81,35 @@ void DataConversionGUI::onPastePressed()
 {
     QClipboard *const clipboard = QGuiApplication::clipboard();
     inputTextEdit->setText(clipboard->text()); // onInputTextChanged()
+}
+
+void DataConversionGUI::onClearPressed()
+{
+    inputTextEdit->setText("");
+    dataConversion->setInputText("");
+    ui->inputMessageTextView->setText("");
+    dataConversion->updateOutputText();
+    ui->outputMessageTextView->setText("");
+    outputTextView->setPlainText("");
+}
+
+void DataConversionGUI::onLoadPressed()
+{
+    QFileDialog dialog(this);
+    dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("Plain Text (*.txt *.json *.toml *.yml *yaml)");
+    connect(&dialog, &QFileDialog::fileSelected, this, [=](const QString &fileName) {
+        QFile file(fileName);
+        if (file.open(QIODevice::ReadOnly)) {
+            QTextStream stream(&file);
+            const QString text = stream.readAll();
+
+            inputTextEdit->setPlainText(text);
+        }
+    });
+    dialog.exec();
 }
 
 void DataConversionGUI::onFormatSelected(int index)
@@ -116,12 +154,25 @@ void DataConversionGUI::onStyleSelected(int index)
     outputTextView->setPlainText(dataConversion->outputText());
 }
 
-void DataConversionGUI::onClearPressed()
+void DataConversionGUI::onSavePressed()
 {
-    ui->inputTextEdit->setText("");
-    dataConversion->setInputText("");
-    ui->inputMessageTextView->setText("");
-    dataConversion->updateOutputText();
-    ui->outputMessageTextView->setText("");
-    outputTextView->setPlainText("");
+    QFileDialog dialog(this);
+    dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    connect(&dialog, &QFileDialog::fileSelected, this, [=](const QString &fileName) {
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly)) {
+            QTextStream stream(&file);
+            stream << outputTextView->toPlainText();
+        }
+    });
+    dialog.exec();
+}
+
+void DataConversionGUI::onCopyPressed()
+{
+    QClipboard *const clipboard = QGuiApplication::clipboard();
+    const auto text = outputTextView->toPlainText();
+    if (text != "")
+        clipboard->setText(text);
 }
