@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.0.0 LANGUAGES CXX)
+project(DevTools VERSION 0.1.4 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "-test")
@@ -35,9 +35,12 @@ find_package(Doxygen)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
+set(APP_INFO_FILE app_info.autogen.cpp)
+
 # TODO: 環境で分ける
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
     # アイコンを設定
     set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
@@ -193,6 +196,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # メモリアドレス関連の静的チェックを有効にする
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
+# 画像関係の依存関係
+add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
@@ -211,10 +220,6 @@ find_package(yaml-cpp CONFIG REQUIRED)
 #    message(STATUS "${_variableName}=${${_variableName}}")
 #endforeach()
 
-# インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
 
 # [モジュール一覧]
 set(MODULE_LIST
@@ -280,13 +285,57 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${MODULE_LIST}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+string(TOLOWER ${CMAKE_GENERATOR} GENERATOR_LOWER)
+if(${GENERATOR_LOWER} STREQUAL "xcode")
+    configure_file(${CMAKE_SOURCE_DIR}/distribution/Info.plist.in ${CMAKE_BINARY_DIR}/distribution/Info.plist @ONLY)
+
+    set(XCODE_ASSETS distribution/Assets.xcassets)
+    target_sources(${PROJECT_NAME} PRIVATE ${XCODE_ASSETS})
+    set_source_files_properties(${XCODE_ASSETS} PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
+
+    #file(RELATIVE_PATH REL_BUILD_DIR "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}")
+
+    # NOTE: XCODE_ATTRIBUTE_*は↓で確認
+    # https://developer.apple.com/documentation/xcode/build-settings-reference
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE    TRUE
+        WIN32_EXECUTABLE TRUE
+        # 機能しないので削除
+        #INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../Libs"
+        # NOTE: x86_64もサポートするのが望ましいが、静的リンクライブラリがビルドできなかった。
+        #       また、パッケージマネージャと競合する可能性がある。
+        XCODE_ATTRIBUTE_ARCHS   "arm64"
+        XCODE_ATTRIBUTE_SDKROOT "macosx"
+        XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH  "YES"
+        XCODE_ATTRIBUTE_PRODUCT_NAME    ${PROJECT_NAME}
+        MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
+        #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME  "AppIcon"
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "distribution/${PROJECT_NAME}.entitlements"
+        XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/../Frameworks"
+    )
+
+    # 上手く動かない...
+    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #     COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BUILD_TYPE}/${PROJECT_NAME}.app
+    #     VERBATIM
+    # )
+else()
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE    TRUE
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}
