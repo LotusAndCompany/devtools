@@ -136,6 +136,145 @@
     </message>
 </context>
 <context>
+    <name>DataConversion</name>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="17"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="20"/>
+        <source>Invalid input value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="25"/>
+        <source>JSON does not support top level value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="37"/>
+        <source>TOML does not support top level array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="128"/>
+        <source>ignore null value in array: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="188"/>
+        <source>ignore null value of key: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="76"/>
+        <source>Invalid file path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="90"/>
+        <source>Cannot open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="193"/>
+        <source>Parsed as JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="204"/>
+        <source>Parsed as TOML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="216"/>
+        <source>Parsed as flow style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="219"/>
+        <source>Parsed as block style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="230"/>
+        <source>Cannot parse input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="37"/>
+        <source>YAML does not support tab indentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="66"/>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="79"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="164"/>
+        <source>Input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="354"/>
+        <source>Error &amp; waning messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="230"/>
+        <source>YAML (Flow style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
+        <source>YAML (Block style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="244"/>
+        <source>4 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="249"/>
+        <source>2 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="254"/>
+        <source>Tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="259"/>
+        <source>Minified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="283"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="296"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="325"/>
+        <source>Output text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ImageDivisionGUI</name>
     <message>
         <location filename="../gui/image/division/image_division_gui.ui" line="85"/>
@@ -390,18 +529,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="59"/>
-        <source>Command Genration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../core/tool/tool.cpp" line="60"/>
         <source>Generate command from command list</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="64"/>
+        <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/tool/tool.cpp" line="55"/>
         <source>Generate and manage Phrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="59"/>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="65"/>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -519,7 +668,7 @@
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
         <source>Enter text...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

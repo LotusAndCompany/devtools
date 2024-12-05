@@ -140,6 +140,145 @@
     </message>
 </context>
 <context>
+    <name>DataConversion</name>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+17"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
+        <source>Invalid input value</source>
+        <translation>無効なデータです</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>JSON does not support top level value</source>
+        <translation>JSONでは値のみのデータはサポートされていません</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+17"/>
+        <source>TOML does not support top level array</source>
+        <translation>TOMLでは値のみのデータはサポートされていません</translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>ignore null value in array: %1</source>
+        <translation>配列内のnull値を無視します: %1</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>ignore null value of key: %1</source>
+        <translation>null値を無視します: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="+76"/>
+        <source>Invalid file path</source>
+        <translation>ファイルパスが不正です</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Cannot open %1</source>
+        <translation>%1が開けませんでした</translation>
+    </message>
+    <message>
+        <location line="+103"/>
+        <source>Parsed as JSON</source>
+        <translation>JSONとして読み込み</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Parsed as TOML</source>
+        <translation>TOMLとして読み込み</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Parsed as flow style YAML</source>
+        <translation>YAML (Flowスタイル)で読み込み</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Parsed as block style YAML</source>
+        <translation>YAML (Blockスタイル)で読み込み</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Cannot parse input text</source>
+        <translation>入力文字列を解析できませんでした</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+20"/>
+        <source>YAML does not support tab indentation</source>
+        <translation>YAMLはタブによ字下げをサポートしていません</translation>
+    </message>
+</context>
+<context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+66"/>
+        <source>Load</source>
+        <translation>読み込み</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Paste</source>
+        <translation>読み込み</translation>
+    </message>
+    <message>
+        <location line="+85"/>
+        <source>Input text</source>
+        <translation>入力文字列</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <location line="+164"/>
+        <source>Error &amp; waning messages</source>
+        <translation>エラー・警告</translation>
+    </message>
+    <message>
+        <location line="-124"/>
+        <source>YAML (Flow style)</source>
+        <translation>YAML (Flowスタイル)</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>YAML (Block style)</source>
+        <translation>YAML (Blockスタイル)</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>4 Spaces</source>
+        <translation>4スペース</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>2 Spaces</source>
+        <translation>2スペース</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tabs</source>
+        <translation>タブ</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Minified</source>
+        <translation>最小化</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Output text</source>
+        <translation>出力文字列</translation>
+    </message>
+    <message>
+        <location line="-42"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+</context>
+<context>
     <name>ImageDivisionGUI</name>
     <message>
         <location filename="../gui/image/division/image_division_gui.ui" line="+85"/>
@@ -493,11 +632,25 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Command Genration</source>
-        <translation>コマンド生成</translation>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Data/Format Conversion</source>
+        <translation type="unfinished">データ変換/フォーマット変換</translation>
     </message>
     <message>
         <location line="+1"/>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="unfinished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
+    </message>
+    <message>
+        <source>Command Genration</source>
+        <translation type="vanished">コマンド生成</translation>
+    </message>
+    <message>
+        <location line="-5"/>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
     </message>
@@ -632,6 +785,14 @@
     <message>
         <source>Generate command from command list</source>
         <translation type="vanished">コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <source>Data/Format Conversion</source>
+        <translation type="vanished">データ変換/フォーマット変換</translation>
+    </message>
+    <message>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="vanished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
 </context>
 </TS>

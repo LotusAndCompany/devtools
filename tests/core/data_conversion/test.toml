@@ -1,0 +1,21 @@
+# basic types
+integer_key=42
+float_key=2.7818281828
+string_key="value"
+true_key=true
+false_key=false
+
+# array
+array_key=[
+    -0.5,
+    0,
+    0.5
+]
+
+# tables
+inline_table_key={a=0, b=1}
+
+[table_key]
+key="v"
+[table_key.inner]
+key2="v2"

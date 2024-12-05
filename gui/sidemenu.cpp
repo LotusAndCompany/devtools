@@ -29,6 +29,8 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::IMAGE_TRANSPARENT);
     registerItem(ID::PHRASE_GENERATION);
     registerItem(ID::COMMAND_GENERATION);
+    registerItem(ID::DATA_CONVERSION);
+
     ui->scrollAreaLayout->addStretch();
 }
 
@@ -78,6 +80,10 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     case ID::COMMAND_GENERATION:
         iconName = "terminal";
         break;
+    case ID::DATA_CONVERSION:
+        iconName = "question_mark";
+        break;
+
     default:
         throw UnderDevelopmentException();
     }

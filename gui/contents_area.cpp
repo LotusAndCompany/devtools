@@ -4,11 +4,12 @@
 
 #include <QLabel>
 
-
+#include "core/data_conversion/data_conversion.h"
 #include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
 #include "core/image/transparent/image_transparent.h"
+#include "gui/data_conversion/data_conversion_gui.h"
 #include "gui/image/division/image_division_gui.h"
 #include "gui/image/resize/image_resize_gui.h"
 #include "gui/image/rotation/image_rotation_gui.h"
@@ -85,6 +86,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::HTTP_REQUEST:
         content = new api_tool(this);
+        break;
+    case Sidemenu::ID::DATA_CONVERSION:
+        content = new DataConversionGUI(new DataConversion(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
