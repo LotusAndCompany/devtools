@@ -3,8 +3,14 @@
 
 #include "basic_emitter.h"
 
+#ifdef _TEST_JsonEmitter
+namespace Test {
+class TestJsonEmitter;
+}
+#endif
+
 /// QVariantをJSONにする
-class JsonEmitter : public BasicEmitter
+class JsonEmitter : BasicEmitter
 {
 public:
     JsonEmitter() {}
@@ -16,6 +22,11 @@ public:
      * @return 結果
      */
     EmitResult emitQString(const QVariant &data, DataConversion::Indentation indentation);
+
+private:
+#ifdef _TEST_JsonEmitter
+    friend class Test::TestJsonEmitter;
+#endif
 };
 
 #endif // JSON_EMITTER_H

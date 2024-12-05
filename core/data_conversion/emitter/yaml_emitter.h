@@ -14,7 +14,7 @@ class TestYamlEmitter;
 #endif
 
 /// QVariantをYAMLにする
-class YamlEmitter : public BasicEmitter
+class YamlEmitter : BasicEmitter
 {
 public:
     YamlEmitter() {}

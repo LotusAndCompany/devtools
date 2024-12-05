@@ -21,7 +21,7 @@ struct Util;
 };
 
 /// QVariantをTOMLにする
-class TomlEmitter : public BasicEmitter
+class TomlEmitter : BasicEmitter
 {
 public:
     TomlEmitter(){}
