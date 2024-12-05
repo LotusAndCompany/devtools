@@ -33,15 +33,15 @@ public:
 
     /**
      * @brief サイドメニューのID
-     * @details ID::MIN, ID::HOME, ID::MAX 以外は TOOL_ID_FIELDS() を展開する@n
-     *          ID::HOME, ID::MAX 以外はTool::IDと一致する
+     * @details ID::MIN, ID::WELCOME, ID::MAX 以外は TOOL_ID_FIELDS() を展開する@n
+     *          ID::WELCOME, ID::MAX 以外はTool::IDと一致する
      * 
      * @sa Tool::ID
      */
     enum class ID {
         MIN,              ///< 最小値
         TOOL_ID_FIELDS(), // ここに展開する
-        HOME,             ///< ホーム画面
+        WELCOME,          ///< ようこそ画面
         MAX,              ///< 最大値
     };
     /// 比較用のIDの最小値

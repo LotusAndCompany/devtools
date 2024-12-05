@@ -19,7 +19,7 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent)
 
     Sidemenu::validateID(id);
 
-    if (id == Sidemenu::ID::HOME)
+    if (id == Sidemenu::ID::WELCOME)
         throw InvalidArgumentException(static_cast<int>(id), notConfigurableReason);
 
     setIcon(Sidemenu::icon(id));

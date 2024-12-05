@@ -483,12 +483,11 @@
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="+53"/>
         <source>Home</source>
-        <translation>ホーム</translation>
+        <translation type="vanished">ホーム</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location filename="../gui/sidemenu.ui" line="+50"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -653,6 +652,21 @@
         <location line="-5"/>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../gui/welcome_page.ui" line="+14"/>
+        <source>DevTools - Welcome</source>
+        <translation>DevTools - ようこそ</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Welcome to DevTools!
+Choose a tool from the side panel</source>
+        <translation>DevToolsへようこそ!
+左のパネルからツールを選んでください</translation>
     </message>
 </context>
 <context>
