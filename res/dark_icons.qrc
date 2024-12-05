@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>dark/index.theme</file>
+        <file>dark/material/home.svg</file>
+        <file>dark/material/question_mark.svg</file>
+        <file>dark/material/flip_to_front.svg</file>
+        <file>dark/material/left_panel_close.svg</file>
+        <file>dark/material/left_panel_open.svg</file>
+        <file>dark/material/zoom_in.svg</file>
+        <file>dark/material/zoom_out.svg</file>
+        <file>dark/material/resize.svg</file>
+        <file>dark/material/division.svg</file>
+        <file>dark/material/transparent.svg</file>
+        <file>dark/material/content_paste.svg</file>
+        <file>dark/material/content_copy.svg</file>
+        <file>dark/material/close.svg</file>
+        <file>dark/material/library_books.svg</file>
+        <file>dark/material/add.svg</file>
+        <file>dark/material/close.svg</file>
+        <file>dark/material/menu.svg</file>
+
+        <!-- remix -->
+        <file>dark/remix/anticlockwise.svg</file>
+        <file>dark/remix/clockwise.svg</file>
+        <file>dark/remix/flip_horizontal.svg</file>
+        <file>dark/remix/flip_vertical.svg</file>
+        <file>dark/remix/file.svg</file>
+        <file>dark/remix/save.svg</file>
+    </qresource>
+</RCC>

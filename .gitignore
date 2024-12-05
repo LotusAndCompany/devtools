@@ -34,6 +34,8 @@ Thumbs.db
 *.rc
 /.qmake.cache
 /.qmake.stash
+.qtc_clangd/*
+build/*
 
 # qtcreator generated files
 *.pro.user*
@@ -74,6 +76,10 @@ CMakeLists.txt.user*
 
 # Build directories
 build-*/
+build/*
 
 # Log files
 *.log
+
+# Doxygen default configuration
+Doxyfile.example

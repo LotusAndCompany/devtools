@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>light/index.theme</file>
+        <file>light/material/home.svg</file>
+        <file>light/material/question_mark.svg</file>
+        <file>light/material/flip_to_front.svg</file>
+        <file>light/material/left_panel_close.svg</file>
+        <file>light/material/left_panel_open.svg</file>
+        <file>light/material/zoom_in.svg</file>
+        <file>light/material/zoom_out.svg</file>
+        <file>light/material/resize.svg</file>
+        <file>light/material/division.svg</file>
+        <file>light/material/transparent.svg</file>
+        <file>light/material/content_paste.svg</file>
+        <file>light/material/content_copy.svg</file>
+        <file>light/material/close.svg</file>
+        <file>light/material/library_books.svg</file>
+        <file>light/material/add.svg</file>
+        <file>light/material/close.svg</file>
+        <file>light/material/menu.svg</file>
+
+        <!-- remix -->
+        <file>light/remix/anticlockwise.svg</file>
+        <file>light/remix/clockwise.svg</file>
+        <file>light/remix/flip_horizontal.svg</file>
+        <file>light/remix/flip_vertical.svg</file>
+        <file>light/remix/file.svg</file>
+        <file>light/remix/save.svg</file>
+    </qresource>
+</RCC>
