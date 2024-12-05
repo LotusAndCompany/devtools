@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <widget class="QSplitter" name="splitter">
    <property name="geometry">
@@ -217,12 +217,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <widget class="QComboBox" name="formatSelector">
           <item>
            <property name="text">
-            <string>JSON</string>
+            <string notr="true">JSON</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>YAML (Blobk style)</string>
+            <string>YAML (Block style)</string>
            </property>
           </item>
           <item>
@@ -232,7 +232,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
           <item>
            <property name="text">
-            <string>TOML</string>
+            <string notr="true">TOML</string>
            </property>
           </item>
          </widget>

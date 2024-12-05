@@ -208,11 +208,6 @@
 <context>
     <name>DataConversionGUI</name>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="66"/>
         <source>Load</source>
         <translation type="unfinished"></translation>
@@ -234,23 +229,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="220"/>
-        <source>JSON</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
-        <source>YAML (Blobk style)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="230"/>
         <source>YAML (Flow style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="235"/>
-        <source>TOML</source>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
+        <source>YAML (Block style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -563,7 +548,7 @@
     </message>
     <message>
         <location filename="../core/tool/tool.cpp" line="55"/>
-        <source>Conversion and formatting of text-serialized data</source>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

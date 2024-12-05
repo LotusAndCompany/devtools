@@ -145,151 +145,136 @@
         <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+17"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
         <source>Invalid input value</source>
-        <translation type="unfinished"></translation>
+        <translation>無効なデータです</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>JSON does not support top level value</source>
-        <translation type="unfinished"></translation>
+        <translation>JSONでは値のみのデータはサポートされていません</translation>
     </message>
     <message>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+17"/>
         <source>TOML does not support top level array</source>
-        <translation type="unfinished"></translation>
+        <translation>TOMLでは値のみのデータはサポートされていません</translation>
     </message>
     <message>
         <location line="+91"/>
         <source>ignore null value in array: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>配列内のnull値を無視します: %1</translation>
     </message>
     <message>
         <location line="+60"/>
         <source>ignore null value of key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>null値を無視します: %1</translation>
     </message>
     <message>
         <location filename="../core/data_conversion/data_conversion.cpp" line="+76"/>
         <source>Invalid file path</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルパスが不正です</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Cannot open %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1が開けませんでした</translation>
     </message>
     <message>
         <location line="+103"/>
         <source>Parsed as JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>JSONとして読み込み</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Parsed as TOML</source>
-        <translation type="unfinished"></translation>
+        <translation>TOMLとして読み込み</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Parsed as flow style YAML</source>
-        <translation type="unfinished"></translation>
+        <translation>YAML (Flowスタイル)で読み込み</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Parsed as block style YAML</source>
-        <translation type="unfinished"></translation>
+        <translation>YAML (Blockスタイル)で読み込み</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Cannot parse input text</source>
-        <translation type="unfinished"></translation>
+        <translation>入力文字列を解析できませんでした</translation>
     </message>
     <message>
         <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+20"/>
         <source>YAML does not support tab indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>YAMLはタブによ字下げをサポートしていません</translation>
     </message>
 </context>
 <context>
     <name>DataConversionGUI</name>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+52"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+66"/>
         <source>Load</source>
-        <translation type="unfinished">読み込み</translation>
+        <translation>読み込み</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>読み込み</translation>
     </message>
     <message>
         <location line="+85"/>
         <source>Input text</source>
-        <translation type="unfinished"></translation>
+        <translation>入力文字列</translation>
     </message>
     <message>
         <location line="+26"/>
         <location line="+164"/>
         <source>Error &amp; waning messages</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー・警告</translation>
     </message>
     <message>
-        <location line="-134"/>
-        <source>JSON</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>YAML (Blobk style)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="-124"/>
         <source>YAML (Flow style)</source>
-        <translation type="unfinished"></translation>
+        <translation>YAML (Flowスタイル)</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>TOML</source>
-        <translation type="unfinished"></translation>
+        <location line="-5"/>
+        <source>YAML (Block style)</source>
+        <translation>YAML (Blockスタイル)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+19"/>
         <source>4 Spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>4スペース</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>2 Spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>2スペース</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>タブ</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Minified</source>
-        <translation type="unfinished"></translation>
+        <translation>最小化</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>Output text</source>
-        <translation type="unfinished"></translation>
+        <translation>出力文字列</translation>
     </message>
     <message>
         <location line="-42"/>
         <source>Save</source>
-        <translation type="unfinished">保存</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -794,8 +779,13 @@
         <source>Data/Format Conversion</source>
     </message>
     <message>
-        <source>Conversion and formatting of text-serialized data</source>
-        <translation type="unfinished"></translation>
+        <source>Data/Format Conversion</source>
+        <translation>データ変換/フォーマット変換</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation>JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
 </context>
 </TS>

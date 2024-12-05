@@ -61,7 +61,7 @@ const Tool::Translatable Tool::translatable(ID id)
     case ID::DATA_CONVERSION:
         return Translatable{
             tr("Data/Format Conversion"),
-            tr("Conversion and formatting of text-serialized data"),
+            tr("Conversion and formatting JSON/YAML/TOML data"),
         };
     default:
         throw UnderDevelopmentException();
