@@ -767,28 +767,28 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+48"/>
         <source>Save</source>
         <translation type="unfinished">保存</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+191"/>
         <source>Enter title...</source>
         <translation type="unfinished">タイトルを入力...</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-40"/>
         <source>Delete</source>
         <translation type="unfinished">削除</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+65"/>
+        <location line="+19"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+74"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="-94"/>
         <source>Enter text...</source>
         <translation type="unfinished">テキストを入力...</translation>
     </message>

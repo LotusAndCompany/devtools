@@ -654,28 +654,28 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="56"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="68"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="123"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="259"/>
         <source>Enter title...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="130"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="219"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="137"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="65"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="238"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="74"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="144"/>
         <source>Enter text...</source>
         <translation></translation>
     </message>
