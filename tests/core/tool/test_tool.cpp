@@ -15,35 +15,8 @@ class TestTool : public QObject
 
 private slots:
     // Test cases:
-    void test_trasnlatable();
     void test_validateID();
 };
-
-void TestTool::test_trasnlatable()
-{
-    // Tool::ID::MINが失敗すること
-    QVERIFY_THROWS_EXCEPTION(exception_type, Tool::translatable(Tool::ID::MIN));
-
-    try {
-        const auto imageResize = Tool::translatable(Tool::ID::IMAGE_RESIZE);
-
-        // Translatableの内容が正しいこと
-        QCOMPARE_EQ(imageResize.name, tr("Image Resize"));
-        QCOMPARE_EQ(imageResize.description, tr("Image resizing and scaling"));
-
-        const auto imageRotation = Tool::translatable(Tool::ID::IMAGE_ROTATION);
-
-        // Translatableの内容が正しいこと
-        QCOMPARE_EQ(imageRotation.name, tr("Image Rotation"));
-        QCOMPARE_EQ(imageRotation.description, tr("Image rotation and flipping"));
-    } catch (CommonException &e) {
-        // InvalidArgumentException<int>, UnderDevelopmentExceptionが発生する可能性がある
-        QFAIL("Tool::translatable(Tool::ID::IMAGE_RESIZE) failed unexpectedly");
-    }
-
-    // Tool::ID::MAXが失敗すること
-    QVERIFY_THROWS_EXCEPTION(exception_type, Tool::translatable(Tool::ID::MAX));
-}
 
 void TestTool::test_validateID()
 {

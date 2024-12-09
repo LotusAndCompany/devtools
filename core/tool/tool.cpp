@@ -56,8 +56,13 @@ const Tool::Translatable Tool::translatable(ID id)
         };
     case ID::COMMAND_GENERATION:
         return Translatable{
-            tr("Command Genration"),
+            tr("Command Generation"),
             tr("Generate command from command list"),
+        };
+    case ID::DATA_CONVERSION:
+        return Translatable{
+            tr("Data/Format Conversion"),
+            tr("Conversion and formatting JSON/YAML/TOML data"),
         };
     default:
         throw UnderDevelopmentException();

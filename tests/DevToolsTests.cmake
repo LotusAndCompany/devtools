@@ -74,7 +74,6 @@ DevTools_add_test(test_out_of_range_exception
 # core/tool
 DevTools_add_test(test_tool
     SOURCES
-    core/tool/tool.h
     tests/core/tool/test_tool.cpp
 )
 
@@ -112,6 +111,46 @@ DevTools_add_test(test_image_transparent
     tests/core/image/transparent/test_image_transparent.cpp
 )
 
+# core/data_conversion/parser
+DevTools_add_test(test_basic_parser
+    SOURCES
+    tests/core/data_conversion/parser/test_basic_parser.cpp
+)
+DevTools_add_test(test_json_parser
+    SOURCES
+    tests/core/data_conversion/parser/test_json_parser.cpp
+)
+DevTools_add_test(test_yaml_parser VCPKG_YAML
+    SOURCES
+    tests/core/data_conversion/parser/test_yaml_parser.cpp
+)
+DevTools_add_test(test_toml_parser VCPKG_YAML
+    SOURCES
+    tests/core/data_conversion/parser/test_toml_parser.cpp
+)
+# core/data_conversion/emitter
+DevTools_add_test(test_basic_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_basic_emitter.cpp
+)
+DevTools_add_test(test_json_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_json_emitter.cpp
+)
+DevTools_add_test(test_toml_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_toml_emitter.cpp
+)
+DevTools_add_test(test_yaml_emitter
+    SOURCES
+    tests/core/data_conversion/emitter/test_yaml_emitter.cpp
+)
+# core/data_conversion
+DevTools_add_test(test_data_conversion
+    SOURCES
+    tests/core/data_conversion/test_data_conversion.cpp
+)
+
 # gui/image/basic
 DevTools_add_test(test_basic_image_view_control
     SOURCES
@@ -120,13 +159,6 @@ DevTools_add_test(test_basic_image_view_control
 DevTools_add_test(test_basic_image_view
     SOURCES
     tests/gui/image/basic/test_basic_image_view.cpp
-)
-
-set(IMAGE_TOOL_GUI_SRC
-    gui/image/basic/control.cpp
-    gui/image/basic/file_dialogs.cpp
-    gui/image/basic/image_view.cpp
-    ${IMAGE_TOOL_SRC}
 )
 
 # gui/image/resize

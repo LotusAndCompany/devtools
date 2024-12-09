@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.21.1)
 
 # vcpkgを使わない時はONにする
-set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP ON)
+set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.0.0 LANGUAGES CXX)
+project(DevTools VERSION 0.1.5 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "-test")
@@ -24,16 +24,23 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
     gui/image/basic/
 )
 
-# パッケージを探す
+# Qtのパッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Network)
+# vcpkgのパッケージを探す
+find_package(toml11 CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
+# Doxygenを探す
 find_package(Doxygen)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
+set(APP_INFO_FILE app_info.autogen.cpp)
+
 # TODO: 環境で分ける
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
     # アイコンを設定
     set(MACOSX_BUNDLE_ICON_FILE dev-tools.icns)
@@ -82,6 +89,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp
+        gui/welcome_page.h gui/welcome_page.cpp gui/welcome_page.ui
         core/tool/tool.h core/tool/tool.cpp
         core/exception/common_exception.h
         core/exception/out_of_range_exception.h
@@ -97,6 +105,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
         gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.ui gui/contents_area.cpp gui/contents_area.h gui/contents_area.ui gui/gui_application.cpp gui/gui_application.h gui/gui_tool.cpp gui/gui_tool.h gui/main_window.cpp gui/main_window.h gui/main_window.ui gui/sidemenu.cpp gui/sidemenu.h gui/sidemenu.ui gui/sidemenu_item.cpp gui/sidemenu_item.h
         gui/command/command.h gui/command/command.cpp gui/command/command.ui
+        vcpkg.json
     )
     # image
     qt_add_library(${PROJECT_NAME}_image_core STATIC
@@ -135,10 +144,38 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
     add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
     add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
-    set_target_properties(${PROJECT_NAME}_core PROPERTIES
-        AUTOMOC ON
-        AUTOUIC ON
+
+    # data_conversion
+    qt_add_library(${PROJECT_NAME}_data_conversion STATIC
+        # core
+        core/data_conversion/data_conversion.h core/data_conversion/data_conversion.cpp
+        core/data_conversion/parser/basic_parser.h
+        core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
+        gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
+        # json
+        core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
+        core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
+        # yaml
+        core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
+        core/data_conversion/emitter/yaml_emitter.h core/data_conversion/emitter/yaml_emitter.cpp
+        # toml
+        core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
+        core/data_conversion/emitter/toml_emitter.h core/data_conversion/emitter/toml_emitter.cpp
     )
+    # toml11, yaml-cppのインクルードディレクトリ
+    target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC
+        ${TOML11_INCLUDE_DIR}   # 何故か大文字
+        ${YAML_CPP_INCLUDE_DIR} # 何故か大文字
+    )
+    # toml11はヘッダーのみなのでリンクしなくて良い、yaml-cppはリンクが必要
+    target_link_libraries(${PROJECT_NAME}_data_conversion PUBLIC
+        ${YAML_CPP_LIBRARIES}
+    )
+
+    #set_target_properties(${PROJECT_NAME}_core PROPERTIES
+    #    AUTOMOC ON
+    #    AUTOUIC ON
+    #)
 
     qt_add_translations(
         TARGETS ${PROJECT_NAME}
@@ -159,6 +196,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # メモリアドレス関連の静的チェックを有効にする
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
+# 画像関係の依存関係
+add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
+add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
@@ -167,16 +210,16 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} update_translations)
 add_dependencies(${PROJECT_NAME} release_translations)
 
+# vcpkgのパッケージを探す
+find_package(toml11 CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
+
 #get_cmake_property(_variableNames VARIABLES)
 #list (SORT _variableNames)
 #foreach (_variableName ${_variableNames})
-    #message(STATUS "${_variableName}=${${_variableName}}")
+#    message(STATUS "${_variableName}=${${_variableName}}")
 #endforeach()
 
-# インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
 
 # [モジュール一覧]
 set(MODULE_LIST
@@ -187,6 +230,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_image_division
     ${PROJECT_NAME}_image_transparent
     ${PROJECT_NAME}_phrase_generation
+    ${PROJECT_NAME}_data_conversion
 )
 
 foreach (MODULE ${MODULE_LIST})
@@ -241,13 +285,57 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${MODULE_LIST}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+string(TOLOWER ${CMAKE_GENERATOR} GENERATOR_LOWER)
+if(${GENERATOR_LOWER} STREQUAL "xcode")
+    configure_file(${CMAKE_SOURCE_DIR}/distribution/Info.plist.in ${CMAKE_BINARY_DIR}/distribution/Info.plist @ONLY)
+
+    set(XCODE_ASSETS distribution/Assets.xcassets)
+    target_sources(${PROJECT_NAME} PRIVATE ${XCODE_ASSETS})
+    set_source_files_properties(${XCODE_ASSETS} PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
+
+    #file(RELATIVE_PATH REL_BUILD_DIR "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}")
+
+    # NOTE: XCODE_ATTRIBUTE_*は↓で確認
+    # https://developer.apple.com/documentation/xcode/build-settings-reference
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE    TRUE
+        WIN32_EXECUTABLE TRUE
+        # 機能しないので削除
+        #INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../Libs"
+        # NOTE: x86_64もサポートするのが望ましいが、静的リンクライブラリがビルドできなかった。
+        #       また、パッケージマネージャと競合する可能性がある。
+        XCODE_ATTRIBUTE_ARCHS   "arm64"
+        XCODE_ATTRIBUTE_SDKROOT "macosx"
+        XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH  "YES"
+        XCODE_ATTRIBUTE_PRODUCT_NAME    ${PROJECT_NAME}
+        MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
+        #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME  "AppIcon"
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "distribution/${PROJECT_NAME}.entitlements"
+        XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/../Frameworks"
+    )
+
+    # 上手く動かない...
+    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #     COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BUILD_TYPE}/${PROJECT_NAME}.app
+    #     VERBATIM
+    # )
+else()
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE    TRUE
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}

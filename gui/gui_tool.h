@@ -30,6 +30,22 @@ signals:
 using GuiTool = _GuiToolSuperClass;
 #else
 using GuiTool = QWidget;
+
+#if 0
+#include <QWidget>
+class GuiTool : public QWidget
+{
+    Q_OBJECT
+
+public:
+    GuiTool(QWidget *parent)
+        : QWidget(parent)
+    {
+        qInfo() << "GuiTool::GuiTool";
+    }
+    virtual ~GuiTool() = default;
+};
+#endif
 #endif
 
 #endif // GUI_TOOL_H
