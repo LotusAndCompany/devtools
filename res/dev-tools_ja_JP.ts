@@ -783,7 +783,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+76"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+74"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>

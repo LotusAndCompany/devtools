@@ -32,7 +32,7 @@ phraseGeneration::phraseGeneration(QWidget *parent)
     gridLayout->addWidget(ui->line, 1, 0, 1, 7);
     gridLayout->addWidget(ui->templateText, 2, 0, 7, 7);
     gridLayout->addWidget(ui->titleTreeWidget, 2, 5, 7, 2);
-    gridLayout->addWidget(ui->saveButton, 8, 6, Qt::AlignBottom | Qt::AlignRight);
+    gridLayout->addWidget(ui->saveButton, 8, 5, 1, 1);
 
     // ストレッチ係数を設定
     gridLayout->setColumnStretch(0, 3); // 左側に多くスペースを割り当てる
@@ -183,13 +183,13 @@ void phraseGeneration::handleToggleTreeButtonClick()
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, Qt::AlignBottom | Qt::AlignRight);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
         ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/menu.svg"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 6, Qt::AlignBottom | Qt::AlignRight);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 5, 1, 1);
     }
 }
 

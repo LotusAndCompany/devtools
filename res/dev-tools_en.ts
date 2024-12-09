@@ -670,7 +670,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="238"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="76"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="74"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
