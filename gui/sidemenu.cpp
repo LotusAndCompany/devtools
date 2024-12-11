@@ -27,6 +27,7 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::IMAGE_TRANSPARENT);
     registerItem(ID::PHRASE_GENERATION);
     registerItem(ID::COMMAND_GENERATION);
+    registerItem(ID::HTTP_REQUEST);
     registerItem(ID::DATA_CONVERSION);
 
     ui->scrollAreaLayout->addStretch();
