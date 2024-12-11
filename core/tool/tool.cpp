@@ -51,26 +51,21 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Phrase Generation"),
             tr("Generate and manage Phrase"),
         };
-    case ID::COMMAND_GENERATION:
+    case ID::DATA_CONVERSION:
         return Translatable{
-            tr("Command Generation"),
-            tr("Generate command from command list"),
+            tr("Data/Format Conversion"),
+            tr("Conversion and formatting JSON/YAML/TOML data"),
         };
     case ID::HTTP_REQUEST:
-        return Translatable
-        {
-        tr("HTTP Request"),
-            tr("Send HTTP Request"),
-            case ID::DATA_CONVERSION:
-            return Translatable{
-                tr("Data/Format Conversion"),
-                tr("Conversion and formatting JSON/YAML/TOML data"),
-            };
-            default : throw UnderDevelopmentException();
-        }
+        return Translatable{
+            tr("HTTP Request"),
+            tr("Send HTTP Request")
+        };
+    default : throw UnderDevelopmentException();
     }
+ }
 
-    bool Tool::event(QEvent * event)
+bool Tool::event(QEvent * event)
     {
         switch (event->type())
         {
