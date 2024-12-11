@@ -1,5 +1,6 @@
 #include "api_tool.h"
 #include "ui_api_tool.h"
+#include <QListView>
 #include <QVBoxLayout>
 #include <QAuthenticator>
 #include <QJsonObject>
@@ -90,7 +91,6 @@ void api_tool::setupResponseView() {
 
     statusLabel = new QLabel();  // ステータスラベルの作成
     responseLayout->addWidget(statusLabel);  // レイアウトにステータスラベルを追加
-
     QListView *responseListView = new QListView();  // レスポンス表示用のリストビュー作成
     responseModel = new QStringListModel(this);  // モデルのインスタンス作成
     responseListView->setModel(responseModel);  // リストビューにモデルをセット
