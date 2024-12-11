@@ -59,21 +59,21 @@ const Tool::Translatable Tool::translatable(ID id)
     case ID::HTTP_REQUEST:
         return Translatable{
             tr("HTTP Request"),
-            tr("Send HTTP Request")
-        };
-    default : throw UnderDevelopmentException();
+            tr("Send HTTP Request")};
+    default:
+        throw UnderDevelopmentException();
     }
- }
+}
 
-bool Tool::event(QEvent * event)
+bool Tool::event(QEvent *event)
+{
+    switch (event->type())
     {
-        switch (event->type())
-        {
-        case QEvent::LanguageChange:
-            QObject::event(event);
-            _translatable = translatable(id);
-            return true;
-        default:
-            return QObject::event(event);
-        }
+    case QEvent::LanguageChange:
+        QObject::event(event);
+        _translatable = translatable(id);
+        return true;
+    default:
+        return QObject::event(event);
     }
+}
