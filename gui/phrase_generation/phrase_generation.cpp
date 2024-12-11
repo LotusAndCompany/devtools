@@ -1,5 +1,4 @@
 #include "phrase_generation.h"
-// #include "ui_phrase_generation.h"
 #include "ui_phrase_generation.h"
 
 #include <QFile>
@@ -8,6 +7,7 @@
 #include <QMessageBox>
 #include <QClipboard>
 #include <QUuid>
+#include <QGridLayout>
 
 phraseGeneration::phraseGeneration(QWidget *parent)
     : QWidget(parent)
@@ -24,15 +24,24 @@ phraseGeneration::phraseGeneration(QWidget *parent)
 
     QGridLayout *gridLayout = new QGridLayout(this);
 
-    QWidget *horizontalWidget = new QWidget(this);
-    horizontalWidget->setLayout(ui->horizontalLayout);
-    gridLayout->addWidget(horizontalWidget, 0, 0, 1, 6);
-    gridLayout->addWidget(ui->line, 1, 0, 1, 6);
-    gridLayout->addWidget(ui->templateText, 2, 0, 7, 6);
-    gridLayout->addWidget(ui->titleTreeWidget, 2, 5, 7, 1);
-    gridLayout->addWidget(ui->saveButton, 8, 5, Qt::AlignBottom | Qt::AlignRight);
+    gridLayout->addWidget(ui->templateTitle, 0, 0, 1, 2);
+    gridLayout->addWidget(ui->deleteButton, 0, 2, 1, 1);
+    gridLayout->addWidget(ui->copyButton, 0, 3, 1, 1);
+    gridLayout->addWidget(ui->addButton, 0, 4, 1, 1);
+    gridLayout->addWidget(ui->toggleTreeButton, 0, 6, 1, 1);
+    gridLayout->addWidget(ui->line, 1, 0, 1, 7);
+    gridLayout->addWidget(ui->templateText, 2, 0, 7, 7);
+    gridLayout->addWidget(ui->titleTreeWidget, 2, 5, 7, 2);
+    gridLayout->addWidget(ui->saveButton, 8, 5, 1, 1);
+
+    // ストレッチ係数を設定
+    gridLayout->setColumnStretch(0, 3); // 左側に多くスペースを割り当てる
+    gridLayout->setColumnStretch(5, 1); // titleTreeWidget の列
+
+    this->setMinimumSize(300, 200);
 
     this->setLayout(gridLayout);
+
 
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
@@ -62,7 +71,7 @@ void phraseGeneration::loadTitles()
         // UUIDをユーザーデータとして保持
         item->setData(0, Qt::UserRole, filename);
 
-        QPushButton *copyButton = new QPushButton("Copy", ui->titleTreeWidget);
+        QPushButton *copyButton = new QPushButton(tr("Copy"), ui->titleTreeWidget);
         connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
 
         ui->titleTreeWidget->setItemWidget(item, 1, copyButton);
@@ -170,17 +179,17 @@ void phraseGeneration::handleToggleTreeButtonClick()
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
-        ui->toggleTreeButton->setText("X");
+        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, Qt::AlignBottom | Qt::AlignRight);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
-        ui->toggleTreeButton->setText("三");
+        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/menu.svg"));
         this->layout()->removeWidget(ui->templateText);
-        static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 6);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 5, Qt::AlignBottom | Qt::AlignRight);
+        static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 5, 1, 1);
     }
 }
 

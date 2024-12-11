@@ -4,11 +4,12 @@
 
 #include <QLabel>
 
-
+#include "core/data_conversion/data_conversion.h"
 #include "core/image/division/image_division.h"
 #include "core/image/resize/image_resize.h"
 #include "core/image/rotation/image_rotation.h"
 #include "core/image/transparent/image_transparent.h"
+#include "gui/data_conversion/data_conversion_gui.h"
 #include "gui/image/division/image_division_gui.h"
 #include "gui/image/resize/image_resize_gui.h"
 #include "gui/image/rotation/image_rotation_gui.h"
@@ -16,6 +17,7 @@
 #include "phrase_generation/phrase_generation.h"
 #include "gui/command/command.h"
 #include "api_tool.h"
+#include "gui/welcome_page.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -23,7 +25,7 @@ ContentsArea::ContentsArea(QWidget *parent)
 {
     ui->setupUi(this);
 
-    changeContent(Sidemenu::ID::HOME);
+    changeContent(Sidemenu::ID::WELCOME);
 }
 
 ContentsArea::~ContentsArea()
@@ -61,9 +63,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     QWidget *content = nullptr;
 
     switch (id) {
-    case Sidemenu::ID::HOME:
-        content = new QLabel("(´･ω･) ﾎｰﾑﾀﾞﾖｰ", this);
-        static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
+    case Sidemenu::ID::WELCOME:
+        content = new WelcomePage(this);
         break;
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
@@ -85,6 +86,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::HTTP_REQUEST:
         content = new api_tool(this);
+        break;
+    case Sidemenu::ID::DATA_CONVERSION:
+        content = new DataConversionGUI(new DataConversion(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

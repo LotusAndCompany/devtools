@@ -20,8 +20,6 @@ Sidemenu::Sidemenu(QWidget *parent)
 
     connect(buttonGroup, &QButtonGroup::idToggled, this, &Sidemenu::onButtonToggled);
 
-    buttonGroup->addButton(ui->homeButton, static_cast<int>(ID::HOME));
-
     // WIP: 適当なボタンを追加する
     registerItem(ID::IMAGE_RESIZE);
     registerItem(ID::IMAGE_ROTATION);
@@ -30,6 +28,8 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::PHRASE_GENERATION);
     registerItem(ID::COMMAND_GENERATION);
     registerItem(ID::HTTP_REQUEST);
+    registerItem(ID::DATA_CONVERSION);
+
     ui->scrollAreaLayout->addStretch();
 }
 
@@ -53,11 +53,6 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     QString iconName;
     switch (id)
     {
-    case ID::HOME:
-        // NOTE: unused, Home icon is set in sidemenu.ui
-        qWarning() << "Home icon is set in sidemenu.ui";
-        iconName = "home";
-        break;
     case ID::HTTP_REQUEST:
         iconName = "terminal";
         break;
@@ -74,11 +69,15 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         iconName = "transparent";
         break;
     case ID::PHRASE_GENERATION:
-        iconName = "phrase_generation";
+        iconName = "library_books";
         break;
     case ID::COMMAND_GENERATION:
         iconName = "terminal";
         break;
+    case ID::DATA_CONVERSION:
+        iconName = "question_mark";
+        break;
+
     default:
         throw UnderDevelopmentException();
     }

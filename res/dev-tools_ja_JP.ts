@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -120,14 +114,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+41"/>
+        <source>Generate command</source>
+        <translation type="unfinished">コマンド生成</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">クリア</translation>
     </message>
     <message>
         <location line="-35"/>
@@ -135,26 +134,148 @@
         <translation type="unfinished">リセット</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Generate command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-22"/>
+        <location line="-15"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>DataConversion</name>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+17"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
+        <source>Invalid input value</source>
+        <translation>無効なデータです</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>JSON does not support top level value</source>
+        <translation>JSONでは値のみのデータはサポートされていません</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+17"/>
+        <source>TOML does not support top level array</source>
+        <translation>TOMLでは値のみのデータはサポートされていません</translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>ignore null value in array: %1</source>
+        <translation>配列内のnull値を無視します: %1</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>ignore null value of key: %1</source>
+        <translation>null値を無視します: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="+76"/>
+        <source>Invalid file path</source>
+        <translation>ファイルパスが不正です</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Cannot open %1</source>
+        <translation>%1が開けませんでした</translation>
+    </message>
+    <message>
+        <location line="+103"/>
+        <source>Parsed as JSON</source>
+        <translation>JSONとして読み込み</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Parsed as TOML</source>
+        <translation>TOMLとして読み込み</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Parsed as flow style YAML</source>
+        <translation>YAML (Flowスタイル)で読み込み</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Parsed as block style YAML</source>
+        <translation>YAML (Blockスタイル)で読み込み</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Cannot parse input text</source>
+        <translation>入力文字列を解析できませんでした</translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+20"/>
+        <source>YAML does not support tab indentation</source>
+        <translation>YAMLはタブによ字下げをサポートしていません</translation>
+    </message>
+</context>
+<context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+66"/>
+        <source>Load</source>
+        <translation>読み込み</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Paste</source>
+        <translation>読み込み</translation>
+    </message>
+    <message>
+        <location line="+85"/>
+        <source>Input text</source>
+        <translation>入力文字列</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <location line="+164"/>
+        <source>Error &amp; waning messages</source>
+        <translation>エラー・警告</translation>
+    </message>
+    <message>
+        <location line="-124"/>
+        <source>YAML (Flow style)</source>
+        <translation>YAML (Flowスタイル)</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>YAML (Block style)</source>
+        <translation>YAML (Blockスタイル)</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>4 Spaces</source>
+        <translation>4スペース</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>2 Spaces</source>
+        <translation>2スペース</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tabs</source>
+        <translation>タブ</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Minified</source>
+        <translation>最小化</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
     <message>
         <location line="+29"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.AppleSystemUIFont&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>Output text</source>
+        <translation>出力文字列</translation>
+    </message>
+    <message>
+        <location line="-42"/>
+        <source>Save</source>
+        <translation>保存</translation>
     </message>
 </context>
 <context>
@@ -362,12 +483,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="+53"/>
         <source>Home</source>
-        <translation>ホーム</translation>
+        <translation type="vanished">ホーム</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location filename="../gui/sidemenu.ui" line="+50"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -502,7 +622,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location line="+4"/>
         <source>Phrase Generation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">定型文生成</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -511,71 +631,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location line="+4"/>
-        <source>Command Genration</source>
-        <translation type="unfinished">コマンド生成</translation>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Data/Format Conversion</source>
+        <translation type="unfinished">データ変換/フォーマット変換</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Generate command from command list</source>
-        <translation type="unfinished">コマンドリストからコマンドを生成</translation>
-    </message>
-</context>
-<context>
-    <name>home</name>
-    <message>
-        <source>Copy</source>
-        <translation type="obsolete">コピー</translation>
-    </message>
-</context>
-<context>
-    <name>phraseGeneration</name>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>Save</source>
-        <translation type="unfinished">保存</translation>
-    </message>
-    <message>
-        <location line="+67"/>
-        <source>Enter title...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>三</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Enter text...</source>
-        <translation type="unfinished"></translation>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="unfinished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
     <message>
         <source>Command Genration</source>
-        <translation type="obsolete">コマンド生成</translation>
+        <translation type="vanished">コマンド生成</translation>
     </message>
     <message>
+        <location line="-5"/>
         <source>Generate command from command list</source>
-        <translation type="vanished">コマンドリストからコマンドを生成</translation>
+        <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../gui/welcome_page.ui" line="+14"/>
+        <source>DevTools - Welcome</source>
+        <translation>DevTools - ようこそ</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Welcome to DevTools!
+Choose a tool from the side panel</source>
+        <translation>DevToolsへようこそ!
+左のパネルからツールを選んでください</translation>
     </message>
 </context>
 <context>
@@ -659,6 +750,63 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location line="+4"/>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>home</name>
+    <message>
+        <source>Copy</source>
+        <translation type="obsolete">コピー</translation>
+    </message>
+</context>
+<context>
+    <name>phraseGeneration</name>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>Save</source>
+        <translation type="unfinished">保存</translation>
+    </message>
+    <message>
+        <location line="+191"/>
+        <source>Enter title...</source>
+        <translation type="unfinished">タイトルを入力...</translation>
+    </message>
+    <message>
+        <location line="-40"/>
+        <source>Delete</source>
+        <translation type="unfinished">削除</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+74"/>
+        <source>Copy</source>
+        <translation type="unfinished">コピー</translation>
+    </message>
+    <message>
+        <location line="-94"/>
+        <source>Enter text...</source>
+        <translation type="unfinished">テキストを入力...</translation>
+    </message>
+    <message>
+        <source>Command Genration</source>
+        <translation type="obsolete">コマンド生成</translation>
+    </message>
+    <message>
+        <source>Generate command from command list</source>
+        <translation type="vanished">コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <source>Data/Format Conversion</source>
+        <translation type="vanished">データ変換/フォーマット変換</translation>
+    </message>
+    <message>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="vanished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
 </context>
 </TS>

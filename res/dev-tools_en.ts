@@ -69,22 +69,16 @@
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
         <location filename="../gui/image/basic/image_view.cpp" line="125"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="131"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="142"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="133"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="190"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
-        <location filename="../build/Qt_6_7_0_for_macOS-Debug/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="137"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -116,6 +110,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/command/command.ui" line="55"/>
+        <source>Generate command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/command/command.ui" line="76"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
@@ -131,25 +130,147 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="55"/>
-        <source>Generate command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../gui/command/command.ui" line="33"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>DataConversion</name>
     <message>
-        <location filename="../gui/command/command.ui" line="62"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.AppleSystemUIFont&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="17"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="20"/>
+        <source>Invalid input value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="25"/>
+        <source>JSON does not support top level value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="37"/>
+        <source>TOML does not support top level array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="128"/>
+        <source>ignore null value in array: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="188"/>
+        <source>ignore null value of key: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="76"/>
+        <source>Invalid file path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="90"/>
+        <source>Cannot open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="193"/>
+        <source>Parsed as JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="204"/>
+        <source>Parsed as TOML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="216"/>
+        <source>Parsed as flow style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="219"/>
+        <source>Parsed as block style YAML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="230"/>
+        <source>Cannot parse input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="37"/>
+        <source>YAML does not support tab indentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataConversionGUI</name>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="66"/>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="79"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="164"/>
+        <source>Input text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="354"/>
+        <source>Error &amp; waning messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="230"/>
+        <source>YAML (Flow style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
+        <source>YAML (Block style)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="244"/>
+        <source>4 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="249"/>
+        <source>2 Spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="254"/>
+        <source>Tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="259"/>
+        <source>Minified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="283"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="296"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="325"/>
+        <source>Output text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -350,12 +471,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.ui" line="53"/>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/sidemenu.ui" line="81"/>
+        <location filename="../gui/sidemenu.ui" line="50"/>
         <source>Search tools</source>
         <translation type="unfinished"></translation>
     </message>
@@ -408,13 +524,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="59"/>
-        <source>Command Genration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../core/tool/tool.cpp" line="60"/>
         <source>Generate command from command list</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="64"/>
+        <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -422,47 +538,28 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <source>Generate and manage Phrase</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="59"/>
+        <source>Command Generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="65"/>
+        <source>Conversion and formatting JSON/YAML/TOML data</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>phraseGeneration</name>
+    <name>WelcomePage</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="20"/>
-        <source>Form</source>
+        <location filename="../gui/welcome_page.ui" line="14"/>
+        <source>DevTools - Welcome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="56"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="123"/>
-        <source>Enter title...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="130"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="137"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="149"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="163"/>
-        <source>三</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="193"/>
-        <source>Enter text...</source>
+        <location filename="../gui/welcome_page.ui" line="51"/>
+        <source>Welcome to DevTools!
+Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -547,6 +644,40 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../gui/api_tool.cpp" line="146"/>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>phraseGeneration</name>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="20"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="68"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="259"/>
+        <source>Enter title...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="219"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="238"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="74"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="144"/>
+        <source>Enter text...</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

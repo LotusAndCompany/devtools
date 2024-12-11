@@ -51,6 +51,8 @@ public:
      */
     virtual void raise() const override { throw *this; }
 
+    //const char *what() const noexcept override { return message.toStdString().c_str(); }
+
 protected:
     /**
      * @brief このインスタンスをコピーする
