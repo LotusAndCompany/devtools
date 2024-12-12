@@ -54,7 +54,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     switch (id)
     {
     case ID::HTTP_REQUEST:
-        iconName = "terminal";
+        iconName = "network";
         break;
     case ID::IMAGE_RESIZE:
         iconName = "resize";
