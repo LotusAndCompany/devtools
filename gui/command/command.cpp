@@ -50,6 +50,11 @@ void Command::init() {
         "6: 直前のコミットと変更内容を取り消し",
         "7: マージ",
         "8: マージする際、コンフリクトの編集を破棄",
+        "9: リモートリポジトリの一覧確認",
+        "10: リモートリポジトリ オリジンのurlを変更",
+        "11: コミット履歴を確認",
+        // git diff
+        // git config 利用中のアカウントの情報確認
     };
 
     ui->functionsList->addItems(functionsList);
@@ -85,11 +90,18 @@ void Command::selectedFunction()
         ui->label->setVisible(true);
         ui->textEdit->setVisible(true);
         break;
+    case 10:
+        ui->label->setText("New URL");
+        ui->label->setVisible(true);
+        ui->textEdit->setVisible(true);
+        break;
     case 2:
     case 4:
     case 5:
     case 6:
     case 8:
+    case 9:
+    case 11:
     default:
         ui->label->setVisible(false);
         ui->textEdit->setVisible(false);
@@ -147,6 +159,9 @@ void Command::generate()
     const QString gitResetHard = "git reset --hard HEAD^";
     const QString gitMerge = "git merge ";
     const QString gitMergeAbort = "git merge --abort";
+    const QString gitRemoteList = "git remote -v";
+    const QString gitRemoteOriginSetURL = "git remote set-url origin ";
+    const QString gitLog = "git log";
     const int selectedIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
 
@@ -178,6 +193,15 @@ void Command::generate()
             break;
         case 8:
             ui->textBrowser->setText(gitMergeAbort);
+            break;
+        case 9:
+            ui->textBrowser->setText(gitRemoteList);
+            break;
+        case 10:
+            ui->textBrowser->setText(gitRemoteOriginSetURL + value1);
+            break;
+        case 11:
+            ui->textBrowser->setText(gitLog);
             break;
         default:
             break;
