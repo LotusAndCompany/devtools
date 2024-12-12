@@ -20,6 +20,8 @@ api_tool::api_tool(QWidget *parent)
     , paramsModel(new QStandardItemModel(this)) // Model initialization
 {
     ui->setupUi(this);
+    setupParametersTable();
+    setupResponseView();
     networkManager = new QNetworkAccessManager(this);
 
     connect(ui->sendButton, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
@@ -28,8 +30,6 @@ api_tool::api_tool(QWidget *parent)
 
     qDebug() << "api_tool UI setup complete";
 
-    setupParametersTable();
-    setupResponseView();
 
 }
 
