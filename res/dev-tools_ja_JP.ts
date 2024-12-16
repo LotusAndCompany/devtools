@@ -580,7 +580,7 @@
 <context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="+34"/>
+        <location filename="../core/tool/tool.cpp" line="+31"/>
         <source>Image Resize</source>
         <translation>画像サイズ変更</translation>
     </message>
@@ -645,11 +645,21 @@
         <translation type="unfinished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <source>HTTP Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Send HTTP Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Command Genration</source>
         <translation type="vanished">コマンド生成</translation>
     </message>
     <message>
-        <location line="-5"/>
+        <location line="-10"/>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
     </message>
@@ -727,7 +737,7 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="+43"/>
+        <location filename="../gui/api_tool.cpp" line="+44"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -742,7 +752,7 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+96"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>
