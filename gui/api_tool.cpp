@@ -1,5 +1,6 @@
 #include "api_tool.h"
 #include "ui_api_tool.h"
+#include <QListView>
 #include <QVBoxLayout>
 #include <QAuthenticator>
 #include <QJsonObject>
@@ -19,6 +20,8 @@ api_tool::api_tool(QWidget *parent)
     , paramsModel(new QStandardItemModel(this)) // Model initialization
 {
     ui->setupUi(this);
+    setupParametersTable();
+    setupResponseView();
     networkManager = new QNetworkAccessManager(this);
 
     connect(ui->sendButton, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
@@ -27,8 +30,6 @@ api_tool::api_tool(QWidget *parent)
 
     qDebug() << "api_tool UI setup complete";
 
-    setupParametersTable();
-    setupResponseView();
 
 }
 
@@ -90,7 +91,6 @@ void api_tool::setupResponseView() {
 
     statusLabel = new QLabel();  // ステータスラベルの作成
     responseLayout->addWidget(statusLabel);  // レイアウトにステータスラベルを追加
-
     QListView *responseListView = new QListView();  // レスポンス表示用のリストビュー作成
     responseModel = new QStringListModel(this);  // モデルのインスタンス作成
     responseListView->setModel(responseModel);  // リストビューにモデルをセット

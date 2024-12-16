@@ -479,72 +479,82 @@
 <context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="34"/>
+        <location filename="../core/tool/tool.cpp" line="31"/>
         <source>Image Resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="35"/>
+        <location filename="../core/tool/tool.cpp" line="32"/>
         <source>Image resizing and scaling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="39"/>
+        <location filename="../core/tool/tool.cpp" line="36"/>
         <source>Image Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="40"/>
+        <location filename="../core/tool/tool.cpp" line="37"/>
         <source>Image rotation and flipping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="44"/>
+        <location filename="../core/tool/tool.cpp" line="41"/>
         <source>Image Division</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="45"/>
+        <location filename="../core/tool/tool.cpp" line="42"/>
         <source>Divide image into n x m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="49"/>
+        <location filename="../core/tool/tool.cpp" line="46"/>
         <source>Image Transparent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="50"/>
+        <location filename="../core/tool/tool.cpp" line="47"/>
         <source>Make the selected color transparent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="54"/>
+        <location filename="../core/tool/tool.cpp" line="51"/>
         <source>Phrase Generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="60"/>
+        <location filename="../core/tool/tool.cpp" line="57"/>
         <source>Generate command from command list</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="64"/>
+        <location filename="../core/tool/tool.cpp" line="61"/>
         <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="55"/>
+        <location filename="../core/tool/tool.cpp" line="66"/>
+        <source>HTTP Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="67"/>
+        <source>Send HTTP Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/tool/tool.cpp" line="52"/>
         <source>Generate and manage Phrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="59"/>
+        <location filename="../core/tool/tool.cpp" line="56"/>
         <source>Command Generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="65"/>
+        <location filename="../core/tool/tool.cpp" line="62"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -621,17 +631,17 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="43"/>
+        <location filename="../gui/api_tool.cpp" line="44"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="44"/>
+        <location filename="../gui/api_tool.cpp" line="45"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="45"/>
+        <location filename="../gui/api_tool.cpp" line="46"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -654,28 +664,28 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="56"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="68"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="123"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="259"/>
         <source>Enter title...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="130"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="219"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="137"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="65"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="238"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="74"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="199"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="144"/>
         <source>Enter text...</source>
         <translation></translation>
     </message>

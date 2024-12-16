@@ -3,14 +3,10 @@
 #include "core/exception/invalid_argument_exception.h"
 #include "core/exception/under_development_exception.h"
 
-const QString Tool::invalidToolIDReason
-    = QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
+const QString Tool::invalidToolIDReason = QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
 
 Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
-    : QObject(parent)
-    , id(id)
-    , stringID(stringID)
-    , _translatable(translatable(id))
+    : QObject(parent), id(id), stringID(stringID), _translatable(translatable(id))
 {
     validateID(id);
 }
@@ -28,7 +24,8 @@ const Tool::Translatable Tool::translatable(ID id)
     validateID(id);
 
     // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
-    switch (id) {
+    switch (id)
+    {
     case ID::IMAGE_RESIZE:
         return Translatable{
             tr("Image Resize"),
@@ -64,6 +61,10 @@ const Tool::Translatable Tool::translatable(ID id)
             tr("Data/Format Conversion"),
             tr("Conversion and formatting JSON/YAML/TOML data"),
         };
+    case ID::HTTP_REQUEST:
+        return Translatable{
+            tr("HTTP Request"),
+            tr("Send HTTP Request")};
     default:
         throw UnderDevelopmentException();
     }
@@ -71,7 +72,8 @@ const Tool::Translatable Tool::translatable(ID id)
 
 bool Tool::event(QEvent *event)
 {
-    switch (event->type()) {
+    switch (event->type())
+    {
     case QEvent::LanguageChange:
         QObject::event(event);
         _translatable = translatable(id);
