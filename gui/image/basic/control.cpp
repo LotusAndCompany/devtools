@@ -4,6 +4,8 @@
 #include "core/exception/invalid_state_exception.h"
 #include "file_dialogs.h"
 
+#include <QMessageBox>
+
 const QString BasicImageViewControl::invalidDialogType
     = QString("DialogType::SELECT_FILE=%1, DialogType::SELECT_FOLDER=%2")
           .arg(static_cast<int>(DialogType::SELECT_FILE))
@@ -27,6 +29,7 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
             &QPushButton::clicked,
             this,
             &BasicImageViewControl::onLoadButtonClicked);
+    connect(this, &BasicImageViewControl::saveFileSelected, this, &BasicImageViewControl::onSaveFileSelected);
 }
 
 BasicImageViewControl::~BasicImageViewControl()
@@ -83,4 +86,8 @@ void BasicImageViewControl::onLoadButtonClicked()
 void BasicImageViewControl::onLoadFileSelected(const QString &path)
 {
     fileName = path;
+}
+void BasicImageViewControl::onSaveFileSelected()
+{
+    QMessageBox::information(this, "Save Successful", "The image has been saved successfully.");
 }

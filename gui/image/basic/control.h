@@ -74,6 +74,10 @@ private slots:
      * @param path ファイル名
      */
     void onLoadFileSelected(const QString &path);
+    /**
+     * @brief ダイアログ内の保存ボタンが押された時の処理
+     */
+    void onSaveFileSelected();
 
 private:
     /// DialogTypeが不正

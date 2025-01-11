@@ -101,7 +101,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <location filename="../gui/image/basic/control.cpp" line="+60"/>
+        <location filename="../gui/image/basic/control.cpp" line="+63"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>

@@ -97,7 +97,7 @@
     </message>
     <message>
         <location filename="../gui/image/basic/control.ui" line="34"/>
-        <location filename="../gui/image/basic/control.cpp" line="60"/>
+        <location filename="../gui/image/basic/control.cpp" line="63"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
