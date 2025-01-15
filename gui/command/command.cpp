@@ -12,6 +12,10 @@ Command::Command(QWidget *parent)
 
     Command::init();
 
+    connect(ui->categoryList,
+            &QComboBox::currentIndexChanged,
+            this,
+            &Command::selectedCategory);
     connect(ui->functionsList,
             &QComboBox::currentIndexChanged,
             this,
@@ -31,7 +35,7 @@ Command::Command(QWidget *parent)
     connect(ui->copyButton,
             &QPushButton::clicked,
             this,
-            &Command::copy);
+            &Command::copy);        
 }
 
 Command::~Command()
@@ -40,24 +44,15 @@ Command::~Command()
 }
 
 void Command::init() {
-    const QStringList functionsList {
-        "機能一覧",
-        "1: 変更を追加",
-        "2: コミット",
-        "3: コミット & コメント",
-        "4: ブランチの状態確認",
-        "5: 直前のコミットを取り消し",
-        "6: 直前のコミットと変更内容を取り消し",
-        "7: マージ",
-        "8: マージする際、コンフリクトの編集を破棄",
-        "9: リモートリポジトリの一覧確認",
-        "10: リモートリポジトリ オリジンのurlを変更",
-        "11: コミット履歴を確認",
-        // git diff
-        // git config 利用中のアカウントの情報確認
+    const QStringList categoryList {
+        "カテゴリ一覧",
+        "1: Gitコマンド",
+        "2: Dockerコマンド"
     };
 
-    ui->functionsList->addItems(functionsList);
+    // set categoryList items
+    ui->categoryList->addItems(categoryList);
+
     // adjust commnadBox minmun width
     adjustCommandBoxWidth();
 
@@ -66,6 +61,53 @@ void Command::init() {
 
     // all textBox default hidden
     ui->textEdit->setVisible(false);
+
+    // functionsList default hidden
+    ui->functionsList->setVisible(false);
+}
+
+const QStringList gitFunctionsList {
+    "機能一覧",
+    "1: 変更を追加",
+    "2: コミット",
+    "3: コミット & コメント",
+    "4: ブランチの状態確認",
+    "5: 直前のコミットを取り消し",
+    "6: 直前のコミットと変更内容を取り消し",
+    "7: マージ",
+    "8: マージする際、コンフリクトの編集を破棄",
+    "9: リモートリポジトリの一覧確認",
+    "10: リモートリポジトリ オリジンのurlを変更",
+    "11: コミット履歴を確認",
+    // git diff
+    // git config 利用中のアカウントの情報確認
+};
+
+const QStringList dockerFunctionsList {
+    "機能一覧",
+};
+
+void Command::selectedCategory()
+{
+    const int selectedIndex = ui->categoryList->currentIndex();
+
+    ui->functionsList->clear();
+
+    // set list items
+    switch (selectedIndex) {
+    case 1:
+        ui->functionsList->addItems(gitFunctionsList);
+        // display functionsList
+        ui->functionsList->setVisible(true);
+        ui->functionsList->setEnabled(true);
+        break;
+    case 2:
+        ui->functionsList->addItems(dockerFunctionsList);
+        // display functionsList
+        ui->functionsList->setVisible(true);
+        ui->functionsList->setEnabled(true);
+        break;
+    }
 }
 
 void Command::selectedFunction()
@@ -73,6 +115,20 @@ void Command::selectedFunction()
     // all textBox clear
     ui->textEdit->clear();
 
+    const int selectedCategoryIndex = ui->categoryList->currentIndex();
+    switch (selectedCategoryIndex) {
+    case 1:
+        Command::selectedGitFunction();
+        break;
+    case 2:
+        Command::selectedDockerFunction();
+        break;
+    default:
+        break;
+    }
+}
+
+void Command::selectedGitFunction() {
     const int selectedIndex = ui->functionsList->currentIndex();
     switch (selectedIndex) {
     case 1:
@@ -102,6 +158,17 @@ void Command::selectedFunction()
     case 8:
     case 9:
     case 11:
+    default:
+        ui->label->setVisible(false);
+        ui->textEdit->setVisible(false);
+        break;
+    }
+}
+
+void Command::selectedDockerFunction() {
+    const int selectedIndex = ui->functionsList->currentIndex();
+    switch (selectedIndex) {
+    // set Docker command input parmater title to label.
     default:
         ui->label->setVisible(false);
         ui->textEdit->setVisible(false);
@@ -151,6 +218,8 @@ void showErrorAlert() {
 
 void Command::generate()
 {
+    // Todo: add Docker command generation
+    if (ui->categoryList->currentIndex() != 1) return;
     const QString gitAdd = "git add ";
     const QString gitCommit = "git commit";
     const QString gitCommitComment = "git commit -m ";

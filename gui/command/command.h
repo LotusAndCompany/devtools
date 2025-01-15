@@ -18,7 +18,10 @@ public:
 private:
     Ui::Command *ui;
     void init();
+    void selectedCategory();
     void selectedFunction();
+    void selectedGitFunction();
+    void selectedDockerFunction();
     void generate();
     void reset();
     void clear();
