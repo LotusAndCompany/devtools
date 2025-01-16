@@ -19,7 +19,6 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
             &QPushButton::clicked,
             this,
             &BasicImageViewControl::resetButtonClicked);
-
     connect(ui->saveButton,
             &QPushButton::clicked,
             this,
@@ -37,9 +36,17 @@ BasicImageViewControl::~BasicImageViewControl()
 
 void BasicImageViewControl::onSaveButtonClicked()
 {
-    switch (saveFileDailogType) {
+    switch (saveFileDialogType) {
     case DialogType::SELECT_FILE: {
         ImageSaveDialog dialog;
+
+        if (fileName.endsWith(".svg")) {
+            // svg形式はpngにして保存する
+            dialog.selectFile(fileName.replace(fileName.length() - 3, 3, "png"));
+        } else {
+            dialog.selectFile(fileName);
+        }
+
         connect(&dialog,
                 &ImageSaveDialog::fileSelected,
                 this,
@@ -55,7 +62,7 @@ void BasicImageViewControl::onSaveButtonClicked()
         dialog.exec();
     } break;
     default:
-        throw InvalidStateException(QString::number(static_cast<int>(saveFileDailogType)),
+        throw InvalidStateException(QString::number(static_cast<int>(saveFileDialogType)),
                                     invalidDialogType);
         break;
     }
@@ -65,6 +72,15 @@ void BasicImageViewControl::onLoadButtonClicked()
 {
     ImageOpenDialog dialog;
     connect(&dialog, &ImageOpenDialog::fileSelected, this, &BasicImageViewControl::loadFileSelected);
+    connect(&dialog,
+            &ImageOpenDialog::fileSelected,
+            this,
+            &BasicImageViewControl::onLoadFileSelected);
 
     dialog.exec();
+}
+
+void BasicImageViewControl::onLoadFileSelected(const QString &path)
+{
+    fileName = path;
 }

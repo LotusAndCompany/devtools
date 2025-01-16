@@ -18,7 +18,7 @@ ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidge
     if (imageDivision->parent() == nullptr)
         imageDivision->setParent(this);
 
-    ui->control->saveFileDailogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
+    ui->control->saveFileDialogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
     connect(ui->control,
             &BasicImageViewControl::loadFileSelected,
             this,
