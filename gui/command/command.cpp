@@ -85,6 +85,33 @@ const QStringList gitFunctionsList {
 
 const QStringList dockerFunctionsList {
     "機能一覧",
+    "1:  ビルド", // docker build
+    "2:  イメージ一覧を表示", // docker images
+    "3:  コンテナの作成、実行", // docker run
+    "4:  実行中のコンテナを表示", // docker ps
+    "5:  不要なイメージの削除", // docker image prune
+    "6:  実行中のコンテナ内でコマンドを実行", // docker exec
+    "7:  リポジトリのダウンロード", // docker pull
+    "8:  リポジトリにプッシュ", // docker push
+    "9:  ログを表示", // docker logs
+    "10: コンテナの停止", // docker stop
+    "11: 停止したコンテナの削除", // docker rm
+    "12: イメージの削除", // docker rmi
+    "13: 作成済みのネットワーク一覧を表示", // docker network ls
+    "14: 作成済みのボリューム一覧を表示", // docker volume ls
+    "",
+    "----Docker Compose----",
+    "15: コンテナを起動", // docker compose up
+    "16: コンテナを停止しボリューム等を削除", // docker compose down
+    "17: コンテナを再起動", // docker compose restart
+    "18: サービスをビルド", // docker compose build
+    "19: コンテナのログを表示", // docker compose logs
+    "20: コンテナのステータスを表示", // docker compose ps
+    "21: コンテナを停止", // docker compose stop
+    "22: 停止中のサービスを起動", // docker compose start
+    "23: 実行中のコンテナ内でコマンドを実行", // docker compose exec
+    "24: コンテナを強制終了", // docker compose kill
+
 };
 
 void Command::selectedCategory()
@@ -169,6 +196,33 @@ void Command::selectedDockerFunction() {
     const int selectedIndex = ui->functionsList->currentIndex();
     switch (selectedIndex) {
     // set Docker command input parmater title to label.
+    case 1:  // docker build
+    case 3:  // docker run
+    case 4:  // docker ps
+    case 5:  // docker image prune
+    case 17: // docker compose up
+    case 18: // docker compose down
+    case 21: // docker compose ps
+        ui->label->setText("option");
+        ui->label->setVisible(true);
+        ui->textEdit->setVisible(true);
+        break;
+    case 2:  // docker images
+    case 6:  // docker exec
+    case 7:  // docker pull
+    case 8:  // docker push
+    case 9:  // docker logs
+    case 10: // docker stop
+    case 11: // docker rm
+    case 12: // docker rmi
+    case 13: // docker network ls
+    case 14: // docker volume ls
+    case 19: // docker compose build
+    case 20: // docker compose logs
+    case 22: // docker compose stop
+    case 23: // docker compose start
+    case 24: // docker compose exec
+    case 25: // docker compose kill
     default:
         ui->label->setVisible(false);
         ui->textEdit->setVisible(false);
@@ -231,6 +285,31 @@ void Command::generate()
     const QString gitRemoteList = "git remote -v";
     const QString gitRemoteOriginSetURL = "git remote set-url origin ";
     const QString gitLog = "git log";
+
+    const QString dockerBuild           = "docker build";           // 1
+    const QString dockerImages          = "docker images";          // 2
+    const QString dockerRun             = "docker run";             // 3
+    const QString dockerPs              = "docker ps";              // 4
+    const QString dockerImagePure       = "docker image pure";      // 5
+    const QString dockerExec            = "docker exec";            // 6
+    const QString dockerPull            = "docker pull";            // 7
+    const QString dockerPush            = "docker push";            // 8
+    const QString dockerLogs            = "docker logs";            // 9
+    const QString dockerStop            = "docker stop";            // 10
+    const QString dockerRm              = "docker rm";              // 11
+    const QString dockerRmi             = "docker rmi";             // 12
+    const QString dockerNetworkLs       = "docker network ls";      // 13
+    const QString dockerVolumeLs        = "docker volume ls";       // 14
+    const QString dockerComposeUp       = "docker compose up";      // 17
+    const QString dockerComposeDown     = "docker compose down";    // 18
+    const QString dockerComposeBuild    = "docker compose build";   // 19
+    const QString dockerComposeLogs     = "docker compose logs";    // 20
+    const QString dockerComposePs       = "docker compose ps";      // 21
+    const QString dockerComposeStop     = "docker compose stop";    // 22
+    const QString dockerComposeStart    = "docker compose start";   // 23
+    const QString dockerComposeExec     = "docker compose exec";    // 24
+    const QString dockerComposeKill     = "docker compose kill";    // 25
+
     const int selectedIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
 
