@@ -272,8 +272,21 @@ void showErrorAlert() {
 
 void Command::generate()
 {
-    // Todo: add Docker command generation
-    if (ui->categoryList->currentIndex() != 1) return;
+    const int categoryIndex = ui->categoryList->currentIndex();
+
+    switch (categoryIndex) {
+    case 1:
+        Command::gitCommandGenerate();
+    case 2:
+        Command::dockerCommandGenerate();
+    default:
+        break;
+    }
+
+}
+
+void Command::gitCommandGenerate()
+{
     const QString gitAdd = "git add ";
     const QString gitCommit = "git commit";
     const QString gitCommitComment = "git commit -m ";
@@ -286,38 +299,14 @@ void Command::generate()
     const QString gitRemoteOriginSetURL = "git remote set-url origin ";
     const QString gitLog = "git log";
 
-    const QString dockerBuild           = "docker build";           // 1
-    const QString dockerImages          = "docker images";          // 2
-    const QString dockerRun             = "docker run";             // 3
-    const QString dockerPs              = "docker ps";              // 4
-    const QString dockerImagePure       = "docker image pure";      // 5
-    const QString dockerExec            = "docker exec";            // 6
-    const QString dockerPull            = "docker pull";            // 7
-    const QString dockerPush            = "docker push";            // 8
-    const QString dockerLogs            = "docker logs";            // 9
-    const QString dockerStop            = "docker stop";            // 10
-    const QString dockerRm              = "docker rm";              // 11
-    const QString dockerRmi             = "docker rmi";             // 12
-    const QString dockerNetworkLs       = "docker network ls";      // 13
-    const QString dockerVolumeLs        = "docker volume ls";       // 14
-    const QString dockerComposeUp       = "docker compose up";      // 17
-    const QString dockerComposeDown     = "docker compose down";    // 18
-    const QString dockerComposeBuild    = "docker compose build";   // 19
-    const QString dockerComposeLogs     = "docker compose logs";    // 20
-    const QString dockerComposePs       = "docker compose ps";      // 21
-    const QString dockerComposeStop     = "docker compose stop";    // 22
-    const QString dockerComposeStart    = "docker compose start";   // 23
-    const QString dockerComposeExec     = "docker compose exec";    // 24
-    const QString dockerComposeKill     = "docker compose kill";    // 25
-
-    const int selectedIndex = ui->functionsList->currentIndex();
+    const int functionsIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
 
     // simple validation
     if (!containsNoQuotes(value1)) {
         showErrorAlert();
     } else {
-        switch (selectedIndex) {
+        switch (functionsIndex) {
         case 1:
             ui->textBrowser->setText(gitAdd + value1);
             break;
@@ -351,6 +340,46 @@ void Command::generate()
         case 11:
             ui->textBrowser->setText(gitLog);
             break;
+        default:
+            break;
+        }
+    }
+}
+
+void Command::dockerCommandGenerate()
+{
+    const QString dockerBuild           = "docker build";           // 1
+    const QString dockerImages          = "docker images";          // 2
+    const QString dockerRun             = "docker run";             // 3
+    const QString dockerPs              = "docker ps";              // 4
+    const QString dockerImagePure       = "docker image pure";      // 5
+    const QString dockerExec            = "docker exec";            // 6
+    const QString dockerPull            = "docker pull";            // 7
+    const QString dockerPush            = "docker push";            // 8
+    const QString dockerLogs            = "docker logs";            // 9
+    const QString dockerStop            = "docker stop";            // 10
+    const QString dockerRm              = "docker rm";              // 11
+    const QString dockerRmi             = "docker rmi";             // 12
+    const QString dockerNetworkLs       = "docker network ls";      // 13
+    const QString dockerVolumeLs        = "docker volume ls";       // 14
+    const QString dockerComposeUp       = "docker compose up";      // 17
+    const QString dockerComposeDown     = "docker compose down";    // 18
+    const QString dockerComposeBuild    = "docker compose build";   // 19
+    const QString dockerComposeLogs     = "docker compose logs";    // 20
+    const QString dockerComposePs       = "docker compose ps";      // 21
+    const QString dockerComposeStop     = "docker compose stop";    // 22
+    const QString dockerComposeStart    = "docker compose start";   // 23
+    const QString dockerComposeExec     = "docker compose exec";    // 24
+    const QString dockerComposeKill     = "docker compose kill";    // 25
+
+    const int functionsIndex = ui->functionsList->currentIndex();
+    const QString value1 = ui->textEdit->text();
+
+    // simple validation
+    if (!containsNoQuotes(value1)) {
+        showErrorAlert();
+    } else {
+        switch (functionsIndex) {
         default:
             break;
         }

@@ -23,6 +23,8 @@ private:
     void selectedGitFunction();
     void selectedDockerFunction();
     void generate();
+    void gitCommandGenerate();
+    void dockerCommandGenerate();
     void reset();
     void clear();
     void copy();
