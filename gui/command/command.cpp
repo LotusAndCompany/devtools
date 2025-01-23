@@ -203,10 +203,10 @@ void Command::selectedDockerFunction() {
     case 17: // docker compose up
     case 18: // docker compose down
     case 21: // docker compose ps
-        ui->label->setText("option");
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
-        break;
+        // ui->label->setText("option");
+        // ui->label->setVisible(true);
+        // ui->textEdit->setVisible(true);
+        // break;
     case 2:  // docker images
     case 6:  // docker exec
     case 7:  // docker pull
@@ -372,17 +372,42 @@ void Command::dockerCommandGenerate()
     const QString dockerComposeExec     = "docker compose exec";    // 24
     const QString dockerComposeKill     = "docker compose kill";    // 25
 
+    const QList<QString> dockerCommandList = {
+        dockerBuild,
+        dockerImages,
+        dockerRun,
+        dockerPs,
+        dockerImagePure,
+        dockerExec,
+        dockerPull,
+        dockerPush,
+        dockerLogs,
+        dockerStop,
+        dockerRm,
+        dockerRmi,
+        dockerNetworkLs,
+        dockerVolumeLs,
+        NULL,
+        NULL,
+        dockerComposeUp,
+        dockerComposeDown,
+        dockerComposeBuild,
+        dockerComposeLogs,
+        dockerComposePs,
+        dockerComposeStop,
+        dockerComposeStart,
+        dockerComposeExec,
+        dockerComposeKill
+    };
+
     const int functionsIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
 
     // simple validation
     if (!containsNoQuotes(value1)) {
         showErrorAlert();
-    } else {
-        switch (functionsIndex) {
-        default:
-            break;
-        }
+    } else if(functionsIndex != 0){
+        ui->textBrowser->setText(dockerCommandList[functionsIndex-1]);
     }
 }
 
