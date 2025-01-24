@@ -277,8 +277,10 @@ void Command::generate()
     switch (categoryIndex) {
     case 1:
         Command::gitCommandGenerate();
+        break;
     case 2:
         Command::dockerCommandGenerate();
+        break;
     default:
         break;
     }
@@ -286,7 +288,7 @@ void Command::generate()
 }
 
 void Command::gitCommandGenerate()
-{
+{    
     const QString gitAdd = "git add ";
     const QString gitCommit = "git commit";
     const QString gitCommitComment = "git commit -m ";
