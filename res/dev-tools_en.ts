@@ -97,7 +97,7 @@
     </message>
     <message>
         <location filename="../gui/image/basic/control.ui" line="34"/>
-        <location filename="../gui/image/basic/control.cpp" line="63"/>
+        <location filename="../gui/image/basic/control.cpp" line="60"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,8 +322,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="72"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="73"/>
         <source>%1 x %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
+        <source>Save Successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="102"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="102"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -365,6 +385,26 @@
     <message>
         <location filename="../gui/image/resize/image_resize_gui.ui" line="196"/>
         <source>Smooth scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
+        <source>Save Successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="80"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="80"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -410,6 +450,26 @@
         <source>Flip Vertical</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
+        <source>Save Successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="74"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="74"/>
+        <source>Failed to save the image.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageSaveDialog</name>
@@ -444,6 +504,26 @@
     <message>
         <location filename="../gui/image/transparent/image_transparent_gui.ui" line="210"/>
         <source>Only contiguous area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
+        <source>Save Successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="81"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="81"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

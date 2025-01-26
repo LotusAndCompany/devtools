@@ -3,6 +3,8 @@
 
 #include "core/image/rotation/image_rotation.h"
 
+#include <QMessageBox>
+
 ImageRotationGUI::ImageRotationGUI(ImageRotationInterface *imageRotation, QWidget *parent)
     : GuiTool(parent)
     , imageRotation(imageRotation)
@@ -66,9 +68,11 @@ void ImageRotationGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool result = imageRotation->overwriteSave(path);
-
-    // TODO: save()の結果に応じて何かメッセージを出す
+    if (imageRotation->overwriteSave(path)) {
+        QMessageBox::information(this, tr("Save Successful"), tr("Image was saved successfully."));
+    } else {
+        QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
+    }
 }
 
 void ImageRotationGUI::onResetButtonClicked()

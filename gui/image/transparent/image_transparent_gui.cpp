@@ -5,6 +5,8 @@
 #include "core/exception/invalid_argument_exception.h"
 #include "core/image/transparent/image_transparent.h"
 
+#include <QMessageBox>
+
 ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTransparent,
                                          QWidget *parent)
     : GuiTool(parent)
@@ -73,9 +75,11 @@ void ImageTransparentGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    imageTransparent->overwriteSave(path);
-
-    // TODO: save()の結果に応じて何かメッセージを出す
+    if (imageTransparent->overwriteSave(path)) {
+        QMessageBox::information(this, tr("Save Successful"), tr("Image was saved successfully."));
+    } else {
+        QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
+    }
 }
 
 void ImageTransparentGUI::onResetButtonClicked()

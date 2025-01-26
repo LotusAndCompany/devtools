@@ -101,7 +101,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <location filename="../gui/image/basic/control.cpp" line="+63"/>
+        <location filename="../gui/image/basic/control.cpp" line="+60"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -326,9 +326,29 @@
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+72"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+73"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Save Successful</source>
+        <translation>保存成功</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Image was saved successfully.</source>
+        <translation>画像の保存に成功しました。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Save Failed</source>
+        <translation>保存失敗</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed to save the image.</source>
+        <translation>画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -370,6 +390,26 @@
         <location line="+7"/>
         <source>Smooth scaling</source>
         <translation>バイリニア補完</translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+78"/>
+        <source>Save Successful</source>
+        <translation type="unfinished">保存成功</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished">画像の保存に成功しました。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Save Failed</source>
+        <translation type="unfinished">保存失敗</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed to save the image.</source>
+        <translation type="unfinished">画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -414,6 +454,26 @@
         <source>Flip Vertical</source>
         <translation>上下反転</translation>
     </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+72"/>
+        <source>Save Successful</source>
+        <translation type="unfinished">保存成功</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished">画像の保存に成功しました。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Save Failed</source>
+        <translation type="unfinished">保存失敗</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed to save the image.</source>
+        <translation type="unfinished">画像の保存に失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>ImageSaveDialog</name>
@@ -450,6 +510,26 @@
         <location line="+49"/>
         <source>Transparency:</source>
         <translation>透明度:</translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+79"/>
+        <source>Save Successful</source>
+        <translation type="unfinished">保存成功</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Image was saved successfully.</source>
+        <translation type="unfinished">画像の保存に成功しました。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Save Failed</source>
+        <translation type="unfinished">保存失敗</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed to save the image.</source>
+        <translation type="unfinished">画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
