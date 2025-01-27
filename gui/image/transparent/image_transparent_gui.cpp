@@ -75,7 +75,7 @@ void ImageTransparentGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    if (imageTransparent->overwriteSave(path)) {
+    if (!imageTransparent->overwriteSave(path)) {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
     }
 }

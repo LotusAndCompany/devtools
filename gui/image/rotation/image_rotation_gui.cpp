@@ -68,7 +68,7 @@ void ImageRotationGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    if (imageRotation->overwriteSave(path)) {
+    if (!imageRotation->overwriteSave(path)) {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
     }
 }
