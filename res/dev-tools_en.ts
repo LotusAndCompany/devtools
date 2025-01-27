@@ -105,32 +105,32 @@
 <context>
     <name>Command</name>
     <message>
-        <location filename="../gui/command/command.ui" line="14"/>
+        <location filename="../gui/command/command.ui" line="17"/>
         <source>GroupBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="55"/>
+        <location filename="../gui/command/command.ui" line="53"/>
         <source>Generate command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="76"/>
+        <location filename="../gui/command/command.ui" line="30"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="83"/>
+        <location filename="../gui/command/command.ui" line="23"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="48"/>
+        <location filename="../gui/command/command.ui" line="75"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="33"/>
+        <location filename="../gui/command/command.ui" line="63"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -328,21 +328,11 @@
     </message>
     <message>
         <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
-        <source>Save Successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
-        <source>Image was saved successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="102"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="102"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -389,21 +379,11 @@
     </message>
     <message>
         <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
-        <source>Save Successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
-        <source>Image was saved successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="80"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="80"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -452,21 +432,11 @@
     </message>
     <message>
         <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
-        <source>Save Successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
-        <source>Image was saved successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="74"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="74"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -508,21 +478,11 @@
     </message>
     <message>
         <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
-        <source>Save Successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
-        <source>Image was saved successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="81"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="81"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>

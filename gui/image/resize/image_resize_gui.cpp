@@ -75,8 +75,6 @@ void ImageResizeGUI::onSaveImageSelected(const QString &path)
     qDebug() << "path:" << path;
 
     if (imageResize->overwriteSave(path)) {
-        QMessageBox::information(this, tr("Save Successful"), tr("Image was saved successfully."));
-    } else {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
     }
 }

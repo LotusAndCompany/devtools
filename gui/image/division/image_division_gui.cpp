@@ -96,12 +96,9 @@ void ImageDivisionGUI::onSaveLocationSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    if (imageDivision->overwriteSave(path)) {
-        QMessageBox::information(this, tr("Save Successful"), tr("Image was saved successfully."));
-    } else {
+    if (!imageDivision->overwriteSave(path)) {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
     }
-
 }
 
 void ImageDivisionGUI::onResetButtonClicked()
