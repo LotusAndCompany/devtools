@@ -105,32 +105,32 @@
 <context>
     <name>Command</name>
     <message>
-        <location filename="../gui/command/command.ui" line="14"/>
+        <location filename="../gui/command/command.ui" line="17"/>
         <source>GroupBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="55"/>
+        <location filename="../gui/command/command.ui" line="53"/>
         <source>Generate command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="76"/>
+        <location filename="../gui/command/command.ui" line="30"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="83"/>
+        <location filename="../gui/command/command.ui" line="23"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="48"/>
+        <location filename="../gui/command/command.ui" line="75"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="33"/>
+        <location filename="../gui/command/command.ui" line="63"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,8 +322,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="72"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="73"/>
         <source>%1 x %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -365,6 +375,16 @@
     <message>
         <location filename="../gui/image/resize/image_resize_gui.ui" line="196"/>
         <source>Smooth scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -410,6 +430,16 @@
         <source>Flip Vertical</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
+        <source>Failed to save the image.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageSaveDialog</name>
@@ -444,6 +474,16 @@
     <message>
         <location filename="../gui/image/transparent/image_transparent_gui.ui" line="210"/>
         <source>Only contiguous area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
+        <source>Save Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
+        <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
