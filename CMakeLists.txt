@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.1.6 LANGUAGES CXX)
+project(DevTools VERSION 0.1.7 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "-test")
@@ -76,20 +76,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res/dev-tools_en.ts
 
         main/main.cpp
+        vcpkg.json
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )
 
     # modules
+    # core
     qt_add_library(${PROJECT_NAME}_core STATIC
-        gui/main_window.h gui/main_window.cpp gui/main_window.ui
         core/application_mixin.h core/application_mixin.cpp
-        gui/gui_application.h gui/gui_application.cpp
-        gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
-        gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
-        gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
-        gui/sidemenu_item.h gui/sidemenu_item.cpp
-        gui/welcome_page.h gui/welcome_page.cpp gui/welcome_page.ui
         core/tool/tool.h core/tool/tool.cpp
         core/exception/common_exception.h
         core/exception/out_of_range_exception.h
@@ -98,15 +93,32 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/under_development_exception.h
         core/tool/tool_id_fields.h
         core/enum_cast.h
+        gui/main_window.h gui/main_window.cpp gui/main_window.ui
+        gui/gui_application.h gui/gui_application.cpp
+        gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
+        gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
+        gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
+        gui/sidemenu_item.h gui/sidemenu_item.cpp
+        gui/welcome_page.h gui/welcome_page.cpp gui/welcome_page.ui
         gui/gui_tool.h gui/gui_tool.cpp
-        gui/api_tool.h gui/api_tool.cpp gui/api_tool.ui
-
-
-        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp gui/phrase_generation/phrase_generation.ui
-        gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.ui gui/contents_area.cpp gui/contents_area.h gui/contents_area.ui gui/gui_application.cpp gui/gui_application.h gui/gui_tool.cpp gui/gui_tool.h gui/main_window.cpp gui/main_window.h gui/main_window.ui gui/sidemenu.cpp gui/sidemenu.h gui/sidemenu.ui gui/sidemenu_item.cpp gui/sidemenu_item.h
-        gui/command/command.h gui/command/command.cpp gui/command/command.ui
-        vcpkg.json
     )
+
+    # http_request
+    qt_add_library(${PROJECT_NAME}_http_request STATIC
+        gui/api_tool.h gui/api_tool.cpp gui/api_tool.ui
+    )
+
+    # command
+    qt_add_library(${PROJECT_NAME}_command STATIC
+        gui/command/command.h gui/command/command.cpp gui/command/command.ui
+    )
+
+    # phrase_generation
+    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
+        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
+        gui/phrase_generation/phrase_generation.ui
+    )
+
     # image
     qt_add_library(${PROJECT_NAME}_image_core STATIC
         core/image/basic_image_io.h core/image/basic_image_io.cpp
@@ -133,11 +145,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
-    )
-    # phrase_generation
-    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
-        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
-        gui/phrase_generation/phrase_generation.ui
     )
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
@@ -230,6 +237,8 @@ set(MODULE_LIST
     ${PROJECT_NAME}_image_division
     ${PROJECT_NAME}_image_transparent
     ${PROJECT_NAME}_phrase_generation
+    ${PROJECT_NAME}_http_request
+    ${PROJECT_NAME}_command
     ${PROJECT_NAME}_data_conversion
 )
 
@@ -246,6 +255,7 @@ foreach (MODULE ${MODULE_LIST})
         ${Qt6Bus_INCLUDE_DIRS}
         ${Qt6Gui_INCLUDE_DIRS}
         ${Qt6Widgets_INCLUDE_DIRS}
+        ${Qt6Network_INCLUDE_DIRS}
     )
 
     # ライブラリをリンクする

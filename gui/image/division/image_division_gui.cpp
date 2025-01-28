@@ -6,6 +6,7 @@
 #include "core/exception/invalid_state_exception.h"
 #include "core/image/division/image_division.h"
 #include <core/exception/invalid_argument_exception.h>
+#include <QMessageBox>
 
 ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidget *parent)
     : GuiTool(parent)
@@ -18,7 +19,7 @@ ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidge
     if (imageDivision->parent() == nullptr)
         imageDivision->setParent(this);
 
-    ui->control->saveFileDailogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
+    ui->control->saveFileDialogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
     connect(ui->control,
             &BasicImageViewControl::loadFileSelected,
             this,
@@ -95,9 +96,9 @@ void ImageDivisionGUI::onSaveLocationSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    imageDivision->overwriteSave(path);
-
-    // TODO: save()の結果に応じて何かメッセージを出す
+    if (!imageDivision->overwriteSave(path)) {
+        QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
+    }
 }
 
 void ImageDivisionGUI::onResetButtonClicked()

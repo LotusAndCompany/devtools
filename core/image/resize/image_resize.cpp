@@ -27,6 +27,7 @@ bool ImageResize::loadImpl(const QString &path)
     return result && !_current.isNull();
 }
 
+// TODO: SVGの場合はレンダリングし直したい
 bool ImageResize::updateImpl()
 {
     _current = original().scaled(computedSize(), Qt::IgnoreAspectRatio, transformationMode());

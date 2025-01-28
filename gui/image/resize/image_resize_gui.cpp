@@ -4,6 +4,8 @@
 #include <QSignalBlocker>
 #include "core/image/resize/image_resize.h"
 
+#include <QMessageBox>
+
 ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
     : GuiTool(parent)
     , ui(new Ui::ImageResizeGUI)
@@ -72,9 +74,9 @@ void ImageResizeGUI::onSaveImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    imageResize->overwriteSave(path);
-
-    // TODO: save()の結果に応じて何かメッセージを出す
+    if (!imageResize->overwriteSave(path)) {
+        QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
+    }
 }
 
 void ImageResizeGUI::onResetButtonClicked()

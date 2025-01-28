@@ -40,7 +40,7 @@ public:
         SELECT_FILE,   ///< ファイルを選択するダイアログ
         SELECT_FOLDER, ///< フォルダを選択するダイアログ
         MAX,           ///< 最大値
-    } saveFileDailogType
+    } saveFileDialogType
         = DialogType::SELECT_FILE;
 
 signals:
@@ -69,11 +69,20 @@ private slots:
      * @brief 読み込みボタンが押された時の処理
      */
     void onLoadButtonClicked();
+    /**
+     * @brief 読み込むファイルが選択された時の処理
+     * @param path ファイル名
+     */
+    void onLoadFileSelected(const QString &path);
 
 private:
+    /// DialogTypeが不正
     static const QString invalidDialogType;
 
     Ui::BasicImageViewControl *const ui;
+
+    /// 読み込んだファイル名
+    QString fileName;
 
 #ifdef _TEST_BasicImageViewControl
     friend class Test::TestBasicImageViewControl;
