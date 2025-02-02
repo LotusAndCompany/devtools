@@ -854,7 +854,7 @@ Choose a tool from the side panel</source>
         <translation type="unfinished">保存</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+190"/>
         <source>Enter title...</source>
         <translation type="unfinished">タイトルを入力...</translation>
     </message>
@@ -865,7 +865,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+74"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+85"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>

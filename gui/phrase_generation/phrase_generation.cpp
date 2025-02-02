@@ -56,6 +56,17 @@ phraseGeneration::~phraseGeneration()
     delete ui;
 }
 
+//テキスト表示部分がカラーテーマ変更に追従しないため明示的に設定
+void phraseGeneration::changeEvent(QEvent *event) {
+    if (event->type() == QEvent::PaletteChange) {
+        QPalette palette = this->palette();
+        QPalette templateTextPalette = ui->templateText->palette();
+        templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
+        ui->templateText->setPalette(templateTextPalette);
+    }
+    QWidget::changeEvent(event);
+}
+
 void phraseGeneration::loadTitles()
 {
     ui->titleTreeWidget->clear();
@@ -179,13 +190,14 @@ void phraseGeneration::handleToggleTreeButtonClick()
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
-        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
+        // ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
+        ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
-        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/menu.svg"));
+        ui->toggleTreeButton->setIcon(QIcon::fromTheme("menu"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);
