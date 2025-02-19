@@ -38,6 +38,8 @@ private:
     void deleteContent(const QString &title);
     QString currentFile; //現在のファイル名を保持
 
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // PHRASE_GENERATION_H

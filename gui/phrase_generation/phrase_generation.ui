@@ -137,7 +137,6 @@ QTreeWidget::item:selected {
    <property name="styleSheet">
     <string notr="true">QPlainTextEdit {
     padding: 0px 0px 5px 0px;
-    background-color: #000000;
 }</string>
    </property>
    <property name="placeholderText">
