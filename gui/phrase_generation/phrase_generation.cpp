@@ -190,7 +190,6 @@ void phraseGeneration::handleToggleTreeButtonClick()
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
-        // ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
