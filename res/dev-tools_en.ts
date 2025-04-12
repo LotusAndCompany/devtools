@@ -709,23 +709,23 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="258"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="244"/>
         <source>Enter title...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="218"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="204"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="237"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="85"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="223"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="143"/>
+        <location filename="../gui/phrase_generation/phrase_generation.ui" line="129"/>
         <source>Enter text...</source>
         <translation></translation>
     </message>
