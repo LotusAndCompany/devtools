@@ -49,6 +49,7 @@ phraseGeneration::phraseGeneration(QWidget *parent)
 
     // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
     QPalette palette = this->palette();
+    // TODO: QPalette::WindowとQPalette::WindowTextを比較してテーマカラーを判別するようにする
     QColor baseColor = palette.color(QPalette::Base);
     QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
     ui->titleTreeWidget->setStyleSheet(QString(
@@ -75,6 +76,7 @@ void phraseGeneration::changeEvent(QEvent *event) {
         ui->templateText->setPalette(templateTextPalette);
 
         // ダークモードかライトモードか判定
+        // TODO: QPalette::WindowとQPalette::WindowTextを比較してテーマカラーを判別するようにする
         QColor baseColor = palette.color(QPalette::Base);
         QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
 
