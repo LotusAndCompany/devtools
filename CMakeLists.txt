@@ -77,6 +77,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         main/main.cpp
         vcpkg.json
+        gui/command/command_option.h
+        gui/command/command_function.h
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )

@@ -1,5 +1,6 @@
 #include "command.h"
 #include "ui_command.h"
+#include "command_function.h"
 #include <QClipboard>
 #include <QApplication>
 #include <QMessageBox>
@@ -20,6 +21,10 @@ Command::Command(QWidget *parent)
             &QComboBox::currentIndexChanged,
             this,
             &Command::selectedFunction);
+    connect(ui->optionList,
+            &QComboBox::currentIndexChanged,
+            this,
+            &Command::selectedOption);
     connect(ui->resetButton,
             &QPushButton::clicked,
             this,
@@ -47,7 +52,8 @@ void Command::init() {
     const QStringList categoryList {
         "カテゴリ一覧",
         "1: Gitコマンド",
-        "2: Dockerコマンド"
+        "2: Dockerコマンド",
+        "3: DockerComposeコマンド"
     };
 
     // set categoryList items
@@ -62,57 +68,131 @@ void Command::init() {
     // all textBox default hidden
     ui->textEdit->setVisible(false);
 
-    // functionsList default hidden
+    // commandList default hidden
+    ui->functionsLabel->setVisible(false);
     ui->functionsList->setVisible(false);
+    // optionList default hidden
+    ui->optionLabel->setVisible(false);
+    ui->optionList->setVisible(false);
 }
 
-const QStringList gitFunctionsList {
-    "機能一覧",
-    "1: 変更を追加",
-    "2: コミット",
-    "3: コミット & コメント",
-    "4: ブランチの状態確認",
-    "5: 直前のコミットを取り消し",
-    "6: 直前のコミットと変更内容を取り消し",
-    "7: マージ",
-    "8: マージする際、コンフリクトの編集を破棄",
-    "9: リモートリポジトリの一覧確認",
-    "10: リモートリポジトリ オリジンのurlを変更",
-    "11: コミット履歴を確認",
-    // git diff
-    // git config 利用中のアカウントの情報確認
-};
+QList<CommandFunction> getGitCommands() {
+    return {
+        CommandFunction("git add", "変更を追加", {
+            CommandOption("なし", true, "Path", false),
+        }),
+        CommandFunction("git commit", "コミットを作成", {
+            CommandOption("なし", false, "", false),
+            CommandOption("-m", true, "メッセージ", true),
+            CommandOption("-a", false, "", false)
+        }),
+        CommandFunction("git log", "コミット履歴を確認", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("git status", "ブランチの状態確認", {
+            CommandOption("なし", false, "", false),
+        }),
+        /*
+        CommandFunction("git reset", "直前のコミットを取り消し", {
+            CommandOption("-soft", true, ""),
+            CommandOption("-hard", true, ""),
+        }),
+        CommandFunction("git config", "利用中のアカウントの情報確認", {
+            CommandOption("なし", false, "", false),
+        }),
+        */
+        CommandFunction("git diff", "差分を確認", {
+            CommandOption("なし", true, "比較対象", false),
+        }),
+        CommandFunction("git merge", "マージ", {
+            CommandOption("なし", false, "", false),
+            CommandOption("-abort", false, "", false)
+        }),
+        CommandFunction("git remote", "リモート", {
+            CommandOption("-v", false, "", false),
+            CommandOption("set-url", true, "リモート名とURL", false)
+        })
+    };
+}
 
-const QStringList dockerFunctionsList {
-    "機能一覧",
-    "1:  ビルド", // docker build
-    "2:  イメージ一覧を表示", // docker images
-    "3:  コンテナの作成、実行", // docker run
-    "4:  実行中のコンテナを表示", // docker ps
-    "5:  不要なイメージの削除", // docker image prune
-    "6:  実行中のコンテナ内でコマンドを実行", // docker exec
-    "7:  リポジトリのダウンロード", // docker pull
-    "8:  リポジトリにプッシュ", // docker push
-    "9:  ログを表示", // docker logs
-    "10: コンテナの停止", // docker stop
-    "11: 停止したコンテナの削除", // docker rm
-    "12: イメージの削除", // docker rmi
-    "13: 作成済みのネットワーク一覧を表示", // docker network ls
-    "14: 作成済みのボリューム一覧を表示", // docker volume ls
-    "",
-    "----Docker Compose----",
-    "15: コンテナを起動", // docker compose up
-    "16: コンテナを停止しボリューム等を削除", // docker compose down
-    "17: コンテナを再起動", // docker compose restart
-    "18: サービスをビルド", // docker compose build
-    "19: コンテナのログを表示", // docker compose logs
-    "20: コンテナのステータスを表示", // docker compose ps
-    "21: コンテナを停止", // docker compose stop
-    "22: 停止中のサービスを起動", // docker compose start
-    "23: 実行中のコンテナ内でコマンドを実行", // docker compose exec
-    "24: コンテナを強制終了", // docker compose kill
+QList<CommandFunction> getDockerCommands() {
+    return {
+        CommandFunction("docker build", "ビルド", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker images", "イメージ一覧を表示", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker run", "コンテナの作成、実行", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker image prune", "不要なイメージの削除", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker exec", "実行中のコンテナ内でコマンドを実行", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker pull", "リポジトリのダウンロード", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker push", "リポジトリにプッシュ", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker logs", "ログを表示", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker stop", "コンテナの停止", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker rm", "停止したコンテナの削除", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker rmi", "イメージの削除", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker network ls", "作成済みのネットワーク一覧を表示", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker volume ls", "作成済みのボリューム一覧を表示", {
+            CommandOption("なし", false, "", false),
+        }),
+    };
+}
 
-};
+QList<CommandFunction> getDockerComposeCommands() {
+    return {
+        CommandFunction("docker compose build", "サービスをビルド", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose exec", "実行中のコンテナ内でコマンドを実行", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose up", "コンテナを起動", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose down", "コンテナを停止しボリューム等を削除", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose restart", "コンテナを再起動", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose stop", "コンテナを停止", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose logs", "コンテナのログを表示", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose ps", "コンテナのステータスを表示", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose start", "停止中のサービスを起動", {
+            CommandOption("なし", false, "", false),
+        }),
+        CommandFunction("docker compose kill", "コンテナを強制終了", {
+            CommandOption("なし", false, "", false),
+        }),
+    };
+}
 
 void Command::selectedCategory()
 {
@@ -120,19 +200,46 @@ void Command::selectedCategory()
 
     ui->functionsList->clear();
 
+    QList<CommandFunction> commandList;
+    QStringList commandNames;
+
     // set list items
     switch (selectedIndex) {
-    case 1:
-        ui->functionsList->addItems(gitFunctionsList);
-        // display functionsList
+    case 1:        
+        commandList = getGitCommands();
+        for (const CommandFunction& cmd : commandList) {
+            commandNames.append(cmd.getName() + " " + cmd.getDescription());
+        }
+        ui->functionsList->addItems(commandNames);
+        // display commandList
+        ui->functionsLabel->setVisible(true);
         ui->functionsList->setVisible(true);
         ui->functionsList->setEnabled(true);
         break;
     case 2:
-        ui->functionsList->addItems(dockerFunctionsList);
-        // display functionsList
+        commandList = getDockerCommands();
+        for (const CommandFunction& cmd : commandList) {
+            commandNames.append(cmd.getName() + " " + cmd.getDescription());
+        }
+        ui->functionsList->addItems(commandNames);
+        // display commandList
+        ui->functionsLabel->setVisible(true);
         ui->functionsList->setVisible(true);
         ui->functionsList->setEnabled(true);
+        break;
+    case 3:
+        commandList = getDockerComposeCommands();
+        for (const CommandFunction& cmd : commandList) {
+            commandNames.append(cmd.getName() + " " + cmd.getDescription());
+        }
+        ui->functionsList->addItems(commandNames);
+        // display commandList
+        ui->functionsLabel->setVisible(true);
+        ui->functionsList->setVisible(true);
+        ui->functionsList->setEnabled(true);
+        break;
+    default:
+        reset();
         break;
     }
 }
@@ -141,98 +248,95 @@ void Command::selectedFunction()
 {
     // all textBox clear
     ui->textEdit->clear();
+    // optionList clear
+    ui->optionList->clear();
+    ui->optionList->setVisible(false);
+    ui->optionList->setEnabled(false);
 
     const int selectedCategoryIndex = ui->categoryList->currentIndex();
+    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
+
+    QList<CommandFunction> commandList;
+
     switch (selectedCategoryIndex) {
     case 1:
-        Command::selectedGitFunction();
+        commandList = getGitCommands();
         break;
     case 2:
-        Command::selectedDockerFunction();
-        break;
-    default:
-        break;
-    }
-}
-
-void Command::selectedGitFunction() {
-    const int selectedIndex = ui->functionsList->currentIndex();
-    switch (selectedIndex) {
-    case 1:
-        ui->label->setText("Path");
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
+        commandList = getDockerCommands();
         break;
     case 3:
-        ui->label->setText("Comment");
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
+        commandList = getDockerComposeCommands();
         break;
-    case 7:
-        ui->label->setText("Branch");
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
-        break;
-    case 10:
-        ui->label->setText("New URL");
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
-        break;
-    case 2:
-    case 4:
-    case 5:
-    case 6:
-    case 8:
-    case 9:
-    case 11:
     default:
+        break;
+    }
+
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) return;
+    QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
+
+    if (optionList.length()) {
         ui->label->setVisible(false);
         ui->textEdit->setVisible(false);
-        break;
+        // display optionsList
+        QStringList optionNames;
+
+        for (const CommandOption& opt : optionList) {
+            optionNames.append(opt.getName());
+        }
+        ui->optionList->addItems(optionNames);
+        ui->optionLabel->setVisible(true);
+        ui->optionList->setVisible(true);
+        ui->optionList->setEnabled(true);
     }
 }
 
-void Command::selectedDockerFunction() {
-    const int selectedIndex = ui->functionsList->currentIndex();
-    switch (selectedIndex) {
-    // set Docker command input parmater title to label.
-    case 1:  // docker build
-    case 3:  // docker run
-    case 4:  // docker ps
-    case 5:  // docker image prune
-    case 17: // docker compose up
-    case 18: // docker compose down
-    case 21: // docker compose ps
-        // ui->label->setText("option");
-        // ui->label->setVisible(true);
-        // ui->textEdit->setVisible(true);
-        // break;
-    case 2:  // docker images
-    case 6:  // docker exec
-    case 7:  // docker pull
-    case 8:  // docker push
-    case 9:  // docker logs
-    case 10: // docker stop
-    case 11: // docker rm
-    case 12: // docker rmi
-    case 13: // docker network ls
-    case 14: // docker volume ls
-    case 19: // docker compose build
-    case 20: // docker compose logs
-    case 22: // docker compose stop
-    case 23: // docker compose start
-    case 24: // docker compose exec
-    case 25: // docker compose kill
+void Command::selectedOption()
+{
+    const int selectedCategoryIndex = ui->categoryList->currentIndex();
+    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
+    const int selectedOptionIndex = ui->optionList->currentIndex();
+
+    QList<CommandFunction> commandList;
+
+    switch (selectedCategoryIndex) {
+    case 1:
+        commandList = getGitCommands();
+        break;
+    case 2:
+        commandList = getDockerCommands();
+        break;
+    case 3:
+        commandList = getDockerComposeCommands();
+        break;
     default:
-        ui->label->setVisible(false);
-        ui->textEdit->setVisible(false);
         break;
     }
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) return;
+
+    QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
+    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size()) return;
+
+    CommandOption option = optionList[selectedOptionIndex];
+
+    if (option.isRequired()) {
+        ui->label->setText(option.getTitle());
+        ui->label->setVisible(true);
+        ui->textEdit->setVisible(true);
+    } else {
+        ui->label->setVisible(false);
+        ui->textEdit->setVisible(false);
+    }
+
 }
 
 void Command::reset()
 {
-    ui->functionsList->setCurrentIndex(0);
+    // reset list current index
+    ui->categoryList->setCurrentIndex(0);
+
+    ui->functionsList->clear();
+    ui->optionList->clear();
 
     // all lineEdit clear
     ui->textEdit->clear();
@@ -242,6 +346,16 @@ void Command::reset()
 
     // all lineEdit default hidden
     ui->textEdit->setVisible(false);
+
+    // commandList default hidden
+    ui->functionsLabel->setVisible(false);
+    ui->functionsList->setVisible(false);
+    ui->functionsList->setEnabled(false);
+
+    // optionList default hidden
+    ui->optionLabel->setVisible(false);
+    ui->optionList->setVisible(false);
+    ui->optionList->setEnabled(false);
 }
 
 void Command::clear()
@@ -272,145 +386,51 @@ void showErrorAlert() {
 
 void Command::generate()
 {
-    const int categoryIndex = ui->categoryList->currentIndex();
+    const int selectedCategoryIndex = ui->categoryList->currentIndex();
+    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
+    const int selectedOptionIndex = ui->optionList->currentIndex();
 
-    switch (categoryIndex) {
+    QList<CommandFunction> commandList;
+    switch (selectedCategoryIndex) {
     case 1:
-        Command::gitCommandGenerate();
+        commandList = getGitCommands();
         break;
     case 2:
-        Command::dockerCommandGenerate();
+        commandList = getDockerCommands();
+        break;
+    case 3:
+        commandList = getDockerComposeCommands();
         break;
     default:
         break;
     }
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) return;
 
-}
+    QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
+    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size()) return;
 
-void Command::gitCommandGenerate()
-{    
-    const QString gitAdd = "git add ";
-    const QString gitCommit = "git commit";
-    const QString gitCommitComment = "git commit -m ";
-    const QString gitStatus = "git status";
-    const QString gitResetSoft = "git reset --soft HEAD^";
-    const QString gitResetHard = "git reset --hard HEAD^";
-    const QString gitMerge = "git merge ";
-    const QString gitMergeAbort = "git merge --abort";
-    const QString gitRemoteList = "git remote -v";
-    const QString gitRemoteOriginSetURL = "git remote set-url origin ";
-    const QString gitLog = "git log";
+    CommandOption option = optionList[selectedOptionIndex];
 
-    const int functionsIndex = ui->functionsList->currentIndex();
     const QString value1 = ui->textEdit->text();
 
     // simple validation
     if (!containsNoQuotes(value1)) {
         showErrorAlert();
     } else {
-        switch (functionsIndex) {
-        case 1:
-            ui->textBrowser->setText(gitAdd + value1);
-            break;
-        case 2:
-            ui->textBrowser->setText(gitCommit);
-            break;
-        case 3:
-            ui->textBrowser->setText(gitCommitComment + "'" + value1 + "'");
-            break;
-        case 4:
-            ui->textBrowser->setText(gitStatus);
-            break;
-        case 5:
-            ui->textBrowser->setText(gitResetSoft);
-            break;
-        case 6:
-            ui->textBrowser->setText(gitResetHard);
-            break;
-        case 7:
-            ui->textBrowser->setText(gitMerge + value1);
-            break;
-        case 8:
-            ui->textBrowser->setText(gitMergeAbort);
-            break;
-        case 9:
-            ui->textBrowser->setText(gitRemoteList);
-            break;
-        case 10:
-            ui->textBrowser->setText(gitRemoteOriginSetURL + value1);
-            break;
-        case 11:
-            ui->textBrowser->setText(gitLog);
-            break;
-        default:
-            break;
+        QString command = commandList[selectedFunctionsIndex].getName();
+        if (ui->optionList->isEnabled() && option.getName() != "なし") {
+            command += " " + option.getName();
         }
+        if (ui->textEdit->isEnabled()) {
+            if (option.isRequiredQuotes()) {
+                command += " \"" + value1 + "\"";
+            } else {
+                command += " " + value1;
+            }
+        }
+        ui->textBrowser->setText(command);
     }
-}
 
-void Command::dockerCommandGenerate()
-{
-    const QString dockerBuild           = "docker build";           // 1
-    const QString dockerImages          = "docker images";          // 2
-    const QString dockerRun             = "docker run";             // 3
-    const QString dockerPs              = "docker ps";              // 4
-    const QString dockerImagePure       = "docker image pure";      // 5
-    const QString dockerExec            = "docker exec";            // 6
-    const QString dockerPull            = "docker pull";            // 7
-    const QString dockerPush            = "docker push";            // 8
-    const QString dockerLogs            = "docker logs";            // 9
-    const QString dockerStop            = "docker stop";            // 10
-    const QString dockerRm              = "docker rm";              // 11
-    const QString dockerRmi             = "docker rmi";             // 12
-    const QString dockerNetworkLs       = "docker network ls";      // 13
-    const QString dockerVolumeLs        = "docker volume ls";       // 14
-    const QString dockerComposeUp       = "docker compose up";      // 17
-    const QString dockerComposeDown     = "docker compose down";    // 18
-    const QString dockerComposeBuild    = "docker compose build";   // 19
-    const QString dockerComposeLogs     = "docker compose logs";    // 20
-    const QString dockerComposePs       = "docker compose ps";      // 21
-    const QString dockerComposeStop     = "docker compose stop";    // 22
-    const QString dockerComposeStart    = "docker compose start";   // 23
-    const QString dockerComposeExec     = "docker compose exec";    // 24
-    const QString dockerComposeKill     = "docker compose kill";    // 25
-
-    const QList<QString> dockerCommandList = {
-        dockerBuild,
-        dockerImages,
-        dockerRun,
-        dockerPs,
-        dockerImagePure,
-        dockerExec,
-        dockerPull,
-        dockerPush,
-        dockerLogs,
-        dockerStop,
-        dockerRm,
-        dockerRmi,
-        dockerNetworkLs,
-        dockerVolumeLs,
-        NULL,
-        NULL,
-        dockerComposeUp,
-        dockerComposeDown,
-        dockerComposeBuild,
-        dockerComposeLogs,
-        dockerComposePs,
-        dockerComposeStop,
-        dockerComposeStart,
-        dockerComposeExec,
-        dockerComposeKill
-    };
-
-    const int functionsIndex = ui->functionsList->currentIndex();
-    const QString value1 = ui->textEdit->text();
-
-    // simple validation
-    if (!containsNoQuotes(value1)) {
-        showErrorAlert();
-    } else if(functionsIndex != 0){
-        ui->textBrowser->setText(dockerCommandList[functionsIndex-1]);
-    }
 }
 
 void Command::copy()

@@ -110,27 +110,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="53"/>
+        <location filename="../gui/command/command.ui" line="39"/>
         <source>Generate command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="30"/>
+        <location filename="../gui/command/command.ui" line="81"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="23"/>
+        <location filename="../gui/command/command.ui" line="95"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="75"/>
+        <location filename="../gui/command/command.ui" line="119"/>
+        <source>Option List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="64"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/command/command.ui" line="63"/>
+        <location filename="../gui/command/command.ui" line="49"/>
+        <source>Functions List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/command/command.ui" line="88"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
