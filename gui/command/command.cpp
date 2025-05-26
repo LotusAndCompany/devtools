@@ -118,25 +118,29 @@ QList<CommandFunction> getGitCommands() {
 QList<CommandFunction> getDockerCommands() {
     return {
         CommandFunction("docker build", "ビルド", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
+            CommandOption("-t", true, "名前とtag", false),
+            CommandOption("-f", true, "ファイル", false),
         }),
         CommandFunction("docker images", "イメージ一覧を表示", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
+            CommandOption("--all", false, "", false),
+            CommandOption("--quiet", false, "", false),
         }),
         CommandFunction("docker run", "コンテナの作成、実行", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker image prune", "不要なイメージの削除", {
             CommandOption("なし", false, "", false),
         }),
         CommandFunction("docker exec", "実行中のコンテナ内でコマンドを実行", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker pull", "リポジトリのダウンロード", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker push", "リポジトリにプッシュ", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker logs", "ログを表示", {
             CommandOption("なし", false, "", false),
@@ -145,10 +149,10 @@ QList<CommandFunction> getDockerCommands() {
             CommandOption("なし", false, "", false),
         }),
         CommandFunction("docker rm", "停止したコンテナの削除", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker rmi", "イメージの削除", {
-            CommandOption("なし", false, "", false),
+            CommandOption("なし", true, "", false),
         }),
         CommandFunction("docker network ls", "作成済みのネットワーク一覧を表示", {
             CommandOption("なし", false, "", false),
