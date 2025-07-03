@@ -20,11 +20,8 @@ private:
     void init();
     void selectedCategory();
     void selectedFunction();
-    void selectedGitFunction();
-    void selectedDockerFunction();
+    void selectedOption();    
     void generate();
-    void gitCommandGenerate();
-    void dockerCommandGenerate();
     void reset();
     void clear();
     void copy();

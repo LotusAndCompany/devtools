@@ -114,27 +114,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+22"/>
         <source>Generate command</source>
         <translation type="unfinished">コマンド生成</translation>
     </message>
     <message>
-        <location line="-23"/>
+        <location line="+42"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
     <message>
-        <location line="-7"/>
+        <location line="+14"/>
         <source>Clear</source>
         <translation type="unfinished">クリア</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+24"/>
+        <source>Option List</source>
+        <translation type="unfinished">オプションリスト</translation>
+    </message>
+    <message>
+        <location line="-55"/>
         <source>Reset</source>
         <translation type="unfinished">リセット</translation>
     </message>
     <message>
-        <location line="-12"/>
+        <location line="-15"/>
+        <source>Functions List</source>
+        <translation type="unfinished">機能リスト</translation>
+    </message>
+    <message>
+        <location line="+39"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -704,7 +714,7 @@
     <message>
         <location line="+4"/>
         <source>Command Generation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">コマンド生成</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -725,10 +735,6 @@
         <location line="+1"/>
         <source>Send HTTP Request</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Command Genration</source>
-        <translation type="vanished">コマンド生成</translation>
     </message>
     <message>
         <location line="-10"/>
@@ -854,7 +860,7 @@ Choose a tool from the side panel</source>
         <translation type="unfinished">保存</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+176"/>
         <source>Enter title...</source>
         <translation type="unfinished">タイトルを入力...</translation>
     </message>
@@ -865,7 +871,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+74"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+106"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
@@ -875,7 +881,7 @@ Choose a tool from the side panel</source>
         <translation type="unfinished">テキストを入力...</translation>
     </message>
     <message>
-        <source>Command Genration</source>
+        <source>Command Generation</source>
         <translation type="obsolete">コマンド生成</translation>
     </message>
     <message>

@@ -84,21 +84,7 @@ background-color: rgb(175, 174, 177);</string>
     </sizepolicy>
    </property>
    <property name="styleSheet">
-    <string notr="true">QTreeWidget {
-    background-color: #555555;
-    color: #333333;
-}
-
-QTreeWidget::item {
-    background-color: #999999;
-    color: #000000;
-    border-bottom: 1px solid #d3d3d3;
-}
-
-QTreeWidget::item:selected {
-    background-color: #0078d7;
-    color: #ffffff;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="headerHidden">
     <bool>true</bool>
@@ -137,7 +123,6 @@ QTreeWidget::item:selected {
    <property name="styleSheet">
     <string notr="true">QPlainTextEdit {
     padding: 0px 0px 5px 0px;
-    background-color: #000000;
 }</string>
    </property>
    <property name="placeholderText">

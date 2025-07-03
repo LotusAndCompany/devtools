@@ -47,6 +47,17 @@ phraseGeneration::phraseGeneration(QWidget *parent)
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     ui->titleTreeWidget->setColumnWidth(1, 40);
 
+    // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
+    QPalette palette = this->palette();
+    // TODO: QPalette::WindowとQPalette::WindowTextを比較してテーマカラーを判別するようにする
+    QColor baseColor = palette.color(QPalette::Base);
+    QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
+    ui->titleTreeWidget->setStyleSheet(QString(
+            "QTreeWidget::item { border-bottom: 1px solid %1; }"
+            "QTreeWidget::item:selected { background-color: #0078d7; color: #ffffff; }"
+        ).arg(borderColor.name())
+    );
+
     ui->titleTreeWidget->setVisible(false);
     loadTitles();
 }
@@ -54,6 +65,29 @@ phraseGeneration::phraseGeneration(QWidget *parent)
 phraseGeneration::~phraseGeneration()
 {
     delete ui;
+}
+
+//カラーテーマ変更時に走る処理
+void phraseGeneration::changeEvent(QEvent *event) {
+    if (event->type() == QEvent::PaletteChange) {
+        QPalette palette = this->palette();
+        QPalette templateTextPalette = ui->templateText->palette();
+        templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
+        ui->templateText->setPalette(templateTextPalette);
+
+        // ダークモードかライトモードか判定
+        // TODO: QPalette::WindowとQPalette::WindowTextを比較してテーマカラーを判別するようにする
+        QColor baseColor = palette.color(QPalette::Base);
+        QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
+
+        // QTreeWidget のスタイルを更新
+        ui->titleTreeWidget->setStyleSheet(QString(
+                "QTreeWidget::item { border-bottom: 1px solid %1; }"
+                "QTreeWidget::item:selected { background-color: #0078d7; color: #ffffff; }"
+           ).arg(borderColor.name())
+        );
+    }
+    QWidget::changeEvent(event);
 }
 
 void phraseGeneration::loadTitles()
@@ -179,13 +213,13 @@ void phraseGeneration::handleToggleTreeButtonClick()
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
-        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/close.svg"));
+        ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
-        ui->toggleTreeButton->setIcon(QIcon(":/icons/dark/material/menu.svg"));
+        ui->toggleTreeButton->setIcon(QIcon::fromTheme("menu"));
         this->layout()->removeWidget(ui->templateText);
         static_cast<QGridLayout*>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);

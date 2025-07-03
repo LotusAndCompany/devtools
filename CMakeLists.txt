@@ -76,7 +76,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         res/dev-tools_en.ts
 
         main/main.cpp
-        vcpkg.json
+        vcpkg.json        
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )
@@ -110,7 +110,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # command
     qt_add_library(${PROJECT_NAME}_command STATIC
-        gui/command/command.h gui/command/command.cpp gui/command/command.ui
+        gui/command/command.h gui/command/command.cpp gui/command/command.ui gui/command/command_option.h
+        gui/command/command_function.h
     )
 
     # phrase_generation
