@@ -180,6 +180,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${YAML_CPP_LIBRARIES}
     )
 
+    # qr_code_generation
+    qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC
+        gui/qr_code/qr_code_generation_gui.h 
+        gui/qr_code/qr_code_generation_gui.cpp 
+        gui/qr_code/qr_code_generation_gui.ui
+    )
+
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
     #    AUTOMOC ON
     #    AUTOUIC ON
@@ -241,6 +248,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
     ${PROJECT_NAME}_data_conversion
+    ${PROJECT_NAME}_qr_code_generation
 )
 
 foreach (MODULE ${MODULE_LIST})
