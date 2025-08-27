@@ -10,11 +10,7 @@ namespace Ui {
 class QRCodeGenerationGUI;
 }
 
-class QLineEdit;
 class QTextEdit;
-class QComboBox;
-class QCheckBox;
-class QDateTimeEdit;
 
 class QRCodeGenerationGUI : public GuiTool
 {
@@ -39,15 +35,7 @@ private:
     Ui::QRCodeGenerationGUI *ui;
     
     enum QRCodeType {
-        Text,
-        URL,
-        Email,
-        Phone,
-        SMS,
-        WiFi,
-        Contact,
-        CalendarEvent,
-        GeoLocation
+        Text
     };
     
     void initializeCategories();
@@ -55,16 +43,8 @@ private:
     void clearAllParameters();
     QString generateQRCodeContent();
     
-    // Parameter widgets for different types
+    // Parameter widget for text type
     QWidget* createTextWidget();
-    QWidget* createURLWidget();
-    QWidget* createEmailWidget();
-    QWidget* createPhoneWidget();
-    QWidget* createSMSWidget();
-    QWidget* createWiFiWidget();
-    QWidget* createContactWidget();
-    QWidget* createCalendarWidget();
-    QWidget* createGeoWidget();
     
     QStackedWidget* parameterStack;
     QRCodeType currentType;

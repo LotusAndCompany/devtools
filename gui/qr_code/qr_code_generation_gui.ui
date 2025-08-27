@@ -41,46 +41,6 @@
             <string>Text</string>
            </property>
           </item>
-          <item>
-           <property name="text">
-            <string>URL</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Email</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Phone Number</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>SMS</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>WiFi Network</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Contact (vCard)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Calendar Event</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Geo Location</string>
-           </property>
-          </item>
          </widget>
         </item>
        </layout>
