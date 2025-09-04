@@ -18,6 +18,7 @@
         <file>dark/material/add.svg</file>
         <file>dark/material/close.svg</file>
         <file>dark/material/menu.svg</file>
+        <file>dark/material/qr_code.svg</file>
 
         <!-- remix -->
         <file>dark/remix/anticlockwise.svg</file>
