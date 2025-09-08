@@ -9,6 +9,11 @@
 #include <QApplication>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QImage>
+#include "core/qr_tool/qrcodegen.hpp"
+
+using qrcodegen::QrCode;
+using qrcodegen::QrSegment;
 
 QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent)
     : GuiTool(parent)
@@ -145,8 +150,32 @@ void QRCodeGenerationGUI::onGenerateClicked()
     // Display content preview
     ui->contentPreviewEdit->setPlainText(content);
     
-    // TODO: Actually generate QR code image
-    ui->qrCodeLabel->setText(tr("QR Code Generated\n(Implementation pending)"));
+    // QRコード生成
+    const QrCode qr = QrCode::encodeText(content.toUtf8().constData(), QrCode::Ecc::LOW);
+
+    int scale = 8; // 自由に設定させるかは要検討
+
+    int size = qr.getSize();
+    QImage image(size * scale, size * scale, QImage::Format_RGB32);
+    image.fill(Qt::white);
+
+    // QRコード描画
+    for (int y = 0; y < size; y++) {
+        for (int x = 0; x < size; x++) {
+            if (qr.getModule(x, y)) {
+                for (int dy = 0; dy < scale; dy++) {
+                    for (int dx = 0; dx < scale; dx++) {
+                        image.setPixel(x * scale + dx, y * scale + dy, qRgb(0, 0, 0));
+                    }
+                }
+            }
+        }
+    }
+
+    ui->qrCodeLabel->setPixmap(QPixmap::fromImage(image));
+    // 枠いっぱいにするかどうか
+    //ui->qrCodeLabel->setScaledContents(true);  // サイズに合わせて拡大縮小
+    ui->qrCodeLabel->show();
     
     // Enable output buttons
     ui->copyButton->setEnabled(true);

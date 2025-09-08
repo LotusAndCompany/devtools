@@ -93,6 +93,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/under_development_exception.h
         core/tool/tool_id_fields.h
         core/enum_cast.h
+        core/qr_tool/qrcodegen.hpp core/qr_tool/qrcodegen.cpp
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
