@@ -183,6 +183,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # qr_code_generation
     qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC
+        core/qr_tool/content_generator.h
+        core/qr_tool/content_generator.cpp
         gui/qr_code/qr_code_generation_gui.h 
         gui/qr_code/qr_code_generation_gui.cpp 
         gui/qr_code/qr_code_generation_gui.ui
