@@ -31,7 +31,7 @@
     <message>
         <location line="+82"/>
         <source>Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>リビジョン</translation>
     </message>
     <message>
         <location line="+62"/>
@@ -46,22 +46,22 @@
     <message>
         <location line="+17"/>
         <source>DevTools relies on the following thirdparty softwares</source>
-        <translation type="unfinished"></translation>
+        <translation>DevToolsは以下のサードパーティソフトウェアを使用しています</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>TODO: Grid Layoutにする、リンクを追加する</source>
-        <translation type="unfinished"></translation>
+        <translation>TODO: Grid Layoutにする、リンクを追加する</translation>
     </message>
     <message>
         <location line="+52"/>
         <source>License</source>
-        <translation type="unfinished">ライセンス</translation>
+        <translation>ライセンス</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>No contents, Work in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>コンテンツはありません。開発中です。</translation>
     </message>
 </context>
 <context>
@@ -111,42 +111,42 @@
     <message>
         <location filename="../gui/command/command.ui" line="+17"/>
         <source>GroupBox</source>
-        <translation type="unfinished"></translation>
+        <translation>グループボックス</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Generate command</source>
-        <translation type="unfinished">コマンド生成</translation>
+        <translation>コマンド生成</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Clear</source>
-        <translation type="unfinished">クリア</translation>
+        <translation>クリア</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Option List</source>
-        <translation type="unfinished">オプションリスト</translation>
+        <translation>オプションリスト</translation>
     </message>
     <message>
         <location line="-55"/>
         <source>Reset</source>
-        <translation type="unfinished">リセット</translation>
+        <translation>リセット</translation>
     </message>
     <message>
         <location line="-15"/>
         <source>Functions List</source>
-        <translation type="unfinished">機能リスト</translation>
+        <translation>機能リスト</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストラベル</translation>
     </message>
 </context>
 <context>
@@ -410,12 +410,12 @@
     <message>
         <location filename="../gui/image/resize/image_resize_gui.cpp" line="+78"/>
         <source>Save Failed</source>
-        <translation type="unfinished">保存失敗</translation>
+        <translation>保存失敗</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Failed to save the image.</source>
-        <translation type="unfinished">画像の保存に失敗しました。</translation>
+        <translation>画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -471,12 +471,12 @@
     <message>
         <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+72"/>
         <source>Save Failed</source>
-        <translation type="unfinished">保存失敗</translation>
+        <translation>保存失敗</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Failed to save the image.</source>
-        <translation type="unfinished">画像の保存に失敗しました。</translation>
+        <translation>画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -526,12 +526,12 @@
     <message>
         <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+79"/>
         <source>Save Failed</source>
-        <translation type="unfinished">保存失敗</translation>
+        <translation>保存失敗</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Failed to save the image.</source>
-        <translation type="unfinished">画像の保存に失敗しました。</translation>
+        <translation>画像の保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -545,8 +545,8 @@
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+173"/>
-        <source>ファイル</source>
-        <translation type="unfinished"></translation>
+        <source>File</source>
+        <translation>ファイル</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -560,18 +560,18 @@
     </message>
     <message>
         <location line="+8"/>
-        <source>ウィンドウを閉じる</source>
-        <translation type="unfinished"></translation>
+        <source>Close Window</source>
+        <translation>ウィンドウを閉じる</translation>
     </message>
     <message>
         <location line="+8"/>
-        <source>メインウィンドウを表示</source>
-        <translation type="unfinished"></translation>
+        <source>Show Main Window</source>
+        <translation>メインウィンドウを表示</translation>
     </message>
     <message>
         <location line="-5"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
 </context>
 <context>
@@ -724,37 +724,37 @@
     <message>
         <location line="+4"/>
         <source>Phrase Generation</source>
-        <translation type="unfinished">定型文生成</translation>
+        <translation>定型文生成</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Generate and manage Phrase</source>
-        <translation type="unfinished"></translation>
+        <translation>定型文の生成と管理</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Command Generation</source>
-        <translation type="unfinished">コマンド生成</translation>
+        <translation>コマンド生成</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Data/Format Conversion</source>
-        <translation type="unfinished">データ変換/フォーマット変換</translation>
+        <translation>データ変換/フォーマット変換</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
-        <translation type="unfinished">JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
+        <translation>JSON/YAML/TOMLの相互変換とフォーマット変換</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>HTTP Request</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPリクエスト</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Send HTTP Request</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPリクエストを送信</translation>
     </message>
     <message>
         <location line="-10"/>
@@ -782,82 +782,82 @@ Choose a tool from the side panel</source>
     <message>
         <location filename="../gui/api_tool.ui" line="+70"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>送信</translation>
     </message>
     <message>
         <location line="-33"/>
         <source>GET</source>
-        <translation type="unfinished"></translation>
+        <translation>GET</translation>
     </message>
     <message>
         <location line="-23"/>
         <source>API Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>APIツール</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>POST</source>
-        <translation type="unfinished"></translation>
+        <translation>POST</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>PUT</source>
-        <translation type="unfinished"></translation>
+        <translation>PUT</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>DELETE</source>
-        <translation type="unfinished"></translation>
+        <translation>DELETE</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>パラメータ</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>認証</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名:</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Body</source>
-        <translation type="unfinished"></translation>
+        <translation>ボディ</translation>
     </message>
     <message>
         <location filename="../gui/api_tool.cpp" line="+44"/>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>キー</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>値</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>説明</translation>
     </message>
     <message>
         <location line="+96"/>
         <source>Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>エラー: </translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>ステータス: %1 %2 時間: %3ms サイズ: %4</translation>
     </message>
 </context>
 <context>
@@ -872,33 +872,33 @@ Choose a tool from the side panel</source>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>フォーム</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Save</source>
-        <translation type="unfinished">保存</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location line="+176"/>
         <source>Enter title...</source>
-        <translation type="unfinished">タイトルを入力...</translation>
+        <translation>タイトルを入力...</translation>
     </message>
     <message>
         <location line="-40"/>
         <source>Delete</source>
-        <translation type="unfinished">削除</translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location line="+19"/>
         <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
         <source>Copy</source>
-        <translation type="unfinished">コピー</translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <location line="-94"/>
         <source>Enter text...</source>
-        <translation type="unfinished">テキストを入力...</translation>
+        <translation>テキストを入力...</translation>
     </message>
     <message>
         <source>Command Generation</source>

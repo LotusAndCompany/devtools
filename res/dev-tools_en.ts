@@ -501,7 +501,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="173"/>
-        <source>ファイル</source>
+        <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -516,12 +516,12 @@
     </message>
     <message>
         <location filename="../gui/main_window.ui" line="206"/>
-        <source>ウィンドウを閉じる</source>
+        <source>Close Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/main_window.ui" line="214"/>
-        <source>メインウィンドウを表示</source>
+        <source>Show Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

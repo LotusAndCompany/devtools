@@ -170,7 +170,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>ファイル</string>
+     <string>File</string>
     </property>
     <addaction name="actionCloseWindow"/>
     <addaction name="actionShowMainWindow"/>
@@ -203,7 +203,7 @@
   </action>
   <action name="actionCloseWindow">
    <property name="text">
-    <string>ウィンドウを閉じる</string>
+    <string>Close Window</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
@@ -211,7 +211,7 @@
   </action>
   <action name="actionShowMainWindow">
    <property name="text">
-    <string>メインウィンドウを表示</string>
+    <string>Show Main Window</string>
    </property>
   </action>
  </widget>
