@@ -19,6 +19,7 @@ Sidemenu::Sidemenu(QWidget *parent)
     buttonGroup->setExclusive(true);
 
     connect(buttonGroup, &QButtonGroup::idToggled, this, &Sidemenu::onButtonToggled);
+    connect(ui->searchBoxEdit, &QLineEdit::textChanged, this, &Sidemenu::onSearchTextChanged);
 
     // WIP: 適当なボタンを追加する
     registerItem(ID::IMAGE_RESIZE);
@@ -90,6 +91,7 @@ void Sidemenu::registerItem(ID id)
     SidemenuItem *const item = new SidemenuItem(id, this);
     buttonGroup->addButton(item, static_cast<int>(id));
     ui->scrollAreaLayout->addWidget(item);
+    allItems.append(item);
 }
 
 void Sidemenu::changeEvent(QEvent *event)
@@ -122,4 +124,20 @@ void Sidemenu::onButtonToggled(int intID, bool checked)
     {
         qWarning() << e.message;
     }
+}
+
+void Sidemenu::filterItems(const QString &searchText)
+{
+    const QString lowerSearchText = searchText.toLower();
+    
+    for (SidemenuItem *item : allItems) {
+        const QString itemText = item->text().toLower();
+        const bool shouldShow = searchText.isEmpty() || itemText.contains(lowerSearchText);
+        item->setVisible(shouldShow);
+    }
+}
+
+void Sidemenu::onSearchTextChanged(const QString &text)
+{
+    filterItems(text);
 }
