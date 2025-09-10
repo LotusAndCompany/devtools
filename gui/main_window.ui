@@ -168,6 +168,13 @@
      <height>36</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>ファイル</string>
+    </property>
+    <addaction name="actionCloseWindow"/>
+    <addaction name="actionShowMainWindow"/>
+   </widget>
    <widget class="QMenu" name="menuDevTools">
     <property name="title">
      <string notr="true">DevTools</string>
@@ -175,6 +182,7 @@
     <addaction name="actionAboutDevTools"/>
     <addaction name="actionSettings"/>
    </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuDevTools"/>
   </widget>
   <action name="actionSettings">
@@ -191,6 +199,19 @@
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionCloseWindow">
+   <property name="text">
+    <string>ウィンドウを閉じる</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionShowMainWindow">
+   <property name="text">
+    <string>メインウィンドウを表示</string>
    </property>
   </action>
  </widget>

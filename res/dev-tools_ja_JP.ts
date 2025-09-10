@@ -544,7 +544,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.ui" line="+182"/>
+        <location filename="../gui/main_window.ui" line="+173"/>
+        <source>ファイル</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -552,6 +557,21 @@
         <location line="+8"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>ウィンドウを閉じる</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>メインウィンドウを表示</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Ctrl+W</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -871,7 +891,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>

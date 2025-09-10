@@ -46,6 +46,14 @@ void MainWindow::onActionTriggered(QAction *action)
         aboutDialog->show();
     } else if (action == ui->actionSettings) {
         qDebug() << "Settings";
+    } else if (action == ui->actionCloseWindow) {
+        qDebug() << "Close Window";
+        close();
+    } else if (action == ui->actionShowMainWindow) {
+        qDebug() << "Show Main Window";
+        show();
+        raise();
+        activateWindow();
     }
 }
 

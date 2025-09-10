@@ -500,13 +500,33 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.ui" line="182"/>
-        <source>Settings</source>
+        <location filename="../gui/main_window.ui" line="173"/>
+        <source>ファイル</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/main_window.ui" line="190"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="198"/>
         <source>About DevTools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="206"/>
+        <source>ウィンドウを閉じる</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="214"/>
+        <source>メインウィンドウを表示</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="209"/>
+        <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -730,7 +750,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="223"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="108"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
