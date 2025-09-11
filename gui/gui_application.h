@@ -29,6 +29,18 @@ public:
      * @return 現在の言語。言語に依るかも知れないが、ja_JPのような形式。
      */
     inline QString language() { return translator().language(); }
+    
+    /**
+     * @brief 言語を変更する
+     * @param languageCode 新しい言語コード（ja_JP, en など）
+     * @return 変更に成功したかどうか
+     */
+    bool changeLanguage(const QString &languageCode);
+    
+    /**
+     * @brief システムのカラースキームを適用する
+     */
+    void applySystemColorScheme();
 
     void setup() override;
     int start() override;

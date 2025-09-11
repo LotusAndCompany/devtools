@@ -539,6 +539,69 @@
     </message>
 </context>
 <context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="14"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="33"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="41"/>
+        <source>日本語</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="44"/>
+        <source>ja_JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="49"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="52"/>
+        <source>en</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="74"/>
+        <source>Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="80"/>
+        <source>Window Behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="86"/>
+        <source>Always on top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="93"/>
+        <source>Remember window size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="100"/>
+        <source>Remember window position</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Sidemenu</name>
     <message>
         <location filename="../gui/sidemenu.ui" line="50"/>

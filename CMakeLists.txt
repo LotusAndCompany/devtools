@@ -96,6 +96,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
+        gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp gui/menubar/settings_dialog.ui
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp

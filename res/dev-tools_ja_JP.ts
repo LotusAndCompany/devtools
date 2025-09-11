@@ -583,6 +583,69 @@
     </message>
 </context>
 <context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="+14"/>
+        <source>Settings</source>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>General</source>
+        <translation>一般</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Language:</source>
+        <translation>言語:</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>日本語</source>
+        <translation>日本語</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>ja_JP</source>
+        <translation>ja_JP</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>English</source>
+        <translation>English</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>en</source>
+        <translation>en</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Window</source>
+        <translation>ウィンドウ</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Window Behavior</source>
+        <translation>ウィンドウの動作</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Always on top</source>
+        <translation>常に最前面に表示</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Remember window size</source>
+        <translation>ウィンドウサイズを記憶</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Remember window position</source>
+        <translation>ウィンドウ位置を記憶</translation>
+    </message>
+</context>
+<context>
     <name>Sidemenu</name>
     <message>
         <source>Home</source>
