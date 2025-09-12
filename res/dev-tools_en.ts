@@ -536,94 +536,371 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="64"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="104"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="83"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="129"/>
         <source>Generate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="90"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="136"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="116"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="162"/>
         <source>QR Code Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="131"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="295"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="177"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="996"/>
         <source>QR Code will appear here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="146"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="192"/>
         <source>Copy Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="156"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="202"/>
         <source>Save Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="174"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="220"/>
         <source>QR code content preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="78"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="94"/>
         <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="79"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="97"/>
         <source>Text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="253"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="296"/>
+        <source>Enter phone...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="309"/>
+        <source>Enter email...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="585"/>
+        <source>Password is required for WPA/WEP security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="607"/>
+        <source>At least phone or email is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="630"/>
+        <source>Start date/time cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="635"/>
+        <source>End date/time cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="658"/>
+        <source>Latitude must be between -90 and 90</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="670"/>
+        <source>Longitude must be between -180 and 180</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="834"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="253"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="834"/>
         <source>Please fill in required fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="304"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1005"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="304"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1005"/>
         <source>QR code content copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="309"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1010"/>
         <source>Save QR Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="309"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1010"/>
         <source>PNG Files (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="312"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1013"/>
         <source>Saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="312"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1013"/>
         <source>QR code saved (implementation pending)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="46"/>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="51"/>
+        <source>Email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="56"/>
+        <source>Phone Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="61"/>
+        <source>SMS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="66"/>
+        <source>WiFi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="71"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="76"/>
+        <source>Calendar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="81"/>
+        <source>Geo Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="119"/>
+        <source>Enter URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="122"/>
+        <source>URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="144"/>
+        <source>Enter email address...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="147"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="312"/>
+        <source>Email:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="169"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="194"/>
+        <source>Enter phone number...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="172"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="197"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="299"/>
+        <source>Phone:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="207"/>
+        <source>Enter message...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="210"/>
+        <source>Message:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="234"/>
+        <source>Enter SSID...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="237"/>
+        <source>SSID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="247"/>
+        <source>Enter password...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="250"/>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="263"/>
+        <source>Security:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="266"/>
+        <source>Hidden Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="285"/>
+        <source>Enter name...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="286"/>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="338"/>
+        <source>Enter event title...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="341"/>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="356"/>
+        <source>Start:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="371"/>
+        <source>End:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="397"/>
+        <source>Enter latitude...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="400"/>
+        <source>Latitude:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="410"/>
+        <source>Enter longitude...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="413"/>
+        <source>Longitude:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="512"/>
+        <source>Text cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="521"/>
+        <source>URL cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="524"/>
+        <source>URL must start with http:// or https://</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="533"/>
+        <source>Email cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="536"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="613"/>
+        <source>Invalid email format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="545"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="559"/>
+        <source>Phone number cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="548"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="562"/>
+        <source>Invalid phone number format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="566"/>
+        <source>Message cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="578"/>
+        <source>SSID cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="598"/>
+        <source>Name cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="625"/>
+        <source>Event title cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="641"/>
+        <source>End time must be after start time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="652"/>
+        <source>Latitude cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="664"/>
+        <source>Longitude cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

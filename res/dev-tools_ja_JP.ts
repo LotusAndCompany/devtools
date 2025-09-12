@@ -580,20 +580,24 @@
         <translation>テキスト</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>URL</source>
-        <translation type="vanished">URL</translation>
+        <translation>URL</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Email</source>
-        <translation type="vanished">メールアドレス</translation>
+        <translation>メールアドレス</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Phone Number</source>
-        <translation type="vanished">電話番号</translation>
+        <translation>電話番号</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>SMS</source>
-        <translation type="vanished">SMS</translation>
+        <translation>SMS</translation>
     </message>
     <message>
         <source>WiFi Network</source>
@@ -608,8 +612,9 @@
         <translation type="vanished">カレンダーイベント</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>Geo Location</source>
-        <translation type="vanished">位置情報</translation>
+        <translation>位置情報</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -617,14 +622,14 @@
         <translation>パラメータ</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+25"/>
         <source>Generate</source>
         <translation>生成</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Clear</source>
-        <translation type="unfinished">クリア</translation>
+        <translation>クリア</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -633,7 +638,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+295"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+996"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -645,7 +650,7 @@
     <message>
         <location line="+10"/>
         <source>Save Image</source>
-        <translation type="unfinished">画像を保存</translation>
+        <translation>画像を保存</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -653,54 +658,350 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-217"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-902"/>
         <source>Enter text...</source>
-        <translation type="unfinished">テキストを入力...</translation>
+        <translation>テキストを入力...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation>テキスト:</translation>
     </message>
     <message>
-        <location line="+174"/>
+        <location line="+199"/>
+        <source>Enter phone...</source>
+        <translation>電話番号を入力...</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Enter email...</source>
+        <translation>メールアドレスを入力...</translation>
+    </message>
+    <message>
+        <location line="+276"/>
+        <source>Password is required for WPA/WEP security</source>
+        <translation>WPA/WEPセキュリティにはパスワードが必要です</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>At least phone or email is required</source>
+        <translation>電話番号またはメールアドレスのいずれかが必要です</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Start date/time cannot be empty</source>
+        <translation>開始日時を入力してください</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>End date/time cannot be empty</source>
+        <translation>終了日時を入力してください</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Latitude must be between -90 and 90</source>
+        <translation>緯度は-90から90の範囲で入力してください</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Longitude must be between -180 and 180</source>
+        <translation>経度は-180から180の範囲で入力してください</translation>
+    </message>
+    <message>
+        <location line="+164"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Please fill in required fields</source>
-        <translation type="unfinished"></translation>
+        <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+171"/>
         <source>Copied</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー完了</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>QR code content copied to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>QRコードの内容をクリップボードにコピーしました</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Save QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>QRコードを保存</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>PNG Files (*.png)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNGファイル (*.png)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Saved</source>
-        <translation type="unfinished"></translation>
+        <translation>保存完了</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>QR code saved (implementation pending)</source>
-        <translation type="unfinished"></translation>
+        <translation>QRコードを保存しました</translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="-154"/>
+        <source>WiFi</source>
+        <translation>WiFi</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Contact</source>
+        <translation>連絡先</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Calendar</source>
+        <translation>カレンダー</translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-894"/>
+        <source>Enter URL...</source>
+        <translation>URLを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>URL:</source>
+        <translation>URL:</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Enter email address...</source>
+        <translation>メールアドレスを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+165"/>
+        <source>Email:</source>
+        <translation>メール:</translation>
+    </message>
+    <message>
+        <location line="-143"/>
+        <location line="+25"/>
+        <source>Enter phone number...</source>
+        <translation>電話番号を入力...</translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <location line="+25"/>
+        <location line="+102"/>
+        <source>Phone:</source>
+        <translation>電話:</translation>
+    </message>
+    <message>
+        <location line="-92"/>
+        <source>Enter message...</source>
+        <translation>メッセージを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Message:</source>
+        <translation>メッセージ:</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Enter SSID...</source>
+        <translation>SSIDを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>SSID:</source>
+        <translation>SSID:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter password...</source>
+        <translation>パスワードを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Password:</source>
+        <translation>パスワード:</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Security:</source>
+        <translation>セキュリティ:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Hidden Network</source>
+        <translation>非表示ネットワーク</translation>
+    </message>
+    <message>
+        <location line="+375"/>
+        <source>End time must be after start time</source>
+        <translation>終了時刻は開始時刻より後である必要があります</translation>
+    </message>
+    <message>
+        <source>WPA</source>
+        <translation type="vanished">WPA</translation>
+    </message>
+    <message>
+        <source>WEP</source>
+        <translation type="vanished">WEP</translation>
+    </message>
+    <message>
+        <source>nopass</source>
+        <translation type="vanished">パスワードなし</translation>
+    </message>
+    <message>
+        <location line="-356"/>
+        <source>Enter name...</source>
+        <translation>名前を入力...</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Name:</source>
+        <translation>名前:</translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Enter event title...</source>
+        <translation>イベントタイトルを入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Event:</source>
+        <translation>イベント:</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Start:</source>
+        <translation>開始:</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>End:</source>
+        <translation>終了:</translation>
+    </message>
+    <message>
+        <source>YYYYMMDDTHHMMSS</source>
+        <translation type="vanished">YYYYMMDDTHHMMSS</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Enter latitude...</source>
+        <translation>緯度を入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Latitude:</source>
+        <translation>緯度:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter longitude...</source>
+        <translation>経度を入力...</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Longitude:</source>
+        <translation>経度:</translation>
+    </message>
+    <message>
+        <location line="+99"/>
+        <source>Text cannot be empty</source>
+        <translation>テキストを入力してください</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>URL cannot be empty</source>
+        <translation>URLを入力してください</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>URL must start with http:// or https://</source>
+        <translation>URLはhttp://またはhttps://で始まる必要があります</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Email cannot be empty</source>
+        <translation>メールアドレスを入力してください</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+77"/>
+        <source>Invalid email format</source>
+        <translation>メールアドレスの形式が無効です</translation>
+    </message>
+    <message>
+        <location line="-68"/>
+        <location line="+14"/>
+        <source>Phone number cannot be empty</source>
+        <translation>電話番号を入力してください</translation>
+    </message>
+    <message>
+        <location line="-11"/>
+        <location line="+14"/>
+        <source>Invalid phone number format</source>
+        <translation>電話番号の形式が無効です</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Message cannot be empty</source>
+        <translation>メッセージを入力してください</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>SSID cannot be empty</source>
+        <translation>SSIDを入力してください</translation>
+    </message>
+    <message>
+        <source>Password is required for WPA/WEP</source>
+        <translation type="vanished">WPA/WEPにはパスワードが必要です</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Name cannot be empty</source>
+        <translation>名前を入力してください</translation>
+    </message>
+    <message>
+        <source>Phone or email is required</source>
+        <translation type="vanished">電話番号またはメールアドレスが必要です</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Event title cannot be empty</source>
+        <translation>イベントタイトルを入力してください</translation>
+    </message>
+    <message>
+        <source>Start time cannot be empty</source>
+        <translation type="vanished">開始時刻を入力してください</translation>
+    </message>
+    <message>
+        <source>End time cannot be empty</source>
+        <translation type="vanished">終了時刻を入力してください</translation>
+    </message>
+    <message>
+        <source>Invalid date format</source>
+        <translation type="vanished">日付形式が無効です</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Latitude cannot be empty</source>
+        <translation>緯度を入力してください</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Longitude cannot be empty</source>
+        <translation>経度を入力してください</translation>
+    </message>
+    <message>
+        <source>Invalid latitude range</source>
+        <translation type="vanished">緯度の範囲が無効です</translation>
+    </message>
+    <message>
+        <source>Invalid longitude range</source>
+        <translation type="vanished">経度の範囲が無効です</translation>
     </message>
 </context>
 <context>
@@ -958,7 +1259,7 @@ Choose a tool from the side panel</source>
     <message>
         <location line="+10"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">パスワード:</translation>
     </message>
     <message>
         <location line="+15"/>

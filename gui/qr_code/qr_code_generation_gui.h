@@ -4,6 +4,13 @@
 #include <QWidget>
 #include <QMap>
 #include <QStackedWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QDateTimeEdit>
 #include "gui/gui_tool.h"
 
 namespace Ui {
@@ -15,6 +22,7 @@ class QTextEdit;
 class QRCodeGenerationGUI : public GuiTool
 {
     Q_OBJECT
+    Q_DISABLE_COPY(QRCodeGenerationGUI)
 
 public:
     explicit QRCodeGenerationGUI(QWidget *parent = nullptr);
@@ -35,7 +43,15 @@ private:
     Ui::QRCodeGenerationGUI *ui;
     
     enum QRCodeType {
-        Text
+        Text,
+        Url,
+        Email,
+        Phone,
+        Sms,
+        Wifi,
+        Contact,
+        Calendar,
+        Geo
     };
     
     void initializeCategories();
@@ -45,12 +61,29 @@ private:
     
     // Parameter widget for text type
     QWidget* createTextWidget();
+    QWidget* createUrlWidget();
+    QWidget* createEmailWidget();
+    QWidget* createPhoneWidget();
+    QWidget* createSmsWidget();
+    QWidget* createWifiWidget();
+    QWidget* createContactWidget();
+    QWidget* createCalendarWidget();
+    QWidget* createGeoWidget();
     
     QStackedWidget* parameterStack;
     QRCodeType currentType;
     
     // Widget references for easy access
     QMap<QString, QWidget*> parameterWidgets;
+    
+    // エラーラベル用のマップ
+    QMap<QString, QLabel*> errorLabels;
+    
+    // バリデーションメソッド
+    bool validateCurrentType();
+    void showValidationError(const QString& fieldKey, const QString& message);
+    void clearValidationErrors();
+    bool isValidPhoneNumber(const QString& phone);
 };
 
 #endif // QR_CODE_GENERATION_GUI_H

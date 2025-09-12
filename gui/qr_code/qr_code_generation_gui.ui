@@ -41,6 +41,46 @@
             <string>Text</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>URL</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Email</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Phone Number</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>SMS</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>WiFi</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Contact</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Calendar</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Geo Location</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -48,16 +88,16 @@
      </item>
      <item>
       <widget class="QGroupBox" name="parametersGroupBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
          <width>400</width>
-         <height>300</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>800</width>
-         <height>600</height>
+         <height>200</height>
         </size>
        </property>
        <property name="title">
@@ -66,6 +106,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_params">
         <item>
          <widget class="QStackedWidget" name="parameterStackedWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
