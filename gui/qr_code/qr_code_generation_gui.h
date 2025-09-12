@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QDateTimeEdit>
+#include <QImage>
 #include "gui/gui_tool.h"
 
 namespace Ui {
@@ -84,6 +85,9 @@ private:
     void showValidationError(const QString& fieldKey, const QString& message);
     void clearValidationErrors();
     bool isValidPhoneNumber(const QString& phone);
+    
+    // 生成されたQRコード画像を保持
+    QImage currentQRImage;
 };
 
 #endif // QR_CODE_GENERATION_GUI_H

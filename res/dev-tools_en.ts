@@ -557,7 +557,7 @@
     </message>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="177"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="996"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="999"/>
         <source>QR Code will appear here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -628,6 +628,8 @@
     </message>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="834"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1011"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1024"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -637,33 +639,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1005"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1011"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1024"/>
+        <source>QRコードが生成されていません。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1017"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1005"/>
-        <source>QR code content copied to clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1010"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1028"/>
         <source>Save QR Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1010"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1028"/>
         <source>PNG Files (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1013"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1037"/>
         <source>Saved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1013"/>
-        <source>QR code saved (implementation pending)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -901,6 +899,26 @@
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="664"/>
         <source>Longitude cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1017"/>
+        <source>QRコード画像をクリップボードにコピーしました。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1037"/>
+        <source>QRコード画像を保存しました: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1039"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1039"/>
+        <source>QRコード画像の保存に失敗しました。</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

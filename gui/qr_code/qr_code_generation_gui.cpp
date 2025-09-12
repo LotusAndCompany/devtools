@@ -980,6 +980,9 @@ void QRCodeGenerationGUI::onGenerateClicked()
         }
     }
 
+    // 生成されたQRコード画像をメンバ変数に保存
+    currentQRImage = image;
+    
     ui->qrCodeLabel->setPixmap(QPixmap::fromImage(image));
     // 枠いっぱいにするかどうか
     //ui->qrCodeLabel->setScaledContents(true);  // サイズに合わせて拡大縮小
@@ -996,20 +999,44 @@ void QRCodeGenerationGUI::onClearClicked()
     ui->qrCodeLabel->setText(tr("QR Code will appear here"));
     ui->copyButton->setEnabled(false);
     ui->saveButton->setEnabled(false);
+    
+    // 現在のQRコード画像をクリア
+    currentQRImage = QImage();
 }
 
 void QRCodeGenerationGUI::onCopyClicked()
 {
-    // TODO: Copy QR code image to clipboard
-    QApplication::clipboard()->setText(ui->contentPreviewEdit->toPlainText());
-    QMessageBox::information(this, tr("Copied"), tr("QR code content copied to clipboard"));
+    // 画像が生成されているかチェック
+    if (currentQRImage.isNull()) {
+        QMessageBox::warning(this, tr("Warning"), tr("QRコードが生成されていません。"));
+        return;
+    }
+    
+    // QRコード画像をクリップボードにコピー
+    QApplication::clipboard()->setImage(currentQRImage);
+    QMessageBox::information(this, tr("Copied"), tr("QRコード画像をクリップボードにコピーしました。"));
 }
 
 void QRCodeGenerationGUI::onSaveClicked()
 {
+    // 画像が生成されているかチェック
+    if (currentQRImage.isNull()) {
+        QMessageBox::warning(this, tr("Warning"), tr("QRコードが生成されていません。"));
+        return;
+    }
+    
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save QR Code"), "", tr("PNG Files (*.png)"));
     if (!fileName.isEmpty()) {
-        // TODO: Save QR code image
-        QMessageBox::information(this, tr("Saved"), tr("QR code saved (implementation pending)"));
+        // ファイル拡張子がない場合は".png"を自動追加
+        if (!fileName.toLower().endsWith(".png")) {
+            fileName += ".png";
+        }
+        
+        // 実際にファイル保存
+        if (currentQRImage.save(fileName, "PNG")) {
+            QMessageBox::information(this, tr("Saved"), tr("QRコード画像を保存しました: %1").arg(fileName));
+        } else {
+            QMessageBox::critical(this, tr("Error"), tr("QRコード画像の保存に失敗しました。"));
+        }
     }
 }

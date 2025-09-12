@@ -638,7 +638,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+996"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+999"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -658,7 +658,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-902"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-905"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -709,26 +709,33 @@
     </message>
     <message>
         <location line="+164"/>
+        <location line="+177"/>
+        <location line="+13"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-190"/>
         <source>Please fill in required fields</source>
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+177"/>
+        <location line="+13"/>
+        <source>QRコードが生成されていません。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-7"/>
         <source>Copied</source>
         <translation>コピー完了</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>QR code content copied to clipboard</source>
-        <translation>QRコードの内容をクリップボードにコピーしました</translation>
+        <translation type="vanished">QRコードの内容をクリップボードにコピーしました</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+11"/>
         <source>Save QR Code</source>
         <translation>QRコードを保存</translation>
     </message>
@@ -738,14 +745,13 @@
         <translation>PNGファイル (*.png)</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+9"/>
         <source>Saved</source>
         <translation>保存完了</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>QR code saved (implementation pending)</source>
-        <translation>QRコードを保存しました</translation>
+        <translation type="vanished">QRコードを保存しました</translation>
     </message>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="-154"/>
@@ -763,7 +769,7 @@
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-894"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-918"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -842,6 +848,26 @@
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
     <message>
+        <location line="+376"/>
+        <source>QRコード画像をクリップボードにコピーしました。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>QRコード画像を保存しました: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>QRコード画像の保存に失敗しました。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA</source>
         <translation type="vanished">WPA</translation>
     </message>
@@ -854,7 +880,7 @@
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-356"/>
+        <location line="-754"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>
