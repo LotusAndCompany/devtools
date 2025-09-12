@@ -580,44 +580,36 @@
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>URL</source>
-        <translation>URL</translation>
+        <translation type="vanished">URL</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Email</source>
-        <translation>メールアドレス</translation>
+        <translation type="vanished">メールアドレス</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Phone Number</source>
-        <translation>電話番号</translation>
+        <translation type="vanished">電話番号</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>SMS</source>
-        <translation>SMS</translation>
+        <translation type="vanished">SMS</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>WiFi Network</source>
-        <translation>WiFiネットワーク</translation>
+        <translation type="vanished">WiFiネットワーク</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Contact (vCard)</source>
-        <translation>連絡先 (vCard)</translation>
+        <translation type="vanished">連絡先 (vCard)</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Calendar Event</source>
-        <translation>カレンダーイベント</translation>
+        <translation type="vanished">カレンダーイベント</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Geo Location</source>
-        <translation>位置情報</translation>
+        <translation type="vanished">位置情報</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -641,7 +633,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+555"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+295"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -661,7 +653,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-471"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-217"/>
         <source>Enter text...</source>
         <translation type="unfinished">テキストを入力...</translation>
     </message>
@@ -671,230 +663,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
-        <source>https://example.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>URL:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>user@example.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+93"/>
-        <source>Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-79"/>
-        <location line="+15"/>
-        <source>+1234567890</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-14"/>
-        <location line="+15"/>
-        <source>Phone Number:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Message text (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Message:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Network name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>SSID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Password (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>WPA/WPA2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>WEP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>No password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Security:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Hidden network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>Full name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Company name (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Company:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Phone number (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Phone:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Email (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Address (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Website (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Website:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Memo (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Memo:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Event name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Event:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Start:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>End:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Location (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Location:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Description (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Description:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>e.g., 35.6762</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Latitude:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>e.g., 139.6503</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Longitude:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Search query (optional)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Query:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+251"/>
+        <location line="+174"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -904,13 +673,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>QR Code Generated
-(Implementation pending)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+19"/>
+        <location line="+51"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1259,7 +1022,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>

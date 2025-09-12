@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QImage>
 #include "core/qr_tool/qrcodegen.hpp"
+#include "core/qr_tool/content_generator.h"
 
 using qrcodegen::QrCode;
 using qrcodegen::QrSegment;
@@ -116,14 +117,120 @@ void QRCodeGenerationGUI::clearAllParameters()
 
 QString QRCodeGenerationGUI::generateQRCodeContent()
 {
-    QString content;
-    
-    // Only handle Text type now
-    if (QTextEdit* edit = qobject_cast<QTextEdit*>(parameterWidgets["text_content"])) {
-        content = edit->toPlainText();
+    QVariantMap params;
+    QString type;
+
+    switch (currentType) {
+    case Text: {
+        if (QTextEdit* edit = qobject_cast<QTextEdit*>(parameterWidgets["text_content"])) {
+            params["text"] = edit->toPlainText();
+        }
+        type = "text";
+        break;
     }
-    
-    return content;
+
+    // ↓ UI未構築なので一旦コメントアウト
+    // TODO: UI構築したものから都度コメントアウト解除
+
+    // case Url: {
+    //     if (QLineEdit* edit = qobject_cast<QLineEdit*>(parameterWidgets["url_content"])) {
+    //         params["url"] = edit->text();
+    //     }
+    //     type = "url";
+    //     break;
+    // }
+
+    // case Email: {
+    //     if (QLineEdit* edit = qobject_cast<QLineEdit*>(parameterWidgets["email_address"])) {
+    //         params["email"] = edit->text();
+    //     }
+    //     type = "email";
+    //     break;
+    // }
+
+    // case Phone: {
+    //     if (QLineEdit* edit = qobject_cast<QLineEdit*>(parameterWidgets["phone_number"])) {
+    //         params["number"] = edit->text();
+    //     }
+    //     type = "phone";
+    //     break;
+    // }
+
+    // case Sms: {
+    //     if (QLineEdit* numEdit = qobject_cast<QLineEdit*>(parameterWidgets["sms_number"])) {
+    //         params["number"] = numEdit->text();
+    //     }
+    //     if (QTextEdit* textEdit = qobject_cast<QTextEdit*>(parameterWidgets["sms_text"])) {
+    //         params["text"] = textEdit->toPlainText();
+    //     }
+    //     type = "sms";
+    //     break;
+    // }
+
+    // case Geo: {
+    //     if (QLineEdit* latEdit = qobject_cast<QLineEdit*>(parameterWidgets["geo_lat"])) {
+    //         params["lat"] = latEdit->text().toDouble();
+    //     }
+    //     if (QLineEdit* lngEdit = qobject_cast<QLineEdit*>(parameterWidgets["geo_lng"])) {
+    //         params["lng"] = lngEdit->text().toDouble();
+    //     }
+    //     type = "geo";
+    //     break;
+    // }
+
+    // case Calendar: {
+    //     if (QLineEdit* summaryEdit = qobject_cast<QLineEdit*>(parameterWidgets["cal_summary"])) {
+    //         params["summary"] = summaryEdit->text();
+    //     }
+    //     if (QLineEdit* startEdit = qobject_cast<QLineEdit*>(parameterWidgets["cal_start"])) {
+    //         params["start"] = startEdit->text();
+    //     }
+    //     if (QLineEdit* endEdit = qobject_cast<QLineEdit*>(parameterWidgets["cal_end"])) {
+    //         params["end"] = endEdit->text();
+    //     }
+    //     type = "calendar";
+    //     break;
+    // }
+
+    // case Contact: {
+    //     if (QLineEdit* nameEdit = qobject_cast<QLineEdit*>(parameterWidgets["contact_name"])) {
+    //         params["name"] = nameEdit->text();
+    //     }
+    //     if (QLineEdit* phoneEdit = qobject_cast<QLineEdit*>(parameterWidgets["contact_phone"])) {
+    //         params["phone"] = phoneEdit->text();
+    //     }
+    //     if (QLineEdit* emailEdit = qobject_cast<QLineEdit*>(parameterWidgets["contact_email"])) {
+    //         params["email"] = emailEdit->text();
+    //     }
+    //     type = "contact";
+    //     break;
+    // }
+
+    // case Wifi: {
+    //     if (QLineEdit* ssidEdit = qobject_cast<QLineEdit*>(parameterWidgets["wifi_ssid"])) {
+    //         params["ssid"] = ssidEdit->text();
+    //     }
+    //     if (QLineEdit* passEdit = qobject_cast<QLineEdit*>(parameterWidgets["wifi_password"])) {
+    //         params["password"] = passEdit->text();
+    //     }
+    //     if (QComboBox* combo = qobject_cast<QComboBox*>(parameterWidgets["wifi_type"])) {
+    //         params["type"] = combo->currentText();  // WPA/WEP/nopass
+    //     }
+    //     if (QCheckBox* hiddenCheck = qobject_cast<QCheckBox*>(parameterWidgets["wifi_hidden"])) {
+    //         params["hidden"] = hiddenCheck->isChecked();
+    //     }
+    //     type = "wifi";
+    //     break;
+    // }
+
+    default:
+        type = "text";
+        params["text"] = "default";
+        break;
+    }
+
+    ContentGenerator generator;
+    return generator.generate(type, params);
 }
 
 void QRCodeGenerationGUI::updateGenerateButtonState()
