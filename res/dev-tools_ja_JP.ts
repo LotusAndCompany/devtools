@@ -638,7 +638,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1005"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1026"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -658,7 +658,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-911"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-931"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -709,18 +709,18 @@
     </message>
     <message>
         <location line="+164"/>
-        <location line="+177"/>
+        <location line="+197"/>
         <location line="+13"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-190"/>
+        <location line="-210"/>
         <source>Please fill in required fields</source>
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+197"/>
         <location line="+13"/>
         <source>QRコードが生成されていません。</source>
         <translation type="unfinished"></translation>
@@ -769,7 +769,7 @@
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-924"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-944"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -848,7 +848,18 @@
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
     <message>
-        <location line="+376"/>
+        <location line="+365"/>
+        <source>Failed to generate QR code:
+%1
+
+Please try reducing the amount of data or simplifying the content.</source>
+        <translation>QRコードの生成に失敗しました:
+%1
+
+データ量を減らすか、内容を簡略化してください。</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>QRコード画像をクリップボードにコピーしました。</source>
         <translation type="unfinished"></translation>
     </message>
@@ -858,7 +869,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-52"/>
+        <location line="+54"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -880,7 +892,7 @@
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-760"/>
+        <location line="-780"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>

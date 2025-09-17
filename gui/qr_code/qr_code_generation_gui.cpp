@@ -17,6 +17,7 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QImage>
+#include <QResizeEvent>
 #include "core/qr_tool/qrcodegen.hpp"
 #include "core/qr_tool/content_generator.h"
 
@@ -963,40 +964,60 @@ void QRCodeGenerationGUI::onGenerateClicked()
     
     // Display content preview
     ui->contentPreviewEdit->setPlainText(content);
-    
-    // QRコード生成
-    const QrCode qr = QrCode::encodeText(content.toUtf8().constData(), QrCode::Ecc::LOW);
 
-    int scale = 8; // 自由に設定させるかは要検討
+    try {
+        // QRコード生成
+        const QrCode qr = QrCode::encodeText(content.toUtf8().constData(), QrCode::Ecc::LOW);
 
-    int size = qr.getSize();
-    QImage image(size * scale, size * scale, QImage::Format_RGB32);
-    image.fill(Qt::white);
+        int scale = 8; // 自由に設定させるかは要検討
 
-    // QRコード描画
-    for (int y = 0; y < size; y++) {
-        for (int x = 0; x < size; x++) {
-            if (qr.getModule(x, y)) {
-                for (int dy = 0; dy < scale; dy++) {
-                    for (int dx = 0; dx < scale; dx++) {
-                        image.setPixel(x * scale + dx, y * scale + dy, qRgb(0, 0, 0));
+        int size = qr.getSize();
+        QImage image(size * scale, size * scale, QImage::Format_RGB32);
+        image.fill(Qt::white);
+
+        // QRコード描画
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (qr.getModule(x, y)) {
+                    for (int dy = 0; dy < scale; dy++) {
+                        for (int dx = 0; dx < scale; dx++) {
+                            image.setPixel(x * scale + dx, y * scale + dy, qRgb(0, 0, 0));
+                        }
                     }
                 }
             }
         }
-    }
 
-    // 生成されたQRコード画像をメンバ変数に保存
-    currentQRImage = image;
-    
-    ui->qrCodeLabel->setPixmap(QPixmap::fromImage(image));
-    // 枠いっぱいにするかどうか
-    //ui->qrCodeLabel->setScaledContents(true);  // サイズに合わせて拡大縮小
-    ui->qrCodeLabel->show();
-    
-    // Enable output buttons
-    ui->copyButton->setEnabled(true);
-    ui->saveButton->setEnabled(true);
+        // 生成されたQRコード画像をメンバ変数に保存
+        currentQRImage = image;
+        
+        // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
+        QSize labelSize = ui->qrCodeLabel->size();
+        // マージンを考慮してサイズを少し小さくする
+        labelSize -= QSize(10, 10);
+        
+        QPixmap pixmap = QPixmap::fromImage(image);
+        // アスペクト比を保持しながら、ラベルサイズに収まるようにスケーリング
+        QPixmap scaledPixmap = pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        
+        ui->qrCodeLabel->setPixmap(scaledPixmap);
+        ui->qrCodeLabel->show();
+        
+        // Enable output buttons
+        ui->copyButton->setEnabled(true);
+        ui->saveButton->setEnabled(true);
+        
+    } catch (const std::exception& e) {
+        // QRコード生成時のエラーをキャッチ
+        QMessageBox::critical(this, tr("Error"), 
+            tr("Failed to generate QR code:\n%1\n\n"
+               "Please try reducing the amount of data or simplifying the content.")
+            .arg(e.what()));
+        
+        // エラー時はボタンを無効化
+        ui->copyButton->setEnabled(false);
+        ui->saveButton->setEnabled(false);
+    }
 }
 
 void QRCodeGenerationGUI::onClearClicked()
@@ -1045,4 +1066,32 @@ void QRCodeGenerationGUI::onSaveClicked()
             QMessageBox::critical(this, tr("Error"), tr("QRコード画像の保存に失敗しました。"));
         }
     }
+}
+
+void QRCodeGenerationGUI::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    
+    // QRコードが既に生成されている場合のみ再描画
+    if (!currentQRImage.isNull()) {
+        refreshQRCodeDisplay();
+    }
+}
+
+void QRCodeGenerationGUI::refreshQRCodeDisplay()
+{
+    if (currentQRImage.isNull()) {
+        return;
+    }
+    
+    // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
+    QSize labelSize = ui->qrCodeLabel->size();
+    // マージンを考慮してサイズを少し小さくする
+    labelSize -= QSize(10, 10);
+    
+    QPixmap pixmap = QPixmap::fromImage(currentQRImage);
+    // アスペクト比を保持しながら、ラベルサイズに収まるようにスケーリング
+    QPixmap scaledPixmap = pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    
+    ui->qrCodeLabel->setPixmap(scaledPixmap);
 }

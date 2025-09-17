@@ -31,6 +31,7 @@ public:
 
 protected:
     void changeEvent(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void onCategoryChanged(int index);
@@ -88,6 +89,9 @@ private:
     
     // 生成されたQRコード画像を保持
     QImage currentQRImage;
+
+    // QRコード表示を更新
+    void refreshQRCodeDisplay();
 };
 
 #endif // QR_CODE_GENERATION_GUI_H
