@@ -638,7 +638,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+999"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1005"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -658,7 +658,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-905"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-911"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -688,7 +688,7 @@
         <translation>電話番号またはメールアドレスのいずれかが必要です</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+29"/>
         <source>Start date/time cannot be empty</source>
         <translation>開始日時を入力してください</translation>
     </message>
@@ -769,7 +769,7 @@
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-918"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-924"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -843,7 +843,7 @@
         <translation>非表示ネットワーク</translation>
     </message>
     <message>
-        <location line="+375"/>
+        <location line="+381"/>
         <source>End time must be after start time</source>
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
@@ -880,7 +880,7 @@
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-754"/>
+        <location line="-760"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>
@@ -955,12 +955,12 @@
     </message>
     <message>
         <location line="+3"/>
-        <location line="+77"/>
+        <location line="+83"/>
         <source>Invalid email format</source>
         <translation>メールアドレスの形式が無効です</translation>
     </message>
     <message>
-        <location line="-68"/>
+        <location line="-74"/>
         <location line="+14"/>
         <source>Phone number cannot be empty</source>
         <translation>電話番号を入力してください</translation>
@@ -968,11 +968,12 @@
     <message>
         <location line="-11"/>
         <location line="+14"/>
+        <location line="+51"/>
         <source>Invalid phone number format</source>
         <translation>電話番号の形式が無効です</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-47"/>
         <source>Message cannot be empty</source>
         <translation>メッセージを入力してください</translation>
     </message>
@@ -995,7 +996,7 @@
         <translation type="vanished">電話番号またはメールアドレスが必要です</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+33"/>
         <source>Event title cannot be empty</source>
         <translation>イベントタイトルを入力してください</translation>
     </message>

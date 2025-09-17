@@ -607,6 +607,12 @@ bool QRCodeGenerationGUI::validateCurrentType()
             showValidationError("contact_phone_error", tr("At least phone or email is required"));
             isValid = false;
         }
+
+        // 電話番号が入力されている場合のフォーマットチェック
+        if (hasPhone && !isValidPhoneNumber(phoneEdit->text())) {
+            showValidationError("contact_phone_error", tr("Invalid phone number format"));
+            isValid = false;
+        }
         
         // メールアドレスが入力されている場合のフォーマットチェック
         if (hasEmail && !emailEdit->text().contains("@")) {
