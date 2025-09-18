@@ -39,7 +39,7 @@ set(APP_INFO_FILE app_info.autogen.cpp)
 
 # TODO: 環境で分ける
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0") # NOTE: 現状arm64専用のため
     set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
     # アイコンを設定
