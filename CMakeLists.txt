@@ -6,7 +6,7 @@ set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 project(DevTools VERSION 0.1.7 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
-set(DevTools_VERSION_SUFFIX "-test")
+set(DevTools_VERSION_SUFFIX "")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -178,7 +178,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
     # toml11はヘッダーのみなのでリンクしなくて良い、yaml-cppはリンクが必要
     target_link_libraries(${PROJECT_NAME}_data_conversion PUBLIC
-        ${YAML_CPP_LIBRARIES}
+        yaml-cpp::yaml-cpp
     )
 
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
