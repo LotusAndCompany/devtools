@@ -71,6 +71,12 @@ protected:
      * @return QTranslatorの参照
      */
     inline const QTranslator &translator() const { return _translator; }
+    
+    /**
+     * @brief 翻訳器への非const参照を返す（サブクラス専用）
+     * @return QTranslatorの非const参照
+     */
+    inline QTranslator &mutableTranslator() { return _translator; }
 
 private:
     /// 翻訳ファイルを読み込むオブジェクト
