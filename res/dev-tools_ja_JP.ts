@@ -44,9 +44,9 @@
         <translation type="unfinished">ライセンス</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>No contents, Work in progress</source>
-        <translation type="unfinished"></translation>
+        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="+26"/>
+        <source>Failed to load license information.</source>
+        <translation>ライセンス情報を読み込めませんでした。</translation>
     </message>
 </context>
 <context>

@@ -44,8 +44,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/about_devtools_dialog.ui" line="300"/>
-        <source>No contents, Work in progress</source>
+        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="26"/>
+        <source>Failed to load license information.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -2,6 +2,7 @@
 #include "app_info.autogen.cpp"
 #include "ui_about_devtools_dialog.h"
 
+#include <QFile>
 #include <QPushButton>
 
 AboutDevToolsDialog::AboutDevToolsDialog(QWidget *parent)
@@ -16,6 +17,14 @@ AboutDevToolsDialog::AboutDevToolsDialog(QWidget *parent)
                           + QString(DevTools::COMPILER_NAME) + " "
                           + QString(DevTools::COMPILER_VERSION));
     ui->qtVersion->setText(qVersion());
+
+    QFile licenseFile(QStringLiteral(":/docs/LICENSE"));
+    if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        const QString licenseText = QString::fromUtf8(licenseFile.readAll());
+        ui->licenseText->setPlainText(licenseText);
+    } else {
+        ui->licenseText->setPlainText(tr("Failed to load license information."));
+    }
 
     connect(ui->copyButton, &QPushButton::clicked, this, &AboutDevToolsDialog::onCopyButtonClicked);
 }
