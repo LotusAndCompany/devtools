@@ -40,26 +40,11 @@
     </message>
     <message>
         <location filename="../gui/menubar/about_devtools_dialog.ui" line="288"/>
-        <source>Thirdparty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/menubar/about_devtools_dialog.ui" line="305"/>
-        <source>DevTools relies on the following thirdparty softwares</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/menubar/about_devtools_dialog.ui" line="330"/>
-        <source>TODO: Grid Layoutにする、リンクを追加する</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/menubar/about_devtools_dialog.ui" line="382"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/about_devtools_dialog.ui" line="394"/>
+        <location filename="../gui/menubar/about_devtools_dialog.ui" line="300"/>
         <source>No contents, Work in progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -730,7 +715,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="223"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="108"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>

@@ -40,21 +40,6 @@
     </message>
     <message>
         <location line="+23"/>
-        <source>Thirdparty</source>
-        <translation>サードパーティ</translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>DevTools relies on the following thirdparty softwares</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>TODO: Grid Layoutにする、リンクを追加する</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+52"/>
         <source>License</source>
         <translation type="unfinished">ライセンス</translation>
     </message>
@@ -871,7 +856,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
         <source>Copy</source>
         <translation type="unfinished">コピー</translation>
     </message>
