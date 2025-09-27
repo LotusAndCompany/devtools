@@ -4,6 +4,8 @@
 #include <QIcon>
 #include <QStyleFactory>
 #include <QStyleHints>
+#include <QSettings>
+#include <QTranslator>
 
 GuiApplication::GuiApplication(int argc, char **argv)
     : QApplication(argc, argv)
@@ -26,8 +28,14 @@ GuiApplication::GuiApplication(int argc, char **argv)
 
 void GuiApplication::setup()
 {
-    // TODO: 設定ファイル等を読み込む
-
+    // QSettings の初期化
+    QCoreApplication::setOrganizationName("LotusAndCompany");
+    QCoreApplication::setApplicationName("DevTools");
+    
+    // 設定ファイル等を読み込む
+    QSettings settings;
+    
+    // ApplicationMixinのsetupApplicationが翻訳を初期化する
     setupApplication(this);
 
     /*
@@ -50,17 +58,86 @@ void GuiApplication::setup()
 
     // アイコンテーマの読み込み
     QStringList themeSearchPaths = QIcon::themeSearchPaths();
-    themeSearchPaths.append(":/icons/dark");
-    themeSearchPaths.append(":/icons/light");
+    themeSearchPaths.append(":/dark");
+    themeSearchPaths.append(":/light");
     QIcon::setThemeSearchPaths(themeSearchPaths);
 
+    // システムテーマを自動適用
+    applyColorScheme();
+    
+    // 保存された言語設定があれば適用（ApplicationMixinが初期化した後に）
+    QString savedLanguage = settings.value("language", "").toString();
+    if (!savedLanguage.isEmpty()) {
+        QString translationFile = QString(":i18n/dev-tools_%1.qm").arg(savedLanguage);
+        if (mutableTranslator().load(translationFile)) {
+            removeTranslator(&mutableTranslator());
+            installTranslator(&mutableTranslator());
+            qDebug() << "Applied saved language setting:" << savedLanguage;
+        } else {
+            qDebug() << "Failed to load saved language:" << translationFile;
+        }
+    }
+}
+
+bool GuiApplication::changeLanguage(const QString &languageCode)
+{
+    qDebug() << "GuiApplication::changeLanguage called with:" << languageCode;
+    
+    // 既存の翻訳を削除
+    removeTranslator(&mutableTranslator());
+    
+    // 新しい翻訳を読み込み（正しいi18nパスを使用）
+    QString translationFile = QString(":i18n/dev-tools_%1.qm").arg(languageCode);
+    if (mutableTranslator().load(translationFile)) {
+        installTranslator(&mutableTranslator());
+        qDebug() << "Successfully changed language to:" << languageCode;
+        return true;
+    } else {
+        qWarning() << "Failed to load translation:" << translationFile;
+        // フォールバックを試行
+        if (languageCode != "ja_JP" && mutableTranslator().load(":i18n/dev-tools_ja_JP.qm")) {
+            installTranslator(&mutableTranslator());
+            qDebug() << "Fallback to Japanese translation";
+            return true;
+        }
+        return false;
+    }
+}
+
+void GuiApplication::applySystemColorScheme()
+{
     applyColorScheme();
 }
 
 int GuiApplication::start()
 {
-    // TODO: 前回のウィンドウサイズを記憶しておき、そのサイズで表示する (setWindowFlag(), setWindowFlags())
+    QSettings settings;
+    
+    // ウィンドウサイズの復元
+    if (settings.value("window/rememberSize", true).toBool()) {
+        if (settings.contains("window/width") && settings.contains("window/height")) {
+            int width = settings.value("window/width", 1280).toInt();
+            int height = settings.value("window/height", 720).toInt();
+            window.resize(width, height);
+        }
+    }
+    
+    // ウィンドウ位置の復元
+    if (settings.value("window/rememberPosition", true).toBool()) {
+        if (settings.contains("window/x") && settings.contains("window/y")) {
+            int x = settings.value("window/x", 100).toInt();
+            int y = settings.value("window/y", 100).toInt();
+            window.move(x, y);
+        }
+    }
+    
+    // Always on top設定の適用
+    if (settings.value("window/alwaysOnTop", false).toBool()) {
+        window.setWindowFlag(Qt::WindowStaysOnTopHint, true);
+    }
+    
     window.show();
+    
     return QApplication::exec();
 }
 
