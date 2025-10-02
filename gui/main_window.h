@@ -10,6 +10,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class SettingsDialog;
+
 /**
  * @brief メインウィンドウ
  */
@@ -19,6 +21,9 @@ class MainWindow : public QMainWindow
 
     /// UI
     Ui::MainWindow *const ui;
+    
+    /// 設定ダイアログ
+    SettingsDialog *m_settingsDialog;
 
 public:
     /**
@@ -76,5 +81,10 @@ private slots:
      * @param checked ウィンドウを最上位に表示するボタンの状態
      */
     void onWindowAlwaysOnTopButtonToggled(bool checked);
+    /**
+     * @brief 言語が変更された時の処理
+     * @param languageCode 言語コード（ja_JP, en など）
+     */
+    void onLanguageChanged(const QString &languageCode);
 };
 #endif // MAIN_WINDOW_H

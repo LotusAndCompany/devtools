@@ -85,6 +85,9 @@ private:
     /// サイドメニューの各ボタンを含むボタングループ(排他)
     QButtonGroup *const buttonGroup;
 
+    /// 全てのサイドメニューアイテム
+    QList<SidemenuItem*> allItems;
+
     /**
      * @brief 変更系のイベントを処理する
      * @param event 処理するイベント
@@ -97,6 +100,11 @@ private:
      * @exception InvalidArgumentException &lt;int&gt; 間違った ID が渡された場合
      */
     void registerItem(ID id) noexcept(false);
+    /**
+     * @brief 検索テキストに基づいてアイテムの表示/非表示を制御する
+     * @param searchText 検索テキスト
+     */
+    void filterItems(const QString &searchText);
 
 private slots:
     /**
@@ -105,6 +113,11 @@ private slots:
      * @param checked ボタンの状態
      */
     void onButtonToggled(int id, bool checked);
+    /**
+     * @brief 検索ボックスのテキストが変更された時の処理
+     * @param text 変更後のテキスト
+     */
+    void onSearchTextChanged(const QString &text);
 };
 
 #endif // SIDEMENU_H

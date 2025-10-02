@@ -485,13 +485,33 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.ui" line="182"/>
-        <source>Settings</source>
+        <location filename="../gui/main_window.ui" line="173"/>
+        <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/main_window.ui" line="190"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="198"/>
         <source>About DevTools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="206"/>
+        <source>Close Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="214"/>
+        <source>Show Main Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="209"/>
+        <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -500,6 +520,69 @@
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="15"/>
         <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="14"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="33"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="41"/>
+        <source>日本語</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="44"/>
+        <source>ja_JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="49"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="52"/>
+        <source>en</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="74"/>
+        <source>Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="80"/>
+        <source>Window Behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="86"/>
+        <source>Always on top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="93"/>
+        <source>Remember window size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="100"/>
+        <source>Remember window position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
