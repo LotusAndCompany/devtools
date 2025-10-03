@@ -40,28 +40,13 @@
     </message>
     <message>
         <location line="+23"/>
-        <source>Thirdparty</source>
-        <translation>サードパーティ</translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>DevTools relies on the following thirdparty softwares</source>
-        <translation>DevToolsは以下のサードパーティソフトウェアを使用しています</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>TODO: Grid Layoutにする、リンクを追加する</source>
-        <translation>TODO: Grid Layoutにする、リンクを追加する</translation>
-    </message>
-    <message>
-        <location line="+52"/>
         <source>License</source>
         <translation>ライセンス</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>No contents, Work in progress</source>
-        <translation>コンテンツはありません。開発中です。</translation>
+        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="+26"/>
+        <source>Failed to load license information.</source>
+        <translation>ライセンス情報を読み込めませんでした。</translation>
     </message>
 </context>
 <context>

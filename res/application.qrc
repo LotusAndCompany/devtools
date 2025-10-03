@@ -4,4 +4,7 @@
     <qresource prefix="/logo">
         <file>dev-tools_logo.svg</file>
     </qresource>
+    <qresource prefix="/docs">
+        <file alias="LICENSE">../LICENSE</file>
+    </qresource>
 </RCC>
