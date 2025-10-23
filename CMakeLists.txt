@@ -6,7 +6,7 @@ set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 project(DevTools VERSION 0.1.7 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
-set(DevTools_VERSION_SUFFIX "-test")
+set(DevTools_VERSION_SUFFIX "")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -39,7 +39,7 @@ set(APP_INFO_FILE app_info.autogen.cpp)
 
 # TODO: 環境で分ける
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0") # NOTE: 現状arm64専用のため
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0") # NOTE: 現状arm64専用のため
     set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
     # アイコンを設定
@@ -97,6 +97,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
+        gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp gui/menubar/settings_dialog.ui
         gui/sidemenu.h gui/sidemenu.cpp gui/sidemenu.ui
         gui/contents_area.h gui/contents_area.cpp gui/contents_area.ui
         gui/sidemenu_item.h gui/sidemenu_item.cpp
@@ -178,7 +179,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
     # toml11はヘッダーのみなのでリンクしなくて良い、yaml-cppはリンクが必要
     target_link_libraries(${PROJECT_NAME}_data_conversion PUBLIC
-        ${YAML_CPP_LIBRARIES}
+        yaml-cpp::yaml-cpp
     )
 
     # qr_code_generation
