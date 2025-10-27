@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.1.7 LANGUAGES CXX)
+project(DevTools VERSION 0.2.0 LANGUAGES CXX)
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
