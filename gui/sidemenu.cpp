@@ -30,6 +30,7 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::COMMAND_GENERATION);
     registerItem(ID::HTTP_REQUEST);
     registerItem(ID::DATA_CONVERSION);
+    registerItem(ID::QR_CODE_GENERATION);
 
     ui->scrollAreaLayout->addStretch();
 }
@@ -77,6 +78,9 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::DATA_CONVERSION:
         iconName = "question_mark";
+        break;
+    case ID::QR_CODE_GENERATION:
+        iconName = "qr_code";
         break;
 
     default:

@@ -93,6 +93,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/under_development_exception.h
         core/tool/tool_id_fields.h
         core/enum_cast.h
+        core/qr_tool/qrcodegen.hpp core/qr_tool/qrcodegen.cpp
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         gui/gui_application.h gui/gui_application.cpp
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
@@ -181,6 +182,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         yaml-cpp::yaml-cpp
     )
 
+    # qr_code_generation
+    qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC
+        core/qr_tool/content_generator.h
+        core/qr_tool/content_generator.cpp
+        gui/qr_code/qr_code_generation_gui.h 
+        gui/qr_code/qr_code_generation_gui.cpp 
+        gui/qr_code/qr_code_generation_gui.ui
+    )
+
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
     #    AUTOMOC ON
     #    AUTOUIC ON
@@ -242,6 +252,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
     ${PROJECT_NAME}_data_conversion
+    ${PROJECT_NAME}_qr_code_generation
 )
 
 foreach (MODULE ${MODULE_LIST})

@@ -32,7 +32,9 @@
     /** 定型文生成 */             \
     PHRASE_GENERATION,          \
     /** データ・フォーマット変換 */ \
-    DATA_CONVERSION              // 末尾のカンマは不要
+    DATA_CONVERSION,              \
+    /** QRコード生成 */           \
+    QR_CODE_GENERATION            // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

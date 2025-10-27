@@ -18,6 +18,7 @@
 #include "gui/command/command.h"
 #include "api_tool.h"
 #include "gui/welcome_page.h"
+#include "gui/qr_code/qr_code_generation_gui.h"
 
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent)
@@ -89,6 +90,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::DATA_CONVERSION:
         content = new DataConversionGUI(new DataConversion(), this);
+        break;
+    case Sidemenu::ID::QR_CODE_GENERATION:
+        content = new QRCodeGenerationGUI(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
