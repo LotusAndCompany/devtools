@@ -18,6 +18,7 @@
         <file>light/material/add.svg</file>
         <file>light/material/close.svg</file>
         <file>light/material/menu.svg</file>
+        <file>light/material/qr_code.svg</file>
 
         <!-- remix -->
         <file>light/remix/anticlockwise.svg</file>

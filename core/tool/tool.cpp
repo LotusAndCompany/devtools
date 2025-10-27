@@ -65,6 +65,10 @@ const Tool::Translatable Tool::translatable(ID id)
         return Translatable{
             tr("HTTP Request"),
             tr("Send HTTP Request")};
+    case ID::QR_CODE_GENERATION:
+        return Translatable{
+            tr("QR Code Generation"),
+            tr("Generate QR codes from text or URLs")};
     default:
         throw UnderDevelopmentException();
     }
