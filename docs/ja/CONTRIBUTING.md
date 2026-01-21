@@ -170,6 +170,7 @@ pre-commit autoupdate
 | clang-format | macOS | 変更ファイルのフォーマットチェック |
 | clang-tidy | Ubuntu | 変更ファイルの静的解析 |
 | format-suggestion | macOS | PRにフォーマット修正提案をコメント |
+| semantic-pr | Ubuntu | PRタイトルがConventional Commits形式に従っているか検証 |
 
 #### IDE連携
 
@@ -318,11 +319,18 @@ docs: macOS用ビルド手順を更新
 
 ### PRタイトルのフォーマット
 
-明確で説明的なタイトルを使用：
-- `feat: SMS用QRコード生成を追加`
-- `fix: 画像回転角度の計算を修正`
-- `docs: macOS用ビルド手順を更新`
-- `refactor: データ変換ロジックを簡素化`
+[Conventional Commits](https://www.conventionalcommits.org/)形式に従った明確で説明的なタイトルを使用してください。
+タイトルはCIで自動検証されます。
+
+**ルール:**
+- subject（コロン以降）は小文字で始める（英語の場合）
+- 現在形を使用
+
+**例:**
+- `feat: add SMS QR code generation`
+- `fix: correct image rotation angle calculation`
+- `docs: update build instructions for macOS`
+- `refactor: simplify data conversion logic`
 
 ### レビュープロセス
 

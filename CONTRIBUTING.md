@@ -170,6 +170,7 @@ Code quality checks run automatically on:
 | clang-format | macOS | Format check on changed files |
 | clang-tidy | Ubuntu | Static analysis on changed files |
 | format-suggestion | macOS | PR comment with format suggestions |
+| semantic-pr | Ubuntu | Validate PR title follows Conventional Commits |
 
 #### IDE Integration
 
@@ -319,11 +320,18 @@ docs: Update build instructions for macOS
 
 ### PR Title Format
 
-Use a clear, descriptive title:
-- `feat: Add SMS QR code generation`
-- `fix: Correct image rotation angle calculation`
-- `docs: Update build instructions for macOS`
-- `refactor: Simplify data conversion logic`
+Use a clear, descriptive title following the [Conventional Commits](https://www.conventionalcommits.org/) format.
+The title is automatically validated by CI.
+
+**Rules:**
+- Start the subject (after the colon) with a lowercase letter
+- Use present tense ("add feature" not "added feature")
+
+**Examples:**
+- `feat: add SMS QR code generation`
+- `fix: correct image rotation angle calculation`
+- `docs: update build instructions for macOS`
+- `refactor: simplify data conversion logic`
 
 ### Review Process
 
