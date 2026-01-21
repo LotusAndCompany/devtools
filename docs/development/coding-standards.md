@@ -396,6 +396,7 @@ Code quality checks run automatically on:
 | clang-format | macOS | Format check on changed files |
 | clang-tidy | Ubuntu | Static analysis on changed files |
 | format-suggestion | macOS | PR comment with format suggestions |
+| semantic-pr | Ubuntu | Validate PR title follows Conventional Commits |
 
 ## Related Documentation
 
