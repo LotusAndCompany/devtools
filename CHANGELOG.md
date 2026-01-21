@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1](https://github.com/LotusAndCompany/devtools/compare/v0.5.0...v0.5.1) (2026-01-21)
+
+
+### Bug Fixes
+
+* add job-level permissions for release-please ([#8](https://github.com/LotusAndCompany/devtools/issues/8)) ([0f33cfc](https://github.com/LotusAndCompany/devtools/commit/0f33cfcec3fa2ef741fff623e02fb8c2222cb56f))
+* auto-create tags when release PR is merged ([#7](https://github.com/LotusAndCompany/devtools/issues/7)) ([2d1b577](https://github.com/LotusAndCompany/devtools/commit/2d1b577422a7571653582224e92b009db7d6113a))
+* restore release-please workflow to initial implementation ([#9](https://github.com/LotusAndCompany/devtools/issues/9)) ([e5bd4f2](https://github.com/LotusAndCompany/devtools/commit/e5bd4f2e437ad165927eab1f26074e27d8eef8b3))
+
 ## [0.5.0](https://github.com/LotusAndCompany/devtools/compare/v0.4.0...v0.5.0) (2026-01-21)
 
 
