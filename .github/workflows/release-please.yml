@@ -1,9 +1,7 @@
 name: Release Please
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,6 +16,21 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - name: Check actor permission
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTOR: ${{ github.actor }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          PERMISSION=$(gh api "repos/${REPO}/collaborators/${ACTOR}/permission" --jq '.permission')
+          echo "Actor: ${ACTOR}, Permission: ${PERMISSION}"
+          if [ "$PERMISSION" != "admin" ]; then
+            echo "::error::Only repository owners (admin) can run this workflow"
+            exit 1
+          fi
+          echo "Permission check passed"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
