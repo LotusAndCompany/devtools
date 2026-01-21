@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dbMain</class>
+ <widget class="QWidget" name="dbMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>943</width>
+    <height>349</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_main">
+   <item>
+    <widget class="QGroupBox" name="toolbarGroupBox">
+     <property name="title">
+      <string>Toolbar</string>
+     </property>
+     <layout class="QHBoxLayout" name="toolbarLayout">
+      <item>
+       <widget class="QPushButton" name="refreshTableButton">
+        <property name="toolTip">
+         <string>テーブル更新</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset theme="refresh"/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="connectionSettingsButton">
+        <property name="text">
+         <string>DB接続設定</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addQueryTabButton">
+        <property name="text">
+         <string>SQL</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="contentLayout" stretch="1,3">
+     <item>
+      <widget class="QGroupBox" name="tablesGroupBox">
+       <property name="title">
+        <string>Tables</string>
+       </property>
+       <layout class="QVBoxLayout" name="tablesLayout">
+        <item>
+         <widget class="QListWidget" name="tableListWidget"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="queryGroupBox">
+       <property name="title">
+        <string>Query</string>
+       </property>
+       <layout class="QVBoxLayout" name="queryLayout">
+        <item>
+         <widget class="QTabWidget" name="queryTabWidget">
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,123 @@
+name: "Bug Report / バグ報告"
+description: "Create a report to help us improve / 改善のための報告を作成"
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please fill out the form below.
+        バグを報告していただきありがとうございます！以下のフォームにご記入ください。
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Bug Description / バグの説明"
+      description: |
+        A clear and concise description of what the bug is.
+        バグの内容を明確かつ簡潔に説明してください。
+      placeholder: "Describe the bug... / バグを説明してください..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: "Steps to Reproduce / 再現手順"
+      description: |
+        Steps to reproduce the behavior.
+        問題を再現する手順を記載してください。
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: "Expected Behavior / 期待される動作"
+      description: |
+        A clear and concise description of what you expected to happen.
+        期待される動作を明確かつ簡潔に説明してください。
+      placeholder: "What should happen... / 何が起こるべきか..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: "Actual Behavior / 実際の動作"
+      description: |
+        A clear and concise description of what actually happened.
+        実際に起こったことを明確かつ簡潔に説明してください。
+      placeholder: "What actually happens... / 実際に何が起こるか..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots / スクリーンショット"
+      description: |
+        If applicable, add screenshots to help explain your problem.
+        可能であれば、問題を説明するためのスクリーンショットを追加してください。
+      placeholder: "Drag and drop images here... / ここに画像をドラッグ＆ドロップ..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: "Operating System / オペレーティングシステム"
+      description: |
+        Select your operating system.
+        お使いのOSを選択してください。
+      options:
+        - "macOS 15 (Sequoia)"
+        - "macOS 14 (Sonoma)"
+        - "macOS 13 (Ventura)"
+        - "macOS 12 (Monterey)"
+        - "Windows 11"
+        - "Windows 10"
+        - "Ubuntu 24.04"
+        - "Ubuntu 22.04"
+        - "Other Linux / その他のLinux"
+        - "Other / その他"
+    validations:
+      required: true
+
+  - type: input
+    id: devtools-version
+    attributes:
+      label: "DevTools Version / DevTools バージョン"
+      description: |
+        The version of DevTools you are using.
+        使用しているDevToolsのバージョン。
+      placeholder: "e.g., 0.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: qt-version
+    attributes:
+      label: "Qt Version / Qt バージョン"
+      description: |
+        The version of Qt you are using.
+        使用しているQtのバージョン。
+      placeholder: "e.g., 6.8.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context / 追加情報"
+      description: |
+        Add any other context about the problem here.
+        問題に関するその他の情報があれば追加してください。
+      placeholder: "Any other relevant information... / その他の関連情報..."
+    validations:
+      required: false

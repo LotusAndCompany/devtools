@@ -1,0 +1,86 @@
+# pre-commit configuration
+# See https://pre-commit.com for more information
+#
+# Installation:
+#   brew install pre-commit  # or: pip install pre-commit
+#   pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+
+default_language_version:
+  python: python3
+
+repos:
+  # ===========================================================================
+  # clang-format (C++ code formatting)
+  # ===========================================================================
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+      - id: clang-format
+        name: clang-format (C++)
+        types_or: [c++, c]
+        files: \.(cpp|h|hpp|c|cc|cxx)$
+        exclude: |
+          (?x)^(
+            build/.*|
+            build-.*/.*|
+            .*/moc_.*\.cpp|
+            .*/ui_.*\.h|
+            .*/qrc_.*\.cpp
+          )$
+        args:
+          - --style=file
+
+  # ===========================================================================
+  # Conventional Commits (commit message validation)
+  # ===========================================================================
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        name: conventional-commit
+        stages: [commit-msg]
+        args:
+          - feat
+          - fix
+          - docs
+          - style
+          - refactor
+          - test
+          - chore
+          - build
+          - ci
+          - perf
+
+  # ===========================================================================
+  # Basic file checks
+  # ===========================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: trailing-whitespace
+        exclude: ^(.*\.md|.*\.patch)$
+
+      - id: end-of-file-fixer
+        name: end-of-file-fixer
+        exclude: ^(build/|build-.*/)
+
+      - id: check-added-large-files
+        name: check-added-large-files
+        args: ['--maxkb=1024']
+        exclude: ^(.*\.icns|.*\.png|.*\.qm)$
+
+      - id: check-merge-conflict
+        name: check-merge-conflict
+
+  # ===========================================================================
+  # CMake build verification (pre-push)
+  # ===========================================================================
+  - repo: local
+    hooks:
+      - id: cmake-build
+        name: cmake-build (pre-push)
+        entry: bash scripts/pre-push-build.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

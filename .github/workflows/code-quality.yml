@@ -1,0 +1,213 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
+      - '.clang-format'
+      - '.clang-tidy'
+      - '.github/workflows/code-quality.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  clang-format:
+    name: Check Code Formatting
+    runs-on: macos-14
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install clang-format
+        run: |
+          brew install llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.cpp
+            **/*.h
+            **/*.hpp
+          files_ignore: |
+            build/**
+            **/moc_*.cpp
+            **/ui_*.h
+            **/qrc_*.cpp
+
+      - name: Check formatting
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          echo "Checking files: $CHANGED_FILES"
+          FAILED=0
+          for file in $CHANGED_FILES; do
+            if ! clang-format --dry-run --Werror "$file" 2>/dev/null; then
+              echo "::error file=$file::File is not properly formatted"
+              clang-format --dry-run "$file" 2>&1 | head -20
+              FAILED=1
+            fi
+          done
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "::error::Some files are not properly formatted. Run 'clang-format -i <file>' to fix."
+            exit 1
+          fi
+          echo "All checked files are properly formatted!"
+
+  clang-tidy:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y llvm clang clang-tidy ninja-build qt6-base-dev qt6-tools-dev
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'  # 2024.10.21 release
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_COMPILER=clang \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            core/**/*.cpp
+            gui/**/*.cpp
+            main/**/*.cpp
+            tests/**/*.cpp
+          files_ignore: |
+            build/**
+
+      - name: Run clang-tidy
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          FAILED=0
+          for file in $CHANGED_FILES; do
+            echo "Analyzing: $file"
+            if ! clang-tidy -p build "$file" --warnings-as-errors='*' 2>&1; then
+              FAILED=1
+            fi
+          done
+          if [ $FAILED -eq 1 ]; then
+            echo "::error::clang-tidy found issues. Please fix the warnings above."
+            exit 1
+          fi
+          echo "Static analysis passed!"
+
+  format-suggestion:
+    name: Format Suggestions (PR Comment)
+    runs-on: macos-14
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          brew install llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+
+      - name: Generate format diff
+        id: format-diff
+        run: |
+          FILES=$(find core gui main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
+
+          if [ -z "$FILES" ]; then
+            echo "has_diff=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          DIFF=""
+          for file in $FILES; do
+            FILE_DIFF=$(clang-format "$file" | diff -u "$file" - 2>/dev/null || true)
+            if [ -n "$FILE_DIFF" ]; then
+              DIFF="${DIFF}\n\n### $file\n\`\`\`diff\n${FILE_DIFF}\n\`\`\`"
+            fi
+          done
+
+          if [ -n "$DIFF" ]; then
+            echo "has_diff=true" >> $GITHUB_OUTPUT
+            echo -e "$DIFF" > format_diff.md
+          else
+            echo "has_diff=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment on PR
+        if: steps.format-diff.outputs.has_diff == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const diff = fs.readFileSync('format_diff.md', 'utf8');
+
+            const body = `## :art: Code Formatting Suggestions
+
+            The following files have formatting differences from the project style:
+
+            ${diff}
+
+            <details>
+            <summary>How to fix</summary>
+
+            Run the following command to format all files:
+            \`\`\`bash
+            cmake --build build --target format
+            \`\`\`
+
+            Or format specific files:
+            \`\`\`bash
+            clang-format -i <file>
+            \`\`\`
+            </details>
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

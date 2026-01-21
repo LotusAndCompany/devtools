@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Documentation / ドキュメント"
+    url: https://github.com/LotusAndCompany/devtools/wiki
+    about: "Check the documentation before opening an issue / Issueを作成する前にドキュメントを確認してください"
+  - name: "Discussions / ディスカッション"
+    url: https://github.com/LotusAndCompany/devtools/discussions
+    about: "Ask questions and share ideas / 質問やアイデアの共有はこちら"

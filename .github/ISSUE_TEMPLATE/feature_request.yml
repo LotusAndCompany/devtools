@@ -1,0 +1,88 @@
+name: "Feature Request / 機能リクエスト"
+description: "Suggest an idea for this project / このプロジェクトへのアイデアを提案"
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please fill out the form below.
+        機能をご提案いただきありがとうございます！以下のフォームにご記入ください。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem / 問題"
+      description: |
+        Is your feature request related to a problem? Please describe.
+        機能リクエストは問題に関連していますか？説明してください。
+      placeholder: |
+        A clear and concise description of what the problem is.
+        Example: I'm always frustrated when [...]
+
+        問題の内容を明確かつ簡潔に説明してください。
+        例: [...] のときにいつも困っています
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: "Proposed Solution / 提案する解決策"
+      description: |
+        Describe the solution you'd like.
+        望む解決策を説明してください。
+      placeholder: "A clear and concise description of what you want to happen. / 実現したいことを明確かつ簡潔に説明してください。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered / 検討した代替案"
+      description: |
+        Describe any alternative solutions or features you've considered.
+        検討した代替の解決策や機能を説明してください。
+      placeholder: "Alternative approaches you have considered... / 検討した代替アプローチ..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: "Use Cases / ユースケース"
+      description: |
+        Describe specific use cases for this feature.
+        この機能の具体的なユースケースを説明してください。
+      placeholder: |
+        1. When I need to...
+        2. In the scenario where...
+
+        1. ...が必要なとき
+        2. ...のシナリオで
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context / 追加情報"
+      description: |
+        Add any other context or screenshots about the feature request here.
+        機能リクエストに関するその他の情報やスクリーンショットがあれば追加してください。
+      placeholder: "Any other relevant information or screenshots... / その他の関連情報やスクリーンショット..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: "Willingness to Contribute / 貢献の意思"
+      description: |
+        Would you be willing to help implement this feature?
+        この機能の実装に協力する意思はありますか？
+      options:
+        - label: "I am willing to submit a PR for this feature / この機能のPRを提出する意思があります"
+          required: false
+        - label: "I need help implementing this / 実装に助けが必要です"
+          required: false

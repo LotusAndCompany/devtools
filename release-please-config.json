@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "packages": {
+    ".": {
+      "package-name": "DevTools",
+      "changelog-path": "CHANGELOG.md",
+      "include-component-in-tag": false,
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "CMakeLists.txt"
+        },
+        {
+          "type": "json",
+          "path": "vcpkg.json",
+          "jsonpath": "$.version-string"
+        },
+        {
+          "type": "generic",
+          "path": "version.txt"
+        }
+      ]
+    }
+  },
+  "changelog-sections": [
+    {"type": "feat", "section": "Features", "hidden": false},
+    {"type": "fix", "section": "Bug Fixes", "hidden": false},
+    {"type": "perf", "section": "Performance Improvements", "hidden": false},
+    {"type": "docs", "section": "Documentation", "hidden": false},
+    {"type": "build", "section": "Build System", "hidden": false},
+    {"type": "refactor", "section": "Code Refactoring", "hidden": true},
+    {"type": "style", "section": "Styles", "hidden": true},
+    {"type": "test", "section": "Tests", "hidden": true},
+    {"type": "ci", "section": "Continuous Integration", "hidden": true},
+    {"type": "chore", "section": "Miscellaneous", "hidden": true}
+  ],
+  "pull-request-title-pattern": "chore: release ${version}",
+  "sequential-calls": true
+}

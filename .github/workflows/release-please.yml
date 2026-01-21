@@ -1,0 +1,78 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: release-please-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release-please configuration
+        run: |
+          set -e
+          if [ ! -f "release-please-config.json" ]; then
+            echo "::error::release-please-config.json not found"
+            exit 1
+          fi
+          if [ ! -f ".release-please-manifest.json" ]; then
+            echo "::error::.release-please-manifest.json not found"
+            exit 1
+          fi
+          if ! jq_error=$(jq empty release-please-config.json 2>&1); then
+            echo "::error::release-please-config.json contains invalid JSON"
+            echo "::error::${jq_error}"
+            exit 1
+          fi
+          if ! jq_error=$(jq empty .release-please-manifest.json 2>&1); then
+            echo "::error::.release-please-manifest.json contains invalid JSON"
+            echo "::error::${jq_error}"
+            exit 1
+          fi
+          echo "Configuration files validated successfully"
+
+      - name: Run Release Please
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Output Release Status
+        env:
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
+          PR: ${{ steps.release.outputs.pr }}
+          TAG_NAME: ${{ steps.release.outputs.tag_name }}
+          VERSION: ${{ steps.release.outputs.version }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          echo "## Release Please Summary" >> $GITHUB_STEP_SUMMARY
+          if [ "$RELEASE_CREATED" = "true" ]; then
+            echo "### Release Created" >> $GITHUB_STEP_SUMMARY
+            echo "- **Tag:** ${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Version:** ${VERSION}" >> $GITHUB_STEP_SUMMARY
+            echo "[View Release](https://github.com/${REPO}/releases/tag/${TAG_NAME})" >> $GITHUB_STEP_SUMMARY
+          elif [ -n "$PR" ]; then
+            echo "### Release PR Updated" >> $GITHUB_STEP_SUMMARY
+            echo "Release PR: ${PR}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### No Release Action" >> $GITHUB_STEP_SUMMARY
+            echo "No releasable commits since last release." >> $GITHUB_STEP_SUMMARY
+          fi

@@ -1,0 +1,121 @@
+---
+# DevTools clang-tidy configuration
+# Qt6 C++17 project with custom naming conventions
+
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  clang-analyzer-*,
+  -clang-analyzer-cplusplus.NewDeleteLeaks,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-no-malloc,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-pro-type-union-access,
+  misc-*,
+  -misc-non-private-member-variables-in-classes,
+  -misc-no-recursion,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-avoid-c-arrays,
+  performance-*,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-function-cognitive-complexity,
+  -readability-else-after-return,
+
+WarningsAsErrors: ''
+
+HeaderFilterRegex: '^.*/devtools/(core|gui|main|tests)/.*\.(h|hpp)$'
+
+FormatStyle: file
+
+CheckOptions:
+  # Naming conventions matching CONTRIBUTING.md
+  # Classes: camelCase (camelBack in clang-tidy terminology)
+  - key: readability-identifier-naming.ClassCase
+    value: camelBack
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypeAliasCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypedefCase
+    value: CamelCase
+  - key: readability-identifier-naming.UnionCase
+    value: CamelCase
+
+  # Functions: camelCase (camelBack in clang-tidy terminology)
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.MethodCase
+    value: camelBack
+
+  # Variables: camelCase (camelBack in clang-tidy terminology)
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.LocalVariableCase
+    value: camelBack
+
+  # Member variables: camelCase (camelBack in clang-tidy terminology)
+  - key: readability-identifier-naming.MemberCase
+    value: camelBack
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: camelBack
+  - key: readability-identifier-naming.ProtectedMemberCase
+    value: camelBack
+
+  # Constants: SCREAMING_SNAKE_CASE
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.StaticConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ClassConstantCase
+    value: UPPER_CASE
+
+  # Enum values: SCREAMING_SNAKE_CASE
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE
+
+  # Namespaces: PascalCase (for Qt Ui namespace compatibility)
+  - key: readability-identifier-naming.NamespaceCase
+    value: CamelCase
+
+  # Template parameters
+  - key: readability-identifier-naming.TemplateParameterCase
+    value: CamelCase
+
+  # Macros: SCREAMING_SNAKE_CASE
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+
+  # Other settings
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: '1'
+  - key: readability-function-size.LineThreshold
+    value: '100'
+  - key: readability-function-size.StatementThreshold
+    value: '50'
+  - key: modernize-use-override.IgnoreDestructors
+    value: 'true'
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: 'QString;QStringList;QVariant;QByteArray;QImage;QPixmap'
+  - key: bugprone-argument-comment.StrictMode
+    value: 'false'
+
+SystemHeaders: false
+...

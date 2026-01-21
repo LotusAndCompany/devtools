@@ -1,0 +1,2 @@
+constexpr const char *_TEST_SRC_DIR = "@CMAKE_CURRENT_SOURCE_DIR@/tests";
+constexpr const char *_TEST_BIN_DIR = "@CMAKE_CURRENT_BINARY_DIR@/tests";

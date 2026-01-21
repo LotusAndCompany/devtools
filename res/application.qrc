@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/logo">
+        <file>dev-tools_logo.png</file>
+    </qresource>
+    <qresource prefix="/docs">
+        <file alias="LICENSE">../LICENSE</file>
+    </qresource>
+</RCC>

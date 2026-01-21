@@ -1,0 +1,17 @@
+{
+    "null_key": null,
+    "integer_key": 42,
+    "float_key": 2.7818281828,
+    "string_key": value,
+    "true_key": true,
+    "false_key": false,
+    "map_key": {
+        "key": v,
+    },
+    "array_key": [
+        -0.5,
+        0,
+        0.5,
+    ],
+    # comment
+}
