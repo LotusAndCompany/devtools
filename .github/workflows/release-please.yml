@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,26 +17,7 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
-      - name: Check actor permission (manual trigger only)
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACTOR: ${{ github.actor }}
-          REPO: ${{ github.repository }}
-        run: |
-          set -e
-          PERMISSION=$(gh api "repos/${REPO}/collaborators/${ACTOR}/permission" --jq '.permission')
-          echo "Actor: ${ACTOR}, Permission: ${PERMISSION}"
-          if [ "$PERMISSION" != "admin" ]; then
-            echo "::error::Only repository owners (admin) can run this workflow manually"
-            exit 1
-          fi
-          echo "✅ Permission check passed: ${ACTOR} has ${PERMISSION} access"
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -66,58 +46,33 @@ jobs:
           fi
           echo "Configuration files validated successfully"
 
-      # pushトリガー時: タグ作成のみ（PR作成しない）
-      - name: Release Please (create tag on merge)
-        if: github.event_name == 'push'
-        id: release-push
+      - name: Run Release Please
         uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-          skip-github-pull-request: true
-
-      # 手動トリガー時: PR作成のみ（タグ作成しない）
-      - name: Release Please (create PR manually)
-        if: github.event_name == 'workflow_dispatch'
-        id: release-manual
-        uses: googleapis/release-please-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
-          skip-github-release: true
 
       - name: Output Release Status
         env:
-          EVENT_NAME: ${{ github.event_name }}
-          RELEASE_CREATED: ${{ steps.release-push.outputs.release_created }}
-          PUSH_PR: ${{ steps.release-push.outputs.pr }}
-          PUSH_TAG_NAME: ${{ steps.release-push.outputs.tag_name }}
-          PUSH_VERSION: ${{ steps.release-push.outputs.version }}
-          MANUAL_PR: ${{ steps.release-manual.outputs.pr }}
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
+          PR: ${{ steps.release.outputs.pr }}
+          TAG_NAME: ${{ steps.release.outputs.tag_name }}
+          VERSION: ${{ steps.release.outputs.version }}
           REPO: ${{ github.repository }}
         run: |
           set -e
           echo "## Release Please Summary" >> $GITHUB_STEP_SUMMARY
-          if [ "$EVENT_NAME" = "push" ]; then
-            echo "### Trigger: Push to main" >> $GITHUB_STEP_SUMMARY
-            if [ "$RELEASE_CREATED" = "true" ]; then
-              echo "### ✅ Release Created" >> $GITHUB_STEP_SUMMARY
-              echo "- **Tag:** ${PUSH_TAG_NAME}" >> $GITHUB_STEP_SUMMARY
-              echo "- **Version:** ${PUSH_VERSION}" >> $GITHUB_STEP_SUMMARY
-              echo "[View Release](https://github.com/${REPO}/releases/tag/${PUSH_TAG_NAME})" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "### No Release Action" >> $GITHUB_STEP_SUMMARY
-              echo "No pending release PR merge detected." >> $GITHUB_STEP_SUMMARY
-            fi
+          if [ "$RELEASE_CREATED" = "true" ]; then
+            echo "### Release Created" >> $GITHUB_STEP_SUMMARY
+            echo "- **Tag:** ${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Version:** ${VERSION}" >> $GITHUB_STEP_SUMMARY
+            echo "[View Release](https://github.com/${REPO}/releases/tag/${TAG_NAME})" >> $GITHUB_STEP_SUMMARY
+          elif [ -n "$PR" ]; then
+            echo "### Release PR Updated" >> $GITHUB_STEP_SUMMARY
+            echo "Release PR: ${PR}" >> $GITHUB_STEP_SUMMARY
           else
-            echo "### Trigger: Manual (workflow_dispatch)" >> $GITHUB_STEP_SUMMARY
-            if [ -n "$MANUAL_PR" ]; then
-              echo "### ✅ Release PR Created/Updated" >> $GITHUB_STEP_SUMMARY
-              echo "Release PR: ${MANUAL_PR}" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "### No Release Action" >> $GITHUB_STEP_SUMMARY
-              echo "No releasable commits since last release." >> $GITHUB_STEP_SUMMARY
-            fi
+            echo "### No Release Action" >> $GITHUB_STEP_SUMMARY
+            echo "No releasable commits since last release." >> $GITHUB_STEP_SUMMARY
           fi
