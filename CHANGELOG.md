@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0](https://github.com/LotusAndCompany/devtools/compare/v0.4.0...v0.5.0) (2026-01-21)
+
+
+### Features
+
+* Make Release Please workflow manual-only and restrict to owners ([#3](https://github.com/LotusAndCompany/devtools/issues/3)) ([5ad446e](https://github.com/LotusAndCompany/devtools/commit/5ad446e915a55b6a58f55e0bd0a42803b8f78bcd))
+
 ## [0.4.0](https://github.com/LotusAndCompany/devtools/compare/v0.3.0...v0.4.0) (2026-01-21)
 
 
