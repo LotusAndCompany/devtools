@@ -18,6 +18,9 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Check actor permission (manual trigger only)
         if: github.event_name == 'workflow_dispatch'
