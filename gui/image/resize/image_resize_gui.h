@@ -25,13 +25,14 @@ class ImageResizeGUI : public GuiTool
     Q_OBJECT
 
 public:
+    explicit ImageResizeGUI(QWidget *parent = nullptr);
     /**
      * @brief コンストラクタ
      * @param imageResize (ロジック部分)
      * @param parent 親ウィジェット
      * @details UIを構築し、シグナルを接続する
      */
-    explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);
+    //explicit ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent = nullptr);
     /**
      * @brief デストラクタ
      */
@@ -43,57 +44,57 @@ private slots:
      * @details 画像を読み込み、プレビューとUIを更新する
      * @param path 読み込む画像ファイル
      */
-    void onLoadImageSelected(const QString &path);
+    //void onLoadImageSelected(const QString &path);
     /**
      * @brief 保存先が選択された時の処理
      * @details 画像を上書き保存する
      * @param path 保存先
      */
-    void onSaveImageSelected(const QString &path);
+    //void onSaveImageSelected(const QString &path);
     /**
      * @brief リセットボタンが押された時に呼び出される
      * @details 拡大率の設定を初期状態に戻し、プレビューとUIを更新する
      */
-    void onResetButtonClicked();
+    //void onResetButtonClicked();
     /**
      * @brief 画像の横幅の入力欄が更新された時の処理
      * @param width 変更後の値
      * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
      */
-    void onWidthValueChanged(int width);
+    //void onWidthValueChanged(int width);
     /**
      * @brief 画像の縦幅の入力欄が更新された時の処理
      * @param height 変更後の値
      * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
      */
-    void onHeightValueChanged(int height);
+    //void onHeightValueChanged(int height);
     /**
      * @brief 水平方向の拡大率の入力欄が更新された時の処理
      * @param hScale 変更後の値
      * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
      */
-    void onHorizontalScaleChanged(double hScale);
+    //void onHorizontalScaleChanged(double hScale);
     /**
      * @brief 垂直方向の拡大率の入力欄が更新された時の処理
      * @param vScale 変更後の値
      * @details 入力に基づいて画像サイズを変更し、プレビューとUIを更新する
      */
-    void onVerticalScaleChanged(double vScale);
+    //void onVerticalScaleChanged(double vScale);
     /**
      * @brief 縦横比固定のチェックボックスの状態が変化した時の処理
      * @param state 縦横比固定のチェックボックスの状態
      */
-    void onKeepAspectRatioChanged(Qt::CheckState state);
+    //void onKeepAspectRatioChanged(Qt::CheckState state);
     /**
      * @brief 画素補完のチェックボックスの状態が変化した時の処理
      * @param state 画素補完のチェックボックスの状態
      */
-    void onSmoothTransformationChanged(Qt::CheckState state);
+    //void onSmoothTransformationChanged(Qt::CheckState state);
 
 private:
-    Ui::ImageResizeGUI *const ui;
+    Ui::ImageResizeGUI *ui;
     /// ロジック部分
-    ImageResizeInterface *const imageResize;
+    ImageResizeInterface *imageResize;
 
     /// 縦横比固定フラグ
     bool keepAspectRatio = false;

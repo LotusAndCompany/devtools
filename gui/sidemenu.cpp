@@ -22,7 +22,8 @@ Sidemenu::Sidemenu(QWidget *parent)
     connect(ui->searchBoxEdit, &QLineEdit::textChanged, this, &Sidemenu::onSearchTextChanged);
 
     // WIP: 適当なボタンを追加する
-    registerItem(ID::IMAGE_RESIZE);
+    //registerItem(ID::IMAGE_RESIZE);
+    registerItem(ID::IMAGE_MAIN);
     registerItem(ID::IMAGE_ROTATION);
     registerItem(ID::IMAGE_DIVISION);
     registerItem(ID::IMAGE_TRANSPARENT);
@@ -57,6 +58,9 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
     {
     case ID::HTTP_REQUEST:
         iconName = "network";
+        break;
+    case ID::IMAGE_MAIN:
+        iconName = "resize";
         break;
     case ID::IMAGE_RESIZE:
         iconName = "resize";

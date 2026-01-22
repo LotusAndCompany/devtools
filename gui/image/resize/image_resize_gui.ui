@@ -30,22 +30,6 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="BasicImageView" name="imageView" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>64</width>
-       <height>128</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QFrame" name="uiArea">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -60,7 +44,7 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -136,13 +120,6 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Vertical Scale:</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="1">
          <widget class="QDoubleSpinBox" name="hScaleValue">
           <property name="suffix">
@@ -159,6 +136,13 @@
           </property>
           <property name="value">
            <double>100.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Vertical Scale:</string>
           </property>
          </widget>
         </item>
@@ -181,57 +165,27 @@
           </property>
          </widget>
         </item>
+        <item row="5" column="0">
+         <widget class="QCheckBox" name="smoothScaling">
+          <property name="text">
+           <string>Smooth scaling</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="keepAspectRatio">
+          <property name="text">
+           <string>Keep aspect ratio</string>
+          </property>
+         </widget>
+        </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="keepAspectRatio">
-        <property name="text">
-         <string>Keep aspect ratio</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="smoothScaling">
-        <property name="text">
-         <string>Smooth scaling</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="BasicImageViewControl" name="basicImageViewControl" native="true"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>BasicImageViewControl</class>
-   <extends>QWidget</extends>
-   <header>gui/image/basic/control.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>BasicImageView</class>
-   <extends>QWidget</extends>
-   <header>gui/image/basic/image_view.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,101 +1,66 @@
-#include "image_resize_gui.h"
-#include "ui_image_resize_gui.h"
+#include "image_editor_context.h"
+#include "core/image/resize/image_resize.h"
 
-#include <QSignalBlocker>
-//#include "core/image/resize/image_resize.h"
-
-#include <QMessageBox>
-/*
-ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
-    : GuiTool(parent)
-    , ui(new Ui::ImageResizeGUI)
-    , imageResize(imageResize)
+ImageEditorContext::ImageEditorContext(BasicImageEditInterface *editor,
+                                       QObject *parent)
+    : QObject(parent)
+    , _editor(editor)
 {
-    ui->setupUi(this);
-/*
-    // NOTE: parentが設定されていなければこのインスタンスで管理する
-    if (imageResize->parent() == nullptr)
-        imageResize->setParent(this);
-
-    // TODO: 共通化できないか?
-    connect(ui->basicImageViewControl,
-            &BasicImageViewControl::loadFileSelected,
-            this,
-            &ImageResizeGUI::onLoadImageSelected);
-    connect(ui->basicImageViewControl,
-            &BasicImageViewControl::saveFileSelected,
-            this,
-            &ImageResizeGUI::onSaveImageSelected);
-    connect(ui->basicImageViewControl,
-            &BasicImageViewControl::resetButtonClicked,
-            this,
-            &ImageResizeGUI::onResetButtonClicked);
-
-    connect(ui->widthValue, &QSpinBox::valueChanged, this, &ImageResizeGUI::onWidthValueChanged);
-    connect(ui->heightValue, &QSpinBox::valueChanged, this, &ImageResizeGUI::onHeightValueChanged);
-    connect(ui->hScaleValue,
-            &QDoubleSpinBox::valueChanged,
-            this,
-            &ImageResizeGUI::onHorizontalScaleChanged);
-    connect(ui->vScaleValue,
-            &QDoubleSpinBox::valueChanged,
-            this,
-            &ImageResizeGUI::onVerticalScaleChanged);
-
-    connect(ui->keepAspectRatio,
-            &QCheckBox::checkStateChanged,
-            this,
-            &ImageResizeGUI::onKeepAspectRatioChanged);
-    connect(ui->smoothScaling,
-            &QCheckBox::checkStateChanged,
-            this,
-            &ImageResizeGUI::onSmoothTransformationChanged);
-}
-*/
-
-ImageResizeGUI::ImageResizeGUI(QWidget *parent)
-    : GuiTool(parent)
-    , ui(new Ui::ImageResizeGUI)
-{
-    ui->setupUi(this);
 }
 
-ImageResizeGUI::~ImageResizeGUI()
+
+bool ImageEditorContext::loadImage(const QString &path)
 {
-    delete ui;
-}
-/*
-void ImageResizeGUI::onLoadImageSelected(const QString &path)
-{
-    qDebug() << "path:" << path;
+    if (!_editor->load(path)) {
+        emit errorOccurred(tr("Failed to load image."));
+        return false;
+    }
 
-    bool result = imageResize->load(path);
-    imageResize->update();
-
-    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()), true);
-    updateUIValues();
-
-    // TODO: load()の結果に応じて何かメッセージを出す
+    _editor->update();
+    emit imageUpdated();
+    return true;
 }
 
-void ImageResizeGUI::onSaveImageSelected(const QString &path)
+bool ImageEditorContext::saveImage(const QString &path)
 {
-    qDebug() << "path:" << path;
+    if (!_editor->overwriteSave(path)) {
+        emit errorOccurred(tr("Failed to save the image."));
+        return false;
+    }
+    return true;
+}
 
-    if (!imageResize->overwriteSave(path)) {
-        QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
+void ImageEditorContext::reset()
+{
+    _editor->reset();
+    emit imageUpdated();
+}
+
+void ImageEditorContext::setWidth(int width)
+{
+    if (width < 0)
+        return;
+
+    // downcast は factory 側で保証されている前提
+    auto resize = static_cast<ImageResize *>(_editor);
+    resize->setWidth(width, keepAspectRatio);
+    applyAndUpdate();
+}
+
+void ImageEditorContext::applyAndUpdate()
+{
+    if (_editor->isOutdated()) {
+        _editor->update();
+        emit imageUpdated();
     }
 }
 
-void ImageResizeGUI::onResetButtonClicked()
+const QImage &ImageEditorContext::currentImage() const
 {
-    // NOTE: リセット処理。オリジナル画像は保持し、UIの拡大率などを初期値に戻す。
-    imageResize->reset();
-
-    ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
-    updateUIValues();
+    return _editor->current();
 }
 
+/*
 void ImageResizeGUI::onWidthValueChanged(int width)
 {
     qDebug() << "width:" << width;

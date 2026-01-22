@@ -17,6 +17,8 @@
     HTTP_REQUEST,               \
     /** コマンド生成 */           \
     COMMAND_GENERATION,         \
+    /** 画像処理 */              \
+    IMAGE_MAIN,                 \
     /** 画像リサイズ */           \
     IMAGE_RESIZE,               \
     /** 画像回転・反転 */         \

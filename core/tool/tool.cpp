@@ -26,6 +26,11 @@ const Tool::Translatable Tool::translatable(ID id)
     // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
     switch (id)
     {
+    case ID::IMAGE_MAIN:
+        return Translatable{
+            tr("Image Editing"),
+            tr("Image Editing"),
+        };
     case ID::IMAGE_RESIZE:
         return Translatable{
             tr("Image Resize"),

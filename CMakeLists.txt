@@ -93,6 +93,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/exception/under_development_exception.h
         core/tool/tool_id_fields.h
         core/enum_cast.h
+        core/context/image_editor_context.h core/context/image_editor_context.cpp
         core/qr_tool/qrcodegen.hpp core/qr_tool/qrcodegen.cpp
         gui/main_window.h gui/main_window.cpp gui/main_window.ui
         gui/gui_application.h gui/gui_application.cpp
@@ -129,6 +130,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
         gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
+        gui/image/basic/function_area.h gui/image/basic/function_area.cpp gui/image/basic/function_area.ui
+        gui/image/main/image_main.h gui/image/main/image_main.cpp gui/image/main/image_main.ui
     )
     qt_add_library(${PROJECT_NAME}_image_resize STATIC
         core/image/resize/image_resize.h core/image/resize/image_resize.cpp

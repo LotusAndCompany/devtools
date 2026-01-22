@@ -1,5 +1,6 @@
 #include "contents_area.h"
 #include "api_tool.h"
+#include "gui/image/main/image_main.h"
 #include "ui_contents_area.h"
 
 #include <QLabel>
@@ -67,9 +68,14 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::WELCOME:
         content = new WelcomePage(this);
         break;
+    case Sidemenu::ID::IMAGE_MAIN:
+        content = new ImageMain(this);
+        break;
+/*
     case Sidemenu::ID::IMAGE_RESIZE:
         content = new ImageResizeGUI(new ImageResize(), this);
         break;
+*/
     case Sidemenu::ID::IMAGE_ROTATION:
         content = new ImageRotationGUI(new ImageRotation(), this);
         break;
