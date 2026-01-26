@@ -272,7 +272,8 @@ set(MODULE_LIST
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
     if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
-        add_dependencies(${MODULE} ${PROJECT_NAME}_core)
+        # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
+        target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)
     endif()
 
     # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
