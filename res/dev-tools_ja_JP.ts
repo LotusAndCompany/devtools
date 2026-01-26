@@ -305,12 +305,12 @@
         <translation>TOMLでは値のみのデータはサポートされていません</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+87"/>
         <source>ignore null value in array: %1</source>
         <translation>配列内のnull値を無視します: %1</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+59"/>
         <source>ignore null value of key: %1</source>
         <translation>null値を無視します: %1</translation>
     </message>
@@ -472,7 +472,7 @@
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+62"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+63"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
     </message>
@@ -544,7 +544,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+64"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+65"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>

@@ -228,10 +228,11 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
 # 画像関係の依存関係
-add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+# target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
+target_link_libraries(${PROJECT_NAME}_image_resize PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_rotation PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_division PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_transparent PUBLIC ${PROJECT_NAME}_image_core)
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
