@@ -31,7 +31,7 @@ private slots:
     void cleanup(); // will be called after every test function.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_load();
     void test_original();
     void test_originalFileInfo();
@@ -41,11 +41,12 @@ private slots:
 
 void TestImageIO::init()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 }
 
 void TestImageIO::cleanup()
@@ -56,7 +57,7 @@ void TestImageIO::cleanup()
 
 void TestImageIO::test_constructor()
 {
-    ImageIO io;
+    ImageIO const io;
 
     // 画像が空であること
     QVERIFY(io.original().isNull());

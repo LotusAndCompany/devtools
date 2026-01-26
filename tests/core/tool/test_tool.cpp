@@ -15,7 +15,7 @@ class TestTool : public QObject
 
 private slots:
     // Test cases:
-    void test_validateID();
+    static void test_validateID();
 };
 
 void TestTool::test_validateID()

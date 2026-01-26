@@ -32,7 +32,11 @@ public:
      * @details UIを構築し、シグナルを接続する
      */
     explicit ImageRotationGUI(ImageRotationInterface *imageRotation, QWidget *parent = nullptr);
-    ~ImageRotationGUI();
+    ~ImageRotationGUI() override;
+    ImageRotationGUI(const ImageRotationGUI &) = delete;
+    ImageRotationGUI &operator=(const ImageRotationGUI &) = delete;
+    ImageRotationGUI(ImageRotationGUI &&) = delete;
+    ImageRotationGUI &operator=(ImageRotationGUI &&) = delete;
 
 private slots:
     /**

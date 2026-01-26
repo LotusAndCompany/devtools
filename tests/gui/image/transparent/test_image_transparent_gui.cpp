@@ -36,11 +36,11 @@ public:
     {
         return mock_overwriteSave(path, format, quality);
     }
-    const QFileInfo &fileInfo(unsigned int index = 0) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int index = 0) const override
     {
         return mock_fileInfo(index);
     }
-    const QImage &original() const override { return mock_original(); }
+    [[nodiscard]] const QImage &original() const override { return mock_original(); }
     void addTransparentColor(const QColor &targetColor) override
     {
         mock_addTransparentColor(targetColor);
@@ -70,27 +70,28 @@ class TestImageTransparentGUI : public QObject
 private slots:
     void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void init();            // will be called before each test function is executed.
+    static void init();     // will be called before each test function is executed.
 
     // Test cases:
     void test_constructor();
     void test_onLoadImageSelected();
     void test_onSaveImageSelected();
-    void test_onResetButtonClicked();
+    static void test_onResetButtonClicked();
     void test_onColorModeTextChanged();
     void test_onPixelSelected();
     void test_onToleranceValueChanged();
     void test_onTransparencyValueChanged();
-    void test_onContiguousAreaCheckStateChanged();
+    static void test_onContiguousAreaCheckStateChanged();
 };
 
 void TestImageTransparentGUI::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 
     image320 = QImage(testDirPath + resourceNames[0]);
 
@@ -156,7 +157,7 @@ void TestImageTransparentGUI::test_constructor()
     }
 */
     {
-        ImageTransparentGUI gui(new ImageTransparentMock(this));
+        ImageTransparentGUI const gui(new ImageTransparentMock(this));
 
         // 親ウィジェットが設定されていれば変更されないこと
         QCOMPARE_EQ(gui.imageTransparent->parent(), this);

@@ -60,7 +60,7 @@ void BasicImageViewControl::onSaveButtonClicked()
     }
 }
 
-void BasicImageViewControl::onLoadButtonClicked()
+void BasicImageViewControl::onLoadButtonClicked() const
 {
     ImageOpenDialog dialog;
     connect(&dialog, &ImageOpenDialog::fileSelected, this,

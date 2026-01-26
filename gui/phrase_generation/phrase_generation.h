@@ -18,7 +18,11 @@ class phraseGeneration : public QWidget
 
 public:
     explicit phraseGeneration(QWidget *parent = nullptr);
-    ~phraseGeneration();
+    ~phraseGeneration() override;
+    phraseGeneration(const phraseGeneration &) = delete;
+    phraseGeneration &operator=(const phraseGeneration &) = delete;
+    phraseGeneration(phraseGeneration &&) = delete;
+    phraseGeneration &operator=(phraseGeneration &&) = delete;
 
 private slots:
 
@@ -33,9 +37,9 @@ private slots:
 private:
     Ui::phraseGeneration *ui;
     void loadTitles();
-    QString loadContent(const QString &filename, QString *title = nullptr);
-    void saveContent(const QString &title, const QString &content);
-    void deleteContent(const QString &title);
+    static QString loadContent(const QString &filename, QString *title = nullptr);
+    static void saveContent(const QString &title, const QString &content);
+    void deleteContent(const QString &filename);
     QString currentFile; // 現在のファイル名を保持
 
 protected:

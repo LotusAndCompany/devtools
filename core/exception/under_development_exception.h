@@ -28,16 +28,23 @@ public:
      * @param src コピー元インスタンス
      */
     UnderDevelopmentException(const UnderDevelopmentException &src) = default;
+    UnderDevelopmentException(UnderDevelopmentException &&src) noexcept = default;
+    UnderDevelopmentException &operator=(const UnderDevelopmentException &src) = default;
+    UnderDevelopmentException &operator=(UnderDevelopmentException &&src) noexcept = default;
+    ~UnderDevelopmentException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ
      */
     explicit UnderDevelopmentException(const QString &message) : CommonException(message) {}
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new UnderDevelopmentException(*this); }
+    [[nodiscard]] QException *clone() const override
+    {
+        return new UnderDevelopmentException(*this);
+    }
 
 #ifdef _TEST_UnderDevelopmentException
     friend class Test::TestUnderDevelopmentException;

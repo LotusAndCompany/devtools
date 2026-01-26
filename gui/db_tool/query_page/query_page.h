@@ -15,7 +15,11 @@ class QueryPage : public QWidget
 
 public:
     explicit QueryPage(QWidget *parent = nullptr);
-    ~QueryPage();
+    ~QueryPage() override;
+    QueryPage(const QueryPage &) = delete;
+    QueryPage &operator=(const QueryPage &) = delete;
+    QueryPage(QueryPage &&) = delete;
+    QueryPage &operator=(QueryPage &&) = delete;
 
 protected:
     void changeEvent(QEvent *event) override;

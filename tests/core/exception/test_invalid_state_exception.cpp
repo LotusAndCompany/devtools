@@ -17,16 +17,16 @@ class TestInvalidStateException : public QObject
 
 private slots:
     // Test cases:
-    void test_defaultConstructor();
+    static void test_defaultConstructor();
     void test_messageConstructor();
-    void test_actualExpectedConstructor();
+    static void test_actualExpectedConstructor();
     void test_clone();
     void test_raise();
 };
 
 void TestInvalidStateException::test_defaultConstructor()
 {
-    InvalidStateException e;
+    InvalidStateException const e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
     QCOMPARE_EQ(e.message, "");
 }
@@ -34,14 +34,14 @@ void TestInvalidStateException::test_defaultConstructor()
 void TestInvalidStateException::test_messageConstructor()
 {
     const QString msg = rd.nextQString(length);
-    InvalidStateException e(msg);
+    InvalidStateException const e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QCOMPARE_EQ(e.message, msg);
 }
 
 void TestInvalidStateException::test_actualExpectedConstructor()
 {
-    InvalidStateException e("_actual_", "_expected_");
+    InvalidStateException const e("_actual_", "_expected_");
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QCOMPARE_EQ(e.message, "[InvalidStateException] actual: _actual_, expected: _expected_");
 }
@@ -56,7 +56,7 @@ void TestInvalidStateException::test_clone()
     // clone()を呼び出しても元のインスタンスが変わらないこと
     QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QCOMPARE_EQ(static_cast<InvalidStateException *>(copied.get())->message, msg);
+    QCOMPARE_EQ(dynamic_cast<InvalidStateException *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
     QCOMPARE_NE(&e, copied.get());
 }
@@ -64,7 +64,7 @@ void TestInvalidStateException::test_clone()
 void TestInvalidStateException::test_raise()
 {
     const QString msg = rd.nextQString(length);
-    InvalidStateException src(msg);
+    InvalidStateException const src(msg);
 
     // try-catchのスコープより寿命が長い例外インスタンスを投げる
     try {

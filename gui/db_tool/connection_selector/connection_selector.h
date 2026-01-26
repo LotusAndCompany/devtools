@@ -15,7 +15,11 @@ class ConnectionSelector : public QWidget
 
 public:
     explicit ConnectionSelector(QWidget *parent = nullptr);
-    ~ConnectionSelector();
+    ~ConnectionSelector() override;
+    ConnectionSelector(const ConnectionSelector &) = delete;
+    ConnectionSelector &operator=(const ConnectionSelector &) = delete;
+    ConnectionSelector(ConnectionSelector &&) = delete;
+    ConnectionSelector &operator=(ConnectionSelector &&) = delete;
 
     void loadHistory();
 

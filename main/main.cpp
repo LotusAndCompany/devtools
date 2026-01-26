@@ -2,15 +2,15 @@
 
 #if defined(BUILD_TYPE_Debug) || defined(BUILD_TYPE_RelWithDebInfo)
 #include <iostream>
-__attribute__((destructor)) void destructor(void)
+__attribute__((destructor)) void destructor()
 {
     // NOTE:
     // これが実行される時点でメニューバーが解放されていないらしく、メモリリークとして検出されるらしい
     // FIXME: QtCreatorから実行するとファイルへの出力が失敗するるらしい
     const int status = system("leaks -q DevTools &> ./leaks.log");
-    if (status) {
+    if (status != 0) {
         // 標準エラー出力を使うのはやめた方が良いかも
-        std::cerr << "Memory leaks are detected!" << std::endl;
+        std::cerr << "Memory leaks are detected!" << '\n';
         system("cat ./leaks.log >/dev/stderr");
         exit(1);
     }

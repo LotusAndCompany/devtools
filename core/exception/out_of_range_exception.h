@@ -28,6 +28,10 @@ public:
      * @param src コピー元インスタンス
      */
     OutOfRangeException(const OutOfRangeException &src) = default;
+    OutOfRangeException(OutOfRangeException &&src) noexcept = default;
+    OutOfRangeException &operator=(const OutOfRangeException &src) = default;
+    OutOfRangeException &operator=(OutOfRangeException &&src) noexcept = default;
+    ~OutOfRangeException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ
@@ -61,10 +65,10 @@ public:
                       .arg(max);
     }
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new OutOfRangeException(*this); }
+    [[nodiscard]] QException *clone() const override { return new OutOfRangeException(*this); }
 
 #ifdef _TEST_OutOfRangeException
     friend class Test::TestOutOfRangeException;

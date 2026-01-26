@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "noEmit": true
+    },
+    "exclude": [
+        "res/**/*.ts"
+    ],
+    "files": []
+}

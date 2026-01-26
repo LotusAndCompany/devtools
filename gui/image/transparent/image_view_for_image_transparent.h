@@ -11,7 +11,7 @@ class TestImageViewForImageTransparent;
 }
 #endif
 
-namespace _ImageViewForImageTransparentInternal {
+namespace ImageViewForImageTransparentInternal {
 class ClickableLabel;
 }
 
@@ -45,19 +45,18 @@ private slots:
      */
     void onLabelClicked(const QPoint &point);
 
-private:
     /**
      * @brief ui->imageを返す
      * @return ui->image
      */
-    _ImageViewForImageTransparentInternal::ClickableLabel *ui_image() const;
+    [[nodiscard]] ImageViewForImageTransparentInternal::ClickableLabel *ui_image() const;
 
 #ifdef _TEST_ImageViewForImageTransparent
     friend class Test::TestImageViewForImageTransparent;
 #endif
 };
 
-namespace _ImageViewForImageTransparentInternal {
+namespace ImageViewForImageTransparentInternal {
 /**
  * @brief クリックしたピクセルの座標と色とを取得できるラベル
  */
@@ -80,8 +79,8 @@ signals:
     void clicked(const QPoint &point);
 
 protected:
-    void mousePressEvent(QMouseEvent *) override;
+    void mousePressEvent(QMouseEvent * /*ev*/) override;
 };
-} // namespace _ImageViewForImageTransparentInternal
+} // namespace ImageViewForImageTransparentInternal
 
 #endif // IMAGE_VIEW_FOR_IMAGE_TRANSPARENT_H

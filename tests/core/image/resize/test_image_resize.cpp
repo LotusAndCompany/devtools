@@ -30,7 +30,7 @@ private slots:
     void cleanup();      // will be called after every test function.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_load();
     void test_save();
     void test_overwriteSave();
@@ -56,11 +56,12 @@ void TestImageResize::initTestCase()
 
 void TestImageResize::init()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 }
 
 void TestImageResize::cleanup()
@@ -71,7 +72,7 @@ void TestImageResize::cleanup()
 
 void TestImageResize::test_constructor()
 {
-    ImageResize imageResize;
+    ImageResize const imageResize;
 
     // stringIDが想定通り設定されていること
     QCOMPARE_EQ(imageResize.stringID, "image-resize");
@@ -118,8 +119,9 @@ void TestImageResize::test_save()
     imageResize.setScale(2.0);
     imageResize.update();
     const QSize size640 = imageResize.current().size();
-    if (size640.isEmpty())
+    if (size640.isEmpty()) {
         QFAIL("image is empty");
+    }
     imageResize.save(testDirPath + "save2.png");
     QCOMPARE_EQ(QImage(testDirPath + "save2.png").size(), size640);
 }
@@ -140,8 +142,9 @@ void TestImageResize::test_overwriteSave()
     imageResize.setScale(2.0);
     imageResize.update();
     const QSize size640 = imageResize.current().size();
-    if (size640.isEmpty())
+    if (size640.isEmpty()) {
         QFAIL("image is empty");
+    }
     imageResize.overwriteSave(testDirPath + "overwriteSave2.png");
     QCOMPARE_EQ(QImage(testDirPath + "overwriteSave2.png").size(), size640);
 }
@@ -154,8 +157,9 @@ void TestImageResize::test_reset()
     imageResize.reset();
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     imageResize.setSize(QSize(32, 32));
 
@@ -174,8 +178,9 @@ void TestImageResize::test_update()
     QVERIFY(!imageResize.update());
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     imageResize.setScale(2.0);
 
@@ -189,8 +194,9 @@ void TestImageResize::test_setScale()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const double randomScaleX = rd.nextDouble(0.1, 10);
         const double randomScaleY = rd.nextDouble(0.1, 10);
@@ -213,8 +219,9 @@ void TestImageResize::test_setScale()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const double randomScale = rd.nextDouble(0.1, 10);
 
@@ -237,8 +244,9 @@ void TestImageResize::test_setScaleX()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const double randomScale = rd.nextDouble(0.1, 10);
 
@@ -269,8 +277,9 @@ void TestImageResize::test_setScaleY()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const double randomScale = rd.nextDouble(0.1, 10);
 
@@ -302,8 +311,9 @@ void TestImageResize::test_setSize()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const int randomWidth = rd.nextInt(32, 3200);
         const int randomHeight = rd.nextInt(32, 3200);
@@ -329,8 +339,9 @@ void TestImageResize::test_setWidth()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const int randomWidth = rd.nextInt(32, 3200);
 
@@ -351,8 +362,9 @@ void TestImageResize::test_setWidth()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const int randomWidth = rd.nextInt(32, 3200);
 
@@ -377,8 +389,9 @@ void TestImageResize::test_setHeight()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const int randomHeight = rd.nextInt(32, 3200);
 
@@ -399,8 +412,9 @@ void TestImageResize::test_setHeight()
     {
         ImageResize imageResize;
         imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-        if (imageResize.current().isNull())
+        if (imageResize.current().isNull()) {
             QFAIL("image is empty");
+        }
 
         const int randomHeight = rd.nextInt(32, 3200);
 
@@ -428,8 +442,9 @@ void TestImageResize::test_computedSize()
     QVERIFY(imageResize.computedSize() == QSize(0, 0));
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // DEFAULTの場合はそのままの値を返すこと
     QCOMPARE_EQ(imageResize.computedSize(), size320);
@@ -464,8 +479,9 @@ void TestImageResize::test_computedScale()
     QCOMPARE_EQ(imageResize.computedSize(), QSize(0, 0));
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // DEFAULTの場合は1.0を返すこと
     QCOMPARE_EQ(imageResize.computedScaleX(), 1.0);
@@ -496,8 +512,9 @@ void TestImageResize::test_setSmoothTransformationEnabled()
 {
     ImageResize imageResize;
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // trueを設定できること
     imageResize.setSmoothTransformationEnabled(true);
@@ -522,8 +539,9 @@ void TestImageResize::test_aspectRatio()
     QVERIFY_THROWS_EXCEPTION(InvalidStateException, imageResize.aspectRatio());
 
     imageResize.ImageResizeInterface::load(testDirPath + resourceNames[0]);
-    if (imageResize.current().isNull())
+    if (imageResize.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 横/縦の値を返すこと
     QVERIFY(isEqaulApprox(imageResize.aspectRatio(), (double)size320.width() / size320.height()));

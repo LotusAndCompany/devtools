@@ -26,13 +26,17 @@ public:
     /**
      * デストラクタ
      */
-    ~AboutDevToolsDialog();
+    ~AboutDevToolsDialog() override;
+    AboutDevToolsDialog(const AboutDevToolsDialog &) = delete;
+    AboutDevToolsDialog &operator=(const AboutDevToolsDialog &) = delete;
+    AboutDevToolsDialog(AboutDevToolsDialog &&) = delete;
+    AboutDevToolsDialog &operator=(AboutDevToolsDialog &&) = delete;
 
 private slots:
     /**
      * @brief コピーボタンを押した時の処理
      */
-    void onCopyButtonClicked();
+    static void onCopyButtonClicked();
 };
 
 #endif // ABOUT_DEVTOOLS_DIALOG_H

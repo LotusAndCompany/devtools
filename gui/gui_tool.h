@@ -5,9 +5,10 @@
 
 // 0: using GuiTool = QWidget;
 // 1: using GuiTool = _GuiToolSuperClass;
-#define _DevTools_USE_GUI_TOOL_SUPERCLASS 0
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define DevTools_USE_GUI_TOOL_SUPERCLASS 0
 
-#if _DevTools_USE_GUI_TOOL_SUPERCLASS
+#if DevTools_USE_GUI_TOOL_SUPERCLASS
 // NOTE: 直接使いたくない名前にする
 class _GuiToolSuperClass : public QWidget
 {
@@ -31,6 +32,7 @@ using GuiTool = _GuiToolSuperClass;
 #else
 using GuiTool = QWidget;
 
+// NOLINTNEXTLINE(readability-avoid-unconditional-preprocessor-if)
 #if 0
 #include <QWidget>
 class GuiTool : public QWidget

@@ -12,7 +12,7 @@
 #include <QTranslator>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), m_settingsDialog(nullptr)
+    : QMainWindow(parent), ui(new Ui::MainWindow), m_settingsDialog(new SettingsDialog(this))
 {
     qDebug() << "=== MainWindow Constructor START ===";
     ui->setupUi(this);
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 設定ダイアログを作成し、シグナルを接続
     qDebug() << "Creating SettingsDialog...";
-    m_settingsDialog = new SettingsDialog(this);
+
     qDebug() << "Connecting signals...";
     connect(m_settingsDialog, &SettingsDialog::languageChanged, this,
             &MainWindow::onLanguageChanged);
@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Always on topボタンの初期状態を設定から読み込み
     QSettings settings;
-    bool alwaysOnTop = settings.value("window/alwaysOnTop", false).toBool();
+    bool const alwaysOnTop = settings.value("window/alwaysOnTop", false).toBool();
     ui->windowAlwaysOnTopButton->setChecked(alwaysOnTop);
 
     // 初回起動時のデフォルト値を書き込む
@@ -47,9 +47,11 @@ MainWindow::MainWindow(QWidget *parent)
         settings.setValue("general/showLastToolOnStartup", false);
     }
 
-    bool showSidebarOnStartup = settings.value("general/showSidemenuOnStartup", true).toBool();
+    bool const showSidebarOnStartup =
+        settings.value("general/showSidemenuOnStartup", true).toBool();
     setSidemenuHidden(!showSidebarOnStartup);
-    bool showLastToolOnStartup = settings.value("general/showLastToolOnStartup", false).toBool();
+    bool const showLastToolOnStartup =
+        settings.value("general/showLastToolOnStartup", false).toBool();
     if (showLastToolOnStartup) {
         const int lastToolValue = settings.value("general/lastUsedTool", -1).toInt();
         if (lastToolValue > Sidemenu::ID_MIN &&
@@ -171,7 +173,7 @@ void MainWindow::onLanguageChanged(const QString &languageCode)
     qDebug() << "=== MainWindow::onLanguageChanged CALLED with:" << languageCode << "===";
 
     // GuiApplicationを取得してchangeLanguageメソッドを使用
-    if (GuiApplication *app = qobject_cast<GuiApplication *>(QApplication::instance())) {
+    if (auto *app = qobject_cast<GuiApplication *>(QApplication::instance())) {
         if (app->changeLanguage(languageCode)) {
             // UIを再翻訳
             ui->retranslateUi(this);

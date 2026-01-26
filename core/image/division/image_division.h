@@ -22,7 +22,11 @@ class ImageDivisionInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
-    virtual ~ImageDivisionInterface() = default;
+    ImageDivisionInterface(const ImageDivisionInterface &) = delete;
+    ImageDivisionInterface(ImageDivisionInterface &&) = delete;
+    ImageDivisionInterface &operator=(const ImageDivisionInterface &) = delete;
+    ImageDivisionInterface &operator=(ImageDivisionInterface &&) = delete;
+    ~ImageDivisionInterface() override = default;
 
     /**
      * @brief 横の分割数を設定する
@@ -53,7 +57,7 @@ public:
      * @brief 元の画像を返す
      * @return 元の画像
      */
-    virtual const QImage &original() const = 0;
+    [[nodiscard]] virtual const QImage &original() const = 0;
     /**
      * @brief fileInfo() に基づいて保存するファイル名を返す
      * @param location 保存先フォルダ
@@ -61,23 +65,24 @@ public:
      * @param y y位置
      * @return 保存するファイル名
      */
-    virtual QString saveFilename(const QDir &location, unsigned int x, unsigned int y) const = 0;
+    [[nodiscard]] virtual QString saveFilename(const QDir &location, unsigned int x,
+                                               unsigned int y) const = 0;
 
     /**
      * @brief 現在の設定に基づいて計算される分割後の画像サイズ
      * @return 分割後の画像サイズ
      */
-    virtual QSizeF computedCellSize() const = 0;
+    [[nodiscard]] virtual QSizeF computedCellSize() const = 0;
     /**
      * @brief 現在の設定に基づいて計算される画像の横の分割数
      * @return 横の分割数。 `discardRemainders == false` の場合は端数を含む
      */
-    virtual unsigned int numberOfHorizontalDivision() const = 0;
+    [[nodiscard]] virtual unsigned int numberOfHorizontalDivision() const = 0;
     /**
      * @brief 現在の設定に基づいて計算される画像の縦の分割数
      * @return 縦の分割数。 `discardRemainders == false` の場合は端数を含む
      */
-    virtual unsigned int numberOfVerticalDivision() const = 0;
+    [[nodiscard]] virtual unsigned int numberOfVerticalDivision() const = 0;
 
     /// 分割後に画像の端の部分の大きさが十分でない場合、保存対象にしない
     bool discardRemainders = true;
@@ -104,17 +109,16 @@ public:
      */
     explicit ImageDivision(QObject *parent = nullptr);
 
-    inline bool save(const QString &path, const char *format = nullptr,
-                     int quality = -1) const override
+    bool save(const QString &path, const char *format = nullptr, int quality = -1) const override
     {
         return saveImpl(ImageIO::save, path, format, quality);
     }
-    inline bool overwriteSave(const QString &path, const char *format = nullptr,
-                              int quality = -1) const override
+    bool overwriteSave(const QString &path, const char *format = nullptr,
+                       int quality = -1) const override
     {
         return saveImpl(ImageIO::overwriteSave, path, format, quality);
     }
-    inline const QFileInfo &fileInfo(unsigned int index = 0) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int /*index*/ = 0) const override
     {
         return ImageIO::originalFileInfo();
     }
@@ -123,16 +127,17 @@ public:
     void setVerticalDivision(unsigned int m) noexcept(false) override;
     void setCellWidth(unsigned int width) noexcept(false) override;
     void setCellHeight(unsigned int height) noexcept(false) override;
-    const QImage &original() const override { return ImageIO::original(); }
-    QString saveFilename(const QDir &location, unsigned int x, unsigned int y) const override;
-    QSizeF computedCellSize() const override;
-    unsigned int numberOfHorizontalDivision() const override;
-    unsigned int numberOfVerticalDivision() const override;
+    [[nodiscard]] const QImage &original() const override { return ImageIO::original(); }
+    [[nodiscard]] QString saveFilename(const QDir &location, unsigned int x,
+                                       unsigned int y) const override;
+    [[nodiscard]] QSizeF computedCellSize() const override;
+    [[nodiscard]] unsigned int numberOfHorizontalDivision() const override;
+    [[nodiscard]] unsigned int numberOfVerticalDivision() const override;
 
 protected:
     bool loadImpl(const QString &path) override;
     void resetImpl() override;
-    inline bool updateImpl() override { return !current().isNull(); } // 特に何もしない
+    bool updateImpl() override { return !current().isNull(); } // 特に何もしない
 
 private:
     /// 分割数が不正
@@ -170,7 +175,8 @@ private:
      * @param hint 分割方法
      * @return 分割数
      */
-    unsigned int numberOfDivisionInternal(unsigned int sourceSize, const DivisionHints &hint) const
+    [[nodiscard]] unsigned int numberOfDivisionInternal(unsigned int sourceSize,
+                                                        const DivisionHints &hint) const
         noexcept(false);
 
     /**
