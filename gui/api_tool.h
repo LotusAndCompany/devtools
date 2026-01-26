@@ -25,7 +25,7 @@ class api_tool : public QFrame
 
 public:
     explicit api_tool(QWidget *parent = nullptr);
-    ~api_tool();
+    ~api_tool() override;
 
 private slots:
     void setupParametersTable();
@@ -39,13 +39,13 @@ private:
     QNetworkAccessManager *networkManager; // ネットワークマネージャの追加
     QStringList list;                      // リストデータの追加
     QStandardItemModel *paramsModel;
-    QStringListModel *responseModel;
-    QLabel *statusLabel;
-    QVBoxLayout *responseLayout;
-    qint64 requestStartTime;
-    QLineEdit *usernameEdit; // ユーザー名入力欄
-    QLineEdit *passwordEdit; // パスワード入力欄
-    QTextEdit *bodyTextEdit; // ボディテキストエリア
+    QStringListModel *responseModel{};
+    QLabel *statusLabel{};
+    QVBoxLayout *responseLayout{};
+    qint64 requestStartTime{};
+    QLineEdit *usernameEdit{}; // ユーザー名入力欄
+    QLineEdit *passwordEdit{}; // パスワード入力欄
+    QTextEdit *bodyTextEdit{}; // ボディテキストエリア
 };
 
 #endif // API_TOOL_H

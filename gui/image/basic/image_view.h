@@ -31,7 +31,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    virtual ~BasicImageView();
+    ~BasicImageView() override;
 
     /**
      * @brief 画像データを設定する。空の画像データを指定すると "No Image" になる

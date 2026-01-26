@@ -13,7 +13,7 @@ class Command : public QGroupBox
 
 public:
     explicit Command(QWidget *parent = nullptr);
-    ~Command();
+    ~Command() override;
 
 private:
     Ui::Command *ui;

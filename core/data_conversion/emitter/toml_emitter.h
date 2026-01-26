@@ -16,7 +16,7 @@ class TestTomlEmitter;
 }
 #endif
 
-namespace _TomlEmitterPrivate {
+namespace TomlEmitterPrivate {
 struct Util;
 };
 
@@ -24,7 +24,7 @@ struct Util;
 class TomlEmitter : BasicEmitter
 {
 public:
-    TomlEmitter() {}
+    TomlEmitter() = default;
 
     /**
      * @brief データを文字列に変換する
@@ -73,7 +73,7 @@ private:
         const QString &key, const QVariantMap &map,
         DataConversionInterface::Indentation indentation) noexcept(false);
 
-    friend struct _TomlEmitterPrivate::Util;
+    friend struct TomlEmitterPrivate::Util;
 #ifdef _TEST_TomlEmitter
     friend class Test::TestTomlEmitter;
 #endif

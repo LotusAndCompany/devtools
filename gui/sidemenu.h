@@ -30,7 +30,7 @@ public:
     /**
      * デストラクタ
      */
-    ~Sidemenu();
+    ~Sidemenu() override;
 
     /**
      * @brief サイドメニューのID
@@ -65,7 +65,7 @@ public:
      * @return アイコン
      * @exception InvalidArgumentException &lt;int&gt; 間違った ID が渡された場合
      */
-    static const QIcon icon(ID id) noexcept(false);
+    static QIcon icon(ID id) noexcept(false);
 
     /**
      * @brief 指定したIDのメニューを選択状態にする
@@ -114,12 +114,12 @@ private:
      */
     void filterItems(const QString &searchText);
 
-private slots:
     /**
-     * @brief サイドメニューのボタンが切り替わった場合
-     * @param id 切り替わったボタンのID
-     * @param checked ボタンの状態
-     */
+* @brief サイドメニューのボタンが切り替わ �合
+
+   * @param id 切り替わった� ���ID
+* @param checked ボタ � �
+        */
     void onButtonToggled(int id, bool checked);
     /**
      * @brief 検索ボックスのテキストが変更された時の処理

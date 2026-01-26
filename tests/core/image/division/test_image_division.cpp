@@ -28,16 +28,16 @@ private slots:
     void cleanup();      // will be called after every test function.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_load();
     void test_save();
     void test_overwriteSave();
-    void test_reset();
+    static void test_reset();
     void test_update();
-    void test_setHorizontalDivision();
-    void test_setVerticalDivision();
-    void test_setCellWidth();
-    void test_setCellHeight();
+    static void test_setHorizontalDivision();
+    static void test_setVerticalDivision();
+    static void test_setCellWidth();
+    static void test_setCellHeight();
     void test_computedCellSize();
     void test_numberOfHorizontalDivision();
     void test_numberOfVerticalDivision();
@@ -52,11 +52,12 @@ void TestImageDivision::initTestCase()
 
 void TestImageDivision::init()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 }
 
 void TestImageDivision::cleanup()
@@ -67,7 +68,7 @@ void TestImageDivision::cleanup()
 
 void TestImageDivision::test_constructor()
 {
-    ImageDivision imageDivision;
+    ImageDivision const imageDivision;
 
     // stringIDが想定通り設定されていること
     QCOMPARE_EQ(imageDivision.stringID, "image-division");
@@ -107,16 +108,17 @@ void TestImageDivision::test_save()
     QVERIFY(!imageDivision.save(""));
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
-    QFileInfo info(testDirPath + "save");
+    QFileInfo const info(testDirPath + "save");
     QVERIFY(!info.exists());
 
     // パスが存在しない場合、失敗すること
     QVERIFY(!imageDivision.save(info.filePath()));
 
-    QDir dir(testDirPath);
+    QDir const dir(testDirPath);
     dir.mkpath("save");
     QVERIFY(info.exists());
 
@@ -159,16 +161,17 @@ void TestImageDivision::test_overwriteSave()
     QVERIFY(!imageDivision.overwriteSave(""));
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
-    QFileInfo info(testDirPath + "overwriteSave");
+    QFileInfo const info(testDirPath + "overwriteSave");
     QVERIFY(!info.exists());
 
     // パスが存在しない場合、失敗すること
     QVERIFY(!imageDivision.overwriteSave(info.filePath()));
 
-    QDir dir(testDirPath);
+    QDir const dir(testDirPath);
     dir.mkpath("overwriteSave");
     QVERIFY(info.exists());
 
@@ -238,8 +241,9 @@ void TestImageDivision::test_update()
     QVERIFY(!imageDivision.update());
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // update()が成功すること
     QVERIFY(imageDivision.update());
@@ -309,8 +313,9 @@ void TestImageDivision::test_computedCellSize()
     QCOMPARE_EQ(imageDivision.computedCellSize(), QSizeF(0, 0));
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 初期状態では元の画像サイズを返すこと
     QCOMPARE_EQ(imageDivision.computedCellSize(), size320);
@@ -334,8 +339,9 @@ void TestImageDivision::test_numberOfHorizontalDivision()
     QCOMPARE_EQ(imageDivision.numberOfHorizontalDivision(), 0);
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 初期状態では1を返すこと
     QCOMPARE_EQ(imageDivision.numberOfHorizontalDivision(), 1);
@@ -366,8 +372,9 @@ void TestImageDivision::test_numberOfVerticalDivision()
     QCOMPARE_EQ(imageDivision.numberOfVerticalDivision(), 0);
 
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 初期状態では1を返すこと
     QCOMPARE_EQ(imageDivision.numberOfVerticalDivision(), 1);
@@ -394,8 +401,9 @@ void TestImageDivision::test_saveFilename()
 {
     ImageDivision imageDivision;
     imageDivision.ImageDivisionInterface::load(testDirPath + resourceNames[0]);
-    if (imageDivision.current().isNull())
+    if (imageDivision.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     RandomData rd;
     const unsigned int randomX = rd.nextInt(64);

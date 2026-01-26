@@ -17,16 +17,16 @@ class TestCommonException : public QObject
 
 private slots:
     // Test cases:
-    void test_defaultConstructor();
+    static void test_defaultConstructor();
     void test_messageConstructor();
     void test_clone();
     void test_raise();
-    void test_QDebugOutputOperator();
+    static void test_QDebugOutputOperator();
 };
 
 void TestCommonException::test_defaultConstructor()
 {
-    CommonException e;
+    CommonException const e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
     QVERIFY(e.message == "");
 }
@@ -34,7 +34,7 @@ void TestCommonException::test_defaultConstructor()
 void TestCommonException::test_messageConstructor()
 {
     const QString msg = rd.nextQString(length);
-    CommonException e(msg);
+    CommonException const e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QCOMPARE_EQ(e.message, msg);
 }
@@ -49,7 +49,7 @@ void TestCommonException::test_clone()
     // clone()を呼び出しても元のインスタンスが変わらないこと
     QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QCOMPARE_EQ(static_cast<CommonException *>(copied.get())->message, msg);
+    QCOMPARE_EQ(dynamic_cast<CommonException *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
     QCOMPARE_NE(&e, copied.get());
 }
@@ -57,7 +57,7 @@ void TestCommonException::test_clone()
 void TestCommonException::test_raise()
 {
     const QString msg = rd.nextQString(length);
-    CommonException src(msg);
+    CommonException const src(msg);
 
     // try-catchのスコープより寿命が長い例外インスタンスを投げる
     try {
@@ -77,9 +77,9 @@ void TestCommonException::test_raise()
 
 void TestCommonException::test_QDebugOutputOperator()
 {
-    CommonException d("Custom message for Debug");
-    CommonException i("Custom message for Info");
-    CommonException w("Custom message for Waning");
+    CommonException const d("Custom message for Debug");
+    CommonException const i("Custom message for Info");
+    CommonException const w("Custom message for Waning");
 
     // NOTE: 想定通りの値が出力できたかはコード上では確認が難しそう
     /* テスト結果に

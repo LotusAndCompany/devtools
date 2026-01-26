@@ -24,7 +24,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    virtual ~Tool() = default;
+    ~Tool() override = default;
 
     /**
      * @brief ツールのID
@@ -67,12 +67,12 @@ public:
      * @param id ツールID
      * @return 指定されたツールIDの情報
      */
-    static const Translatable translatable(ID id) noexcept(false);
+    static Translatable translatable(ID id) noexcept(false);
     /**
      * @brief このインスタンスの情報を返す
      * @return このインスタンスの情報
      */
-    const Translatable &translatable() const { return _translatable; }
+    [[nodiscard]] const Translatable &translatable() const { return _translatable; }
 
 protected:
     /**
@@ -88,7 +88,7 @@ protected:
      * @param stringID ツールの文字列ID
      * @param parent 親オブジェクト
      */
-    explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
+    explicit Tool(ID id, QString stringID, QObject *parent = nullptr) noexcept(false);
 
     /// ツールIDが無効
     static const QString invalidToolIDReason;
@@ -109,7 +109,7 @@ protected:
      * @param event 発生したイベント
      * @return 処理した場合は`true`、無視した場合は`false`
      */
-    virtual bool event(QEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     /// ツールのID。現状使う予定がないため非公開にする。

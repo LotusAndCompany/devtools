@@ -14,8 +14,9 @@ ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTranspa
     ui->setupUi(this);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
-    if (imageTransparent->parent() == nullptr)
+    if (imageTransparent->parent() == nullptr) {
         imageTransparent->setParent(this);
+    }
 
     connect(ui->control, &BasicImageViewControl::loadFileSelected, this,
             &ImageTransparentGUI::onLoadImageSelected);
@@ -45,7 +46,7 @@ void ImageTransparentGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool result = imageTransparent->load(path);
+    bool const result = imageTransparent->load(path);
     imageTransparent->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageTransparent->current()), true);
@@ -88,10 +89,11 @@ void ImageTransparentGUI::onPixelSelected(const QPoint &point, const QColor &col
     qDebug() << "point:" << point << ", color:" << color;
     ui->colorSample->setColor(color);
 
-    if (onlyContiguousArea)
+    if (onlyContiguousArea) {
         imageTransparent->addTransparentPixel(point);
-    else
+    } else {
         imageTransparent->addTransparentColor(color);
+    }
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageTransparent->current()));
 }
@@ -100,8 +102,9 @@ void ImageTransparentGUI::onToleranceValueChanged(double tolerance)
 {
     qDebug() << "tolerance:" << tolerance;
 
-    if (tolerance < 0.0 || 1.0 < tolerance)
+    if (tolerance < 0.0 || 1.0 < tolerance) {
         throw InvalidArgumentException<double>(tolerance, "tolerance must be in range [0.0, 1.0]");
+    }
 
     imageTransparent->tolerance = tolerance;
 }
@@ -110,9 +113,10 @@ void ImageTransparentGUI::onTransparencyValueChanged(double transparency)
 {
     qDebug() << "transparency:" << transparency;
 
-    if (transparency < 0.0 || 1.0 < transparency)
+    if (transparency < 0.0 || 1.0 < transparency) {
         throw InvalidArgumentException<double>(transparency,
                                                "transparency must be in range [0.0, 1.0]");
+    }
 
     imageTransparent->opacity = 255 * (1.0 - transparency);
 }

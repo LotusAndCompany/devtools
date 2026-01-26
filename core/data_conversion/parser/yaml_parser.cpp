@@ -33,7 +33,7 @@ YamlParser::ParseResult YamlParser::tryParse(const QString &src) const
  * @param node 対象のノード
  * @return `node` の場所(" at position: %1, line: %2, column: %3" の形)
  */
-QString _nodePosition(const YAML::Node &node)
+QString nodePosition(const YAML::Node &node)
 {
     const auto &mark = node.Mark();
     return QString(" at position: %1, line: %2, column: %3")
@@ -45,10 +45,10 @@ QString _nodePosition(const YAML::Node &node)
 bool YamlParser::validateYamlNode(const YAML::Node &node, ParseResult *result)
 {
     if (!node.IsDefined()) {
-        if (result) {
+        if (result != nullptr) {
             result->data = QVariant();
             result->success = false;
-            result->errors.push_back("invalid node" + _nodePosition(node));
+            result->errors.push_back("invalid node" + nodePosition(node));
         }
         return false;
     }
@@ -60,13 +60,13 @@ YamlParser::ParseResult YamlParser::yamlNodeToQVariant(const YAML::Node &node)
     ParseResult result;
 
     if (validateYamlNode(node, &result)) {
-        if (node.IsMap())
+        if (node.IsMap()) {
             return yamlMapToQVariantMap(node);
-        else if (node.IsSequence())
+        } else if (node.IsSequence()) {
             return yamlSequenceToQVariantList(node);
-        else if (node.IsScalar())
+        } else if (node.IsScalar()) {
             return yamlScalarToQVariant(node);
-        else if (node.IsNull()) {
+        } else if (node.IsNull()) {
             // NOTE: このパターンがあり得るのか分からない
             result.success = true;
             result.data = QVariant::fromValue(nullptr);
@@ -89,7 +89,7 @@ YamlParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node)
         } else {
             // 論理エラー; 到達不能の想定
             throw InvalidArgumentException<bool>(
-                node.IsScalar(), "node is expected to be scalar type" + _nodePosition(node));
+                node.IsScalar(), "node is expected to be scalar type" + nodePosition(node));
         }
     }
 
@@ -111,35 +111,35 @@ YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
                     const auto valueParseResult = yamlNodeToQVariant(valueNode);
 
                     if (keyParseResult && valueParseResult) {
-                        map[keyParseResult.data.toString()] = std::move(valueParseResult.data);
+                        map[keyParseResult.data.toString()] = valueParseResult.data;
                     } else {
                         // keyもしくはvalueが不正
                         result.success = false;
-                        result.data = std::move(map);
+                        result.data = map;
                         result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
-                        result.errors.append(std::move(keyParseResult.errors));
-                        result.errors.append(std::move(valueParseResult.errors));
+                        result.errors.append(keyParseResult.errors);
+                        result.errors.append(valueParseResult.errors);
                         return result;
                     }
                 } else {
                     // NOTE: yamlでは文字列以外のkeyも認められるが、今のところはサポートしない
                     result.success = false;
-                    result.data = std::move(map);
+                    result.data = map;
                     result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
                     result.errors.push_back("no-scaler type key is not supported currently" +
-                                            _nodePosition(node));
+                                            nodePosition(node));
                     return result;
                 }
             }
 
             result.success = true;
-            result.data = std::move(map);
+            result.data = map;
             result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
             return result;
         } else {
             // 論理エラー; 到達不能の想定
             throw InvalidArgumentException<bool>(
-                node.IsMap(), "node is expected to be map type" + _nodePosition(node));
+                node.IsMap(), "node is expected to be map type" + nodePosition(node));
         }
     }
 
@@ -157,25 +157,25 @@ YamlParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node 
                 const auto valueParseResult = yamlNodeToQVariant(*it);
 
                 if (valueParseResult) {
-                    list.push_back(std::move(valueParseResult.data));
+                    list.push_back(valueParseResult.data);
                 } else {
                     // valueが不正
                     result.success = false;
-                    result.data = std::move(list);
+                    result.data = list;
                     result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
-                    result.errors.append(std::move(valueParseResult.errors));
+                    result.errors.append(valueParseResult.errors);
                     return result;
                 }
             }
 
             result.success = true;
-            result.data = std::move(list);
+            result.data = list;
             result.extras[EXTRAS_YAML_STYLE] = static_cast<int>(node.Style());
             return result;
         } else {
             // 論理エラー; 到達不能の想定
             throw InvalidArgumentException(
-                node.IsSequence(), "node is expected to be sequence type" + _nodePosition(node));
+                node.IsSequence(), "node is expected to be sequence type" + nodePosition(node));
         }
     }
 

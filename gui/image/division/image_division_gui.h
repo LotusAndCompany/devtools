@@ -33,7 +33,7 @@ public:
      * @param parent 親ウィジェット
      */
     explicit ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidget *parent = nullptr);
-    ~ImageDivisionGUI();
+    ~ImageDivisionGUI() override;
 
 private slots:
     /**

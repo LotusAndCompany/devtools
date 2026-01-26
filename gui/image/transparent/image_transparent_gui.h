@@ -34,7 +34,7 @@ public:
      */
     explicit ImageTransparentGUI(ImageTransparentInterface *imageTransparent,
                                  QWidget *parent = nullptr);
-    ~ImageTransparentGUI();
+    ~ImageTransparentGUI() override;
 
 protected slots:
     /**

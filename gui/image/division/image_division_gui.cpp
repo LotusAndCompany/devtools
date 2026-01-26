@@ -16,8 +16,9 @@ ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidge
     ui->setupUi(this);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
-    if (imageDivision->parent() == nullptr)
+    if (imageDivision->parent() == nullptr) {
         imageDivision->setParent(this);
+    }
 
     ui->control->saveFileDialogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
     connect(ui->control, &BasicImageViewControl::loadFileSelected, this,
@@ -60,7 +61,7 @@ void ImageDivisionGUI::onLoadImageSelected(const QString &path)
     ui->sizeLabel->setText(tr("%1 x %2").arg(size.width()).arg(size.height()));
 
     // NOTE: 最大値・最小値を設定する
-    QSignalBlocker blockers[] = {
+    QSignalBlocker const blockers[] = {
         QSignalBlocker(ui->hDivValue),
         QSignalBlocker(ui->vDivValue),
         QSignalBlocker(ui->widthValue),
@@ -121,8 +122,9 @@ void ImageDivisionGUI::onDivisionModeClicked(QAbstractButton *button)
 
 void ImageDivisionGUI::onHorizontalDivisionValueChanged(int hDiv)
 {
-    if (!ui->useDivisionButton->isEnabled())
+    if (!ui->useDivisionButton->isEnabled()) {
         throw InvalidStateException("useDivisionButton expected to be checked");
+    }
 
     imageDivision->setHorizontalDivision(hDiv);
     updateUI();
@@ -130,8 +132,9 @@ void ImageDivisionGUI::onHorizontalDivisionValueChanged(int hDiv)
 
 void ImageDivisionGUI::onVerticalDivisionValueChanged(int vDiv)
 {
-    if (!ui->useDivisionButton->isEnabled())
+    if (!ui->useDivisionButton->isEnabled()) {
         throw InvalidStateException("useDivisionButton expected to be checked");
+    }
 
     imageDivision->setVerticalDivision(vDiv);
     updateUI();
@@ -139,8 +142,9 @@ void ImageDivisionGUI::onVerticalDivisionValueChanged(int vDiv)
 
 void ImageDivisionGUI::onWidthValueChanged(int width)
 {
-    if (!ui->useSizeButton->isEnabled())
+    if (!ui->useSizeButton->isEnabled()) {
         throw InvalidStateException("useSizeButton expected to be checked");
+    }
 
     imageDivision->setCellWidth(width);
     updateUI();
@@ -148,8 +152,9 @@ void ImageDivisionGUI::onWidthValueChanged(int width)
 
 void ImageDivisionGUI::onHeightValueChanged(int height)
 {
-    if (!ui->useSizeButton->isEnabled())
+    if (!ui->useSizeButton->isEnabled()) {
         throw InvalidStateException("useSizeButton expected to be checked");
+    }
 
     imageDivision->setCellHeight(height);
     updateUI();
@@ -158,7 +163,7 @@ void ImageDivisionGUI::onHeightValueChanged(int height)
 void ImageDivisionGUI::updateUI()
 {
     const auto cellSize = imageDivision->computedCellSize();
-    QSignalBlocker blockers[] = {
+    QSignalBlocker const blockers[] = {
         QSignalBlocker(ui->hDivValue),
         QSignalBlocker(ui->vDivValue),
         QSignalBlocker(ui->widthValue),

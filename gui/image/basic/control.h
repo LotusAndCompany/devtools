@@ -30,7 +30,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~BasicImageViewControl();
+    ~BasicImageViewControl() override;
 
     /**
      * @brief save/loadで開くダイアログの種類
@@ -67,7 +67,7 @@ private slots:
     /**
      * @brief 読み込みボタンが押された時の処理
      */
-    void onLoadButtonClicked();
+    void onLoadButtonClicked() const;
     /**
      * @brief 読み込むファイルが選択された時の処理
      * @param path ファイル名

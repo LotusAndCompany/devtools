@@ -44,10 +44,10 @@ public:
                   expected;
     }
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new InvalidStateException(*this); }
+    [[nodiscard]] QException *clone() const override { return new InvalidStateException(*this); }
 
 #ifdef _TEST_InvalidStateException
     friend class Test::TestInvalidStateException;

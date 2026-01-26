@@ -5,9 +5,9 @@
 
 // 0: using GuiTool = QWidget;
 // 1: using GuiTool = _GuiToolSuperClass;
-#define _DevTools_USE_GUI_TOOL_SUPERCLASS 0
+#define DevTools_USE_GUI_TOOL_SUPERCLASS 0
 
-#if _DevTools_USE_GUI_TOOL_SUPERCLASS
+#if DevTools_USE_GUI_TOOL_SUPERCLASS
 // NOTE: 直接使いたくない名前にする
 class _GuiToolSuperClass : public QWidget
 {

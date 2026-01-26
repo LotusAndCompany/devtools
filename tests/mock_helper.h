@@ -14,10 +14,10 @@ template <typename>
 class FunctionMock;
 
 template <typename result_type>
-struct _DefaultValue;
+struct DefaultValue;
 
 template <typename... arg_types>
-struct _ArgumentsHistory;
+struct ArgumentsHistory;
 
 /**
  * @brief mockの実装に使える、中身を入れ替えられる関数オブジェクト
@@ -54,13 +54,13 @@ template <typename result_type, typename... arg_types>
 class FunctionMock<result_type(arg_types...)>
 {
     using function_type = std::function<result_type(arg_types...)>;
-    using history_type = typename _ArgumentsHistory<arg_types...>::element_type;
+    using history_type = typename ArgumentsHistory<arg_types...>::element_type;
 
 public:
     /**
      * @brief デフォルトコンストラクタ
      */
-    FunctionMock() {}
+    FunctionMock() = default;
     /**
      * @brief func を設定するコンストラクタ
      * @param f 設定する関数。 std::function<return_type(arg_types...)> 型の値を受け取れる。
@@ -75,14 +75,14 @@ public:
     {
         _count++;
 
-        if constexpr (!std::is_void<history_type>::value) {
+        if constexpr (!std::is_void_v<history_type>) {
             argsHistory.push_back({args...});
         }
 
         if (hasFunction()) {
             return func(args...);
         } else {
-            return _DefaultValue<result_type>::get();
+            return DefaultValue<result_type>::get();
         }
     }
 
@@ -91,30 +91,30 @@ public:
      * @param args 引数リスト
      * @return func が設定されていれば func の返り値、設定されていなければデフォルトの値。
      */
-    inline result_type operator()(arg_types... args) { return invoke(args...); }
+    result_type operator()(arg_types... args) { return invoke(args...); }
 
     /**
      * @brief func が設定されているかを返す
      * @return 設定されていれば`true`
      */
-    inline bool hasFunction() const { return (bool)func; }
+    [[nodiscard]] bool hasFunction() const { return (bool)func; }
     /**
      * @brief この関数オブジェクトが呼び出されたかを返す
      * @return 呼び出されていれば`true`
      */
-    inline bool isInvoked() const { return 0 < _count; }
+    [[nodiscard]] bool isInvoked() const { return 0 < _count; }
     /**
      * @brief この関数オブジェクトが呼び出された回数を返す
      * @return 呼び出された回数
      */
-    inline size_t count() const { return _count; }
+    [[nodiscard]] size_t count() const { return _count; }
     /**
      * @brief 呼び出された回数と引数リストの履歴を初期化する
      */
     void resetCount()
     {
         _count = 0;
-        if constexpr (!std::is_void<history_type>::value) {
+        if constexpr (!std::is_void_v<history_type>) {
             argsHistory.clear();
         }
     }
@@ -126,8 +126,9 @@ public:
      */
     void setFunction(const function_type &f, bool keepCount = false)
     {
-        if (!keepCount)
+        if (!keepCount) {
             resetCount();
+        }
 
         func = f;
     }
@@ -136,16 +137,16 @@ public:
      * @brief func を削除する
      * @param keepCount `true`なら _count と argsHistory とを初期化しない
      */
-    inline void clearFunction(bool keepCount = false) { setFunction(function_type(), keepCount); }
+    void clearFunction(bool keepCount = false) { setFunction(function_type(), keepCount); }
 
     /**
      * @brief この関数オブジェクトに渡された引数リストの履歴を返す
      * @param index インデックス。0=最古、size()-1または-1=最新。
      * @return 渡された引数リストの履歴
      */
-    inline const history_type &argumentsHistory(int index = -1) const
+    [[nodiscard]] const history_type &argumentsHistory(int index = -1) const
     {
-        if constexpr (std::is_void<history_type>::value) {
+        if constexpr (std::is_void_v<history_type>) {
             // void
             return;
         } else {
@@ -161,7 +162,7 @@ private:
     size_t _count = 0;
 
     /// この関数オブジェクトに渡された引数の履歴
-    _ArgumentsHistory<arg_types...> argsHistory;
+    ArgumentsHistory<arg_types...> argsHistory;
 };
 
 /**
@@ -169,21 +170,21 @@ private:
  * @tparam result_type 関数の返り値の型
  */
 template <typename result_type>
-struct _DefaultValue
+struct DefaultValue
 {
     /**
      * @brief デフォルト値を返す
      * @return デフォルト値
      */
-    inline static result_type get()
+    static result_type get()
     {
-        if constexpr (std::is_void<result_type>::value) {
+        if constexpr (std::is_void_v<result_type>) {
             // void
             return;
-        } else if constexpr (std::is_pointer<result_type>::value) {
+        } else if constexpr (std::is_pointer_v<result_type>) {
             // pointer
             return nullptr;
-        } else if constexpr (std::is_fundamental<result_type>::value) {
+        } else if constexpr (std::is_fundamental_v<result_type>) {
             // primitive types such as int, float, char, bool, etc...
             return static_cast<result_type>(0);
         } else {
@@ -198,13 +199,13 @@ struct _DefaultValue
  * @warning 返り値を共有しているので値を編集すると他の関数の返り値にも影響する
  */
 template <typename result_type>
-struct _DefaultValue<result_type &>
+struct DefaultValue<result_type &>
 {
     /**
      * @brief デフォルト値の参照を返す
      * @return デフォルト値の参照
      */
-    inline static result_type &get() { return value; }
+    static result_type &get() { return value; }
 
 private:
     /// デフォルト値(デフォルトコンストラクタが必要)
@@ -212,14 +213,14 @@ private:
 };
 
 template <typename result_type>
-result_type _DefaultValue<result_type &>::value;
+result_type DefaultValue<result_type &>::value;
 
 /**
  * @brief 引数リストの履歴
  * @tparam arg_types 引数の型
  */
 template <typename... arg_types>
-struct _ArgumentsHistory
+struct ArgumentsHistory
 {
     // NOTE: 工夫すれば引数が一つの時はtupleにしないようにもできそう
     using element_type = std::tuple<arg_types...>;
@@ -227,30 +228,31 @@ struct _ArgumentsHistory
     /**
      * @brief 初期化する
      */
-    inline void clear() { history.clear(); }
+    void clear() { history.clear(); }
     /**
      * @brief 指定のインデックスの履歴を返す
      * @param index インデックス。0=最古、size()-1または-1=最新。
      * @return 引数の履歴
      */
-    const element_type &at(int index) const
+    [[nodiscard]] const element_type &at(int index) const
     {
-        if (index < 0)
+        if (index < 0) {
             return history.at(history.size() + index);
-        else
+        } else {
             return history.at(index);
+        }
     }
     /**
      * @brief 添字アクセスのオーバーロード
      * @param index インデックス。0=最古、size()-1または-1=最新。
      * @return 引数の履歴
      */
-    inline const element_type &operator[](int index) const { return at(index); }
+    const element_type &operator[](int index) const { return at(index); }
     /**
      * @brief 要素を追加する
      * @param args 引数
      */
-    inline void push_back(const element_type &args) { history.push_back(args); }
+    void push_back(const element_type &args) { history.push_back(args); }
 
 private:
     /// 引数の履歴
@@ -261,7 +263,7 @@ private:
  * @brief void型用の特殊化
  */
 template <>
-struct _ArgumentsHistory<void>
+struct ArgumentsHistory<void>
 {
     using element_type = void;
 };

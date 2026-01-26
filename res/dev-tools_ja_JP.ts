@@ -53,7 +53,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+125"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+131"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <location filename="../gui/image/basic/control.cpp" line="+60"/>
+        <location filename="../gui/image/basic/control.cpp" line="+51"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -161,7 +161,7 @@
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+67"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+73"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
@@ -176,7 +176,7 @@
         <translation>%1 のパスワードを入力してください:</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+19"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
@@ -186,7 +186,7 @@
         <translation>成功</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Database connection established.</source>
         <translation>データベースに接続しました。</translation>
     </message>
@@ -244,7 +244,7 @@
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+53"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+62"/>
         <source>Select Database File</source>
         <translation>データベースファイルを選択</translation>
     </message>
@@ -254,18 +254,18 @@
         <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location line="+7"/>
+        <location line="+26"/>
+        <location line="+6"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location line="-7"/>
+        <location line="-6"/>
         <source>Database type not supported.</source>
         <translation>サポートされていないデータベースタイプです。</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Some fields are missing.</source>
         <translation>入力されていない項目があります。</translation>
     </message>
@@ -280,7 +280,7 @@
         <translation>成功</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Database connection established.</source>
         <translation>データベースに接続しました。</translation>
     </message>
@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+17"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+20"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -305,17 +305,17 @@
         <translation>TOMLでは値のみのデータはサポートされていません</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+87"/>
         <source>ignore null value in array: %1</source>
         <translation>配列内のnull値を無視します: %1</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+59"/>
         <source>ignore null value of key: %1</source>
         <translation>null値を無視します: %1</translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="+76"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="+74"/>
         <source>Invalid file path</source>
         <translation>ファイルパスが不正です</translation>
     </message>
@@ -325,7 +325,7 @@
         <translation>%1が開けませんでした</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+105"/>
         <source>Parsed as JSON</source>
         <translation>JSONとして読み込み</translation>
     </message>
@@ -472,7 +472,7 @@
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+73"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+61"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
     </message>
@@ -498,7 +498,7 @@
 <context>
     <name>ImageOpenDialog</name>
     <message>
-        <location filename="../gui/image/basic/file_dialogs.cpp" line="+26"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+25"/>
         <source>Open Image</source>
         <translation>画像を開く</translation>
     </message>
@@ -544,7 +544,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+78"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+63"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -605,7 +605,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+72"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+57"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -618,7 +618,7 @@
 <context>
     <name>ImageSaveDialog</name>
     <message>
-        <location filename="../gui/image/basic/file_dialogs.cpp" line="+15"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="+14"/>
         <source>Save Image</source>
         <translation>画像を保存</translation>
     </message>
@@ -660,7 +660,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+79"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+62"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -713,7 +713,7 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../gui/image/basic/file_dialogs.cpp" line="-26"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="-24"/>
         <source>Images</source>
         <translation>画像</translation>
     </message>
@@ -794,7 +794,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1088"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1045"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -814,7 +814,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-996"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-949"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -824,7 +824,7 @@
         <translation>テキスト:</translation>
     </message>
     <message>
-        <location line="+202"/>
+        <location line="+208"/>
         <source>Enter phone...</source>
         <translation>電話番号を入力...</translation>
     </message>
@@ -834,17 +834,17 @@
         <translation>メールアドレスを入力...</translation>
     </message>
     <message>
-        <location line="+294"/>
+        <location line="+285"/>
         <source>Password is required for WPA/WEP security</source>
         <translation>WPA/WEPセキュリティにはパスワードが必要です</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+22"/>
         <source>At least phone or email is required</source>
         <translation>電話番号またはメールアドレスのいずれかが必要です</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+29"/>
         <source>Start date/time cannot be empty</source>
         <translation>開始日時を入力してください</translation>
     </message>
@@ -854,35 +854,35 @@
         <translation>終了日時を入力してください</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+24"/>
         <source>Latitude must be between -90 and 90</source>
         <translation>緯度は-90から90の範囲で入力してください</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+12"/>
         <source>Longitude must be between -180 and 180</source>
         <translation>経度は-180から180の範囲で入力してください</translation>
     </message>
     <message>
-        <location line="+180"/>
-        <location line="+211"/>
+        <location line="+162"/>
+        <location line="+198"/>
         <location line="+14"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-224"/>
+        <location line="-212"/>
         <source>Please fill in required fields</source>
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+198"/>
         <location line="+14"/>
         <source>QRコードが生成されていません。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-7"/>
+        <location line="-8"/>
         <source>Copied</source>
         <translation>コピー完了</translation>
     </message>
@@ -891,17 +891,17 @@
         <translation type="vanished">QRコードの内容をクリップボードにコピーしました</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+13"/>
         <source>Save QR Code</source>
         <translation>QRコードを保存</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>PNG Files (*.png)</source>
         <translation>PNGファイル (*.png)</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>Saved</source>
         <translation>保存完了</translation>
     </message>
@@ -925,7 +925,7 @@
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-1012"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-963"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -935,31 +935,31 @@
         <translation>URL:</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Enter email address...</source>
         <translation>メールアドレスを入力...</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location line="+168"/>
+        <location line="+172"/>
         <source>Email:</source>
         <translation>メール:</translation>
     </message>
     <message>
-        <location line="-146"/>
-        <location line="+25"/>
+        <location line="-149"/>
+        <location line="+26"/>
         <source>Enter phone number...</source>
         <translation>電話番号を入力...</translation>
     </message>
     <message>
-        <location line="-22"/>
-        <location line="+25"/>
-        <location line="+105"/>
+        <location line="-23"/>
+        <location line="+26"/>
+        <location line="+107"/>
         <source>Phone:</source>
         <translation>電話:</translation>
     </message>
     <message>
-        <location line="-95"/>
+        <location line="-97"/>
         <source>Enter message...</source>
         <translation>メッセージを入力...</translation>
     </message>
@@ -969,7 +969,7 @@
         <translation>メッセージ:</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Enter SSID...</source>
         <translation>SSIDを入力...</translation>
     </message>
@@ -999,12 +999,12 @@
         <translation>非表示ネットワーク</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+394"/>
         <source>End time must be after start time</source>
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
     <message>
-        <location line="+399"/>
+        <location line="+364"/>
         <source>Failed to generate QR code:
 %1
 
@@ -1015,12 +1015,12 @@ Please try reducing the amount of data or simplifying the content.</source>
 データ量を減らすか、内容を簡略化してください。</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+32"/>
         <source>QRコード画像をクリップボードにコピーしました。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+22"/>
         <source>QRコード画像を保存しました: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1031,7 +1031,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="unfinished">エラー</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>QRコード画像の保存に失敗しました。</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1048,7 +1048,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-847"/>
+        <location line="-792"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>
@@ -1058,7 +1058,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>名前:</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Enter event title...</source>
         <translation>イベントタイトルを入力...</translation>
     </message>
@@ -1082,7 +1082,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">YYYYMMDDTHHMMSS</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+29"/>
         <source>Enter latitude...</source>
         <translation>緯度を入力...</translation>
     </message>
@@ -1102,51 +1102,51 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>経度:</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+100"/>
         <source>Text cannot be empty</source>
         <translation>テキストを入力してください</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>URL cannot be empty</source>
         <translation>URLを入力してください</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>URL must start with http:// or https://</source>
         <translation>URLはhttp://またはhttps://で始まる必要があります</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>Email cannot be empty</source>
         <translation>メールアドレスを入力してください</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location line="+99"/>
+        <location line="+85"/>
         <source>Invalid email format</source>
         <translation>メールアドレスの形式が無効です</translation>
     </message>
     <message>
-        <location line="-88"/>
-        <location line="+18"/>
+        <location line="-76"/>
+        <location line="+14"/>
         <source>Phone number cannot be empty</source>
         <translation>電話番号を入力してください</translation>
     </message>
     <message>
-        <location line="-14"/>
-        <location line="+17"/>
-        <location line="+61"/>
+        <location line="-11"/>
+        <location line="+14"/>
+        <location line="+53"/>
         <source>Invalid phone number format</source>
         <translation>電話番号の形式が無効です</translation>
     </message>
     <message>
-        <location line="-57"/>
+        <location line="-49"/>
         <source>Message cannot be empty</source>
         <translation>メッセージを入力してください</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+12"/>
         <source>SSID cannot be empty</source>
         <translation>SSIDを入力してください</translation>
     </message>
@@ -1155,7 +1155,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">WPA/WEPにはパスワードが必要です</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+22"/>
         <source>Name cannot be empty</source>
         <translation>名前を入力してください</translation>
     </message>
@@ -1164,7 +1164,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">電話番号またはメールアドレスが必要です</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+33"/>
         <source>Event title cannot be empty</source>
         <translation>イベントタイトルを入力してください</translation>
     </message>
@@ -1181,12 +1181,12 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">日付形式が無効です</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+28"/>
         <source>Latitude cannot be empty</source>
         <translation>緯度を入力してください</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+12"/>
         <source>Longitude cannot be empty</source>
         <translation>経度を入力してください</translation>
     </message>
@@ -1385,7 +1385,7 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="+33"/>
+        <location filename="../core/tool/tool.cpp" line="+36"/>
         <source>Image Resize</source>
         <translation>画像サイズ変更</translation>
     </message>
@@ -1465,12 +1465,12 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="unfinished">QRコード生成</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>DB Tool</source>
         <translation>DBツール</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Provides database-related functionalities</source>
         <translation>データベース関連の機能を提供します</translation>
     </message>
@@ -1479,12 +1479,12 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">コマンド生成</translation>
     </message>
     <message>
-        <location line="-3"/>
+        <location line="-2"/>
         <source>Generate QR codes from text or URLs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-11"/>
+        <location line="-10"/>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
     </message>
@@ -1562,7 +1562,7 @@ Choose a tool from the side panel</source>
         <translation>ボディ</translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="+44"/>
+        <location filename="../gui/api_tool.cpp" line="+45"/>
         <source>Key</source>
         <translation>キー</translation>
     </message>
@@ -1577,7 +1577,7 @@ Choose a tool from the side panel</source>
         <translation>説明</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+100"/>
         <source>Error: </source>
         <translation>エラー: </translation>
     </message>
@@ -1625,17 +1625,17 @@ Choose a tool from the side panel</source>
         <translation>クエリ</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="+72"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="+76"/>
         <source>DB Not Connected</source>
         <translation>DB未接続</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Not connected to database</source>
         <translation>データベースに接続されていません</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+58"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
@@ -1680,7 +1680,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>

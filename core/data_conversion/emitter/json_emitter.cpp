@@ -27,7 +27,7 @@ JsonEmitter::EmitResult JsonEmitter::emitQString(const QVariant &data,
         };
     }
 
-    QJsonDocument doc = QJsonDocument::fromVariant(data);
+    QJsonDocument const doc = QJsonDocument::fromVariant(data);
 
     switch (indentation) {
     case DataConversion::Indentation::MINIFIED:

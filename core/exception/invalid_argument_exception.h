@@ -47,10 +47,10 @@ public:
             QString("[InvalidArgumentException] given: %1, reason: %2").arg(given).arg(reason);
     }
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new InvalidArgumentException(*this); }
+    [[nodiscard]] QException *clone() const override { return new InvalidArgumentException(*this); }
 
 #ifdef _TEST_InvalidArgumentException
     friend class Test::TestInvalidArgumentException;

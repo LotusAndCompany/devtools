@@ -15,7 +15,7 @@ class QueryPage : public QWidget
 
 public:
     explicit QueryPage(QWidget *parent = nullptr);
-    ~QueryPage();
+    ~QueryPage() override;
 
 protected:
     void changeEvent(QEvent *event) override;

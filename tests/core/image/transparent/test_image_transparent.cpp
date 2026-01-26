@@ -21,7 +21,7 @@ class TestImageTransparent : public QObject
 
     RandomData rd;
 
-    static QImage sampleImage(const QColor &, const QColor &);
+    static QImage sampleImage(const QColor & /*baseColor*/, const QColor & /*attentionColor*/);
 
 private slots:
     void initTestCase(); // will be called before the first test function is executed.
@@ -29,17 +29,17 @@ private slots:
     void cleanup();      // will be called after every test function.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_load();
     void test_save();
     void test_overwriteSave();
     void test_reset();
     void test_update();
-    void test_validateImageFormat();
-    void test_addTransparentColor();
-    void test_addTransparentPixel();
-    void test_colorComparisonFunction();
-    void test_maxColorDiffSquared();
+    static void test_validateImageFormat();
+    static void test_addTransparentColor();
+    static void test_addTransparentPixel();
+    static void test_colorComparisonFunction();
+    static void test_maxColorDiffSquared();
     void test_colorDiffSquaredRgb();
     void test_colorDiffSquaredHsl();
     void test_colorDiffSquaredHsv();
@@ -52,12 +52,16 @@ QImage TestImageTransparent::sampleImage(const QColor &baseColor, const QColor &
     QImage image(size, QImage::Format_RGBA8888);
     image.fill(baseColor);
 
-    for (unsigned int y = 1; y <= 2; y++)
-        for (unsigned int x = 1; x <= 2; x++)
+    for (unsigned int y = 1; y <= 2; y++) {
+        for (unsigned int x = 1; x <= 2; x++) {
             image.setPixelColor(x, y, attentionColor);
-    for (unsigned int y = 3; y <= 5; y++)
-        for (unsigned int x = 3; x <= 5; x++)
+        }
+    }
+    for (unsigned int y = 3; y <= 5; y++) {
+        for (unsigned int x = 3; x <= 5; x++) {
             image.setPixelColor(x, y, attentionColor);
+        }
+    }
 
     return image;
 }
@@ -70,11 +74,12 @@ void TestImageTransparent::initTestCase()
 
 void TestImageTransparent::init()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 }
 
 void TestImageTransparent::cleanup()
@@ -85,7 +90,7 @@ void TestImageTransparent::cleanup()
 
 void TestImageTransparent::test_constructor()
 {
-    ImageTransparent imageTransparent;
+    ImageTransparent const imageTransparent;
 
     // stringIDが想定通り設定されていること
     QCOMPARE_EQ(imageTransparent.stringID, "image-transparent");
@@ -127,8 +132,9 @@ void TestImageTransparent::test_save()
 {
     ImageTransparent imageTransparent;
     imageTransparent.ImageTransparentInterface::load(testDirPath + resourceNames[0]);
-    if (imageTransparent.current().isNull())
+    if (imageTransparent.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 保存できること
     QVERIFY(imageTransparent.save(testDirPath + "save.png"));
@@ -141,8 +147,9 @@ void TestImageTransparent::test_overwriteSave()
 {
     ImageTransparent imageTransparent;
     imageTransparent.ImageTransparentInterface::load(testDirPath + resourceNames[0]);
-    if (imageTransparent.current().isNull())
+    if (imageTransparent.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 保存できること
     QVERIFY(imageTransparent.overwriteSave(testDirPath + "overwriteSave.png"));
@@ -177,8 +184,9 @@ void TestImageTransparent::test_update()
     QVERIFY(!imageTransparent.update());
 
     imageTransparent.ImageTransparentInterface::load(testDirPath + resourceNames[0]);
-    if (imageTransparent.current().isNull())
+    if (imageTransparent.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // updated()が成功すること
     QVERIFY(imageTransparent.update());
@@ -186,19 +194,20 @@ void TestImageTransparent::test_update()
 
 void TestImageTransparent::test_validateImageFormat()
 {
-    const QImage::Format min = QImage::Format_Invalid,
-                         max = QImage::Format_RGBA32FPx4_Premultiplied;
+    const QImage::Format min = QImage::Format_Invalid;
+    const QImage::Format max = QImage::Format_RGBA32FPx4_Premultiplied;
 
     for (int format = min; format <= max; format++) {
-        if (format == QImage::Format_RGBA8888)
+        if (format == QImage::Format_RGBA8888) {
             // 例外が発生しないこと
             QVERIFY_THROWS_NO_EXCEPTION(
                 ImageTransparent::validateImageFormat(QImage::Format_RGBA8888));
-        else
+        } else {
             // 例外が発生すること
             QVERIFY_THROWS_EXCEPTION(
                 InvalidArgumentException<int>,
                 ImageTransparent::validateImageFormat(static_cast<QImage::Format>(format)));
+        }
     }
 }
 
@@ -211,8 +220,9 @@ void TestImageTransparent::test_addTransparentColor()
     int countTransparentPixels = 0;
     for (int y = 0; y < imageTransparent.current().height(); y++) {
         for (int x = 0; x < imageTransparent.current().width(); x++) {
-            if (imageTransparent.current().pixelColor(x, y).alpha() == 0)
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
                 countTransparentPixels++;
+            }
         }
     }
     QCOMPARE_EQ(countTransparentPixels, 0);
@@ -222,8 +232,7 @@ void TestImageTransparent::test_addTransparentColor()
     for (int y = 0; y < imageTransparent.current().height(); y++) {
         for (int x = 0; x < imageTransparent.current().width(); x++) {
             if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
-                if (!((1 <= x && x <= 2 && 1 <= y && y <= 2) ||
-                      (3 <= x && x <= 5 && 3 <= y && y <= 5))) {
+                if ((1 > x || x > 2 || 1 > y || y > 2) && (3 > x || x > 5 || 3 > y || y > 5)) {
                     qWarning() << "at:" << x << y;
                     QFAIL("unexpected transparent pixel");
                 }
@@ -241,8 +250,9 @@ void TestImageTransparent::test_addTransparentPixel()
     int countTransparentPixels = 0;
     for (int y = 0; y < imageTransparent.current().height(); y++) {
         for (int x = 0; x < imageTransparent.current().width(); x++) {
-            if (imageTransparent.current().pixelColor(x, y).alpha() == 0)
+            if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
                 countTransparentPixels++;
+            }
         }
     }
     QCOMPARE_EQ(countTransparentPixels, 0);
@@ -252,7 +262,7 @@ void TestImageTransparent::test_addTransparentPixel()
     for (int y = 0; y < imageTransparent.current().height(); y++) {
         for (int x = 0; x < imageTransparent.current().width(); x++) {
             if (imageTransparent.current().pixelColor(x, y).alpha() == 0) {
-                if (!(1 <= x && x <= 2 && 1 <= y && y <= 2)) {
+                if (1 > x || x > 2 || 1 > y || y > 2) {
                     qWarning() << "at:" << x << y;
                     QFAIL("unexpected transparent pixel");
                 }
@@ -263,11 +273,12 @@ void TestImageTransparent::test_addTransparentPixel()
 
 void TestImageTransparent::test_colorComparisonFunction()
 {
-    const int min = QColor::Spec::Invalid, max = QColor::Spec::ExtendedRgb;
+    const int min = QColor::Spec::Invalid;
+    const int max = QColor::Spec::ExtendedRgb;
 
     for (int spec = min; spec <= max; spec++) {
-        void *actual = nullptr;
-        void *expected = nullptr;
+        void const *actual = nullptr;
+        void const *expected = nullptr;
         switch (spec) {
         case QColor::Spec::Rgb:
             // ImageTransparent::colorDiffSquaredRgbを返すこと
@@ -301,7 +312,8 @@ void TestImageTransparent::test_colorComparisonFunction()
 
 void TestImageTransparent::test_maxColorDiffSquared()
 {
-    const int min = QColor::Spec::Invalid, max = QColor::Spec::ExtendedRgb;
+    const int min = QColor::Spec::Invalid;
+    const int max = QColor::Spec::ExtendedRgb;
 
     for (int spec = min; spec <= max; spec++) {
         switch (spec) {

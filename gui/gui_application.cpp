@@ -26,7 +26,7 @@ GuiApplication::GuiApplication(int argc, char **argv)
 void GuiApplication::setup()
 {
     // 設定ファイル等を読み込む
-    QSettings settings;
+    QSettings const settings;
 
     // ApplicationMixinのsetupApplicationが翻訳を初期化する
     setupApplication(this);
@@ -86,7 +86,7 @@ bool GuiApplication::changeLanguage(const QString &languageCode)
     removeTranslator(&mutableTranslator());
 
     // 新しい翻訳を読み込み（正しいi18nパスを使用）
-    QString translationFile = QString(":i18n/dev-tools_%1.qm").arg(languageCode);
+    QString const translationFile = QString(":i18n/dev-tools_%1.qm").arg(languageCode);
     if (mutableTranslator().load(translationFile)) {
         installTranslator(&mutableTranslator());
         qDebug() << "Successfully changed language to:" << languageCode;
@@ -110,13 +110,13 @@ void GuiApplication::applySystemColorScheme()
 
 int GuiApplication::start()
 {
-    QSettings settings;
+    QSettings const settings;
 
     // ウィンドウサイズの復元
     if (settings.value("window/rememberSize", true).toBool()) {
         if (settings.contains("window/width") && settings.contains("window/height")) {
-            int width = settings.value("window/width", 1280).toInt();
-            int height = settings.value("window/height", 720).toInt();
+            int const width = settings.value("window/width", 1280).toInt();
+            int const height = settings.value("window/height", 720).toInt();
             window->resize(width, height);
         }
     }
@@ -124,8 +124,8 @@ int GuiApplication::start()
     // ウィンドウ位置の復元
     if (settings.value("window/rememberPosition", true).toBool()) {
         if (settings.contains("window/x") && settings.contains("window/y")) {
-            int x = settings.value("window/x", 100).toInt();
-            int y = settings.value("window/y", 100).toInt();
+            int const x = settings.value("window/x", 100).toInt();
+            int const y = settings.value("window/y", 100).toInt();
             window->move(x, y);
         }
     }
@@ -168,8 +168,9 @@ bool GuiApplication::event(QEvent *event)
     switch (event->type()) {
     case QEvent::ApplicationStateChange:
         QApplication::event(event);
-        if (applicationState() == Qt::ApplicationActive)
+        if (applicationState() == Qt::ApplicationActive) {
             window->show();
+        }
         return true;
     default:
         return QApplication::event(event);

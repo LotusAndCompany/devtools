@@ -25,8 +25,9 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
     try {
         const auto toml = variantToTomlValue("", data, indentation);
         QString text = QString::fromStdString(toml::format(toml));
-        if (text.endsWith("\n\n"))
+        if (text.endsWith("\n\n")) {
             text = text.mid(0, text.length() - 1);
+        }
         return EmitResult{text, warnings, ""};
     } catch (InvalidArgumentException<int> e) {
         qCritical() << e.message;
@@ -45,42 +46,41 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
     }
 }
 
-namespace _TomlEmitterPrivate {
+namespace TomlEmitterPrivate {
 struct Util
 {
-    inline static toml::local_time timeToTomlLocalTime(const QTime &time)
+    static toml::local_time timeToTomlLocalTime(const QTime &time)
     {
-        return toml::local_time(time.hour(), time.minute(), time.second(), time.msec());
+        return {time.hour(), time.minute(), time.second(), time.msec()};
     }
 
-    inline static toml::local_date dateToTomlLocalDate(const QDate &date)
+    static toml::local_date dateToTomlLocalDate(const QDate &date)
     {
-        return toml::local_date(date.year(), static_cast<toml::month_t>(date.month() - 1),
-                                date.day());
+        return {date.year(), static_cast<toml::month_t>(date.month() - 1), date.day()};
     }
 };
-}; // namespace _TomlEmitterPrivate
+}; // namespace TomlEmitterPrivate
 
-using namespace _TomlEmitterPrivate;
+using namespace TomlEmitterPrivate;
 
 TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
     const QString &key, const QVariant &value, DataConversionInterface::Indentation indentation)
 {
     switch (value.typeId()) {
     case QMetaType::Type::Nullptr:
-        return toml_value_type();
+        return {};
     case QMetaType::Type::Bool:
-        return toml_value_type(value.toBool());
+        return {value.toBool()};
     case QMetaType::Type::Short:    // int16_t
     case QMetaType::Type::Int:      // int32_t
     case QMetaType::Type::Long:     // int32_t or int64_t
     case QMetaType::Type::LongLong: // int64_t
-        return toml_value_type(value.toLongLong());
+        return {value.toLongLong()};
     case QMetaType::Type::Float:
     case QMetaType::Type::Double:
-        return toml_value_type(value.toDouble());
+        return {value.toDouble()};
     case QMetaType::QString:
-        return toml_value_type(value.toString().toStdString());
+        return {value.toString().toStdString()};
     case QMetaType::Type::QTime:
         return Util::timeToTomlLocalTime(value.toTime());
     case QMetaType::Type::QDate:
@@ -96,7 +96,7 @@ TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
                                         Util::timeToTomlLocalTime(time));
         } else {
             // システムのタイムゾーンと違ったらoffset_datetime扱い
-            int offsetSeconds = timeZone.offsetFromUtc(datetime);
+            int const offsetSeconds = timeZone.offsetFromUtc(datetime);
 
             return toml::offset_datetime(
                 Util::dateToTomlLocalDate(date), Util::timeToTomlLocalTime(time),
@@ -108,7 +108,7 @@ TomlEmitter::toml_value_type TomlEmitter::variantToTomlValue(
     case QMetaType::Type::QVariantMap:
         return mapToTomlTable(key, value.toMap(), indentation);
     default:
-        throw InvalidArgumentException<int>(static_cast<int>(value.typeId()), "Unsupported type");
+        throw InvalidArgumentException<int>(value.typeId(), "Unsupported type");
     }
 }
 
@@ -118,9 +118,9 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(
     toml_value_type::array_type array;
     for (const auto &elem : list) {
         // null値は無視
-        if (!elem.isNull())
+        if (!elem.isNull()) {
             array.push_back(variantToTomlValue(key, elem, indentation));
-        else {
+        } else {
             warnings.push_back(QCoreApplication::instance()
                                    ->translate("DataConversion", "ignore null value in array: %1")
                                    .arg(key));
@@ -139,10 +139,11 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(
         value.as_array_fmt().body_indent = 0;
         value.as_array_fmt().closing_indent = 0;
     } else {
-        if (value.is_array_of_tables())
+        if (value.is_array_of_tables()) {
             value.as_array_fmt().fmt = toml::array_format::array_of_tables;
-        else
+        } else {
             value.as_array_fmt().fmt = toml::array_format::multiline;
+        }
 
         if (indentation == DataConversion::Indentation::TABS) {
             value.as_array_fmt().indent_type = toml::indent_char::tab;
@@ -175,10 +176,10 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(
     for (const auto &entry : map.asKeyValueRange()) {
         const auto childKey = key == "" ? entry.first : key + "." + entry.first;
         // null値は無視
-        if (!entry.second.isNull())
+        if (!entry.second.isNull()) {
             table[entry.first.toStdString()] =
                 variantToTomlValue(childKey, entry.second, indentation);
-        else {
+        } else {
             warnings.push_back(QCoreApplication::instance()
                                    ->translate("DataConversion", "ignore null value of key: %1")
                                    .arg(childKey));
@@ -195,9 +196,9 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(
     } else {
         value.as_table_fmt().fmt = toml::table_format::multiline;
         value.as_table_fmt().closing_indent = 0;
-        if (key == "")
+        if (key == "") {
             value.as_table_fmt().body_indent = 0;
-        else {
+        } else {
             if (indentation == DataConversion::Indentation::TABS) {
                 value.as_table_fmt().indent_type = toml::indent_char::tab;
                 value.as_table_fmt().body_indent = 1;

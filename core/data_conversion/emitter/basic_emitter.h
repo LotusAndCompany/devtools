@@ -33,7 +33,8 @@ protected:
      * @param newIndent 置換先の文字列
      * @return 結果
      */
-    virtual QString replace4spaceIndentation(const QString &src, const QString &newIndent) const;
+    [[nodiscard]] virtual QString replace4spaceIndentation(const QString &src,
+                                                           const QString &newIndent) const;
 
     /// 警告
     QStringList warnings;

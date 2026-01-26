@@ -403,6 +403,13 @@ file(GLOB_RECURSE ALL_SOURCE_FILES
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/build.*/.*")
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/CMakeFiles/.*")
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/\\.cache/.*")
+# Exclude third-party library files from linting
+list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.cpp$")
+list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.hpp$")
+
+# Create LINT_SOURCE_FILES excluding tests (format still applies to tests)
+set(LINT_SOURCE_FILES ${ALL_SOURCE_FILES})
+list(FILTER LINT_SOURCE_FILES EXCLUDE REGEX ".*/tests/.*")
 
 if(CLANG_FORMAT_EXECUTABLE)
     message(STATUS "Found clang-format: ${CLANG_FORMAT_EXECUTABLE}")
@@ -437,14 +444,25 @@ if(CLANG_TIDY_EXECUTABLE)
 
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Generate compile_commands.json" FORCE)
 
+    # Get macOS SDK path for proper system header resolution
+    execute_process(
+        COMMAND xcrun --show-sdk-path
+        OUTPUT_VARIABLE MACOS_SDK_PATH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
     add_custom_target(lint
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} ${ALL_SOURCE_FILES}
+        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR}
+            --extra-arg=-isysroot${MACOS_SDK_PATH}
+            ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
         VERBATIM
     )
 
     add_custom_target(lint-fix
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix ${ALL_SOURCE_FILES}
+        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
+            --extra-arg=-isysroot${MACOS_SDK_PATH}
+            ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"
         VERBATIM
     )

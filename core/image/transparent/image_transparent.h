@@ -22,7 +22,7 @@ class ImageTransparentInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
-    virtual ~ImageTransparentInterface() = default;
+    ~ImageTransparentInterface() override = default;
 
     /**
      * @brief 画像全体の対象の色を透明化する
@@ -39,7 +39,7 @@ public:
      * @brief 元の画像を返す
      * @return 元の画像
      */
-    virtual const QImage &original() const = 0;
+    [[nodiscard]] virtual const QImage &original() const = 0;
 
     /**
      * @brief 計算に使う色空間(RGB, HSV, HSL)
@@ -87,12 +87,12 @@ public:
         return ImageIO::overwriteSave(path, current(), format, quality);
     }
 
-    const QFileInfo &fileInfo(unsigned int index) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int /*index*/) const override
     {
         return ImageIO::originalFileInfo();
     }
 
-    const QImage &original() const override { return ImageIO::original(); }
+    [[nodiscard]] const QImage &original() const override { return ImageIO::original(); }
 
     void addTransparentColor(const QColor &targetColor) override;
     void addTransparentPixel(const QPoint &start) override;
@@ -119,8 +119,9 @@ private:
      */
     static void validateImageFormat(QImage::Format format)
     {
-        if (format != QImage::Format_RGBA8888)
+        if (format != QImage::Format_RGBA8888) {
             throw InvalidArgumentException<int>(format, expectedImageFormat);
+        }
     }
 
     /// colorDiffSquared*の関数ポインタ型

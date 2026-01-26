@@ -30,9 +30,8 @@ public:
     /**
      * デストラクタ
      */
-    ~ContentsArea();
+    ~ContentsArea() override;
 
-public slots:
     /**
      * @brief サイドメニューのボタンを押した時に呼び出される
      * @param id サイドメニューID

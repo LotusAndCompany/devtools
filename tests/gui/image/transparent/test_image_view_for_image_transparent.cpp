@@ -65,15 +65,17 @@ void TestImageViewForImageTransparent::test_onLabelClicked()
     QSignalSpy spyOnPixelSelected(&gui, &ImageViewForImageTransparent::pixelSelected);
 
     QImage image(QSize(8, 8), QImage::Format_RGBA8888);
-    for (int y = 0; y < 8; y++)
-        for (int x = 0; x < 8; x++)
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
             image.setPixelColor(x, y, QColor(rd.nextInt(256), rd.nextInt(256), rd.nextInt(256)));
+        }
+    }
 
     const QSize labelSize = gui.ui_image()->size();
     gui.setPixmap(QPixmap::fromImage(image));
 
     QTest::mouseClick(gui.ui_image(), Qt::LeftButton, Qt::KeyboardModifiers(),
-                      QPoint(labelSize.width() / 2 - 4, labelSize.height() / 2 - 4));
+                      QPoint((labelSize.width() / 2) - 4, (labelSize.height() / 2) - 4));
 
     // pixelSelectedが発せられていること
     QCOMPARE_EQ(spyOnPixelSelected.count(), 1);
@@ -84,7 +86,7 @@ void TestImageViewForImageTransparent::test_onLabelClicked()
 
     gui.updateScale(2.0);
     QTest::mouseClick(gui.ui_image(), Qt::LeftButton, Qt::KeyboardModifiers(),
-                      QPoint(labelSize.width() / 2 + 7, labelSize.height() / 2 + 7));
+                      QPoint((labelSize.width() / 2) + 7, (labelSize.height() / 2) + 7));
     QCOMPARE_EQ(spyOnPixelSelected.count(), 2);
     params = spyOnPixelSelected[1];
     // 画像の右下の座標と色とが渡されること

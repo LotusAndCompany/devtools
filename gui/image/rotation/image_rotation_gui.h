@@ -32,7 +32,7 @@ public:
      * @details UIを構築し、シグナルを接続する
      */
     explicit ImageRotationGUI(ImageRotationInterface *imageRotation, QWidget *parent = nullptr);
-    ~ImageRotationGUI();
+    ~ImageRotationGUI() override;
 
 private slots:
     /**

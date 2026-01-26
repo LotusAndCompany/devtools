@@ -26,7 +26,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~SettingsDialog();
+    ~SettingsDialog() override;
 
 private:
     /**

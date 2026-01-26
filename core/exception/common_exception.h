@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QException>
 
+#include <utility>
+
 #ifdef _TEST_CommonException
 namespace Test {
 class TestCommonException;
@@ -38,7 +40,7 @@ public:
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ
      */
-    explicit CommonException(const QString &message) : message(message) {}
+    explicit CommonException(QString message) : message(std::move(message)) {}
 
     /// メッセージ
     QString message;
@@ -48,7 +50,7 @@ public:
      *
      * @sa [QException::raise()](https://doc.qt.io/qt-6/qexception.html#raise)
      */
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
     // const char *what() const noexcept override { return message.toStdString().c_str(); }
 
@@ -60,7 +62,7 @@ protected:
      *
      * @sa [QException::clone()](https://doc.qt.io/qt-6/qexception.html#clone)
      */
-    inline virtual QException *clone() const override { return new CommonException(*this); }
+    [[nodiscard]] QException *clone() const override { return new CommonException(*this); }
 
 #ifdef _TEST_CommonException
     friend class Test::TestCommonException;

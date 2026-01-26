@@ -13,7 +13,7 @@ class WelcomePage : public QWidget
 
 public:
     explicit WelcomePage(QWidget *parent = nullptr);
-    ~WelcomePage();
+    ~WelcomePage() override;
 
 protected:
     void changeEvent(QEvent *event) override;

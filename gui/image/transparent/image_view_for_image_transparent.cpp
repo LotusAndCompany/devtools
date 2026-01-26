@@ -4,7 +4,7 @@
 
 #include <QMouseEvent>
 
-using namespace _ImageViewForImageTransparentInternal;
+using namespace ImageViewForImageTransparentInternal;
 
 ImageViewForImageTransparent::ImageViewForImageTransparent(QWidget *parent) : BasicImageView(parent)
 {
@@ -21,7 +21,7 @@ ImageViewForImageTransparent::ImageViewForImageTransparent(QWidget *parent) : Ba
 
 ClickableLabel *ImageViewForImageTransparent::ui_image() const
 {
-    return static_cast<ClickableLabel *>(ui->image);
+    return dynamic_cast<ClickableLabel *>(ui->image);
 }
 
 void ImageViewForImageTransparent::onLabelClicked(const QPoint &point)

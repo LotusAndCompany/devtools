@@ -15,7 +15,7 @@ class ConnectionSelector : public QWidget
 
 public:
     explicit ConnectionSelector(QWidget *parent = nullptr);
-    ~ConnectionSelector();
+    ~ConnectionSelector() override;
 
     void loadHistory();
 

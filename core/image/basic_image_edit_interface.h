@@ -47,7 +47,7 @@ public:
      * @param index ファイルのインデックス(複数のファイルを読み込んでいる場合)
      * @return 現在読み込んでいるファイルの情報
      */
-    virtual const QFileInfo &fileInfo(unsigned int index = 0) const = 0;
+    [[nodiscard]] virtual const QFileInfo &fileInfo(unsigned int index = 0) const = 0;
     /**
      * @brief _current を更新する。 _outdated を`false`に設定する。
      */
@@ -61,16 +61,16 @@ public:
      * @brief 現在編集中の画像を取得する。GUI向けを想定。
      * @note 正しい状態を返すのは load(), reset(), update() 直後のみ
      */
-    inline const QImage &current() const { return _current; }
+    [[nodiscard]] const QImage &current() const { return _current; }
     /**
      * @brief outdated を`true`に設定する
      */
-    inline void setOutdated() { outdated = true; }
+    void setOutdated() { outdated = true; }
     /**
      * @brief update() を呼ぶ必要があるか
      * @return 呼ぶ必要がある時(= updated() で _currentが更新される可能性がある時 )は`true`
      */
-    inline bool isOutdated() const { return outdated; }
+    [[nodiscard]] bool isOutdated() const { return outdated; }
 
 protected:
     /// 編集中の画像

@@ -72,8 +72,9 @@ QString RandomData::nextQString(const QString &charSets)
 QString RandomData::nextQString(int length, const QString &charSets)
 {
     QString result;
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++) {
         result.append(charSets.at(gen.bounded(charSets.length())));
+    }
 
     return result;
 }

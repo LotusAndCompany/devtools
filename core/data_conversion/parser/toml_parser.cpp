@@ -24,7 +24,7 @@ TomlParser::ParseResult TomlParser::tryParse(const QString &src) const
     return result;
 }
 
-namespace _TomlParserPrivate {
+namespace TomlParserPrivate {
 /// TomlParserの内部用ユーティリティ
 struct Util
 {
@@ -38,7 +38,7 @@ struct Util
         if (0 < time.microsecond || 0 < time.nanosecond) {
             qInfo() << "microsecond and nanosecond are ignored";
         }
-        return QTime(time.hour, time.minute, time.second, time.millisecond);
+        return {time.hour, time.minute, time.second, time.millisecond};
     }
 
     /**
@@ -48,7 +48,7 @@ struct Util
      */
     static QDate tomlDateToQDate(const TomlParser::toml_value_type::local_date_type &date)
     {
-        return QDate(date.year, date.month + 1, date.day);
+        return {date.year, date.month + 1, date.day};
     }
 
     /**
@@ -75,9 +75,9 @@ struct Util
             .arg(l.first_column_number());
     }
 };
-} // namespace _TomlParserPrivate
+} // namespace TomlParserPrivate
 
-using namespace _TomlParserPrivate;
+using namespace TomlParserPrivate;
 
 TomlParser::ParseResult TomlParser::tomlValueToQvariant(const toml_value_type &value)
 {
@@ -138,15 +138,15 @@ TomlParser::ParseResult TomlParser::tomlTableToQvariantMap(const toml_value_type
 
     if (value.is_table()) {
         QVariantMap map;
-        const auto table = value.as_table();
+        const auto &table = value.as_table();
         for (const auto &entry : table) {
             const QString key = QString::fromStdString(entry.first);
             const auto valueParseResult = tomlValueToQvariant(entry.second);
-            if (valueParseResult)
+            if (valueParseResult) {
                 map[key] = valueParseResult.data;
-            else {
+            } else {
                 result.success = false;
-                result.data = std::move(map);
+                result.data = map;
                 const QString msg = "invalid value" + Util::valueLocation(value);
                 qInfo() << msg;
                 result.errors.push_back(msg);
@@ -155,7 +155,7 @@ TomlParser::ParseResult TomlParser::tomlTableToQvariantMap(const toml_value_type
         }
 
         result.success = true;
-        result.data = std::move(map);
+        result.data = map;
     } else {
         result.success = false;
         result.data = QVariant();
@@ -173,14 +173,14 @@ TomlParser::ParseResult TomlParser::tomlArrayToQvariantList(const toml_value_typ
 
     if (value.is_array()) {
         QVariantList list;
-        const auto array = value.as_array();
+        const auto &array = value.as_array();
         for (const auto &item : array) {
             const auto valueParseResult = tomlValueToQvariant(item);
-            if (valueParseResult)
+            if (valueParseResult) {
                 list.append(valueParseResult.data);
-            else {
+            } else {
                 result.success = false;
-                result.data = std::move(list);
+                result.data = list;
                 const QString msg = "invalid value" + Util::valueLocation(value);
                 qInfo() << msg;
                 result.errors.push_back(msg);
@@ -189,7 +189,7 @@ TomlParser::ParseResult TomlParser::tomlArrayToQvariantList(const toml_value_typ
         }
 
         result.success = true;
-        result.data = std::move(list);
+        result.data = list;
     } else {
         result.success = false;
         result.data = QVariant();

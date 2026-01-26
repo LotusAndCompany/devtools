@@ -33,7 +33,7 @@ private slots:
     void cleanupTestCase(); // will be called after the last test function was executed.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_setPixmap();
     void test_resizeEvent();
     void test_zoomIn();
@@ -45,11 +45,12 @@ private slots:
 
 void TestBasicImageView::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 
     pixmap320 = QPixmap(testDirPath + resourceNames[0]);
     pixmap578 = QPixmap(testDirPath + resourceNames[1]);
@@ -63,7 +64,7 @@ void TestBasicImageView::cleanupTestCase()
 
 void TestBasicImageView::test_constructor()
 {
-    BasicImageView imageView;
+    BasicImageView const imageView;
 
     // scaleが1.0で初期化されていること
     QCOMPARE_EQ(imageView.scale, 1.0);
@@ -160,15 +161,17 @@ bool TestBasicImageView::isLinear(const QMap<double, double> &pairs, double erro
         qCritical() << "errorRatio must be grater or equal to 0";
         return false;
     }
-    if (pairs.size() <= 2)
+    if (pairs.size() <= 2) {
         return true;
+    }
 
     // 最小二乗法による直線近似
     const auto keys = pairs.keys();
     const auto values = pairs.values();
     const double ax = std::accumulate(keys.cbegin(), keys.cend(), 0.0) / keys.size();
     const double ay = std::accumulate(values.cbegin(), values.cend(), 0.0) / values.size();
-    double sx2 = 0.0, sxy = 0.0;
+    double sx2 = 0.0;
+    double sxy = 0.0;
 
     for (const auto [x, y] : pairs.asKeyValueRange()) {
         sx2 += (x - ax) * (x - ax);
@@ -177,7 +180,7 @@ bool TestBasicImageView::isLinear(const QMap<double, double> &pairs, double erro
 
     // y=ax+b
     const double a = sxy / sx2;
-    const double b = ay - a * ax;
+    const double b = ay - (a * ax);
 
     const double max = 1.0 + errorRatio;
     const double min = 1.0 - errorRatio;
@@ -190,8 +193,8 @@ bool TestBasicImageView::isLinear(const QMap<double, double> &pairs, double erro
             continue;
         }
 
-        double v = a * x + b;
-        double r = abs(v / y);
+        double const v = (a * x) + b;
+        double const r = abs(v / y);
         if (r < min || max < r) {
             qWarning() << "expected: (" << x << ", " << v << "), actual: (" << x << ", " << y
                        << "), error ratio: " << r;

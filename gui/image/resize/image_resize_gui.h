@@ -36,7 +36,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~ImageResizeGUI();
+    ~ImageResizeGUI() override;
 
 private slots:
     /**

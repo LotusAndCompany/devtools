@@ -17,17 +17,17 @@ class TestOutOfRangeException : public QObject
 
 private slots:
     // Test cases:
-    void test_defaultConstructor();
+    static void test_defaultConstructor();
     void test_messageConstructor();
-    void test_actualMaxConstructor();
-    void test_actualMinMaxConstructor();
+    static void test_actualMaxConstructor();
+    static void test_actualMinMaxConstructor();
     void test_clone();
     void test_raise();
 };
 
 void TestOutOfRangeException::test_defaultConstructor()
 {
-    OutOfRangeException<int> e;
+    OutOfRangeException<int> const e;
     // デフォルトコンストラクタの場合、空文字列が設定されること
     QCOMPARE_EQ(e.message, "");
 }
@@ -35,7 +35,7 @@ void TestOutOfRangeException::test_defaultConstructor()
 void TestOutOfRangeException::test_messageConstructor()
 {
     const QString msg = rd.nextQString(length);
-    OutOfRangeException<int> e(msg);
+    OutOfRangeException<int> const e(msg);
     // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
     QCOMPARE_EQ(e.message, msg);
 }
@@ -43,13 +43,13 @@ void TestOutOfRangeException::test_messageConstructor()
 void TestOutOfRangeException::test_actualMaxConstructor()
 {
     {
-        OutOfRangeException e(0x10, 10);
+        OutOfRangeException const e(0x10, 10);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
         QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: 16, max: 10");
     }
 
     {
-        OutOfRangeException e(6.28318530718, 1.0);
+        OutOfRangeException const e(6.28318530718, 1.0);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
         QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: 6.28319, max: 1");
     }
@@ -58,13 +58,13 @@ void TestOutOfRangeException::test_actualMaxConstructor()
 void TestOutOfRangeException::test_actualMinMaxConstructor()
 {
     {
-        OutOfRangeException e(-1, 0, 10);
+        OutOfRangeException const e(-1, 0, 10);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
         QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: -1, min: 0, max: 10");
     }
 
     {
-        OutOfRangeException e(-0.5, 0.0, 1.0);
+        OutOfRangeException const e(-0.5, 0.0, 1.0);
         // コンストラクタでメッセージを設定した場合、想定通りの文字列が設定されること
         QCOMPARE_EQ(e.message, "[OutOfRangeException] actual: -0.5, min: 0, max: 1");
     }
@@ -80,7 +80,7 @@ void TestOutOfRangeException::test_clone()
     // clone()を呼び出しても元のインスタンスが変わらないこと
     QCOMPARE_EQ(e.message, msg);
     // clone()で返されたインスタンスのメッセージが元のインスタンスと変わらないこと
-    QCOMPARE_EQ(static_cast<OutOfRangeException<int> *>(copied.get())->message, msg);
+    QCOMPARE_EQ(dynamic_cast<OutOfRangeException<int> *>(copied.get())->message, msg);
     // clone()で返されたインスタンスが元のインスタンスとは異なること
     QCOMPARE_NE(&e, copied.get());
 }
@@ -88,7 +88,7 @@ void TestOutOfRangeException::test_clone()
 void TestOutOfRangeException::test_raise()
 {
     const QString msg = rd.nextQString(length);
-    OutOfRangeException<int> src(msg);
+    OutOfRangeException<int> const src(msg);
 
     // try-catchのスコープより寿命が長い例外インスタンスを投げる
     try {

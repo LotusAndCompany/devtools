@@ -28,7 +28,7 @@ class QRCodeGenerationGUI : public GuiTool
 
 public:
     explicit QRCodeGenerationGUI(QWidget *parent = nullptr);
-    ~QRCodeGenerationGUI();
+    ~QRCodeGenerationGUI() override;
 
 protected:
     void changeEvent(QEvent *event) override;
@@ -63,8 +63,8 @@ private:
     QWidget *createCalendarWidget();
     QWidget *createGeoWidget();
 
-    QStackedWidget *parameterStack;
-    QRCodeType currentType;
+    QStackedWidget *parameterStack{nullptr};
+    QRCodeType currentType{Text};
 
     // Widget references for easy access
     QMap<QString, QWidget *> parameterWidgets;
@@ -76,7 +76,7 @@ private:
     bool validateCurrentType();
     void showValidationError(const QString &fieldKey, const QString &message);
     void clearValidationErrors();
-    bool isValidPhoneNumber(const QString &phone);
+    static bool isValidPhoneNumber(const QString &phone);
 
     // 生成されたQRコード画像を保持
     QImage currentQRImage;

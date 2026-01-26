@@ -34,10 +34,13 @@ public:
      */
     explicit UnderDevelopmentException(const QString &message) : CommonException(message) {}
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new UnderDevelopmentException(*this); }
+    [[nodiscard]] QException *clone() const override
+    {
+        return new UnderDevelopmentException(*this);
+    }
 
 #ifdef _TEST_UnderDevelopmentException
     friend class Test::TestUnderDevelopmentException;

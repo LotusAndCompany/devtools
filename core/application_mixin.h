@@ -42,12 +42,12 @@ public:
      * @brief アプリケーションの種類の判定
      * @return GUIアプリケーションであれば `true`
      */
-    inline bool isGui() const { return appType == AppType::GUI; }
+    [[nodiscard]] bool isGui() const { return appType == AppType::GUI; }
     /**
      * @brief アプリケーションの種類の判定
      * @return CLIアプリケーションであれば `true`
      */
-    inline bool isCli() const { return appType == AppType::CLI; }
+    [[nodiscard]] bool isCli() const { return appType == AppType::CLI; }
 
     /**
      * @brief GUI/CLIに固有の初期化処理
@@ -75,13 +75,13 @@ protected:
      * 現在有効な[QTranslator](https://doc.qt.io/qt-6/qtranslator.html)への参照を返す
      * @return QTranslatorの参照
      */
-    inline const QTranslator &translator() const { return _translator; }
+    [[nodiscard]] const QTranslator &translator() const { return _translator; }
 
     /**
      * @brief 翻訳器への非const参照を返す（サブクラス専用）
      * @return QTranslatorの非const参照
      */
-    inline QTranslator &mutableTranslator() { return _translator; }
+    QTranslator &mutableTranslator() { return _translator; }
 
 private:
     /// 翻訳ファイルを読み込むオブジェクト

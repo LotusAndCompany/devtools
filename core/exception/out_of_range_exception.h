@@ -61,10 +61,10 @@ public:
                       .arg(max);
     }
 
-    virtual void raise() const override { throw *this; }
+    void raise() const override { throw *this; }
 
 protected:
-    virtual QException *clone() const override { return new OutOfRangeException(*this); }
+    [[nodiscard]] QException *clone() const override { return new OutOfRangeException(*this); }
 
 #ifdef _TEST_OutOfRangeException
     friend class Test::TestOutOfRangeException;
