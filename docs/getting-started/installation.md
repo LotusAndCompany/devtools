@@ -12,14 +12,16 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.x | GUI framework |
+| Qt | 6.9.3 | GUI framework |
 | vcpkg | Latest | Package management |
 
 ### Optional Tools
-| Tool | Purpose |
-|------|---------|
-| Doxygen | API documentation generation |
-| Qt Creator | IDE with Qt integration |
+| Tool | Version | Purpose |
+|------|---------|---------|
+| Doxygen | - | API documentation generation |
+| Qt Creator | 18.0.1+ | IDE with Qt integration |
+| Ninja | 1.12.1+ | Fast build tool |
+| Qt Installer Framework | 4.10 | Application packaging |
 
 ## Step-by-Step Installation
 

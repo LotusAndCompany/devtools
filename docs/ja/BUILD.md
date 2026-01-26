@@ -12,7 +12,7 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.x（Widgets, LinguistTools, Networkモジュール）
+- **Qt**: 6.9.3（Widgets, LinguistTools, Networkモジュール）
 - **vcpkg**: 依存関係管理用
 
 ### 依存ライブラリ（vcpkg経由）
@@ -21,6 +21,9 @@
 
 ### オプション
 - **Doxygen**: APIドキュメント生成用
+- **Qt Creator**: 18.0.1以上（Qt統合IDE）
+- **Ninja**: 1.12.1以上（高速ビルドツール）
+- **Qt Installer Framework**: 4.10（アプリケーションパッケージング）
 
 ## インストール
 
