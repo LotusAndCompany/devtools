@@ -3,6 +3,8 @@
 
 #include "common_exception.h"
 
+#include <QStringBuilder>
+
 #ifdef _TEST_InvalidStateException
 namespace Test {
 class TestInvalidStateException;

@@ -2,6 +2,8 @@
 
 #include "core/exception/invalid_argument_exception.h"
 
+#include <QStringBuilder>
+
 ImageDivisionInterface::ImageDivisionInterface(QObject *parent)
     : Tool(Tool::ID::IMAGE_DIVISION, "image-division", parent)
 {}

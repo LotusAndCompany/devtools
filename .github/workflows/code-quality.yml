@@ -116,6 +116,9 @@ jobs:
           files_ignore: |
             build/**
 
+      - name: Build project
+        run: cmake --build build
+
       - name: Run clang-tidy
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
