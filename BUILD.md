@@ -12,7 +12,7 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.x (Widgets, LinguistTools, Network modules)
+- **Qt**: 6.9.3 (Widgets, LinguistTools, Network modules)
 - **vcpkg**: For dependency management
 
 ### Dependencies (via vcpkg)
@@ -21,6 +21,9 @@ This document describes how to build DevTools from source.
 
 ### Optional
 - **Doxygen**: For generating API documentation
+- **Qt Creator**: 18.0.1+ (IDE with Qt integration)
+- **Ninja**: 1.12.1+ (Fast build tool)
+- **Qt Installer Framework**: 4.10 (Application packaging)
 
 ## Installation
 
