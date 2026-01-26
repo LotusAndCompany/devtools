@@ -96,7 +96,7 @@ TomlParser::ParseResult TomlParser::tomlValueToQvariant(const toml_value_type &v
         result.data = value.as_floating();
         result.success = true;
     } else if (value.is_integer()) {
-        result.data = value.as_integer();
+        result.data = static_cast<qlonglong>(value.as_integer());
         result.success = true;
     } else if (value.is_string()) {
         result.data = QString::fromStdString(value.as_string());
