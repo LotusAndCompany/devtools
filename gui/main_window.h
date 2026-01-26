@@ -4,7 +4,7 @@
 #include "sidemenu.h"
 
 #include <QMainWindow>
-#include <QtSystemDetection>
+#include <QtGlobal>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
