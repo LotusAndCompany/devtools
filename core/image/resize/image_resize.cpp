@@ -103,7 +103,7 @@ void ImageResize::setSize(const QSize &size)
 void ImageResize::setWidth(unsigned int w, bool keepAspectRatio)
 {
     if (keepAspectRatio) {
-        setSize(QSize(w, (int)std::round(w / aspectRatio())));
+        setSize(QSize(static_cast<int>(w), static_cast<int>(std::round(w / aspectRatio()))));
     } else {
         if (width.type != ResizeHints::Type::DEFAULT) {
             qWarning() << widthOverwritten;
@@ -119,7 +119,7 @@ void ImageResize::setWidth(unsigned int w, bool keepAspectRatio)
 void ImageResize::setHeight(unsigned int h, bool keepAspectRatio)
 {
     if (keepAspectRatio) {
-        setSize(QSize((int)std::round(h * aspectRatio()), h));
+        setSize(QSize(static_cast<int>(std::round(h * aspectRatio())), static_cast<int>(h)));
     } else {
         if (height.type != ResizeHints::Type::DEFAULT) {
             qWarning() << heightOverwritten;
@@ -137,7 +137,7 @@ unsigned int ImageResize::computedSizeInternal(unsigned int originalSize, const 
     switch (hints.type) {
     case ResizeHints::Type::SCALE:
         if (originalSize != 0) {
-            return hints.scale * originalSize;
+            return static_cast<unsigned int>(hints.scale * originalSize);
         } else {
             throw InvalidArgumentException(originalSize, invalidImageSize);
         }

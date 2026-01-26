@@ -41,7 +41,7 @@ void ImageRotationGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool const result = imageRotation->load(path);
+    imageRotation->load(path);
     imageRotation->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageRotation->current()), true);

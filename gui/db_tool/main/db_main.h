@@ -21,6 +21,10 @@ class dbMain : public QWidget
 public:
     explicit dbMain(QWidget *parent = nullptr);
     ~dbMain() override;
+    dbMain(const dbMain &) = delete;
+    dbMain &operator=(const dbMain &) = delete;
+    dbMain(dbMain &&) = delete;
+    dbMain &operator=(dbMain &&) = delete;
 
 private:
     Ui::dbMain *ui;

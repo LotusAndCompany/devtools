@@ -23,6 +23,12 @@ class TestImageIO;
  */
 class ImageIO
 {
+public:
+    ImageIO(const ImageIO &) = delete;
+    ImageIO(ImageIO &&) = delete;
+    ImageIO &operator=(const ImageIO &) = delete;
+    ImageIO &operator=(ImageIO &&) = delete;
+
 protected:
     /**
      * @brief コンストラクタ

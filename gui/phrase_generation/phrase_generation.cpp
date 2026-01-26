@@ -95,6 +95,7 @@ void phraseGeneration::loadTitles()
     ui->titleTreeWidget->clear();
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
         QString const content = loadContent(filename, &title);

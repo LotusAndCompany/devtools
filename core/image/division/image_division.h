@@ -22,6 +22,10 @@ class ImageDivisionInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
+    ImageDivisionInterface(const ImageDivisionInterface &) = delete;
+    ImageDivisionInterface(ImageDivisionInterface &&) = delete;
+    ImageDivisionInterface &operator=(const ImageDivisionInterface &) = delete;
+    ImageDivisionInterface &operator=(ImageDivisionInterface &&) = delete;
     ~ImageDivisionInterface() override = default;
 
     /**

@@ -27,6 +27,10 @@ public:
      * デストラクタ
      */
     ~AboutDevToolsDialog() override;
+    AboutDevToolsDialog(const AboutDevToolsDialog &) = delete;
+    AboutDevToolsDialog &operator=(const AboutDevToolsDialog &) = delete;
+    AboutDevToolsDialog(AboutDevToolsDialog &&) = delete;
+    AboutDevToolsDialog &operator=(AboutDevToolsDialog &&) = delete;
 
 private slots:
     /**

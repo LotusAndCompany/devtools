@@ -28,6 +28,10 @@ public:
      * @param src コピー元インスタンス
      */
     InvalidArgumentException(const InvalidArgumentException &src) = default;
+    InvalidArgumentException(InvalidArgumentException &&src) noexcept = default;
+    InvalidArgumentException &operator=(const InvalidArgumentException &src) = default;
+    InvalidArgumentException &operator=(InvalidArgumentException &&src) noexcept = default;
+    ~InvalidArgumentException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ

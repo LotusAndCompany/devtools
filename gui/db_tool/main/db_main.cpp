@@ -22,6 +22,7 @@
 #include <QWidget>
 
 // Static variable to track if connection was made during this app session
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool s_hasConnectedThisSession = false;
 
 dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
@@ -62,7 +63,7 @@ void dbMain::handleAddQueryTabButtonClick()
     int counter = 1;
     QString newTabName;
 
-    do {
+    do { // NOLINT(cppcoreguidelines-avoid-do-while)
         newTabName = QString("%1 %2").arg(baseName).arg(counter++);
     } while (isTabNameExists(newTabName));
 

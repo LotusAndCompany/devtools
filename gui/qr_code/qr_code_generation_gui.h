@@ -29,6 +29,8 @@ class QRCodeGenerationGUI : public GuiTool
 public:
     explicit QRCodeGenerationGUI(QWidget *parent = nullptr);
     ~QRCodeGenerationGUI() override;
+    QRCodeGenerationGUI(QRCodeGenerationGUI &&) = delete;
+    QRCodeGenerationGUI &operator=(QRCodeGenerationGUI &&) = delete;
 
 protected:
     void changeEvent(QEvent *event) override;
@@ -45,7 +47,8 @@ private slots:
 private:
     Ui::QRCodeGenerationGUI *ui;
 
-    enum QRCodeType { Text, Url, Email, Phone, Sms, Wifi, Contact, Calendar, Geo };
+    enum class QRCodeType : uint8_t { Text, Url, Email, Phone, Sms, Wifi, Contact, Calendar, Geo };
+    ;
 
     void initializeCategories();
     void setupParameterWidgets();
@@ -64,7 +67,7 @@ private:
     QWidget *createGeoWidget();
 
     QStackedWidget *parameterStack{nullptr};
-    QRCodeType currentType{Text};
+    QRCodeType currentType{QRCodeType::Text};
 
     // Widget references for easy access
     QMap<QString, QWidget *> parameterWidgets;

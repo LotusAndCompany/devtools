@@ -22,6 +22,10 @@ class ImageTransparentInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
+    ImageTransparentInterface(const ImageTransparentInterface &) = delete;
+    ImageTransparentInterface(ImageTransparentInterface &&) = delete;
+    ImageTransparentInterface &operator=(const ImageTransparentInterface &) = delete;
+    ImageTransparentInterface &operator=(ImageTransparentInterface &&) = delete;
     ~ImageTransparentInterface() override = default;
 
     /**

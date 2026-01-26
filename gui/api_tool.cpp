@@ -108,15 +108,16 @@ QString formatDataSize(qint64 bytes)
     const double KB = 1024.0;
     const double MB = 1024.0 * KB;
     const double GB = 1024.0 * MB;
+    const auto bytesDouble = static_cast<double>(bytes);
 
-    if (bytes < KB) {
+    if (bytesDouble < KB) {
         return QString::number(bytes) + " B";
-    } else if (bytes < MB) {
-        return QString::number(bytes / KB, 'f', 2) + " KB";
-    } else if (bytes < GB) {
-        return QString::number(bytes / MB, 'f', 2) + " MB";
+    } else if (bytesDouble < MB) {
+        return QString::number(bytesDouble / KB, 'f', 2) + " KB";
+    } else if (bytesDouble < GB) {
+        return QString::number(bytesDouble / MB, 'f', 2) + " MB";
     } else {
-        return QString::number(bytes / GB, 'f', 2) + " GB";
+        return QString::number(bytesDouble / GB, 'f', 2) + " GB";
     }
 }
 

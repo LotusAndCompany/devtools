@@ -88,6 +88,10 @@ struct enum_cast
         }
     }
     enum_cast(const enum_cast &) = delete;
+    enum_cast(enum_cast &&) = delete;
+    enum_cast &operator=(const enum_cast &) = delete;
+    enum_cast &operator=(enum_cast &&) = delete;
+    ~enum_cast() = default;
 
     /**
      * @brief 変換先のenum型への暗黙変換

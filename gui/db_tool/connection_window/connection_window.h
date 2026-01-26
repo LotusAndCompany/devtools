@@ -15,6 +15,10 @@ class ConnectionWindow : public QWidget
 public:
     explicit ConnectionWindow(QWidget *parent = nullptr);
     ~ConnectionWindow() override;
+    ConnectionWindow(const ConnectionWindow &) = delete;
+    ConnectionWindow &operator=(const ConnectionWindow &) = delete;
+    ConnectionWindow(ConnectionWindow &&) = delete;
+    ConnectionWindow &operator=(ConnectionWindow &&) = delete;
 
     [[nodiscard]] QJsonObject getConnectionInfo() const;
 

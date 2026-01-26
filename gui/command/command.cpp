@@ -214,7 +214,7 @@ void Command::selectedCategory()
     switch (selectedIndex) {
     case 1:
         commandList = getGitCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -225,7 +225,7 @@ void Command::selectedCategory()
         break;
     case 2:
         commandList = getDockerCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -236,7 +236,7 @@ void Command::selectedCategory()
         break;
     case 3:
         commandList = getDockerComposeCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -384,6 +384,7 @@ bool containsNoQuotes(const QString &str)
 {
     QString const quotes = "\"'`";
 
+    // NOLINTNEXTLINE(readability-use-anyofallof)
     for (const QChar &quote : quotes) {
         if (str.contains(quote)) {
             return false;

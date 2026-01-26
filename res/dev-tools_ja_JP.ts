@@ -44,7 +44,7 @@
         <translation>ライセンス</translation>
     </message>
     <message>
-        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="+26"/>
+        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="+27"/>
         <source>Failed to load license information.</source>
         <translation>ライセンス情報を読み込めませんでした。</translation>
     </message>
@@ -305,12 +305,12 @@
         <translation>TOMLでは値のみのデータはサポートされていません</translation>
     </message>
     <message>
-        <location line="+87"/>
+        <location line="+86"/>
         <source>ignore null value in array: %1</source>
         <translation>配列内のnull値を無視します: %1</translation>
     </message>
     <message>
-        <location line="+59"/>
+        <location line="+58"/>
         <source>ignore null value of key: %1</source>
         <translation>null値を無視します: %1</translation>
     </message>
@@ -472,7 +472,7 @@
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+61"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+62"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
     </message>
@@ -544,7 +544,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+63"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+64"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -794,7 +794,7 @@
     </message>
     <message>
         <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1045"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1047"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
@@ -814,7 +814,7 @@
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-949"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-952"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -834,7 +834,7 @@
         <translation>メールアドレスを入力...</translation>
     </message>
     <message>
-        <location line="+285"/>
+        <location line="+286"/>
         <source>Password is required for WPA/WEP security</source>
         <translation>WPA/WEPセキュリティにはパスワードが必要です</translation>
     </message>
@@ -864,19 +864,19 @@
         <translation>経度は-180から180の範囲で入力してください</translation>
     </message>
     <message>
-        <location line="+162"/>
-        <location line="+198"/>
+        <location line="+163"/>
+        <location line="+199"/>
         <location line="+14"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-212"/>
+        <location line="-213"/>
         <source>Please fill in required fields</source>
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+198"/>
+        <location line="+199"/>
         <location line="+14"/>
         <source>QRコードが生成されていません。</source>
         <translation type="unfinished"></translation>
@@ -925,7 +925,7 @@
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-963"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-966"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -999,12 +999,12 @@
         <translation>非表示ネットワーク</translation>
     </message>
     <message>
-        <location line="+394"/>
+        <location line="+395"/>
         <source>End time must be after start time</source>
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
     <message>
-        <location line="+364"/>
+        <location line="+366"/>
         <source>Failed to generate QR code:
 %1
 
@@ -1048,7 +1048,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-792"/>
+        <location line="-795"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>
@@ -1102,7 +1102,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>経度:</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+101"/>
         <source>Text cannot be empty</source>
         <translation>テキストを入力してください</translation>
     </message>
@@ -1577,7 +1577,7 @@ Choose a tool from the side panel</source>
         <translation>説明</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+101"/>
         <source>Error: </source>
         <translation>エラー: </translation>
     </message>
@@ -1625,7 +1625,7 @@ Choose a tool from the side panel</source>
         <translation>クエリ</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="+76"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="+77"/>
         <source>DB Not Connected</source>
         <translation>DB未接続</translation>
     </message>
@@ -1680,7 +1680,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+108"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+109"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>

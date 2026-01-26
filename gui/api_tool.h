@@ -26,6 +26,10 @@ class api_tool : public QFrame
 public:
     explicit api_tool(QWidget *parent = nullptr);
     ~api_tool() override;
+    api_tool(const api_tool &) = delete;
+    api_tool &operator=(const api_tool &) = delete;
+    api_tool(api_tool &&) = delete;
+    api_tool &operator=(api_tool &&) = delete;
 
 private slots:
     void setupParametersTable();

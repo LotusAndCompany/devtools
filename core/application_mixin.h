@@ -12,12 +12,13 @@
 /**
  * @brief アプリケーションの種類
  */
-enum class AppType {
+enum class AppType : uint8_t {
     MIN, ///< 最小値
     GUI, ///< GUIアプリケーション
     CLI, ///< CLIアプリケーション
     MAX, ///< 最大値
 };
+;
 
 /**
  * @brief
@@ -35,9 +36,14 @@ public:
      */
     ApplicationMixin(AppType appType, int argc, char **argv);
     ApplicationMixin() = delete;
+    ApplicationMixin(const ApplicationMixin &) = delete;
+    ApplicationMixin(ApplicationMixin &&) = delete;
+    ApplicationMixin &operator=(const ApplicationMixin &) = delete;
+    ApplicationMixin &operator=(ApplicationMixin &&) = delete;
+    virtual ~ApplicationMixin() = default;
 
     /// アプリケーションの種類
-    const AppType appType;
+    const AppType appType; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
     /**
      * @brief アプリケーションの種類の判定
      * @return GUIアプリケーションであれば `true`

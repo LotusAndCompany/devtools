@@ -22,6 +22,10 @@ class ImageResizeInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
+    ImageResizeInterface(const ImageResizeInterface &) = delete;
+    ImageResizeInterface(ImageResizeInterface &&) = delete;
+    ImageResizeInterface &operator=(const ImageResizeInterface &) = delete;
+    ImageResizeInterface &operator=(ImageResizeInterface &&) = delete;
     ~ImageResizeInterface() override = default;
 
     /**
@@ -112,7 +116,8 @@ protected:
     explicit ImageResizeInterface(QObject *parent = nullptr);
 
     /// Bilinear補完有効化フラグ
-    bool smoothTransformationEnabled = false;
+    bool smoothTransformationEnabled =
+        false; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 };
 
 /**
@@ -182,7 +187,7 @@ private:
     struct ResizeHints
     {
         /// 指定なし/サイズ指定/拡大率指定を表す列挙体
-        enum class Type {
+        enum class Type : uint8_t {
             /// 最小値
             MIN,
             /// 変更しない
@@ -194,6 +199,7 @@ private:
             /// 最大値
             MAX,
         };
+        ;
         /// 値の種類
         Type type = Type::DEFAULT;
 

@@ -33,6 +33,10 @@ public:
      */
     explicit ImageRotationGUI(ImageRotationInterface *imageRotation, QWidget *parent = nullptr);
     ~ImageRotationGUI() override;
+    ImageRotationGUI(const ImageRotationGUI &) = delete;
+    ImageRotationGUI &operator=(const ImageRotationGUI &) = delete;
+    ImageRotationGUI(ImageRotationGUI &&) = delete;
+    ImageRotationGUI &operator=(ImageRotationGUI &&) = delete;
 
 private slots:
     /**

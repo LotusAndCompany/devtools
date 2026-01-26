@@ -36,6 +36,10 @@ public:
      * @param src コピー元インスタンス
      */
     CommonException(const CommonException &src) = default;
+    CommonException(CommonException &&src) noexcept = default;
+    CommonException &operator=(const CommonException &src) = default;
+    CommonException &operator=(CommonException &&src) noexcept = default;
+    ~CommonException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ

@@ -16,6 +16,11 @@ class BasicEmitter
 {
 public:
     /// デストラクタ
+    BasicEmitter() = default;
+    BasicEmitter(const BasicEmitter &) = default;
+    BasicEmitter(BasicEmitter &&) noexcept = default;
+    BasicEmitter &operator=(const BasicEmitter &) = default;
+    BasicEmitter &operator=(BasicEmitter &&) noexcept = default;
     virtual ~BasicEmitter() = default;
 
     /// 出力結果を格納する構造体
@@ -37,7 +42,7 @@ protected:
                                                            const QString &newIndent) const;
 
     /// 警告
-    QStringList warnings;
+    QStringList warnings; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
 #ifdef _TEST_BasicEmitter
     friend class Test::TestBasicEmitter;

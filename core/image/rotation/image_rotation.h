@@ -23,6 +23,10 @@ class ImageRotationInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
+    ImageRotationInterface(const ImageRotationInterface &) = delete;
+    ImageRotationInterface(ImageRotationInterface &&) = delete;
+    ImageRotationInterface &operator=(const ImageRotationInterface &) = delete;
+    ImageRotationInterface &operator=(ImageRotationInterface &&) = delete;
     ~ImageRotationInterface() override = default;
 
     /**
@@ -69,7 +73,8 @@ protected:
     explicit ImageRotationInterface(QObject *parent);
 
     /// Bilinear補完有効化フラグ
-    bool smoothTransformationEnabled = false;
+    bool smoothTransformationEnabled =
+        false; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 };
 
 /**

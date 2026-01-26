@@ -35,7 +35,8 @@ bool ImageDivision::saveImpl(bool (*saveFunc)(const QString &, const QImage &, c
 
         for (unsigned int y = 0; y < yMax; y++) {
             for (unsigned int x = 0; x < xMax; x++) {
-                const QRect rect(QPoint(x * cellSize.width(), y * cellSize.height()),
+                const QRect rect(QPoint(static_cast<int>(x * cellSize.width()),
+                                        static_cast<int>(y * cellSize.height())),
                                  cellSize.toSize());
                 const QString filename = saveFilename(dir, x, y);
 

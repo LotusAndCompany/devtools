@@ -79,6 +79,7 @@ struct Util
 
 using namespace TomlParserPrivate;
 
+// NOLINTNEXTLINE(readability-function-size)
 TomlParser::ParseResult TomlParser::tomlValueToQvariant(const toml_value_type &value)
 {
     if (value.is_array()) {

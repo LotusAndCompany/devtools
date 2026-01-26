@@ -46,7 +46,7 @@ void ImageTransparentGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool const result = imageTransparent->load(path);
+    imageTransparent->load(path);
     imageTransparent->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageTransparent->current()), true);
@@ -118,7 +118,7 @@ void ImageTransparentGUI::onTransparencyValueChanged(double transparency)
                                                "transparency must be in range [0.0, 1.0]");
     }
 
-    imageTransparent->opacity = 255 * (1.0 - transparency);
+    imageTransparent->opacity = static_cast<uint8_t>(255 * (1.0 - transparency));
 }
 
 void ImageTransparentGUI::onContiguousAreaCheckStateChanged(Qt::CheckState state)

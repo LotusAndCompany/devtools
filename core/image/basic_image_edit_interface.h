@@ -17,6 +17,11 @@ class QFileInfo;
 class BasicImageEditInterface
 {
 public:
+    BasicImageEditInterface() = default;
+    BasicImageEditInterface(const BasicImageEditInterface &) = delete;
+    BasicImageEditInterface(BasicImageEditInterface &&) = delete;
+    BasicImageEditInterface &operator=(const BasicImageEditInterface &) = delete;
+    BasicImageEditInterface &operator=(BasicImageEditInterface &&) = delete;
     virtual ~BasicImageEditInterface() = default;
     /**
      * @brief 画像を読み込む。 reset() や update() は呼び出さない
@@ -74,7 +79,7 @@ public:
 
 protected:
     /// 編集中の画像
-    QImage _current;
+    QImage _current; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief load() の実装

@@ -28,6 +28,10 @@ public:
      * @param src コピー元インスタンス
      */
     OutOfRangeException(const OutOfRangeException &src) = default;
+    OutOfRangeException(OutOfRangeException &&src) noexcept = default;
+    OutOfRangeException &operator=(const OutOfRangeException &src) = default;
+    OutOfRangeException &operator=(OutOfRangeException &&src) noexcept = default;
+    ~OutOfRangeException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ

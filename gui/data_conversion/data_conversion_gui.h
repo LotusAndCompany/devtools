@@ -35,6 +35,10 @@ public:
     explicit DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent = nullptr);
     /// デストラクタ
     ~DataConversionGUI() override;
+    DataConversionGUI(const DataConversionGUI &) = delete;
+    DataConversionGUI &operator=(const DataConversionGUI &) = delete;
+    DataConversionGUI(DataConversionGUI &&) = delete;
+    DataConversionGUI &operator=(DataConversionGUI &&) = delete;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

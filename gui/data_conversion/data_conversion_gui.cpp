@@ -125,6 +125,8 @@ void DataConversionGUI::onFormatSelected(int index)
     case 3:
         dataConversion->setOutputFormat(DataConversion::Format::TOML);
         break;
+    default:
+        break;
     }
     dataConversion->updateOutputText();
     ui->outputMessageTextView->setText(dataConversion->messages());
@@ -145,6 +147,8 @@ void DataConversionGUI::onStyleSelected(int index)
         break;
     case 3:
         dataConversion->setIndentation(DataConversion::Indentation::MINIFIED);
+        break;
+    default:
         break;
     }
     dataConversion->updateOutputText();

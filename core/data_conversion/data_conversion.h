@@ -22,6 +22,10 @@ class DataConversionInterface : public Tool
 
 public:
     /// デストラクタ
+    DataConversionInterface(const DataConversionInterface &) = delete;
+    DataConversionInterface(DataConversionInterface &&) = delete;
+    DataConversionInterface &operator=(const DataConversionInterface &) = delete;
+    DataConversionInterface &operator=(DataConversionInterface &&) = delete;
     ~DataConversionInterface() override = default;
 
     /**
@@ -54,7 +58,7 @@ public:
     [[nodiscard]] virtual bool save(const QString &path, bool overwrite = false) const = 0;
 
     /// 出力形式を定義した列挙体
-    enum class Format {
+    enum class Format : uint8_t {
         MIN,        ///< 最小値
         UNKNOWN,    ///< 不明/未指定
         JSON,       ///< JSON
@@ -64,6 +68,7 @@ public:
         ERROR,      ///< 不正なフォーマット
         MAX,        ///< 最大値
     };
+    ;
     /**
      * @brief 出力形式を設定する
      * @param format 出力形式
@@ -76,7 +81,7 @@ public:
     [[nodiscard]] Format outputFormat() const { return _outputFormat; }
 
     /// 出力文字列のインデントを定義した列挙体
-    enum class Indentation {
+    enum class Indentation : uint8_t {
         MIN,      ///< 最小値
         SPACES_4, ///< 4スペースでインデント
         SPACES_2, ///< 2スペースでインデント
@@ -84,6 +89,7 @@ public:
         MINIFIED, ///< 最小化
         MAX,      ///< 最大値
     };
+    ;
     /**
      * @brief 出力時のインデントを設定する
      * @param indentation インデント
@@ -107,6 +113,7 @@ protected:
      */
     explicit DataConversionInterface(QObject *parent = nullptr);
 
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     /// 入力文字列
     QString _inputText;
     /// 出力文字列
@@ -117,6 +124,7 @@ protected:
     Indentation _indentation = Indentation::SPACES_4;
     /// エラーメッセージ等
     QStringList _messages;
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief 出力形式が不正なら例外を投げる
@@ -149,6 +157,10 @@ public:
      * @param parent 親オブジェクト
      */
     explicit DataConversion(QObject *parent = nullptr);
+    DataConversion(const DataConversion &) = delete;
+    DataConversion(DataConversion &&) = delete;
+    DataConversion &operator=(const DataConversion &) = delete;
+    DataConversion &operator=(DataConversion &&) = delete;
     /// デストラクタ
     ~DataConversion() override = default;
 

@@ -16,6 +16,11 @@ class BasicParser
 {
 public:
     /// デストラクタ
+    BasicParser() = default;
+    BasicParser(const BasicParser &) = default;
+    BasicParser(BasicParser &&) noexcept = default;
+    BasicParser &operator=(const BasicParser &) = default;
+    BasicParser &operator=(BasicParser &&) noexcept = default;
     virtual ~BasicParser() = default;
 
     /// 解析結果を格納する構造体

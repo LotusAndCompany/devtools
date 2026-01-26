@@ -24,7 +24,6 @@
 #include <QVariantMap>
 
 using qrcodegen::QrCode;
-using qrcodegen::QrSegment;
 
 QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent)
     : GuiTool(parent), ui(new Ui::QRCodeGenerationGUI)
@@ -451,44 +450,44 @@ void QRCodeGenerationGUI::onCategoryChanged(int index)
     // Map combo box index to QRCodeType and parameterStack index
     switch (index) {
     case 0: // Text
-        currentType = Text;
+        currentType = QRCodeType::Text;
         parameterStack->setCurrentIndex(1);
         break;
     case 1: // URL
-        currentType = Url;
+        currentType = QRCodeType::Url;
         parameterStack->setCurrentIndex(2);
         break;
     case 2: // Email
-        currentType = Email;
+        currentType = QRCodeType::Email;
         parameterStack->setCurrentIndex(3);
         break;
     case 3: // Phone Number
-        currentType = Phone;
+        currentType = QRCodeType::Phone;
         parameterStack->setCurrentIndex(4);
         break;
     case 4: // SMS
-        currentType = Sms;
+        currentType = QRCodeType::Sms;
         parameterStack->setCurrentIndex(5);
         break;
     case 5: // WiFi
-        currentType = Wifi;
+        currentType = QRCodeType::Wifi;
         parameterStack->setCurrentIndex(6);
         break;
     case 6: // Contact
-        currentType = Contact;
+        currentType = QRCodeType::Contact;
         parameterStack->setCurrentIndex(7);
         break;
     case 7: // Calendar
-        currentType = Calendar;
+        currentType = QRCodeType::Calendar;
         parameterStack->setCurrentIndex(8);
         break;
     case 8: // Geo Location
-        currentType = Geo;
+        currentType = QRCodeType::Geo;
         parameterStack->setCurrentIndex(9);
         break;
     default:
         // Default to Text
-        currentType = Text;
+        currentType = QRCodeType::Text;
         parameterStack->setCurrentIndex(1);
         break;
     }
@@ -518,13 +517,14 @@ void QRCodeGenerationGUI::clearAllParameters()
     clearValidationErrors();
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 bool QRCodeGenerationGUI::validateCurrentType()
 {
     clearValidationErrors();
     bool isValid = true;
 
     switch (currentType) {
-    case Text: {
+    case QRCodeType::Text: {
         auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"]);
         if ((edit == nullptr) || edit->toPlainText().trimmed().isEmpty()) {
             showValidationError("text_content_error", tr("Text cannot be empty"));
@@ -533,7 +533,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Url: {
+    case QRCodeType::Url: {
         auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["url_content"]);
         if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
             showValidationError("url_content_error", tr("URL cannot be empty"));
@@ -545,7 +545,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Email: {
+    case QRCodeType::Email: {
         auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["email_address"]);
         if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
             showValidationError("email_address_error", tr("Email cannot be empty"));
@@ -557,7 +557,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Phone: {
+    case QRCodeType::Phone: {
         auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["phone_number"]);
         if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
             showValidationError("phone_number_error", tr("Phone number cannot be empty"));
@@ -569,7 +569,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Sms: {
+    case QRCodeType::Sms: {
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
         auto const *messageEdit = qobject_cast<QTextEdit *>(parameterWidgets["sms_message"]);
 
@@ -587,7 +587,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Wifi: {
+    case QRCodeType::Wifi: {
         auto const *ssidEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_ssid"]);
         auto const *passwordEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_password"]);
         auto const *securityCombo = qobject_cast<QComboBox *>(parameterWidgets["wifi_security"]);
@@ -609,7 +609,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Contact: {
+    case QRCodeType::Contact: {
         auto const *nameEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_name"]);
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_phone"]);
         auto const *emailEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_email"]);
@@ -642,7 +642,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Calendar: {
+    case QRCodeType::Calendar: {
         auto const *summaryEdit = qobject_cast<QLineEdit *>(parameterWidgets["cal_summary"]);
         auto const *startEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_start"]);
         auto const *endEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_end"]);
@@ -671,7 +671,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
         break;
     }
 
-    case Geo: {
+    case QRCodeType::Geo: {
         auto const *latEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lat"]);
         auto const *lngEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lng"]);
 
@@ -747,13 +747,14 @@ bool QRCodeGenerationGUI::isValidPhoneNumber(const QString &phone)
     return digitOnlyPattern.match(cleanPhone).hasMatch();
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 QString QRCodeGenerationGUI::generateQRCodeContent()
 {
     QVariantMap params;
     QString type;
 
     switch (currentType) {
-    case Text: {
+    case QRCodeType::Text: {
         if (auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"])) {
             params["text"] = edit->toPlainText();
         }
@@ -761,7 +762,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Url: {
+    case QRCodeType::Url: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["url_content"])) {
             params["url"] = edit->text();
         }
@@ -769,7 +770,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Email: {
+    case QRCodeType::Email: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["email_address"])) {
             params["email"] = edit->text();
         }
@@ -777,7 +778,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Phone: {
+    case QRCodeType::Phone: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["phone_number"])) {
             params["number"] = edit->text();
         }
@@ -785,7 +786,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Sms: {
+    case QRCodeType::Sms: {
         if (auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"])) {
             params["number"] = phoneEdit->text();
         }
@@ -796,7 +797,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Contact: {
+    case QRCodeType::Contact: {
         if (auto const *nameEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_name"])) {
             params["name"] = nameEdit->text();
         }
@@ -810,7 +811,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Calendar: {
+    case QRCodeType::Calendar: {
         if (auto const *summaryEdit = qobject_cast<QLineEdit *>(parameterWidgets["cal_summary"])) {
             params["summary"] = summaryEdit->text();
         }
@@ -824,7 +825,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Geo: {
+    case QRCodeType::Geo: {
         if (auto const *latEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lat"])) {
             params["lat"] = latEdit->text();
         }
@@ -835,7 +836,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         break;
     }
 
-    case Wifi: {
+    case QRCodeType::Wifi: {
         if (auto const *ssidEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_ssid"])) {
             params["ssid"] = ssidEdit->text();
         }
@@ -864,40 +865,41 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
     return ContentGenerator::generate(type, params);
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 void QRCodeGenerationGUI::updateGenerateButtonState()
 {
     bool enabled = false;
 
     switch (currentType) {
-    case Text: {
+    case QRCodeType::Text: {
         if (auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"])) {
             enabled = !edit->toPlainText().trimmed().isEmpty();
         }
         break;
     }
 
-    case Url: {
+    case QRCodeType::Url: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["url_content"])) {
             enabled = !edit->text().trimmed().isEmpty();
         }
         break;
     }
 
-    case Email: {
+    case QRCodeType::Email: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["email_address"])) {
             enabled = !edit->text().trimmed().isEmpty();
         }
         break;
     }
 
-    case Phone: {
+    case QRCodeType::Phone: {
         if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["phone_number"])) {
             enabled = !edit->text().trimmed().isEmpty();
         }
         break;
     }
 
-    case Sms: {
+    case QRCodeType::Sms: {
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
         auto const *messageEdit = qobject_cast<QTextEdit *>(parameterWidgets["sms_message"]);
         enabled = (phoneEdit != nullptr) && (messageEdit != nullptr) &&
@@ -906,7 +908,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
         break;
     }
 
-    case Wifi: {
+    case QRCodeType::Wifi: {
         auto const *ssidEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_ssid"]);
         auto const *securityCombo = qobject_cast<QComboBox *>(parameterWidgets["wifi_security"]);
         auto const *passwordEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_password"]);
@@ -923,7 +925,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
         break;
     }
 
-    case Contact: {
+    case QRCodeType::Contact: {
         auto const *nameEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_name"]);
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_phone"]);
         auto const *emailEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_email"]);
@@ -944,7 +946,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
         break;
     }
 
-    case Calendar: {
+    case QRCodeType::Calendar: {
         auto const *summaryEdit = qobject_cast<QLineEdit *>(parameterWidgets["cal_summary"]);
         auto const *startEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_start"]);
         auto const *endEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_end"]);
@@ -954,7 +956,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
         break;
     }
 
-    case Geo: {
+    case QRCodeType::Geo: {
         auto const *latEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lat"]);
         auto const *lngEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lng"]);
 

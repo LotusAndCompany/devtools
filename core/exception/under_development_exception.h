@@ -28,6 +28,10 @@ public:
      * @param src コピー元インスタンス
      */
     UnderDevelopmentException(const UnderDevelopmentException &src) = default;
+    UnderDevelopmentException(UnderDevelopmentException &&src) noexcept = default;
+    UnderDevelopmentException &operator=(const UnderDevelopmentException &src) = default;
+    UnderDevelopmentException &operator=(UnderDevelopmentException &&src) noexcept = default;
+    ~UnderDevelopmentException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ

@@ -31,6 +31,10 @@ public:
      * デストラクタ
      */
     ~Sidemenu() override;
+    Sidemenu(const Sidemenu &) = delete;
+    Sidemenu &operator=(const Sidemenu &) = delete;
+    Sidemenu(Sidemenu &&) = delete;
+    Sidemenu &operator=(Sidemenu &&) = delete;
 
     /**
      * @brief サイドメニューのID
@@ -39,12 +43,13 @@ public:
      *
      * @sa Tool::ID
      */
-    enum class ID {
+    enum class ID : uint8_t {
         MIN,              ///< 最小値
         TOOL_ID_FIELDS(), // ここに展開する
         WELCOME,          ///< ようこそ画面
         MAX,              ///< 最大値
     };
+    ;
     /// 比較用のIDの最小値
     constexpr static const int ID_MIN = static_cast<int>(ID::MIN);
     /// 比較用のIDの最大値

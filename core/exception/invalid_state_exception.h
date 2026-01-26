@@ -25,6 +25,10 @@ public:
      * @param src コピー元インスタンス
      */
     InvalidStateException(const InvalidStateException &src) = default;
+    InvalidStateException(InvalidStateException &&src) noexcept = default;
+    InvalidStateException &operator=(const InvalidStateException &src) = default;
+    InvalidStateException &operator=(InvalidStateException &&src) noexcept = default;
+    ~InvalidStateException() override = default;
     /**
      * @brief 任意のメッセージを設定できるコンストラクタ
      * @param message メッセージ

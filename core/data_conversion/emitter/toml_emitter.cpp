@@ -18,7 +18,7 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
         return EmitResult{
             "",
             {},
-            QCoreApplication::instance()->translate("DataConversion", "Invalid input value"),
+            QCoreApplication::translate("DataConversion", "Invalid input value"),
         };
     }
 
@@ -29,14 +29,14 @@ TomlEmitter::EmitResult TomlEmitter::emitQString(const QVariant &data,
             text = text.mid(0, text.length() - 1);
         }
         return EmitResult{text, warnings, ""};
-    } catch (InvalidArgumentException<int> e) {
+    } catch (const InvalidArgumentException<int> &e) {
         qCritical() << e.message;
         return EmitResult{"", warnings, e.message};
-    } catch (std::exception e) {
+    } catch (const std::exception &e) {
         if (e.what() == QString("std::exception") &&
             data.typeId() == QMetaType::Type::QVariantList) {
-            const QString m = QCoreApplication::instance()->translate(
-                "DataConversion", "TOML does not support top level array");
+            const QString m = QCoreApplication::translate("DataConversion",
+                                                          "TOML does not support top level array");
             qCritical() << m;
             return EmitResult{"", warnings, m};
         } else {
@@ -121,9 +121,9 @@ TomlEmitter::toml_value_type TomlEmitter::listToTomlArray(
         if (!elem.isNull()) {
             array.push_back(variantToTomlValue(key, elem, indentation));
         } else {
-            warnings.push_back(QCoreApplication::instance()
-                                   ->translate("DataConversion", "ignore null value in array: %1")
-                                   .arg(key));
+            warnings.push_back(
+                QCoreApplication::translate("DataConversion", "ignore null value in array: %1")
+                    .arg(key));
             qWarning() << warnings.back();
         }
     }
@@ -180,9 +180,9 @@ TomlEmitter::toml_value_type TomlEmitter::mapToTomlTable(
             table[entry.first.toStdString()] =
                 variantToTomlValue(childKey, entry.second, indentation);
         } else {
-            warnings.push_back(QCoreApplication::instance()
-                                   ->translate("DataConversion", "ignore null value of key: %1")
-                                   .arg(childKey));
+            warnings.push_back(
+                QCoreApplication::translate("DataConversion", "ignore null value of key: %1")
+                    .arg(childKey));
             qWarning() << warnings.back();
         }
     }

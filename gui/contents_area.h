@@ -31,6 +31,10 @@ public:
      * デストラクタ
      */
     ~ContentsArea() override;
+    ContentsArea(const ContentsArea &) = delete;
+    ContentsArea &operator=(const ContentsArea &) = delete;
+    ContentsArea(ContentsArea &&) = delete;
+    ContentsArea &operator=(ContentsArea &&) = delete;
 
     /**
      * @brief サイドメニューのボタンを押した時に呼び出される

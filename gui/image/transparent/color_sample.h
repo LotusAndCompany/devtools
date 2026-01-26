@@ -23,6 +23,10 @@ public:
      */
     explicit ColorSample(QWidget *parent = nullptr);
     ~ColorSample() override = default;
+    ColorSample(const ColorSample &) = delete;
+    ColorSample &operator=(const ColorSample &) = delete;
+    ColorSample(ColorSample &&) = delete;
+    ColorSample &operator=(ColorSample &&) = delete;
 
     /**
      * @brief 色を設定し、UIを更新する

@@ -34,6 +34,10 @@ public:
      */
     explicit ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidget *parent = nullptr);
     ~ImageDivisionGUI() override;
+    ImageDivisionGUI(const ImageDivisionGUI &) = delete;
+    ImageDivisionGUI &operator=(const ImageDivisionGUI &) = delete;
+    ImageDivisionGUI(ImageDivisionGUI &&) = delete;
+    ImageDivisionGUI &operator=(ImageDivisionGUI &&) = delete;
 
 private slots:
     /**

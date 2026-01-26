@@ -21,6 +21,9 @@ class Tool : public QObject
 public:
     Tool() = delete;
     Tool(const Tool &) = delete;
+    Tool(Tool &&) = delete;
+    Tool &operator=(const Tool &) = delete;
+    Tool &operator=(Tool &&) = delete;
     /**
      * @brief デストラクタ
      */
@@ -34,15 +37,16 @@ public:
      *
      * @sa Sidemenu::ID
      */
-    enum class ID {
+    enum class ID : uint8_t {
         MIN,              ///< 最小値
         TOOL_ID_FIELDS(), // ここに展開する
         MAX,              ///< 最大値
     };
+    ;
     /**
      * @brief ツールの文字列ID 各ツールに分かりやすい一意な文字列を設定する
      */
-    const QString stringID;
+    const QString stringID; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief 翻訳が必要な情報を格納する構造体

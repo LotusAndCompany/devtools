@@ -63,9 +63,11 @@ void LabelWithGrid::paintEvent(QPaintEvent *event)
      */
     const double xLimit = xMax - 1;
     const double yLimit = yMax - 1;
+    // NOLINTNEXTLINE(clang-analyzer-security.FloatLoopCounter)
     for (double x = gridSize.width(); x < xLimit; x += gridSize.width()) {
         painter.drawLine(QPointF(x, 0), QPointF(x, yMax));
     }
+    // NOLINTNEXTLINE(clang-analyzer-security.FloatLoopCounter)
     for (double y = gridSize.height(); y < yLimit; y += gridSize.height()) {
         painter.drawLine(QPointF(0, y), QPointF(xMax, y));
     }

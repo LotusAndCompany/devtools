@@ -37,6 +37,10 @@ public:
      * @brief デストラクタ
      */
     ~ImageResizeGUI() override;
+    ImageResizeGUI(const ImageResizeGUI &) = delete;
+    ImageResizeGUI &operator=(const ImageResizeGUI &) = delete;
+    ImageResizeGUI(ImageResizeGUI &&) = delete;
+    ImageResizeGUI &operator=(ImageResizeGUI &&) = delete;
 
 private slots:
     /**
@@ -102,7 +106,7 @@ private:
     /**
      * @brief どの操作により画像サイズが更新されたかを表す列挙体
      */
-    enum class UpdateMode {
+    enum class UpdateMode : uint8_t {
         MIN,            ///< 最小値
         DEFAULT,        ///< loadやresetによる更新
         WIDTH_UPDATE,   ///< ui->widthValue の編集による更新
@@ -111,6 +115,7 @@ private:
         Y_SCALE_UPDATE, ///< ui->vScaleValue の編集による更新
         MAX,            ///< 最大値
     };
+    ;
     /**
      * @brief UI上の画像サイズ・拡大率を更新する
      * @param mode 更新モード

@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QSignalBlocker>
 
+#include <array>
+
 ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
     : GuiTool(parent), ui(new Ui::ImageResizeGUI), imageResize(imageResize)
 {
@@ -46,7 +48,7 @@ void ImageResizeGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool const result = imageResize->load(path);
+    imageResize->load(path);
     imageResize->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()), true);
@@ -202,12 +204,12 @@ void ImageResizeGUI::onSmoothTransformationChanged(Qt::CheckState state)
 void ImageResizeGUI::updateUIValues(UpdateMode mode)
 {
     // NOTE: 値を変更するとsignalが発せられるので、それを防止する
-    const QSignalBlocker blockers[] = {
+    const std::array<const QSignalBlocker, 4> blockers = {{
         QSignalBlocker(ui->widthValue),
         QSignalBlocker(ui->heightValue),
         QSignalBlocker(ui->vScaleValue),
         QSignalBlocker(ui->hScaleValue),
-    };
+    }};
 
     if (imageResize->original().isNull()) {
         ui->widthValue->setValue(0);
