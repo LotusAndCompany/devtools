@@ -245,7 +245,7 @@ void dbMain::openNewConnectionWindow()
             [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
                 setDatabase(db, connectionInfo);
                 // ConnectionSelectorも閉じる
-                if (connectionSelector) {
+                if (connectionSelector != nullptr) {
                     connectionSelector->close();
                 }
             });

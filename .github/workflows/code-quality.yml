@@ -119,9 +119,9 @@ jobs:
             core/**/*.cpp
             gui/**/*.cpp
             main/**/*.cpp
-            tests/**/*.cpp
           files_ignore: |
             build/**
+            tests/**
 
       - name: Build project
         run: cmake --build build
