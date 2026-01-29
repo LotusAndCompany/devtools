@@ -4,7 +4,7 @@
 
 #include <QPainter>
 
-using namespace _ImageViewForImageDivisionInternal;
+using namespace ImageViewForImageDivisionInternal;
 
 ImageViewForImageDivision::ImageViewForImageDivision(QWidget *parent) : BasicImageView(parent)
 {
@@ -25,7 +25,9 @@ void ImageViewForImageDivision::updateScale(double newScale)
 
 LabelWithGrid *ImageViewForImageDivision::ui_image() const
 {
-    return static_cast<LabelWithGrid *>(ui->image);
+    auto *label = dynamic_cast<LabelWithGrid *>(ui->image);
+    Q_ASSERT(label != nullptr);
+    return label;
 }
 
 void ImageViewForImageDivision::setGridSize(const QSizeF &newGridSize)
@@ -38,8 +40,9 @@ void LabelWithGrid::paintEvent(QPaintEvent *event)
 {
     QLabel::paintEvent(event);
 
-    if (gridSize.isEmpty() || pixmap().isNull())
+    if (gridSize.isEmpty() || pixmap().isNull()) {
         return;
+    }
 
     QPainter painter(this);
 
@@ -60,11 +63,16 @@ void LabelWithGrid::paintEvent(QPaintEvent *event)
      * [clang-analyzer-security.FloatLoopCounter] Variable 'y' with floating point type 'double'
      * should not be used as a loop counter [clang-analyzer-security.FloatLoopCounter]
      */
-    const double xLimit = xMax - 1, yLimit = yMax - 1;
-    for (double x = gridSize.width(); x < xLimit; x += gridSize.width())
+    const double xLimit = xMax - 1;
+    const double yLimit = yMax - 1;
+    // NOLINTNEXTLINE(clang-analyzer-security.FloatLoopCounter)
+    for (double x = gridSize.width(); x < xLimit; x += gridSize.width()) {
         painter.drawLine(QPointF(x, 0), QPointF(x, yMax));
-    for (double y = gridSize.height(); y < yLimit; y += gridSize.height())
+    }
+    // NOLINTNEXTLINE(clang-analyzer-security.FloatLoopCounter)
+    for (double y = gridSize.height(); y < yLimit; y += gridSize.height()) {
         painter.drawLine(QPointF(0, y), QPointF(xMax, y));
+    }
 }
 
 void LabelWithGrid::setGridSize(const QSizeF &scaledGridSize)

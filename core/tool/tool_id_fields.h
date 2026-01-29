@@ -12,6 +12,7 @@
  */
 // NOTE: コード整形をこの部分だけ無効化する
 // clang-format off
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define TOOL_ID_FIELDS()        \
     /** HTTPリクエスト */        \
     HTTP_REQUEST,               \

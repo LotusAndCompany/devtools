@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <cstdint>
+
 namespace Ui {
 class BasicImageViewControl;
 }
@@ -30,17 +32,21 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~BasicImageViewControl();
+    ~BasicImageViewControl() override;
+    BasicImageViewControl(const BasicImageViewControl &) = delete;
+    BasicImageViewControl &operator=(const BasicImageViewControl &) = delete;
+    BasicImageViewControl(BasicImageViewControl &&) = delete;
+    BasicImageViewControl &operator=(BasicImageViewControl &&) = delete;
 
     /**
      * @brief save/loadで開くダイアログの種類
      */
-    enum class DialogType {
-        MIN,           ///< 最小値
-        SELECT_FILE,   ///< ファイルを選択するダイアログ
-        SELECT_FOLDER, ///< フォルダを選択するダイアログ
-        MAX,           ///< 最大値
-    } saveFileDialogType = DialogType::SELECT_FILE;
+    enum class DialogType : uint8_t {
+        MIN,                                        ///< 最小値
+        SELECT_FILE,                                ///< ファイルを選択するダイアログ
+        SELECT_FOLDER,                              ///< フォルダを選択するダイアログ
+        MAX,                                        ///< 最大値
+    } saveFileDialogType = DialogType::SELECT_FILE; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
 signals:
     /**
@@ -67,7 +73,7 @@ private slots:
     /**
      * @brief 読み込みボタンが押された時の処理
      */
-    void onLoadButtonClicked();
+    void onLoadButtonClicked() const;
     /**
      * @brief 読み込むファイルが選択された時の処理
      * @param path ファイル名

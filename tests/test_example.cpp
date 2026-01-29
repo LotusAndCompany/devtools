@@ -40,8 +40,8 @@ class TestExample : public QObject
     Q_OBJECT
 
 public:
-    TestExample() {}
-    ~TestExample() {}
+    TestExample() = default;
+    ~TestExample() override = default;
 
 private slots:
     void initTestCase() {}      // will be called before the first test function is executed.
@@ -51,7 +51,7 @@ private slots:
     void cleanup() {}           // will be called after every test function.
 
     // Test cases:
-    void test_case1();
+    static void test_case1();
 };
 
 void TestExample::test_case1()

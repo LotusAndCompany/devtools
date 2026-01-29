@@ -21,18 +21,18 @@ class TestDataConversion : public QObject
 private slots:
     void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void test_constructor();
-    void test_validateFormat();
-    void test_validateIndentation();
+    static void test_constructor();
+    static void test_validateFormat();
+    static void test_validateIndentation();
     void test_setInputText();
     void test_load();
     void test_save();
-    void test_parseInputText();
+    static void test_parseInputText();
 };
 
 void TestDataConversion::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 }
 
@@ -44,7 +44,7 @@ void TestDataConversion::cleanupTestCase()
 
 void TestDataConversion::test_constructor()
 {
-    DataConversion dataConversion;
+    DataConversion const dataConversion;
 
     // 入力/出力文字列の初期値が空であること
     QCOMPARE_EQ(dataConversion._inputText, "");

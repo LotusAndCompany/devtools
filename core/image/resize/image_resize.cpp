@@ -49,11 +49,13 @@ void ImageResize::setScale(double sx, double sy)
 
 void ImageResize::setScaleX(double sx)
 {
-    if (sx < 0)
+    if (sx < 0) {
         throw InvalidArgumentException(sx, invalidScale);
+    }
 
-    if (width.type != ResizeHints::Type::DEFAULT)
+    if (width.type != ResizeHints::Type::DEFAULT) {
         qWarning() << "horizontal scale is already set";
+    }
 
     width.type = ResizeHints::Type::SCALE;
     width.scale = sx;
@@ -63,11 +65,13 @@ void ImageResize::setScaleX(double sx)
 
 void ImageResize::setScaleY(double sy)
 {
-    if (sy < 0)
+    if (sy < 0) {
         throw InvalidArgumentException(sy, invalidScale);
+    }
 
-    if (height.type != ResizeHints::Type::DEFAULT)
+    if (height.type != ResizeHints::Type::DEFAULT) {
         qWarning() << "vertical scale is already set";
+    }
 
     height.type = ResizeHints::Type::SCALE;
     height.scale = sy;
@@ -77,13 +81,16 @@ void ImageResize::setScaleY(double sy)
 
 void ImageResize::setSize(const QSize &size)
 {
-    if (size.isEmpty())
+    if (size.isEmpty()) {
         throw InvalidArgumentException<QSize>(invalidSize);
+    }
 
-    if (width.type != ResizeHints::Type::DEFAULT)
+    if (width.type != ResizeHints::Type::DEFAULT) {
         qWarning() << widthOverwritten;
-    if (height.type != ResizeHints::Type::DEFAULT)
+    }
+    if (height.type != ResizeHints::Type::DEFAULT) {
         qWarning() << heightOverwritten;
+    }
 
     width.type = ResizeHints::Type::SIZE;
     width.size = size.width();
@@ -95,11 +102,12 @@ void ImageResize::setSize(const QSize &size)
 
 void ImageResize::setWidth(unsigned int w, bool keepAspectRatio)
 {
-    if (keepAspectRatio)
-        setSize(QSize(w, (int)std::round(w / aspectRatio())));
-    else {
-        if (width.type != ResizeHints::Type::DEFAULT)
+    if (keepAspectRatio) {
+        setSize(QSize(static_cast<int>(w), static_cast<int>(std::round(w / aspectRatio()))));
+    } else {
+        if (width.type != ResizeHints::Type::DEFAULT) {
             qWarning() << widthOverwritten;
+        }
 
         width.type = ResizeHints::Type::SIZE;
         width.size = w;
@@ -110,11 +118,12 @@ void ImageResize::setWidth(unsigned int w, bool keepAspectRatio)
 
 void ImageResize::setHeight(unsigned int h, bool keepAspectRatio)
 {
-    if (keepAspectRatio)
-        setSize(QSize((int)std::round(h * aspectRatio()), h));
-    else {
-        if (height.type != ResizeHints::Type::DEFAULT)
+    if (keepAspectRatio) {
+        setSize(QSize(static_cast<int>(std::round(h * aspectRatio())), static_cast<int>(h)));
+    } else {
+        if (height.type != ResizeHints::Type::DEFAULT) {
             qWarning() << heightOverwritten;
+        }
 
         height.type = ResizeHints::Type::SIZE;
         height.size = h;
@@ -127,10 +136,11 @@ unsigned int ImageResize::computedSizeInternal(unsigned int originalSize, const 
 {
     switch (hints.type) {
     case ResizeHints::Type::SCALE:
-        if (originalSize != 0)
-            return hints.scale * originalSize;
-        else
+        if (originalSize != 0) {
+            return static_cast<unsigned int>(hints.scale * originalSize);
+        } else {
             throw InvalidArgumentException(originalSize, invalidImageSize);
+        }
     case ResizeHints::Type::SIZE:
         return hints.size;
     default:
@@ -144,10 +154,11 @@ double ImageResize::computedScaleInternal(unsigned int originalSize, const Resiz
     case ResizeHints::Type::SCALE:
         return hints.scale;
     case ResizeHints::Type::SIZE:
-        if (originalSize != 0)
+        if (originalSize != 0) {
             return (double)hints.size / originalSize;
-        else
+        } else {
             throw InvalidArgumentException(originalSize, invalidImageSize);
+        }
     default:
         return 1;
     }
@@ -156,16 +167,17 @@ double ImageResize::computedScaleInternal(unsigned int originalSize, const Resiz
 QSize ImageResize::computedSize() const
 {
     const auto size = original().size();
-    return QSize(computedSizeInternal(size.width(), width),
-                 computedSizeInternal(size.height(), height));
+    return {static_cast<int>(computedSizeInternal(size.width(), width)),
+            static_cast<int>(computedSizeInternal(size.height(), height))};
 }
 
 double ImageResize::computedScaleX() const
 {
     const auto size = original().size();
-    if (size.isEmpty())
+    if (size.isEmpty()) {
         throw InvalidStateException(
             QString("image size: (%1, %2)").arg(size.width()).arg(size.height()), invalidImageSize);
+    }
 
     return computedScaleInternal(size.width(), width);
 }
@@ -173,9 +185,10 @@ double ImageResize::computedScaleX() const
 double ImageResize::computedScaleY() const
 {
     const auto size = original().size();
-    if (size.isEmpty())
+    if (size.isEmpty()) {
         throw InvalidStateException(
             QString("image size: (%1, %2)").arg(size.width()).arg(size.height()), invalidImageSize);
+    }
 
     return computedScaleInternal(size.height(), height);
 }
@@ -183,9 +196,10 @@ double ImageResize::computedScaleY() const
 double ImageResize::aspectRatio() const
 {
     const auto size = original().size();
-    if (size.isEmpty())
+    if (size.isEmpty()) {
         throw InvalidStateException(
             QString("image size: (%1, %2)").arg(size.width()).arg(size.height()), invalidImageSize);
+    }
 
     return (double)size.width() / size.height();
 }

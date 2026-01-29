@@ -24,24 +24,27 @@ private slots:
 
 QTime TestTomlEmitter::getRandomQTime()
 {
-    const uint8_t randomHour = rd.nextInt(0, 24), randomMin = rd.nextInt(0, 60),
-                  randomSec = rd.nextInt(0, 60);
+    const uint8_t randomHour = rd.nextInt(0, 24);
+    const uint8_t randomMin = rd.nextInt(0, 60);
+    const uint8_t randomSec = rd.nextInt(0, 60);
     const uint16_t randomMsec = rd.nextInt(0, 1000);
 
-    return QTime(randomHour, randomMin, randomSec, randomMsec);
+    return {randomHour, randomMin, randomSec, randomMsec};
 }
 
 QDate TestTomlEmitter::getRandomQDate()
 {
     const int16_t randomAD = rd.nextInt(1970, 3000);
-    const uint8_t randomMon = rd.nextInt(1, 13), randomDay = rd.nextInt(1, 29);
+    const uint8_t randomMon = rd.nextInt(1, 13);
+    const uint8_t randomDay = rd.nextInt(1, 29);
 
-    return QDate(randomAD, randomMon, randomDay);
+    return {randomAD, randomMon, randomDay};
 }
 
 QTimeZone TestTomlEmitter::getRandomQTimeZone()
 {
-    const int8_t randomHour = rd.nextInt(-12, 13), randomMin = rd.nextInt(-59, 60);
+    const int8_t randomHour = rd.nextInt(-12, 13);
+    const int8_t randomMin = rd.nextInt(-59, 60);
 
     return QTimeZone(60 * (60 * randomHour + randomMin));
 }

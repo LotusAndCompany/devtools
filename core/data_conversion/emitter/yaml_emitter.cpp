@@ -16,7 +16,7 @@ YamlEmitter::EmitResult YamlEmitter::emitQString(const QVariant &data,
         return EmitResult{
             "",
             {},
-            QCoreApplication::instance()->translate("DataConversion", "Invalid input value"),
+            QCoreApplication::translate("DataConversion", "Invalid input value"),
         };
     }
 
@@ -36,8 +36,8 @@ YamlEmitter::EmitResult YamlEmitter::emitQString(const QVariant &data,
             return EmitResult{
                 "",
                 {},
-                QCoreApplication::instance()->translate("DataConversion",
-                                                        "YAML does not support tab indentation"),
+                QCoreApplication::translate("DataConversion",
+                                            "YAML does not support tab indentation"),
             };
         }
         out << variantToYamlNode(data, style, indentation);

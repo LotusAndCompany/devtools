@@ -34,7 +34,7 @@ QueryPage::QueryPage(QWidget *parent)
 
 void QueryPage::executeQuery()
 {
-    QString queryText = ui->queryTextEdit->toPlainText();
+    QString const queryText = ui->queryTextEdit->toPlainText();
     QSqlQuery query(db);
 
     if (!query.exec(queryText)) {

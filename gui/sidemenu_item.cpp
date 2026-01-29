@@ -18,8 +18,9 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 
     Sidemenu::validateID(id);
 
-    if (id == Sidemenu::ID::WELCOME)
+    if (id == Sidemenu::ID::WELCOME) {
         throw InvalidArgumentException(static_cast<int>(id), notConfigurableReason);
+    }
 
     setIcon(Sidemenu::icon(id));
     // NOTE: Tool::IDとSidemenu::IDはHOME, MAX以外は一致する想定

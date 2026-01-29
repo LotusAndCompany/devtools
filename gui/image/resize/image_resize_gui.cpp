@@ -6,14 +6,17 @@
 #include <QMessageBox>
 #include <QSignalBlocker>
 
+#include <array>
+
 ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
     : GuiTool(parent), ui(new Ui::ImageResizeGUI), imageResize(imageResize)
 {
     ui->setupUi(this);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
-    if (imageResize->parent() == nullptr)
+    if (imageResize->parent() == nullptr) {
         imageResize->setParent(this);
+    }
 
     // TODO: 共通化できないか?
     connect(ui->basicImageViewControl, &BasicImageViewControl::loadFileSelected, this,
@@ -45,7 +48,7 @@ void ImageResizeGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool result = imageResize->load(path);
+    imageResize->load(path);
     imageResize->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()), true);
@@ -81,8 +84,9 @@ void ImageResizeGUI::onWidthValueChanged(int width)
         return;
     }
 
-    if (imageResize->original().isNull())
+    if (imageResize->original().isNull()) {
         return;
+    }
 
     imageResize->setWidth(width, keepAspectRatio);
     imageResize->update();
@@ -100,8 +104,9 @@ void ImageResizeGUI::onHeightValueChanged(int height)
         return;
     }
 
-    if (imageResize->original().isNull())
+    if (imageResize->original().isNull()) {
         return;
+    }
 
     imageResize->setHeight(height, keepAspectRatio);
     imageResize->update();
@@ -119,13 +124,15 @@ void ImageResizeGUI::onHorizontalScaleChanged(double hScale)
         return;
     }
 
-    if (imageResize->original().isNull())
+    if (imageResize->original().isNull()) {
         return;
+    }
 
-    if (keepAspectRatio)
+    if (keepAspectRatio) {
         imageResize->setScale(hScale / 100.0);
-    else
+    } else {
         imageResize->setScaleX(hScale / 100.0);
+    }
     imageResize->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
@@ -141,13 +148,15 @@ void ImageResizeGUI::onVerticalScaleChanged(double vScale)
         return;
     }
 
-    if (imageResize->original().isNull())
+    if (imageResize->original().isNull()) {
         return;
+    }
 
-    if (keepAspectRatio)
+    if (keepAspectRatio) {
         imageResize->setScale(vScale / 100.0);
-    else
+    } else {
         imageResize->setScaleY(vScale / 100.0);
+    }
     imageResize->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageResize->current()));
@@ -195,12 +204,12 @@ void ImageResizeGUI::onSmoothTransformationChanged(Qt::CheckState state)
 void ImageResizeGUI::updateUIValues(UpdateMode mode)
 {
     // NOTE: 値を変更するとsignalが発せられるので、それを防止する
-    const QSignalBlocker blockers[] = {
+    const std::array<const QSignalBlocker, 4> blockers = {{
         QSignalBlocker(ui->widthValue),
         QSignalBlocker(ui->heightValue),
         QSignalBlocker(ui->vScaleValue),
         QSignalBlocker(ui->hScaleValue),
-    };
+    }};
 
     if (imageResize->original().isNull()) {
         ui->widthValue->setValue(0);
@@ -215,11 +224,13 @@ void ImageResizeGUI::updateUIValues(UpdateMode mode)
     const double scaleX = imageResize->computedScaleX();
     const double scaleY = imageResize->computedScaleY();
 
-    if (mode != UpdateMode::WIDTH_UPDATE)
+    if (mode != UpdateMode::WIDTH_UPDATE) {
         ui->widthValue->setValue(size.width());
+    }
 
-    if (mode != UpdateMode::HEIGHT_UPDATE)
+    if (mode != UpdateMode::HEIGHT_UPDATE) {
         ui->heightValue->setValue(size.height());
+    }
 
     // NOTE: 縦横比固定かつ拡大率指定の場合は画像サイズから拡大率を算出しないようにする
     if (keepAspectRatio && mode == UpdateMode::X_SCALE_UPDATE) {
@@ -227,10 +238,12 @@ void ImageResizeGUI::updateUIValues(UpdateMode mode)
     } else if (keepAspectRatio && mode == UpdateMode::Y_SCALE_UPDATE) {
         ui->hScaleValue->setValue(ui->vScaleValue->value());
     } else {
-        if (mode != UpdateMode::X_SCALE_UPDATE)
+        if (mode != UpdateMode::X_SCALE_UPDATE) {
             ui->hScaleValue->setValue(100.0 * scaleX);
+        }
 
-        if (mode != UpdateMode::Y_SCALE_UPDATE)
+        if (mode != UpdateMode::Y_SCALE_UPDATE) {
             ui->vScaleValue->setValue(100.0 * scaleY);
+        }
     }
 }

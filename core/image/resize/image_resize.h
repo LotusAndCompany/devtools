@@ -22,7 +22,11 @@ class ImageResizeInterface : public Tool, public BasicImageEditInterface
     Q_OBJECT
 
 public:
-    virtual ~ImageResizeInterface() = default;
+    ImageResizeInterface(const ImageResizeInterface &) = delete;
+    ImageResizeInterface(ImageResizeInterface &&) = delete;
+    ImageResizeInterface &operator=(const ImageResizeInterface &) = delete;
+    ImageResizeInterface &operator=(ImageResizeInterface &&) = delete;
+    ~ImageResizeInterface() override = default;
 
     /**
      * @brief 拡大率を設定する。他の設定は上書きされる。
@@ -36,7 +40,7 @@ public:
      * @param s 拡大率
      * @exception InvalidArgumentException &lt;double&gt; s<0の場合
      */
-    inline void setScale(double s) noexcept(false) { setScale(s, s); }
+    void setScale(double s) noexcept(false) { setScale(s, s); }
     /**
      * @brief 横方向の拡大率を設定する。横方向の設定は上書きされる。
      * @param sx 横方向の拡大率
@@ -75,24 +79,24 @@ public:
      * @brief 現在の設定に基づいて計算される画像のサイズ
      * @return 画像のサイズ
      */
-    virtual QSize computedSize() const = 0;
+    [[nodiscard]] virtual QSize computedSize() const = 0;
     /**
      * @brief 現在の設定に基づいて計算される画像の横方向の拡大率
      * @return 画像の横方向の拡大率
      * @exception InvalidStateException 画像が空の場合
      */
-    virtual double computedScaleX() const = 0;
+    [[nodiscard]] virtual double computedScaleX() const = 0;
     /**
      * @brief 現在の設定に基づいて計算される画像の縦方向の拡大率
      * @return 画像の縦方向の拡大率
      * @exception InvalidStateException 画像が空の場合
      */
-    virtual double computedScaleY() const = 0;
+    [[nodiscard]] virtual double computedScaleY() const = 0;
     /**
      * @brief smoothTransformationEnabled を返す
      * @return smoothTransformationEnabled の値
      */
-    bool isSmoothTransformationEnabled() const { return smoothTransformationEnabled; }
+    [[nodiscard]] bool isSmoothTransformationEnabled() const { return smoothTransformationEnabled; }
     /**
      * @brief smoothTransformationEnabled を設定する
      * @param value 設定する値
@@ -102,7 +106,7 @@ public:
      * @brief 元の画像を返す
      * @return 元の画像
      */
-    virtual const QImage &original() const = 0;
+    [[nodiscard]] virtual const QImage &original() const = 0;
 
 protected:
     /**
@@ -112,7 +116,8 @@ protected:
     explicit ImageResizeInterface(QObject *parent = nullptr);
 
     /// Bilinear補完有効化フラグ
-    bool smoothTransformationEnabled = false;
+    bool smoothTransformationEnabled =
+        false; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 };
 
 /**
@@ -129,13 +134,12 @@ public:
      */
     explicit ImageResize(QObject *parent = nullptr);
 
-    inline bool save(const QString &path, const char *format = nullptr,
-                     int quality = -1) const override
+    bool save(const QString &path, const char *format = nullptr, int quality = -1) const override
     {
         return ImageIO::save(path, _current, format, quality);
     }
-    inline bool overwriteSave(const QString &path, const char *format = nullptr,
-                              int quality = -1) const override
+    bool overwriteSave(const QString &path, const char *format = nullptr,
+                       int quality = -1) const override
     {
         return ImageIO::overwriteSave(path, _current, format, quality);
     }
@@ -149,18 +153,18 @@ public:
     void setWidth(unsigned int w, bool keepAspectRatio = false) override;
     void setHeight(unsigned int h, bool keepAspectRatio = false) override;
 
-    QSize computedSize() const override;
-    double computedScaleX() const override;
-    double computedScaleY() const override;
+    [[nodiscard]] QSize computedSize() const override;
+    [[nodiscard]] double computedScaleX() const override;
+    [[nodiscard]] double computedScaleY() const override;
 
     void setSmoothTransformationEnabled(bool value = true) override;
 
-    inline const QFileInfo &fileInfo(unsigned int index = 0) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int /*index*/ = 0) const override
     {
         return ImageIO::originalFileInfo();
     }
 
-    inline const QImage &original() const override { return ImageIO::original(); }
+    [[nodiscard]] const QImage &original() const override { return ImageIO::original(); }
 
 protected:
     bool loadImpl(const QString &path) override;
@@ -183,7 +187,7 @@ private:
     struct ResizeHints
     {
         /// 指定なし/サイズ指定/拡大率指定を表す列挙体
-        enum class Type {
+        enum class Type : uint8_t {
             /// 最小値
             MIN,
             /// 変更しない
@@ -195,12 +199,13 @@ private:
             /// 最大値
             MAX,
         };
+        ;
         /// 値の種類
         Type type = Type::DEFAULT;
 
         union {
             /// サイズ指定。type == SIZE の時のみ有効
-            unsigned int size;
+            unsigned int size{};
             /// 拡大率指定。type == SCALE の時のみ有効
             double scale;
         };
@@ -233,12 +238,12 @@ private:
      * @return 縦横比
      * @exception InvalidStateException 画像サイズが無効な場合
      */
-    double aspectRatio() const noexcept(false);
+    [[nodiscard]] double aspectRatio() const noexcept(false);
     /**
      * @brief 現在の smoothTransformation を元に変形モードを返す
      * @return 変形モード
      */
-    inline Qt::TransformationMode transformationMode() const
+    [[nodiscard]] Qt::TransformationMode transformationMode() const
     {
         return smoothTransformationEnabled ? Qt::SmoothTransformation : Qt::FastTransformation;
     }

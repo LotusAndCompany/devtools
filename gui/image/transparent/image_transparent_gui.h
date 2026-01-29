@@ -34,7 +34,11 @@ public:
      */
     explicit ImageTransparentGUI(ImageTransparentInterface *imageTransparent,
                                  QWidget *parent = nullptr);
-    ~ImageTransparentGUI();
+    ~ImageTransparentGUI() override;
+    ImageTransparentGUI(const ImageTransparentGUI &) = delete;
+    ImageTransparentGUI &operator=(const ImageTransparentGUI &) = delete;
+    ImageTransparentGUI(ImageTransparentGUI &&) = delete;
+    ImageTransparentGUI &operator=(ImageTransparentGUI &&) = delete;
 
 protected slots:
     /**

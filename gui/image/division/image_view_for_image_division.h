@@ -15,7 +15,7 @@ class TestImageViewForImageDivision;
 }
 #endif
 
-namespace _ImageViewForImageDivisionInternal {
+namespace ImageViewForImageDivisionInternal {
 class LabelWithGrid;
 }
 
@@ -46,7 +46,7 @@ private:
      * @brief ui->imageを返す
      * @return ui->image
      */
-    _ImageViewForImageDivisionInternal::LabelWithGrid *ui_image() const;
+    [[nodiscard]] ImageViewForImageDivisionInternal::LabelWithGrid *ui_image() const;
 
     /// 拡大率を適用していないグリッドの大きさ
     QSizeF gridSize;
@@ -56,7 +56,7 @@ private:
 #endif
 };
 
-namespace _ImageViewForImageDivisionInternal {
+namespace ImageViewForImageDivisionInternal {
 /**
  * @brief グリッドを表示できるQLabel
  * @todo グレーに塗りつぶせるようにする
@@ -87,6 +87,6 @@ private:
     friend class Test::TestImageViewForImageDivision;
 #endif
 };
-} // namespace _ImageViewForImageDivisionInternal
+} // namespace ImageViewForImageDivisionInternal
 
 #endif // IMAGE_VIEW_FOR_IMAGE_DIVISION_H

@@ -10,7 +10,7 @@ template <typename TC>
 class basic_value;
 }; // namespace toml
 
-namespace _TomlParserPrivate {
+namespace TomlParserPrivate {
 struct Util;
 };
 
@@ -26,11 +26,14 @@ class TestTomlParser;
 class TomlParser : public BasicParser
 {
 public:
-    ParseResult tryParse(const QString &src) const override;
+    [[nodiscard]] ParseResult tryParse(const QString &src) const override;
 
 private:
-    /// tomlのデータ型
+    /// tomlのデータ型（internal関数からアクセスされるためpublic）
+public:
     using toml_value_type = toml::basic_value<toml::type_config>;
+
+private:
     /**
      * @brief tomlの値をQVariantに変換する
      * @param value 入力値
@@ -50,7 +53,7 @@ private:
      */
     static ParseResult tomlArrayToQvariantList(const toml_value_type &value);
 
-    friend struct _TomlParserPrivate::Util;
+    friend struct TomlParserPrivate::Util;
 #ifdef _TEST_TomlParser
     friend class Test::TestTomlParser;
 #endif

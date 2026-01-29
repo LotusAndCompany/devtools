@@ -39,7 +39,7 @@ struct static_enum_cast
 
 private:
     // 型チェック
-    static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
+    static_assert(std::is_enum_v<enum_type>, "enum_type is not enum");
 
     /// 最小値(比較用)
     static constexpr const int MIN_VALUE = static_cast<int>(enum_type::MIN);
@@ -88,6 +88,10 @@ struct enum_cast
         }
     }
     enum_cast(const enum_cast &) = delete;
+    enum_cast(enum_cast &&) = delete;
+    enum_cast &operator=(const enum_cast &) = delete;
+    enum_cast &operator=(enum_cast &&) = delete;
+    ~enum_cast() = default;
 
     /**
      * @brief 変換先のenum型への暗黙変換
@@ -96,8 +100,8 @@ struct enum_cast
 
 private:
     // 型チェック
-    static_assert(std::is_enum<enum_type>::value, "enum_type is not enum");
-    static_assert(std::is_integral<int_type>::value, "int_type is not integer");
+    static_assert(std::is_enum_v<enum_type>, "enum_type is not enum");
+    static_assert(std::is_integral_v<int_type>, "int_type is not integer");
 
     /// 最小値(比較用)
     static constexpr const int_type MIN_VALUE = static_cast<int_type>(enum_type::MIN);

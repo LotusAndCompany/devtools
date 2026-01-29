@@ -1,5 +1,6 @@
 #include "about_devtools_dialog.h"
 
+// NOLINTNEXTLINE(bugprone-suspicious-include)
 #include "app_info.autogen.cpp"
 #include "ui_about_devtools_dialog.h"
 

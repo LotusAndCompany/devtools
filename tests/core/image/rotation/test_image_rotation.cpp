@@ -27,11 +27,11 @@ private slots:
     void cleanup();      // will be called after every test function.
 
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_load();
     void test_save();
     void test_overwriteSave();
-    void test_reset();
+    static void test_reset();
     void test_update();
     void test_rotateDegrees();
     void test_flipHorizontal();
@@ -47,11 +47,12 @@ void TestImageRotation::initTestCase()
 
 void TestImageRotation::init()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 }
 
 void TestImageRotation::cleanup()
@@ -62,7 +63,7 @@ void TestImageRotation::cleanup()
 
 void TestImageRotation::test_constructor()
 {
-    ImageRotation imageRotation;
+    ImageRotation const imageRotation;
 
     // stringIDが想定通り設定されていること
     QCOMPARE_EQ(imageRotation.stringID, "image-rotation");
@@ -96,8 +97,9 @@ void TestImageRotation::test_save()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 保存できること
     QVERIFY(imageRotation.save(testDirPath + "save.png"));
@@ -110,8 +112,9 @@ void TestImageRotation::test_overwriteSave()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 保存できること
     QVERIFY(imageRotation.overwriteSave(testDirPath + "overwriteSave.png"));
@@ -140,8 +143,9 @@ void TestImageRotation::test_update()
     QVERIFY(!imageRotation.update());
 
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     imageRotation.rotateDegrees(90);
 
@@ -154,8 +158,9 @@ void TestImageRotation::test_setSmoothTransformationEnabled()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // trueを設定できること
     imageRotation.setSmoothTransformationEnabled(true);
@@ -176,8 +181,9 @@ void TestImageRotation::test_rotateDegrees()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 反時計回りに90°回転できること
     imageRotation.rotateDegrees(90);
@@ -208,8 +214,9 @@ void TestImageRotation::test_flipHorizontal()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 左右反転できること
     imageRotation.flipHorizontal();
@@ -226,8 +233,9 @@ void TestImageRotation::test_flipVertical()
 {
     ImageRotation imageRotation;
     imageRotation.ImageRotationInterface::load(testDirPath + resourceNames[0]);
-    if (imageRotation.current().isNull())
+    if (imageRotation.current().isNull()) {
         QFAIL("image is empty");
+    }
 
     // 上下反転できること
     imageRotation.flipVertical();

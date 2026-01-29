@@ -16,6 +16,11 @@ class BasicEmitter
 {
 public:
     /// デストラクタ
+    BasicEmitter() = default;
+    BasicEmitter(const BasicEmitter &) = default;
+    BasicEmitter(BasicEmitter &&) noexcept = default;
+    BasicEmitter &operator=(const BasicEmitter &) = default;
+    BasicEmitter &operator=(BasicEmitter &&) noexcept = default;
     virtual ~BasicEmitter() = default;
 
     /// 出力結果を格納する構造体
@@ -33,10 +38,11 @@ protected:
      * @param newIndent 置換先の文字列
      * @return 結果
      */
-    virtual QString replace4spaceIndentation(const QString &src, const QString &newIndent) const;
+    [[nodiscard]] virtual QString replace4spaceIndentation(const QString &src,
+                                                           const QString &newIndent) const;
 
     /// 警告
-    QStringList warnings;
+    QStringList warnings; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
 #ifdef _TEST_BasicEmitter
     friend class Test::TestBasicEmitter;

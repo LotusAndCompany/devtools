@@ -228,10 +228,11 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
 # 画像関係の依存関係
-add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+# target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
+target_link_libraries(${PROJECT_NAME}_image_resize PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_rotation PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_division PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_transparent PUBLIC ${PROJECT_NAME}_image_core)
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
@@ -271,7 +272,8 @@ set(MODULE_LIST
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
     if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
-        add_dependencies(${MODULE} ${PROJECT_NAME}_core)
+        # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
+        target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)
     endif()
 
     # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
@@ -403,6 +405,13 @@ file(GLOB_RECURSE ALL_SOURCE_FILES
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/build.*/.*")
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/CMakeFiles/.*")
 list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/\\.cache/.*")
+# Exclude third-party library files from linting
+list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.cpp$")
+list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.hpp$")
+
+# Create LINT_SOURCE_FILES excluding tests (format still applies to tests)
+set(LINT_SOURCE_FILES ${ALL_SOURCE_FILES})
+list(FILTER LINT_SOURCE_FILES EXCLUDE REGEX ".*/tests/.*")
 
 if(CLANG_FORMAT_EXECUTABLE)
     message(STATUS "Found clang-format: ${CLANG_FORMAT_EXECUTABLE}")
@@ -437,14 +446,34 @@ if(CLANG_TIDY_EXECUTABLE)
 
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Generate compile_commands.json" FORCE)
 
+    # Get macOS SDK path for proper system header resolution (macOS only)
+    set(CLANG_TIDY_EXTRA_ARGS "")
+    if(APPLE)
+        find_program(XCRUN_EXECUTABLE xcrun)
+        if(XCRUN_EXECUTABLE)
+            execute_process(
+                COMMAND ${XCRUN_EXECUTABLE} --show-sdk-path
+                OUTPUT_VARIABLE MACOS_SDK_PATH
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
+            if(MACOS_SDK_PATH)
+                list(APPEND CLANG_TIDY_EXTRA_ARGS "--extra-arg=-isysroot${MACOS_SDK_PATH}")
+            endif()
+        endif()
+    endif()
+
     add_custom_target(lint
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} ${ALL_SOURCE_FILES}
+        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR}
+            ${CLANG_TIDY_EXTRA_ARGS}
+            ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
         VERBATIM
     )
 
     add_custom_target(lint-fix
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix ${ALL_SOURCE_FILES}
+        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
+            ${CLANG_TIDY_EXTRA_ARGS}
+            ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"
         VERBATIM
     )

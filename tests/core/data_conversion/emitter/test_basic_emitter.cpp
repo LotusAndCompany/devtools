@@ -14,14 +14,14 @@ class TestBasicEmitter : public QObject
     Q_OBJECT
 
 private slots:
-    void test_replace4spaceIndentation();
+    static void test_replace4spaceIndentation();
 };
 
 void TestBasicEmitter::test_replace4spaceIndentation()
 {
     const QString src4spaces =
         QString("a    \n    bb    \n        ccc    \n        dddd    \neeeee    ");
-    BasicEmitter emitter;
+    BasicEmitter const emitter;
     // 4スペース→2スペースの変換ができること
     const QString src2spaces = QString("a    \n  bb    \n    ccc    \n    dddd    \neeeee    \n");
     QCOMPARE_EQ(emitter.replace4spaceIndentation(src4spaces, "  "), src2spaces);

@@ -75,21 +75,21 @@ class TestEnumCast : public QObject
     Q_OBJECT
 private:
     using exception_type = InvalidArgumentException<int>;
-private slots:
+
     // Tests for Enum
-    void cast_lt_Enum_MIN()
+    static void cast_lt_Enum_MIN()
     {
         // Enum::MIN未満の数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<Enum>(-1));
     }
 
-    void cast_Enum_MIN()
+    static void cast_Enum_MIN()
     {
         // Enum::MINと同じ数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<Enum>(0));
     }
 
-    void cast_Enum_VALUE()
+    static void cast_Enum_VALUE()
     {
         // Enum::VALUEと同じ数値のキャストが成功すること
         const Enum result = static_enum_cast<Enum, 1>::result;
@@ -98,32 +98,32 @@ private slots:
         QCOMPARE_EQ(enum_cast<Enum>(1), Enum::VALUE);
     }
 
-    void cast_Enum_MAX()
+    static void cast_Enum_MAX()
     {
         // Enum::MAXと同じ数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<Enum>(2));
     }
 
-    void cast_gt_Enum_MAX()
+    static void cast_gt_Enum_MAX()
     {
         // Enum::MAX超の数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<Enum>(3));
     }
 
     // Tests for EnumClass
-    void cast_lt_EnumClass_MIN()
+    static void cast_lt_EnumClass_MIN()
     {
         // EnumClass::MIN未満の数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<EnumClass>(15));
     }
 
-    void cast_EnumClass_MIN()
+    static void cast_EnumClass_MIN()
     {
         // EnumClass::MINと同じ数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<EnumClass>(16));
     }
 
-    void cast_EnumClass_VALUE()
+    static void cast_EnumClass_VALUE()
     {
         // EnumClass::VALUEと同じ数値のキャストが成功すること
         const EnumClass result = static_enum_cast<EnumClass, 17>::result;
@@ -132,13 +132,13 @@ private slots:
         QCOMPARE_EQ(enum_cast<EnumClass>(17), EnumClass::VALUE);
     }
 
-    void cast_EnumClass_MAX()
+    static void cast_EnumClass_MAX()
     {
         // EnumClass::MAXと同じ数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<EnumClass>(18));
     }
 
-    void cast_gt_EnumClass_MAX()
+    static void cast_gt_EnumClass_MAX()
     {
         // EnumClass::MAX超の数値のキャストが失敗すること
         QVERIFY_THROWS_EXCEPTION(exception_type, enum_cast<EnumClass>(19));

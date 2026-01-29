@@ -9,7 +9,7 @@ JsonParser::ParseResult JsonParser::tryParse(const QString &src) const
     ParseResult result;
 
     QJsonParseError *jsonError = nullptr;
-    QJsonDocument doc = QJsonDocument::fromJson(src.toUtf8(), jsonError);
+    QJsonDocument const doc = QJsonDocument::fromJson(src.toUtf8(), jsonError);
     if (jsonError == nullptr && !doc.isNull()) {
         if (doc.isObject()) {
             result.data = doc.object().toVariantMap();
@@ -22,7 +22,7 @@ JsonParser::ParseResult JsonParser::tryParse(const QString &src) const
 
         result.success = true;
     } else {
-        if (jsonError) {
+        if (jsonError != nullptr) {
             result.errors.push_back(jsonError->errorString());
             qInfo() << jsonError->errorString();
         } else {

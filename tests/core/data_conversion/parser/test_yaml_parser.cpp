@@ -19,10 +19,10 @@ class TestYamlParser : public QObject
     RandomData rd;
 
 private slots:
-    void test_tryParse();
-    void test_validateYamlNode();
-    void test_yamlNodeToQVariant();
-    void test_yamlScalarToQVariant();
+    static void test_tryParse();
+    static void test_validateYamlNode();
+    static void test_yamlNodeToQVariant();
+    static void test_yamlScalarToQVariant();
     void test_yamlMapToQVariantMap();
     void test_yamlSequenceToQVariantList();
 };
@@ -31,7 +31,7 @@ void TestYamlParser::test_tryParse()
 {
     // TODO: データ型の判別ができるようになったら直す
 
-    YamlParser yp;
+    YamlParser const yp;
 
     // flow styleのyamlを読み込めること
     QFile file(TEST_SRC_DIR + "/core/data_conversion/test_flow.yaml");

@@ -26,7 +26,11 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~SettingsDialog();
+    ~SettingsDialog() override;
+    SettingsDialog(const SettingsDialog &) = delete;
+    SettingsDialog &operator=(const SettingsDialog &) = delete;
+    SettingsDialog(SettingsDialog &&) = delete;
+    SettingsDialog &operator=(SettingsDialog &&) = delete;
 
 private:
     /**

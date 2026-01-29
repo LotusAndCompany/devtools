@@ -22,7 +22,11 @@ public:
      * @param parent 親ウィジェット
      */
     explicit ColorSample(QWidget *parent = nullptr);
-    ~ColorSample() = default;
+    ~ColorSample() override = default;
+    ColorSample(const ColorSample &) = delete;
+    ColorSample &operator=(const ColorSample &) = delete;
+    ColorSample(ColorSample &&) = delete;
+    ColorSample &operator=(ColorSample &&) = delete;
 
     /**
      * @brief 色を設定し、UIを更新する
@@ -33,7 +37,7 @@ public:
      * @brief 現在設定されている色を返す
      * @return 現在設定されている色
      */
-    const QColor &color() const { return _color; }
+    [[nodiscard]] const QColor &color() const { return _color; }
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -46,7 +50,7 @@ private:
      * @brief 線の幅を除いた領域を返す
      * @return 線の幅を除いた領域
      */
-    inline QRect contentRect() const
+    [[nodiscard]] QRect contentRect() const
     {
         return frameRect().marginsRemoved(QMargins(1, 1, 1, 1) * (lineWidth() + midLineWidth()));
     }

@@ -13,16 +13,16 @@ class TestBasicImageViewControl : public QObject
 
 private slots:
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_reset();
     // NOTE: dialogが上手く閉じられない
-    void test_load();
-    void test_save();
+    static void test_load();
+    static void test_save();
 };
 
 void TestBasicImageViewControl::test_constructor()
 {
-    BasicImageViewControl control;
+    BasicImageViewControl const control;
 
     /*
     QCOMPARE_EQ(control.ui->loadButton->text(), tr("Load"));
@@ -48,7 +48,7 @@ void TestBasicImageViewControl::test_load()
 {
     QSKIP("how can we close QFileDialog?");
 
-    BasicImageViewControl control;
+    BasicImageViewControl const control;
 
     // QTest::mouseClick(control.ui->loadButton, Qt::MouseButton::LeftButton);
 }
@@ -57,7 +57,7 @@ void TestBasicImageViewControl::test_save()
 {
     QSKIP("how can we close QFileDialog?");
 
-    BasicImageViewControl control;
+    BasicImageViewControl const control;
 
     // QTest::mouseClick(control.ui->saveButton, Qt::MouseButton::LeftButton);
 }

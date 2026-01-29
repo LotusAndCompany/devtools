@@ -3,17 +3,22 @@
 #pragma once
 #include <QString>
 
+#include <utility>
+
 class CommandOption
 {
 public:
-    CommandOption(const QString &name, bool required, const QString &title, bool requiredQuotes)
-        : name(name), required(required), title(title), requiredQuotes(requiredQuotes)
+    CommandOption(QString name, bool required, QString title, bool requiredQuotes)
+        : name(std::move(name))
+        , required(required)
+        , title(std::move(title))
+        , requiredQuotes(requiredQuotes)
     {}
 
-    QString getName() const { return name; }
-    bool isRequired() const { return required; }
-    QString getTitle() const { return title; }
-    bool isRequiredQuotes() const { return requiredQuotes; }
+    [[nodiscard]] QString getName() const { return name; }
+    [[nodiscard]] bool isRequired() const { return required; }
+    [[nodiscard]] QString getTitle() const { return title; }
+    [[nodiscard]] bool isRequiredQuotes() const { return requiredQuotes; }
 
 private:
     QString name;

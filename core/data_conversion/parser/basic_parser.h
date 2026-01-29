@@ -16,6 +16,11 @@ class BasicParser
 {
 public:
     /// デストラクタ
+    BasicParser() = default;
+    BasicParser(const BasicParser &) = default;
+    BasicParser(BasicParser &&) noexcept = default;
+    BasicParser &operator=(const BasicParser &) = default;
+    BasicParser &operator=(BasicParser &&) noexcept = default;
     virtual ~BasicParser() = default;
 
     /// 解析結果を格納する構造体
@@ -39,7 +44,7 @@ public:
      * @param src 入力文字列
      * @return 結果
      */
-    virtual ParseResult tryParse(const QString &src) const = 0;
+    [[nodiscard]] virtual ParseResult tryParse(const QString &src) const = 0;
 
 #ifdef _TEST_BasicParser
     friend class Test::TestBasicParser;

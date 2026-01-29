@@ -74,7 +74,7 @@ void SettingsDialog::loadSettings()
     QSettings settings;
 
     // 言語設定
-    QString language = settings.value("language", "ja_JP").toString();
+    QString const language = settings.value("language", "ja_JP").toString();
     qDebug() << "Loading language setting:" << language;
 
     // コンボボックスのアイテム数とデータを確認
@@ -84,7 +84,7 @@ void SettingsDialog::loadSettings()
                  << "data:" << ui->languageComboBox->itemData(i).toString();
     }
 
-    int languageIndex = ui->languageComboBox->findData(language);
+    int const languageIndex = ui->languageComboBox->findData(language);
     qDebug() << "Found language index:" << languageIndex;
     if (languageIndex >= 0) {
         ui->languageComboBox->setCurrentIndex(languageIndex);
@@ -99,21 +99,21 @@ void SettingsDialog::loadSettings()
     if (!settings.contains(showSidebarKey)) {
         settings.setValue(showSidebarKey, true);
     }
-    bool showSidebarOnStartup = settings.value(showSidebarKey, true).toBool();
+    bool const showSidebarOnStartup = settings.value(showSidebarKey, true).toBool();
     ui->showSidebarOnStartupCheckBox->setChecked(showSidebarOnStartup);
 
     const QString showLastToolKey = QStringLiteral("general/showLastToolOnStartup");
     if (!settings.contains(showLastToolKey)) {
         settings.setValue(showLastToolKey, false);
     }
-    bool showLastToolOnStartup = settings.value(showLastToolKey, false).toBool();
+    bool const showLastToolOnStartup = settings.value(showLastToolKey, false).toBool();
     ui->showLastToolOnStartupCheckBox->setChecked(showLastToolOnStartup);
 
     // ウィンドウ設定
     // MainWindowの現在の状態を反映するため、親ウィンドウから取得
     bool alwaysOnTop = false;
-    if (parentWidget()) {
-        alwaysOnTop = parentWidget()->windowFlags() & Qt::WindowStaysOnTopHint;
+    if (parentWidget() != nullptr) {
+        alwaysOnTop = ((parentWidget()->windowFlags() & Qt::WindowStaysOnTopHint) != 0U);
     }
     if (!alwaysOnTop) {
         // 親ウィンドウから取得できない場合は設定から読む
@@ -121,10 +121,10 @@ void SettingsDialog::loadSettings()
     }
     ui->alwaysOnTopCheckBox->setChecked(alwaysOnTop);
 
-    bool rememberWindowSize = settings.value("window/rememberSize", true).toBool();
+    bool const rememberWindowSize = settings.value("window/rememberSize", true).toBool();
     ui->rememberWindowSizeCheckBox->setChecked(rememberWindowSize);
 
-    bool rememberWindowPosition = settings.value("window/rememberPosition", true).toBool();
+    bool const rememberWindowPosition = settings.value("window/rememberPosition", true).toBool();
     ui->rememberWindowPositionCheckBox->setChecked(rememberWindowPosition);
 
     qDebug() << "SettingsDialog::loadSettings() completed";
@@ -135,8 +135,8 @@ void SettingsDialog::saveSettings()
     QSettings settings;
 
     // 言語設定
-    QString language = ui->languageComboBox->currentData().toString();
-    QString currentLanguage = settings.value("language", "ja_JP").toString();
+    QString const language = ui->languageComboBox->currentData().toString();
+    QString const currentLanguage = settings.value("language", "ja_JP").toString();
     qDebug() << "SettingsDialog::saveSettings - Language change:" << currentLanguage << "->"
              << language;
     settings.setValue("language", language);
@@ -147,21 +147,21 @@ void SettingsDialog::saveSettings()
 
     // サイドバー設定
     const QString showSidebarKey = QStringLiteral("general/showSidemenuOnStartup");
-    bool showSidebarOnStartup = ui->showSidebarOnStartupCheckBox->isChecked();
+    bool const showSidebarOnStartup = ui->showSidebarOnStartupCheckBox->isChecked();
     settings.setValue(showSidebarKey, showSidebarOnStartup);
 
     const QString showLastToolKey = QStringLiteral("general/showLastToolOnStartup");
-    bool showLastToolOnStartup = ui->showLastToolOnStartupCheckBox->isChecked();
+    bool const showLastToolOnStartup = ui->showLastToolOnStartupCheckBox->isChecked();
     settings.setValue(showLastToolKey, showLastToolOnStartup);
 
     // ウィンドウ設定
-    bool alwaysOnTop = ui->alwaysOnTopCheckBox->isChecked();
+    bool const alwaysOnTop = ui->alwaysOnTopCheckBox->isChecked();
     settings.setValue("window/alwaysOnTop", alwaysOnTop);
     settings.setValue("window/rememberSize", ui->rememberWindowSizeCheckBox->isChecked());
     settings.setValue("window/rememberPosition", ui->rememberWindowPositionCheckBox->isChecked());
 
     // Always on topを即座に適用
-    if (parentWidget()) {
+    if (parentWidget() != nullptr) {
         parentWidget()->setWindowFlag(Qt::WindowStaysOnTopHint, alwaysOnTop);
         parentWidget()->show();
     }
