@@ -120,11 +120,10 @@ private:
     void filterItems(const QString &searchText);
 
     /**
-* @brief サイドメニューのボタンが切り替わ �合
-
-   * @param id 切り替わった� ���ID
-* @param checked ボタ � �
-        */
+     * @brief サイドメニューのボタンが切り替わった場合の処理
+     * @param id 切り替わったボタンのID
+     * @param checked ボタンの状態
+     */
     void onButtonToggled(int id, bool checked);
     /**
      * @brief 検索ボックスのテキストが変更された時の処理

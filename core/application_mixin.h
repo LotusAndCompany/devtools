@@ -9,6 +9,8 @@
 #include <QCoreApplication>
 #include <QTranslator>
 
+#include <cstdint>
+
 /**
  * @brief アプリケーションの種類
  */
@@ -18,7 +20,6 @@ enum class AppType : uint8_t {
     CLI, ///< CLIアプリケーション
     MAX, ///< 最大値
 };
-;
 
 /**
  * @brief

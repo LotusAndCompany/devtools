@@ -48,7 +48,7 @@ struct Util
      */
     static QDate tomlDateToQDate(const TomlParser::toml_value_type::local_date_type &date)
     {
-        return {date.year, date.month + 1, date.day};
+        return {date.year, date.month, date.day};
     }
 
     /**

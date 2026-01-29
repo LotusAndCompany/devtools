@@ -45,11 +45,7 @@ private:
     QStandardItemModel *paramsModel;
     QStringListModel *responseModel{};
     QLabel *statusLabel{};
-    QVBoxLayout *responseLayout{};
     qint64 requestStartTime{};
-    QLineEdit *usernameEdit{}; // ユーザー名入力欄
-    QLineEdit *passwordEdit{}; // パスワード入力欄
-    QTextEdit *bodyTextEdit{}; // ボディテキストエリア
 };
 
 #endif // API_TOOL_H

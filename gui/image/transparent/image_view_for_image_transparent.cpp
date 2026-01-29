@@ -21,7 +21,9 @@ ImageViewForImageTransparent::ImageViewForImageTransparent(QWidget *parent) : Ba
 
 ClickableLabel *ImageViewForImageTransparent::ui_image() const
 {
-    return dynamic_cast<ClickableLabel *>(ui->image);
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -
+    // コンストラクタで型が保証されている
+    return static_cast<ClickableLabel *>(ui->image);
 }
 
 void ImageViewForImageTransparent::onLabelClicked(const QPoint &point)

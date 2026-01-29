@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <cstdint>
+
 namespace Ui {
 class BasicImageViewControl;
 }

@@ -212,19 +212,24 @@ void phraseGeneration::handleToggleTreeButtonClick()
     bool const isVisible = ui->titleTreeWidget->isVisible();
     ui->titleTreeWidget->setVisible(!isVisible);
 
+    auto *grid = qobject_cast<QGridLayout *>(this->layout());
+    if (grid == nullptr) {
+        return;
+    }
+
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
         this->layout()->removeWidget(ui->templateText);
-        dynamic_cast<QGridLayout *>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
+        grid->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
-        dynamic_cast<QGridLayout *>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
+        grid->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("menu"));
         this->layout()->removeWidget(ui->templateText);
-        dynamic_cast<QGridLayout *>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
+        grid->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);
-        dynamic_cast<QGridLayout *>(this->layout())->addWidget(ui->saveButton, 8, 5, 1, 1);
+        grid->addWidget(ui->saveButton, 8, 5, 1, 1);
     }
 }
 

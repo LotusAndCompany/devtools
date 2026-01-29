@@ -25,7 +25,9 @@ void ImageViewForImageDivision::updateScale(double newScale)
 
 LabelWithGrid *ImageViewForImageDivision::ui_image() const
 {
-    return dynamic_cast<LabelWithGrid *>(ui->image);
+    auto *label = dynamic_cast<LabelWithGrid *>(ui->image);
+    Q_ASSERT(label != nullptr);
+    return label;
 }
 
 void ImageViewForImageDivision::setGridSize(const QSizeF &newGridSize)

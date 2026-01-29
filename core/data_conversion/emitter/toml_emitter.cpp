@@ -56,7 +56,7 @@ struct Util
 
     static toml::local_date dateToTomlLocalDate(const QDate &date)
     {
-        return {date.year(), static_cast<toml::month_t>(date.month() - 1), date.day()};
+        return {date.year(), static_cast<toml::month_t>(date.month()), date.day()};
     }
 };
 }; // namespace TomlEmitterPrivate
