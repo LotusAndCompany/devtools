@@ -36,7 +36,7 @@ private slots:
     /**
      * @brief コピーボタンを押した時の処理
      */
-    void onCopyButtonClicked();
+    static void onCopyButtonClicked();
 };
 
 #endif // ABOUT_DEVTOOLS_DIALOG_H

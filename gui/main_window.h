@@ -105,6 +105,6 @@ private slots:
      * @brief サイドメニューの選択が変わった時の処理
      * @param id 選択されたサイドメニューID
      */
-    void onSidemenuItemSelected(Sidemenu::ID id);
+    static void onSidemenuItemSelected(Sidemenu::ID id);
 };
 #endif // MAIN_WINDOW_H
