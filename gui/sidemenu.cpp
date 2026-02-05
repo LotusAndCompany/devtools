@@ -46,11 +46,12 @@ void Sidemenu::validateID(Sidemenu::ID id)
 {
     const int intID = static_cast<int>(id);
 
-    if (intID <= ID_MIN || ID_MAX <= intID)
+    if (intID <= ID_MIN || ID_MAX <= intID) {
         throw InvalidArgumentException(intID, invalidSidemenuIDReason);
+    }
 }
 
-const QIcon Sidemenu::icon(Sidemenu::ID id)
+QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
 
@@ -96,7 +97,7 @@ const QIcon Sidemenu::icon(Sidemenu::ID id)
 
 void Sidemenu::registerItem(ID id)
 {
-    SidemenuItem *const item = new SidemenuItem(id, this);
+    auto *const item = new SidemenuItem(id, this);
     buttonGroup->addButton(item, static_cast<int>(id));
     ui->scrollAreaLayout->addWidget(item);
     allItems.append(item);
@@ -133,8 +134,9 @@ void Sidemenu::onButtonToggled(int intID, bool checked)
 
         validateID(id);
 
-        if (checked) emit
-            itemSelected(id);
+        if (checked) {
+            emit itemSelected(id);
+        }
     } catch (InvalidArgumentException<int> &e) {
         qWarning() << e.message;
     }

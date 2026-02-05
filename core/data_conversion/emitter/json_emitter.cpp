@@ -15,19 +15,18 @@ JsonEmitter::EmitResult JsonEmitter::emitQString(const QVariant &data,
         return EmitResult{
             "",
             {},
-            QCoreApplication::instance()->translate("DataConversion", "Invalid input value"),
+            QCoreApplication::translate("DataConversion", "Invalid input value"),
         };
     } else if (data.typeId() != QMetaType::Type::QVariantList &&
                data.typeId() != QMetaType::Type::QVariantMap) {
         return EmitResult{
             "",
             {},
-            QCoreApplication::instance()->translate("DataConversion",
-                                                    "JSON does not support top level value"),
+            QCoreApplication::translate("DataConversion", "JSON does not support top level value"),
         };
     }
 
-    QJsonDocument doc = QJsonDocument::fromVariant(data);
+    QJsonDocument const doc = QJsonDocument::fromVariant(data);
 
     switch (indentation) {
     case DataConversion::Indentation::MINIFIED:

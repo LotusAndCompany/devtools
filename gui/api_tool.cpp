@@ -24,7 +24,6 @@ api_tool::api_tool(QWidget *parent)
     ui->setupUi(this);
     setupParametersTable();
     setupResponseView();
-    networkManager = new QNetworkAccessManager(this);
 
     connect(ui->sendButton, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
     connect(networkManager, &QNetworkAccessManager::finished, this,
@@ -56,24 +55,24 @@ void api_tool::handleSendButtonClick()
 
     requestStartTime = QDateTime::currentMSecsSinceEpoch();
 
-    QString username = ui->usernameEdit->text();
-    QString password = ui->passwordEdit->text();
+    QString const username = ui->usernameEdit->text();
+    QString const password = ui->passwordEdit->text();
 
-    QString selectedMethod = ui->comboBox->currentText();
-    QString url = ui->textEdit->toPlainText();
+    QString const selectedMethod = ui->comboBox->currentText();
+    QString const url = ui->textEdit->toPlainText();
     QNetworkRequest request((QUrl(url)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     if (!username.isEmpty() && !password.isEmpty()) {
-        QString credentials = username + ":" + password;
-        QByteArray data = credentials.toLocal8Bit().toBase64();
+        QString const credentials = username + ":" + password;
+        QByteArray const data = credentials.toLocal8Bit().toBase64();
         request.setRawHeader("Authorization", "Basic " + data);
     }
 
     QByteArray payload;
     // Bodyテキストエリアからデータを取得してpayloadに設定
     if (selectedMethod == "POST" || selectedMethod == "PUT") {
-        QString bodyText = ui->bodyTextEdit->toPlainText();
+        QString const bodyText = ui->bodyTextEdit->toPlainText();
         payload = bodyText.toUtf8();
     }
 
@@ -90,18 +89,18 @@ void api_tool::handleSendButtonClick()
 
 void api_tool::setupResponseView()
 {
-    QWidget *responseWidget = new QWidget();
-    QVBoxLayout *responseLayout = new QVBoxLayout(responseWidget);
+    auto *responseWidget = new QWidget();
+    auto *responseLayout = new QVBoxLayout(responseWidget);
 
-    statusLabel = new QLabel();             // ステータスラベルの作成
-    responseLayout->addWidget(statusLabel); // レイアウトにステータスラベルを追加
-    QListView *responseListView = new QListView(); // レスポンス表示用のリストビュー作成
-    responseModel = new QStringListModel(this);  // モデルのインスタンス作成
-    responseListView->setModel(responseModel);   // リストビューにモデルをセット
-    responseLayout->addWidget(responseListView); // レイアウトにリストビューを追加
+    statusLabel = new QLabel();
+    responseLayout->addWidget(statusLabel);
+    auto *responseListView = new QListView();
+    responseModel = new QStringListModel(this);
+    responseListView->setModel(responseModel);
+    responseLayout->addWidget(responseListView);
 
-    responseWidget->setLayout(responseLayout); // ウィジェットにレイアウトをセット
-    ui->mainSplitter->addWidget(responseWidget); // mainSplitterにレスポンスウィジェットを追加
+    responseWidget->setLayout(responseLayout);
+    ui->mainSplitter->addWidget(responseWidget);
 }
 
 QString formatDataSize(qint64 bytes)
@@ -109,35 +108,36 @@ QString formatDataSize(qint64 bytes)
     const double KB = 1024.0;
     const double MB = 1024.0 * KB;
     const double GB = 1024.0 * MB;
+    const auto bytesDouble = static_cast<double>(bytes);
 
-    if (bytes < KB) {
+    if (bytesDouble < KB) {
         return QString::number(bytes) + " B";
-    } else if (bytes < MB) {
-        return QString::number(bytes / KB, 'f', 2) + " KB";
-    } else if (bytes < GB) {
-        return QString::number(bytes / MB, 'f', 2) + " MB";
+    } else if (bytesDouble < MB) {
+        return QString::number(bytesDouble / KB, 'f', 2) + " KB";
+    } else if (bytesDouble < GB) {
+        return QString::number(bytesDouble / MB, 'f', 2) + " MB";
     } else {
-        return QString::number(bytes / GB, 'f', 2) + " GB";
+        return QString::number(bytesDouble / GB, 'f', 2) + " GB";
     }
 }
 
 void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
 {
     try {
-        if (!reply) {
+        if (reply == nullptr) {
             qCritical() << "Received a null reply object.";
             return;
         }
 
-        qint64 responseTime = QDateTime::currentMSecsSinceEpoch() - requestStartTime;
+        qint64 const responseTime = QDateTime::currentMSecsSinceEpoch() - requestStartTime;
         qDebug() << "Handling network reply, elapsed time:" << responseTime << "ms";
 
-        QByteArray responseData = reply->readAll();
-        qint64 dataSize = responseData.size();
+        QByteArray const responseData = reply->readAll();
+        qint64 const dataSize = responseData.size();
         qDebug() << "Response size:" << dataSize << "bytes";
 
-        int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        QString statusText =
+        int const statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        QString const statusText =
             reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
         qDebug() << "Status code:" << statusCode << (statusText.isEmpty() ? "" : statusText);
 
@@ -147,13 +147,13 @@ void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
         } else {
             responseText = tr("Error: ") + reply->errorString();
         }
-        QString formattedSize = formatDataSize(dataSize);
+        QString const formattedSize = formatDataSize(dataSize);
 
-        QString statusInfo = tr("Status: %1 %2 Time: %3ms Size: %4")
-                                 .arg(statusCode)
-                                 .arg(statusText.isEmpty() ? "Error" : statusText)
-                                 .arg(responseTime)
-                                 .arg(formattedSize);
+        QString const statusInfo = tr("Status: %1 %2 Time: %3ms Size: %4")
+                                       .arg(statusCode)
+                                       .arg(statusText.isEmpty() ? "Error" : statusText)
+                                       .arg(responseTime)
+                                       .arg(formattedSize);
         statusLabel->setText(statusInfo);
 
         // Updating the view
@@ -177,8 +177,10 @@ void api_tool::updateUrlFromParams()
     QString queryString;
 
     for (int row = 0; row < paramsModel->rowCount(); ++row) {
-        QString key = paramsModel->item(row, 0) ? paramsModel->item(row, 0)->text() : "";
-        QString value = paramsModel->item(row, 1) ? paramsModel->item(row, 1)->text() : "";
+        QString const key =
+            (paramsModel->item(row, 0) != nullptr) ? paramsModel->item(row, 0)->text() : "";
+        QString const value =
+            (paramsModel->item(row, 1) != nullptr) ? paramsModel->item(row, 1)->text() : "";
 
         if (!key.isEmpty()) {
             if (!queryString.isEmpty()) {

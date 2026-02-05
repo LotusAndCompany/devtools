@@ -35,9 +35,9 @@ void ConnectionWindow::init()
 
 void ConnectionWindow::selectedDBType()
 {
-    QString dbTypeText = ui->dbTypeComboBox->currentText();
-    bool isSQLite = (dbTypeText == "SQLite");
-    bool display = !isSQLite;
+    QString const dbTypeText = ui->dbTypeComboBox->currentText();
+    bool const isSQLite = (dbTypeText == "SQLite");
+    bool const display = !isSQLite;
 
     if (display) {
         this->setFixedHeight(600);
@@ -58,7 +58,7 @@ void ConnectionWindow::selectedDBType()
 
 void ConnectionWindow::browseForDatabase()
 {
-    QString filePath = QFileDialog::getOpenFileName(
+    QString const filePath = QFileDialog::getOpenFileName(
         this, tr("Select Database File"), QString(),
         tr("SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)"));
 
@@ -76,7 +76,7 @@ void ConnectionWindow::createNewConnect()
     const QString password = ui->passwordLineEdit->text();
 
     QString databaseType;
-    QString dbTypeText = ui->dbTypeComboBox->currentText();
+    QString const dbTypeText = ui->dbTypeComboBox->currentText();
 
     if (dbTypeText == "SQLite") {
         databaseType = "QSQLITE";
@@ -114,7 +114,7 @@ void ConnectionWindow::createNewConnect()
         // Build connection info for history
         QString displayName;
         if (databaseType == "QSQLITE") {
-            QFileInfo fileInfo(databaseName);
+            QFileInfo const fileInfo(databaseName);
             displayName = QString("SQLite: %1").arg(fileInfo.fileName());
         } else {
             displayName = QString("%1: %2@%3/%4")

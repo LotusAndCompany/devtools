@@ -31,11 +31,12 @@ void DataConversionInterface::validateFormat(Format format)
     const int FORMAT_MIN = static_cast<int>(Format::MIN);
     const int FORMAT_MAX = static_cast<int>(Format::MAX);
 
-    if (intValue <= FORMAT_MIN || FORMAT_MAX <= intValue)
+    if (intValue <= FORMAT_MIN || FORMAT_MAX <= intValue) {
         throw InvalidArgumentException(
             intValue, QString("DataConversionInterface::Format must be in range (%1, %2)")
                           .arg(FORMAT_MIN)
                           .arg(FORMAT_MAX));
+    }
 }
 
 void DataConversionInterface::validateIndentation(Indentation indentation)
@@ -44,11 +45,12 @@ void DataConversionInterface::validateIndentation(Indentation indentation)
     const int INDENT_MIN = static_cast<int>(Indentation::MIN);
     const int INDENT_MAX = static_cast<int>(Indentation::MAX);
 
-    if (intValue <= INDENT_MIN || INDENT_MAX <= intValue)
+    if (intValue <= INDENT_MIN || INDENT_MAX <= intValue) {
         throw InvalidArgumentException(
             intValue, QString("DataConversionInterface::Indentation must be in range (%1, %2)")
                           .arg(INDENT_MIN)
                           .arg(INDENT_MAX));
+    }
 }
 
 // const QString DataConversion::invalidPointer = "void *p must not be null";
@@ -91,8 +93,9 @@ bool DataConversion::load(const QString &path)
 
 bool DataConversion::save(const QString &path, bool overwrite) const
 {
-    if (!overwrite && QFileInfo::exists(path))
+    if (!overwrite && QFileInfo::exists(path)) {
         return false;
+    }
 
     QFile file(path);
     if (file.open(QIODevice::WriteOnly)) {
@@ -126,8 +129,9 @@ void DataConversion::setIndentation(Indentation indentation)
 
 void DataConversion::updateOutputText()
 {
-    if (!outdated)
+    if (!outdated) {
         return;
+    }
 
     _messages.clear();
 
@@ -181,7 +185,7 @@ void DataConversion::parseInputText()
     BasicParser::ParseResult result;
 
     // JSONで解析できるか試す
-    JsonParser jp;
+    JsonParser const jp;
     result = jp.tryParse(inputText());
     if (result) {
         inputFormat = Format::JSON;
@@ -191,7 +195,7 @@ void DataConversion::parseInputText()
         return;
     }
 
-    TomlParser tp;
+    TomlParser const tp;
     // TOMLで解析できるか試す
     result = tp.tryParse(inputText());
     if (result) {
@@ -203,7 +207,7 @@ void DataConversion::parseInputText()
     }
 
     // YAMLで解析できるか試す
-    YamlParser yp;
+    YamlParser const yp;
     result = yp.tryParse(inputText());
     if (result) {
         if (result.extras[YamlParser::EXTRAS_YAML_STYLE].toInt() ==

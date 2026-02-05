@@ -4,7 +4,7 @@
 #include "sidemenu.h"
 
 #include <QMainWindow>
-#include <QtSystemDetection>
+#include <QtGlobal>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow
     Ui::MainWindow *const ui;
 
     /// 設定ダイアログ
-    SettingsDialog *m_settingsDialog;
+    SettingsDialog *m_settingsDialog{nullptr};
 
 public:
     /**
@@ -43,7 +43,11 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~MainWindow();
+    ~MainWindow() override;
+    MainWindow(const MainWindow &) = delete;
+    MainWindow &operator=(const MainWindow &) = delete;
+    MainWindow(MainWindow &&) = delete;
+    MainWindow &operator=(MainWindow &&) = delete;
 
 private:
     /**
@@ -101,6 +105,6 @@ private slots:
      * @brief サイドメニューの選択が変わった時の処理
      * @param id 選択されたサイドメニューID
      */
-    void onSidemenuItemSelected(Sidemenu::ID id);
+    static void onSidemenuItemSelected(Sidemenu::ID id);
 };
 #endif // MAIN_WINDOW_H

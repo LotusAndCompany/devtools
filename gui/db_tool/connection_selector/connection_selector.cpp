@@ -20,7 +20,7 @@ ConnectionSelector::ConnectionSelector(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->historyListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
-        int row = ui->historyListWidget->row(item);
+        int const row = ui->historyListWidget->row(item);
         handleHistoryItemClicked(row);
     });
     connect(ui->newConnectionButton, &QPushButton::clicked, this,
@@ -38,12 +38,12 @@ ConnectionSelector::~ConnectionSelector()
 
 void ConnectionSelector::loadHistory()
 {
-    QSettings settings;
-    QStringList historyList = settings.value("db_tool/connectionHistory").toStringList();
+    QSettings const settings;
+    QStringList const historyList = settings.value("db_tool/connectionHistory").toStringList();
 
     connectionHistory.clear();
     for (const QString &jsonStr : historyList) {
-        QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
+        QJsonDocument const doc = QJsonDocument::fromJson(jsonStr.toUtf8());
         if (!doc.isNull() && doc.isObject()) {
             connectionHistory.append(doc.object());
         }
@@ -58,16 +58,16 @@ void ConnectionSelector::refreshHistoryList()
 
     for (int i = 0; i < connectionHistory.size(); ++i) {
         const QJsonObject &conn = connectionHistory[i];
-        QString displayName = conn["displayName"].toString();
+        QString const displayName = conn["displayName"].toString();
 
-        QWidget *itemWidget = new QWidget();
-        QHBoxLayout *layout = new QHBoxLayout(itemWidget);
+        auto *itemWidget = new QWidget();
+        auto *layout = new QHBoxLayout(itemWidget);
         layout->setContentsMargins(5, 2, 5, 2);
 
-        QLabel *label = new QLabel(displayName);
+        auto *label = new QLabel(displayName);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-        QPushButton *deleteButton = new QPushButton();
+        auto *deleteButton = new QPushButton();
         deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
         deleteButton->setFixedSize(24, 24);
         deleteButton->setToolTip(tr("Delete"));
@@ -78,7 +78,7 @@ void ConnectionSelector::refreshHistoryList()
         layout->addWidget(label);
         layout->addWidget(deleteButton);
 
-        QListWidgetItem *item = new QListWidgetItem();
+        auto *item = new QListWidgetItem();
         item->setSizeHint(itemWidget->sizeHint());
         ui->historyListWidget->addItem(item);
         ui->historyListWidget->setItemWidget(item, itemWidget);
@@ -99,10 +99,10 @@ void ConnectionSelector::handleHistoryItemClicked(int row)
 
 bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
 {
-    QString dbType = connectionInfo["type"].toString();
-    QString hostName = connectionInfo["host"].toString();
-    QString databaseName = connectionInfo["database"].toString();
-    QString userName = connectionInfo["username"].toString();
+    QString const dbType = connectionInfo["type"].toString();
+    QString const hostName = connectionInfo["host"].toString();
+    QString const databaseName = connectionInfo["database"].toString();
+    QString const userName = connectionInfo["username"].toString();
 
     QString password;
 
@@ -151,7 +151,7 @@ void ConnectionSelector::removeHistoryItem(int index)
     QSettings settings;
     QStringList historyList;
     for (const QJsonObject &conn : connectionHistory) {
-        QJsonDocument doc(conn);
+        QJsonDocument const doc(conn);
         historyList.append(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
     }
     settings.setValue("db_tool/connectionHistory", historyList);

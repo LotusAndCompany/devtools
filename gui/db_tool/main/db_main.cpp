@@ -22,6 +22,7 @@
 #include <QWidget>
 
 // Static variable to track if connection was made during this app session
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool s_hasConnectedThisSession = false;
 
 dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
@@ -44,8 +45,8 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
 
     // Check if we should show connection dialog on startup
     QTimer::singleShot(0, this, [this]() {
-        QSettings settings;
-        QStringList history = settings.value("db_tool/connectionHistory").toStringList();
+        QSettings const settings;
+        QStringList const history = settings.value("db_tool/connectionHistory").toStringList();
 
         // Show dialog if no history and not connected in this session
         if (history.isEmpty() && !s_hasConnectedThisSession) {
@@ -56,13 +57,13 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
 
 void dbMain::handleAddQueryTabButtonClick()
 {
-    QueryPage *page = new QueryPage(this);
+    auto *page = new QueryPage(this);
 
-    QString baseName = "Query";
+    QString const baseName = "Query";
     int counter = 1;
     QString newTabName;
 
-    do {
+    do { // NOLINT(cppcoreguidelines-avoid-do-while)
         newTabName = QString("%1 %2").arg(baseName).arg(counter++);
     } while (isTabNameExists(newTabName));
 
@@ -96,7 +97,7 @@ bool dbMain::isTabNameExists(const QString &tabName)
 
 void dbMain::handleTabCloseRequested(int index)
 {
-    QWidget *widget = ui->queryTabWidget->widget(index);
+    QWidget const *widget = ui->queryTabWidget->widget(index);
     ui->queryTabWidget->removeTab(index);
     delete widget;
 }
@@ -111,7 +112,7 @@ void dbMain::populateTableList()
 
 void dbMain::handleTableClicked(QListWidgetItem *item)
 {
-    QString tableName = item->text();
+    QString const tableName = item->text();
 
     // 同名タブがある場合はそれを選択
     for (int i = 0; i < ui->queryTabWidget->count(); ++i) {
@@ -121,28 +122,28 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
         }
     }
 
-    QSqlTableModel *model = new QSqlTableModel(this, db);
+    auto *model = new QSqlTableModel(this, db);
     model->setTable(tableName);
     model->select();
 
-    QTableView *tableView = new QTableView;
+    auto *tableView = new QTableView;
     tableView->setModel(model);
 
     // 更新ボタン
-    QPushButton *refreshButton = new QPushButton;
+    auto *refreshButton = new QPushButton;
     refreshButton->setIcon(QIcon::fromTheme("refresh"));
     refreshButton->setToolTip(tr("Refresh"));
     connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
     // 左寄せのレイアウト
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    auto *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(refreshButton);
     buttonLayout->addStretch();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    auto *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(buttonLayout); // 更新ボタン
     mainLayout->addWidget(tableView);    // テーブルビュー
 
-    QWidget *container = new QWidget;
+    auto *container = new QWidget;
     container->setLayout(mainLayout);
     container->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -185,7 +186,7 @@ void dbMain::handleConnectionSettingsButtonClick()
 
 void dbMain::showConnectionSelector()
 {
-    if (connectionSelector) {
+    if (connectionSelector != nullptr) {
         connectionSelector->raise();
         connectionSelector->activateWindow();
         return;
@@ -196,7 +197,7 @@ void dbMain::showConnectionSelector()
 
     // Inherit window flags from parent, including stay-on-top if set
     Qt::WindowFlags flags = connectionSelector->windowFlags() | Qt::Window;
-    if (window() && (window()->windowFlags() & Qt::WindowStaysOnTopHint)) {
+    if ((window() != nullptr) && ((window()->windowFlags() & Qt::WindowStaysOnTopHint) != 0U)) {
         flags |= Qt::WindowStaysOnTopHint;
     }
     connectionSelector->setWindowFlags(flags);
@@ -209,7 +210,7 @@ void dbMain::showConnectionSelector()
             [this]() { connectionSelector = nullptr; });
 
     connect(connectionSelector, &ConnectionSelector::connectionCreated, this,
-            [this](QSqlDatabase db) { setDatabase(db); });
+            [this](const QSqlDatabase &db) { setDatabase(db); });
 
     connect(connectionSelector, &ConnectionSelector::newConnectionRequested, this,
             [this]() { openNewConnectionWindow(); });
@@ -217,7 +218,7 @@ void dbMain::showConnectionSelector()
 
 void dbMain::openNewConnectionWindow()
 {
-    if (connectionWindow) {
+    if (connectionWindow != nullptr) {
         connectionWindow->raise();
         connectionWindow->activateWindow();
         return;
@@ -228,7 +229,7 @@ void dbMain::openNewConnectionWindow()
 
     // Inherit window flags from parent, including stay-on-top if set
     Qt::WindowFlags flags = connectionWindow->windowFlags() | Qt::Window;
-    if (window() && (window()->windowFlags() & Qt::WindowStaysOnTopHint)) {
+    if ((window() != nullptr) && ((window()->windowFlags() & Qt::WindowStaysOnTopHint) != 0U)) {
         flags |= Qt::WindowStaysOnTopHint;
     }
     connectionWindow->setWindowFlags(flags);
@@ -241,10 +242,10 @@ void dbMain::openNewConnectionWindow()
             [this]() { connectionWindow = nullptr; });
 
     connect(connectionWindow, &ConnectionWindow::connectionCreated, this,
-            [this](QSqlDatabase db, QJsonObject connectionInfo) {
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
                 setDatabase(db, connectionInfo);
                 // ConnectionSelectorも閉じる
-                if (connectionSelector) {
+                if (connectionSelector != nullptr) {
                     connectionSelector->close();
                 }
             });
@@ -265,16 +266,16 @@ void dbMain::saveConnectionHistory(const QJsonObject &connectionInfo)
     QStringList historyList = settings.value("db_tool/connectionHistory").toStringList();
 
     // Convert to JSON string
-    QJsonDocument doc(connectionInfo);
-    QString jsonStr = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
+    QJsonDocument const doc(connectionInfo);
+    QString const jsonStr = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
 
     // Check for duplicates (same database path/name)
-    QString newDatabase = connectionInfo["database"].toString();
-    QString newType = connectionInfo["type"].toString();
-    QString newHost = connectionInfo["host"].toString();
+    QString const newDatabase = connectionInfo["database"].toString();
+    QString const newType = connectionInfo["type"].toString();
+    QString const newHost = connectionInfo["host"].toString();
 
     for (int i = 0; i < historyList.size(); ++i) {
-        QJsonDocument existingDoc = QJsonDocument::fromJson(historyList[i].toUtf8());
+        QJsonDocument const existingDoc = QJsonDocument::fromJson(historyList[i].toUtf8());
         if (!existingDoc.isNull() && existingDoc.isObject()) {
             QJsonObject existing = existingDoc.object();
             if (existing["database"].toString() == newDatabase &&

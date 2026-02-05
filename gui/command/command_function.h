@@ -6,17 +6,18 @@
 #include <QList>
 #include <QString>
 
+#include <utility>
+
 class CommandFunction
 {
 public:
-    CommandFunction(const QString &name, const QString &description,
-                    const QList<CommandOption> &options)
-        : name(name), description(description), options(options)
+    CommandFunction(QString name, QString description, const QList<CommandOption> &options)
+        : name(std::move(name)), description(std::move(description)), options(options)
     {}
 
-    QString getName() const { return name; }
-    QString getDescription() const { return description; }
-    QList<CommandOption> getOptions() const { return options; }
+    [[nodiscard]] QString getName() const { return name; }
+    [[nodiscard]] QString getDescription() const { return description; }
+    [[nodiscard]] QList<CommandOption> getOptions() const { return options; }
 
 private:
     QString name;

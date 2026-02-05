@@ -17,12 +17,12 @@ class TestJsonParser : public QObject
     Q_OBJECT
 
 private slots:
-    void test_tryParse();
+    static void test_tryParse();
 };
 
 void TestJsonParser::test_tryParse()
 {
-    JsonParser jp;
+    JsonParser const jp;
     JsonParser::ParseResult result;
 
     result = jp.tryParse("");

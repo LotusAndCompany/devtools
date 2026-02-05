@@ -37,7 +37,7 @@ class TestBasicImageEditInterface : public QObject
             return mock_overwriteSave(path, format, quality);
         }
 
-        const QFileInfo &fileInfo(unsigned int index) const override
+        [[nodiscard]] const QFileInfo &fileInfo(unsigned int index) const override
         {
             return mock_fileInfo(index);
         }
@@ -52,13 +52,13 @@ class TestBasicImageEditInterface : public QObject
     using ImageEdit = QScopedPointer<BasicImageEditInterface>;
 
 private slots:
-    void init(); // will be called before each test function is executed.
+    static void init(); // will be called before each test function is executed.
 
     // Test cases:
-    void test_constructor();
-    void test_load();
-    void test_reset();
-    void test_update();
+    static void test_constructor();
+    static void test_load();
+    static void test_reset();
+    static void test_update();
 };
 
 void TestBasicImageEditInterface::init()

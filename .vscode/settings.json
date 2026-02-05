@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "**/res/*.ts": "xml"
+    },
+    "typescript.tsc.autoDetect": "off",
+    "typescript.disableAutomaticTypeAcquisition": true
+}

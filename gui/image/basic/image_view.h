@@ -31,7 +31,11 @@ public:
     /**
      * @brief デストラクタ
      */
-    virtual ~BasicImageView();
+    ~BasicImageView() override;
+    BasicImageView(const BasicImageView &) = delete;
+    BasicImageView &operator=(const BasicImageView &) = delete;
+    BasicImageView(BasicImageView &&) = delete;
+    BasicImageView &operator=(BasicImageView &&) = delete;
 
     /**
      * @brief 画像データを設定する。空の画像データを指定すると "No Image" になる
@@ -41,6 +45,7 @@ public:
     void setPixmap(const QPixmap &pixmap, bool reset = false);
 
 protected:
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     Ui::BasicImageView *const ui;
 
     /// 実際の拡大率
@@ -48,6 +53,7 @@ protected:
 
     /// 拡大縮小前の画像データ。 setPixmap() によってのみ変更される
     QPixmap original;
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief scale を変更し、UIに反映する

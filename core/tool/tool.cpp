@@ -5,11 +5,13 @@
 
 #include <QEvent>
 
+#include <utility>
+
 const QString Tool::invalidToolIDReason =
     QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
 
-Tool::Tool(Tool::ID id, const QString &stringID, QObject *parent)
-    : QObject(parent), id(id), stringID(stringID), _translatable(translatable(id))
+Tool::Tool(Tool::ID id, QString stringID, QObject *parent)
+    : QObject(parent), id(id), stringID(std::move(stringID)), _translatable(translatable(id))
 {
     validateID(id);
 }
@@ -18,11 +20,12 @@ void Tool::validateID(ID id)
 {
     const int intID = static_cast<int>(id);
 
-    if (intID <= ID_MIN || ID_MAX <= intID)
+    if (intID <= ID_MIN || ID_MAX <= intID) {
         throw InvalidArgumentException(intID, invalidToolIDReason);
+    }
 }
 
-const Tool::Translatable Tool::translatable(ID id)
+Tool::Translatable Tool::translatable(ID id)
 {
     validateID(id);
 

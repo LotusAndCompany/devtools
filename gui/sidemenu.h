@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QWidget>
 
+#include <cstdint>
+
 class QButtonGroup;
 class QAbstractButton;
 class SidemenuItem;
@@ -30,7 +32,11 @@ public:
     /**
      * デストラクタ
      */
-    ~Sidemenu();
+    ~Sidemenu() override;
+    Sidemenu(const Sidemenu &) = delete;
+    Sidemenu &operator=(const Sidemenu &) = delete;
+    Sidemenu(Sidemenu &&) = delete;
+    Sidemenu &operator=(Sidemenu &&) = delete;
 
     /**
      * @brief サイドメニューのID
@@ -39,7 +45,7 @@ public:
      *
      * @sa Tool::ID
      */
-    enum class ID {
+    enum class ID : uint8_t {
         MIN,              ///< 最小値
         TOOL_ID_FIELDS(), // ここに展開する
         WELCOME,          ///< ようこそ画面
@@ -65,7 +71,7 @@ public:
      * @return アイコン
      * @exception InvalidArgumentException &lt;int&gt; 間違った ID が渡された場合
      */
-    static const QIcon icon(ID id) noexcept(false);
+    static QIcon icon(ID id) noexcept(false);
 
     /**
      * @brief 指定したIDのメニューを選択状態にする
@@ -114,9 +120,8 @@ private:
      */
     void filterItems(const QString &searchText);
 
-private slots:
     /**
-     * @brief サイドメニューのボタンが切り替わった場合
+     * @brief サイドメニューのボタンが切り替わった場合の処理
      * @param id 切り替わったボタンのID
      * @param checked ボタンの状態
      */

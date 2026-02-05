@@ -18,22 +18,30 @@ Checks: >
   -cppcoreguidelines-no-malloc,
   -cppcoreguidelines-pro-type-vararg,
   -cppcoreguidelines-pro-type-union-access,
+  -cppcoreguidelines-init-variables,
+  -cppcoreguidelines-prefer-member-initializer,
   misc-*,
   -misc-non-private-member-variables-in-classes,
   -misc-no-recursion,
+  -misc-include-cleaner,
+  -misc-use-internal-linkage,
+  -misc-use-anonymous-namespace,
   modernize-*,
   -modernize-use-trailing-return-type,
   -modernize-avoid-c-arrays,
+  -modernize-use-override,
   performance-*,
   readability-*,
   -readability-magic-numbers,
   -readability-identifier-length,
   -readability-function-cognitive-complexity,
   -readability-else-after-return,
+  -readability-identifier-naming,
+  -readability-redundant-access-specifiers,
 
 WarningsAsErrors: ''
 
-HeaderFilterRegex: '^.*/devtools/(core|gui|main|tests)/.*\.(h|hpp)$'
+HeaderFilterRegex: '^.*/devtools/(core|gui|main|tests)/(?!.*qrcodegen).*\.(h|hpp)$'
 
 FormatStyle: file
 
@@ -110,8 +118,6 @@ CheckOptions:
     value: '100'
   - key: readability-function-size.StatementThreshold
     value: '50'
-  - key: modernize-use-override.IgnoreDestructors
-    value: 'true'
   - key: performance-unnecessary-value-param.AllowedTypes
     value: 'QString;QStringList;QVariant;QByteArray;QImage;QPixmap'
   - key: bugprone-argument-comment.StrictMode

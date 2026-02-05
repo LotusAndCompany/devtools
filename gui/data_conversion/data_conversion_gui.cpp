@@ -23,8 +23,9 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
     copyButton = ui->copyButton;
     saveButton = ui->saveButton;
 
-    if (dataConversion->parent() == nullptr)
+    if (dataConversion->parent() == nullptr) {
         dataConversion->setParent(this);
+    }
 
     connect(inputTextEdit, &QTextEdit::textChanged, this, &DataConversionGUI::onInputTextChanged);
     connect(loadButton, &QPushButton::pressed, this, &DataConversionGUI::onLoadPressed);
@@ -53,10 +54,12 @@ void DataConversionGUI::resizeEvent(QResizeEvent *event)
     setMinimumWidth(width);
 
     QSize size = event->size();
-    if (size.width() < ui->splitter->minimumSizeHint().width())
+    if (size.width() < ui->splitter->minimumSizeHint().width()) {
         size.setWidth(ui->splitter->minimumSizeHint().width());
-    if (size.height() < ui->splitter->minimumSizeHint().height())
+    }
+    if (size.height() < ui->splitter->minimumSizeHint().height()) {
         size.setHeight(ui->splitter->minimumSizeHint().height());
+    }
 
     ui->splitter->resize(size);
     event->accept();
@@ -74,7 +77,7 @@ void DataConversionGUI::onInputTextChanged()
 
 void DataConversionGUI::onPastePressed()
 {
-    QClipboard *const clipboard = QGuiApplication::clipboard();
+    QClipboard const *const clipboard = QGuiApplication::clipboard();
     inputTextEdit->setText(clipboard->text()); // onInputTextChanged()
 }
 
@@ -95,7 +98,7 @@ void DataConversionGUI::onLoadPressed()
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter("Plain Text (*.txt *.json *.toml *.yml *yaml)");
-    connect(&dialog, &QFileDialog::fileSelected, this, [=](const QString &fileName) {
+    connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) {
             QTextStream stream(&file);
@@ -122,6 +125,8 @@ void DataConversionGUI::onFormatSelected(int index)
     case 3:
         dataConversion->setOutputFormat(DataConversion::Format::TOML);
         break;
+    default:
+        break;
     }
     dataConversion->updateOutputText();
     ui->outputMessageTextView->setText(dataConversion->messages());
@@ -143,6 +148,8 @@ void DataConversionGUI::onStyleSelected(int index)
     case 3:
         dataConversion->setIndentation(DataConversion::Indentation::MINIFIED);
         break;
+    default:
+        break;
     }
     dataConversion->updateOutputText();
     ui->outputMessageTextView->setText(dataConversion->messages());
@@ -154,7 +161,7 @@ void DataConversionGUI::onSavePressed()
     QFileDialog dialog(this);
     dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    connect(&dialog, &QFileDialog::fileSelected, this, [=](const QString &fileName) {
+    connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
         QFile file(fileName);
         if (file.open(QIODevice::WriteOnly)) {
             QTextStream stream(&file);
@@ -168,6 +175,7 @@ void DataConversionGUI::onCopyPressed()
 {
     QClipboard *const clipboard = QGuiApplication::clipboard();
     const auto text = outputTextView->toPlainText();
-    if (text != "")
+    if (text != "") {
         clipboard->setText(text);
+    }
 }

@@ -40,26 +40,27 @@ public:
     {
         return mock_overwriteSave(path, format, quality);
     }
-    const QFileInfo &fileInfo(unsigned int index = 0) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int index = 0) const override
     {
         return mock_fileInfo(index);
     }
-    const QImage &original() const override { return mock_original(); }
+    [[nodiscard]] const QImage &original() const override { return mock_original(); }
 
     void setHorizontalDivision(unsigned int n) override { mock_setHorizontalDivision(n); }
     void setVerticalDivision(unsigned int m) override { mock_setVerticalDivision(m); }
     void setCellWidth(unsigned int width) override { mock_setCellWidth(width); }
     void setCellHeight(unsigned int height) override { mock_setCellHeight(height); }
-    QString saveFilename(const QDir &location, unsigned int x, unsigned int y) const override
+    [[nodiscard]] QString saveFilename(const QDir &location, unsigned int x,
+                                       unsigned int y) const override
     {
         return mock_saveFilename(location, x, y);
     }
-    QSizeF computedCellSize() const override { return mock_computedCellSize(); }
-    unsigned int numberOfHorizontalDivision() const override
+    [[nodiscard]] QSizeF computedCellSize() const override { return mock_computedCellSize(); }
+    [[nodiscard]] unsigned int numberOfHorizontalDivision() const override
     {
         return mock_numberOfHorizontalDivision();
     }
-    unsigned int numberOfVerticalDivision() const override
+    [[nodiscard]] unsigned int numberOfVerticalDivision() const override
     {
         return mock_numberOfVerticalDivision();
     }
@@ -87,13 +88,13 @@ class TestImageDivisionGUI : public QObject
 private slots:
     void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void init();            // will be called before each test function is executed.
+    static void init();     // will be called before each test function is executed.
 
     // Test cases:
     void test_constructor();
     void test_onLoadImageSelected();
     void test_onSaveLocationSelected();
-    void test_onResetButtonClicked();
+    static void test_onResetButtonClicked();
     void test_onDivisionModeClicked();
     void test_onHorizontalDivisionValueChanged();
     void test_onVerticalDivisionValueChanged();
@@ -105,11 +106,12 @@ private slots:
 
 void TestImageDivisionGUI::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 
     image320 = QImage(testDirPath + resourceNames[0]);
 
@@ -180,7 +182,7 @@ void TestImageDivisionGUI::test_constructor()
     }
 
     {
-        ImageDivisionGUI gui(new ImageDivisionMock(this));
+        ImageDivisionGUI const gui(new ImageDivisionMock(this));
 
         // 親ウィジェットが設定されていれば変更されないこと
         QCOMPARE_EQ(gui.imageDivision->parent(), this);

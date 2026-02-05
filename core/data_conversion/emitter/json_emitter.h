@@ -13,7 +13,7 @@ class TestJsonEmitter;
 class JsonEmitter : BasicEmitter
 {
 public:
-    JsonEmitter() {}
+    JsonEmitter() = default;
 
     /**
      * @brief データを文字列に変換する

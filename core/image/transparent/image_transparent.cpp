@@ -2,6 +2,8 @@
 
 #include <QVector3D>
 
+#include <array>
+
 const QString ImageTransparent::expectedColorSpec = QString("available colorSpec values=%1");
 const QString ImageTransparent::expectedImageFormat =
     QString("image format=%1(QImage::Format_RGBA8888)").arg(QImage::Format_RGBA8888);
@@ -33,8 +35,9 @@ void ImageTransparent::fetchOriginal()
 
 void ImageTransparent::addTransparentColor(const QColor &targetColor)
 {
-    if (current().isNull())
+    if (current().isNull()) {
         return;
+    }
 
     if (targetColor.spec() != colorSpec) {
         // 色空間を揃える
@@ -50,18 +53,19 @@ void ImageTransparent::addTransparentColor(const QColor &targetColor)
     color_comp_function_type const comparison = colorComparisonFunction(colorSpec);
 
     const double toleranceSquaredx3 = maxColorDiffSquared(colorSpec) * tolerance * tolerance;
-    for (unsigned int y = 0; y < current().height(); y++) {
+    for (int y = 0; y < current().height(); y++) {
         // NOTE: [公式ドキュメント](https://doc.qt.io/qt-6/qimage.html#scanLine)では
         //       reinterpret_cast<QRgb*>を使っているが、これが使えるかどうかはフォーマット次第のはず
         uchar *const line = _current.scanLine(y);
-        for (unsigned int x = 0; x < current().width(); x++) {
-            uchar *const pixel = line + bytesPerPixel * x;
+        for (int x = 0; x < current().width(); x++) {
+            uchar *const pixel = line + static_cast<size_t>(bytesPerPixel * x);
             const uchar r = pixel[0];
             const uchar g = pixel[1];
             const uchar b = pixel[2];
 
-            if (comparison(QColor(r, g, b), targetColor) <= toleranceSquaredx3)
+            if (comparison(QColor(r, g, b), targetColor) <= toleranceSquaredx3) {
                 pixel[3] = opacity;
+            }
         }
     }
 
@@ -69,15 +73,18 @@ void ImageTransparent::addTransparentColor(const QColor &targetColor)
     setOutdated();
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 void ImageTransparent::addTransparentPixel(const QPoint &start)
 {
-    if (current().isNull())
+    if (current().isNull()) {
         return;
+    }
 
-    if (!current().valid(start))
+    if (!current().valid(start)) {
         throw InvalidArgumentException<QString>(
             QString("start=(%1, %2)").arg(start.x()).arg(start.y()),
             pixelOutOfImage.arg(current().width()).arg(current().height()));
+    }
 
     // 色空間を揃える
     const QColor targetColor = QColor(current().pixelColor(start)).convertTo(colorSpec);
@@ -91,41 +98,44 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
 
     const double toleranceSquaredx3 = maxColorDiffSquared(colorSpec) * tolerance * tolerance;
     // labelsとlookupを設定する。連続領域に同じラベルを設定する。
-    QList<int> labels(current().width() * current().height(), 0);
+    QList<int> labels(static_cast<qsizetype>(current().width()) * current().height(), 0);
     QMap<int, int> lookup;
     uchar *const data = _current.bits();
     int nextLabel = 0;
 
-    const auto &pixelIndex = [=](int x, int y) {
-        if (x < 0 || current().width() <= x)
+    const auto &pixelIndex = [this](int x, int y) -> qsizetype {
+        if (x < 0 || current().width() <= x) {
             throw InvalidArgumentException<int>(
                 x, QString("x value must be in [0, %1)").arg(current().width()));
-        else if (y < 0 || current().height() <= y)
+        } else if (y < 0 || current().height() <= y) {
             throw InvalidArgumentException<int>(
                 y, QString("y value must be in [0, %1)").arg(current().height()));
+        }
 
-        return current().width() * y + x;
+        return (static_cast<qsizetype>(current().width()) * y) + x;
     };
 
-    for (unsigned int y = 0; y < current().height(); y++) {
-        for (unsigned int x = 0; x < current().width(); x++) {
-            const int currentPixelIndex = pixelIndex(x, y);
-            const int dataIndex = bytesPerPixel * currentPixelIndex;
+    for (int y = 0; y < current().height(); y++) {
+        for (int x = 0; x < current().width(); x++) {
+            const qsizetype currentPixelIndex = pixelIndex(x, y);
+            const qsizetype dataIndex = bytesPerPixel * currentPixelIndex;
 
             const uchar r = data[dataIndex];
             const uchar g = data[dataIndex + 1];
             const uchar b = data[dataIndex + 2];
 
             if (comparison(QColor(r, g, b), targetColor) <= toleranceSquaredx3) {
-                int refLabels[] = {
+                std::array<int, 2> refLabels = {{
                     0,
                     0,
-                };
+                }};
                 // 四近傍法を使う
-                if (0 < y)
+                if (0 < y) {
                     refLabels[0] = labels[pixelIndex(x, y - 1)];
-                if (0 < x)
+                }
+                if (0 < x) {
                     refLabels[1] = labels[pixelIndex(x - 1, y)];
+                }
 
                 if (refLabels[0] == 0 && refLabels[1] == 0) {
                     nextLabel++;
@@ -155,14 +165,15 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
     }
 
     // lookupをlabelsに適用する。lookupは空になる想定。
-    while (lookup.size()) {
+    while (static_cast<int>(!lookup.empty()) != 0) {
         const auto &it = std::prev(lookup.cend());
         const int from = it.key();
         const int to = it.value();
 
         for (int &label : labels) {
-            if (label == from)
+            if (label == from) {
                 label = to;
+            }
         }
 
         lookup.erase(it);
@@ -170,11 +181,12 @@ void ImageTransparent::addTransparentPixel(const QPoint &start)
 
     // labelsに基づき透明化する
     const int targetLabel = labels[pixelIndex(start.x(), start.y())];
-    for (unsigned int y = 0; y < current().height(); y++) {
-        for (unsigned int x = 0; x < current().width(); x++) {
-            const int currentPixelIndex = pixelIndex(x, y);
-            if (labels[currentPixelIndex] == targetLabel)
-                data[bytesPerPixel * currentPixelIndex + 3] = opacity;
+    for (int y = 0; y < current().height(); y++) {
+        for (int x = 0; x < current().width(); x++) {
+            const qsizetype currentPixelIndex = pixelIndex(x, y);
+            if (labels[currentPixelIndex] == targetLabel) {
+                data[static_cast<size_t>((bytesPerPixel * currentPixelIndex) + 3)] = opacity;
+            }
         }
     }
 
@@ -188,7 +200,7 @@ double ImageTransparent::colorDiffSquaredRgb(const QColor &a, const QColor &b)
     const double diffG = a.greenF() - b.greenF();
     const double diffB = a.blueF() - b.blueF();
 
-    return diffR * diffR + diffG * diffG + diffB * diffB;
+    return (diffR * diffR) + (diffG * diffG) + (diffB * diffB);
 }
 
 constexpr const double M_TAU = 2.0 * M_PI;
@@ -196,17 +208,21 @@ constexpr const double M_TAU = 2.0 * M_PI;
 double ImageTransparent::colorDiffSquaredHsv(const QColor &a, const QColor &b)
 {
     QVector3D va;
-    if (a.hsvHueF() < 0)
+    if (a.hsvHueF() < 0) {
         va = QVector3D(0, 0, a.valueF());
-    else
-        va = QVector3D(a.hsvSaturationF() * cos(M_TAU * a.hsvHueF()),
-                       a.hsvSaturationF() * sin(M_TAU * a.hsvHueF()), a.valueF());
+    } else {
+        va = QVector3D(static_cast<float>(a.hsvSaturationF() * cos(M_TAU * a.hsvHueF())),
+                       static_cast<float>(a.hsvSaturationF() * sin(M_TAU * a.hsvHueF())),
+                       a.valueF());
+    }
     QVector3D vb;
-    if (b.hsvHueF() < 0)
+    if (b.hsvHueF() < 0) {
         vb = QVector3D(0, 0, b.valueF());
-    else
-        vb = QVector3D(b.hsvSaturationF() * cos(M_TAU * b.hsvHueF()),
-                       b.hsvSaturationF() * sin(M_TAU * b.hsvHueF()), b.valueF());
+    } else {
+        vb = QVector3D(static_cast<float>(b.hsvSaturationF() * cos(M_TAU * b.hsvHueF())),
+                       static_cast<float>(b.hsvSaturationF() * sin(M_TAU * b.hsvHueF())),
+                       b.valueF());
+    }
 
     return (vb - va).lengthSquared();
 }
@@ -214,17 +230,21 @@ double ImageTransparent::colorDiffSquaredHsv(const QColor &a, const QColor &b)
 double ImageTransparent::colorDiffSquaredHsl(const QColor &a, const QColor &b)
 {
     QVector3D va;
-    if (a.hslHueF() < 0)
+    if (a.hslHueF() < 0) {
         va = QVector3D(0, 0, a.lightnessF());
-    else
-        va = QVector3D(a.hslSaturationF() * cos(M_TAU * a.hslHueF()),
-                       a.hslSaturationF() * sin(M_TAU * a.hslHueF()), a.lightnessF());
+    } else {
+        va = QVector3D(static_cast<float>(a.hslSaturationF() * cos(M_TAU * a.hslHueF())),
+                       static_cast<float>(a.hslSaturationF() * sin(M_TAU * a.hslHueF())),
+                       a.lightnessF());
+    }
     QVector3D vb;
-    if (b.hslHueF() < 0)
+    if (b.hslHueF() < 0) {
         vb = QVector3D(0, 0, b.lightnessF());
-    else
-        vb = QVector3D(b.hslSaturationF() * cos(M_TAU * b.hslHueF()),
-                       b.hslSaturationF() * sin(M_TAU * b.hslHueF()), b.lightnessF());
+    } else {
+        vb = QVector3D(static_cast<float>(b.hslSaturationF() * cos(M_TAU * b.hslHueF())),
+                       static_cast<float>(b.hslSaturationF() * sin(M_TAU * b.hslHueF())),
+                       b.lightnessF());
+    }
 
     return (vb - va).lengthSquared();
 }
@@ -280,7 +300,8 @@ void ImageTransparent::validateColorSpec(QColor::Spec colorSpec) noexcept(false)
         QColor::Hsl,
     };
     QStringList strings(avaliableColorSpecList.size());
-    for (int i : avaliableColorSpecList)
+    for (int const i : avaliableColorSpecList) {
         strings.append(QString::number(i));
+    }
     throw InvalidArgumentException<int>(colorSpec, expectedColorSpec.arg(strings.join(',')));
 }

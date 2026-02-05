@@ -5,7 +5,7 @@
 #include "main_window.h"
 
 #include <QApplication>
-#include <QtSystemDetection>
+#include <QtGlobal>
 
 #include <memory>
 
@@ -32,7 +32,7 @@ public:
      * @brief 現在の言語
      * @return 現在の言語。言語に依るかも知れないが、ja_JPのような形式。
      */
-    inline QString language() { return translator().language(); }
+    QString language() { return translator().language(); }
 
     /**
      * @brief 言語を変更する
@@ -44,7 +44,7 @@ public:
     /**
      * @brief システムのカラースキームを適用する
      */
-    void applySystemColorScheme();
+    static void applySystemColorScheme();
 
     void setup() override;
     int start() override;
@@ -68,21 +68,18 @@ private:
      * @sa [Freedesktop The icon theme
      * specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html)
      */
-    void applyColorScheme();
+    static void applyColorScheme();
 
-private slots:
-    // NOTE: staticにできる
     /**
-     * @brief カラースキームが変更された時に呼び出される
-     * @details MainWindow::colorSchemeChanged() と接続される
-     *
-     * @sa GuiApplication::GuiApplication(int argc, char **argv)
+     * @brief カラースキームが変更された時に呼ばれる
+     * @details MainWindow::colorSchemeChanged() と接続されている
+     * @sa GuiApplication::GuiApplication(int argc, char *argv)
      */
-    void onWindowColorSchemeChanged();
+    static void onWindowColorSchemeChanged();
 
 // Platform specific
 #ifdef Q_OS_MACOS
-private:
+
     /**
      * @brief イベント処理
      * @details
@@ -91,11 +88,7 @@ private:
      *
      * @sa MainWindow::closeEvent(QCloseEvent *event)
      */
-    bool event(QEvent *) override;
-/*
-private slots:
-    void onApplicationStateChanged(Qt::ApplicationState state);
-*/
+    bool event(QEvent *event) override;
 #endif
 };
 

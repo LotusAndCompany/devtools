@@ -40,7 +40,7 @@ void ContentsArea::changeEvent(QEvent *event)
         event->accept();
         break;
     default:
-        QWidget::changeEvent(event);
+        QFrame::changeEvent(event);
         break;
     }
 }
@@ -52,7 +52,7 @@ void ContentsArea::onSidemenuItemChanged(Sidemenu::ID id)
 
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
-    if (currentContent) {
+    if (currentContent != nullptr) {
         ui->contentsAreaLayout->removeWidget(currentContent);
         // DBツールはキャッシュするので削除しない
         if (currentContent != cachedDbMain) {
@@ -95,7 +95,7 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::DB_TOOL:
         // DBツールはキャッシュして状態を保持
-        if (!cachedDbMain) {
+        if (cachedDbMain == nullptr) {
             cachedDbMain = new dbMain(this);
         }
         content = cachedDbMain;
@@ -107,7 +107,7 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
         content = new QLabel("Under development...", this);
-        static_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
+        dynamic_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
         break;
     }
 

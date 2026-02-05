@@ -7,6 +7,8 @@
 #include <QClipboard>
 #include <QMessageBox>
 
+#include <algorithm>
+
 Command::Command(QWidget *parent) : QGroupBox(parent), ui(new Ui::Command)
 {
     ui->setupUi(this);
@@ -212,7 +214,7 @@ void Command::selectedCategory()
     switch (selectedIndex) {
     case 1:
         commandList = getGitCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -223,7 +225,7 @@ void Command::selectedCategory()
         break;
     case 2:
         commandList = getDockerCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -234,7 +236,7 @@ void Command::selectedCategory()
         break;
     case 3:
         commandList = getDockerComposeCommands();
-        for (const CommandFunction &cmd : commandList) {
+        for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
         ui->functionsList->addItems(commandNames);
@@ -277,11 +279,12 @@ void Command::selectedFunction()
         break;
     }
 
-    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size())
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
         return;
-    QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
+    }
+    QList<CommandOption> const optionList = commandList[selectedFunctionsIndex].getOptions();
 
-    if (optionList.length()) {
+    if (static_cast<int>(!optionList.empty()) != 0) {
         ui->label->setVisible(false);
         ui->textEdit->setVisible(false);
         // display optionsList
@@ -318,14 +321,16 @@ void Command::selectedOption()
     default:
         break;
     }
-    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size())
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
         return;
+    }
 
     QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
-    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size())
+    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size()) {
         return;
+    }
 
-    CommandOption option = optionList[selectedOptionIndex];
+    const CommandOption &option = optionList[selectedOptionIndex];
 
     if (option.isRequired()) {
         ui->label->setText(option.getTitle());
@@ -377,8 +382,9 @@ void Command::clear()
  */
 bool containsNoQuotes(const QString &str)
 {
-    QString quotes = "\"'`";
+    QString const quotes = "\"'`";
 
+    // NOLINTNEXTLINE(readability-use-anyofallof)
     for (const QChar &quote : quotes) {
         if (str.contains(quote)) {
             return false;
@@ -412,14 +418,16 @@ void Command::generate()
     default:
         break;
     }
-    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size())
+    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
         return;
+    }
 
     QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
-    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size())
+    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size()) {
         return;
+    }
 
-    CommandOption option = optionList[selectedOptionIndex];
+    const CommandOption &option = optionList[selectedOptionIndex];
 
     const QString value1 = ui->textEdit->text();
 
@@ -452,12 +460,10 @@ void Command::copy()
 void Command::adjustCommandBoxWidth()
 {
     int maxWidth = 0;
-    QFontMetrics fontMetrics(ui->functionsList->font());
+    QFontMetrics const fontMetrics(ui->functionsList->font());
     for (int i = 0; i < ui->functionsList->count(); ++i) {
-        int width = fontMetrics.horizontalAdvance(ui->functionsList->itemText(i));
-        if (width > maxWidth) {
-            maxWidth = width;
-        }
+        int const width = fontMetrics.horizontalAdvance(ui->functionsList->itemText(i));
+        maxWidth = std::max(width, maxWidth);
     }
     ui->functionsList->setMinimumWidth(maxWidth + 40);
 }

@@ -13,7 +13,11 @@ class WelcomePage : public QWidget
 
 public:
     explicit WelcomePage(QWidget *parent = nullptr);
-    ~WelcomePage();
+    ~WelcomePage() override;
+    WelcomePage(const WelcomePage &) = delete;
+    WelcomePage &operator=(const WelcomePage &) = delete;
+    WelcomePage(WelcomePage &&) = delete;
+    WelcomePage &operator=(WelcomePage &&) = delete;
 
 protected:
     void changeEvent(QEvent *event) override;

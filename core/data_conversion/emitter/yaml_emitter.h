@@ -17,7 +17,7 @@ class TestYamlEmitter;
 class YamlEmitter : BasicEmitter
 {
 public:
-    YamlEmitter() {}
+    YamlEmitter() = default;
 
     /**
      * @brief データを文字列に変換する
