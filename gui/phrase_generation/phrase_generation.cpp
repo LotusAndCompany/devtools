@@ -24,7 +24,7 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent), ui(new Ui
     connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this,
             &phraseGeneration::handleTitleTreeWidgetItemClick);
 
-    QGridLayout *gridLayout = new QGridLayout(this);
+    auto *gridLayout = new QGridLayout(this);
 
     gridLayout->addWidget(ui->templateTitle, 0, 0, 1, 2);
     gridLayout->addWidget(ui->deleteButton, 0, 2, 1, 1);
@@ -49,9 +49,9 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent), ui(new Ui
     ui->titleTreeWidget->setColumnWidth(1, 40);
 
     // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
-    QPalette palette = this->palette();
-    QColor baseColor = palette.color(QPalette::Base);
-    QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
+    QPalette const palette = this->palette();
+    QColor const baseColor = palette.color(QPalette::Base);
+    QColor const borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
     ui->titleTreeWidget->setStyleSheet(
         QString("QTreeWidget::item { border-bottom: 1px solid %1; }"
                 "QTreeWidget::item:selected { background-color: #0078d7; color: "
@@ -71,14 +71,14 @@ phraseGeneration::~phraseGeneration()
 void phraseGeneration::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::PaletteChange) {
-        QPalette palette = this->palette();
+        QPalette const palette = this->palette();
         QPalette templateTextPalette = ui->templateText->palette();
         templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
         ui->templateText->setPalette(templateTextPalette);
 
         // ダークモードかライトモードか判定
-        QColor baseColor = palette.color(QPalette::Base);
-        QColor borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
+        QColor const baseColor = palette.color(QPalette::Base);
+        QColor const borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
 
         // QTreeWidget のスタイルを更新
         ui->titleTreeWidget->setStyleSheet(
@@ -93,19 +93,20 @@ void phraseGeneration::changeEvent(QEvent *event)
 void phraseGeneration::loadTitles()
 {
     ui->titleTreeWidget->clear();
-    QDir directory("content");
-    QStringList files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    QDir const directory("content");
+    QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
-        QString content = loadContent(filename, &title);
+        QString const content = loadContent(filename, &title);
 
-        QTreeWidgetItem *item = new QTreeWidgetItem(ui->titleTreeWidget);
+        auto *item = new QTreeWidgetItem(ui->titleTreeWidget);
         item->setText(0, title);
 
         // UUIDをユーザーデータとして保持
         item->setData(0, Qt::UserRole, filename);
 
-        QPushButton *copyButton = new QPushButton(tr("Copy"), ui->titleTreeWidget);
+        auto *copyButton = new QPushButton(tr("Copy"), ui->titleTreeWidget);
         connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
 
         ui->titleTreeWidget->setItemWidget(item, 1, copyButton);
@@ -117,7 +118,7 @@ QString phraseGeneration::loadContent(const QString &filename, QString *title)
     QFile file("content/" + filename);
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
-        if (title) {
+        if (title != nullptr) {
             *title = in.readLine();
         }
         return in.readAll();
@@ -134,8 +135,8 @@ void phraseGeneration::handleAddButtonClick()
 
 void phraseGeneration::handleSaveButtonClick()
 {
-    QString title = ui->templateTitle->text();
-    QString content = ui->templateText->toPlainText();
+    QString const title = ui->templateTitle->text();
+    QString const content = ui->templateText->toPlainText();
 
     if (title.isEmpty()) {
         QMessageBox::warning(this, "Warning", "Title cannot be empty.");
@@ -163,9 +164,9 @@ void phraseGeneration::saveContent(const QString &title, const QString &content)
     QDir().mkpath("content");
 
     // UUIDを生成
-    QString uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    QString const uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
     // UUIDでファイルを一意化
-    QString filename = uuid + ".txt";
+    QString const filename = uuid + ".txt";
     QFile file("content/" + filename);
 
     if (file.open(QIODevice::WriteOnly)) {
@@ -178,20 +179,20 @@ void phraseGeneration::saveContent(const QString &title, const QString &content)
 void phraseGeneration::handleCopyButtonClick()
 {
     QClipboard *clipboard = QApplication::clipboard();
-    QString content = ui->templateText->toPlainText();
+    QString const content = ui->templateText->toPlainText();
     clipboard->setText(content);
     QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
 
 void phraseGeneration::handleDeleteButtonClick()
 {
-    QTreeWidgetItem *item = ui->titleTreeWidget->currentItem();
-    if (!item) {
+    QTreeWidgetItem const *item = ui->titleTreeWidget->currentItem();
+    if (item == nullptr) {
         QMessageBox::warning(this, "Warning", "No title selected.");
         return;
     }
 
-    QString filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item->data(0, Qt::UserRole).toString();
     deleteContent(filename);
     loadTitles();
     ui->templateTitle->clear();
@@ -208,30 +209,35 @@ void phraseGeneration::deleteContent(const QString &filename)
 
 void phraseGeneration::handleToggleTreeButtonClick()
 {
-    bool isVisible = ui->titleTreeWidget->isVisible();
+    bool const isVisible = ui->titleTreeWidget->isVisible();
     ui->titleTreeWidget->setVisible(!isVisible);
+
+    auto *grid = qobject_cast<QGridLayout *>(this->layout());
+    if (grid == nullptr) {
+        return;
+    }
 
     // ボタンのテキストを切り替える
     if (ui->titleTreeWidget->isVisible()) {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
         this->layout()->removeWidget(ui->templateText);
-        static_cast<QGridLayout *>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 5);
+        grid->addWidget(ui->templateText, 2, 0, 7, 5);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout *>(this->layout())->addWidget(ui->saveButton, 8, 4, 1, 1);
+        grid->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("menu"));
         this->layout()->removeWidget(ui->templateText);
-        static_cast<QGridLayout *>(this->layout())->addWidget(ui->templateText, 2, 0, 7, 7);
+        grid->addWidget(ui->templateText, 2, 0, 7, 7);
         this->layout()->removeWidget(ui->saveButton);
-        static_cast<QGridLayout *>(this->layout())->addWidget(ui->saveButton, 8, 5, 1, 1);
+        grid->addWidget(ui->saveButton, 8, 5, 1, 1);
     }
 }
 
-void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column)
+void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int /*column*/)
 {
-    QString filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item->data(0, Qt::UserRole).toString();
     QString title;
-    QString content = loadContent(filename, &title);
+    QString const content = loadContent(filename, &title);
 
     ui->templateTitle->setText(title);
     ui->templateText->setPlainText(content);
@@ -241,12 +247,13 @@ void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int
 
 void phraseGeneration::copyContent()
 {
-    QPushButton *button = qobject_cast<QPushButton *>(sender());
-    if (!button)
+    auto const *button = qobject_cast<QPushButton *>(sender());
+    if (button == nullptr) {
         return;
+    }
 
     // ボタンから直接アイテムを取得
-    QTreeWidgetItem *item = nullptr;
+    QTreeWidgetItem const *item = nullptr;
     for (int i = 0; i < ui->titleTreeWidget->topLevelItemCount(); ++i) {
         QTreeWidgetItem *currentItem = ui->titleTreeWidget->topLevelItem(i);
         if (ui->titleTreeWidget->itemWidget(currentItem, 1) == button) {
@@ -255,12 +262,12 @@ void phraseGeneration::copyContent()
         }
     }
 
-    if (!item) {
+    if (item == nullptr) {
         QMessageBox::warning(this, "Error", "Unable to find the corresponding item.");
         return;
     }
 
-    QString filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item->data(0, Qt::UserRole).toString();
 
     QString title;
     // 本文のみ取得

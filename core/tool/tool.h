@@ -21,10 +21,13 @@ class Tool : public QObject
 public:
     Tool() = delete;
     Tool(const Tool &) = delete;
+    Tool(Tool &&) = delete;
+    Tool &operator=(const Tool &) = delete;
+    Tool &operator=(Tool &&) = delete;
     /**
      * @brief デストラクタ
      */
-    virtual ~Tool() = default;
+    ~Tool() override = default;
 
     /**
      * @brief ツールのID
@@ -34,7 +37,7 @@ public:
      *
      * @sa Sidemenu::ID
      */
-    enum class ID {
+    enum class ID : uint8_t {
         MIN,              ///< 最小値
         TOOL_ID_FIELDS(), // ここに展開する
         MAX,              ///< 最大値
@@ -42,7 +45,7 @@ public:
     /**
      * @brief ツールの文字列ID 各ツールに分かりやすい一意な文字列を設定する
      */
-    const QString stringID;
+    const QString stringID; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief 翻訳が必要な情報を格納する構造体
@@ -67,12 +70,12 @@ public:
      * @param id ツールID
      * @return 指定されたツールIDの情報
      */
-    static const Translatable translatable(ID id) noexcept(false);
+    static Translatable translatable(ID id) noexcept(false);
     /**
      * @brief このインスタンスの情報を返す
      * @return このインスタンスの情報
      */
-    const Translatable &translatable() const { return _translatable; }
+    [[nodiscard]] const Translatable &translatable() const { return _translatable; }
 
 protected:
     /**
@@ -88,7 +91,7 @@ protected:
      * @param stringID ツールの文字列ID
      * @param parent 親オブジェクト
      */
-    explicit Tool(ID id, const QString &stringID, QObject *parent = nullptr) noexcept(false);
+    explicit Tool(ID id, QString stringID, QObject *parent = nullptr) noexcept(false);
 
     /// ツールIDが無効
     static const QString invalidToolIDReason;
@@ -109,7 +112,7 @@ protected:
      * @param event 発生したイベント
      * @return 処理した場合は`true`、無視した場合は`false`
      */
-    virtual bool event(QEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     /// ツールのID。現状使う予定がないため非公開にする。

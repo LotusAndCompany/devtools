@@ -18,13 +18,13 @@ class TestColorSample : public QObject
 
 private slots:
     // Test cases:
-    void test_constructor();
+    static void test_constructor();
     void test_setColor();
 };
 
 void TestColorSample::test_constructor()
 {
-    ColorSample gui;
+    ColorSample const gui;
 
     // 枠のスタイルがQFrame::Panel | QFrame::Raisedであること
     QCOMPARE_EQ(gui.frameStyle(), QFrame::Panel | QFrame::Raised);

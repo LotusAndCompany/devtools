@@ -40,7 +40,7 @@ public:
     {
         return mock_overwriteSave(path, format, quality);
     }
-    const QFileInfo &fileInfo(unsigned int index = 0) const override
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int index = 0) const override
     {
         return mock_fileInfo(index);
     }
@@ -48,10 +48,10 @@ public:
     void rotateDegrees(double deg) override { mock_rotateDegrees(deg); }
     void flipHorizontal() override { mock_flipHorizontal(); }
     void flipVertical() override { mock_flipVertical(); }
-    const QImage &original() const override { return mock_original(); }
+    [[nodiscard]] const QImage &original() const override { return mock_original(); }
     void setSmoothTransformationEnabled(bool value = true) override
     {
-        return mock_setSmoothTransformationEnabled(value);
+        mock_setSmoothTransformationEnabled(value);
     }
 
 protected:
@@ -79,13 +79,13 @@ class TestImageRotationGUI : public QObject
 private slots:
     void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void init();            // will be called before each test function is executed.
+    static void init();     // will be called before each test function is executed.
 
     // Test cases:
     void test_constructor();
-    void test_onLoadImageSelected();
-    void test_onSaveImageSelected();
-    void test_onResetButtonClicked();
+    static void test_onLoadImageSelected();
+    static void test_onSaveImageSelected();
+    static void test_onResetButtonClicked();
     void test_onRotateRightButtonClicked();
     void test_onRotateLeftButtonClicked();
     void test_onFlipHorizontalButtonClicked();
@@ -94,11 +94,12 @@ private slots:
 
 void TestImageRotationGUI::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 
     image320 = QImage(testDirPath + resourceNames[0]);
 
@@ -136,7 +137,7 @@ void TestImageRotationGUI::test_constructor()
     }
 
     {
-        ImageRotationGUI gui(new ImageRotationMock(this));
+        ImageRotationGUI const gui(new ImageRotationMock(this));
 
         // 親オブジェクトが設定されている場合はそれが変わらないこと
         QCOMPARE_EQ(gui.imageRotation->parent(), this);

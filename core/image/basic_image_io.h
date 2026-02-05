@@ -23,6 +23,12 @@ class TestImageIO;
  */
 class ImageIO
 {
+public:
+    ImageIO(const ImageIO &) = delete;
+    ImageIO(ImageIO &&) = delete;
+    ImageIO &operator=(const ImageIO &) = delete;
+    ImageIO &operator=(ImageIO &&) = delete;
+
 protected:
     /**
      * @brief コンストラクタ
@@ -52,13 +58,14 @@ protected:
      * @return 成功なら`true`
      */
     template <typename QImageType>
-    static inline bool overwriteSave(const QString &path, const QImageType &image,
-                                     const char *format = nullptr, int quality = -1)
+    static bool overwriteSave(const QString &path, const QImageType &image,
+                              const char *format = nullptr, int quality = -1)
     {
-        if (image.isNull())
+        if (image.isNull()) {
             return false;
-        else
+        } else {
             return image.save(path, format, quality);
+        }
     }
     /**
      * @brief 画像を保存する。上書きはせず、既にファイルが存在する場合は失敗する。
@@ -73,25 +80,26 @@ protected:
      * @return 成功なら`true`
      */
     template <typename QImageType>
-    static inline bool save(const QString &path, const QImageType &image,
-                            const char *format = nullptr, int quality = -1)
+    static bool save(const QString &path, const QImageType &image, const char *format = nullptr,
+                     int quality = -1)
     {
-        if (image.isNull() || QFileInfo::exists(path))
+        if (image.isNull() || QFileInfo::exists(path)) {
             return false;
-        else
+        } else {
             return image.save(path, format, quality);
+        }
     }
 
     /**
      * @brief 現在読み込まれている画像を返す
      * @return  現在読み込まれている画像
      */
-    inline const QImage &original() const { return _original; }
+    [[nodiscard]] const QImage &original() const { return _original; }
     /**
      * @brief 現在読み込まれている画像のファイル情報を返す
      * @return 現在読み込まれている画像のファイル情報
      */
-    inline const QFileInfo &originalFileInfo() const { return _fileInfo; }
+    [[nodiscard]] const QFileInfo &originalFileInfo() const { return _fileInfo; }
 
 private:
     /// 読み込んだ画像

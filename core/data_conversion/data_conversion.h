@@ -22,13 +22,17 @@ class DataConversionInterface : public Tool
 
 public:
     /// デストラクタ
-    virtual ~DataConversionInterface() = default;
+    DataConversionInterface(const DataConversionInterface &) = delete;
+    DataConversionInterface(DataConversionInterface &&) = delete;
+    DataConversionInterface &operator=(const DataConversionInterface &) = delete;
+    DataConversionInterface &operator=(DataConversionInterface &&) = delete;
+    ~DataConversionInterface() override = default;
 
     /**
      * @brief 入力文字列を返す
      * @return 入力文字列
      */
-    const QString &inputText() const { return _inputText; }
+    [[nodiscard]] const QString &inputText() const { return _inputText; }
     /**
      * @brief 入力文字列を設定する
      * @param inputText 設定する文字列
@@ -38,7 +42,7 @@ public:
      * @brief 出力文字列を返す
      * @return 出力文字列
      */
-    const QString &outputText() const { return _outputText; }
+    [[nodiscard]] const QString &outputText() const { return _outputText; }
     /**
      * @brief ファイルを読み込む
      * @param path 読み込むファイルパス
@@ -51,10 +55,10 @@ public:
      * @param overwrite `true` なら上書き
      * @return 成功なら `true`
      */
-    virtual bool save(const QString &path, bool overwrite = false) const = 0;
+    [[nodiscard]] virtual bool save(const QString &path, bool overwrite = false) const = 0;
 
     /// 出力形式を定義した列挙体
-    enum class Format {
+    enum class Format : uint8_t {
         MIN,        ///< 最小値
         UNKNOWN,    ///< 不明/未指定
         JSON,       ///< JSON
@@ -64,6 +68,7 @@ public:
         ERROR,      ///< 不正なフォーマット
         MAX,        ///< 最大値
     };
+    ;
     /**
      * @brief 出力形式を設定する
      * @param format 出力形式
@@ -73,10 +78,10 @@ public:
      * @brief 出力形式を返す
      * @return 出力形式
      */
-    Format outputFormat() const { return _outputFormat; }
+    [[nodiscard]] Format outputFormat() const { return _outputFormat; }
 
     /// 出力文字列のインデントを定義した列挙体
-    enum class Indentation {
+    enum class Indentation : uint8_t {
         MIN,      ///< 最小値
         SPACES_4, ///< 4スペースでインデント
         SPACES_2, ///< 2スペースでインデント
@@ -84,6 +89,7 @@ public:
         MINIFIED, ///< 最小化
         MAX,      ///< 最大値
     };
+    ;
     /**
      * @brief 出力時のインデントを設定する
      * @param indentation インデント
@@ -93,12 +99,12 @@ public:
      * @brief 出力時のインデントを返す
      * @return 出力時のインデント
      */
-    Indentation indentation() const { return _indentation; }
+    [[nodiscard]] Indentation indentation() const { return _indentation; }
 
     /// 現在の設定で出力文字列を更新する
     virtual void updateOutputText() = 0;
 
-    QString messages() const;
+    [[nodiscard]] QString messages() const;
 
 protected:
     /**
@@ -107,6 +113,7 @@ protected:
      */
     explicit DataConversionInterface(QObject *parent = nullptr);
 
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     /// 入力文字列
     QString _inputText;
     /// 出力文字列
@@ -117,6 +124,7 @@ protected:
     Indentation _indentation = Indentation::SPACES_4;
     /// エラーメッセージ等
     QStringList _messages;
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
      * @brief 出力形式が不正なら例外を投げる
@@ -149,12 +157,16 @@ public:
      * @param parent 親オブジェクト
      */
     explicit DataConversion(QObject *parent = nullptr);
+    DataConversion(const DataConversion &) = delete;
+    DataConversion(DataConversion &&) = delete;
+    DataConversion &operator=(const DataConversion &) = delete;
+    DataConversion &operator=(DataConversion &&) = delete;
     /// デストラクタ
-    ~DataConversion() = default;
+    ~DataConversion() override = default;
 
     void setInputText(const QString &inputText) override;
     bool load(const QString &path) override;
-    bool save(const QString &path, bool overwrite = false) const override;
+    [[nodiscard]] bool save(const QString &path, bool overwrite = false) const override;
     void setOutputFormat(Format format) override;
     void setIndentation(Indentation indentation) override;
     void updateOutputText() override;

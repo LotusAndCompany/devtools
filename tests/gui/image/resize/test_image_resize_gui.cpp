@@ -43,7 +43,10 @@ public:
     {
         return mock_overwriteSave(path, format, quality);
     }
-    const QFileInfo &fileInfo(unsigned int index) const override { return mock_fileInfo(index); }
+    [[nodiscard]] const QFileInfo &fileInfo(unsigned int index) const override
+    {
+        return mock_fileInfo(index);
+    }
 
     void setScale(double sx, double sy) noexcept(false) override { mock_setScale(sx, sy); }
     void setScaleX(double sx) noexcept(false) override { mock_setScaleX(sx); }
@@ -57,14 +60,14 @@ public:
     {
         mock_setHeight(h, keepAspectRatio);
     }
-    QSize computedSize() const override { return mock_computedSize(); }
-    double computedScaleX() const override { return mock_computedScaleX(); }
-    double computedScaleY() const override { return mock_computedScaleY(); }
+    [[nodiscard]] QSize computedSize() const override { return mock_computedSize(); }
+    [[nodiscard]] double computedScaleX() const override { return mock_computedScaleX(); }
+    [[nodiscard]] double computedScaleY() const override { return mock_computedScaleY(); }
     void setSmoothTransformationEnabled(bool value) override
     {
         mock_setSmoothTransformationEnabled(value);
     }
-    const QImage &original() const override { return mock_original(); }
+    [[nodiscard]] const QImage &original() const override { return mock_original(); }
 
 protected:
     bool loadImpl(const QString &path) override { return mock_loadImpl(path); }
@@ -93,29 +96,30 @@ class TestImageResizeGUI : public QObject
 private slots:
     void initTestCase();    // will be called before the first test function is executed.
     void cleanupTestCase(); // will be called after the last test function was executed.
-    void init();            // will be called before each test function is executed.
+    static void init();     // will be called before each test function is executed.
 
     // Test cases:
     void test_constructor();
-    void test_onLoadImageSelected();
-    void test_onSaveImageSelected();
-    void test_onResetButtonClicked();
+    static void test_onLoadImageSelected();
+    static void test_onSaveImageSelected();
+    static void test_onResetButtonClicked();
     void test_onWidthValueChanged();
     void test_onHeightValueChanged();
     void test_onHScaleValueChanged();
     void test_onVScaleValueChanged();
-    void test_onKeepAspectRatioChanged();
-    void test_onSmoothTransformationChanged();
+    static void test_onKeepAspectRatioChanged();
+    static void test_onSmoothTransformationChanged();
     void test_updateUIValues();
 };
 
 void TestImageResizeGUI::initTestCase()
 {
-    QDir dir(TEST_BIN_DIR);
+    QDir const dir(TEST_BIN_DIR);
     dir.mkpath(testDirName);
 
-    for (const QString &src : resourceNames)
+    for (const QString &src : resourceNames) {
         QFile::copy(TEST_SRC_DIR + "/core/image/" + src, testDirPath + src);
+    }
 
     image320 = QImage(testDirPath + resourceNames[0]);
 
@@ -175,7 +179,7 @@ void TestImageResizeGUI::test_constructor()
     }*/
 
     {
-        ImageResizeGUI gui(new ImageResizeMock(this));
+        ImageResizeGUI const gui(new ImageResizeMock(this));
 
         // 親オブジェクトが設定されている場合はそれが変わらないこと
         QCOMPARE_EQ(gui.imageResize->parent(), this);

@@ -15,8 +15,8 @@ class TestBasicParser : public QObject
 
 private slots:
     // test cases
-    void test_ParseResult();
-    void test_operator_bool();
+    static void test_ParseResult();
+    static void test_operator_bool();
 };
 
 void TestBasicParser::test_ParseResult()

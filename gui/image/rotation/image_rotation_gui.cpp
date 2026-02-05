@@ -11,8 +11,9 @@ ImageRotationGUI::ImageRotationGUI(ImageRotationInterface *imageRotation, QWidge
     ui->setupUi(this);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
-    if (imageRotation->parent() == nullptr)
+    if (imageRotation->parent() == nullptr) {
         imageRotation->setParent(this);
+    }
 
     connect(ui->basicImageViewControl, &BasicImageViewControl::loadFileSelected, this,
             &ImageRotationGUI::onLoadImageSelected);
@@ -40,7 +41,7 @@ void ImageRotationGUI::onLoadImageSelected(const QString &path)
 {
     qDebug() << "path:" << path;
 
-    bool result = imageRotation->load(path);
+    imageRotation->load(path);
     imageRotation->update();
 
     ui->imageView->setPixmap(QPixmap::fromImage(imageRotation->current()), true);
@@ -66,8 +67,9 @@ void ImageRotationGUI::onResetButtonClicked()
 
 void ImageRotationGUI::onRotateRightButtonClicked()
 {
-    if (imageRotation->original().isNull())
+    if (imageRotation->original().isNull()) {
         return;
+    }
 
     imageRotation->rotateDegrees(-90);
     imageRotation->update();
@@ -77,8 +79,9 @@ void ImageRotationGUI::onRotateRightButtonClicked()
 
 void ImageRotationGUI::onRotateLeftButtonClicked()
 {
-    if (imageRotation->original().isNull())
+    if (imageRotation->original().isNull()) {
         return;
+    }
 
     imageRotation->rotateDegrees(90);
     imageRotation->update();
@@ -88,8 +91,9 @@ void ImageRotationGUI::onRotateLeftButtonClicked()
 
 void ImageRotationGUI::onFlipHorizontalButtonClicked()
 {
-    if (imageRotation->original().isNull())
+    if (imageRotation->original().isNull()) {
         return;
+    }
 
     imageRotation->flipHorizontal();
     imageRotation->update();
@@ -99,8 +103,9 @@ void ImageRotationGUI::onFlipHorizontalButtonClicked()
 
 void ImageRotationGUI::onFlipVerticalButtonClicked()
 {
-    if (imageRotation->original().isNull())
+    if (imageRotation->original().isNull()) {
         return;
+    }
 
     imageRotation->flipVertical();
     imageRotation->update();

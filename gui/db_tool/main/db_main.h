@@ -20,7 +20,11 @@ class dbMain : public QWidget
 
 public:
     explicit dbMain(QWidget *parent = nullptr);
-    ~dbMain();
+    ~dbMain() override;
+    dbMain(const dbMain &) = delete;
+    dbMain &operator=(const dbMain &) = delete;
+    dbMain(dbMain &&) = delete;
+    dbMain &operator=(dbMain &&) = delete;
 
 private:
     Ui::dbMain *ui;
@@ -35,7 +39,7 @@ private:
     void populateTableList();
     void showConnectionSelector();
     void openNewConnectionWindow();
-    void saveConnectionHistory(const QJsonObject &connectionInfo);
+    static void saveConnectionHistory(const QJsonObject &connectionInfo);
 
 protected:
     void changeEvent(QEvent *event) override;

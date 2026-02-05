@@ -16,7 +16,7 @@ BasicImageView::BasicImageView(QWidget *parent) : QWidget(parent), ui(new Ui::Ba
     ui->scalingUI->raise();
 
     // NOTE: 少しだけ透明にする
-    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui->zoomInButton);
+    auto *opacityEffect = new QGraphicsOpacityEffect(ui->zoomInButton);
     opacityEffect->setOpacity(0.8);
     ui->zoomInButton->setGraphicsEffect(opacityEffect);
 
@@ -38,10 +38,11 @@ void BasicImageView::setPixmap(const QPixmap &pixmap, bool reset)
 {
     original = pixmap;
 
-    if (reset)
+    if (reset) {
         updateScale(1.0);
-    else
+    } else {
         updateScale(scale);
+    }
 }
 
 void BasicImageView::resizeEvent(QResizeEvent *event)
@@ -74,20 +75,23 @@ void BasicImageView::dropEvent(QDropEvent *event)
 
 void BasicImageView::onZoomInButtonPressed()
 {
-    if (!original.isNull())
+    if (!original.isNull()) {
         zoomIn();
+    }
 }
 
 void BasicImageView::onZoomOutButtonPressed()
 {
-    if (!original.isNull())
+    if (!original.isNull()) {
         zoomOut();
+    }
 }
 
 void BasicImageView::zoomIn()
 {
-    if (scale == maxScale)
+    if (scale == maxScale) {
         return;
+    }
 
     // NOTE: 底が2, e, 10の時はそれぞれlog2(), log(), log10()に置き換えられる
     const double logScale = log(scale) / log(scaleBase);
@@ -99,8 +103,9 @@ void BasicImageView::zoomIn()
 
 void BasicImageView::zoomOut()
 {
-    if (scale == minScale)
+    if (scale == minScale) {
         return;
+    }
 
     // NOTE: 底が2, e, 10の時はそれぞれlog2(), log(), log10()に置き換えられる
     const double logScale = log(scale) / log(scaleBase);
@@ -120,8 +125,9 @@ void BasicImageView::updateScale(double newScale)
     // https://doc.qt.io/qt-6/qlocale.html#toString-8
     ui->scaleLabel->setText('x' + QString::number(scale, 'g', 2));
 
-    if (!original.isNull())
+    if (!original.isNull()) {
         ui->image->setPixmap(original.scaled(original.size() * scale));
-    else
+    } else {
         ui->image->setText(tr("No Image"));
+    }
 }

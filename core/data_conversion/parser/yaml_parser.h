@@ -22,7 +22,7 @@ public:
     /// YAMLスタイルを格納するためのキー。extrasで使う
     static const QString EXTRAS_YAML_STYLE;
 
-    ParseResult tryParse(const QString &src) const override;
+    [[nodiscard]] ParseResult tryParse(const QString &src) const override;
 
 private:
     /**

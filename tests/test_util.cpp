@@ -15,8 +15,9 @@ bool isEqaulApprox(double a, double b, double errorRatio)
         return false;
     }
 
-    if (a == b)
+    if (a == b) {
         return true;
+    }
 
     if (a == 0.0 || b == 0.0) {
         qWarning() << "a or b appears to be 0. use errorRatio as absolute tolerance value";
@@ -26,8 +27,9 @@ bool isEqaulApprox(double a, double b, double errorRatio)
     const double r = abs(a / b) - 1.0;
     const bool result = (-errorRatio <= r && r <= errorRatio);
 
-    if (!result)
+    if (!result) {
         qWarning() << "a=" << a << ", b=" << b << ", r=" << r;
+    }
 
     return result;
 }
