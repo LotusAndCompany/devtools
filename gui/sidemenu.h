@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QWidget>
 
+#include <cstdint>
+
 class QButtonGroup;
 class QAbstractButton;
 class SidemenuItem;
@@ -49,7 +51,6 @@ public:
         WELCOME,          ///< ようこそ画面
         MAX,              ///< 最大値
     };
-    ;
     /// 比較用のIDの最小値
     constexpr static const int ID_MIN = static_cast<int>(ID::MIN);
     /// 比較用のIDの最大値
