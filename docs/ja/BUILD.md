@@ -7,7 +7,7 @@
 ## 必要要件
 
 ### プラットフォーム
-- **macOS 15.0以上**（Apple Silicon / arm64専用）
+- **macOS 15.0以上**（Apple Silicon / arm64 および Intel / x86_64）
 
 ### ツール
 - **CMake**: 3.21.1以上
@@ -74,8 +74,8 @@ vcpkg install
 # ビルドディレクトリを作成
 mkdir build && cd build
 
-# 構成
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# 構成（vcpkgトリプレットはアーキテクチャに基づいて自動検出）
+cmake ..
 
 # ビルド
 make
@@ -88,23 +88,19 @@ make -j$(sysctl -n hw.ncpu)
 
 1. Qt Creatorで `CMakeLists.txt` を開く
 2. Qt Creatorの設定でvcpkgプラグインを有効にする
-3. 以下のCMake引数を追加：
-   ```
-   -DVCPKG_TARGET_TRIPLET=arm64-osx
-   ```
-4. プロジェクトを構成
-5. ビルドボタンまたは `Cmd+B` でビルド
+3. プロジェクトを構成（vcpkgトリプレットは自動検出）
+4. ビルドボタンまたは `Cmd+B` でビルド
 
 ### ビルドオプション
 
 | オプション | デフォルト | 説明 |
 |-----------|-----------|------|
 | `ENABLE_UNIT_TEST` | OFF | ユニットテストを有効にする |
-| `VCPKG_TARGET_TRIPLET` | auto | Apple Siliconの場合は `arm64-osx` を設定 |
+| `VCPKG_TARGET_TRIPLET` | auto | 自動検出（Apple Siliconでは `arm64-osx`、Intelでは `x64-osx`）。手動指定も可能。 |
 
 オプション指定の例：
 ```bash
-cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
+cmake .. -DENABLE_UNIT_TEST=ON
 ```
 
 ## テストの実行
@@ -168,11 +164,17 @@ make DevTools_docs
 
 1. **Qt6_DIR環境変数を設定**:
    ```bash
+   # Apple Silicon
    export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Intel Mac
+   export Qt6_DIR=/usr/local/lib/cmake/Qt6
    ```
 2. **またはCMakeに渡す**:
    ```bash
+   # Apple Silicon
    cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Intel Mac
+   cmake .. -DQt6_DIR=/usr/local/lib/cmake/Qt6
    ```
 
 ## 配布

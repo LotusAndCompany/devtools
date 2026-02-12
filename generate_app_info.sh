@@ -3,6 +3,7 @@
 # $3: OS version
 # $4: Compiler name
 # $5: Compiler version
+# $6: Target architecture
 
 # Sample:
 #
@@ -13,6 +14,7 @@
 #   constexpr const char* OS_VERSION = "x.y.z";
 #   constexpr const char* COMPILER_NAME = "compiler";
 #   constexpr const char* COMPILER_VERSION = "x.y.z";
+#   constexpr const char* TARGET_ARCH = "arm64";
 #   }
 
 target_file="app_info.autogen.cpp"
@@ -25,5 +27,6 @@ echo "constexpr const char* OS_NAME = \"$2\";" >> $target_file
 echo "constexpr const char* OS_VERSION = \"$3\";" >> $target_file
 echo "constexpr const char* COMPILER_NAME = \"$4\";" >> $target_file
 echo "constexpr const char* COMPILER_VERSION = \"$5\";" >> $target_file
+echo "constexpr const char* TARGET_ARCH = \"$6\";" >> $target_file
 
 echo "}" >> $target_file

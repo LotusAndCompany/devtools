@@ -10,9 +10,9 @@ DevTools is a unified desktop application that combines various development tool
 
 Currently, DevTools supports:
 - **macOS 15.0 or later**
-- **Apple Silicon (arm64) only**
+- **Apple Silicon (arm64) and Intel (x86_64)**
 
-Intel Mac support is not currently available.
+Note: The application requires macOS 15.0+ to run (Apple Silicon only). Intel Macs can be used for building from source.
 
 ### Is DevTools free?
 
@@ -47,7 +47,10 @@ See [Installation Guide](../getting-started/installation.md) for details.
 Qt might not be in your PATH. Set the Qt6_DIR:
 
 ```bash
+# Apple Silicon
 export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
+# Intel Mac
+export Qt6_DIR=/usr/local/lib/cmake/Qt6
 ```
 
 Or install via Homebrew:
@@ -178,9 +181,9 @@ Use Terminal.app for these.
 
 There are no immediate plans for Windows or Linux support. The current focus is on macOS.
 
-### Will Intel Mac be supported?
+### Is Intel Mac supported?
 
-There are no immediate plans for Intel Mac support. Apple Silicon (arm64) is the primary target.
+Intel Macs can be used for building DevTools from source. However, running the application requires macOS 15.0 or later, which is only available on Apple Silicon Macs.
 
 ### What features are planned?
 

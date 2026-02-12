@@ -141,7 +141,7 @@ To change language:
 ## System Requirements
 
 - **OS**: macOS 15.0 or later
-- **Architecture**: Apple Silicon (arm64)
+- **Architecture**: Apple Silicon (arm64) and Intel (x86_64)
 - **Memory**: 4GB RAM recommended
 - **Storage**: 100MB free space
 

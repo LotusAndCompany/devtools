@@ -5,7 +5,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 ## System Requirements
 
 ### Platform
-- **macOS 15.0 or later** (Apple Silicon / arm64 only)
+- **macOS 15.0 or later** (Apple Silicon / arm64 and Intel / x86_64)
 
 ### Required Tools
 | Tool | Version | Purpose |
@@ -111,8 +111,8 @@ This installs:
 # Create build directory
 mkdir build && cd build
 
-# Configure with CMake
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# Configure with CMake (vcpkg triplet is auto-detected based on architecture)
+cmake ..
 
 # Build (using all available cores)
 make -j$(sysctl -n hw.ncpu)
@@ -141,8 +141,7 @@ open DevTools.app
 3. Ensure a Qt 6.x kit is configured
 4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
 5. Open `CMakeLists.txt` from the project root
-6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
-7. Configure and build
+6. Configure and build (vcpkg triplet is auto-detected)
 
 ### VS Code
 
@@ -151,23 +150,13 @@ open DevTools.app
    - CMake Tools
    - clangd (optional, for better intellisense)
 
-2. Create `.vscode/settings.json`:
-   ```json
-   {
-     "cmake.configureArgs": [
-       "-DVCPKG_TARGET_TRIPLET=arm64-osx"
-     ]
-   }
-   ```
-
-3. Use the CMake Tools extension to configure and build
+2. Use the CMake Tools extension to configure and build (vcpkg triplet is auto-detected)
 
 ### CLion
 
 1. Open the project folder
 2. Go to **Preferences > Build, Execution, Deployment > CMake**
-3. Add CMake option: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
-4. Reload CMake project
+3. Reload CMake project (vcpkg triplet is auto-detected)
 
 ## Verifying Installation
 

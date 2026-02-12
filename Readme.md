@@ -40,7 +40,7 @@ A unified desktop application that combines various development tools into a sin
 
 ## Requirements
 
-- **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
+- **Platform**: macOS 15.0+ (Apple Silicon / arm64 and Intel / x86_64)
 - **Qt**: 6.x
 - **CMake**: 3.21.1+
 - **C++ Compiler**: C++17 compatible

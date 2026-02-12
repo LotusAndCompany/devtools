@@ -23,7 +23,10 @@ Could not find a package configuration file provided by "Qt6"
 2. Set Qt6_DIR:
    ```bash
    export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Apple Silicon
    cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Intel Mac
+   cmake .. -DQt6_DIR=/usr/local/lib/cmake/Qt6
    ```
 
 #### vcpkg Packages Not Found
@@ -142,9 +145,9 @@ Cannot be opened because the developer cannot be verified
    file DevTools.app/Contents/MacOS/DevTools
    ```
 
-2. Rebuild with correct triplet:
+2. Rebuild (vcpkg triplet is auto-detected based on architecture):
    ```bash
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   cmake ..
    ```
 
 ### Feature-Specific Issues

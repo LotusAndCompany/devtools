@@ -14,7 +14,8 @@ AboutDevToolsDialog::AboutDevToolsDialog(QWidget *parent)
 
     ui->appVersion->setText(DevTools::APP_VERSION);
     ui->revision->setText(DevTools::GIT_REVISION);
-    ui->buildEnv->setText(QString(DevTools::OS_NAME) + " " + QString(DevTools::OS_VERSION) + ", " +
+    ui->buildEnv->setText(QString(DevTools::OS_NAME) + " " + QString(DevTools::OS_VERSION) + " (" +
+                          QString(DevTools::TARGET_ARCH) + "), " +
                           QString(DevTools::COMPILER_NAME) + " " +
                           QString(DevTools::COMPILER_VERSION));
     ui->qtVersion->setText(qVersion());

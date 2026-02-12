@@ -39,7 +39,9 @@ set(APP_INFO_FILE app_info.autogen.cpp)
 
 # プラットフォーム固有の設定
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0") # NOTE: 現状arm64専用のため
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0")
+    message(STATUS "Target architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+    message(STATUS "macOS deployment target: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
     set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.lotusandcompanyinc.dev-tools)
 
     # アイコンを設定
@@ -63,7 +65,7 @@ endif()
 set(SH_FILE ${CMAKE_CURRENT_SOURCE_DIR}/generate_app_info.sh)
 file(CHMOD ${SH_FILE} PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
 add_custom_target(${PROJECT_NAME}_app_info
-    COMMAND ${SH_FILE} "${CMAKE_PROJECT_VERSION}${DevTools_VERSION_SUFFIX}" "${OS_NAME}" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
+    COMMAND ${SH_FILE} "${CMAKE_PROJECT_VERSION}${DevTools_VERSION_SUFFIX}" "${OS_NAME}" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION} ${CMAKE_SYSTEM_PROCESSOR}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -348,9 +350,7 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
         WIN32_EXECUTABLE TRUE
         # 機能しないので削除
         #INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../Libs"
-        # NOTE: x86_64もサポートするのが望ましいが、静的リンクライブラリがビルドできなかった。
-        #       また、パッケージマネージャと競合する可能性がある。
-        XCODE_ATTRIBUTE_ARCHS   "arm64"
+        XCODE_ATTRIBUTE_ARCHS   "${CMAKE_SYSTEM_PROCESSOR}"
         XCODE_ATTRIBUTE_SDKROOT "macosx"
         XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH  "YES"
         XCODE_ATTRIBUTE_PRODUCT_NAME    ${PROJECT_NAME}
