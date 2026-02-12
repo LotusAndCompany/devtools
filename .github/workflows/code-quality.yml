@@ -10,12 +10,6 @@ on:
       - '.clang-format'
       - '.clang-tidy'
       - '.github/workflows/code-quality.yml'
-  push:
-    branches: [main]
-    paths:
-      - '**.cpp'
-      - '**.h'
-      - '**.hpp'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
