@@ -389,7 +389,6 @@ pre-commit autoupdate
 
 Code quality checks run automatically on:
 - **Pull Request** to `main`
-- **Push** to `main`
 
 | Check | Runner | Description |
 |-------|--------|-------------|
