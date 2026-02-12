@@ -40,7 +40,7 @@
 
 ## 必要環境
 
-- **OS**: macOS 15.0以上（Apple Silicon / arm64 専用）
+- **OS**: macOS 15.0以上（Apple Silicon / arm64 および Intel / x86_64）
 - **Qt**: 6.x
 - **CMake**: 3.21.1以上
 - **C++ コンパイラ**: C++17 対応
@@ -130,8 +130,7 @@ CMakeの設定で `ENABLE_UNIT_TEST` をONにするとテストができるよ�
 
 Qt以外の外部ライブラリを利用する場合は[vcpkg](https://vcpkg.io/)を使います。
 Qt Creatorの方でプラグインを有効にしてください。
-macOSではなぜかarm64と判定されないのでCMakeの引数に以下を追加してください。
-`-DVCPKG_TARGET_TRIPLET=arm64-osx`
+vcpkgトリプレットはアーキテクチャに基づいて自動検出されます（arm64→`arm64-osx`、x86_64→`x64-osx`）。手動指定する場合はCMakeの引数に `-DVCPKG_TARGET_TRIPLET=arm64-osx` などを追加してください。
 
 また、小規模のものであれば `git submodule` で追加しても構いません。
 submoduleの場合は普通にコードを追加すれば動くはずです。

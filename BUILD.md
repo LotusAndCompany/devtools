@@ -7,7 +7,7 @@ This document describes how to build DevTools from source.
 ## Requirements
 
 ### Platform
-- **macOS 15.0 or later** (Apple Silicon / arm64 only)
+- **macOS 15.0 or later** (Apple Silicon / arm64 and Intel / x86_64)
 
 ### Tools
 - **CMake**: 3.21.1 or later
@@ -74,8 +74,8 @@ vcpkg install
 # Create build directory
 mkdir build && cd build
 
-# Configure
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# Configure (vcpkg triplet is auto-detected based on architecture)
+cmake ..
 
 # Build
 make
@@ -88,23 +88,19 @@ make -j$(sysctl -n hw.ncpu)
 
 1. Open `CMakeLists.txt` in Qt Creator
 2. Enable the vcpkg plugin in Qt Creator settings
-3. Add the following CMake argument:
-   ```
-   -DVCPKG_TARGET_TRIPLET=arm64-osx
-   ```
-4. Configure the project
-5. Build using the Build button or `Cmd+B`
+3. Configure the project (vcpkg triplet is auto-detected)
+4. Build using the Build button or `Cmd+B`
 
 ### Build Options
 
 | Option | Default | Description |
 |--------|---------|-------------|
 | `ENABLE_UNIT_TEST` | OFF | Enable unit tests |
-| `VCPKG_TARGET_TRIPLET` | auto | Set to `arm64-osx` for Apple Silicon |
+| `VCPKG_TARGET_TRIPLET` | auto | Auto-detected (`arm64-osx` on Apple Silicon, `x64-osx` on Intel). Can be overridden manually. |
 
 Example with options:
 ```bash
-cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
+cmake .. -DENABLE_UNIT_TEST=ON
 ```
 
 ## Running Tests
@@ -168,9 +164,15 @@ The generated documentation will be in `build/doxygen/html/`.
 
 1. **Set Qt6_DIR** environment variable:
    ```bash
+   # Apple Silicon
    export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Intel Mac
+   export Qt6_DIR=/usr/local/lib/cmake/Qt6
    ```
 2. **Or pass it to CMake**:
    ```bash
+   # Apple Silicon
    cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   # Intel Mac
+   cmake .. -DQt6_DIR=/usr/local/lib/cmake/Qt6
    ```
