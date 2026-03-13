@@ -25,7 +25,8 @@ repos:
             build-.*/.*|
             .*/moc_.*\.cpp|
             .*/ui_.*\.h|
-            .*/qrc_.*\.cpp
+            .*/qrc_.*\.cpp|
+            .*/qrcodegen\.(cpp|hpp)
           )$
         args:
           - --style=file
@@ -59,11 +60,11 @@ repos:
     hooks:
       - id: trailing-whitespace
         name: trailing-whitespace
-        exclude: ^(.*\.md|.*\.patch)$
+        exclude: ^(.*\.md|.*\.patch|.*/qrcodegen\.(cpp|hpp))$
 
       - id: end-of-file-fixer
         name: end-of-file-fixer
-        exclude: ^(build/|build-.*/)
+        exclude: ^(build/|build-.*/|.*/qrcodegen\.(cpp|hpp)|.*\.svg|vcpkg\.json|distribution/Info\.plist\.in)
 
       - id: check-added-large-files
         name: check-added-large-files
