@@ -64,7 +64,7 @@ repos:
 
       - id: end-of-file-fixer
         name: end-of-file-fixer
-        exclude: ^(build/|build-.*/|.*/qrcodegen\.(cpp|hpp)|.*\.svg|vcpkg\.json|distribution/Info\.plist\.in)
+        exclude: ^(build/|build-.*/|.*/qrcodegen\.(cpp|hpp)$|.*\.svg$|vcpkg\.json$|distribution/Info\.plist\.in$)
 
       - id: check-added-large-files
         name: check-added-large-files
