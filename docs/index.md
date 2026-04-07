@@ -28,6 +28,7 @@ Learn how to use each feature:
 - [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
 - [Command Execution](user-guide/command-execution.md) - Run shell commands from the GUI
 - [Phrase Generation](user-guide/phrase-generation.md) - Generate random text and phrases
+- [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
 
 ### Development
 

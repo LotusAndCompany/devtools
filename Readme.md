@@ -35,6 +35,11 @@ A unified desktop application that combines various development tools into a sin
 - Execute shell commands from the GUI
 - View command output in real-time
 
+### Database Management
+- Connect to **SQLite**, **MySQL**, and **PostgreSQL** databases
+- Browse tables and view data
+- Execute SQL queries with tabbed interface
+
 ### Phrase Generation
 - Generate random phrases and text
 

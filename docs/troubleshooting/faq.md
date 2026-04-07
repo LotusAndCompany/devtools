@@ -4,7 +4,7 @@
 
 ### What is DevTools?
 
-DevTools is a unified desktop application that combines various development tools into a single interface. It provides QR code generation, image processing, data conversion, API testing, command execution, and phrase generation.
+DevTools is a unified desktop application that combines various development tools into a single interface. It provides QR code generation, image processing, data conversion, API testing, command execution, phrase generation, and database management.
 
 ### What platforms are supported?
 
@@ -80,6 +80,15 @@ Not currently. Supported QR code types:
 - Geographic location (geo:)
 
 WiFi support may be added in future versions.
+
+### What databases are supported?
+
+The Database Management tool supports:
+- **SQLite** (file-based)
+- **MySQL** (server-based)
+- **PostgreSQL** (server-based)
+
+Appropriate Qt SQL driver plugins must be installed for MySQL and PostgreSQL.
 
 ### Are generated QR codes saved automatically?
 
