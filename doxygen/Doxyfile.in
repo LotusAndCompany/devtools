@@ -7,6 +7,9 @@ PROJECT_ICON = "doxygen/dev-tools_icon.doxygen.png"
 INPUT = @CMAKE_CURRENT_SOURCE_DIR@/docs/ @CMAKE_CURRENT_SOURCE_DIR@/core/ @CMAKE_CURRENT_SOURCE_DIR@/gui/
 FILE_PATTERNS = *.cpp *.h *.dox *.md
 RECURSIVE = YES
+
+# レイアウトファイル
+LAYOUT_FILE = doxygen/DoxygenLayout.xml
 OUTPUT_DIRECTORY = doxygen
 #EXTRACT_ALL = YES
 STRIP_FROM_PATH = @CMAKE_CURRENT_SOURCE_DIR@

@@ -8,6 +8,9 @@ set(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 # copy icon
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/dev-tools_icon.doxygen.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/doxygen/)
 
+# copy layout file
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/DoxygenLayout.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/doxygen/)
+
 # request to configure the file
 configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 message("Doxygen build started")
