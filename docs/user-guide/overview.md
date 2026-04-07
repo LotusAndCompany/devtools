@@ -16,6 +16,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [API Testing](api-testing.md) | Send HTTP requests and view responses |
 | [Command Execution](command-execution.md) | Run shell commands from the GUI |
 | [Phrase Generation](phrase-generation.md) | Generate random text and phrases |
+| [Database Management](database-management.md) | Connect to databases and execute SQL queries |
 
 ## User Interface
 
@@ -32,6 +33,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 |   - API          |                                |
 |   - Command      |                                |
 |   - Phrase       |                                |
+|   - DB           |                                |
 |                  |                                |
 +------------------+--------------------------------+
 ```

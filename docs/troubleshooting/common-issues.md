@@ -215,6 +215,30 @@ Cannot be opened because the developer cannot be verified
 3. Try simpler commands first
 4. Use terminal for complex operations
 
+#### Database Connection Failed
+
+**Symptoms:**
+- "Connection Failed" error message
+- Cannot connect to database
+
+**Solutions:**
+
+1. **SQLite**: Verify the file path is correct and the file is a valid SQLite database
+2. **MySQL/PostgreSQL**: Check hostname, port, username, and password
+3. **Server not running**: Ensure the database server is running and accessible
+4. **Driver not found**: Ensure the Qt SQL driver plugin (QSQLITE, QMYSQL, QPSQL) is installed
+
+#### Database Tables Not Showing
+
+**Symptoms:**
+- Tables panel is empty after connecting
+
+**Solutions:**
+
+1. Click the **Refresh** button in the toolbar
+2. Verify the database contains tables
+3. Check that the connection is active (SQL and Refresh buttons should be enabled)
+
 ## UI Issues
 
 ### Text Truncation
