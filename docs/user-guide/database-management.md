@@ -169,7 +169,7 @@ INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com');
 ### Query Errors
 
 1. **Syntax errors**: Check your SQL syntax for the specific database dialect
-2. **Table not found**: Verify the table name matches exactly (case-sensitive)
+2. **Table not found**: Verify the table name matches your schema definition (case handling depends on database/configuration)
 3. **Permission denied**: Ensure your database user has the required permissions
 
 ### Database Type Not Supported

@@ -114,14 +114,14 @@ When you launch DevTools, you'll see:
 ### Database Management
 
 1. Click **DB** in the side menu
-2. Click **DB接続設定** to open connection settings
+2. Click **DB接続設定** (DB Connection Settings) to open connection settings
 3. Create a new connection or select from history
 4. Browse tables in the left panel
 5. Click **SQL** to open a query tab
-6. Enter SQL and click **実行** to execute
+6. Enter SQL and click **実行** (Execute) to execute
 
 **Example: Browse a SQLite Database**
-1. Click **DB接続設定** > **New Connection**
+1. Click **DB接続設定** (DB Connection Settings) > **New Connection**
 2. Select **SQLite**
 3. Click **Browse...** and select your `.db` file
 4. Click **Connect**
