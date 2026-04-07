@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.3](https://github.com/LotusAndCompany/devtools/compare/v0.5.2...v0.5.3) (2026-04-07)
+
+
+### Documentation
+
+* add database management tool documentation ([#20](https://github.com/LotusAndCompany/devtools/issues/20)) ([56b0ee9](https://github.com/LotusAndCompany/devtools/commit/56b0ee93d51825d22033f8bce0b83da0baf609f7))
+
 ## [0.5.2](https://github.com/LotusAndCompany/devtools/compare/v0.5.1...v0.5.2) (2026-02-09)
 
 
