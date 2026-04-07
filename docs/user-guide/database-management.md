@@ -11,7 +11,7 @@ The Database Management tool provides a graphical interface for connecting to SQ
 1. Launch DevTools
 2. Click **DB** in the side menu
 
-On first access (with no connection history), the Connection Selector dialog opens automatically.
+If there is no connection history and no database connection has been made in the current session, the Connection Selector dialog opens automatically.
 
 ## Interface Overview
 
@@ -88,7 +88,7 @@ Once connected to a database:
 4. Use the **Refresh** button within the tab to reload table data
 5. Use the toolbar **Refresh** button to reload the table list
 
-If you click a table that already has an open tab, the existing tab is selected instead of creating a duplicate.
+Tabs are identified by table name only, not by database connection. If you switch to a different database that has a table with the same name, the existing tab will be selected, but its content may still reflect the previous connection.
 
 ## Executing SQL Queries
 
