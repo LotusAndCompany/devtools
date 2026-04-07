@@ -52,8 +52,7 @@ reviews:
     - "!**/qrc_*.cpp"
 
     # Bundled third-party (qrcodegen)
-    - "!core/qr_tool/qrcodegen/qrcodegen.cpp"
-    - "!core/qr_tool/qrcodegen/qrcodegen.hpp"
+    - "!core/qr_tool/qrcodegen/**"
 
     # vcpkg
     - "!vcpkg_installed/**"
@@ -110,9 +109,9 @@ reviews:
 
     - path: "docs/**/*.md"
       instructions: >
-        ドキュメントの正確性と明瞭さを確認してください。
-        docs/ 直下は英語版、docs/ja/ は日本語版です。
-        英語版が更新された場合、対応する日本語版も更新が必要か確認してください。
+        ドキュメントの正確性と明瞭さを確認してください（docs/ja/ 配下は除く。日本語版は別ルールで対応）。
+        docs/ 配下（ja/ を除く）は英語版です。
+        英語版が更新された場合、対応する日本語版（docs/ja/）も更新が必要か確認してください。
 
     - path: "docs/ja/**/*.md"
       instructions: >
