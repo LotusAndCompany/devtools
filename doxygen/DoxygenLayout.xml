@@ -119,7 +119,7 @@
       <functions visible="yes" title=""/>
       <variables visible="yes" title=""/>
       <properties visible="yes" title=""/>
-      <membergroups visible="yes" visible="yes"/>
+      <membergroups visible="yes"/>
     </memberdecl>
     <detaileddescription visible="yes" title=""/>
     <memberdef>
@@ -167,7 +167,7 @@
       <functions visible="yes" title=""/>
       <variables visible="yes" title=""/>
       <properties visible="yes" title=""/>
-      <membergroups visible="yes" visible="yes"/>
+      <membergroups visible="yes"/>
     </memberdecl>
     <detaileddescription visible="yes" title=""/>
     <memberdef>

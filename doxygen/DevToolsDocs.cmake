@@ -5,6 +5,16 @@ set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/Doxyfile.in)
 set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen/Doxyfile)
 set(DOXYGEN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+# check GraphViz
+find_program(DOT_EXECUTABLE dot)
+if(DOT_EXECUTABLE)
+  set(DOXYGEN_HAVE_DOT "YES")
+  message(STATUS "GraphViz found: ${DOT_EXECUTABLE}")
+else()
+  set(DOXYGEN_HAVE_DOT "NO")
+  message(STATUS "GraphViz not found - diagrams will be disabled")
+endif()
+
 # copy icon
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/dev-tools_icon.doxygen.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/doxygen/)
 
