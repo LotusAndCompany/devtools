@@ -92,25 +92,14 @@
                     {
                       "type": "frame",
                       "id": "NRpQP",
-                      "width": 64,
-                      "height": 64,
+                      "width": 80,
+                      "height": 80,
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "./res/dev-tools_logo.png",
+                        "url": "../res/dev-tools_logo.png",
                         "mode": "fit"
                       }
-                    },
-                    {
-                      "type": "text",
-                      "id": "skrEP",
-                      "name": "logoTxt",
-                      "fill": "$--foreground",
-                      "content": "DevTools",
-                      "lineHeight": 1,
-                      "fontFamily": "JetBrains Mono",
-                      "fontSize": 48,
-                      "fontWeight": "700"
                     }
                   ]
                 },
@@ -119,10 +108,10 @@
                   "id": "gv2A9",
                   "name": "welcomeMsg",
                   "fill": "$--foreground",
-                  "content": "Welcome to DevTools!",
+                  "content": "DevToolsへようこそ!",
                   "lineHeight": 1.4,
                   "fontFamily": "Geist",
-                  "fontSize": 28,
+                  "fontSize": 24,
                   "fontWeight": "600"
                 },
                 {
@@ -130,7 +119,7 @@
                   "id": "MLWrr",
                   "name": "subMsg",
                   "fill": "$--muted-foreground",
-                  "content": "Choose a tool from the side panel",
+                  "content": "左のパネルからツールを選んでください",
                   "lineHeight": 1.5,
                   "fontFamily": "Geist",
                   "fontSize": 16,
@@ -498,25 +487,25 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "qxBN5",
+                          "id": "SFGYZ",
                           "type": "ref",
-                          "ref": "feVSQ",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "loadBtn",
+                          "width": "fill_container",
                           "descendants": {
-                            "y5FmM": {
+                            "LWqTh": {
                               "content": "読み込み"
                             }
                           }
                         },
                         {
-                          "id": "93vjE",
+                          "id": "4P4mR",
                           "type": "ref",
-                          "ref": "oXSFE",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "resetBtn",
+                          "width": "fill_container",
                           "descendants": {
-                            "XKcvT": {
+                            "LWqTh": {
                               "content": "リセット"
                             }
                           }
@@ -817,25 +806,25 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "OIhff",
+                          "id": "FsBhT",
                           "type": "ref",
-                          "ref": "feVSQ",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "ldBtn",
+                          "width": "fill_container",
                           "descendants": {
-                            "y5FmM": {
+                            "LWqTh": {
                               "content": "読み込み"
                             }
                           }
                         },
                         {
-                          "id": "5tN3A",
+                          "id": "AQdEf",
                           "type": "ref",
-                          "ref": "oXSFE",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "rsBtn",
+                          "width": "fill_container",
                           "descendants": {
-                            "XKcvT": {
+                            "LWqTh": {
                               "content": "リセット"
                             }
                           }
@@ -1195,25 +1184,25 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "LNx5Q",
+                          "id": "bFpYb",
                           "type": "ref",
-                          "ref": "feVSQ",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "ldBtnD",
+                          "width": "fill_container",
                           "descendants": {
-                            "y5FmM": {
+                            "LWqTh": {
                               "content": "読み込み"
                             }
                           }
                         },
                         {
-                          "id": "h1PI9",
+                          "id": "zab5N",
                           "type": "ref",
-                          "ref": "oXSFE",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "rsBtnD",
+                          "width": "fill_container",
                           "descendants": {
-                            "XKcvT": {
+                            "LWqTh": {
                               "content": "リセット"
                             }
                           }
@@ -1553,25 +1542,25 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "TuFw5",
+                          "id": "1clHG",
                           "type": "ref",
-                          "ref": "feVSQ",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "ldBtnT",
+                          "width": "fill_container",
                           "descendants": {
-                            "y5FmM": {
+                            "LWqTh": {
                               "content": "読み込み"
                             }
                           }
                         },
                         {
-                          "id": "TYKK7",
+                          "id": "RTKUr",
                           "type": "ref",
-                          "ref": "oXSFE",
-                          "width": "fill_container",
+                          "ref": "QIaJG",
                           "name": "rsBtnT",
+                          "width": "fill_container",
                           "descendants": {
-                            "XKcvT": {
+                            "LWqTh": {
                               "content": "リセット"
                             }
                           }
@@ -1763,12 +1752,12 @@
                       }
                     },
                     {
-                      "id": "aT4ku",
+                      "id": "BFhbO",
                       "type": "ref",
-                      "ref": "oXSFE",
+                      "ref": "QIaJG",
                       "name": "delBtn",
                       "descendants": {
-                        "XKcvT": {
+                        "LWqTh": {
                           "content": "+"
                         }
                       }
@@ -1836,13 +1825,13 @@
                           ]
                         },
                         {
-                          "id": "Wth46",
+                          "id": "2hhGL",
                           "type": "ref",
-                          "ref": "L4Qdn",
-                          "name": "saveBtn",
+                          "ref": "QIaJG",
                           "enabled": true,
+                          "name": "saveBtn",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "保存"
                             }
                           }
@@ -2223,23 +2212,23 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "1EE6X",
+                          "id": "88qjE",
                           "type": "ref",
-                          "ref": "L4Qdn",
+                          "ref": "QIaJG",
                           "name": "newRstBtn",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "リセット"
                             }
                           }
                         },
                         {
-                          "id": "XcajN",
+                          "id": "GESjw",
                           "type": "ref",
-                          "ref": "L4Qdn",
+                          "ref": "QIaJG",
                           "name": "newGenBtn",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "コマンド生成"
                             }
                           }
@@ -2336,13 +2325,13 @@
                       }
                     },
                     {
-                      "id": "pESjc",
+                      "id": "m9eT4",
                       "type": "ref",
-                      "ref": "oXSFE",
-                      "name": "clearBtn",
+                      "ref": "QIaJG",
                       "width": "fill_container",
+                      "name": "clearBtn",
                       "descendants": {
-                        "XKcvT": {
+                        "LWqTh": {
                           "content": "クリア"
                         }
                       }
@@ -2470,11 +2459,12 @@
                       "name": "methodSel",
                       "width": 100,
                       "height": 40,
-                      "fill": "$--primary",
+                      "fill": "#00000000",
                       "cornerRadius": 999,
                       "stroke": {
                         "align": "inside",
-                        "thickness": 0
+                        "thickness": 1,
+                        "fill": "$--muted-foreground"
                       },
                       "padding": [
                         8,
@@ -2487,7 +2477,7 @@
                           "type": "text",
                           "id": "p1FeS",
                           "name": "methodTxt",
-                          "fill": "$--primary-foreground",
+                          "fill": "$--foreground",
                           "content": "GET",
                           "fontFamily": "JetBrains Mono",
                           "fontSize": 14,
@@ -2501,7 +2491,7 @@
                           "height": 16,
                           "iconFontName": "keyboard_arrow_down",
                           "iconFontFamily": "Material Symbols Sharp",
-                          "fill": "$--primary-foreground"
+                          "fill": "$--foreground"
                         }
                       ]
                     },
@@ -2538,12 +2528,12 @@
                       ]
                     },
                     {
-                      "id": "z0SAW",
+                      "id": "2GShB",
                       "type": "ref",
-                      "ref": "feVSQ",
+                      "ref": "QIaJG",
                       "name": "sendBtn",
                       "descendants": {
-                        "y5FmM": {
+                        "LWqTh": {
                           "content": "送信"
                         }
                       }
@@ -3065,12 +3055,12 @@
                           }
                         },
                         {
-                          "id": "5Jn5Y",
+                          "id": "UJ5WI",
                           "type": "ref",
-                          "ref": "oXSFE",
+                          "ref": "QIaJG",
                           "name": "clearBtnDC",
                           "descendants": {
-                            "XKcvT": {
+                            "LWqTh": {
                               "content": "×"
                             }
                           }
@@ -3529,12 +3519,12 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "n9hoJ",
+                          "id": "EtU9A",
                           "type": "ref",
-                          "ref": "feVSQ",
+                          "ref": "QIaJG",
                           "name": "genBtnQR",
                           "descendants": {
-                            "y5FmM": {
+                            "LWqTh": {
                               "content": "生成"
                             }
                           }
@@ -3784,23 +3774,25 @@
                       "gap": 8,
                       "children": [
                         {
-                          "id": "33zdz",
+                          "id": "OUSkV",
                           "type": "ref",
-                          "ref": "L4Qdn",
+                          "ref": "QIaJG",
                           "width": "fill_container",
+                          "name": "a1",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "画像をコピー"
                             }
                           }
                         },
                         {
-                          "id": "3ZaUB",
+                          "id": "wx91e",
                           "type": "ref",
-                          "ref": "L4Qdn",
+                          "ref": "QIaJG",
                           "width": "fill_container",
+                          "name": "b1",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "画像を保存"
                             }
                           }
@@ -3972,7 +3964,7 @@
                           "id": "PI7AS",
                           "name": "tlTitle",
                           "fill": "$--foreground",
-                          "content": "ツールバー",
+                          "content": "テーブル",
                           "fontFamily": "Geist",
                           "fontSize": 14,
                           "fontWeight": "600"
@@ -3984,35 +3976,6 @@
                           "fill": "$--muted-foreground",
                           "width": 20,
                           "height": 20
-                        },
-                        {
-                          "type": "frame",
-                          "id": "EXQUQ",
-                          "name": "spacerDB",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "id": "OATKn",
-                          "type": "ref",
-                          "ref": "QIaJG",
-                          "name": "connBtn",
-                          "descendants": {
-                            "LWqTh": {
-                              "content": "DB接続設定"
-                            }
-                          }
-                        },
-                        {
-                          "id": "jNDbD",
-                          "type": "ref",
-                          "ref": "feVSQ",
-                          "name": "sqlBtn",
-                          "descendants": {
-                            "y5FmM": {
-                              "content": "SQL"
-                            }
-                          }
                         }
                       ]
                     },
@@ -4211,10 +4174,12 @@
                         },
                         "fill": "$--border"
                       },
+                      "gap": 8,
                       "padding": [
                         12,
                         16
                       ],
+                      "alignItems": "center",
                       "children": [
                         {
                           "type": "text",
@@ -4225,6 +4190,35 @@
                           "fontFamily": "Geist",
                           "fontSize": 14,
                           "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "A6SBq",
+                          "name": "spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "id": "RoRAR",
+                          "type": "ref",
+                          "ref": "QIaJG",
+                          "name": "connBtn",
+                          "descendants": {
+                            "LWqTh": {
+                              "content": "DB接続設定"
+                            }
+                          }
+                        },
+                        {
+                          "id": "566MK",
+                          "type": "ref",
+                          "ref": "QIaJG",
+                          "name": "sqlBtn",
+                          "descendants": {
+                            "LWqTh": {
+                              "content": "SQL"
+                            }
+                          }
                         }
                       ]
                     },
@@ -4330,12 +4324,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "id": "b9D2l",
+                              "id": "d7n7b",
                               "type": "ref",
-                              "ref": "feVSQ",
+                              "ref": "QIaJG",
                               "name": "execBtn",
                               "descendants": {
-                                "y5FmM": {
+                                "LWqTh": {
                                   "content": "Execute"
                                 }
                               }
@@ -5150,23 +5144,23 @@
                   }
                 },
                 {
-                  "id": "W7APO",
+                  "id": "aweJD",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "name": "applyBtn",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "Apply"
                     }
                   }
                 },
                 {
-                  "id": "0EOcD",
+                  "id": "UGBOP",
                   "type": "ref",
-                  "ref": "feVSQ",
+                  "ref": "QIaJG",
                   "name": "okBtn",
                   "descendants": {
-                    "y5FmM": {
+                    "LWqTh": {
                       "content": "OK"
                     }
                   }
@@ -5360,12 +5354,12 @@
       "name": "Button/Outline",
       "reusable": true,
       "height": 40,
-      "fill": "$--background",
+      "fill": "#00000000",
       "cornerRadius": 6,
       "stroke": {
         "align": "inside",
         "thickness": 1,
-        "fill": "$--border"
+        "fill": "$--muted-foreground"
       },
       "gap": 6,
       "padding": [
@@ -6159,12 +6153,12 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "bymkK",
+                  "id": "sbcgU",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "name": "nb1",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "新規接続"
                     }
                   }
@@ -6322,12 +6316,12 @@
                           "alignItems": "center"
                         },
                         {
-                          "id": "CoCEW",
+                          "id": "cceTX",
                           "type": "ref",
-                          "ref": "L4Qdn",
+                          "ref": "QIaJG",
                           "name": "browseBtn",
                           "descendants": {
-                            "QruAk": {
+                            "LWqTh": {
                               "content": "参照..."
                             }
                           }
@@ -6352,25 +6346,25 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "Qfnon",
+                  "id": "VBMnA",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "width": "fill_container",
                   "name": "connBtn",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "接続"
                     }
                   }
                 },
                 {
-                  "id": "6CwEw",
+                  "id": "n3vbw",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "width": "fill_container",
                   "name": "closeBtn2",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "閉じる"
                     }
                   }
@@ -6505,7 +6499,7 @@
                   "fill": {
                     "type": "image",
                     "enabled": true,
-                    "url": "./res/dev-tools_logo.png",
+                    "url": "../res/dev-tools_logo.png",
                     "mode": "fit"
                   }
                 },
@@ -6564,12 +6558,12 @@
                   "fontWeight": "normal"
                 },
                 {
-                  "id": "U2dlZ",
+                  "id": "Mp8Cc",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "name": "copyBtn1",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "コピー"
                     }
                   }
@@ -6590,12 +6584,12 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "kvkJ2",
+                  "id": "AGFac",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
                   "name": "okBtn1",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "OK"
                     }
                   }
@@ -6747,11 +6741,12 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "d7j8l",
+                  "id": "N3yaR",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
+                  "name": "b18",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "OK"
                     }
                   }
@@ -7015,21 +7010,23 @@
                   }
                 },
                 {
-                  "id": "gAG6G",
+                  "id": "4t0yr",
                   "type": "ref",
-                  "ref": "L4Qdn",
+                  "ref": "QIaJG",
+                  "name": "b21",
                   "descendants": {
-                    "QruAk": {
+                    "LWqTh": {
                       "content": "Apply"
                     }
                   }
                 },
                 {
-                  "id": "UlSgF",
+                  "id": "vTTRM",
                   "type": "ref",
-                  "ref": "feVSQ",
+                  "ref": "QIaJG",
+                  "name": "b22",
                   "descendants": {
-                    "y5FmM": {
+                    "LWqTh": {
                       "content": "OK"
                     }
                   }
@@ -7276,10 +7273,7 @@
       "type": "color",
       "value": [
         {
-          "value": "#E7E8E5"
-        },
-        {
-          "value": "#2E2E2E",
+          "value": "#383838",
           "theme": {
             "Mode": "Dark"
           }
