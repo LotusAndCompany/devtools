@@ -53,7 +53,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+131"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+180"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <location filename="../gui/image/basic/control.cpp" line="+51"/>
+        <location filename="../gui/image/basic/control.cpp" line="+53"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -472,7 +472,7 @@
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+63"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+65"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
     </message>
@@ -544,7 +544,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+65"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+67"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -605,7 +605,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+57"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+59"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -660,7 +660,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+62"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+64"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>

@@ -19,6 +19,8 @@ ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *paren
     }
 
     // TODO: 共通化できないか?
+    connect(ui->imageView, &BasicImageView::loadFileSelected, ui->basicImageViewControl,
+            &BasicImageViewControl::loadFileSelected);
     connect(ui->basicImageViewControl, &BasicImageViewControl::loadFileSelected, this,
             &ImageResizeGUI::onLoadImageSelected);
     connect(ui->basicImageViewControl, &BasicImageViewControl::saveFileSelected, this,

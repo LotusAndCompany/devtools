@@ -20,6 +20,8 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
             &BasicImageViewControl::onSaveButtonClicked);
     connect(ui->loadButton, &QPushButton::clicked, this,
             &BasicImageViewControl::onLoadButtonClicked);
+    connect(this, &BasicImageViewControl::loadFileSelected, this,
+            &BasicImageViewControl::onLoadFileSelected);
 }
 
 BasicImageViewControl::~BasicImageViewControl()
@@ -65,8 +67,6 @@ void BasicImageViewControl::onLoadButtonClicked() const
     ImageOpenDialog dialog;
     connect(&dialog, &ImageOpenDialog::fileSelected, this,
             &BasicImageViewControl::loadFileSelected);
-    connect(&dialog, &ImageOpenDialog::fileSelected, this,
-            &BasicImageViewControl::onLoadFileSelected);
 
     dialog.exec();
 }
