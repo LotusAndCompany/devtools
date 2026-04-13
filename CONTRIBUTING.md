@@ -36,6 +36,7 @@ devtools/
 ├── main/           # Application entry point
 ├── res/            # Resources and translation files
 ├── tests/          # Unit tests
+├── designs/        # UI design files (.pen)
 ├── docs/           # Documentation
 └── distribution/   # Platform-specific packaging files
 ```
@@ -224,6 +225,37 @@ DevTools_add_test(test_your_module
 ```
 
 Enable tests with `cmake .. -DENABLE_UNIT_TEST=ON`.
+
+### Design Files
+
+UI design files (`.pen`) are stored in the `designs/` directory. These files are treated as binary in `.gitattributes`, so Git cannot perform text-based merges on them.
+
+#### Resolving Merge Conflicts
+
+When a merge conflict occurs on a `.pen` file, Git will not attempt an automatic merge. You must manually choose which version to keep:
+
+```bash
+# Keep your version (current branch)
+git checkout --ours designs/devtools-design.pen
+git add designs/devtools-design.pen
+
+# Keep their version (incoming branch)
+git checkout --theirs designs/devtools-design.pen
+git add designs/devtools-design.pen
+```
+
+If changes from both branches need to be preserved, open each version in the Pencil editor separately and manually integrate the changes:
+
+1. Save the conflicting file from one branch to a temporary location
+2. Resolve the conflict by choosing one version with `--ours` or `--theirs`
+3. Open both files in the Pencil editor and manually merge the design changes
+4. Commit the final result
+
+#### Best Practices
+
+- **Communicate** with your team before editing shared `.pen` files to avoid concurrent modifications
+- **Keep changes small** — split large design updates into separate PRs when possible
+- **Use descriptive commits** so reviewers understand what changed in the design
 
 ### Branch Naming
 
