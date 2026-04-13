@@ -6,6 +6,7 @@
 #include "ui_db_main.h"
 
 #include <QEvent>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QListWidgetItem>
 #include <QMessageBox>
@@ -83,6 +84,48 @@ void dbMain::handleRefreshTableButtonClick()
 
     // 再度テーブル一覧を取得
     populateTableList();
+}
+
+bool dbMain::connectSQLiteFile(const QString &filePath)
+{
+    QFileInfo const fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        QMessageBox::warning(this, tr("Invalid File"), tr("The selected file does not exist."));
+        return false;
+    }
+
+    const QString suffix = fileInfo.suffix().toLower();
+    if (suffix != "db" && suffix != "sqlite" && suffix != "sqlite3") {
+        QMessageBox::warning(this, tr("Unsupported File"),
+                             tr("Please select a SQLite database file."));
+        return false;
+    }
+
+    QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE");
+    sqliteDb.setDatabaseName(fileInfo.absoluteFilePath());
+
+    if (!sqliteDb.open()) {
+        QMessageBox::critical(this, tr("Connection Failed"), sqliteDb.lastError().text());
+        return false;
+    }
+
+    QSqlQuery validationQuery(sqliteDb);
+    if (!validationQuery.exec("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1;")) {
+        QMessageBox::critical(this, tr("Connection Failed"), validationQuery.lastError().text());
+        sqliteDb.close();
+        return false;
+    }
+
+    const QJsonObject connectionInfo{
+        {"type", "QSQLITE"},
+        {"host", ""},
+        {"database", fileInfo.absoluteFilePath()},
+        {"username", ""},
+        {"displayName", QString("SQLite: %1").arg(fileInfo.fileName())},
+    };
+
+    setDatabase(sqliteDb, connectionInfo);
+    return true;
 }
 
 bool dbMain::isTabNameExists(const QString &tabName)

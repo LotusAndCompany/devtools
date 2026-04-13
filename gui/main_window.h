@@ -12,6 +12,9 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class QDragEnterEvent;
+class QDropEvent;
+class QMimeData;
 class SettingsDialog;
 
 /**
@@ -55,6 +58,16 @@ private:
      * @param event 処理するイベント
      */
     void changeEvent(QEvent *event) override;
+    /**
+     * @brief ドラッグされたファイルを受け入れるか判定する
+     * @param event 処理するイベント
+     */
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    /**
+     * @brief ドロップされたSQLiteファイルをDBツールで開く
+     * @param event 処理するイベント
+     */
+    void dropEvent(QDropEvent *event) override;
 #ifdef Q_OS_MACOS
     /**
      * @brief ウィンドウを閉じる時のイベント
@@ -71,6 +84,18 @@ private:
      * @param hide true で非表示
      */
     void setSidemenuHidden(bool hide);
+    /**
+     * @brief SQLiteファイルとして扱えるパスか判定する
+     * @param filePath 対象ファイルパス
+     * @return 対応するSQLiteファイルならtrue
+     */
+    static bool isSQLiteFilePath(const QString &filePath);
+    /**
+     * @brief ドロップされたURL一覧から最初のSQLiteファイルを返す
+     * @param mimeData ドロップされたデータ
+     * @return SQLiteファイルパス。見つからない場合は空文字列
+     */
+    static QString droppedSQLiteFilePath(const QMimeData *mimeData);
 
 signals:
     /**

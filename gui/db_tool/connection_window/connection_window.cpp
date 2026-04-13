@@ -2,12 +2,50 @@
 
 #include "ui_connection_window.h"
 
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QUrl>
+
+namespace {
+bool isSQLiteFilePath(const QString &filePath)
+{
+    QFileInfo const fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        return false;
+    }
+
+    const QString suffix = fileInfo.suffix().toLower();
+    return suffix == "db" || suffix == "sqlite" || suffix == "sqlite3";
+}
+
+QString droppedSQLiteFilePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+
+    for (const QUrl &url : mimeData->urls()) {
+        if (!url.isLocalFile()) {
+            continue;
+        }
+
+        const QString filePath = url.toLocalFile();
+        if (isSQLiteFilePath(filePath)) {
+            return QFileInfo(filePath).absoluteFilePath();
+        }
+    }
+
+    return {};
+}
+} // namespace
 
 ConnectionWindow::ConnectionWindow(QWidget *parent) : QWidget(parent), ui(new Ui::ConnectionWindow)
 {
@@ -21,6 +59,8 @@ ConnectionWindow::ConnectionWindow(QWidget *parent) : QWidget(parent), ui(new Ui
     connect(ui->dbTypeComboBox, &QComboBox::currentIndexChanged, this,
             &ConnectionWindow::selectedDBType);
     connect(ui->browseButton, &QPushButton::clicked, this, &ConnectionWindow::browseForDatabase);
+
+    ui->dbNamelineEdit->installEventFilter(this);
 }
 
 ConnectionWindow::~ConnectionWindow()
@@ -54,6 +94,7 @@ void ConnectionWindow::selectedDBType()
 
     // Show browse button only for SQLite
     ui->browseButton->setVisible(isSQLite);
+    ui->dbNamelineEdit->setAcceptDrops(isSQLite);
 }
 
 void ConnectionWindow::browseForDatabase()
@@ -148,5 +189,47 @@ void ConnectionWindow::changeEvent(QEvent *event)
         ui->retranslateUi(this);
     } else {
         QWidget::changeEvent(event);
+    }
+}
+
+bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched != ui->dbNamelineEdit || ui->dbTypeComboBox->currentText() != "SQLite") {
+        return QWidget::eventFilter(watched, event);
+    }
+
+    switch (event->type()) {
+    case QEvent::DragEnter:
+    case QEvent::DragMove: {
+        auto *dragEvent = dynamic_cast<QDragMoveEvent *>(event);
+        if (dragEvent == nullptr) {
+            return true;
+        }
+
+        if (!droppedSQLiteFilePath(dragEvent->mimeData()).isEmpty()) {
+            dragEvent->acceptProposedAction();
+        } else {
+            dragEvent->ignore();
+        }
+        return true;
+    }
+    case QEvent::Drop: {
+        auto *dropEvent = dynamic_cast<QDropEvent *>(event);
+        if (dropEvent == nullptr) {
+            return true;
+        }
+
+        const QString filePath = droppedSQLiteFilePath(dropEvent->mimeData());
+        if (filePath.isEmpty()) {
+            dropEvent->ignore();
+            return true;
+        }
+
+        ui->dbNamelineEdit->setText(filePath);
+        dropEvent->acceptProposedAction();
+        return true;
+    }
+    default:
+        return QWidget::eventFilter(watched, event);
     }
 }

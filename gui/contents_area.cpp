@@ -50,6 +50,16 @@ void ContentsArea::onSidemenuItemChanged(Sidemenu::ID id)
     changeContent(id);
 }
 
+bool ContentsArea::openSQLiteFileInDbTool(const QString &filePath)
+{
+    changeContent(Sidemenu::ID::DB_TOOL);
+    if (cachedDbMain == nullptr) {
+        return false;
+    }
+
+    return cachedDbMain->connectSQLiteFile(filePath);
+}
+
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent != nullptr) {
