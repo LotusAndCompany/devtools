@@ -1,2 +1,6 @@
 # Qt Linguist translation files (XML format, not TypeScript)
 res/*.ts linguist-language=XML
+
+# Pencil design files - treat as binary
+*.pen binary
+*.pen merge=binary
