@@ -28,7 +28,7 @@ cmake --build build --target lint
 - All files MUST conform to `.editorconfig` rules:
   - Files MUST end with a newline (`insert_final_newline = true`)
   - Use LF line endings
-  - Trim trailing whitespace
+  - Trim trailing whitespace (except Markdown files, per `.editorconfig`)
   - Indent with spaces (4 for C++, 2 for XML/Qt UI files)
 - Column limit: 100 characters
 - Braces: Allman style for functions/classes/structs, K&R for control statements
@@ -46,7 +46,7 @@ cmake --build build --target lint
 
 ## Architecture
 
-- `core/`: business logic (no Qt Widgets dependency; QtCore, QtSql, QtNetwork allowed)
+- `core/`: business logic (no Qt Widgets dependency; QtCore, QtGui, QtSql, QtNetwork allowed)
 - `gui/`: Qt6 Widgets UI layer
 - `tests/`: Google Test based unit tests
 - Each feature is a static library module
