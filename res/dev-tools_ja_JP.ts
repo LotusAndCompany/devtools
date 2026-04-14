@@ -1637,28 +1637,28 @@ Choose a tool from the side panel</source>
     <message>
         <location line="+15"/>
         <source>Invalid File</source>
-        <translation type="unfinished"></translation>
+        <translation>無効なファイル</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>The selected file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたファイルが存在しません。</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Unsupported File</source>
-        <translation type="unfinished"></translation>
+        <translation>サポートされていないファイル</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Please select a SQLite database file.</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
         <location line="+8"/>
         <location line="+6"/>
         <source>Connection Failed</source>
-        <translation type="unfinished">接続失敗</translation>
+        <translation>接続失敗</translation>
     </message>
     <message>
         <location line="+64"/>

@@ -203,7 +203,7 @@ bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
     case QEvent::DragMove: {
         auto *dragEvent = dynamic_cast<QDragMoveEvent *>(event);
         if (dragEvent == nullptr) {
-            return true;
+            return QWidget::eventFilter(watched, event);
         }
 
         if (!droppedSQLiteFilePath(dragEvent->mimeData()).isEmpty()) {
@@ -216,7 +216,7 @@ bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
     case QEvent::Drop: {
         auto *dropEvent = dynamic_cast<QDropEvent *>(event);
         if (dropEvent == nullptr) {
-            return true;
+            return QWidget::eventFilter(watched, event);
         }
 
         const QString filePath = droppedSQLiteFilePath(dropEvent->mimeData());

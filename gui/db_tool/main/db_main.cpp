@@ -101,11 +101,14 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
         return false;
     }
 
-    QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE");
+    // Create a unique temporary connection name to avoid conflicts
+    const QString tempConnectionName = QUuid::createUuid().toString();
+    QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE", tempConnectionName);
     sqliteDb.setDatabaseName(fileInfo.absoluteFilePath());
 
     if (!sqliteDb.open()) {
         QMessageBox::critical(this, tr("Connection Failed"), sqliteDb.lastError().text());
+        QSqlDatabase::removeDatabase(tempConnectionName);
         return false;
     }
 
@@ -113,6 +116,7 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
     if (!validationQuery.exec("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1;")) {
         QMessageBox::critical(this, tr("Connection Failed"), validationQuery.lastError().text());
         sqliteDb.close();
+        QSqlDatabase::removeDatabase(tempConnectionName);
         return false;
     }
 
