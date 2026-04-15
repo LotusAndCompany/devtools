@@ -16,10 +16,10 @@ cmake .. -DENABLE_UNIT_TEST=ON
 ctest
 
 # Format check
-cmake --build build --target format-check
+cmake --build . --target format-check
 
 # Static analysis
-cmake --build build --target lint
+cmake --build . --target lint
 ```
 
 ## Code Formatting

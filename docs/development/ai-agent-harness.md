@@ -13,7 +13,7 @@ This means a change to AGENTS.md immediately benefits every tool.
 
 ## Architecture
 
-```
+```text
 AGENTS.md  (single source of truth)
     │
     ├── CLAUDE.md .............. @AGENTS.md import + author rules
