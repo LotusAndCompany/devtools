@@ -1,7 +1,6 @@
 ---
 paths:
   - "**/*.md"
-  - "docs/**/*"
 ---
 
 # Documentation Rules
