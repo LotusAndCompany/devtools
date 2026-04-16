@@ -1,0 +1,79 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1'
+
+permissions:
+  security-events: write
+  contents: read
+
+jobs:
+  analyze-actions:
+    name: Analyze GitHub Actions
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3
+        with:
+          languages: actions
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3
+        with:
+          category: "/language:actions"
+
+  analyze-cpp:
+    name: Analyze C++
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y llvm clang ninja-build
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4
+        with:
+          version: '6.9.3'
+          host: 'linux'
+          target: 'desktop'
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@7d259227a1fb6471a0253dd5ab7419835228f7d7 # v11
+        with:
+          vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3
+        with:
+          languages: c-cpp
+
+      - name: Configure and Build
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_COMPILER=clang \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+          cmake --build build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3
+        with:
+          category: "/language:c-cpp"
