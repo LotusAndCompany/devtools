@@ -1,0 +1,128 @@
+# Project-level command execution rules for OpenAI Codex
+# Format: Starlark prefix_rule() — see https://developers.openai.com/codex/rules
+
+# --- Build and development (allow) ---
+
+prefix_rule(
+    pattern = ["cmake"],
+    decision = "allow",
+    justification = "CMake configure and build commands",
+)
+
+prefix_rule(
+    pattern = ["make"],
+    decision = "allow",
+    justification = "Build via make",
+)
+
+prefix_rule(
+    pattern = ["ctest"],
+    decision = "allow",
+    justification = "Run unit tests",
+)
+
+prefix_rule(
+    pattern = ["ninja"],
+    decision = "allow",
+    justification = "Build via ninja",
+)
+
+# --- Code quality (allow) ---
+
+prefix_rule(
+    pattern = ["clang-format"],
+    decision = "allow",
+    justification = "Code formatting",
+)
+
+prefix_rule(
+    pattern = ["clang-tidy"],
+    decision = "allow",
+    justification = "Static analysis",
+)
+
+prefix_rule(
+    pattern = ["pre-commit"],
+    decision = "allow",
+    justification = "Run pre-commit hooks",
+)
+
+# --- i18n (allow) ---
+
+prefix_rule(
+    pattern = ["/opt/homebrew/bin/lupdate"],
+    decision = "allow",
+    justification = "Update Qt translation files",
+)
+
+prefix_rule(
+    pattern = ["/opt/homebrew/bin/lrelease"],
+    decision = "allow",
+    justification = "Compile Qt translation files",
+)
+
+# --- Read-only git (allow) ---
+
+prefix_rule(
+    pattern = ["git", "status"],
+    decision = "allow",
+    justification = "View working tree status",
+)
+
+prefix_rule(
+    pattern = ["git", "log"],
+    decision = "allow",
+    justification = "View commit history",
+)
+
+prefix_rule(
+    pattern = ["git", "diff"],
+    decision = "allow",
+    justification = "View changes",
+)
+
+prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "allow",
+    justification = "List or manage branches",
+)
+
+# --- Git write operations (prompt) ---
+
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "prompt",
+    justification = "Stage changes — review before committing",
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "Create commits — review message and staged changes",
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Push to remote — confirm branch and target",
+)
+
+# --- Destructive operations (forbidden) ---
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "Force push can overwrite remote history",
+)
+
+prefix_rule(
+    pattern = ["git", "push", "-f"],
+    decision = "forbidden",
+    justification = "Force push shorthand — equally dangerous",
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Hard reset discards uncommitted work",
+)

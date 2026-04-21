@@ -39,6 +39,7 @@ For contributors and developers:
 - [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
 - [Testing Guide](development/testing-guide.md) - Write and run tests
 - [Localization](development/localization.md) - Add and update translations
+- [AI Agent Harness](development/ai-agent-harness.md) - Cross-tool AI agent configuration
 
 ### API Reference
 
