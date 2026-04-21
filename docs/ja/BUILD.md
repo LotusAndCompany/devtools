@@ -20,7 +20,8 @@
 - yaml-cpp
 
 ### オプション
-- **Doxygen**: APIドキュメント生成用
+- **Doxygen**: 1.16以上（APIドキュメント生成用）
+- **GraphViz**: クラス図・依存関係グラフの生成用（オプション）
 - **Qt Creator**: 18.0.1以上（Qt統合IDE）
 - **Ninja**: 1.12.1以上（高速ビルドツール）
 - **Qt Installer Framework**: 4.10（アプリケーションパッケージング）
@@ -122,12 +123,22 @@ ctest
 
 ## ドキュメントの生成
 
-APIドキュメントの生成にはDoxygenが必要です。
+APIドキュメントの生成にはDoxygen 1.16以上が必要です。
 
 ### Doxygenのインストール
 ```bash
 brew install doxygen
 ```
+
+### GraphVizのインストール（オプション）
+
+GraphVizをインストールすると、クラス継承図・コラボレーション図・インクルード依存図が生成されます。
+
+```bash
+brew install graphviz
+```
+
+GraphVizがインストールされていない場合、図表なしでドキュメントが生成されます。
 
 ### ドキュメントの生成
 ```bash
