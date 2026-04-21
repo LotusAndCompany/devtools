@@ -20,7 +20,8 @@ This document describes how to build DevTools from source.
 - yaml-cpp
 
 ### Optional
-- **Doxygen**: For generating API documentation
+- **Doxygen**: 1.16+ (API documentation generation)
+- **GraphViz**: For class diagrams and dependency graphs in documentation (optional)
 - **Qt Creator**: 18.0.1+ (IDE with Qt integration)
 - **Ninja**: 1.12.1+ (Fast build tool)
 - **Qt Installer Framework**: 4.10 (Application packaging)
@@ -122,12 +123,22 @@ ctest
 
 ## Generating Documentation
 
-Doxygen is required to generate API documentation.
+Doxygen 1.16+ is required to generate API documentation.
 
 ### Install Doxygen
 ```bash
 brew install doxygen
 ```
+
+### Install GraphViz (Optional)
+
+GraphViz enables class inheritance diagrams, collaboration diagrams, and include dependency graphs.
+
+```bash
+brew install graphviz
+```
+
+If GraphViz is not installed, documentation will be generated without diagrams.
 
 ### Generate Documentation
 ```bash
