@@ -12,10 +12,16 @@ DevTools uses Doxygen for API documentation generation. The full API reference i
 
 ### Prerequisites
 
-Install Doxygen:
+Install Doxygen (1.16+):
 
 ```bash
 brew install doxygen
+```
+
+Optionally, install GraphViz to enable class diagrams and dependency graphs:
+
+```bash
+brew install graphviz
 ```
 
 ### Generate

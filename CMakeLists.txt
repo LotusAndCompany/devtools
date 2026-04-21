@@ -30,8 +30,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
-# Doxygenを探す
-find_package(Doxygen)
+# Doxygenを探す（1.16以上が必要）
+find_package(Doxygen 1.16)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
