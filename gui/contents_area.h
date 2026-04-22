@@ -45,6 +45,14 @@ public:
      */
     void onSidemenuItemChanged(Sidemenu::ID id);
 
+public slots:
+    /**
+     * @brief SQLiteファイルをDBツールで開く
+     * @param filePath SQLiteファイルパス
+     * @return 接続できた場合はtrue
+     */
+    bool openSQLiteFileInDbTool(const QString &filePath);
+
 private:
     /**
      * @brief 現在表示中のウィジェット

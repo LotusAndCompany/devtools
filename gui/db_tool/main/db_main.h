@@ -26,6 +26,13 @@ public:
     dbMain(dbMain &&) = delete;
     dbMain &operator=(dbMain &&) = delete;
 
+    /**
+     * @brief SQLiteファイルへ接続する
+     * @param filePath SQLiteファイルパス
+     * @return 接続できた場合はtrue
+     */
+    bool connectSQLiteFile(const QString &filePath);
+
 private:
     Ui::dbMain *ui;
     QSqlDatabase db;

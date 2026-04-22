@@ -2,18 +2,50 @@
 
 #include "ui_image_view.h"
 
+#include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QFileInfo>
 #include <QGraphicsOpacityEffect>
+#include <QImageReader>
+#include <QMimeData>
 #include <QResizeEvent>
+#include <QUrl>
 #include <QWheelEvent>
 
 #include <cmath>
+
+namespace {
+QString droppedImagePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+
+    for (const QUrl &url : mimeData->urls()) {
+        if (!url.isLocalFile()) {
+            continue;
+        }
+
+        const QString path = url.toLocalFile();
+        if (!QFileInfo(path).isFile()) {
+            continue;
+        }
+
+        if (!QImageReader::imageFormat(path).isEmpty()) {
+            return path;
+        }
+    }
+
+    return {};
+}
+} // namespace
 
 // TODO: ScrollAreaをドラッグで操作できるようにする
 BasicImageView::BasicImageView(QWidget *parent) : QWidget(parent), ui(new Ui::BasicImageView)
 {
     ui->setupUi(this);
     ui->scalingUI->raise();
+    setAcceptDrops(true);
 
     // NOTE: 少しだけ透明にする
     auto *opacityEffect = new QGraphicsOpacityEffect(ui->zoomInButton);
@@ -68,9 +100,26 @@ void BasicImageView::wheelEvent(QWheelEvent *event)
     QWidget::wheelEvent(event);
 }
 
+void BasicImageView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (!droppedImagePath(event->mimeData()).isEmpty()) {
+        event->acceptProposedAction();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
+}
+
 void BasicImageView::dropEvent(QDropEvent *event)
 {
-    QWidget::dropEvent(event);
+    const QString path = droppedImagePath(event->mimeData());
+    if (path.isEmpty()) {
+        QWidget::dropEvent(event);
+        return;
+    }
+
+    emit loadFileSelected(path);
+    event->acceptProposedAction();
 }
 
 void BasicImageView::onZoomInButtonPressed()
