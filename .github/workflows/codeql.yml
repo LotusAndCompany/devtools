@@ -54,7 +54,7 @@ jobs:
           target: 'desktop'
 
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@7d259227a1fb6471a0253dd5ab7419835228f7d7 # v11
+        uses: lukka/run-vcpkg@305c06bd4dee21e23dcf142c85c657a993f7aa1a # v11
         with:
           vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'
 
