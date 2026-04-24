@@ -71,6 +71,7 @@ jobs:
   clang-tidy:
     name: Static Analysis
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
 
