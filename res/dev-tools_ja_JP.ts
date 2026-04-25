@@ -1681,17 +1681,17 @@ Choose a tool from the side panel</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+210"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="-67"/>
         <source>Text</source>
         <translation type="unfinished">テキスト</translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="-122"/>
         <source>Title</source>
         <translation type="unfinished">タイトル</translation>
     </message>
@@ -1700,13 +1700,13 @@ Choose a tool from the side panel</source>
         <translation type="vanished">タイトルを入力...</translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="+13"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+109"/>
+        <location line="+13"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+97"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
