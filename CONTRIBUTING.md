@@ -228,13 +228,9 @@ Enable tests with `cmake .. -DENABLE_UNIT_TEST=ON`.
 
 ### Design Files
 
-UI design files (`.pen`) are stored under `designs/screens/`, with one file per screen or dialog group. Common elements such as the sidebar are intentionally excluded from individual screen files to keep edits localized.
+UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`, with one file per screen or dialog group. Common chrome such as the sidebar is intentionally excluded from individual screen files to keep edits localized.
 
-#### Best Practices
-
-- **Edit one screen per PR when possible** to keep diffs reviewable and reduce conflict risk
-- **Communicate** with your team before editing shared `.pen` files to avoid concurrent modifications
-- **Use descriptive commits** so reviewers understand what changed in the design
+See [Design Files](docs/development/design-files.md) for the full layout, editing workflow, and conflict-handling guidance.
 
 ### Branch Naming
 

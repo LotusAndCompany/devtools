@@ -42,6 +42,7 @@ For contributors and developers:
 - [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
 - [Testing Guide](development/testing-guide.md) - Write and run tests
 - [Localization](development/localization.md) - Add and update translations
+- [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow
 
 ### API Reference
 
