@@ -7,10 +7,15 @@
 #undef _TEST_BasicImageView
 
 #include <QDir>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QFile>
 #include <QMap>
+#include <QMimeData>
 #include <QPixmap>
 #include <QResizeEvent>
+#include <QSignalSpy>
+#include <QUrl>
 
 namespace Test {
 class TestBasicImageView : public QObject
@@ -39,6 +44,8 @@ private slots:
     void test_zoomIn();
     void test_zoomOut();
     void test_updateScale();
+    void test_dragEnterEvent();
+    void test_dropEvent();
     void test_zoomInButton();
     void test_zoomOutButton();
 };
@@ -308,6 +315,50 @@ void TestBasicImageView::test_updateScale()
     QCOMPARE_EQ(imageView.ui->zoomInButton->isEnabled(), true);
     QCOMPARE_EQ(imageView.ui->zoomOutButton->isEnabled(), true);
 */
+}
+
+void TestBasicImageView::test_dragEnterEvent()
+{
+    BasicImageView imageView;
+    QVERIFY(imageView.acceptDrops());
+
+    QMimeData imageMimeData;
+    imageMimeData.setUrls({QUrl::fromLocalFile(testDirPath + resourceNames[0])});
+    QDragEnterEvent imageEvent(QPoint(0, 0), Qt::CopyAction, &imageMimeData, Qt::LeftButton,
+                               Qt::NoModifier);
+    imageView.dragEnterEvent(&imageEvent);
+    QVERIFY(imageEvent.isAccepted());
+
+    QMimeData textMimeData;
+    textMimeData.setText("not an image");
+    QDragEnterEvent textEvent(QPoint(0, 0), Qt::CopyAction, &textMimeData, Qt::LeftButton,
+                              Qt::NoModifier);
+    imageView.dragEnterEvent(&textEvent);
+    QVERIFY(!textEvent.isAccepted());
+}
+
+void TestBasicImageView::test_dropEvent()
+{
+    BasicImageView imageView;
+    QSignalSpy spy(&imageView, &BasicImageView::loadFileSelected);
+    const QString imagePath = testDirPath + resourceNames[0];
+
+    QMimeData imageMimeData;
+    imageMimeData.setUrls({QUrl::fromLocalFile(imagePath)});
+    QDropEvent imageEvent(QPointF(0, 0), Qt::CopyAction, &imageMimeData, Qt::LeftButton,
+                          Qt::NoModifier);
+    imageView.dropEvent(&imageEvent);
+    QCOMPARE_EQ(spy.count(), 1);
+    QCOMPARE_EQ(spy.takeFirst().at(0).toString(), imagePath);
+    QVERIFY(imageEvent.isAccepted());
+
+    QMimeData textMimeData;
+    textMimeData.setText("not an image");
+    QDropEvent textEvent(QPointF(0, 0), Qt::CopyAction, &textMimeData, Qt::LeftButton,
+                         Qt::NoModifier);
+    imageView.dropEvent(&textEvent);
+    QCOMPARE_EQ(spy.count(), 0);
+    QVERIFY(!textEvent.isAccepted());
 }
 
 void TestBasicImageView::test_zoomInButton()

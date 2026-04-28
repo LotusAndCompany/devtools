@@ -23,6 +23,8 @@ ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidge
     }
 
     ui->control->saveFileDialogType = BasicImageViewControl::DialogType::SELECT_FOLDER;
+    connect(ui->imageView, &BasicImageView::loadFileSelected, ui->control,
+            &BasicImageViewControl::loadFileSelected);
     connect(ui->control, &BasicImageViewControl::loadFileSelected, this,
             &ImageDivisionGUI::onLoadImageSelected);
     connect(ui->control, &BasicImageViewControl::saveFileSelected, this,

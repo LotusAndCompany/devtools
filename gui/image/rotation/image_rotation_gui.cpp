@@ -15,6 +15,8 @@ ImageRotationGUI::ImageRotationGUI(ImageRotationInterface *imageRotation, QWidge
         imageRotation->setParent(this);
     }
 
+    connect(ui->imageView, &BasicImageView::loadFileSelected, ui->basicImageViewControl,
+            &BasicImageViewControl::loadFileSelected);
     connect(ui->basicImageViewControl, &BasicImageViewControl::loadFileSelected, this,
             &ImageRotationGUI::onLoadImageSelected);
     connect(ui->basicImageViewControl, &BasicImageViewControl::saveFileSelected, this,

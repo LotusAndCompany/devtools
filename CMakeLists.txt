@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.5.3 LANGUAGES CXX) # x-release-please-version
+project(DevTools VERSION 0.6.0 LANGUAGES CXX) # x-release-please-version
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
@@ -30,8 +30,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
-# Doxygenを探す
-find_package(Doxygen)
+# Doxygenを探す（1.16以上が必要）
+find_package(Doxygen 1.16)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 

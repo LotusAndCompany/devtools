@@ -36,6 +36,7 @@ signals:
 
 protected:
     void changeEvent(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
 #endif // CONNECTION_WINDOW_H

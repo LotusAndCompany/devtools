@@ -1,0 +1,5 @@
+# OpenAI Codex project configuration
+# AGENTS.md is discovered automatically from the repository root.
+
+# Require approval before writing files (safest default)
+approval_mode = "suggest"

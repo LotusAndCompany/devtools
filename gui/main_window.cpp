@@ -7,15 +7,21 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QFileInfo>
 #include <QIcon>
+#include <QMimeData>
 #include <QSettings>
 #include <QTranslator>
+#include <QUrl>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_settingsDialog(new SettingsDialog(this))
 {
     qDebug() << "=== MainWindow Constructor START ===";
     ui->setupUi(this);
+    setAcceptDrops(true);
 
     connect(ui->menubar, &QMenuBar::triggered, this, &MainWindow::onActionTriggered);
     connect(ui->sidemenu, &Sidemenu::itemSelected, ui->contentsArea,
@@ -140,6 +146,29 @@ void MainWindow::changeEvent(QEvent *event)
     }
 }
 
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (!droppedSQLiteFilePath(event->mimeData()).isEmpty()) {
+        event->acceptProposedAction();
+        return;
+    }
+
+    QMainWindow::dragEnterEvent(event);
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    const QString filePath = droppedSQLiteFilePath(event->mimeData());
+    if (filePath.isEmpty()) {
+        QMainWindow::dropEvent(event);
+        return;
+    }
+
+    ui->sidemenu->selectItem(Sidemenu::ID::DB_TOOL);
+    ui->contentsArea->openSQLiteFileInDbTool(filePath);
+    event->acceptProposedAction();
+}
+
 void MainWindow::setSidemenuHidden(bool hide)
 {
     if (hide) {
@@ -149,6 +178,37 @@ void MainWindow::setSidemenuHidden(bool hide)
         ui->sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
         ui->sidemenu->show();
     }
+}
+
+bool MainWindow::isSQLiteFilePath(const QString &filePath)
+{
+    QFileInfo const fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        return false;
+    }
+
+    const QString suffix = fileInfo.suffix().toLower();
+    return suffix == "db" || suffix == "sqlite" || suffix == "sqlite3";
+}
+
+QString MainWindow::droppedSQLiteFilePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+
+    for (const QUrl &url : mimeData->urls()) {
+        if (!url.isLocalFile()) {
+            continue;
+        }
+
+        const QString filePath = url.toLocalFile();
+        if (isSQLiteFilePath(filePath)) {
+            return filePath;
+        }
+    }
+
+    return {};
 }
 
 void MainWindow::onSidemenuVisibilityButtonClicked()

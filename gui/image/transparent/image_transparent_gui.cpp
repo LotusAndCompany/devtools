@@ -18,6 +18,8 @@ ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTranspa
         imageTransparent->setParent(this);
     }
 
+    connect(ui->imageView, &BasicImageView::loadFileSelected, ui->control,
+            &BasicImageViewControl::loadFileSelected);
     connect(ui->control, &BasicImageViewControl::loadFileSelected, this,
             &ImageTransparentGUI::onLoadImageSelected);
     connect(ui->control, &BasicImageViewControl::saveFileSelected, this,

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/LotusAndCompany/devtools/compare/v0.5.3...v0.6.0) (2026-04-22)
+
+
+### Features
+
+* add drag-and-drop file loading support ([#27](https://github.com/LotusAndCompany/devtools/issues/27)) ([0d83461](https://github.com/LotusAndCompany/devtools/commit/0d83461569c68ba595be64820c74da89039a5829))
+
+
+### Documentation
+
+* add cross-tool AI agent harness ([#29](https://github.com/LotusAndCompany/devtools/issues/29)) ([c28a0e9](https://github.com/LotusAndCompany/devtools/commit/c28a0e976e96231d83e19c9737a818cd5f2ccad4))
+* improve Doxygen configuration and page layout ([#23](https://github.com/LotusAndCompany/devtools/issues/23)) ([4ca77ba](https://github.com/LotusAndCompany/devtools/commit/4ca77ba9273c8e5b95409486700f36fcfd26c59e))
+
 ## [0.5.3](https://github.com/LotusAndCompany/devtools/compare/v0.5.2...v0.5.3) (2026-04-07)
 
 

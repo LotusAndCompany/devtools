@@ -74,10 +74,16 @@ vcpkg version
 
 ### 3. Install Additional Tools
 
-#### Doxygen (Optional)
+#### Doxygen (Optional, 1.16+)
 
 ```bash
 brew install doxygen
+```
+
+#### GraphViz (Optional, for documentation diagrams)
+
+```bash
+brew install graphviz
 ```
 
 #### clang-format and clang-tidy (For development)

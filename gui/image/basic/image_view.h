@@ -44,6 +44,13 @@ public:
      */
     void setPixmap(const QPixmap &pixmap, bool reset = false);
 
+signals:
+    /**
+     * @brief 読み込む画像ファイルが選択された時に発せられる
+     * @param path ファイル名
+     */
+    void loadFileSelected(const QString &path);
+
 protected:
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     Ui::BasicImageView *const ui;
@@ -90,6 +97,7 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
     /**

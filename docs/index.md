@@ -43,6 +43,7 @@ For contributors and developers:
 - [Testing Guide](development/testing-guide.md) - Write and run tests
 - [Localization](development/localization.md) - Add and update translations
 - [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow
+- [AI Agent Harness](development/ai-agent-harness.md) - Cross-tool AI agent configuration
 
 ### API Reference
 
