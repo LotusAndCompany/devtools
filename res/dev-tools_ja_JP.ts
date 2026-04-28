@@ -1688,12 +1688,12 @@ Choose a tool from the side panel</source>
     <message>
         <location line="-67"/>
         <source>Text</source>
-        <translation type="unfinished">テキスト</translation>
+        <translation>テキスト</translation>
     </message>
     <message>
         <location line="-122"/>
         <source>Title</source>
-        <translation type="unfinished">タイトル</translation>
+        <translation>タイトル</translation>
     </message>
     <message>
         <source>Enter title...</source>
