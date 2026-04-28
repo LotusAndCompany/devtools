@@ -95,7 +95,7 @@
                       "type": "text",
                       "id": "DLsMU",
                       "fill": "$--foreground",
-                      "content": "\\b\\w+@\\w+\\.\\w+\\b",
+                      "content": "\\b(\\w+)@(\\w+\\.\\w+)\\b",
                       "fontFamily": "JetBrains Mono",
                       "fontSize": 13,
                       "fontWeight": "normal"
@@ -111,7 +111,7 @@
                       "type": "text",
                       "id": "4aTvg",
                       "fill": "$--muted-foreground",
-                      "content": "/gim",
+                      "content": "/gi",
                       "fontFamily": "JetBrains Mono",
                       "fontSize": 13,
                       "fontWeight": "normal"

@@ -71,6 +71,8 @@
               "name": "Main",
               "width": "fill_container",
               "height": "fill_container",
+              "layout": "horizontal",
+              "gap": 12,
               "children": [
                 {
                   "type": "frame",
@@ -803,6 +805,9 @@
     "--secondary": {
       "type": "color",
       "value": [
+        {
+          "value": "#383838"
+        },
         {
           "value": "#383838",
           "theme": {

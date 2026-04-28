@@ -582,7 +582,7 @@
                                   "id": "CPb1p",
                                   "name": "Label",
                                   "fill": "$--foreground",
-                                  "content": "Execute",
+                                  "content": "実行",
                                   "lineHeight": 1.43,
                                   "textAlign": "center",
                                   "fontFamily": "Geist",
