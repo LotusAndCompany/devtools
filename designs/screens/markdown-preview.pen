@@ -30,27 +30,34 @@
               "id": "NK44l",
               "name": "headerBar",
               "width": "fill_container",
-              "height": 32,
-              "justifyContent": "space_between",
+              "height": 40,
+              "padding": [
+                8,
+                0
+              ],
               "alignItems": "center",
               "children": [
                 {
-                  "type": "icon_font",
+                  "type": "path",
                   "id": "J6C2q",
-                  "width": 20,
-                  "height": 20,
-                  "iconFontName": "panel-left",
-                  "iconFontFamily": "lucide",
-                  "fill": "$--muted-foreground"
+                  "geometry": "M660-320v-320l-160 160 160 160z m-460 200q-33 0-56.5-23.5t-23.5-56.5v-560q0-33 23.5-56.5t56.5-23.5h560q33 0 56.5 23.5t23.5 56.5v560q0 33-23.5 56.5t-56.5 23.5h-560z m120-80v-560h-120v560h120z m80 0h360v-560h-360v560z m-80 0h-120 120z",
+                  "fill": "$--muted-foreground",
+                  "width": 24,
+                  "height": 24
                 },
                 {
-                  "type": "icon_font",
+                  "type": "frame",
+                  "id": "NK44lSpacer",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "path",
                   "id": "z0wxz",
-                  "width": 20,
-                  "height": 20,
-                  "iconFontName": "panel-right",
-                  "iconFontFamily": "lucide",
-                  "fill": "$--muted-foreground"
+                  "geometry": "M360-280q-33 0-56.5-23.5t-23.5-56.5v-400q0-33 23.5-56.5t56.5-23.5h400q33 0 56.5 23.5t23.5 56.5v400q0 33-23.5 56.5t-56.5 23.5h-400z m0-80h400v-400h-400v400z m-160 160v80q-33 0-56.5-23.5t-23.5-56.5h80z m-80-80v-80h80v80h-80z m0-160v-80h80v80h-80z m0-160v-80h80v80h-80z m160 480v-80h80v80h-80z m160 0v-80h80v80h-80z m160 0v-80h80v80h-80z",
+                  "fill": "$--muted-foreground",
+                  "width": 24,
+                  "height": 24
                 }
               ]
             },
