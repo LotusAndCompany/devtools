@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/LotusAndCompany/devtools/compare/v0.6.0...v0.7.0) (2026-05-01)
+
+
+### Features
+
+* **design:** add UI design files for DevTools application ([#25](https://github.com/LotusAndCompany/devtools/issues/25)) ([3b4381e](https://github.com/LotusAndCompany/devtools/commit/3b4381e0dbd8c167093fcc6faeb51e1eb7890c34))
+
 ## [0.6.0](https://github.com/LotusAndCompany/devtools/compare/v0.5.3...v0.6.0) (2026-04-22)
 
 
