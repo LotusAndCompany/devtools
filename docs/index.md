@@ -29,6 +29,9 @@ Learn how to use each feature:
 - [Command Execution](user-guide/command-execution.md) - Run shell commands from the GUI
 - [Phrase Generation](user-guide/phrase-generation.md) - Generate random text and phrases
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
+- [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
+- [Regex Tester](user-guide/regex-tester.md) - Build and test regular expressions interactively
+- [Color Converter](user-guide/color-converter.md) - Convert colors between HEX, RGB, HSL, HSV, and CMYK
 
 ### Development
 
@@ -39,6 +42,7 @@ For contributors and developers:
 - [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
 - [Testing Guide](development/testing-guide.md) - Write and run tests
 - [Localization](development/localization.md) - Add and update translations
+- [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow
 - [AI Agent Harness](development/ai-agent-harness.md) - Cross-tool AI agent configuration
 
 ### API Reference

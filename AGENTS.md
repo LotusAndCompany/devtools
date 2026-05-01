@@ -106,3 +106,13 @@ type: feat, fix, docs, style, refactor, test, chore, build, ci, perf
 Setup: `pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push`
 
 Runs: clang-format, trailing-whitespace, EOF fixer, large file check, commit-msg validation, pre-push build.
+
+## Design Files (Pencil `.pen`)
+
+UI design files live under `designs/screens/`, one file per screen or dialog group. Common chrome (sidebar, header) is intentionally excluded from individual screen files.
+
+- Edit `.pen` files via the Pencil editor or the `pencil` MCP server (`open_document` → `batch_get` / `batch_design`). **Never `Read` or `grep` `.pen` files directly** — they are encrypted.
+- One screen per PR keeps diffs reviewable and minimizes auto-merge risk.
+- No master/aggregate file. Multi-screen changes touch each file separately.
+- `.pen` files are tracked as plain text (no `binary` / `merge=binary` attribute). Encrypted payloads can corrupt under text auto-merge — keep edits localized and coordinate with the team.
+- See `docs/development/design-files.md` for the full guide.

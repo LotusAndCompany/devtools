@@ -36,6 +36,7 @@ devtools/
 ├── main/           # アプリケーションエントリーポイント
 ├── res/            # リソースと翻訳ファイル
 ├── tests/          # ユニットテスト
+├── designs/        # UIデザインファイル（.pen）
 ├── docs/           # ドキュメント
 └── distribution/   # プラットフォーム固有のパッケージングファイル
 ```
@@ -224,6 +225,12 @@ DevTools_add_test(test_your_module
 ```
 
 `cmake .. -DENABLE_UNIT_TEST=ON`でテストを有効化します。
+
+### デザインファイル
+
+UIデザインファイル（`.pen`、[Pencil](https://pencil.app) 形式）は `designs/screens/` 配下に画面・ダイアログ単位で格納されています。サイドバー等の共通要素は個別ファイルから除外し、編集の影響範囲を局所化しています。
+
+ファイル構成・編集フロー・コンフリクト対応の詳細は [Design Files](../development/design-files.md) を参照してください。
 
 ### ブランチ命名規則
 

@@ -36,6 +36,7 @@ devtools/
 ├── main/           # Application entry point
 ├── res/            # Resources and translation files
 ├── tests/          # Unit tests
+├── designs/        # UI design files (.pen)
 ├── docs/           # Documentation
 └── distribution/   # Platform-specific packaging files
 ```
@@ -224,6 +225,12 @@ DevTools_add_test(test_your_module
 ```
 
 Enable tests with `cmake .. -DENABLE_UNIT_TEST=ON`.
+
+### Design Files
+
+UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`, with one file per screen or dialog group. Common chrome such as the sidebar is intentionally excluded from individual screen files to keep edits localized.
+
+See [Design Files](docs/development/design-files.md) for the full layout, editing workflow, and conflict-handling guidance.
 
 ### Branch Naming
 
