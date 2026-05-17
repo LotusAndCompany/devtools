@@ -82,7 +82,13 @@
         </font>
        </property>
        <property name="text">
-        <string/>
+        <string>追加</string>
+       </property>
+       <property name="toolTip">
+        <string>追加</string>
+       </property>
+       <property name="accessibleName">
+        <string>追加</string>
        </property>
        <property name="icon">
         <iconset theme="add"/>
@@ -118,7 +124,13 @@
         </font>
        </property>
        <property name="text">
-        <string/>
+        <string>ツリービュー切替</string>
+       </property>
+       <property name="toolTip">
+        <string>ツリービュー切替</string>
+       </property>
+       <property name="accessibleName">
+        <string>ツリービュー切替</string>
        </property>
        <property name="icon">
         <iconset theme="menu"/>
