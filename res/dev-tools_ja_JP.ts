@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -358,7 +358,7 @@
 <context>
     <name>DataConversionGUI</name>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="+81"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="+82"/>
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
@@ -374,7 +374,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+57"/>
+        <location line="+58"/>
         <source>Error &amp; waning messages</source>
         <translation>エラー・警告</translation>
     </message>

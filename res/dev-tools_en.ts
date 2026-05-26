@@ -350,68 +350,68 @@
 <context>
     <name>DataConversionGUI</name>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="66"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="82"/>
         <source>Load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="79"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="87"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="164"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="116"/>
         <source>Input text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="190"/>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="354"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="123"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="181"/>
         <source>Error &amp; waning messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="230"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="143"/>
         <source>YAML (Flow style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="225"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="142"/>
         <source>YAML (Block style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="244"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="148"/>
         <source>4 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="249"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="149"/>
         <source>2 Spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="254"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="150"/>
         <source>Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="259"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="151"/>
         <source>Minified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="283"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="157"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="296"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="162"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="325"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="173"/>
         <source>Output text</source>
         <translation type="unfinished"></translation>
     </message>

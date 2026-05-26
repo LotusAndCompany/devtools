@@ -64,6 +64,7 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 {
     auto *const container = new QWidget(parent);
     auto *const layout = new QVBoxLayout(container);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(4);
 
     auto *const actionBar = new QWidget(container);
@@ -129,6 +130,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 {
     auto *const container = new QWidget(parent);
     auto *const layout = new QVBoxLayout(container);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(4);
 
     auto *const actionBar = new QWidget(container);
