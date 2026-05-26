@@ -113,7 +113,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # command
     qt_add_library(${PROJECT_NAME}_command STATIC
-        gui/command/command.h gui/command/command.cpp gui/command/command.ui gui/command/command_option.h
+        gui/command/command.h gui/command/command.cpp gui/command/command_option.h
         gui/command/command_function.h
     )
 

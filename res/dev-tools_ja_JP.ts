@@ -94,42 +94,42 @@
 <context>
     <name>Command</name>
     <message>
-        <location filename="../gui/command/command.ui" line="+17"/>
+        <location filename="../gui/command/command.cpp" line="+34"/>
         <source>GroupBox</source>
         <translation>グループボックス</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+33"/>
         <source>Generate command</source>
         <translation>コマンド生成</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+6"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+3"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="-26"/>
         <source>Option List</source>
         <translation>オプションリスト</translation>
     </message>
     <message>
-        <location line="-55"/>
+        <location line="+13"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
     <message>
-        <location line="-15"/>
+        <location line="-21"/>
         <source>Functions List</source>
         <translation>機能リスト</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+15"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1655,13 +1655,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
