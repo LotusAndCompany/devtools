@@ -4,23 +4,51 @@
 #include "core/exception/invalid_argument_exception.h"
 #include "core/exception/under_development_exception.h"
 #include "sidemenu_item.h"
-#include "ui_sidemenu.h"
 
 #include <QAbstractButton>
 #include <QButtonGroup>
+#include <QEvent>
+#include <QFrame>
+#include <QLineEdit>
+#include <QScrollArea>
+#include <QSizePolicy>
+#include <QVBoxLayout>
 
 const QString Sidemenu::invalidSidemenuIDReason =
     QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
 
-Sidemenu::Sidemenu(QWidget *parent)
-    : QWidget(parent), ui(new Ui::Sidemenu), buttonGroup(new QButtonGroup(this))
+Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
-    ui->setupUi(this);
+    const QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    setSizePolicy(sizePolicy);
+    setMinimumWidth(240);
+
+    auto *const verticalLayout = new QVBoxLayout(this);
+    verticalLayout->setSpacing(4);
+    verticalLayout->setContentsMargins(6, 6, 6, 6);
+
+    m_searchBoxEdit = new QLineEdit(this);
+    m_searchBoxEdit->setFocusPolicy(Qt::ClickFocus);
+    verticalLayout->addWidget(m_searchBoxEdit);
+
+    auto *const line = new QFrame(this);
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    verticalLayout->addWidget(line);
+
+    auto *const scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    auto *const scrollAreaWidgetContents = new QWidget();
+    m_scrollAreaLayout = new QVBoxLayout(scrollAreaWidgetContents);
+    m_scrollAreaLayout->setSpacing(0);
+    m_scrollAreaLayout->setContentsMargins(0, 0, 0, 0);
+    scrollArea->setWidget(scrollAreaWidgetContents);
+    verticalLayout->addWidget(scrollArea);
 
     buttonGroup->setExclusive(true);
 
     connect(buttonGroup, &QButtonGroup::idToggled, this, &Sidemenu::onButtonToggled);
-    connect(ui->searchBoxEdit, &QLineEdit::textChanged, this, &Sidemenu::onSearchTextChanged);
+    connect(m_searchBoxEdit, &QLineEdit::textChanged, this, &Sidemenu::onSearchTextChanged);
 
     // WIP: 適当なボタンを追加する
     registerItem(ID::IMAGE_RESIZE);
@@ -34,12 +62,9 @@ Sidemenu::Sidemenu(QWidget *parent)
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::DB_TOOL);
 
-    ui->scrollAreaLayout->addStretch();
-}
+    m_scrollAreaLayout->addStretch();
 
-Sidemenu::~Sidemenu()
-{
-    delete ui;
+    retranslateUi();
 }
 
 void Sidemenu::validateID(Sidemenu::ID id)
@@ -99,7 +124,7 @@ void Sidemenu::registerItem(ID id)
 {
     auto *const item = new SidemenuItem(id, this);
     buttonGroup->addButton(item, static_cast<int>(id));
-    ui->scrollAreaLayout->addWidget(item);
+    m_scrollAreaLayout->addWidget(item);
     allItems.append(item);
 }
 
@@ -117,13 +142,18 @@ void Sidemenu::changeEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        retranslateUi();
         event->accept();
         break;
     default:
         QWidget::changeEvent(event);
         break;
     }
+}
+
+void Sidemenu::retranslateUi()
+{
+    m_searchBoxEdit->setPlaceholderText(tr("Search tools"));
 }
 
 void Sidemenu::onButtonToggled(int intID, bool checked)

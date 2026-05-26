@@ -3,9 +3,7 @@
 
 #include <QWidget>
 
-namespace Ui {
-class WelcomePage;
-}
+class QLabel;
 
 class WelcomePage : public QWidget
 {
@@ -13,7 +11,7 @@ class WelcomePage : public QWidget
 
 public:
     explicit WelcomePage(QWidget *parent = nullptr);
-    ~WelcomePage() override;
+    ~WelcomePage() override = default;
     WelcomePage(const WelcomePage &) = delete;
     WelcomePage &operator=(const WelcomePage &) = delete;
     WelcomePage(WelcomePage &&) = delete;
@@ -23,7 +21,9 @@ protected:
     void changeEvent(QEvent *event) override;
 
 private:
-    Ui::WelcomePage *const ui;
+    QLabel *m_messageLabel{nullptr};
+
+    void retranslateUi();
 };
 
 #endif // WELCOME_PAGE_H

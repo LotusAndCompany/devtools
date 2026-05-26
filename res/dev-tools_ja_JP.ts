@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -680,34 +680,33 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.ui" line="+173"/>
+        <location filename="../gui/main_window.cpp" line="+185"/>
         <source>File</source>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+5"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-1"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-2"/>
         <source>Close Window</source>
         <translation>ウィンドウを閉じる</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+1"/>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示</translation>
     </message>
     <message>
-        <location line="-5"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
 </context>
 <context>
@@ -1292,7 +1291,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">ホーム</translation>
     </message>
     <message>
-        <location filename="../gui/sidemenu.ui" line="+50"/>
+        <location filename="../gui/sidemenu.cpp" line="+156"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -1492,12 +1491,13 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>WelcomePage</name>
     <message>
-        <location filename="../gui/welcome_page.ui" line="+14"/>
+        <location filename="../gui/welcome_page.cpp" line="+11"/>
+        <location line="+37"/>
         <source>DevTools - Welcome</source>
         <translation>DevTools - ようこそ</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+1"/>
         <source>Welcome to DevTools!
 Choose a tool from the side panel</source>
         <translation>DevToolsへようこそ!
@@ -1655,13 +1655,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>

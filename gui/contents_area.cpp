@@ -16,33 +16,19 @@
 #include "gui/qr_code/qr_code_generation_gui.h"
 #include "gui/welcome_page.h"
 #include "phrase_generation/phrase_generation.h"
-#include "ui_contents_area.h"
 
 #include <QLabel>
+#include <QVBoxLayout>
 
-ContentsArea::ContentsArea(QWidget *parent) : QFrame(parent), ui(new Ui::ContentsArea)
+ContentsArea::ContentsArea(QWidget *parent)
+    : QFrame(parent), m_contentsAreaLayout(new QVBoxLayout(this))
 {
-    ui->setupUi(this);
+    setFrameShape(QFrame::StyledPanel);
+
+    m_contentsAreaLayout->setSpacing(0);
+    m_contentsAreaLayout->setContentsMargins(6, 6, 6, 6);
 
     changeContent(Sidemenu::ID::WELCOME);
-}
-
-ContentsArea::~ContentsArea()
-{
-    delete ui;
-}
-
-void ContentsArea::changeEvent(QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        event->accept();
-        break;
-    default:
-        QFrame::changeEvent(event);
-        break;
-    }
 }
 
 void ContentsArea::onSidemenuItemChanged(Sidemenu::ID id)
@@ -63,7 +49,7 @@ bool ContentsArea::openSQLiteFileInDbTool(const QString &filePath)
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent != nullptr) {
-        ui->contentsAreaLayout->removeWidget(currentContent);
+        m_contentsAreaLayout->removeWidget(currentContent);
         // DBツールはキャッシュするので削除しない
         if (currentContent != cachedDbMain) {
             delete currentContent;
@@ -122,5 +108,5 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     }
 
     currentContent = content;
-    ui->contentsAreaLayout->addWidget(currentContent);
+    m_contentsAreaLayout->addWidget(currentContent);
 }
