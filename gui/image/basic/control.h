@@ -5,9 +5,19 @@
 
 #include <cstdint>
 
+class QPushButton;
+
 namespace Ui {
-class BasicImageViewControl;
-}
+/**
+ * @brief BasicImageViewControl が保持するウィジェット群
+ */
+struct BasicImageViewControl // NOLINT(altera-struct-pack-align)
+{
+    QPushButton *loadButton;
+    QPushButton *resetButton;
+    QPushButton *saveButton;
+};
+} // namespace Ui
 
 #ifdef _TEST_BasicImageViewControl
 namespace Test {

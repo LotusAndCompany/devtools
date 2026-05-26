@@ -6,11 +6,34 @@
 #include <QWidget>
 
 class QAbstractButton;
+class QButtonGroup;
+class QCheckBox;
+class QLabel;
+class QRadioButton;
+class QSpinBox;
+class BasicImageViewControl;
+class ImageDivisionInterface;
+class ImageViewForImageDivision;
 
 namespace Ui {
-class ImageDivisionGUI;
-}
-class ImageDivisionInterface;
+/**
+ * @brief ImageDivisionGUI が保持するウィジェット群
+ */
+struct ImageDivisionGUI // NOLINT(altera-struct-pack-align)
+{
+    ImageViewForImageDivision *imageView;
+    BasicImageViewControl *control;
+    QLabel *sizeLabel;
+    QSpinBox *hDivValue;
+    QSpinBox *vDivValue;
+    QSpinBox *widthValue;
+    QSpinBox *heightValue;
+    QRadioButton *useDivisionButton;
+    QRadioButton *useSizeButton;
+    QCheckBox *ignoreRemainders;
+    QButtonGroup *divisionModeButtonGroup;
+};
+} // namespace Ui
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {

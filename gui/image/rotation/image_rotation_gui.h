@@ -5,10 +5,25 @@
 
 #include <QWidget>
 
-namespace Ui {
-class ImageRotationGUI;
-}
+class QPushButton;
+class BasicImageView;
+class BasicImageViewControl;
 class ImageRotationInterface;
+
+namespace Ui {
+/**
+ * @brief ImageRotationGUI が保持するウィジェット群
+ */
+struct ImageRotationGUI // NOLINT(altera-struct-pack-align)
+{
+    BasicImageView *imageView;
+    BasicImageViewControl *basicImageViewControl;
+    QPushButton *rotateRightButton;
+    QPushButton *rotateLeftButton;
+    QPushButton *hFlipButton;
+    QPushButton *vFlipButton;
+};
+} // namespace Ui
 
 #ifdef _TEST_ImageRotationGUI
 namespace Test {

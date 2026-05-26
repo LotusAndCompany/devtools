@@ -5,10 +5,29 @@
 
 #include <QWidget>
 
-namespace Ui {
-class ImageTransparentGUI;
-}
+class QCheckBox;
+class QComboBox;
+class QDoubleSpinBox;
+class BasicImageViewControl;
+class ColorSample;
 class ImageTransparentInterface;
+class ImageViewForImageTransparent;
+
+namespace Ui {
+/**
+ * @brief ImageTransparentGUI が保持するウィジェット群
+ */
+struct ImageTransparentGUI // NOLINT(altera-struct-pack-align)
+{
+    ImageViewForImageTransparent *imageView;
+    BasicImageViewControl *control;
+    QComboBox *colorMode;
+    ColorSample *colorSample;
+    QDoubleSpinBox *toleranceValue;
+    QDoubleSpinBox *transparencyValue;
+    QCheckBox *contiguousArea;
+};
+} // namespace Ui
 
 #ifdef _TEST_ImageTransparentGUI
 namespace Test {

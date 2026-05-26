@@ -52,18 +52,18 @@
 <context>
     <name>BasicImageView</name>
     <message>
-        <location filename="../gui/image/basic/image_view.ui" line="+86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="+180"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="+66"/>
+        <location line="+183"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="-148"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+3"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -71,12 +71,12 @@
 <context>
     <name>BasicImageViewControl</name>
     <message>
-        <location filename="../gui/image/basic/control.ui" line="+20"/>
+        <location filename="../gui/image/basic/control.cpp" line="+17"/>
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
@@ -85,8 +85,8 @@
         <translation type="vanished">保存</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location filename="../gui/image/basic/control.cpp" line="+53"/>
+        <location line="+1"/>
+        <location line="+43"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -427,52 +427,52 @@
 <context>
     <name>ImageDivisionGUI</name>
     <message>
-        <location filename="../gui/image/division/image_division_gui.ui" line="+85"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="+31"/>
         <source>Image size:</source>
         <translation>画像サイズ:</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+4"/>
         <source>0 x 0</source>
         <translation>0 × 0</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+68"/>
         <source>Division</source>
         <translation>分割数</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="-57"/>
         <source>Horizontal:</source>
         <translation>横:</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+9"/>
         <source>Vertical:</source>
         <translation>縦:</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+54"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-39"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+9"/>
         <source>Height:</source>
         <translation>縦幅:</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+39"/>
         <source>Ignore remainders</source>
         <translation>余りを切り捨て</translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="+65"/>
+        <location line="+72"/>
         <source>%1 x %2</source>
         <translation>%1 × %2</translation>
     </message>
@@ -506,32 +506,32 @@
 <context>
     <name>ImageResizeGUI</name>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.ui" line="+74"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+52"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+3"/>
         <source>Height:</source>
         <translation>縦幅:</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+3"/>
         <source>Horizontal Scale:</source>
         <translation>横の拡大率:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
         <source>Vertical Scale:</source>
         <translation>縦の拡大率:</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+17"/>
         <source>Keep aspect ratio</source>
         <translation>縦横比を維持</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
         <source>Smooth scaling</source>
         <translation>バイリニア補完</translation>
     </message>
@@ -544,7 +544,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="+67"/>
+        <location line="+79"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -557,42 +557,42 @@
 <context>
     <name>ImageRotationGUI</name>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+86"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+32"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-1"/>
         <source>Rotate Clockwise</source>
         <translation>右に90°回転</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+7"/>
         <source>Rotate anti-clockwise by 90°</source>
         <translation>左に90°回転</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-1"/>
         <source>Rotate Anti-clockwise</source>
         <translation>左に90°回転</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+5"/>
         <source>Flip holizontally</source>
         <translation>左右反転</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-1"/>
         <source>Flip Horizontal</source>
         <translation>左右反転</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+5"/>
         <source>Flip vertically</source>
         <translation>上下反転</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-1"/>
         <source>Flip Vertical</source>
         <translation>上下反転</translation>
     </message>
@@ -605,7 +605,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+59"/>
+        <location line="+89"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -626,28 +626,28 @@
 <context>
     <name>ImageTransparentGUI</name>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+98"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+31"/>
         <source>Color mode:</source>
         <translatorcomment>しっくり来ない</translatorcomment>
         <translation>色空間:</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+14"/>
         <source>Tolerance:</source>
         <translation>許容誤差:</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+25"/>
         <source>Only contiguous area</source>
         <translation>連続領域のみ</translation>
     </message>
     <message>
-        <location line="-77"/>
+        <location line="-32"/>
         <source>Color:</source>
         <translation>色:</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+14"/>
         <source>Transparency:</source>
         <translation>透明度:</translation>
     </message>
@@ -660,7 +660,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+64"/>
+        <location line="+96"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>
@@ -716,6 +716,125 @@
         <location filename="../gui/image/basic/file_dialogs.cpp" line="-24"/>
         <source>Images</source>
         <translation>画像</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>No Image</source>
+        <translation type="obsolete">画像がありません</translation>
+    </message>
+    <message>
+        <source>Zoom In</source>
+        <translation type="obsolete">拡大</translation>
+    </message>
+    <message>
+        <source>Zoom Out</source>
+        <translation type="obsolete">縮小</translation>
+    </message>
+    <message>
+        <source>Width:</source>
+        <translation type="obsolete">横幅:</translation>
+    </message>
+    <message>
+        <source>Height:</source>
+        <translation type="obsolete">縦幅:</translation>
+    </message>
+    <message>
+        <source>Horizontal Scale:</source>
+        <translation type="obsolete">横の拡大率:</translation>
+    </message>
+    <message>
+        <source>Vertical Scale:</source>
+        <translation type="obsolete">縦の拡大率:</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation type="obsolete">縦横比を維持</translation>
+    </message>
+    <message>
+        <source>Smooth scaling</source>
+        <translation type="obsolete">バイリニア補完</translation>
+    </message>
+    <message>
+        <source>Rotate Clockwise</source>
+        <translation type="obsolete">右に90°回転</translation>
+    </message>
+    <message>
+        <source>Rotate clockwise by 90°</source>
+        <translation type="obsolete">右に90°回転</translation>
+    </message>
+    <message>
+        <source>Rotate Anti-clockwise</source>
+        <translation type="obsolete">左に90°回転</translation>
+    </message>
+    <message>
+        <source>Rotate anti-clockwise by 90°</source>
+        <translation type="obsolete">左に90°回転</translation>
+    </message>
+    <message>
+        <source>Flip Horizontal</source>
+        <translation type="obsolete">左右反転</translation>
+    </message>
+    <message>
+        <source>Flip holizontally</source>
+        <translation type="obsolete">左右反転</translation>
+    </message>
+    <message>
+        <source>Flip Vertical</source>
+        <translation type="obsolete">上下反転</translation>
+    </message>
+    <message>
+        <source>Flip vertically</source>
+        <translation type="obsolete">上下反転</translation>
+    </message>
+    <message>
+        <source>Image size:</source>
+        <translation type="obsolete">画像サイズ:</translation>
+    </message>
+    <message>
+        <source>0 x 0</source>
+        <translation type="obsolete">0 × 0</translation>
+    </message>
+    <message>
+        <source>Horizontal:</source>
+        <translation type="obsolete">横:</translation>
+    </message>
+    <message>
+        <source>Vertical:</source>
+        <translation type="obsolete">縦:</translation>
+    </message>
+    <message>
+        <source>Division</source>
+        <translation type="obsolete">分割数</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">サイズ</translation>
+    </message>
+    <message>
+        <source>Ignore remainders</source>
+        <translation type="obsolete">余りを切り捨て</translation>
+    </message>
+    <message>
+        <source>Color mode:</source>
+        <translation type="obsolete">色空間:</translation>
+    </message>
+    <message>
+        <source>Color:</source>
+        <translation type="obsolete">色:</translation>
+    </message>
+    <message>
+        <source>Tolerance:</source>
+        <translation type="obsolete">許容誤差:</translation>
+    </message>
+    <message>
+        <source>Transparency:</source>
+        <translation type="obsolete">透明度:</translation>
+    </message>
+    <message>
+        <source>Only contiguous area</source>
+        <translation type="obsolete">連続領域のみ</translation>
     </message>
 </context>
 <context>
@@ -1655,13 +1774,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>

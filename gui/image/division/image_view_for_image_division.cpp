@@ -1,8 +1,7 @@
 #include "image_view_for_image_division.h"
 
-#include "gui/image/basic/ui_image_view.h"
-
 #include <QPainter>
+#include <QScrollArea>
 
 using namespace ImageViewForImageDivisionInternal;
 

@@ -127,26 +127,26 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_image_core STATIC
         core/image/basic_image_io.h core/image/basic_image_io.cpp
         core/image/basic_image_edit_interface.h core/image/basic_image_edit_interface.cpp
-        gui/image/basic/image_view.h gui/image/basic/image_view.cpp gui/image/basic/image_view.ui
+        gui/image/basic/image_view.h gui/image/basic/image_view.cpp
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
-        gui/image/basic/control.h gui/image/basic/control.cpp gui/image/basic/control.ui
+        gui/image/basic/control.h gui/image/basic/control.cpp
     )
     qt_add_library(${PROJECT_NAME}_image_resize STATIC
         core/image/resize/image_resize.h core/image/resize/image_resize.cpp
-        gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
+        gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp
     )
     qt_add_library(${PROJECT_NAME}_image_rotation STATIC
         core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
-        gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp gui/image/rotation/image_rotation_gui.ui
+        gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp
     )
     qt_add_library(${PROJECT_NAME}_image_division STATIC
         core/image/division/image_division.h core/image/division/image_division.cpp
-        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp gui/image/division/image_division_gui.ui
+        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp
         gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
     )
     qt_add_library(${PROJECT_NAME}_image_transparent STATIC
         core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
-        gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp gui/image/transparent/image_transparent_gui.ui
+        gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )

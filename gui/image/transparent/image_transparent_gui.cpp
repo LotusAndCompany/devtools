@@ -2,16 +2,101 @@
 
 #include "core/exception/invalid_argument_exception.h"
 #include "core/image/transparent/image_transparent.h"
+#include "gui/image/basic/control.h"
+#include "gui/image/transparent/color_sample.h"
 #include "gui/image/transparent/image_view_for_image_transparent.h"
-#include "ui_image_transparent_gui.h"
 
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMessageBox>
+#include <QSpacerItem>
+#include <QVBoxLayout>
+
+namespace {
+void buildFormFields(Ui::ImageTransparentGUI *ui, QWidget *parent, QVBoxLayout *layout)
+{
+    auto *form = new QFormLayout();
+    form->setSizeConstraint(QLayout::SetDefaultConstraint);
+
+    ui->colorMode = new QComboBox(parent);
+    ui->colorMode->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    ui->colorMode->addItem("RGB");
+    ui->colorMode->addItem("HSL");
+    ui->colorMode->addItem("HSV");
+    auto *colorModeLabel = new QLabel(ImageTransparentGUI::tr("Color mode:"), parent);
+    colorModeLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    form->addRow(colorModeLabel, ui->colorMode);
+
+    ui->colorSample = new ColorSample(parent);
+    ui->colorSample->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ui->colorSample->setMinimumSize(32, 32);
+    form->addRow(new QLabel(ImageTransparentGUI::tr("Color:"), parent), ui->colorSample);
+
+    ui->toleranceValue = new QDoubleSpinBox(parent);
+    ui->toleranceValue->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    ui->toleranceValue->setMaximum(1.0);
+    ui->toleranceValue->setSingleStep(0.05);
+    ui->toleranceValue->setValue(0.1);
+    form->addRow(new QLabel(ImageTransparentGUI::tr("Tolerance:"), parent), ui->toleranceValue);
+
+    ui->transparencyValue = new QDoubleSpinBox(parent);
+    ui->transparencyValue->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    ui->transparencyValue->setMaximum(1.0);
+    ui->transparencyValue->setSingleStep(0.05);
+    ui->transparencyValue->setValue(1.0);
+    form->addRow(new QLabel(ImageTransparentGUI::tr("Transparency:"), parent),
+                 ui->transparencyValue);
+
+    layout->addLayout(form);
+}
+
+void buildUiArea(Ui::ImageTransparentGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
+{
+    auto *uiArea = new QFrame(parent);
+    uiArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    uiArea->setMinimumWidth(240);
+    uiArea->setFrameShape(QFrame::StyledPanel);
+    uiArea->setFrameShadow(QFrame::Raised);
+
+    auto *layout = new QVBoxLayout(uiArea);
+    layout->setContentsMargins(12, 12, 12, 12);
+
+    buildFormFields(ui, uiArea, layout);
+
+    ui->contiguousArea = new QCheckBox(ImageTransparentGUI::tr("Only contiguous area"), uiArea);
+    ui->contiguousArea->setChecked(true);
+    layout->addWidget(ui->contiguousArea);
+
+    layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    ui->control = new BasicImageViewControl(uiArea);
+    layout->addWidget(ui->control);
+
+    rootLayout->addWidget(uiArea);
+}
+} // namespace
 
 ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTransparent,
                                          QWidget *parent)
     : GuiTool(parent), ui(new Ui::ImageTransparentGUI), imageTransparent(imageTransparent)
 {
-    ui->setupUi(this);
+    resize(480, 300);
+
+    auto *rootLayout = new QHBoxLayout(this);
+    rootLayout->setContentsMargins(0, 0, 0, 0);
+    rootLayout->setSpacing(0);
+
+    ui->imageView = new ImageViewForImageTransparent(this);
+    ui->imageView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->imageView->setMinimumWidth(240);
+    rootLayout->addWidget(ui->imageView);
+
+    buildUiArea(ui, this, rootLayout);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
     if (imageTransparent->parent() == nullptr) {

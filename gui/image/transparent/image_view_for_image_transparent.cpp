@@ -1,8 +1,7 @@
 #include "image_view_for_image_transparent.h"
 
-#include "gui/image/basic/ui_image_view.h"
-
 #include <QMouseEvent>
+#include <QScrollArea>
 
 using namespace ImageViewForImageTransparentInternal;
 

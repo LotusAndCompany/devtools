@@ -2,20 +2,145 @@
 
 #include "core/exception/invalid_state_exception.h"
 #include "core/image/division/image_division.h"
-#include "ui_image_division_gui.h"
+#include "gui/image/basic/control.h"
+#include "gui/image/division/image_view_for_image_division.h"
 
 #include <QButtonGroup>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMessageBox>
+#include <QRadioButton>
 #include <QSignalBlocker>
+#include <QSpacerItem>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 #include <array>
 
 #include <core/exception/invalid_argument_exception.h>
 
+namespace {
+void buildSizeRow(Ui::ImageDivisionGUI *ui, QWidget *parent, QVBoxLayout *layout)
+{
+    auto *row = new QHBoxLayout();
+    row->setSpacing(4);
+
+    auto *label = new QLabel(ImageDivisionGUI::tr("Image size:"), parent);
+    label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    row->addWidget(label);
+
+    ui->sizeLabel = new QLabel(ImageDivisionGUI::tr("0 x 0"), parent);
+    ui->sizeLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    row->addWidget(ui->sizeLabel);
+
+    layout->addLayout(row);
+}
+
+void buildDivisionGrid(Ui::ImageDivisionGUI *ui, QWidget *parent, QVBoxLayout *layout)
+{
+    auto *grid = new QGridLayout();
+
+    auto *hLabel = new QLabel(ImageDivisionGUI::tr("Horizontal:"), parent);
+    hLabel->setLayoutDirection(Qt::LeftToRight);
+    hLabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+    grid->addWidget(hLabel, 0, 0);
+
+    ui->hDivValue = new QSpinBox(parent);
+    ui->hDivValue->setMinimum(1);
+    grid->addWidget(ui->hDivValue, 0, 1);
+
+    auto *vLabel = new QLabel(ImageDivisionGUI::tr("Vertical:"), parent);
+    vLabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+    grid->addWidget(vLabel, 1, 0);
+
+    ui->vDivValue = new QSpinBox(parent);
+    ui->vDivValue->setMinimum(1);
+    grid->addWidget(ui->vDivValue, 1, 1);
+
+    layout->addLayout(grid);
+}
+
+void buildSizeGrid(Ui::ImageDivisionGUI *ui, QWidget *parent, QVBoxLayout *layout)
+{
+    auto *grid = new QGridLayout();
+
+    auto *wLabel = new QLabel(ImageDivisionGUI::tr("Width:"), parent);
+    wLabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+    grid->addWidget(wLabel, 0, 0);
+
+    ui->widthValue = new QSpinBox(parent);
+    ui->widthValue->setEnabled(false);
+    ui->widthValue->setSuffix("px");
+    grid->addWidget(ui->widthValue, 0, 1);
+
+    auto *hLabel = new QLabel(ImageDivisionGUI::tr("Height:"), parent);
+    hLabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+    grid->addWidget(hLabel, 1, 0);
+
+    ui->heightValue = new QSpinBox(parent);
+    ui->heightValue->setEnabled(false);
+    ui->heightValue->setSuffix("px");
+    grid->addWidget(ui->heightValue, 1, 1);
+
+    layout->addLayout(grid);
+}
+
+void buildUiArea(Ui::ImageDivisionGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
+{
+    auto *uiArea = new QFrame(parent);
+    uiArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    uiArea->setMinimumWidth(240);
+    uiArea->setFrameShape(QFrame::StyledPanel);
+
+    auto *layout = new QVBoxLayout(uiArea);
+    layout->setContentsMargins(12, 12, 12, 12);
+
+    buildSizeRow(ui, uiArea, layout);
+
+    ui->useDivisionButton = new QRadioButton(ImageDivisionGUI::tr("Division"), uiArea);
+    ui->useDivisionButton->setChecked(true);
+    layout->addWidget(ui->useDivisionButton);
+
+    buildDivisionGrid(ui, uiArea, layout);
+
+    ui->useSizeButton = new QRadioButton(ImageDivisionGUI::tr("Size"), uiArea);
+    layout->addWidget(ui->useSizeButton);
+
+    buildSizeGrid(ui, uiArea, layout);
+
+    ui->divisionModeButtonGroup = new QButtonGroup(parent);
+    ui->divisionModeButtonGroup->addButton(ui->useDivisionButton);
+    ui->divisionModeButtonGroup->addButton(ui->useSizeButton);
+
+    ui->ignoreRemainders = new QCheckBox(ImageDivisionGUI::tr("Ignore remainders"), uiArea);
+    ui->ignoreRemainders->setChecked(true);
+    layout->addWidget(ui->ignoreRemainders);
+
+    layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    ui->control = new BasicImageViewControl(uiArea);
+    layout->addWidget(ui->control);
+
+    rootLayout->addWidget(uiArea);
+}
+} // namespace
+
 ImageDivisionGUI::ImageDivisionGUI(ImageDivisionInterface *imageDivision, QWidget *parent)
     : GuiTool(parent), imageDivision(imageDivision), ui(new Ui::ImageDivisionGUI)
 {
-    ui->setupUi(this);
+    resize(400, 300);
+
+    auto *rootLayout = new QHBoxLayout(this);
+    rootLayout->setContentsMargins(0, 0, 0, 0);
+    rootLayout->setSpacing(0);
+
+    ui->imageView = new ImageViewForImageDivision(this);
+    rootLayout->addWidget(ui->imageView);
+
+    buildUiArea(ui, this, rootLayout);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
     if (imageDivision->parent() == nullptr) {
