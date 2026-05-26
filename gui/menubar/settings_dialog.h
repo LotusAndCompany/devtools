@@ -3,9 +3,15 @@
 
 #include <QDialog>
 
-namespace Ui {
-class SettingsDialog;
-}
+class QCheckBox;
+class QComboBox;
+class QDialogButtonBox;
+class QEvent;
+class QGroupBox;
+class QLabel;
+class QShowEvent;
+class QTabWidget;
+class QWidget;
 
 /**
  * @brief メニューバーのDevTools > Settings で表示されるダイアログ
@@ -14,8 +20,30 @@ class SettingsDialog : public QDialog
 {
     Q_OBJECT
 
-    /// UI
-    Ui::SettingsDialog *const ui;
+    /// タブウィジェット
+    QTabWidget *tab_widget = nullptr;
+    /// General タブ
+    QWidget *general_tab = nullptr;
+    /// Window タブ
+    QWidget *window_tab = nullptr;
+    /// 言語ラベル
+    QLabel *language_label = nullptr;
+    /// 言語コンボボックス
+    QComboBox *language_combo_box = nullptr;
+    /// 起動時にサイドバーを表示するチェックボックス
+    QCheckBox *show_sidebar_on_startup_check_box = nullptr;
+    /// 起動時に前回使用した機能を表示するチェックボックス
+    QCheckBox *show_last_tool_on_startup_check_box = nullptr;
+    /// ウィンドウ動作 GroupBox
+    QGroupBox *window_behavior_group_box = nullptr;
+    /// Always on top チェックボックス
+    QCheckBox *always_on_top_check_box = nullptr;
+    /// ウィンドウサイズを記憶するチェックボックス
+    QCheckBox *remember_window_size_check_box = nullptr;
+    /// ウィンドウ位置を記憶するチェックボックス
+    QCheckBox *remember_window_position_check_box = nullptr;
+    /// ダイアログボタンボックス
+    QDialogButtonBox *button_box = nullptr;
 
 public:
     /**
@@ -26,7 +54,7 @@ public:
     /**
      * @brief デストラクタ
      */
-    ~SettingsDialog() override;
+    ~SettingsDialog() override = default;
     SettingsDialog(const SettingsDialog &) = delete;
     SettingsDialog &operator=(const SettingsDialog &) = delete;
     SettingsDialog(SettingsDialog &&) = delete;
@@ -41,6 +69,18 @@ private:
      * @brief 設定を保存する
      */
     void saveSettings();
+    /**
+     * @brief 翻訳可能なテキストを再設定する
+     */
+    void retranslateUi();
+    /**
+     * @brief General タブを構築する
+     */
+    void buildGeneralTab();
+    /**
+     * @brief Window タブを構築する
+     */
+    void buildWindowTab();
 
 protected:
     /**
