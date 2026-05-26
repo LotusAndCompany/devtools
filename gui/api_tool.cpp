@@ -1,34 +1,41 @@
 #include "api_tool.h"
 
-#include "ui_api_tool.h"
-
 #include <QAuthenticator>
+#include <QComboBox>
 #include <QDateTime>
 #include <QFormLayout>
+#include <QHBoxLayout>
+#include <QHeaderView>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLabel>
+#include <QLineEdit>
 #include <QListView>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPushButton>
+#include <QSplitter>
 #include <QStandardItemModel>
 #include <QStringListModel>
+#include <QTabWidget>
+#include <QTableView>
+#include <QTextEdit>
 #include <QVBoxLayout>
 
 api_tool::api_tool(QWidget *parent)
     : QFrame(parent)
-    , ui(new Ui::api_tool)
-    , networkManager(new QNetworkAccessManager(this))
-    , paramsModel(new QStandardItemModel(this)) // Model initialization
+    , network_manager(new QNetworkAccessManager(this))
+    , params_model(new QStandardItemModel(this))
 {
-    ui->setupUi(this);
+    buildUi();
     setupParametersTable();
     setupResponseView();
 
-    connect(ui->sendButton, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
-    connect(networkManager, &QNetworkAccessManager::finished, this,
+    connect(send_button, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
+    connect(network_manager, &QNetworkAccessManager::finished, this,
             &api_tool::handleNetworkReplyFinished);
-    connect(paramsModel, &QStandardItemModel::itemChanged, this, &api_tool::updateUrlFromParams);
+    connect(params_model, &QStandardItemModel::itemChanged, this, &api_tool::updateUrlFromParams);
 
     qDebug() << "api_tool UI setup complete";
 }
@@ -36,30 +43,94 @@ api_tool::api_tool(QWidget *parent)
 api_tool::~api_tool()
 {
     qDebug() << "Destroying api_tool";
-    delete ui;
+}
+
+void api_tool::buildUi()
+{
+    setWindowTitle(tr("API Tool"));
+    resize(1014, 607);
+
+    auto *root_layout = new QVBoxLayout(this);
+    root_layout->setContentsMargins(30, 20, 33, 36);
+
+    main_splitter = new QSplitter(Qt::Vertical, this);
+    root_layout->addWidget(main_splitter);
+
+    auto *request_container = new QWidget(main_splitter);
+    auto *request_layout = new QHBoxLayout(request_container);
+    request_layout->setContentsMargins(0, 0, 0, 0);
+
+    method_combo = new QComboBox(request_container);
+    method_combo->addItem(tr("GET"));
+    method_combo->addItem(tr("POST"));
+    method_combo->addItem(tr("PUT"));
+    method_combo->addItem(tr("DELETE"));
+    request_layout->addWidget(method_combo);
+
+    url_edit = new QTextEdit(request_container);
+    url_edit->setMaximumHeight(29);
+    request_layout->addWidget(url_edit);
+
+    send_button = new QPushButton(tr("Send"), request_container);
+    request_layout->addWidget(send_button);
+
+    main_splitter->addWidget(request_container);
+
+    auto *tabs_container = new QWidget(main_splitter);
+    auto *tabs_layout = new QVBoxLayout(tabs_container);
+    tabs_layout->setContentsMargins(0, 0, 0, 0);
+
+    auto *tab_widget = new QTabWidget(tabs_container);
+    tab_widget->setFont(QFont(QStringLiteral(".AppleSystemUIFont")));
+
+    auto *params_tab = new QWidget(tab_widget);
+    auto *params_layout = new QVBoxLayout(params_tab);
+    params_table = new QTableView(params_tab);
+    params_layout->addWidget(params_table);
+    tab_widget->addTab(params_tab, tr("Parameters"));
+
+    auto *auth_tab = new QWidget(tab_widget);
+    auto *auth_layout = new QFormLayout(auth_tab);
+    auto *username_label = new QLabel(tr("Username:"), auth_tab);
+    username_edit = new QLineEdit(auth_tab);
+    auto *password_label = new QLabel(tr("Password:"), auth_tab);
+    password_edit = new QLineEdit(auth_tab);
+    password_edit->setEchoMode(QLineEdit::Password);
+    auth_layout->addRow(username_label, username_edit);
+    auth_layout->addRow(password_label, password_edit);
+    tab_widget->addTab(auth_tab, tr("Authentication"));
+
+    auto *body_tab = new QWidget(tab_widget);
+    auto *body_layout = new QVBoxLayout(body_tab);
+    body_edit = new QTextEdit(body_tab);
+    body_layout->addWidget(body_edit);
+    tab_widget->addTab(body_tab, tr("Body"));
+
+    tabs_layout->addWidget(tab_widget);
+    main_splitter->addWidget(tabs_container);
 }
 
 void api_tool::setupParametersTable()
 {
-    paramsModel = new QStandardItemModel(10, 3, this);
-    paramsModel->setHeaderData(0, Qt::Horizontal, tr("Key"));
-    paramsModel->setHeaderData(1, Qt::Horizontal, tr("Value"));
-    paramsModel->setHeaderData(2, Qt::Horizontal, tr("Description"));
-    ui->tableView->setModel(paramsModel);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    params_model = new QStandardItemModel(10, 3, this);
+    params_model->setHeaderData(0, Qt::Horizontal, tr("Key"));
+    params_model->setHeaderData(1, Qt::Horizontal, tr("Value"));
+    params_model->setHeaderData(2, Qt::Horizontal, tr("Description"));
+    params_table->setModel(params_model);
+    params_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void api_tool::handleSendButtonClick()
 {
     qDebug() << "Button clicked";
 
-    requestStartTime = QDateTime::currentMSecsSinceEpoch();
+    request_start_time = QDateTime::currentMSecsSinceEpoch();
 
-    QString const username = ui->usernameEdit->text();
-    QString const password = ui->passwordEdit->text();
+    QString const username = username_edit->text();
+    QString const password = password_edit->text();
 
-    QString const selectedMethod = ui->comboBox->currentText();
-    QString const url = ui->textEdit->toPlainText();
+    QString const selectedMethod = method_combo->currentText();
+    QString const url = url_edit->toPlainText();
     QNetworkRequest request((QUrl(url)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -70,20 +141,19 @@ void api_tool::handleSendButtonClick()
     }
 
     QByteArray payload;
-    // Bodyテキストエリアからデータを取得してpayloadに設定
     if (selectedMethod == "POST" || selectedMethod == "PUT") {
-        QString const bodyText = ui->bodyTextEdit->toPlainText();
+        QString const bodyText = body_edit->toPlainText();
         payload = bodyText.toUtf8();
     }
 
     if (selectedMethod == "GET") {
-        networkManager->get(request);
+        network_manager->get(request);
     } else if (selectedMethod == "POST") {
-        networkManager->post(request, payload);
+        network_manager->post(request, payload);
     } else if (selectedMethod == "PUT") {
-        networkManager->put(request, payload);
+        network_manager->put(request, payload);
     } else if (selectedMethod == "DELETE") {
-        networkManager->deleteResource(request);
+        network_manager->deleteResource(request);
     }
 }
 
@@ -92,15 +162,15 @@ void api_tool::setupResponseView()
     auto *responseWidget = new QWidget();
     auto *responseLayout = new QVBoxLayout(responseWidget);
 
-    statusLabel = new QLabel();
-    responseLayout->addWidget(statusLabel);
+    status_label = new QLabel();
+    responseLayout->addWidget(status_label);
     auto *responseListView = new QListView();
-    responseModel = new QStringListModel(this);
-    responseListView->setModel(responseModel);
+    response_model = new QStringListModel(this);
+    responseListView->setModel(response_model);
     responseLayout->addWidget(responseListView);
 
     responseWidget->setLayout(responseLayout);
-    ui->mainSplitter->addWidget(responseWidget);
+    main_splitter->addWidget(responseWidget);
 }
 
 QString formatDataSize(qint64 bytes)
@@ -129,7 +199,7 @@ void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
             return;
         }
 
-        qint64 const responseTime = QDateTime::currentMSecsSinceEpoch() - requestStartTime;
+        qint64 const responseTime = QDateTime::currentMSecsSinceEpoch() - request_start_time;
         qDebug() << "Handling network reply, elapsed time:" << responseTime << "ms";
 
         QByteArray const responseData = reply->readAll();
@@ -154,12 +224,11 @@ void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
                                        .arg(statusText.isEmpty() ? "Error" : statusText)
                                        .arg(responseTime)
                                        .arg(formattedSize);
-        statusLabel->setText(statusInfo);
+        status_label->setText(statusInfo);
 
-        // Updating the view
         QStringList responseList;
-        responseList << responseText; // Include error message if error occurred
-        responseModel->setStringList(responseList);
+        responseList << responseText;
+        response_model->setStringList(responseList);
 
     } catch (const std::exception &e) {
         qCritical() << "Exception caught during response handling:" << e.what();
@@ -167,20 +236,19 @@ void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
         qCritical() << "Unknown exception caught during response handling.";
     }
 
-    // Safe deletion
     reply->deleteLater();
 }
 
 void api_tool::updateUrlFromParams()
 {
-    QString baseUrl = ui->textEdit->toPlainText().split('?').at(0);
+    QString baseUrl = url_edit->toPlainText().split('?').at(0);
     QString queryString;
 
-    for (int row = 0; row < paramsModel->rowCount(); ++row) {
+    for (int row = 0; row < params_model->rowCount(); ++row) {
         QString const key =
-            (paramsModel->item(row, 0) != nullptr) ? paramsModel->item(row, 0)->text() : "";
+            (params_model->item(row, 0) != nullptr) ? params_model->item(row, 0)->text() : "";
         QString const value =
-            (paramsModel->item(row, 1) != nullptr) ? paramsModel->item(row, 1)->text() : "";
+            (params_model->item(row, 1) != nullptr) ? params_model->item(row, 1)->text() : "";
 
         if (!key.isEmpty()) {
             if (!queryString.isEmpty()) {
@@ -194,5 +262,5 @@ void api_tool::updateUrlFromParams()
         baseUrl.append('?').append(queryString);
     }
 
-    ui->textEdit->setPlainText(baseUrl);
+    url_edit->setPlainText(baseUrl);
 }

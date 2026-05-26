@@ -108,7 +108,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # http_request
     qt_add_library(${PROJECT_NAME}_http_request STATIC
-        gui/api_tool.h gui/api_tool.cpp gui/api_tool.ui
+        gui/api_tool.h gui/api_tool.cpp
     )
 
     # command

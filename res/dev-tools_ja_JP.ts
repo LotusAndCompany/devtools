@@ -1517,62 +1517,62 @@ Choose a tool from the side panel</source>
 <context>
     <name>api_tool</name>
     <message>
-        <location filename="../gui/api_tool.ui" line="+70"/>
+        <location filename="../gui/api_tool.cpp" line="+74"/>
         <source>Send</source>
         <translation>送信</translation>
     </message>
     <message>
-        <location line="-33"/>
+        <location line="-10"/>
         <source>GET</source>
         <translation>GET</translation>
     </message>
     <message>
-        <location line="-23"/>
+        <location line="-14"/>
         <source>API Tool</source>
         <translation>APIツール</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+15"/>
         <source>POST</source>
         <translation>POST</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>PUT</source>
         <translation>PUT</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>DELETE</source>
         <translation>DELETE</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+23"/>
         <source>Parameters</source>
         <translation>パラメータ</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Authentication</source>
         <translation>認証</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-7"/>
         <source>Username:</source>
         <translation>ユーザー名:</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+2"/>
         <source>Password:</source>
         <translation>パスワード:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+11"/>
         <source>Body</source>
         <translation>ボディ</translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="+45"/>
+        <location line="+9"/>
         <source>Key</source>
         <translation>キー</translation>
     </message>
@@ -1587,7 +1587,7 @@ Choose a tool from the side panel</source>
         <translation>説明</translation>
     </message>
     <message>
-        <location line="+101"/>
+        <location line="+100"/>
         <source>Error: </source>
         <translation>エラー: </translation>
     </message>
