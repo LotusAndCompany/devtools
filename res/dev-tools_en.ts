@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US" sourcelanguage="en">
+<TS version="2.1">
 <context>
     <name>AboutDevToolsDialog</name>
     <message>
@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="27"/>
+        <location filename="../gui/menubar/about_devtools_dialog.cpp" line="23"/>
         <source>Failed to load license information.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -53,7 +53,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="86"/>
-        <location filename="../gui/image/basic/image_view.cpp" line="180"/>
+        <location filename="../gui/image/basic/image_view.cpp" line="125"/>
         <source>No Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -82,7 +82,7 @@
     </message>
     <message>
         <location filename="../gui/image/basic/control.ui" line="34"/>
-        <location filename="../gui/image/basic/control.cpp" line="53"/>
+        <location filename="../gui/image/basic/control.cpp" line="60"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,32 +153,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="73"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="70"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="113"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="111"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="114"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="112"/>
         <source>Enter password for %1:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="133"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="131"/>
         <source>Connection Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="137"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="135"/>
         <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="137"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="135"/>
         <source>Database connection established.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,43 +236,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="103"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="69"/>
         <source>Select Database File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="104"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="71"/>
         <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="130"/>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="136"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="97"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="103"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="130"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="97"/>
         <source>Database type not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="136"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="103"/>
         <source>Some fields are missing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="152"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="119"/>
         <source>Connection Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="174"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="143"/>
         <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="174"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="143"/>
         <source>Database connection established.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,8 +281,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="19"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="17"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="20"/>
         <source>Invalid input value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -292,27 +292,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="38"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="37"/>
         <source>TOML does not support top level array</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="125"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="128"/>
         <source>ignore null value in array: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="184"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="188"/>
         <source>ignore null value of key: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="74"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="76"/>
         <source>Invalid file path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/data_conversion.cpp" line="88"/>
+        <location filename="../core/data_conversion/data_conversion.cpp" line="90"/>
         <source>Cannot open %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -342,7 +342,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="39"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="37"/>
         <source>YAML does not support tab indentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -464,17 +464,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="65"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="73"/>
         <source>%1 x %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="92"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/division/image_division_gui.cpp" line="92"/>
+        <location filename="../gui/image/division/image_division_gui.cpp" line="100"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -482,7 +482,7 @@
 <context>
     <name>ImageOpenDialog</name>
     <message>
-        <location filename="../gui/image/basic/file_dialogs.cpp" line="25"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="26"/>
         <source>Open Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -520,12 +520,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="67"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/resize/image_resize_gui.cpp" line="67"/>
+        <location filename="../gui/image/resize/image_resize_gui.cpp" line="78"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -573,12 +573,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="59"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="59"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="72"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -586,7 +586,7 @@
 <context>
     <name>ImageSaveDialog</name>
     <message>
-        <location filename="../gui/image/basic/file_dialogs.cpp" line="39"/>
+        <location filename="../gui/image/basic/file_dialogs.cpp" line="41"/>
         <source>Save Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,12 +619,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="64"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
         <source>Save Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="64"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="79"/>
         <source>Failed to save the image.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -632,28 +632,33 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.cpp" line="185"/>
+        <location filename="../gui/main_window.ui" line="173"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="190"/>
+        <location filename="../gui/main_window.ui" line="190"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="189"/>
+        <location filename="../gui/main_window.ui" line="198"/>
         <source>About DevTools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="187"/>
+        <location filename="../gui/main_window.ui" line="206"/>
         <source>Close Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="188"/>
+        <location filename="../gui/main_window.ui" line="214"/>
         <source>Show Main Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/main_window.ui" line="209"/>
+        <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -662,6 +667,79 @@
     <message>
         <location filename="../gui/image/basic/file_dialogs.cpp" line="15"/>
         <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="14"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="33"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="41"/>
+        <source>日本語</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="44"/>
+        <source>ja_JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="49"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="52"/>
+        <source>en</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="107"/>
+        <source>起動時にサイドバーを表示</source>
+        <translation>Show sidebar on startup</translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="114"/>
+        <source>起動時に前回使用した機能を表示</source>
+        <translation>Open last used tool on startup</translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="74"/>
+        <source>Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="80"/>
+        <source>Window Behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="86"/>
+        <source>Always on top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="93"/>
+        <source>Remember window size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/menubar/settings_dialog.ui" line="100"/>
+        <source>Remember window position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -704,7 +782,7 @@
     </message>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="177"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1047"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="998"/>
         <source>QR Code will appear here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -724,90 +802,90 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="95"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="89"/>
         <source>Enter text...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="98"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="92"/>
         <source>Text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="306"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="286"/>
         <source>Enter phone...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="319"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="299"/>
         <source>Enter email...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="605"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="569"/>
         <source>Password is required for WPA/WEP security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="627"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="591"/>
         <source>At least phone or email is required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="656"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="620"/>
         <source>Start date/time cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="661"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="625"/>
         <source>End date/time cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="685"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="648"/>
         <source>Latitude must be between -90 and 90</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="697"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="660"/>
         <source>Longitude must be between -180 and 180</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="860"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1059"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1073"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="820"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1009"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1021"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="860"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="820"/>
         <source>Please fill in required fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1059"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1073"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1009"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1021"/>
         <source>QRコードが生成されていません。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1065"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1015"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1078"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1025"/>
         <source>Save QR Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1078"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1025"/>
         <source>PNG Files (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1087"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1034"/>
         <source>Saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -852,205 +930,205 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="121"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="113"/>
         <source>Enter URL...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="124"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="116"/>
         <source>URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="147"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="137"/>
         <source>Enter email address...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="150"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="322"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="140"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="302"/>
         <source>Email:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="173"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="199"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="161"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="185"/>
         <source>Enter phone number...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="176"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="202"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="309"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="164"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="188"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="289"/>
         <source>Phone:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="212"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="198"/>
         <source>Enter message...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="215"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="201"/>
         <source>Message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="241"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="224"/>
         <source>Enter SSID...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="244"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="227"/>
         <source>SSID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="254"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="237"/>
         <source>Enter password...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="257"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="240"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="270"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="253"/>
         <source>Security:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="273"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="256"/>
         <source>Hidden Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="295"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="275"/>
         <source>Enter name...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="296"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="276"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="351"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="327"/>
         <source>Enter event title...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="354"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="330"/>
         <source>Event:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="369"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="345"/>
         <source>Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="384"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="360"/>
         <source>End:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="413"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="385"/>
         <source>Enter latitude...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="416"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="388"/>
         <source>Latitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="426"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="398"/>
         <source>Enter longitude...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="429"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="401"/>
         <source>Longitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="530"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="496"/>
         <source>Text cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="539"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="505"/>
         <source>URL cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="542"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="508"/>
         <source>URL must start with http:// or https://</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="551"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="517"/>
         <source>Email cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="554"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="639"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="520"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="603"/>
         <source>Invalid email format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="563"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="577"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="529"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="543"/>
         <source>Phone number cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="566"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="580"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="633"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="532"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="546"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="597"/>
         <source>Invalid phone number format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="584"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="550"/>
         <source>Message cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="596"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="562"/>
         <source>SSID cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="618"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="582"/>
         <source>Name cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="651"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="615"/>
         <source>Event title cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="668"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="631"/>
         <source>End time must be after start time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="679"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="642"/>
         <source>Latitude cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="691"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="654"/>
         <source>Longitude cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1034"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="986"/>
         <source>Failed to generate QR code:
 %1
 
@@ -1058,23 +1136,23 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1066"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1015"/>
         <source>QRコード画像をクリップボードにコピーしました。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1088"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1034"/>
         <source>QRコード画像を保存しました: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1033"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1090"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="985"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1036"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1090"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="1036"/>
         <source>QRコード画像の保存に失敗しました。</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1105,62 +1183,52 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="71"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="33"/>
         <source>Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="100"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="41"/>
         <source>日本語</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="103"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="44"/>
         <source>ja_JP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="108"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="49"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="111"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="52"/>
         <source>en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="134"/>
-        <source>起動時にサイドバーを表示</source>
-        <translation>Show sidebar on startup</translation>
-    </message>
-    <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="141"/>
-        <source>起動時に前回使用した機能を表示</source>
-        <translation>Open last used tool on startup</translation>
-    </message>
-    <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="162"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="74"/>
         <source>Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="168"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="80"/>
         <source>Window Behavior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="174"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="86"/>
         <source>Always on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="181"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="93"/>
         <source>Remember window size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/menubar/settings_dialog.ui" line="188"/>
+        <location filename="../gui/menubar/settings_dialog.ui" line="100"/>
         <source>Remember window position</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1168,7 +1236,7 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>Sidemenu</name>
     <message>
-        <location filename="../gui/sidemenu.cpp" line="156"/>
+        <location filename="../gui/sidemenu.ui" line="50"/>
         <source>Search tools</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1176,102 +1244,102 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>Tool</name>
     <message>
-        <location filename="../core/tool/tool.cpp" line="36"/>
+        <location filename="../core/tool/tool.cpp" line="30"/>
         <source>Image Resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="37"/>
+        <location filename="../core/tool/tool.cpp" line="31"/>
         <source>Image resizing and scaling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="41"/>
+        <location filename="../core/tool/tool.cpp" line="35"/>
         <source>Image Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="42"/>
+        <location filename="../core/tool/tool.cpp" line="36"/>
         <source>Image rotation and flipping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="46"/>
+        <location filename="../core/tool/tool.cpp" line="40"/>
         <source>Image Division</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="47"/>
+        <location filename="../core/tool/tool.cpp" line="41"/>
         <source>Divide image into n x m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="51"/>
+        <location filename="../core/tool/tool.cpp" line="45"/>
         <source>Image Transparent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="52"/>
+        <location filename="../core/tool/tool.cpp" line="46"/>
         <source>Make the selected color transparent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="56"/>
+        <location filename="../core/tool/tool.cpp" line="50"/>
         <source>Phrase Generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="62"/>
+        <location filename="../core/tool/tool.cpp" line="56"/>
         <source>Generate command from command list</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="66"/>
+        <location filename="../core/tool/tool.cpp" line="60"/>
         <source>Data/Format Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="70"/>
+        <location filename="../core/tool/tool.cpp" line="64"/>
         <source>HTTP Request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="70"/>
+        <location filename="../core/tool/tool.cpp" line="64"/>
         <source>Send HTTP Request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="72"/>
+        <location filename="../core/tool/tool.cpp" line="66"/>
         <source>QR Code Generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="72"/>
+        <location filename="../core/tool/tool.cpp" line="66"/>
         <source>Generate QR codes from text or URLs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="74"/>
+        <location filename="../core/tool/tool.cpp" line="68"/>
         <source>DB Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="74"/>
+        <location filename="../core/tool/tool.cpp" line="68"/>
         <source>Provides database-related functionalities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="57"/>
+        <location filename="../core/tool/tool.cpp" line="51"/>
         <source>Generate and manage Phrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="61"/>
+        <location filename="../core/tool/tool.cpp" line="55"/>
         <source>Command Generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/tool/tool.cpp" line="67"/>
+        <location filename="../core/tool/tool.cpp" line="61"/>
         <source>Conversion and formatting JSON/YAML/TOML data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1279,13 +1347,12 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>WelcomePage</name>
     <message>
-        <location filename="../gui/welcome_page.cpp" line="11"/>
-        <location filename="../gui/welcome_page.cpp" line="48"/>
+        <location filename="../gui/welcome_page.ui" line="14"/>
         <source>DevTools - Welcome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/welcome_page.cpp" line="49"/>
+        <location filename="../gui/welcome_page.ui" line="51"/>
         <source>Welcome to DevTools!
 Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
@@ -1294,82 +1361,82 @@ Choose a tool from the side panel</source>
 <context>
     <name>api_tool</name>
     <message>
-        <location filename="../gui/api_tool.ui" line="14"/>
+        <location filename="../gui/api_tool.cpp" line="50"/>
         <source>API Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="37"/>
+        <location filename="../gui/api_tool.cpp" line="64"/>
         <source>GET</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="42"/>
+        <location filename="../gui/api_tool.cpp" line="65"/>
         <source>POST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="47"/>
+        <location filename="../gui/api_tool.cpp" line="66"/>
         <source>PUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="52"/>
+        <location filename="../gui/api_tool.cpp" line="67"/>
         <source>DELETE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="70"/>
+        <location filename="../gui/api_tool.cpp" line="74"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="90"/>
+        <location filename="../gui/api_tool.cpp" line="90"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="100"/>
+        <location filename="../gui/api_tool.cpp" line="101"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="106"/>
+        <location filename="../gui/api_tool.cpp" line="94"/>
         <source>Username:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="116"/>
+        <location filename="../gui/api_tool.cpp" line="96"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.ui" line="131"/>
+        <location filename="../gui/api_tool.cpp" line="107"/>
         <source>Body</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="45"/>
+        <location filename="../gui/api_tool.cpp" line="116"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="46"/>
+        <location filename="../gui/api_tool.cpp" line="117"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="47"/>
+        <location filename="../gui/api_tool.cpp" line="118"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="148"/>
+        <location filename="../gui/api_tool.cpp" line="218"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/api_tool.cpp" line="152"/>
+        <location filename="../gui/api_tool.cpp" line="222"/>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1412,43 +1479,17 @@ Choose a tool from the side panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="78"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="72"/>
         <source>DB Not Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="78"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="72"/>
         <source>Not connected to database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="93"/>
-        <source>Invalid File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="93"/>
-        <source>The selected file does not exist.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="99"/>
-        <source>Unsupported File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="100"/>
-        <source>Please select a SQLite database file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="110"/>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="117"/>
-        <source>Connection Failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="182"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="128"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1482,7 +1523,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="227"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="109"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
