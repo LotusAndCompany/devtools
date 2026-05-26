@@ -94,42 +94,42 @@
 <context>
     <name>Command</name>
     <message>
-        <location filename="../gui/command/command.cpp" line="+34"/>
+        <location filename="../gui/command/command.cpp" line="+35"/>
         <source>GroupBox</source>
         <translation>グループボックス</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+42"/>
         <source>Generate command</source>
         <translation>コマンド生成</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
-        <location line="-26"/>
+        <location line="-34"/>
         <source>Option List</source>
         <translation>オプションリスト</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
     <message>
-        <location line="-21"/>
+        <location line="-27"/>
         <source>Functions List</source>
         <translation>機能リスト</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
