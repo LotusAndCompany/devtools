@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -358,68 +358,68 @@
 <context>
     <name>DataConversionGUI</name>
     <message>
-        <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+66"/>
+        <location filename="../gui/data_conversion/data_conversion_gui.cpp" line="+81"/>
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
         <source>Paste</source>
         <translation>読み込み</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+29"/>
         <source>Input text</source>
         <translation>入力文字列</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+164"/>
+        <location line="+7"/>
+        <location line="+57"/>
         <source>Error &amp; waning messages</source>
         <translation>エラー・警告</translation>
     </message>
     <message>
-        <location line="-124"/>
+        <location line="-38"/>
         <source>YAML (Flow style)</source>
         <translation>YAML (Flowスタイル)</translation>
     </message>
     <message>
-        <location line="-5"/>
+        <location line="-1"/>
         <source>YAML (Block style)</source>
         <translation>YAML (Blockスタイル)</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+6"/>
         <source>4 Spaces</source>
         <translation>4スペース</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>2 Spaces</source>
         <translation>2スペース</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>Tabs</source>
         <translation>タブ</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>Minified</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+11"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+11"/>
         <source>Output text</source>
         <translation>出力文字列</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-16"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -1655,13 +1655,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
