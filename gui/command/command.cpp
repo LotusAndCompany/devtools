@@ -31,49 +31,63 @@ Command::Command(QWidget *parent) : QGroupBox(parent)
 
 void Command::buildUi()
 {
+    setObjectName(QStringLiteral("Command"));
     setWindowTitle(tr("GroupBox"));
     resize(699, 711);
 
     auto *layout = new QGridLayout(this);
+    layout->setObjectName(QStringLiteral("gridLayout"));
 
     category_list = new QComboBox(this);
+    category_list->setObjectName(QStringLiteral("categoryList"));
     layout->addWidget(category_list, 0, 0, 1, 2);
 
     functions_label = new QLabel(tr("Functions List"), this);
+    functions_label->setObjectName(QStringLiteral("functionsLabel"));
     layout->addWidget(functions_label, 1, 0);
 
     functions_list = new QComboBox(this);
+    functions_list->setObjectName(QStringLiteral("functionsList"));
     functions_list->setEnabled(false);
     functions_list->setAutoFillBackground(false);
     layout->addWidget(functions_list, 2, 0, 1, 2);
 
     option_label = new QLabel(tr("Option List"), this);
+    option_label->setObjectName(QStringLiteral("optionLabel"));
     layout->addWidget(option_label, 3, 0);
 
     option_list = new QComboBox(this);
+    option_list->setObjectName(QStringLiteral("optionList"));
     option_list->setEnabled(false);
     layout->addWidget(option_list, 4, 0, 1, 2);
 
     text_label = new QLabel(tr("TextLabel"), this);
+    text_label->setObjectName(QStringLiteral("label"));
     layout->addWidget(text_label, 5, 0);
 
     text_edit = new QLineEdit(this);
+    text_edit->setObjectName(QStringLiteral("textEdit"));
     layout->addWidget(text_edit, 6, 0, 1, 2);
 
     reset_button = new QPushButton(tr("Reset"), this);
+    reset_button->setObjectName(QStringLiteral("resetButton"));
     reset_button->setFont(QFont(QStringLiteral(".AppleSystemUIFont")));
     layout->addWidget(reset_button, 7, 0);
 
     generate_button = new QPushButton(tr("Generate command"), this);
+    generate_button->setObjectName(QStringLiteral("generateButton"));
     layout->addWidget(generate_button, 7, 1);
 
     text_browser = new QTextBrowser(this);
+    text_browser->setObjectName(QStringLiteral("textBrowser"));
     layout->addWidget(text_browser, 8, 0, 1, 4);
 
     copy_button = new QPushButton(tr("Copy"), this);
+    copy_button->setObjectName(QStringLiteral("copyButton"));
     layout->addWidget(copy_button, 9, 2);
 
     clear_button = new QPushButton(tr("Clear"), this);
+    clear_button->setObjectName(QStringLiteral("clearButton"));
     layout->addWidget(clear_button, 9, 3);
 }
 
