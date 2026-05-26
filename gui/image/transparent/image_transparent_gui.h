@@ -80,9 +80,9 @@ protected slots:
 
     /**
      * @brief 色差の計算方法(RGB/HSV/HSL)が変更された時に呼ばれる
-     * @param mode 色差の計算方法(RGB/HSV/HSL)
+     * @param index `colorMode` の選択インデックス。itemData の `QColor::Spec` で識別する
      */
-    void onColorModeTextChanged(const QString &mode);
+    void onColorModeIndexChanged(int index);
     /**
      * @brief 画像上のピクセルが選択された時に呼ばれる
      * @param point 選択された場所

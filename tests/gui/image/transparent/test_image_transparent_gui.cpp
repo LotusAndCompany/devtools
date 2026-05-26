@@ -77,7 +77,7 @@ private slots:
     void test_onLoadImageSelected();
     void test_onSaveImageSelected();
     static void test_onResetButtonClicked();
-    void test_onColorModeTextChanged();
+    void test_onColorModeIndexChanged();
     void test_onPixelSelected();
     void test_onToleranceValueChanged();
     void test_onTransparencyValueChanged();
@@ -194,28 +194,23 @@ void TestImageTransparentGUI::test_onResetButtonClicked()
     QVERIFY(mock_resetImpl.isInvoked());
 }
 
-void TestImageTransparentGUI::test_onColorModeTextChanged()
+void TestImageTransparentGUI::test_onColorModeIndexChanged()
 {
     ImageTransparentGUI gui(new ImageTransparentMock);
 
-    gui.onColorModeTextChanged("RGB");
-    // QColor::Spec::Rgbに設定されること
+    // NOTE: item の順序は buildFormFields() の addItem 順と一致 (RGB=0, HSL=1, HSV=2)
+    gui.onColorModeIndexChanged(0);
     QCOMPARE_EQ(gui.imageTransparent->colorSpec, QColor::Spec::Rgb);
 
-    gui.onColorModeTextChanged("HSV");
-    // QColor::Spec::Hsvに設定されること
-    QCOMPARE_EQ(gui.imageTransparent->colorSpec, QColor::Spec::Hsv);
-
-    gui.onColorModeTextChanged("HSL");
-    // QColor::Spec::Hslに設定されること
+    gui.onColorModeIndexChanged(1);
     QCOMPARE_EQ(gui.imageTransparent->colorSpec, QColor::Spec::Hsl);
 
-    QString dummy;
-    do {
-        dummy = rd.nextQString(3, RandomData::upperAlphabets);
-    } while (dummy == "RGB" || dummy == "HSV" || dummy == "HSL");
-    // "RGB", "HSL", "HSL"以外の場合は例外が発生すること
-    QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<QString>, gui.onColorModeTextChanged(dummy));
+    gui.onColorModeIndexChanged(2);
+    QCOMPARE_EQ(gui.imageTransparent->colorSpec, QColor::Spec::Hsv);
+
+    // 範囲外の index は itemData が無効になるため例外
+    QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<int>, gui.onColorModeIndexChanged(-1));
+    QVERIFY_THROWS_EXCEPTION(InvalidArgumentException<int>, gui.onColorModeIndexChanged(99));
 }
 
 void TestImageTransparentGUI::test_onPixelSelected()

@@ -25,9 +25,10 @@ void buildFormFields(Ui::ImageTransparentGUI *ui, QWidget *parent, QVBoxLayout *
 
     ui->colorMode = new QComboBox(parent);
     ui->colorMode->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-    ui->colorMode->addItem("RGB");
-    ui->colorMode->addItem("HSL");
-    ui->colorMode->addItem("HSV");
+    // NOTE: 表示文字列ではなく itemData の QColor::Spec で識別する
+    ui->colorMode->addItem("RGB", static_cast<int>(QColor::Spec::Rgb));
+    ui->colorMode->addItem("HSL", static_cast<int>(QColor::Spec::Hsl));
+    ui->colorMode->addItem("HSV", static_cast<int>(QColor::Spec::Hsv));
     auto *colorModeLabel = new QLabel(ImageTransparentGUI::tr("Color mode:"), parent);
     colorModeLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     form->addRow(colorModeLabel, ui->colorMode);
@@ -112,8 +113,8 @@ ImageTransparentGUI::ImageTransparentGUI(ImageTransparentInterface *imageTranspa
     connect(ui->control, &BasicImageViewControl::resetButtonClicked, this,
             &ImageTransparentGUI::onResetButtonClicked);
 
-    connect(ui->colorMode, &QComboBox::currentTextChanged, this,
-            &ImageTransparentGUI::onColorModeTextChanged);
+    connect(ui->colorMode, &QComboBox::currentIndexChanged, this,
+            &ImageTransparentGUI::onColorModeIndexChanged);
     connect(ui->imageView, &ImageViewForImageTransparent::pixelSelected, this,
             &ImageTransparentGUI::onPixelSelected);
     connect(ui->transparencyValue, &QDoubleSpinBox::valueChanged, this,
@@ -158,17 +159,14 @@ void ImageTransparentGUI::onResetButtonClicked()
     ui->imageView->setPixmap(QPixmap::fromImage(imageTransparent->current()));
 }
 
-void ImageTransparentGUI::onColorModeTextChanged(const QString &mode)
+void ImageTransparentGUI::onColorModeIndexChanged(int index)
 {
-    if (mode == "RGB") {
-        imageTransparent->colorSpec = QColor::Spec::Rgb;
-    } else if (mode == "HSV") {
-        imageTransparent->colorSpec = QColor::Spec::Hsv;
-    } else if (mode == "HSL") {
-        imageTransparent->colorSpec = QColor::Spec::Hsl;
-    } else {
-        throw InvalidArgumentException<QString>(mode, "mode must be RGB, HSV or HSL");
+    const QVariant data = ui->colorMode->itemData(index);
+    if (!data.isValid()) {
+        throw InvalidArgumentException<int>(index,
+                                            "color mode item has no associated QColor::Spec");
     }
+    imageTransparent->colorSpec = static_cast<QColor::Spec>(data.toInt());
 }
 
 void ImageTransparentGUI::onPixelSelected(const QPoint &point, const QColor &color)

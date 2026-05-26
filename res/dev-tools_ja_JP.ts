@@ -53,7 +53,7 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.cpp" line="+66"/>
-        <location line="+183"/>
+        <location line="+190"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
@@ -557,7 +557,7 @@
 <context>
     <name>ImageRotationGUI</name>
     <message>
-        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+32"/>
+        <location filename="../gui/image/rotation/image_rotation_gui.cpp" line="+33"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
@@ -577,17 +577,21 @@
         <translation>左に90°回転</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Flip holizontally</source>
-        <translation>左右反転</translation>
+        <translation type="vanished">左右反転</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="+5"/>
         <source>Flip Horizontal</source>
         <translation>左右反転</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
+        <source>Flip horizontally</source>
+        <translation>左右反転</translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Flip vertically</source>
         <translation>上下反転</translation>
     </message>
@@ -626,7 +630,7 @@
 <context>
     <name>ImageTransparentGUI</name>
     <message>
-        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+31"/>
+        <location filename="../gui/image/transparent/image_transparent_gui.cpp" line="+32"/>
         <source>Color mode:</source>
         <translatorcomment>しっくり来ない</translatorcomment>
         <translation>色空間:</translation>
@@ -637,12 +641,12 @@
         <translation>許容誤差:</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Only contiguous area</source>
         <translation>連続領域のみ</translation>
     </message>
     <message>
-        <location line="-32"/>
+        <location line="-33"/>
         <source>Color:</source>
         <translation>色:</translation>
     </message>
@@ -660,7 +664,7 @@
         <translation type="obsolete">画像の保存に成功しました。</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+97"/>
         <source>Save Failed</source>
         <translation>保存失敗</translation>
     </message>

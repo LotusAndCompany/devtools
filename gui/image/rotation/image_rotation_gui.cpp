@@ -41,7 +41,7 @@ void buildButtonColumn(Ui::ImageRotationGUI *ui, QWidget *parent, QVBoxLayout *l
 
     ui->hFlipButton =
         buildActionButton(parent, ImageRotationGUI::tr("Flip Horizontal"),
-                          ImageRotationGUI::tr("Flip holizontally"), "flip_horizontal");
+                          ImageRotationGUI::tr("Flip horizontally"), "flip_horizontal");
     column->addWidget(ui->hFlipButton);
 
     ui->vFlipButton = buildActionButton(parent, ImageRotationGUI::tr("Flip Vertical"),

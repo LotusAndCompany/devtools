@@ -79,8 +79,15 @@ QToolButton *buildZoomButton(QWidget *parent, const QString &iconName, const QSt
     button->setMaximumSize(32, 32);
     button->setToolTip(toolTip);
     button->setAutoFillBackground(true);
-    button->setIcon(QIcon::fromTheme(iconName));
-    button->setIconSize(QSize(24, 24));
+
+    const QIcon icon = QIcon::fromTheme(iconName);
+    if (icon.isNull()) {
+        // NOTE: テーマアイコンが解決できない環境では、ボタンが空にならないよう toolTip を表示する
+        button->setText(toolTip);
+    } else {
+        button->setIcon(icon);
+        button->setIconSize(QSize(24, 24));
+    }
 
     // NOTE: 少しだけ透明にする
     auto *opacityEffect = new QGraphicsOpacityEffect(button);
