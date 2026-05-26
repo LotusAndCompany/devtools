@@ -289,8 +289,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1232,60 +1232,64 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>言語:</translation>
     </message>
     <message>
+        <location line="-54"/>
+        <location line="+56"/>
         <source>日本語</source>
-        <translation type="vanished">日本語</translation>
+        <translation>日本語</translation>
     </message>
     <message>
         <source>ja_JP</source>
         <translation type="vanished">ja_JP</translation>
     </message>
     <message>
+        <location line="-55"/>
+        <location line="+56"/>
         <source>English</source>
-        <translation type="vanished">English</translation>
+        <translation>English</translation>
     </message>
     <message>
         <source>en</source>
         <translation type="vanished">en</translation>
     </message>
     <message>
-        <location line="-36"/>
-        <location line="+37"/>
+        <location line="-39"/>
+        <location line="+41"/>
         <source>起動時にサイドバーを表示</source>
         <translation>起動時にサイドバーを表示</translation>
     </message>
     <message>
-        <location line="-36"/>
-        <location line="+37"/>
+        <location line="-40"/>
+        <location line="+41"/>
         <source>起動時に前回使用した機能を表示</source>
         <translation>起動時に前回使用した機能を表示</translation>
     </message>
     <message>
-        <location line="-98"/>
+        <location line="-102"/>
         <location line="+95"/>
         <source>Window</source>
         <translation>ウィンドウ</translation>
     </message>
     <message>
         <location line="-10"/>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Window Behavior</source>
         <translation>ウィンドウの動作</translation>
     </message>
     <message>
-        <location line="-13"/>
-        <location line="+14"/>
+        <location line="-17"/>
+        <location line="+18"/>
         <source>Always on top</source>
         <translation>常に最前面に表示</translation>
     </message>
     <message>
-        <location line="-13"/>
-        <location line="+14"/>
+        <location line="-17"/>
+        <location line="+18"/>
         <source>Remember window size</source>
         <translation>ウィンドウサイズを記憶</translation>
     </message>
     <message>
-        <location line="-13"/>
-        <location line="+14"/>
+        <location line="-17"/>
+        <location line="+18"/>
         <source>Remember window position</source>
         <translation>ウィンドウ位置を記憶</translation>
     </message>

@@ -69,8 +69,8 @@ void SettingsDialog::buildGeneralTab()
     language_combo_box->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     language_combo_box->setMinimumSize(96, 0);
     language_combo_box->setMaximumWidth(96);
-    language_combo_box->addItem(QStringLiteral("日本語"), QStringLiteral("ja_JP"));
-    language_combo_box->addItem(QStringLiteral("English"), QStringLiteral("en"));
+    language_combo_box->addItem(tr("日本語"), QStringLiteral("ja_JP"));
+    language_combo_box->addItem(tr("English"), QStringLiteral("en"));
     languageLayout->addWidget(language_combo_box);
 
     languageLayout->addSpacerItem(
@@ -124,6 +124,10 @@ void SettingsDialog::retranslateUi()
     tab_widget->setTabText(0, tr("General"));
     tab_widget->setTabText(1, tr("Window"));
     language_label->setText(tr("Language:"));
+    if (language_combo_box->count() >= 2) {
+        language_combo_box->setItemText(0, tr("日本語"));
+        language_combo_box->setItemText(1, tr("English"));
+    }
     show_sidebar_on_startup_check_box->setText(tr("起動時にサイドバーを表示"));
     show_last_tool_on_startup_check_box->setText(tr("起動時に前回使用した機能を表示"));
     window_behavior_group_box->setTitle(tr("Window Behavior"));
