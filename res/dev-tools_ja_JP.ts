@@ -292,8 +292,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1971,36 +1971,22 @@ Choose a tool from the side panel</source>
 <context>
     <name>phraseGeneration</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+101"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+65"/>
-        <location line="+3"/>
-        <location line="+3"/>
-        <source>追加</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <location line="+3"/>
-        <location line="+3"/>
-        <source>ツリービュー切替</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+109"/>
+        <location line="+77"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-9"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-49"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
@@ -2009,13 +1995,13 @@ Choose a tool from the side panel</source>
         <translation type="vanished">タイトルを入力...</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+97"/>
+        <location line="+4"/>
+        <location line="+119"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>

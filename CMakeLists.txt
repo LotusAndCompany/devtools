@@ -120,7 +120,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # phrase_generation
     qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
         gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
-        gui/phrase_generation/phrase_generation.ui
     )
 
     # image

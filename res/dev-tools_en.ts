@@ -1497,33 +1497,33 @@ Choose a tool from the side panel</source>
 <context>
     <name>phraseGeneration</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="20"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="101"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="72"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="178"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="133"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="169"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="253"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="120"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="208"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="122"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="227"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="126"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="245"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
