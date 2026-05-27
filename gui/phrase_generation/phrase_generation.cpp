@@ -141,7 +141,7 @@ void phraseGeneration::retranslateUi()
 void phraseGeneration::adjustTreeColumnWidth()
 {
     // 翻訳された Copy ボタンが切れないように sample の sizeHint から算出する
-    QPushButton sample(tr("Copy"));
+    QPushButton const sample(tr("Copy"));
     int const min_width =
         std::max(TREE_FIXED_COLUMN_WIDTH, sample.sizeHint().width() + TREE_COLUMN_PADDING);
     title_tree_widget->setColumnWidth(1, min_width);
