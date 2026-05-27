@@ -193,14 +193,7 @@ void phraseGeneration::createTopBarWidgets()
         font.setBold(true);
         toggle_tree_button->setFont(font);
     }
-    {
-        QIcon const icon = QIcon::fromTheme(QStringLiteral("menu"));
-        if (!icon.isNull()) {
-            toggle_tree_button->setIcon(icon);
-        } else {
-            toggle_tree_button->setText(QStringLiteral("☰"));
-        }
-    }
+    applyToggleButtonIcon(QStringLiteral("menu"), QStringLiteral("☰"));
 }
 
 void phraseGeneration::createBodyWidgets()
@@ -412,19 +405,32 @@ void phraseGeneration::handleToggleTreeButtonClick()
         return;
     }
 
-    // ボタンのテキストを切り替える
+    // ボタンのアイコン/テキストを切り替える
     if (title_tree_widget->isVisible()) {
-        toggle_tree_button->setIcon(QIcon::fromTheme("close"));
+        applyToggleButtonIcon(QStringLiteral("close"), QStringLiteral("✕"));
         grid->removeWidget(template_text);
         grid->addWidget(template_text, 2, 0, 7, 5);
         grid->removeWidget(save_button);
         grid->addWidget(save_button, 8, 4, 1, 1);
     } else {
-        toggle_tree_button->setIcon(QIcon::fromTheme("menu"));
+        applyToggleButtonIcon(QStringLiteral("menu"), QStringLiteral("☰"));
         grid->removeWidget(template_text);
         grid->addWidget(template_text, 2, 0, 7, 7);
         grid->removeWidget(save_button);
         grid->addWidget(save_button, 8, 5, 1, 1);
+    }
+}
+
+void phraseGeneration::applyToggleButtonIcon(const QString &theme_name,
+                                             const QString &fallback_text)
+{
+    QIcon const icon = QIcon::fromTheme(theme_name);
+    if (!icon.isNull()) {
+        toggle_tree_button->setIcon(icon);
+        toggle_tree_button->setText(QString());
+    } else {
+        toggle_tree_button->setIcon(QIcon());
+        toggle_tree_button->setText(fallback_text);
     }
 }
 

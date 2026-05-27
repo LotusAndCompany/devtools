@@ -39,6 +39,7 @@ private:
     void layoutWidgets();
     void retranslateUi();
     void adjustTreeColumnWidth();
+    void applyToggleButtonIcon(const QString &theme_name, const QString &fallback_text);
     void loadTitles();
     static QString loadContent(const QString &filename, QString *title = nullptr);
     static void saveContent(const QString &title, const QString &content);
