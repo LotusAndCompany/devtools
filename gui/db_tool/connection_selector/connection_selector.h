@@ -5,9 +5,9 @@
 #include <QSqlDatabase>
 #include <QWidget>
 
-namespace Ui {
-class ConnectionSelector;
-}
+class QLabel;
+class QListWidget;
+class QPushButton;
 
 class ConnectionSelector : public QWidget
 {
@@ -15,7 +15,7 @@ class ConnectionSelector : public QWidget
 
 public:
     explicit ConnectionSelector(QWidget *parent = nullptr);
-    ~ConnectionSelector() override;
+    ~ConnectionSelector() override = default;
     ConnectionSelector(const ConnectionSelector &) = delete;
     ConnectionSelector &operator=(const ConnectionSelector &) = delete;
     ConnectionSelector(ConnectionSelector &&) = delete;
@@ -32,17 +32,22 @@ protected:
 
 private slots:
     void handleHistoryItemClicked(int row);
-    void handleDeleteButtonClicked();
     void handleNewConnectionButtonClicked();
     void handleCloseButtonClicked();
 
 private:
-    Ui::ConnectionSelector *ui;
-    QList<QJsonObject> connectionHistory;
-
+    void buildUi();
+    void retranslateUi();
     void refreshHistoryList();
     bool connectWithPassword(const QJsonObject &connectionInfo);
     void removeHistoryItem(int index);
+
+    QLabel *titleLabel{nullptr};
+    QListWidget *historyListWidget{nullptr};
+    QPushButton *newConnectionButton{nullptr};
+    QPushButton *closeButton{nullptr};
+
+    QList<QJsonObject> connectionHistory;
 };
 
 #endif // CONNECTION_SELECTOR_H

@@ -5,41 +5,49 @@
     <name>AboutDevToolsDialog</name>
     <message>
         <location filename="../gui/menubar/about_devtools_dialog.ui" line="+14"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+263"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+7"/>
         <source>About</source>
         <translation>DevToolsについて</translation>
     </message>
     <message>
         <location line="+143"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="-4"/>
         <source>Application Version</source>
         <translation>バージョン</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+1"/>
         <source>Build Environment</source>
         <translation>ビルド環境</translation>
     </message>
     <message>
         <location line="-69"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="-2"/>
         <source>Qt Version</source>
         <translation>Qtバージョン</translation>
     </message>
     <message>
         <location line="+82"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+3"/>
         <source>Revision</source>
         <translation>リビジョン</translation>
     </message>
     <message>
         <location line="+62"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+1"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_about_devtools_dialog.h" line="+2"/>
         <source>License</source>
         <translation>ライセンス</translation>
     </message>
@@ -53,17 +61,26 @@
     <name>BasicImageView</name>
     <message>
         <location filename="../gui/image/basic/image_view.ui" line="+86"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_image_view.h" line="+131"/>
+        <location filename="../build/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+131"/>
         <location filename="../gui/image/basic/image_view.cpp" line="+180"/>
         <source>No Image</source>
         <translation>画像がありません</translation>
     </message>
     <message>
         <location line="+56"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_image_view.h" line="+2"/>
+        <location filename="../build/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+2"/>
         <source>Zoom In</source>
         <translation>拡大</translation>
     </message>
     <message>
         <location line="+48"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_image_view.h" line="+4"/>
+        <location filename="../build/DevTools_image_division_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/gui/image/basic/ui_image_view.h" line="+4"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
@@ -72,11 +89,13 @@
     <name>BasicImageViewControl</name>
     <message>
         <location filename="../gui/image/basic/control.ui" line="+20"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_control.h" line="+59"/>
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_control.h" line="+1"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
@@ -86,6 +105,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_image_core_autogen/include/ui_control.h" line="+1"/>
         <location filename="../gui/image/basic/control.cpp" line="+53"/>
         <source>Save</source>
         <translation>保存</translation>
@@ -95,41 +115,49 @@
     <name>Command</name>
     <message>
         <location filename="../gui/command/command.ui" line="+17"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+134"/>
         <source>GroupBox</source>
         <translation>グループボックス</translation>
     </message>
     <message>
         <location line="+22"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+1"/>
         <source>Generate command</source>
         <translation>コマンド生成</translation>
     </message>
     <message>
         <location line="+42"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+3"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
         <location line="+14"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+2"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
         <location line="+24"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+1"/>
         <source>Option List</source>
         <translation>オプションリスト</translation>
     </message>
     <message>
         <location line="-55"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="-4"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
     <message>
         <location line="-15"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="-1"/>
         <source>Functions List</source>
         <translation>機能リスト</translation>
     </message>
     <message>
         <location line="+39"/>
+        <location filename="../build/DevTools_command_autogen/include/ui_command.h" line="+3"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -141,27 +169,27 @@
         <translation type="obsolete">削除</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.ui" line="+14"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+80"/>
         <source>DB Connection</source>
         <translation>DB接続</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Connection History</source>
         <translation>接続履歴</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+1"/>
         <source>New Connection</source>
         <translation>新規接続</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+73"/>
+        <location line="+38"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
@@ -194,57 +222,60 @@
 <context>
     <name>ConnectionWindow</name>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.ui" line="+19"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+136"/>
         <source>New Connection</source>
         <translation>新規接続</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Database Type</source>
         <translation>データベースタイプ</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+2"/>
+        <location line="+19"/>
+        <location line="+43"/>
+        <location line="+71"/>
         <source>SQLite</source>
         <translation>SQLite</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-131"/>
         <source>Host Name</source>
         <translation>ホスト名</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+1"/>
         <source>Database Name</source>
         <translation>データベース名</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Browse...</source>
         <translation>参照...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>User Name</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+1"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Connect</source>
         <translation>接続</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+103"/>
+        <location line="+35"/>
         <source>Select Database File</source>
         <translation>データベースファイルを選択</translation>
     </message>
@@ -275,7 +306,7 @@
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+20"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
@@ -289,8 +320,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -359,67 +390,81 @@
     <name>DataConversionGUI</name>
     <message>
         <location filename="../gui/data_conversion/data_conversion_gui.ui" line="+66"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+245"/>
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>Paste</source>
         <translation>読み込み</translation>
     </message>
     <message>
         <location line="+85"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>Input text</source>
         <translation>入力文字列</translation>
     </message>
     <message>
         <location line="+26"/>
         <location line="+164"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
+        <location line="+12"/>
         <source>Error &amp; waning messages</source>
         <translation>エラー・警告</translation>
     </message>
     <message>
         <location line="-124"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="-10"/>
         <source>YAML (Flow style)</source>
         <translation>YAML (Flowスタイル)</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="-1"/>
         <source>YAML (Block style)</source>
         <translation>YAML (Blockスタイル)</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+3"/>
         <source>4 Spaces</source>
         <translation>4スペース</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>2 Spaces</source>
         <translation>2スペース</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>Tabs</source>
         <translation>タブ</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>Minified</source>
         <translation>最小化</translation>
     </message>
     <message>
         <location line="+37"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+3"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
         <location line="+29"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="+1"/>
         <source>Output text</source>
         <translation>出力文字列</translation>
     </message>
     <message>
         <location line="-42"/>
+        <location filename="../build/DevTools_data_conversion_autogen/include/ui_data_conversion_gui.h" line="-2"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -428,46 +473,55 @@
     <name>ImageDivisionGUI</name>
     <message>
         <location filename="../gui/image/division/image_division_gui.ui" line="+85"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+213"/>
         <source>Image size:</source>
         <translation>画像サイズ:</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>0 x 0</source>
         <translation>0 × 0</translation>
     </message>
     <message>
         <location line="+9"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Division</source>
         <translation>分割数</translation>
     </message>
     <message>
         <location line="+18"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Horizontal:</source>
         <translation>横:</translation>
     </message>
     <message>
         <location line="+17"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Vertical:</source>
         <translation>縦:</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
     <message>
         <location line="+20"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Height:</source>
         <translation>縦幅:</translation>
     </message>
     <message>
         <location line="+22"/>
+        <location filename="../build/DevTools_image_division_autogen/include/ui_image_division_gui.h" line="+1"/>
         <source>Ignore remainders</source>
         <translation>余りを切り捨て</translation>
     </message>
@@ -507,31 +561,37 @@
     <name>ImageResizeGUI</name>
     <message>
         <location filename="../gui/image/resize/image_resize_gui.ui" line="+74"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+180"/>
         <source>Width:</source>
         <translation>横幅:</translation>
     </message>
     <message>
         <location line="+32"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+1"/>
         <source>Height:</source>
         <translation>縦幅:</translation>
     </message>
     <message>
         <location line="+29"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+2"/>
         <source>Horizontal Scale:</source>
         <translation>横の拡大率:</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+1"/>
         <source>Vertical Scale:</source>
         <translation>縦の拡大率:</translation>
     </message>
     <message>
         <location line="+47"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+1"/>
         <source>Keep aspect ratio</source>
         <translation>縦横比を維持</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_image_resize_autogen/include/ui_image_resize_gui.h" line="+1"/>
         <source>Smooth scaling</source>
         <translation>バイリニア補完</translation>
     </message>
@@ -558,41 +618,49 @@
     <name>ImageRotationGUI</name>
     <message>
         <location filename="../gui/image/rotation/image_rotation_gui.ui" line="+86"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+142"/>
         <source>Rotate clockwise by 90°</source>
         <translation>右に90°回転</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Rotate Clockwise</source>
         <translation>右に90°回転</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Rotate anti-clockwise by 90°</source>
         <translation>左に90°回転</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Rotate Anti-clockwise</source>
         <translation>左に90°回転</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Flip holizontally</source>
         <translation>左右反転</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Flip Horizontal</source>
         <translation>左右反転</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Flip vertically</source>
         <translation>上下反転</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_image_rotation_autogen/include/ui_image_rotation_gui.h" line="+2"/>
         <source>Flip Vertical</source>
         <translation>上下反転</translation>
     </message>
@@ -627,27 +695,32 @@
     <name>ImageTransparentGUI</name>
     <message>
         <location filename="../gui/image/transparent/image_transparent_gui.ui" line="+98"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/ui_image_transparent_gui.h" line="+186"/>
         <source>Color mode:</source>
         <translatorcomment>しっくり来ない</translatorcomment>
         <translation>色空間:</translation>
     </message>
     <message>
         <location line="+58"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/ui_image_transparent_gui.h" line="+3"/>
         <source>Tolerance:</source>
         <translation>許容誤差:</translation>
     </message>
     <message>
         <location line="+54"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/ui_image_transparent_gui.h" line="+2"/>
         <source>Only contiguous area</source>
         <translation>連続領域のみ</translation>
     </message>
     <message>
         <location line="-77"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/ui_image_transparent_gui.h" line="-3"/>
         <source>Color:</source>
         <translation>色:</translation>
     </message>
     <message>
         <location line="+49"/>
+        <location filename="../build/DevTools_image_transparent_autogen/include/ui_image_transparent_gui.h" line="+2"/>
         <source>Transparency:</source>
         <translation>透明度:</translation>
     </message>
@@ -681,31 +754,37 @@
     <name>MainWindow</name>
     <message>
         <location filename="../gui/main_window.ui" line="+173"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="+170"/>
         <source>File</source>
         <translation>ファイル</translation>
     </message>
     <message>
         <location line="+17"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="-9"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="+1"/>
         <source>About DevTools</source>
         <translation>DevToolsについて</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="+1"/>
         <source>Close Window</source>
         <translation>ウィンドウを閉じる</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="+4"/>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_main_window.h" line="-2"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
@@ -722,36 +801,43 @@
     <name>QRCodeGenerationGUI</name>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="+14"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+187"/>
         <source>QR Code Generation</source>
         <translation>QRコード生成</translation>
     </message>
     <message>
         <location line="+20"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>QR Code Type</source>
         <translation>QRコードの種類</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Email</source>
         <translation>メールアドレス</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Phone Number</source>
         <translation>電話番号</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>SMS</source>
         <translation>SMS</translation>
     </message>
@@ -769,47 +855,56 @@
     </message>
     <message>
         <location line="+20"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+4"/>
         <source>Geo Location</source>
         <translation>位置情報</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+2"/>
         <source>Parameters</source>
         <translation>パラメータ</translation>
     </message>
     <message>
         <location line="+25"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Generate</source>
         <translation>生成</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>QR Code Output</source>
         <translation>QRコード出力</translation>
     </message>
     <message>
         <location line="+15"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1047"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
     <message>
         <location line="+15"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Copy Image</source>
         <translation>画像をコピー</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Save Image</source>
         <translation>画像を保存</translation>
     </message>
     <message>
         <location line="+18"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>QR code content preview</source>
         <translation>QRコード内容プレビュー</translation>
     </message>
@@ -911,16 +1006,19 @@
     </message>
     <message>
         <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="-154"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="-12"/>
         <source>WiFi</source>
         <translation>WiFi</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Contact</source>
         <translation>連絡先</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_qr_code_generation_autogen/include/ui_qr_code_generation_gui.h" line="+1"/>
         <source>Calendar</source>
         <translation>カレンダー</translation>
     </message>
@@ -1202,12 +1300,12 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>QueryPage</name>
     <message>
-        <location filename="../gui/db_tool/query_page/query_page.ui" line="+14"/>
+        <location filename="../gui/db_tool/query_page/query_page.cpp" line="+55"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+1"/>
         <source>実行</source>
         <translation>実行</translation>
     </message>
@@ -1216,21 +1314,25 @@ Please try reducing the amount of data or simplifying the content.</source>
     <name>SettingsDialog</name>
     <message>
         <location filename="../gui/menubar/settings_dialog.ui" line="+14"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+169"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+7"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
         <location line="+44"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="-6"/>
         <source>Language:</source>
         <translation>言語:</translation>
     </message>
     <message>
         <location line="+29"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>日本語</source>
         <translation>日本語</translation>
     </message>
@@ -1241,6 +1343,7 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>English</source>
         <translation>English</translation>
     </message>
@@ -1251,36 +1354,43 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+2"/>
         <source>起動時にサイドバーを表示</source>
         <translation>起動時にサイドバーを表示</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>起動時に前回使用した機能を表示</source>
         <translation>起動時に前回使用した機能を表示</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+6"/>
         <source>Window</source>
         <translation>ウィンドウ</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="-4"/>
         <source>Window Behavior</source>
         <translation>ウィンドウの動作</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>Always on top</source>
         <translation>常に最前面に表示</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>Remember window size</source>
         <translation>ウィンドウサイズを記憶</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_settings_dialog.h" line="+1"/>
         <source>Remember window position</source>
         <translation>ウィンドウ位置を記憶</translation>
     </message>
@@ -1293,6 +1403,7 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
     <message>
         <location filename="../gui/sidemenu.ui" line="+50"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_sidemenu.h" line="+83"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -1493,11 +1604,13 @@ Please try reducing the amount of data or simplifying the content.</source>
     <name>WelcomePage</name>
     <message>
         <location filename="../gui/welcome_page.ui" line="+14"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_welcome_page.h" line="+69"/>
         <source>DevTools - Welcome</source>
         <translation>DevTools - ようこそ</translation>
     </message>
     <message>
         <location line="+37"/>
+        <location filename="../build/DevTools_core_autogen/include/ui_welcome_page.h" line="+2"/>
         <source>Welcome to DevTools!
 Choose a tool from the side panel</source>
         <translation>DevToolsへようこそ!
@@ -1508,56 +1621,67 @@ Choose a tool from the side panel</source>
     <name>api_tool</name>
     <message>
         <location filename="../gui/api_tool.ui" line="+70"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+178"/>
         <source>Send</source>
         <translation>送信</translation>
     </message>
     <message>
         <location line="-33"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="-5"/>
         <source>GET</source>
         <translation>GET</translation>
     </message>
     <message>
         <location line="-23"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="-1"/>
         <source>API Tool</source>
         <translation>APIツール</translation>
     </message>
     <message>
         <location line="+28"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+2"/>
         <source>POST</source>
         <translation>POST</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+1"/>
         <source>PUT</source>
         <translation>PUT</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+1"/>
         <source>DELETE</source>
         <translation>DELETE</translation>
     </message>
     <message>
         <location line="+38"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+3"/>
         <source>Parameters</source>
         <translation>パラメータ</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+3"/>
         <source>Authentication</source>
         <translation>認証</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="-2"/>
         <source>Username:</source>
         <translation>ユーザー名:</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+1"/>
         <source>Password:</source>
         <translation>パスワード:</translation>
     </message>
     <message>
         <location line="+15"/>
+        <location filename="../build/DevTools_http_request_autogen/include/ui_api_tool.h" line="+2"/>
         <source>Body</source>
         <translation>ボディ</translation>
     </message>
@@ -1590,42 +1714,42 @@ Choose a tool from the side panel</source>
 <context>
     <name>dbMain</name>
     <message>
-        <location filename="../gui/db_tool/main/db_main.ui" line="+14"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="+119"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Toolbar</source>
         <translation>ツールバー</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>テーブル更新</source>
         <translation>テーブル更新</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+1"/>
         <source>DB接続設定</source>
         <translation>DB接続設定</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>SQL</source>
         <translation>SQL</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Tables</source>
         <translation>テーブル</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Query</source>
         <translation>クエリ</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="+78"/>
+        <location line="+22"/>
         <source>DB Not Connected</source>
         <translation>DB未接続</translation>
     </message>
@@ -1655,13 +1779,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
@@ -1677,21 +1801,25 @@ Choose a tool from the side panel</source>
     <name>phraseGeneration</name>
     <message>
         <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="+164"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
         <location line="+52"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="+1"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
         <location line="+61"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="+1"/>
         <source>Text</source>
         <translation type="unfinished">テキスト</translation>
     </message>
     <message>
         <location line="+120"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="+5"/>
         <source>Title</source>
         <translation type="unfinished">タイトル</translation>
     </message>
@@ -1701,11 +1829,13 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <location line="-45"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="-2"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../build/DevTools_phrase_generation_autogen/include/ui_phrase_generation.h" line="+1"/>
         <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+109"/>
         <source>Copy</source>
         <translation>コピー</translation>

@@ -7,12 +7,12 @@
 #include <QListWidgetItem>
 #include <QWidget>
 
-namespace Ui {
-class dbMain;
-}
-
 class ConnectionSelector;
 class ConnectionWindow;
+class QGroupBox;
+class QListWidget;
+class QPushButton;
+class QTabWidget;
 
 class dbMain : public QWidget
 {
@@ -20,7 +20,7 @@ class dbMain : public QWidget
 
 public:
     explicit dbMain(QWidget *parent = nullptr);
-    ~dbMain() override;
+    ~dbMain() override = default;
     dbMain(const dbMain &) = delete;
     dbMain &operator=(const dbMain &) = delete;
     dbMain(dbMain &&) = delete;
@@ -34,7 +34,18 @@ public:
     bool connectSQLiteFile(const QString &filePath);
 
 private:
-    Ui::dbMain *ui;
+    void buildUi();
+    void retranslateUi();
+
+    QPushButton *refreshTableButton{nullptr};
+    QPushButton *connectionSettingsButton{nullptr};
+    QPushButton *addQueryTabButton{nullptr};
+    QGroupBox *toolbarGroupBox{nullptr};
+    QGroupBox *tablesGroupBox{nullptr};
+    QGroupBox *queryGroupBox{nullptr};
+    QListWidget *tableListWidget{nullptr};
+    QTabWidget *queryTabWidget{nullptr};
+
     QSqlDatabase db;
     ConnectionSelector *connectionSelector = nullptr;
     ConnectionWindow *connectionWindow = nullptr;

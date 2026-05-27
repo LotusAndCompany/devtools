@@ -3,15 +3,19 @@
 #include "../connection_selector/connection_selector.h"
 #include "../connection_window/connection_window.h"
 #include "../query_page/query_page.h"
-#include "ui_db_main.h"
 
 #include <QEvent>
 #include <QFileInfo>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <QJsonDocument>
+#include <QListWidget>
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
+#include <QSizePolicy>
+#include <QSpacerItem>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
@@ -22,27 +26,35 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+namespace {
+constexpr int DEFAULT_WIDTH = 943;
+constexpr int DEFAULT_HEIGHT = 349;
+constexpr int CONTENT_STRETCH_TABLES = 1;
+constexpr int CONTENT_STRETCH_QUERY = 3;
+constexpr int SPACER_WIDTH = 40;
+constexpr int SPACER_HEIGHT = 20;
+constexpr int MAX_HISTORY_ENTRIES = 10;
+} // namespace
+
 // Static variable to track if connection was made during this app session
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool s_hasConnectedThisSession = false;
 
-dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
+dbMain::dbMain(QWidget *parent) : QWidget(parent)
 {
-    ui->setupUi(this);
+    buildUi();
 
-    ui->queryTabWidget->setTabsClosable(true);
-    connect(ui->queryTabWidget, &QTabWidget::tabCloseRequested, this,
-            &dbMain::handleTabCloseRequested);
-    connect(ui->addQueryTabButton, &QPushButton::clicked, this,
-            &dbMain::handleAddQueryTabButtonClick);
-    connect(ui->refreshTableButton, &QPushButton::clicked, this,
+    queryTabWidget->setTabsClosable(true);
+    connect(queryTabWidget, &QTabWidget::tabCloseRequested, this, &dbMain::handleTabCloseRequested);
+    connect(addQueryTabButton, &QPushButton::clicked, this, &dbMain::handleAddQueryTabButtonClick);
+    connect(refreshTableButton, &QPushButton::clicked, this,
             &dbMain::handleRefreshTableButtonClick);
-    connect(ui->connectionSettingsButton, &QPushButton::clicked, this,
+    connect(connectionSettingsButton, &QPushButton::clicked, this,
             &dbMain::handleConnectionSettingsButtonClick);
 
     // Disable buttons until DB is connected
-    ui->addQueryTabButton->setEnabled(false);
-    ui->refreshTableButton->setEnabled(false);
+    addQueryTabButton->setEnabled(false);
+    refreshTableButton->setEnabled(false);
 
     // Check if we should show connection dialog on startup
     QTimer::singleShot(0, this, [this]() {
@@ -54,6 +66,63 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent), ui(new Ui::dbMain)
             showConnectionSelector();
         }
     });
+}
+
+void dbMain::buildUi()
+{
+    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    auto *verticalLayoutMain = new QVBoxLayout(this);
+
+    toolbarGroupBox = new QGroupBox(this);
+    auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
+
+    refreshTableButton = new QPushButton(toolbarGroupBox);
+    refreshTableButton->setIcon(QIcon::fromTheme("refresh"));
+    toolbarLayout->addWidget(refreshTableButton);
+
+    auto *horizontalSpacer =
+        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    toolbarLayout->addItem(horizontalSpacer);
+
+    connectionSettingsButton = new QPushButton(toolbarGroupBox);
+    toolbarLayout->addWidget(connectionSettingsButton);
+
+    addQueryTabButton = new QPushButton(toolbarGroupBox);
+    toolbarLayout->addWidget(addQueryTabButton);
+
+    verticalLayoutMain->addWidget(toolbarGroupBox);
+
+    auto *contentLayout = new QHBoxLayout();
+
+    tablesGroupBox = new QGroupBox(this);
+    auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
+    tableListWidget = new QListWidget(tablesGroupBox);
+    tablesLayout->addWidget(tableListWidget);
+    contentLayout->addWidget(tablesGroupBox, CONTENT_STRETCH_TABLES);
+
+    queryGroupBox = new QGroupBox(this);
+    auto *queryLayout = new QVBoxLayout(queryGroupBox);
+    queryTabWidget = new QTabWidget(queryGroupBox);
+    queryTabWidget->setCurrentIndex(-1);
+    queryTabWidget->setTabsClosable(true);
+    queryLayout->addWidget(queryTabWidget);
+    contentLayout->addWidget(queryGroupBox, CONTENT_STRETCH_QUERY);
+
+    verticalLayoutMain->addLayout(contentLayout);
+
+    retranslateUi();
+}
+
+void dbMain::retranslateUi()
+{
+    setWindowTitle(tr("Form"));
+    toolbarGroupBox->setTitle(tr("Toolbar"));
+    refreshTableButton->setToolTip(tr("テーブル更新"));
+    connectionSettingsButton->setText(tr("DB接続設定"));
+    addQueryTabButton->setText(tr("SQL"));
+    tablesGroupBox->setTitle(tr("Tables"));
+    queryGroupBox->setTitle(tr("Query"));
 }
 
 void dbMain::handleAddQueryTabButtonClick()
@@ -68,8 +137,8 @@ void dbMain::handleAddQueryTabButtonClick()
         newTabName = QString("%1 %2").arg(baseName).arg(counter++);
     } while (isTabNameExists(newTabName));
 
-    ui->queryTabWidget->addTab(page, newTabName);
-    ui->queryTabWidget->setCurrentWidget(page); // 追加されたタブに自動で切り替え
+    queryTabWidget->addTab(page, newTabName);
+    queryTabWidget->setCurrentWidget(page); // 追加されたタブに自動で切り替え
 }
 
 void dbMain::handleRefreshTableButtonClick()
@@ -80,7 +149,7 @@ void dbMain::handleRefreshTableButtonClick()
     }
 
     // 既存アイテムをクリア
-    ui->tableListWidget->clear();
+    tableListWidget->clear();
 
     // 再度テーブル一覧を取得
     populateTableList();
@@ -134,8 +203,8 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
 
 bool dbMain::isTabNameExists(const QString &tabName)
 {
-    for (int i = 0; i < ui->queryTabWidget->count(); ++i) {
-        if (ui->queryTabWidget->tabText(i) == tabName) {
+    for (int i = 0; i < queryTabWidget->count(); ++i) {
+        if (queryTabWidget->tabText(i) == tabName) {
             return true;
         }
     }
@@ -144,8 +213,8 @@ bool dbMain::isTabNameExists(const QString &tabName)
 
 void dbMain::handleTabCloseRequested(int index)
 {
-    QWidget const *widget = ui->queryTabWidget->widget(index);
-    ui->queryTabWidget->removeTab(index);
+    QWidget const *widget = queryTabWidget->widget(index);
+    queryTabWidget->removeTab(index);
     delete widget;
 }
 
@@ -153,7 +222,7 @@ void dbMain::populateTableList()
 {
     QSqlQuery query("SELECT name FROM sqlite_master WHERE type='table';", db);
     while (query.next()) {
-        ui->tableListWidget->addItem(query.value(0).toString());
+        tableListWidget->addItem(query.value(0).toString());
     }
 }
 
@@ -162,9 +231,9 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     QString const tableName = item->text();
 
     // 同名タブがある場合はそれを選択
-    for (int i = 0; i < ui->queryTabWidget->count(); ++i) {
-        if (ui->queryTabWidget->tabText(i) == tableName) {
-            ui->queryTabWidget->setCurrentIndex(i);
+    for (int i = 0; i < queryTabWidget->count(); ++i) {
+        if (queryTabWidget->tabText(i) == tableName) {
+            queryTabWidget->setCurrentIndex(i);
             return;
         }
     }
@@ -194,13 +263,8 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     container->setLayout(mainLayout);
     container->setAttribute(Qt::WA_DeleteOnClose);
 
-    ui->queryTabWidget->addTab(container, tableName);
-    ui->queryTabWidget->setCurrentWidget(container);
-}
-
-dbMain::~dbMain()
-{
-    delete ui;
+    queryTabWidget->addTab(container, tableName);
+    queryTabWidget->setCurrentWidget(container);
 }
 
 void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo)
@@ -209,8 +273,8 @@ void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connec
     s_hasConnectedThisSession = true;
 
     // Enable buttons now that DB is connected
-    ui->addQueryTabButton->setEnabled(true);
-    ui->refreshTableButton->setEnabled(true);
+    addQueryTabButton->setEnabled(true);
+    refreshTableButton->setEnabled(true);
 
     // Save connection info to history if provided
     if (!connectionInfo.isEmpty()) {
@@ -218,12 +282,12 @@ void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connec
     }
 
     // Clear existing items before populating
-    ui->tableListWidget->clear();
+    tableListWidget->clear();
     populateTableList();
 
     // Disconnect previous connections to avoid duplicates
-    disconnect(ui->tableListWidget, &QListWidget::itemClicked, this, &dbMain::handleTableClicked);
-    connect(ui->tableListWidget, &QListWidget::itemClicked, this, &dbMain::handleTableClicked);
+    disconnect(tableListWidget, &QListWidget::itemClicked, this, &dbMain::handleTableClicked);
+    connect(tableListWidget, &QListWidget::itemClicked, this, &dbMain::handleTableClicked);
 }
 
 void dbMain::handleConnectionSettingsButtonClick()
@@ -301,7 +365,7 @@ void dbMain::openNewConnectionWindow()
 void dbMain::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        ui->retranslateUi(this);
+        retranslateUi();
     } else {
         QWidget::changeEvent(event);
     }
@@ -337,8 +401,8 @@ void dbMain::saveConnectionHistory(const QJsonObject &connectionInfo)
     // Add new entry at front
     historyList.prepend(jsonStr);
 
-    // Limit to 10 entries
-    while (historyList.size() > 10) {
+    // Limit to MAX_HISTORY_ENTRIES entries
+    while (historyList.size() > MAX_HISTORY_ENTRIES) {
         historyList.removeLast();
     }
 
