@@ -37,6 +37,8 @@ private:
     void createTopBarWidgets();
     void createBodyWidgets();
     void layoutWidgets();
+    void retranslateUi();
+    void adjustTreeColumnWidth();
     void loadTitles();
     static QString loadContent(const QString &filename, QString *title = nullptr);
     static void saveContent(const QString &title, const QString &content);

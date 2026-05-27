@@ -20,6 +20,8 @@
 #include <QTreeWidgetItem>
 #include <QUuid>
 
+#include <algorithm>
+
 namespace {
 const char *const SAVE_BUTTON_STYLE =
     "margin-right: 30px;\n"
@@ -38,6 +40,7 @@ constexpr int DEFAULT_HEIGHT = 633;
 constexpr int MIN_WIDTH = 300;
 constexpr int MIN_HEIGHT = 200;
 constexpr int TREE_FIXED_COLUMN_WIDTH = 40;
+constexpr int TREE_COLUMN_PADDING = 8;
 constexpr int LIGHTNESS_THRESHOLD = 128;
 
 constexpr int TITLE_FONT_POINTSIZE = 28;
@@ -72,7 +75,7 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
 
     title_tree_widget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     title_tree_widget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-    title_tree_widget->setColumnWidth(1, TREE_FIXED_COLUMN_WIDTH);
+    adjustTreeColumnWidth();
 
     // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
     QPalette const palette = this->palette();
@@ -98,12 +101,50 @@ QSizePolicy makePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy verti
 void phraseGeneration::buildUi()
 {
     setObjectName(QStringLiteral("phraseGeneration"));
-    setWindowTitle(tr("Form"));
     resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     createTopBarWidgets();
     createBodyWidgets();
     layoutWidgets();
+    retranslateUi();
+}
+
+void phraseGeneration::retranslateUi()
+{
+    setWindowTitle(tr("Form"));
+    template_title->setPlaceholderText(tr("Title"));
+    template_text->setPlaceholderText(tr("Text"));
+    delete_button->setText(tr("Delete"));
+    copy_button->setText(tr("Copy"));
+    save_button->setText(tr("Save"));
+
+    QString const add_label = tr("Add new template");
+    add_button->setToolTip(add_label);
+    add_button->setAccessibleName(add_label);
+    add_button->setAccessibleDescription(add_label);
+
+    QString const toggle_label = tr("Toggle template list");
+    toggle_tree_button->setToolTip(toggle_label);
+    toggle_tree_button->setAccessibleName(toggle_label);
+    toggle_tree_button->setAccessibleDescription(toggle_label);
+
+    // 各 tree item の Copy ボタンも再翻訳
+    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *item = title_tree_widget->topLevelItem(i);
+        auto *btn = qobject_cast<QPushButton *>(title_tree_widget->itemWidget(item, 1));
+        if (btn != nullptr) {
+            btn->setText(tr("Copy"));
+        }
+    }
+}
+
+void phraseGeneration::adjustTreeColumnWidth()
+{
+    // 翻訳された Copy ボタンが切れないように sample の sizeHint から算出する
+    QPushButton sample(tr("Copy"));
+    int const min_width =
+        std::max(TREE_FIXED_COLUMN_WIDTH, sample.sizeHint().width() + TREE_COLUMN_PADDING);
+    title_tree_widget->setColumnWidth(1, min_width);
 }
 
 void phraseGeneration::createTopBarWidgets()
@@ -117,13 +158,12 @@ void phraseGeneration::createTopBarWidgets()
         template_title->setFont(font);
     }
     template_title->setStyleSheet(QString::fromUtf8(TEMPLATE_TITLE_STYLE));
-    template_title->setPlaceholderText(tr("Title"));
 
-    delete_button = new QPushButton(tr("Delete"), this);
+    delete_button = new QPushButton(this);
     delete_button->setObjectName(QStringLiteral("deleteButton"));
     delete_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
 
-    copy_button = new QPushButton(tr("Copy"), this);
+    copy_button = new QPushButton(this);
     copy_button->setObjectName(QStringLiteral("copyButton"));
     copy_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
 
@@ -135,7 +175,14 @@ void phraseGeneration::createTopBarWidgets()
         font.setPointSize(ADD_FONT_POINTSIZE);
         add_button->setFont(font);
     }
-    add_button->setIcon(QIcon::fromTheme(QStringLiteral("add")));
+    {
+        QIcon const icon = QIcon::fromTheme(QStringLiteral("add"));
+        if (!icon.isNull()) {
+            add_button->setIcon(icon);
+        } else {
+            add_button->setText(QStringLiteral("+"));
+        }
+    }
 
     toggle_tree_button = new QPushButton(this);
     toggle_tree_button->setObjectName(QStringLiteral("toggleTreeButton"));
@@ -146,7 +193,14 @@ void phraseGeneration::createTopBarWidgets()
         font.setBold(true);
         toggle_tree_button->setFont(font);
     }
-    toggle_tree_button->setIcon(QIcon::fromTheme(QStringLiteral("menu")));
+    {
+        QIcon const icon = QIcon::fromTheme(QStringLiteral("menu"));
+        if (!icon.isNull()) {
+            toggle_tree_button->setIcon(icon);
+        } else {
+            toggle_tree_button->setText(QStringLiteral("☰"));
+        }
+    }
 }
 
 void phraseGeneration::createBodyWidgets()
@@ -166,7 +220,6 @@ void phraseGeneration::createBodyWidgets()
         template_text->setFont(font);
     }
     template_text->setStyleSheet(QString::fromUtf8(TEMPLATE_TEXT_STYLE));
-    template_text->setPlaceholderText(tr("Text"));
 
     title_tree_widget = new QTreeWidget(this);
     title_tree_widget->setObjectName(QStringLiteral("titleTreeWidget"));
@@ -175,7 +228,7 @@ void phraseGeneration::createBodyWidgets()
     title_tree_widget->setHeaderHidden(true);
     title_tree_widget->setColumnCount(2);
 
-    save_button = new QPushButton(tr("Save"), this);
+    save_button = new QPushButton(this);
     save_button->setObjectName(QStringLiteral("saveButton"));
     save_button->setSizePolicy(makePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     {
@@ -206,22 +259,28 @@ void phraseGeneration::layoutWidgets()
     grid_layout->setColumnStretch(5, 1); // titleTreeWidget の列
 }
 
-// カラーテーマ変更時に走る処理
+// カラーテーマ / 言語変更時に走る処理
 void phraseGeneration::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::PaletteChange) {
+    switch (event->type()) {
+    case QEvent::PaletteChange: {
         QPalette const palette = this->palette();
         QPalette templateTextPalette = template_text->palette();
         templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
         template_text->setPalette(templateTextPalette);
 
-        // ダークモードかライトモードか判定
         QColor const baseColor = palette.color(QPalette::Base);
         QColor const borderColor =
             (baseColor.lightness() > LIGHTNESS_THRESHOLD) ? Qt::black : Qt::white;
-
-        // QTreeWidget のスタイルを更新
         title_tree_widget->setStyleSheet(treeStyleSheet(borderColor));
+        break;
+    }
+    case QEvent::LanguageChange:
+        retranslateUi();
+        adjustTreeColumnWidth();
+        break;
+    default:
+        break;
     }
     QWidget::changeEvent(event);
 }

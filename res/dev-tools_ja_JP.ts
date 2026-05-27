@@ -292,8 +292,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1971,22 +1971,32 @@ Choose a tool from the side panel</source>
 <context>
     <name>phraseGeneration</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+101"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+114"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+77"/>
+        <location line="+5"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="-9"/>
+        <location line="+2"/>
+        <source>Add new template</source>
+        <translation>新規テンプレートを追加</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Toggle template list</source>
+        <translation>テンプレート一覧を表示/非表示</translation>
+    </message>
+    <message>
+        <location line="-10"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="-49"/>
+        <location line="-1"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
@@ -2000,8 +2010,10 @@ Choose a tool from the side panel</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location line="+119"/>
+        <location line="+1"/>
+        <location line="+18"/>
+        <location line="+8"/>
+        <location line="+160"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
