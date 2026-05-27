@@ -2013,7 +2013,7 @@ Choose a tool from the side panel</source>
         <location line="+1"/>
         <location line="+18"/>
         <location line="+8"/>
-        <location line="+160"/>
+        <location line="+153"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
