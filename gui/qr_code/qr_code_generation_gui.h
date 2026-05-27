@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDateTimeEdit>
+#include <QGroupBox>
 #include <QImage>
 #include <QLabel>
 #include <QLineEdit>
@@ -15,12 +16,6 @@
 #include <QTextEdit>
 #include <QWidget>
 
-namespace Ui {
-class QRCodeGenerationGUI;
-}
-
-class QTextEdit;
-
 class QRCodeGenerationGUI : public GuiTool
 {
     Q_OBJECT
@@ -28,7 +23,7 @@ class QRCodeGenerationGUI : public GuiTool
 
 public:
     explicit QRCodeGenerationGUI(QWidget *parent = nullptr);
-    ~QRCodeGenerationGUI() override;
+    ~QRCodeGenerationGUI() override = default;
     QRCodeGenerationGUI(QRCodeGenerationGUI &&) = delete;
     QRCodeGenerationGUI &operator=(QRCodeGenerationGUI &&) = delete;
 
@@ -45,17 +40,15 @@ private slots:
     void updateGenerateButtonState();
 
 private:
-    Ui::QRCodeGenerationGUI *ui;
-
     enum class QRCodeType : uint8_t { Text, Url, Email, Phone, Sms, Wifi, Contact, Calendar, Geo };
-    ;
 
-    void initializeCategories();
+    void buildUi();
+    void retranslateUi();
     void setupParameterWidgets();
     void clearAllParameters();
     QString generateQRCodeContent();
 
-    // Parameter widget for text type
+    // Parameter widget for each QR code type
     QWidget *createTextWidget();
     QWidget *createUrlWidget();
     QWidget *createEmailWidget();
@@ -66,7 +59,19 @@ private:
     QWidget *createCalendarWidget();
     QWidget *createGeoWidget();
 
-    QStackedWidget *parameterStack{nullptr};
+    // Top-level widgets (owned via Qt parent-child ownership)
+    QGroupBox *categoryGroupBox{nullptr};
+    QGroupBox *parametersGroupBox{nullptr};
+    QGroupBox *outputGroupBox{nullptr};
+    QComboBox *categoryComboBox{nullptr};
+    QStackedWidget *parameterStackedWidget{nullptr};
+    QPushButton *generateButton{nullptr};
+    QPushButton *clearButton{nullptr};
+    QPushButton *copyButton{nullptr};
+    QPushButton *saveButton{nullptr};
+    QLabel *qrCodeLabel{nullptr};
+    QTextEdit *contentPreviewEdit{nullptr};
+
     QRCodeType currentType{QRCodeType::Text};
 
     // Widget references for easy access

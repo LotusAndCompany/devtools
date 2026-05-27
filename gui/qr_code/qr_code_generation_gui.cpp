@@ -2,7 +2,6 @@
 
 #include "core/qr_tool/content_generator.h"
 #include "core/qr_tool/qrcodegen.hpp"
-#include "ui_qr_code_generation_gui.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -11,6 +10,7 @@
 #include <QDateTimeEdit>
 #include <QFileDialog>
 #include <QFormLayout>
+#include <QFrame>
 #include <QHBoxLayout>
 #include <QImage>
 #include <QLabel>
@@ -19,44 +19,156 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QResizeEvent>
+#include <QSizePolicy>
+#include <QSpacerItem>
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QVariantMap>
 
 using qrcodegen::QrCode;
 
-QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent)
-    : GuiTool(parent), ui(new Ui::QRCodeGenerationGUI)
+namespace {
+constexpr int CATEGORY_ITEM_COUNT = 9;
+constexpr int DEFAULT_WIDTH = 818;
+constexpr int DEFAULT_HEIGHT = 600;
+constexpr int CATEGORY_MIN_WIDTH = 400;
+constexpr int CATEGORY_MAX_WIDTH = 800;
+constexpr int CATEGORY_MAX_HEIGHT = 600;
+constexpr int PARAMETERS_MIN_WIDTH = 400;
+constexpr int PARAMETERS_MIN_HEIGHT = 200;
+constexpr int QR_LABEL_MIN_SIZE = 350;
+constexpr int PREVIEW_MAX_HEIGHT = 100;
+constexpr int SPACER_WIDTH = 40;
+constexpr int SPACER_HEIGHT = 20;
+constexpr int QR_SCALE = 8;
+} // namespace
+
+QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent) : GuiTool(parent)
 {
-    ui->setupUi(this);
+    buildUi();
 
-    parameterStack = ui->parameterStackedWidget;
-
-    initializeCategories();
     setupParameterWidgets();
 
-    connect(ui->categoryComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+    connect(categoryComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &QRCodeGenerationGUI::onCategoryChanged);
-    connect(ui->generateButton, &QPushButton::clicked, this,
-            &QRCodeGenerationGUI::onGenerateClicked);
-    connect(ui->clearButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onClearClicked);
-    connect(ui->copyButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onCopyClicked);
-    connect(ui->saveButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onSaveClicked);
+    connect(generateButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onGenerateClicked);
+    connect(clearButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onClearClicked);
+    connect(copyButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onCopyClicked);
+    connect(saveButton, &QPushButton::clicked, this, &QRCodeGenerationGUI::onSaveClicked);
 
     // Set initial category
     onCategoryChanged(0);
 }
 
-QRCodeGenerationGUI::~QRCodeGenerationGUI()
+// NOLINTNEXTLINE(readability-function-size)
+void QRCodeGenerationGUI::buildUi()
 {
-    delete ui;
+    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    auto *horizontalLayoutMain = new QHBoxLayout(this);
+    auto *verticalLayoutLeft = new QVBoxLayout();
+
+    // Category group box
+    categoryGroupBox = new QGroupBox(this);
+    categoryGroupBox->setMinimumSize(QSize(CATEGORY_MIN_WIDTH, 0));
+    categoryGroupBox->setMaximumSize(QSize(CATEGORY_MAX_WIDTH, CATEGORY_MAX_HEIGHT));
+    auto *categoryLayout = new QVBoxLayout(categoryGroupBox);
+    categoryComboBox = new QComboBox(categoryGroupBox);
+    for (int i = 0; i < CATEGORY_ITEM_COUNT; ++i) {
+        categoryComboBox->addItem(QString());
+    }
+    categoryLayout->addWidget(categoryComboBox);
+    verticalLayoutLeft->addWidget(categoryGroupBox);
+
+    // Parameters group box
+    parametersGroupBox = new QGroupBox(this);
+    {
+        QSizePolicy parametersPolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        parametersPolicy.setHorizontalStretch(1);
+        parametersPolicy.setVerticalStretch(0);
+        parametersGroupBox->setSizePolicy(parametersPolicy);
+    }
+    parametersGroupBox->setMinimumSize(QSize(PARAMETERS_MIN_WIDTH, PARAMETERS_MIN_HEIGHT));
+    auto *paramsLayout = new QVBoxLayout(parametersGroupBox);
+    parameterStackedWidget = new QStackedWidget(parametersGroupBox);
+    parameterStackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    auto *emptyPage = new QWidget();
+    parameterStackedWidget->addWidget(emptyPage); // index 0
+    parameterStackedWidget->setCurrentIndex(0);
+    paramsLayout->addWidget(parameterStackedWidget);
+    verticalLayoutLeft->addWidget(parametersGroupBox);
+
+    // Button row
+    auto *buttonLayout = new QHBoxLayout();
+    generateButton = new QPushButton(this);
+    clearButton = new QPushButton(this);
+    buttonLayout->addWidget(generateButton);
+    buttonLayout->addWidget(clearButton);
+    buttonLayout->addItem(
+        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    verticalLayoutLeft->addLayout(buttonLayout);
+
+    horizontalLayoutMain->addLayout(verticalLayoutLeft);
+
+    // Right side: output
+    auto *verticalLayoutRight = new QVBoxLayout();
+    outputGroupBox = new QGroupBox(this);
+    auto *outputLayout = new QVBoxLayout(outputGroupBox);
+
+    qrCodeLabel = new QLabel(outputGroupBox);
+    qrCodeLabel->setMinimumSize(QSize(QR_LABEL_MIN_SIZE, QR_LABEL_MIN_SIZE));
+    qrCodeLabel->setFrameShape(QFrame::Box);
+    qrCodeLabel->setAlignment(Qt::AlignCenter);
+    outputLayout->addWidget(qrCodeLabel);
+
+    auto *outputButtonLayout = new QHBoxLayout();
+    copyButton = new QPushButton(outputGroupBox);
+    copyButton->setEnabled(false);
+    saveButton = new QPushButton(outputGroupBox);
+    saveButton->setEnabled(false);
+    outputButtonLayout->addWidget(copyButton);
+    outputButtonLayout->addWidget(saveButton);
+    outputLayout->addLayout(outputButtonLayout);
+
+    contentPreviewEdit = new QTextEdit(outputGroupBox);
+    contentPreviewEdit->setMaximumSize(QSize(QWIDGETSIZE_MAX, PREVIEW_MAX_HEIGHT));
+    contentPreviewEdit->setReadOnly(true);
+    outputLayout->addWidget(contentPreviewEdit);
+
+    verticalLayoutRight->addWidget(outputGroupBox);
+    horizontalLayoutMain->addLayout(verticalLayoutRight);
+
+    retranslateUi();
+}
+
+void QRCodeGenerationGUI::retranslateUi()
+{
+    setWindowTitle(tr("QR Code Generation"));
+    categoryGroupBox->setTitle(tr("QR Code Type"));
+    parametersGroupBox->setTitle(tr("Parameters"));
+    outputGroupBox->setTitle(tr("QR Code Output"));
+
+    const QStringList categoryItems = {
+        tr("Text"), tr("URL"),     tr("Email"),    tr("Phone Number"), tr("SMS"),
+        tr("WiFi"), tr("Contact"), tr("Calendar"), tr("Geo Location"),
+    };
+    for (int i = 0; i < categoryItems.size() && i < categoryComboBox->count(); ++i) {
+        categoryComboBox->setItemText(i, categoryItems[i]);
+    }
+
+    generateButton->setText(tr("Generate"));
+    clearButton->setText(tr("Clear"));
+    copyButton->setText(tr("Copy Image"));
+    saveButton->setText(tr("Save Image"));
+    qrCodeLabel->setText(tr("QR Code will appear here"));
+    contentPreviewEdit->setPlaceholderText(tr("QR code content preview"));
 }
 
 void QRCodeGenerationGUI::changeEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        retranslateUi();
         event->accept();
         break;
     default:
@@ -65,24 +177,18 @@ void QRCodeGenerationGUI::changeEvent(QEvent *event)
     }
 }
 
-void QRCodeGenerationGUI::initializeCategories()
-{
-    // Categories are already added in the UI file
-    // This function can be used for runtime initialization if needed
-}
-
 void QRCodeGenerationGUI::setupParameterWidgets()
 {
     // Create and add parameter widgets for all types
-    parameterStack->addWidget(createTextWidget());     // Index 1
-    parameterStack->addWidget(createUrlWidget());      // Index 2
-    parameterStack->addWidget(createEmailWidget());    // Index 3
-    parameterStack->addWidget(createPhoneWidget());    // Index 4
-    parameterStack->addWidget(createSmsWidget());      // Index 5
-    parameterStack->addWidget(createWifiWidget());     // Index 6
-    parameterStack->addWidget(createContactWidget());  // Index 7
-    parameterStack->addWidget(createCalendarWidget()); // Index 8
-    parameterStack->addWidget(createGeoWidget());      // Index 9
+    parameterStackedWidget->addWidget(createTextWidget());     // Index 1
+    parameterStackedWidget->addWidget(createUrlWidget());      // Index 2
+    parameterStackedWidget->addWidget(createEmailWidget());    // Index 3
+    parameterStackedWidget->addWidget(createPhoneWidget());    // Index 4
+    parameterStackedWidget->addWidget(createSmsWidget());      // Index 5
+    parameterStackedWidget->addWidget(createWifiWidget());     // Index 6
+    parameterStackedWidget->addWidget(createContactWidget());  // Index 7
+    parameterStackedWidget->addWidget(createCalendarWidget()); // Index 8
+    parameterStackedWidget->addWidget(createGeoWidget());      // Index 9
 }
 
 QWidget *QRCodeGenerationGUI::createTextWidget()
@@ -451,44 +557,44 @@ void QRCodeGenerationGUI::onCategoryChanged(int index)
     switch (index) {
     case 0: // Text
         currentType = QRCodeType::Text;
-        parameterStack->setCurrentIndex(1);
+        parameterStackedWidget->setCurrentIndex(1);
         break;
     case 1: // URL
         currentType = QRCodeType::Url;
-        parameterStack->setCurrentIndex(2);
+        parameterStackedWidget->setCurrentIndex(2);
         break;
     case 2: // Email
         currentType = QRCodeType::Email;
-        parameterStack->setCurrentIndex(3);
+        parameterStackedWidget->setCurrentIndex(3);
         break;
     case 3: // Phone Number
         currentType = QRCodeType::Phone;
-        parameterStack->setCurrentIndex(4);
+        parameterStackedWidget->setCurrentIndex(4);
         break;
     case 4: // SMS
         currentType = QRCodeType::Sms;
-        parameterStack->setCurrentIndex(5);
+        parameterStackedWidget->setCurrentIndex(5);
         break;
     case 5: // WiFi
         currentType = QRCodeType::Wifi;
-        parameterStack->setCurrentIndex(6);
+        parameterStackedWidget->setCurrentIndex(6);
         break;
     case 6: // Contact
         currentType = QRCodeType::Contact;
-        parameterStack->setCurrentIndex(7);
+        parameterStackedWidget->setCurrentIndex(7);
         break;
     case 7: // Calendar
         currentType = QRCodeType::Calendar;
-        parameterStack->setCurrentIndex(8);
+        parameterStackedWidget->setCurrentIndex(8);
         break;
     case 8: // Geo Location
         currentType = QRCodeType::Geo;
-        parameterStack->setCurrentIndex(9);
+        parameterStackedWidget->setCurrentIndex(9);
         break;
     default:
         // Default to Text
         currentType = QRCodeType::Text;
-        parameterStack->setCurrentIndex(1);
+        parameterStackedWidget->setCurrentIndex(1);
         break;
     }
 
@@ -511,7 +617,7 @@ void QRCodeGenerationGUI::clearAllParameters()
         }
     }
 
-    ui->contentPreviewEdit->clear();
+    contentPreviewEdit->clear();
 
     // エラーラベルもクリア
     clearValidationErrors();
@@ -966,7 +1072,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
     }
     }
 
-    ui->generateButton->setEnabled(enabled);
+    generateButton->setEnabled(enabled);
 }
 
 void QRCodeGenerationGUI::onGenerateClicked()
@@ -982,25 +1088,23 @@ void QRCodeGenerationGUI::onGenerateClicked()
     }
 
     // Display content preview
-    ui->contentPreviewEdit->setPlainText(content);
+    contentPreviewEdit->setPlainText(content);
 
     try {
         // QRコード生成
         const QrCode qr = QrCode::encodeText(content.toUtf8().constData(), QrCode::Ecc::LOW);
 
-        int const scale = 8; // 自由に設定させるかは要検討
-
         int const size = qr.getSize();
-        QImage image(size * scale, size * scale, QImage::Format_RGB32);
+        QImage image(size * QR_SCALE, size * QR_SCALE, QImage::Format_RGB32);
         image.fill(Qt::white);
 
         // QRコード描画
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 if (qr.getModule(x, y)) {
-                    for (int dy = 0; dy < scale; dy++) {
-                        for (int dx = 0; dx < scale; dx++) {
-                            image.setPixel((x * scale) + dx, (y * scale) + dy, qRgb(0, 0, 0));
+                    for (int dy = 0; dy < QR_SCALE; dy++) {
+                        for (int dx = 0; dx < QR_SCALE; dx++) {
+                            image.setPixel((x * QR_SCALE) + dx, (y * QR_SCALE) + dy, qRgb(0, 0, 0));
                         }
                     }
                 }
@@ -1011,7 +1115,7 @@ void QRCodeGenerationGUI::onGenerateClicked()
         currentQRImage = image;
 
         // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
-        QSize labelSize = ui->qrCodeLabel->size();
+        QSize labelSize = qrCodeLabel->size();
         // マージンを考慮してサイズを少し小さくする
         labelSize -= QSize(10, 10);
 
@@ -1020,12 +1124,12 @@ void QRCodeGenerationGUI::onGenerateClicked()
         QPixmap const scaledPixmap =
             pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        ui->qrCodeLabel->setPixmap(scaledPixmap);
-        ui->qrCodeLabel->show();
+        qrCodeLabel->setPixmap(scaledPixmap);
+        qrCodeLabel->show();
 
         // Enable output buttons
-        ui->copyButton->setEnabled(true);
-        ui->saveButton->setEnabled(true);
+        copyButton->setEnabled(true);
+        saveButton->setEnabled(true);
 
     } catch (const std::exception &e) {
         // QRコード生成時のエラーをキャッチ
@@ -1036,17 +1140,17 @@ void QRCodeGenerationGUI::onGenerateClicked()
                 .arg(e.what()));
 
         // エラー時はボタンを無効化
-        ui->copyButton->setEnabled(false);
-        ui->saveButton->setEnabled(false);
+        copyButton->setEnabled(false);
+        saveButton->setEnabled(false);
     }
 }
 
 void QRCodeGenerationGUI::onClearClicked()
 {
     clearAllParameters();
-    ui->qrCodeLabel->setText(tr("QR Code will appear here"));
-    ui->copyButton->setEnabled(false);
-    ui->saveButton->setEnabled(false);
+    qrCodeLabel->setText(tr("QR Code will appear here"));
+    copyButton->setEnabled(false);
+    saveButton->setEnabled(false);
 
     // 現在のQRコード画像をクリア
     currentQRImage = QImage();
@@ -1109,7 +1213,7 @@ void QRCodeGenerationGUI::refreshQRCodeDisplay()
     }
 
     // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
-    QSize labelSize = ui->qrCodeLabel->size();
+    QSize labelSize = qrCodeLabel->size();
     // マージンを考慮してサイズを少し小さくする
     labelSize -= QSize(10, 10);
 
@@ -1118,5 +1222,5 @@ void QRCodeGenerationGUI::refreshQRCodeDisplay()
     QPixmap const scaledPixmap =
         pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    ui->qrCodeLabel->setPixmap(scaledPixmap);
+    qrCodeLabel->setPixmap(scaledPixmap);
 }

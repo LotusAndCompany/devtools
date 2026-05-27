@@ -201,7 +201,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/qr_tool/content_generator.cpp
         gui/qr_code/qr_code_generation_gui.h
         gui/qr_code/qr_code_generation_gui.cpp
-        gui/qr_code/qr_code_generation_gui.ui
     )
 
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
