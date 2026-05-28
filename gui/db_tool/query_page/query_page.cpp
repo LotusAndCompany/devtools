@@ -1,23 +1,24 @@
 #include "query_page.h"
 
-#include "ui_query_page.h"
-
-#include <QDebug>
 #include <QEvent>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSizePolicy>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTableView>
 #include <QTextEdit>
-#include <QUuid>
+#include <QVBoxLayout>
 
-QueryPage::QueryPage(QWidget *parent)
-    : QWidget(parent), ui(new Ui::QueryPage), model(new QSqlQueryModel(this)) // modelの初期化
+namespace {
+constexpr int DEFAULT_WIDTH = 400;
+constexpr int DEFAULT_HEIGHT = 300;
+} // namespace
+
+QueryPage::QueryPage(QWidget *parent) : QWidget(parent), model(new QSqlQueryModel(this))
 {
-    ui->setupUi(this);
+    buildUi();
 
-    // DBの初期化
     db = QSqlDatabase::database();
 
     if (!db.open()) {
@@ -25,16 +26,39 @@ QueryPage::QueryPage(QWidget *parent)
         return;
     }
 
-    // QTableViewにモデルをセット
-    ui->queryResultView->setModel(model);
+    queryResultView->setModel(model);
 
-    // ボタンのクリックにスロットを接続
-    connect(ui->executeButton, &QPushButton::clicked, this, &QueryPage::executeQuery);
+    connect(executeButton, &QPushButton::clicked, this, &QueryPage::executeQuery);
+}
+
+void QueryPage::buildUi()
+{
+    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    auto *verticalLayout = new QVBoxLayout(this);
+
+    queryTextEdit = new QTextEdit(this);
+    verticalLayout->addWidget(queryTextEdit);
+
+    executeButton = new QPushButton(this);
+    executeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    verticalLayout->addWidget(executeButton);
+
+    queryResultView = new QTableView(this);
+    verticalLayout->addWidget(queryResultView);
+
+    retranslateUi();
+}
+
+void QueryPage::retranslateUi()
+{
+    setWindowTitle(tr("Form"));
+    executeButton->setText(tr("実行"));
 }
 
 void QueryPage::executeQuery()
 {
-    QString const queryText = ui->queryTextEdit->toPlainText();
+    QString const queryText = queryTextEdit->toPlainText();
     QSqlQuery query(db);
 
     if (!query.exec(queryText)) {
@@ -51,15 +75,10 @@ void QueryPage::executeQuery()
     QMessageBox::information(this, "成功", "クエリを正常に実行しました");
 }
 
-QueryPage::~QueryPage()
-{
-    delete ui;
-}
-
 void QueryPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        ui->retranslateUi(this);
+        retranslateUi();
     } else {
         QWidget::changeEvent(event);
     }

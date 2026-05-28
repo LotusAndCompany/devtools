@@ -5,9 +5,9 @@
 #include <QSqlQueryModel>
 #include <QWidget>
 
-namespace Ui {
-class QueryPage;
-}
+class QPushButton;
+class QTableView;
+class QTextEdit;
 
 class QueryPage : public QWidget
 {
@@ -15,7 +15,7 @@ class QueryPage : public QWidget
 
 public:
     explicit QueryPage(QWidget *parent = nullptr);
-    ~QueryPage() override;
+    ~QueryPage() override = default;
     QueryPage(const QueryPage &) = delete;
     QueryPage &operator=(const QueryPage &) = delete;
     QueryPage(QueryPage &&) = delete;
@@ -28,9 +28,15 @@ private slots:
     void executeQuery();
 
 private:
-    Ui::QueryPage *ui;
+    void buildUi();
+    void retranslateUi();
+
+    QTextEdit *queryTextEdit{nullptr};
+    QPushButton *executeButton{nullptr};
+    QTableView *queryResultView{nullptr};
+
     QSqlDatabase db;
-    QSqlQueryModel *model;
+    QSqlQueryModel *model{nullptr};
 };
 
 #endif // QUERY_PAGE_H

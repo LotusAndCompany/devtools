@@ -154,12 +154,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # db_tool
     qt_add_library(${PROJECT_NAME}_db_tool STATIC
         gui/db_tool/query_page/query_page.h gui/db_tool/query_page/query_page.cpp
-        gui/db_tool/query_page/query_page.ui
-        gui/db_tool/main/db_main.h gui/db_tool/main/db_main.cpp gui/db_tool/main/db_main.ui
+        gui/db_tool/main/db_main.h gui/db_tool/main/db_main.cpp
         gui/db_tool/connection_window/connection_window.h gui/db_tool/connection_window/connection_window.cpp
-        gui/db_tool/connection_window/connection_window.ui
         gui/db_tool/connection_selector/connection_selector.h gui/db_tool/connection_selector/connection_selector.cpp
-        gui/db_tool/connection_selector/connection_selector.ui
     )
 
     # 画像関係の依存関係

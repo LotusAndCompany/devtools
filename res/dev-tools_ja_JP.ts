@@ -141,27 +141,27 @@
         <translation type="obsolete">削除</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.ui" line="+14"/>
+        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+80"/>
         <source>DB Connection</source>
         <translation>DB接続</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Connection History</source>
         <translation>接続履歴</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+1"/>
         <source>New Connection</source>
         <translation>新規接続</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_selector/connection_selector.cpp" line="+73"/>
+        <location line="+38"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
@@ -194,57 +194,60 @@
 <context>
     <name>ConnectionWindow</name>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.ui" line="+19"/>
+        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+136"/>
         <source>New Connection</source>
         <translation>新規接続</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Database Type</source>
         <translation>データベースタイプ</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+2"/>
+        <location line="+19"/>
+        <location line="+43"/>
+        <location line="+71"/>
         <source>SQLite</source>
         <translation>SQLite</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-131"/>
         <source>Host Name</source>
         <translation>ホスト名</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+1"/>
         <source>Database Name</source>
         <translation>データベース名</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Browse...</source>
         <translation>参照...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>User Name</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+1"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Connect</source>
         <translation>接続</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/connection_window/connection_window.cpp" line="+103"/>
+        <location line="+35"/>
         <source>Select Database File</source>
         <translation>データベースファイルを選択</translation>
     </message>
@@ -275,7 +278,7 @@
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+20"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
@@ -289,8 +292,8 @@
     <name>DataConversion</name>
     <message>
         <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1201,12 +1204,12 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>QueryPage</name>
     <message>
-        <location filename="../gui/db_tool/query_page/query_page.ui" line="+14"/>
+        <location filename="../gui/db_tool/query_page/query_page.cpp" line="+55"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+1"/>
         <source>実行</source>
         <translation>実行</translation>
     </message>
@@ -1600,42 +1603,42 @@ Choose a tool from the side panel</source>
 <context>
     <name>dbMain</name>
     <message>
-        <location filename="../gui/db_tool/main/db_main.ui" line="+14"/>
+        <location filename="../gui/db_tool/main/db_main.cpp" line="+119"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Toolbar</source>
         <translation>ツールバー</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>テーブル更新</source>
         <translation>テーブル更新</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+1"/>
         <source>DB接続設定</source>
         <translation>DB接続設定</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>SQL</source>
         <translation>SQL</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Tables</source>
         <translation>テーブル</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Query</source>
         <translation>クエリ</translation>
     </message>
     <message>
-        <location filename="../gui/db_tool/main/db_main.cpp" line="+78"/>
+        <location line="+22"/>
         <source>DB Not Connected</source>
         <translation>DB未接続</translation>
     </message>

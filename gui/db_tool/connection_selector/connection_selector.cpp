@@ -1,39 +1,86 @@
 #include "connection_selector.h"
 
-#include "ui_connection_selector.h"
-
 #include <QEvent>
+#include <QFont>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLabel>
+#include <QListWidget>
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
+#include <QSizePolicy>
+#include <QSpacerItem>
 #include <QSqlError>
+#include <QVBoxLayout>
 
-ConnectionSelector::ConnectionSelector(QWidget *parent)
-    : QWidget(parent), ui(new Ui::ConnectionSelector)
+namespace {
+constexpr int DEFAULT_WIDTH = 400;
+constexpr int DEFAULT_HEIGHT = 300;
+constexpr int DELETE_BUTTON_SIZE = 24;
+constexpr int ITEM_MARGIN_HORIZONTAL = 5;
+constexpr int ITEM_MARGIN_VERTICAL = 2;
+constexpr int SPACER_WIDTH = 40;
+constexpr int SPACER_HEIGHT = 20;
+} // namespace
+
+ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
 {
-    ui->setupUi(this);
+    buildUi();
 
-    connect(ui->historyListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
-        int const row = ui->historyListWidget->row(item);
+    connect(historyListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
+        int const row = historyListWidget->row(item);
         handleHistoryItemClicked(row);
     });
-    connect(ui->newConnectionButton, &QPushButton::clicked, this,
+    connect(newConnectionButton, &QPushButton::clicked, this,
             &ConnectionSelector::handleNewConnectionButtonClicked);
-    connect(ui->closeButton, &QPushButton::clicked, this,
+    connect(closeButton, &QPushButton::clicked, this,
             &ConnectionSelector::handleCloseButtonClicked);
 
     loadHistory();
 }
 
-ConnectionSelector::~ConnectionSelector()
+void ConnectionSelector::buildUi()
 {
-    delete ui;
+    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    auto *verticalLayout = new QVBoxLayout(this);
+
+    titleLabel = new QLabel(this);
+    QFont titleFont = titleLabel->font();
+    titleFont.setBold(true);
+    titleLabel->setFont(titleFont);
+    verticalLayout->addWidget(titleLabel);
+
+    historyListWidget = new QListWidget(this);
+    historyListWidget->setAlternatingRowColors(true);
+    verticalLayout->addWidget(historyListWidget);
+
+    auto *buttonLayout = new QHBoxLayout();
+    auto *horizontalSpacer =
+        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    buttonLayout->addItem(horizontalSpacer);
+
+    newConnectionButton = new QPushButton(this);
+    buttonLayout->addWidget(newConnectionButton);
+
+    closeButton = new QPushButton(this);
+    buttonLayout->addWidget(closeButton);
+
+    verticalLayout->addLayout(buttonLayout);
+
+    retranslateUi();
+}
+
+void ConnectionSelector::retranslateUi()
+{
+    setWindowTitle(tr("DB Connection"));
+    titleLabel->setText(tr("Connection History"));
+    newConnectionButton->setText(tr("New Connection"));
+    closeButton->setText(tr("Close"));
 }
 
 void ConnectionSelector::loadHistory()
@@ -54,7 +101,7 @@ void ConnectionSelector::loadHistory()
 
 void ConnectionSelector::refreshHistoryList()
 {
-    ui->historyListWidget->clear();
+    historyListWidget->clear();
 
     for (int i = 0; i < connectionHistory.size(); ++i) {
         const QJsonObject &conn = connectionHistory[i];
@@ -62,14 +109,15 @@ void ConnectionSelector::refreshHistoryList()
 
         auto *itemWidget = new QWidget();
         auto *layout = new QHBoxLayout(itemWidget);
-        layout->setContentsMargins(5, 2, 5, 2);
+        layout->setContentsMargins(ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL,
+                                   ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL);
 
         auto *label = new QLabel(displayName);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
-        deleteButton->setFixedSize(24, 24);
+        deleteButton->setFixedSize(DELETE_BUTTON_SIZE, DELETE_BUTTON_SIZE);
         deleteButton->setToolTip(tr("Delete"));
         deleteButton->setProperty("historyIndex", i);
 
@@ -80,8 +128,8 @@ void ConnectionSelector::refreshHistoryList()
 
         auto *item = new QListWidgetItem();
         item->setSizeHint(itemWidget->sizeHint());
-        ui->historyListWidget->addItem(item);
-        ui->historyListWidget->setItemWidget(item, itemWidget);
+        historyListWidget->addItem(item);
+        historyListWidget->setItemWidget(item, itemWidget);
     }
 }
 
@@ -159,11 +207,6 @@ void ConnectionSelector::removeHistoryItem(int index)
     refreshHistoryList();
 }
 
-void ConnectionSelector::handleDeleteButtonClicked()
-{
-    // This is handled by individual delete button connections
-}
-
 void ConnectionSelector::handleNewConnectionButtonClicked()
 {
     emit newConnectionRequested();
@@ -177,7 +220,7 @@ void ConnectionSelector::handleCloseButtonClicked()
 void ConnectionSelector::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        ui->retranslateUi(this);
+        retranslateUi();
     } else {
         QWidget::changeEvent(event);
     }
