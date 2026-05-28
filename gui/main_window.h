@@ -6,15 +6,13 @@
 #include <QMainWindow>
 #include <QtGlobal>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
+class QAction;
 class QDragEnterEvent;
 class QDropEvent;
+class QMenu;
 class QMimeData;
+class QPushButton;
+class ContentsArea;
 class SettingsDialog;
 
 /**
@@ -24,8 +22,27 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    /// UI
-    Ui::MainWindow *const ui;
+    /// サイドメニュー表示/非表示切り替えボタン
+    QPushButton *m_sidemenuVisibilityButton{nullptr};
+    /// ウィンドウを最上位に表示するトグルボタン
+    QPushButton *m_windowAlwaysOnTopButton{nullptr};
+    /// サイドメニュー
+    Sidemenu *m_sidemenu{nullptr};
+    /// コンテンツ表示領域
+    ContentsArea *m_contentsArea{nullptr};
+
+    /// メニュー: File
+    QMenu *m_menuFile{nullptr};
+    /// メニュー: DevTools
+    QMenu *m_menuDevTools{nullptr};
+    /// アクション: Settings
+    QAction *m_actionSettings{nullptr};
+    /// アクション: About DevTools
+    QAction *m_actionAboutDevTools{nullptr};
+    /// アクション: Close Window
+    QAction *m_actionCloseWindow{nullptr};
+    /// アクション: Show Main Window
+    QAction *m_actionShowMainWindow{nullptr};
 
     /// 設定ダイアログ
     SettingsDialog *m_settingsDialog{nullptr};
@@ -79,6 +96,18 @@ private:
     void closeEvent(QCloseEvent *event) override;
 #endif
 
+    /**
+     * @brief 中央領域のウィジェットを構築する
+     */
+    void setupCentralWidget();
+    /**
+     * @brief メニューバーのアクションを構築する
+     */
+    void setupMenuBar();
+    /**
+     * @brief UIテキストを翻訳する
+     */
+    void retranslateUi();
     /**
      * @brief サイドメニューの表示状態を更新する
      * @param hide true で非表示

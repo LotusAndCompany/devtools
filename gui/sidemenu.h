@@ -10,11 +10,9 @@
 
 class QButtonGroup;
 class QAbstractButton;
+class QLineEdit;
+class QVBoxLayout;
 class SidemenuItem;
-
-namespace Ui {
-class Sidemenu;
-}
 
 /**
  * @brief サイドメニュー
@@ -32,7 +30,7 @@ public:
     /**
      * デストラクタ
      */
-    ~Sidemenu() override;
+    ~Sidemenu() override = default;
     Sidemenu(const Sidemenu &) = delete;
     Sidemenu &operator=(const Sidemenu &) = delete;
     Sidemenu(Sidemenu &&) = delete;
@@ -93,8 +91,11 @@ private:
     /// 例外に設定するメッセージ
     static const QString invalidSidemenuIDReason;
 
-    /// UI
-    Ui::Sidemenu *const ui;
+    /// 検索ボックス
+    QLineEdit *m_searchBoxEdit{nullptr};
+
+    /// スクロール領域内のレイアウト
+    QVBoxLayout *m_scrollAreaLayout{nullptr};
 
     /// サイドメニューの各ボタンを含むボタングループ(排他)
     QButtonGroup *const buttonGroup;
@@ -119,6 +120,10 @@ private:
      * @param searchText 検索テキスト
      */
     void filterItems(const QString &searchText);
+    /**
+     * @brief UIテキストを翻訳する
+     */
+    void retranslateUi();
 
     /**
      * @brief サイドメニューのボタンが切り替わった場合の処理

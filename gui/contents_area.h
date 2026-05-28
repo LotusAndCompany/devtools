@@ -5,10 +5,7 @@
 
 #include <QFrame>
 
-namespace Ui {
-class ContentsArea;
-}
-
+class QVBoxLayout;
 class dbMain;
 
 /**
@@ -17,9 +14,6 @@ class dbMain;
 class ContentsArea : public QFrame
 {
     Q_OBJECT
-
-    /// UI(レイアウトの指定のみ)
-    Ui::ContentsArea *const ui;
 
 public:
     /**
@@ -30,7 +24,7 @@ public:
     /**
      * デストラクタ
      */
-    ~ContentsArea() override;
+    ~ContentsArea() override = default;
     ContentsArea(const ContentsArea &) = delete;
     ContentsArea &operator=(const ContentsArea &) = delete;
     ContentsArea(ContentsArea &&) = delete;
@@ -54,6 +48,9 @@ public slots:
     bool openSQLiteFileInDbTool(const QString &filePath);
 
 private:
+    /// レイアウト
+    QVBoxLayout *m_contentsAreaLayout{nullptr};
+
     /**
      * @brief 現在表示中のウィジェット
      */
@@ -64,12 +61,6 @@ private:
      */
     dbMain *cachedDbMain = nullptr;
 
-    /**
-     * @brief イベント処理
-     * @details 言語の変更があった場合にUIに反映する
-     * @param event 発生したイベント
-     */
-    void changeEvent(QEvent *event) override;
     /**
      * @brief currentContent を指定された Sidemenu::ID の物に差し替える
      * @param id
