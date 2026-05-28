@@ -97,8 +97,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/qr_tool/qrcodegen.hpp core/qr_tool/qrcodegen.cpp
         gui/main_window.h gui/main_window.cpp
         gui/gui_application.h gui/gui_application.cpp
-        gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp gui/menubar/about_devtools_dialog.ui
-        gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp gui/menubar/settings_dialog.ui
+        gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp
+        gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp
         gui/sidemenu.h gui/sidemenu.cpp
         gui/contents_area.h gui/contents_area.cpp
         gui/sidemenu_item.h gui/sidemenu_item.cpp
