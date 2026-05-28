@@ -720,37 +720,37 @@
 <context>
     <name>QRCodeGenerationGUI</name>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="+14"/>
+        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+146"/>
         <source>QR Code Generation</source>
         <translation>QRコード生成</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+1"/>
         <source>QR Code Type</source>
         <translation>QRコードの種類</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+5"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>Email</source>
         <translation>メールアドレス</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>Phone Number</source>
         <translation>電話番号</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>SMS</source>
         <translation>SMS</translation>
     </message>
@@ -767,53 +767,53 @@
         <translation type="vanished">カレンダーイベント</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+1"/>
         <source>Geo Location</source>
         <translation>位置情報</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="-5"/>
         <source>Parameters</source>
         <translation>パラメータ</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+11"/>
         <source>Generate</source>
         <translation>生成</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-11"/>
         <source>QR Code Output</source>
         <translation>QRコード出力</translation>
     </message>
     <message>
-        <location line="+15"/>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="+1047"/>
+        <location line="+14"/>
+        <location line="+988"/>
         <source>QR Code will appear here</source>
         <translation>QRコードがここに表示されます</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-990"/>
         <source>Copy Image</source>
         <translation>画像をコピー</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+1"/>
         <source>Save Image</source>
         <translation>画像を保存</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+2"/>
         <source>QR code content preview</source>
         <translation>QRコード内容プレビュー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-952"/>
+        <location line="+37"/>
         <source>Enter text...</source>
         <translation>テキストを入力...</translation>
     </message>
@@ -864,18 +864,18 @@
     </message>
     <message>
         <location line="+163"/>
-        <location line="+199"/>
+        <location line="+197"/>
         <location line="+14"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-213"/>
+        <location line="-211"/>
         <source>Please fill in required fields</source>
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <location line="+199"/>
+        <location line="+197"/>
         <location line="+14"/>
         <source>QRコードが生成されていません。</source>
         <translation type="unfinished"></translation>
@@ -909,22 +909,22 @@
         <translation type="vanished">QRコードを保存しました</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.ui" line="-154"/>
+        <location line="-1038"/>
         <source>WiFi</source>
         <translation>WiFi</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>Contact</source>
         <translation>連絡先</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+0"/>
         <source>Calendar</source>
         <translation>カレンダー</translation>
     </message>
     <message>
-        <location filename="../gui/qr_code/qr_code_generation_gui.cpp" line="-966"/>
+        <location line="+74"/>
         <source>Enter URL...</source>
         <translation>URLを入力...</translation>
     </message>
@@ -1003,7 +1003,7 @@
         <translation>終了時刻は開始時刻より後である必要があります</translation>
     </message>
     <message>
-        <location line="+366"/>
+        <location line="+364"/>
         <source>Failed to generate QR code:
 %1
 
@@ -1047,7 +1047,7 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation type="vanished">パスワードなし</translation>
     </message>
     <message>
-        <location line="-795"/>
+        <location line="-793"/>
         <source>Enter name...</source>
         <translation>名前を入力...</translation>
     </message>
