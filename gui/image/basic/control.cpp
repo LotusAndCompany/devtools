@@ -2,7 +2,9 @@
 
 #include "core/exception/invalid_state_exception.h"
 #include "file_dialogs.h"
-#include "ui_control.h"
+
+#include <QHBoxLayout>
+#include <QPushButton>
 
 const QString BasicImageViewControl::invalidDialogType =
     QString("DialogType::SELECT_FILE=%1, DialogType::SELECT_FOLDER=%2")
@@ -12,7 +14,14 @@ const QString BasicImageViewControl::invalidDialogType =
 BasicImageViewControl::BasicImageViewControl(QWidget *parent)
     : QWidget(parent), ui(new Ui::BasicImageViewControl)
 {
-    ui->setupUi(this);
+    ui->loadButton = new QPushButton(tr("Load"), this);
+    ui->resetButton = new QPushButton(tr("Reset"), this);
+    ui->saveButton = new QPushButton(tr("Save"), this);
+
+    auto *layout = new QHBoxLayout(this);
+    layout->addWidget(ui->loadButton);
+    layout->addWidget(ui->resetButton);
+    layout->addWidget(ui->saveButton);
 
     connect(ui->resetButton, &QPushButton::clicked, this,
             &BasicImageViewControl::resetButtonClicked);

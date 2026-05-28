@@ -5,10 +5,6 @@
 
 #include <QLabel>
 
-namespace Ui {
-class BasicImageView;
-}
-
 #ifdef _TEST_ImageViewForImageDivision
 namespace Test {
 class TestImageViewForImageDivision;

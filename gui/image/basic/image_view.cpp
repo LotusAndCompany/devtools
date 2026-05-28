@@ -1,15 +1,22 @@
 #include "image_view.h"
 
-#include "ui_image_view.h"
-
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileInfo>
+#include <QFont>
+#include <QFrame>
 #include <QGraphicsOpacityEffect>
+#include <QGridLayout>
+#include <QIcon>
 #include <QImageReader>
+#include <QLabel>
 #include <QMimeData>
 #include <QResizeEvent>
+#include <QScrollArea>
+#include <QSizePolicy>
+#include <QToolButton>
 #include <QUrl>
+#include <QVBoxLayout>
 #include <QWheelEvent>
 
 #include <cmath>
@@ -38,23 +45,92 @@ QString droppedImagePath(const QMimeData *mimeData)
 
     return {};
 }
+
+void buildScrollArea(Ui::BasicImageView *ui, QWidget *parent)
+{
+    ui->scrollArea = new QScrollArea(parent);
+    ui->scrollArea->setGeometry(0, 0, 400, 300);
+    ui->scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->scrollArea->setFrameShape(QFrame::NoFrame);
+    ui->scrollArea->setWidgetResizable(true);
+    ui->scrollArea->setAlignment(Qt::AlignCenter);
+
+    ui->scrollAreaWidgetContents = new QWidget();
+    ui->scrollAreaWidgetContents->setGeometry(0, 0, 400, 300);
+    ui->scrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    auto *gridLayout = new QGridLayout(ui->scrollAreaWidgetContents);
+    gridLayout->setContentsMargins(0, 0, 0, 0);
+    gridLayout->setSpacing(0);
+
+    ui->image = new QLabel(BasicImageView::tr("No Image"), ui->scrollAreaWidgetContents);
+    ui->image->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->image->setAlignment(Qt::AlignCenter);
+    gridLayout->addWidget(ui->image, 0, 0);
+
+    ui->scrollArea->setWidget(ui->scrollAreaWidgetContents);
+}
+
+QToolButton *buildZoomButton(QWidget *parent, const QString &iconName, const QString &toolTip)
+{
+    auto *button = new QToolButton(parent);
+    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    button->setMinimumSize(32, 32);
+    button->setMaximumSize(32, 32);
+    button->setToolTip(toolTip);
+    button->setAutoFillBackground(true);
+
+    const QIcon icon = QIcon::fromTheme(iconName);
+    if (icon.isNull()) {
+        // NOTE: テーマアイコンが解決できない環境では、ボタンが空にならないよう toolTip を表示する
+        button->setText(toolTip);
+    } else {
+        button->setIcon(icon);
+        button->setIconSize(QSize(24, 24));
+    }
+
+    // NOTE: 少しだけ透明にする
+    auto *opacityEffect = new QGraphicsOpacityEffect(button);
+    opacityEffect->setOpacity(0.8);
+    button->setGraphicsEffect(opacityEffect);
+
+    return button;
+}
+
+void buildScalingUI(Ui::BasicImageView *ui, QWidget *parent)
+{
+    ui->scalingUI = new QWidget(parent);
+    ui->scalingUI->setGeometry(347, 180, 51, 111);
+
+    auto *layout = new QVBoxLayout(ui->scalingUI);
+    layout->setContentsMargins(8, 8, 8, 8);
+
+    ui->zoomInButton = buildZoomButton(ui->scalingUI, "zoom_in", BasicImageView::tr("Zoom In"));
+    layout->addWidget(ui->zoomInButton);
+
+    ui->zoomOutButton = buildZoomButton(ui->scalingUI, "zoom_out", BasicImageView::tr("Zoom Out"));
+    QFont zoomOutFont;
+    zoomOutFont.setPointSize(13);
+    ui->zoomOutButton->setFont(zoomOutFont);
+    layout->addWidget(ui->zoomOutButton);
+
+    ui->scaleLabel = new QLabel("x1", ui->scalingUI);
+    ui->scaleLabel->setAlignment(Qt::AlignCenter);
+    layout->addWidget(ui->scaleLabel);
+}
 } // namespace
 
 // TODO: ScrollAreaをドラッグで操作できるようにする
 BasicImageView::BasicImageView(QWidget *parent) : QWidget(parent), ui(new Ui::BasicImageView)
 {
-    ui->setupUi(this);
+    resize(400, 300);
+    setMinimumSize(64, 128);
+
+    buildScrollArea(ui, this);
+    buildScalingUI(ui, this);
+
     ui->scalingUI->raise();
     setAcceptDrops(true);
-
-    // NOTE: 少しだけ透明にする
-    auto *opacityEffect = new QGraphicsOpacityEffect(ui->zoomInButton);
-    opacityEffect->setOpacity(0.8);
-    ui->zoomInButton->setGraphicsEffect(opacityEffect);
-
-    opacityEffect = new QGraphicsOpacityEffect(ui->zoomOutButton);
-    opacityEffect->setOpacity(0.8);
-    ui->zoomOutButton->setGraphicsEffect(opacityEffect);
 
     connect(ui->zoomInButton, &QToolButton::clicked, this, &BasicImageView::onZoomInButtonPressed);
     connect(ui->zoomOutButton, &QToolButton::clicked, this,

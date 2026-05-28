@@ -5,10 +5,29 @@
 
 #include <QWidget>
 
-namespace Ui {
-class ImageTransparentGUI;
-}
+class QCheckBox;
+class QComboBox;
+class QDoubleSpinBox;
+class BasicImageViewControl;
+class ColorSample;
 class ImageTransparentInterface;
+class ImageViewForImageTransparent;
+
+namespace Ui {
+/**
+ * @brief ImageTransparentGUI が保持するウィジェット群
+ */
+struct ImageTransparentGUI // NOLINT(altera-struct-pack-align)
+{
+    ImageViewForImageTransparent *imageView;
+    BasicImageViewControl *control;
+    QComboBox *colorMode;
+    ColorSample *colorSample;
+    QDoubleSpinBox *toleranceValue;
+    QDoubleSpinBox *transparencyValue;
+    QCheckBox *contiguousArea;
+};
+} // namespace Ui
 
 #ifdef _TEST_ImageTransparentGUI
 namespace Test {
@@ -61,9 +80,9 @@ protected slots:
 
     /**
      * @brief 色差の計算方法(RGB/HSV/HSL)が変更された時に呼ばれる
-     * @param mode 色差の計算方法(RGB/HSV/HSL)
+     * @param index `colorMode` の選択インデックス。itemData の `QColor::Spec` で識別する
      */
-    void onColorModeTextChanged(const QString &mode);
+    void onColorModeIndexChanged(int index);
     /**
      * @brief 画像上のピクセルが選択された時に呼ばれる
      * @param point 選択された場所

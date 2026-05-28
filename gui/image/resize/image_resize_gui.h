@@ -5,10 +5,29 @@
 
 #include <QWidget>
 
-namespace Ui {
-class ImageResizeGUI;
-}
+class QCheckBox;
+class QDoubleSpinBox;
+class QSpinBox;
+class BasicImageView;
+class BasicImageViewControl;
 class ImageResizeInterface;
+
+namespace Ui {
+/**
+ * @brief ImageResizeGUI が保持するウィジェット群
+ */
+struct ImageResizeGUI // NOLINT(altera-struct-pack-align)
+{
+    BasicImageView *imageView;
+    BasicImageViewControl *basicImageViewControl;
+    QSpinBox *widthValue;
+    QSpinBox *heightValue;
+    QDoubleSpinBox *hScaleValue;
+    QDoubleSpinBox *vScaleValue;
+    QCheckBox *keepAspectRatio;
+    QCheckBox *smoothScaling;
+};
+} // namespace Ui
 
 #ifdef _TEST_ImageResizeGUI
 namespace Test {

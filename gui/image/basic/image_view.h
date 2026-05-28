@@ -4,9 +4,25 @@
 #include <QPixmap>
 #include <QWidget>
 
+class QLabel;
+class QScrollArea;
+class QToolButton;
+
 namespace Ui {
-class BasicImageView;
-}
+/**
+ * @brief BasicImageView が保持するウィジェット群
+ */
+struct BasicImageView // NOLINT(altera-struct-pack-align)
+{
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QLabel *image;
+    QWidget *scalingUI;
+    QToolButton *zoomInButton;
+    QToolButton *zoomOutButton;
+    QLabel *scaleLabel;
+};
+} // namespace Ui
 
 #ifdef _TEST_BasicImageView
 namespace Test {

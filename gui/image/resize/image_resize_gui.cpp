@@ -1,17 +1,110 @@
 #include "image_resize_gui.h"
 
 #include "core/image/resize/image_resize.h"
-#include "ui_image_resize_gui.h"
+#include "gui/image/basic/control.h"
+#include "gui/image/basic/image_view.h"
 
+#include <QAbstractSpinBox>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMessageBox>
 #include <QSignalBlocker>
+#include <QSpacerItem>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 #include <array>
+
+namespace {
+QSpinBox *buildPixelSpinBox(QWidget *parent)
+{
+    auto *spin = new QSpinBox(parent);
+    spin->setSuffix("px");
+    spin->setMinimum(0);
+    spin->setMaximum(16777215);
+    spin->setSingleStep(1);
+    spin->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    spin->setValue(0);
+    spin->setDisplayIntegerBase(10);
+    return spin;
+}
+
+QDoubleSpinBox *buildScaleSpinBox(QWidget *parent)
+{
+    auto *spin = new QDoubleSpinBox(parent);
+    spin->setSuffix("%");
+    spin->setDecimals(2);
+    spin->setMaximum(1000.0);
+    spin->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    spin->setValue(100.0);
+    return spin;
+}
+
+void buildFormFields(Ui::ImageResizeGUI *ui, QWidget *parent, QVBoxLayout *layout)
+{
+    auto *form = new QFormLayout();
+
+    ui->widthValue = buildPixelSpinBox(parent);
+    form->addRow(new QLabel(ImageResizeGUI::tr("Width:"), parent), ui->widthValue);
+
+    ui->heightValue = buildPixelSpinBox(parent);
+    form->addRow(new QLabel(ImageResizeGUI::tr("Height:"), parent), ui->heightValue);
+
+    ui->hScaleValue = buildScaleSpinBox(parent);
+    form->addRow(new QLabel(ImageResizeGUI::tr("Horizontal Scale:"), parent), ui->hScaleValue);
+
+    ui->vScaleValue = buildScaleSpinBox(parent);
+    form->addRow(new QLabel(ImageResizeGUI::tr("Vertical Scale:"), parent), ui->vScaleValue);
+
+    layout->addLayout(form);
+}
+
+void buildUiArea(Ui::ImageResizeGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
+{
+    auto *uiArea = new QFrame(parent);
+    uiArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    uiArea->setMinimumWidth(240);
+    uiArea->setFrameShape(QFrame::StyledPanel);
+    uiArea->setFrameShadow(QFrame::Raised);
+
+    auto *layout = new QVBoxLayout(uiArea);
+
+    buildFormFields(ui, uiArea, layout);
+
+    ui->keepAspectRatio = new QCheckBox(ImageResizeGUI::tr("Keep aspect ratio"), uiArea);
+    layout->addWidget(ui->keepAspectRatio);
+
+    ui->smoothScaling = new QCheckBox(ImageResizeGUI::tr("Smooth scaling"), uiArea);
+    layout->addWidget(ui->smoothScaling);
+
+    layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    ui->basicImageViewControl = new BasicImageViewControl(uiArea);
+    layout->addWidget(ui->basicImageViewControl);
+
+    rootLayout->addWidget(uiArea);
+}
+} // namespace
 
 ImageResizeGUI::ImageResizeGUI(ImageResizeInterface *imageResize, QWidget *parent)
     : GuiTool(parent), ui(new Ui::ImageResizeGUI), imageResize(imageResize)
 {
-    ui->setupUi(this);
+    resize(400, 300);
+
+    auto *rootLayout = new QHBoxLayout(this);
+    rootLayout->setContentsMargins(0, 0, 0, 0);
+    rootLayout->setSpacing(0);
+
+    ui->imageView = new BasicImageView(this);
+    ui->imageView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->imageView->setMinimumSize(64, 128);
+    rootLayout->addWidget(ui->imageView);
+
+    buildUiArea(ui, this, rootLayout);
 
     // NOTE: parentが設定されていなければこのインスタンスで管理する
     if (imageResize->parent() == nullptr) {
