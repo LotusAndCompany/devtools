@@ -6,14 +6,12 @@
 
 #include <QWidget>
 
-namespace Ui {
-class DataConversionGUI;
-}
-
-class QTextEdit;
-class QTextBrowser;
 class QComboBox;
+class QHBoxLayout;
 class QPushButton;
+class QSplitter;
+class QTextBrowser;
+class QTextEdit;
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {
@@ -34,7 +32,7 @@ public:
      */
     explicit DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent = nullptr);
     /// デストラクタ
-    ~DataConversionGUI() override;
+    ~DataConversionGUI() override = default;
     DataConversionGUI(const DataConversionGUI &) = delete;
     DataConversionGUI &operator=(const DataConversionGUI &) = delete;
     DataConversionGUI(DataConversionGUI &&) = delete;
@@ -54,30 +52,47 @@ private slots:
     void onCopyPressed();
 
 private:
-    Ui::DataConversionGUI *const ui;
+    /// UIを構築する
+    void buildUi();
+    /// 入力側のUIを構築する
+    QWidget *buildInputSide(QWidget *parent);
+    /// 出力側のUIを構築する
+    QWidget *buildOutputSide(QWidget *parent);
 
     /// ロジック部分
     DataConversionInterface *const dataConversion;
 
+    /// メインスプリッタ
+    QSplitter *splitter = nullptr;
+
+    /// 入力側アクションボタン行のレイアウト
+    QHBoxLayout *input_action_button_layout = nullptr;
+    /// 出力側アクションボタン行のレイアウト
+    QHBoxLayout *output_action_button_layout = nullptr;
+
     /// テキスト入力UI
-    QTextEdit *inputTextEdit;
+    QTextEdit *inputTextEdit = nullptr;
+    /// 入力側のエラー・警告メッセージ表示UI
+    QTextBrowser *inputMessageTextView = nullptr;
     /// 貼り付けボタン
-    QPushButton *pasteButton;
+    QPushButton *pasteButton = nullptr;
     /// 読み込みボタン
-    QPushButton *loadButton;
+    QPushButton *loadButton = nullptr;
     /// 消去ボタン
-    QPushButton *clearButton;
+    QPushButton *clearButton = nullptr;
 
     /// テキスト表示UI
-    QTextBrowser *outputTextView;
+    QTextBrowser *outputTextView = nullptr;
+    /// 出力側のエラー・警告メッセージ表示UI
+    QTextBrowser *outputMessageTextView = nullptr;
     /// 出力フォーマット選択UI
-    QComboBox *formatSelector;
+    QComboBox *formatSelector = nullptr;
     /// インデント選択UI
-    QComboBox *styleSelector;
+    QComboBox *styleSelector = nullptr;
     /// コピーボタン
-    QPushButton *copyButton;
+    QPushButton *copyButton = nullptr;
     /// 保存ボタン
-    QPushButton *saveButton;
+    QPushButton *saveButton = nullptr;
 
 #ifdef _TEST_ImageDivisionGUI
     frientd class Test::TestDataConversionGUI;

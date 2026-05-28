@@ -174,7 +174,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         core/data_conversion/data_conversion.h core/data_conversion/data_conversion.cpp
         core/data_conversion/parser/basic_parser.h
         core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
-        gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp gui/data_conversion/data_conversion_gui.ui
+        gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp
         # json
         core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
         core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
