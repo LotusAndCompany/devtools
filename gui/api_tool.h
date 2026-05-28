@@ -2,26 +2,23 @@
 #define API_TOOL_H
 
 #include <QFrame>
-#include <QLabel>
-#include <QLineEdit>
 #include <QStringList>
-#include <QWidget>
 
-namespace Ui {
-class api_tool;
-}
-
+class QComboBox;
+class QLabel;
+class QLineEdit;
 class QNetworkAccessManager;
 class QNetworkReply;
+class QPushButton;
+class QSplitter;
 class QStandardItemModel;
 class QStringListModel;
-class QVBoxLayout;
+class QTableView;
 class QTextEdit;
 
 class api_tool : public QFrame
 {
     Q_OBJECT
-    QWidget *currentContent = nullptr;
 
 public:
     explicit api_tool(QWidget *parent = nullptr);
@@ -33,19 +30,29 @@ public:
 
 private slots:
     void setupParametersTable();
-    void handleSendButtonClick(); // sendButton
+    void handleSendButtonClick();
     void handleNetworkReplyFinished(QNetworkReply *reply);
-    void updateUrlFromParams(); // パラメータ
+    void updateUrlFromParams();
     void setupResponseView();
 
 private:
-    Ui::api_tool *ui;
-    QNetworkAccessManager *networkManager; // ネットワークマネージャの追加
-    QStringList list;                      // リストデータの追加
-    QStandardItemModel *paramsModel;
-    QStringListModel *responseModel{};
-    QLabel *statusLabel{};
-    qint64 requestStartTime{};
+    void buildUi();
+
+    QComboBox *method_combo{};
+    QTextEdit *url_edit{};
+    QPushButton *send_button{};
+    QTableView *params_table{};
+    QLineEdit *username_edit{};
+    QLineEdit *password_edit{};
+    QTextEdit *body_edit{};
+    QSplitter *main_splitter{};
+
+    QNetworkAccessManager *network_manager;
+    QStringList list;
+    QStandardItemModel *params_model;
+    QStringListModel *response_model{};
+    QLabel *status_label{};
+    qint64 request_start_time{};
 };
 
 #endif // API_TOOL_H
