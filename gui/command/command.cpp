@@ -1,57 +1,112 @@
 #include "command.h"
 
 #include "command_function.h"
-#include "ui_command.h"
 
 #include <QApplication>
 #include <QClipboard>
+#include <QComboBox>
+#include <QFontMetrics>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QTextBrowser>
 
 #include <algorithm>
 
-Command::Command(QWidget *parent) : QGroupBox(parent), ui(new Ui::Command)
+Command::Command(QWidget *parent) : QGroupBox(parent)
 {
-    ui->setupUi(this);
+    buildUi();
+    init();
 
-    Command::init();
-
-    connect(ui->categoryList, &QComboBox::currentIndexChanged, this, &Command::selectedCategory);
-    connect(ui->functionsList, &QComboBox::currentIndexChanged, this, &Command::selectedFunction);
-    connect(ui->optionList, &QComboBox::currentIndexChanged, this, &Command::selectedOption);
-    connect(ui->resetButton, &QPushButton::clicked, this, &Command::reset);
-    connect(ui->generateButton, &QPushButton::clicked, this, &Command::generate);
-    connect(ui->clearButton, &QPushButton::clicked, this, &Command::clear);
-    connect(ui->copyButton, &QPushButton::clicked, this, &Command::copy);
+    connect(category_list, &QComboBox::currentIndexChanged, this, &Command::selectedCategory);
+    connect(functions_list, &QComboBox::currentIndexChanged, this, &Command::selectedFunction);
+    connect(option_list, &QComboBox::currentIndexChanged, this, &Command::selectedOption);
+    connect(reset_button, &QPushButton::clicked, this, &Command::reset);
+    connect(generate_button, &QPushButton::clicked, this, &Command::generate);
+    connect(clear_button, &QPushButton::clicked, this, &Command::clear);
+    connect(copy_button, &QPushButton::clicked, this, &Command::copy);
 }
 
-Command::~Command()
+void Command::buildUi()
 {
-    delete ui;
+    setObjectName(QStringLiteral("Command"));
+    setWindowTitle(tr("GroupBox"));
+    resize(699, 711);
+
+    auto *layout = new QGridLayout(this);
+    layout->setObjectName(QStringLiteral("gridLayout"));
+
+    category_list = new QComboBox(this);
+    category_list->setObjectName(QStringLiteral("categoryList"));
+    layout->addWidget(category_list, 0, 0, 1, 2);
+
+    functions_label = new QLabel(tr("Functions List"), this);
+    functions_label->setObjectName(QStringLiteral("functionsLabel"));
+    layout->addWidget(functions_label, 1, 0);
+
+    functions_list = new QComboBox(this);
+    functions_list->setObjectName(QStringLiteral("functionsList"));
+    functions_list->setEnabled(false);
+    functions_list->setAutoFillBackground(false);
+    layout->addWidget(functions_list, 2, 0, 1, 2);
+
+    option_label = new QLabel(tr("Option List"), this);
+    option_label->setObjectName(QStringLiteral("optionLabel"));
+    layout->addWidget(option_label, 3, 0);
+
+    option_list = new QComboBox(this);
+    option_list->setObjectName(QStringLiteral("optionList"));
+    option_list->setEnabled(false);
+    layout->addWidget(option_list, 4, 0, 1, 2);
+
+    text_label = new QLabel(tr("TextLabel"), this);
+    text_label->setObjectName(QStringLiteral("label"));
+    layout->addWidget(text_label, 5, 0);
+
+    text_edit = new QLineEdit(this);
+    text_edit->setObjectName(QStringLiteral("textEdit"));
+    layout->addWidget(text_edit, 6, 0, 1, 2);
+
+    reset_button = new QPushButton(tr("Reset"), this);
+    reset_button->setObjectName(QStringLiteral("resetButton"));
+    reset_button->setFont(QFont(QStringLiteral(".AppleSystemUIFont")));
+    layout->addWidget(reset_button, 7, 0);
+
+    generate_button = new QPushButton(tr("Generate command"), this);
+    generate_button->setObjectName(QStringLiteral("generateButton"));
+    layout->addWidget(generate_button, 7, 1);
+
+    text_browser = new QTextBrowser(this);
+    text_browser->setObjectName(QStringLiteral("textBrowser"));
+    layout->addWidget(text_browser, 8, 0, 1, 4);
+
+    copy_button = new QPushButton(tr("Copy"), this);
+    copy_button->setObjectName(QStringLiteral("copyButton"));
+    layout->addWidget(copy_button, 9, 2);
+
+    clear_button = new QPushButton(tr("Clear"), this);
+    clear_button->setObjectName(QStringLiteral("clearButton"));
+    layout->addWidget(clear_button, 9, 3);
 }
 
 void Command::init()
 {
-    const QStringList categoryList{"カテゴリ一覧", "1: Gitコマンド", "2: Dockerコマンド",
-                                   "3: DockerComposeコマンド"};
+    const QStringList category_items{"カテゴリ一覧", "1: Gitコマンド", "2: Dockerコマンド",
+                                     "3: DockerComposeコマンド"};
 
-    // set categoryList items
-    ui->categoryList->addItems(categoryList);
+    category_list->addItems(category_items);
 
-    // adjust commnadBox minmun width
     adjustCommandBoxWidth();
 
-    // all label default hidden
-    ui->label->setVisible(false);
+    text_label->setVisible(false);
+    text_edit->setVisible(false);
 
-    // all textBox default hidden
-    ui->textEdit->setVisible(false);
-
-    // commandList default hidden
-    ui->functionsLabel->setVisible(false);
-    ui->functionsList->setVisible(false);
-    // optionList default hidden
-    ui->optionLabel->setVisible(false);
-    ui->optionList->setVisible(false);
+    functions_label->setVisible(false);
+    functions_list->setVisible(false);
+    option_label->setVisible(false);
+    option_list->setVisible(false);
 }
 
 QList<CommandFunction> getGitCommands()
@@ -72,15 +127,6 @@ QList<CommandFunction> getGitCommands()
                             {
                                 CommandOption("なし", false, "", false),
                             }),
-            /*
-            CommandFunction("git reset", "直前のコミットを取り消し", {
-                CommandOption("-soft", true, ""),
-                CommandOption("-hard", true, ""),
-            }),
-            CommandFunction("git config", "利用中のアカウントの情報確認", {
-                CommandOption("なし", false, "", false),
-            }),
-            */
             CommandFunction("git diff", "差分を確認",
                             {
                                 CommandOption("なし", true, "比較対象", false),
@@ -203,47 +249,43 @@ QList<CommandFunction> getDockerComposeCommands()
 
 void Command::selectedCategory()
 {
-    const int selectedIndex = ui->categoryList->currentIndex();
+    const int selectedIndex = category_list->currentIndex();
 
-    ui->functionsList->clear();
+    functions_list->clear();
 
     QList<CommandFunction> commandList;
     QStringList commandNames;
 
-    // set list items
     switch (selectedIndex) {
     case 1:
         commandList = getGitCommands();
         for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
-        ui->functionsList->addItems(commandNames);
-        // display commandList
-        ui->functionsLabel->setVisible(true);
-        ui->functionsList->setVisible(true);
-        ui->functionsList->setEnabled(true);
+        functions_list->addItems(commandNames);
+        functions_label->setVisible(true);
+        functions_list->setVisible(true);
+        functions_list->setEnabled(true);
         break;
     case 2:
         commandList = getDockerCommands();
         for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
-        ui->functionsList->addItems(commandNames);
-        // display commandList
-        ui->functionsLabel->setVisible(true);
-        ui->functionsList->setVisible(true);
-        ui->functionsList->setEnabled(true);
+        functions_list->addItems(commandNames);
+        functions_label->setVisible(true);
+        functions_list->setVisible(true);
+        functions_list->setEnabled(true);
         break;
     case 3:
         commandList = getDockerComposeCommands();
         for (const CommandFunction &cmd : std::as_const(commandList)) {
             commandNames.append(cmd.getName() + " " + cmd.getDescription());
         }
-        ui->functionsList->addItems(commandNames);
-        // display commandList
-        ui->functionsLabel->setVisible(true);
-        ui->functionsList->setVisible(true);
-        ui->functionsList->setEnabled(true);
+        functions_list->addItems(commandNames);
+        functions_label->setVisible(true);
+        functions_list->setVisible(true);
+        functions_list->setEnabled(true);
         break;
     default:
         reset();
@@ -253,15 +295,13 @@ void Command::selectedCategory()
 
 void Command::selectedFunction()
 {
-    // all textBox clear
-    ui->textEdit->clear();
-    // optionList clear
-    ui->optionList->clear();
-    ui->optionList->setVisible(false);
-    ui->optionList->setEnabled(false);
+    text_edit->clear();
+    option_list->clear();
+    option_list->setVisible(false);
+    option_list->setEnabled(false);
 
-    const int selectedCategoryIndex = ui->categoryList->currentIndex();
-    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
+    const int selectedCategoryIndex = category_list->currentIndex();
+    const int selectedFunctionsIndex = functions_list->currentIndex();
 
     QList<CommandFunction> commandList;
 
@@ -285,26 +325,25 @@ void Command::selectedFunction()
     QList<CommandOption> const optionList = commandList[selectedFunctionsIndex].getOptions();
 
     if (static_cast<int>(!optionList.empty()) != 0) {
-        ui->label->setVisible(false);
-        ui->textEdit->setVisible(false);
-        // display optionsList
+        text_label->setVisible(false);
+        text_edit->setVisible(false);
         QStringList optionNames;
 
         for (const CommandOption &opt : optionList) {
             optionNames.append(opt.getName());
         }
-        ui->optionList->addItems(optionNames);
-        ui->optionLabel->setVisible(true);
-        ui->optionList->setVisible(true);
-        ui->optionList->setEnabled(true);
+        option_list->addItems(optionNames);
+        option_label->setVisible(true);
+        option_list->setVisible(true);
+        option_list->setEnabled(true);
     }
 }
 
 void Command::selectedOption()
 {
-    const int selectedCategoryIndex = ui->categoryList->currentIndex();
-    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
-    const int selectedOptionIndex = ui->optionList->currentIndex();
+    const int selectedCategoryIndex = category_list->currentIndex();
+    const int selectedFunctionsIndex = functions_list->currentIndex();
+    const int selectedOptionIndex = option_list->currentIndex();
 
     QList<CommandFunction> commandList;
 
@@ -333,53 +372,41 @@ void Command::selectedOption()
     const CommandOption &option = optionList[selectedOptionIndex];
 
     if (option.isRequired()) {
-        ui->label->setText(option.getTitle());
-        ui->label->setVisible(true);
-        ui->textEdit->setVisible(true);
+        text_label->setText(option.getTitle());
+        text_label->setVisible(true);
+        text_edit->setVisible(true);
     } else {
-        ui->label->setVisible(false);
-        ui->textEdit->setVisible(false);
+        text_label->setVisible(false);
+        text_edit->setVisible(false);
     }
 }
 
 void Command::reset()
 {
-    // reset list current index
-    ui->categoryList->setCurrentIndex(0);
+    category_list->setCurrentIndex(0);
 
-    ui->functionsList->clear();
-    ui->optionList->clear();
+    functions_list->clear();
+    option_list->clear();
 
-    // all lineEdit clear
-    ui->textEdit->clear();
+    text_edit->clear();
 
-    // all label default hidden
-    ui->label->setVisible(false);
+    text_label->setVisible(false);
+    text_edit->setVisible(false);
 
-    // all lineEdit default hidden
-    ui->textEdit->setVisible(false);
+    functions_label->setVisible(false);
+    functions_list->setVisible(false);
+    functions_list->setEnabled(false);
 
-    // commandList default hidden
-    ui->functionsLabel->setVisible(false);
-    ui->functionsList->setVisible(false);
-    ui->functionsList->setEnabled(false);
-
-    // optionList default hidden
-    ui->optionLabel->setVisible(false);
-    ui->optionList->setVisible(false);
-    ui->optionList->setEnabled(false);
+    option_label->setVisible(false);
+    option_list->setVisible(false);
+    option_list->setEnabled(false);
 }
 
 void Command::clear()
 {
-    ui->textBrowser->clear();
+    text_browser->clear();
 }
 
-/**
- * @brief Make sure the string does not contain "'`
- * @param Qstring ui->textEdit->text()
- * @return bool
- */
 bool containsNoQuotes(const QString &str)
 {
     QString const quotes = "\"'`";
@@ -400,9 +427,9 @@ void showErrorAlert()
 
 void Command::generate()
 {
-    const int selectedCategoryIndex = ui->categoryList->currentIndex();
-    const int selectedFunctionsIndex = ui->functionsList->currentIndex();
-    const int selectedOptionIndex = ui->optionList->currentIndex();
+    const int selectedCategoryIndex = category_list->currentIndex();
+    const int selectedFunctionsIndex = functions_list->currentIndex();
+    const int selectedOptionIndex = option_list->currentIndex();
 
     QList<CommandFunction> commandList;
     switch (selectedCategoryIndex) {
@@ -429,30 +456,29 @@ void Command::generate()
 
     const CommandOption &option = optionList[selectedOptionIndex];
 
-    const QString value1 = ui->textEdit->text();
+    const QString value1 = text_edit->text();
 
-    // simple validation
     if (!containsNoQuotes(value1)) {
         showErrorAlert();
     } else {
         QString command = commandList[selectedFunctionsIndex].getName();
-        if (ui->optionList->isEnabled() && option.getName() != "なし") {
+        if (option_list->isEnabled() && option.getName() != "なし") {
             command += " " + option.getName();
         }
-        if (ui->textEdit->isEnabled()) {
+        if (text_edit->isEnabled()) {
             if (option.isRequiredQuotes()) {
                 command += " \"" + value1 + "\"";
             } else {
                 command += " " + value1;
             }
         }
-        ui->textBrowser->setText(command);
+        text_browser->setText(command);
     }
 }
 
 void Command::copy()
 {
-    const QString text = ui->textBrowser->toPlainText();
+    const QString text = text_browser->toPlainText();
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(text);
 }
@@ -460,10 +486,10 @@ void Command::copy()
 void Command::adjustCommandBoxWidth()
 {
     int maxWidth = 0;
-    QFontMetrics const fontMetrics(ui->functionsList->font());
-    for (int i = 0; i < ui->functionsList->count(); ++i) {
-        int const width = fontMetrics.horizontalAdvance(ui->functionsList->itemText(i));
+    QFontMetrics const fontMetrics(functions_list->font());
+    for (int i = 0; i < functions_list->count(); ++i) {
+        int const width = fontMetrics.horizontalAdvance(functions_list->itemText(i));
         maxWidth = std::max(width, maxWidth);
     }
-    ui->functionsList->setMinimumWidth(maxWidth + 40);
+    functions_list->setMinimumWidth(maxWidth + 40);
 }
