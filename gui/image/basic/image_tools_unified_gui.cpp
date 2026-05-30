@@ -46,6 +46,20 @@ struct DivisionPlan
     double stepH = 0.0;
 };
 
+int countByCellSizeForPlan(int source, int cell, bool ignoreRemainders)
+{
+    if (source <= 0 || cell <= 0) {
+        return 0;
+    }
+
+    const int base = source / cell;
+    if (ignoreRemainders || (source % cell == 0)) {
+        return base;
+    }
+
+    return base + 1;
+}
+
 QSpinBox *buildPixelSpinBox(QWidget *parent)
 {
     auto *spin = new QSpinBox(parent);
@@ -140,12 +154,10 @@ void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxL
                           ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
     ui->rotateRightButton = buildActionButton(
         ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
-    ui->flipHorizontalButton =
-        buildActionButton(ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"),
-                          "flip_horizontal");
-    ui->flipVerticalButton =
-        buildActionButton(ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"),
-                          "flip_vertical");
+    ui->flipHorizontalButton = buildActionButton(
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "flip_horizontal");
+    ui->flipVerticalButton = buildActionButton(
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "flip_vertical");
 
     bodyLayout->addWidget(ui->rotateLeftButton);
     bodyLayout->addWidget(ui->rotateRightButton);
@@ -232,8 +244,7 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     ui->useDivisionButton =
         new QRadioButton(ImageToolsUnifiedGUI::tr("Division"), ui->divisionSectionBody);
     ui->useDivisionButton->setChecked(true);
-    ui->useSizeButton =
-        new QRadioButton(ImageToolsUnifiedGUI::tr("Size"), ui->divisionSectionBody);
+    ui->useSizeButton = new QRadioButton(ImageToolsUnifiedGUI::tr("Size"), ui->divisionSectionBody);
     bodyLayout->addWidget(ui->useDivisionButton);
     bodyLayout->addWidget(ui->useSizeButton);
 
@@ -252,14 +263,13 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
         0);
     grid->addWidget(ui->hDivValue, 0, 1);
     grid->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), ui->divisionSectionBody), 1,
-        0);
+        new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), ui->divisionSectionBody), 1, 0);
     grid->addWidget(ui->vDivValue, 1, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), ui->divisionSectionBody),
-                    2, 0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), ui->divisionSectionBody), 2,
+                    0);
     grid->addWidget(ui->cellWidthValue, 2, 1);
-    grid->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), ui->divisionSectionBody), 3, 0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), ui->divisionSectionBody),
+                    3, 0);
     grid->addWidget(ui->cellHeightValue, 3, 1);
     bodyLayout->addLayout(grid);
 
@@ -267,8 +277,8 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     ui->divisionModeButtonGroup->addButton(ui->useDivisionButton);
     ui->divisionModeButtonGroup->addButton(ui->useSizeButton);
 
-    ui->ignoreRemainders = new QCheckBox(ImageToolsUnifiedGUI::tr("Ignore remainders"),
-                                         ui->divisionSectionBody);
+    ui->ignoreRemainders =
+        new QCheckBox(ImageToolsUnifiedGUI::tr("Ignore remainders"), ui->divisionSectionBody);
     ui->ignoreRemainders->setChecked(true);
     bodyLayout->addWidget(ui->ignoreRemainders);
 
@@ -321,10 +331,8 @@ DivisionPlan buildDivisionPlan(const Ui::ImageToolsUnifiedGUI *ui, bool useDivis
 
     const int cellW = std::max(1, ui->cellWidthValue->value());
     const int cellH = std::max(1, ui->cellHeightValue->value());
-    plan.xCount = ImageToolsUnifiedGUI::countByCellSize(sourceW, cellW,
-                                                        ui->ignoreRemainders->isChecked());
-    plan.yCount = ImageToolsUnifiedGUI::countByCellSize(sourceH, cellH,
-                                                        ui->ignoreRemainders->isChecked());
+    plan.xCount = countByCellSizeForPlan(sourceW, cellW, ui->ignoreRemainders->isChecked());
+    plan.yCount = countByCellSizeForPlan(sourceH, cellH, ui->ignoreRemainders->isChecked());
     plan.stepW = cellW;
     plan.stepH = cellH;
     return plan;
@@ -416,16 +424,16 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
     connect(ui->saveDividedButton, &QPushButton::clicked, this,
             &ImageToolsUnifiedGUI::onSaveDividedButtonClicked);
 
-        connect(ui->resizeSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->resizeSectionToggle, &QCheckBox::checkStateChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-        connect(ui->transformSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->transformSectionToggle, &QCheckBox::checkStateChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-        connect(ui->transparentSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->transparentSectionToggle, &QCheckBox::checkStateChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-        connect(ui->divisionSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->divisionSectionToggle, &QCheckBox::checkStateChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
 
-        onSectionVisibilityChanged();
+    onSectionVisibilityChanged();
 }
 
 ImageToolsUnifiedGUI::~ImageToolsUnifiedGUI()
@@ -505,9 +513,9 @@ void ImageToolsUnifiedGUI::applyResize(const QSize &targetSize)
         return;
     }
 
-    currentImage = currentImage.scaled(targetSize, Qt::IgnoreAspectRatio,
-                                       ui->smoothScaling->isChecked() ? Qt::SmoothTransformation
-                                                                      : Qt::FastTransformation);
+    currentImage = currentImage.scaled(
+        targetSize, Qt::IgnoreAspectRatio,
+        ui->smoothScaling->isChecked() ? Qt::SmoothTransformation : Qt::FastTransformation);
     refreshPreview();
 }
 
@@ -577,7 +585,7 @@ void ImageToolsUnifiedGUI::onFlipHorizontalButtonClicked()
         return;
     }
 
-    currentImage = currentImage.mirrored(true, false);
+    currentImage = currentImage.flipped(Qt::Horizontal);
     refreshPreview();
 }
 
@@ -587,7 +595,7 @@ void ImageToolsUnifiedGUI::onFlipVerticalButtonClicked()
         return;
     }
 
-    currentImage = currentImage.mirrored(false, true);
+    currentImage = currentImage.flipped(Qt::Vertical);
     refreshPreview();
 }
 
@@ -718,7 +726,8 @@ void ImageToolsUnifiedGUI::applyTransparentByColor(const QColor &targetColor)
     for (int y = 0; y < currentImage.height(); y++) {
         for (int x = 0; x < currentImage.width(); x++) {
             QColor source = currentImage.pixelColor(x, y);
-            if (isTransparentTarget(source, targetColor, transparentColorSpec, transparentTolerance)) {
+            if (isTransparentTarget(source, targetColor, transparentColorSpec,
+                                    transparentTolerance)) {
                 source.setAlpha(transparentOpacity);
                 currentImage.setPixelColor(x, y, source);
             }
@@ -843,8 +852,8 @@ bool ImageToolsUnifiedGUI::saveDividedImages(const QString &folderPath) const
         return false;
     }
 
-    const DivisionPlan plan = buildDivisionPlan(ui, divisionMode == DivisionMode::DIVISION,
-                                                sourceW, sourceH);
+    const DivisionPlan plan =
+        buildDivisionPlan(ui, divisionMode == DivisionMode::DIVISION, sourceW, sourceH);
 
     if (plan.xCount <= 0 || plan.yCount <= 0) {
         return false;
@@ -902,13 +911,11 @@ void ImageToolsUnifiedGUI::onSectionVisibilityChanged()
 
     ui->resizeSectionToggle->setText((resizeOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) +
                                      tr("Resize"));
-    ui->transformSectionToggle->setText((transformOpen ? QStringLiteral("▼ ") :
-                                                        QStringLiteral("▶ ")) +
-                                        tr("Rotate / Flip"));
-    ui->transparentSectionToggle->setText((transparentOpen ? QStringLiteral("▼ ") :
-                                                            QStringLiteral("▶ ")) +
-                                          tr("Transparent (click image)"));
-    ui->divisionSectionToggle->setText((divisionOpen ? QStringLiteral("▼ ") :
-                                                      QStringLiteral("▶ ")) +
-                                       tr("Division"));
+    ui->transformSectionToggle->setText(
+        (transformOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) + tr("Rotate / Flip"));
+    ui->transparentSectionToggle->setText(
+        (transparentOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) +
+        tr("Transparent (click image)"));
+    ui->divisionSectionToggle->setText(
+        (divisionOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) + tr("Division"));
 }

@@ -5,8 +5,8 @@
 #include "core/exception/under_development_exception.h"
 #include "sidemenu_item.h"
 
-#include <QApplication>
 #include <QAbstractButton>
+#include <QApplication>
 #include <QButtonGroup>
 #include <QEvent>
 #include <QFrame>
