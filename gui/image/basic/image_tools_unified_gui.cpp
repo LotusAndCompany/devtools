@@ -9,33 +9,42 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QDoubleSpinBox>
 #include <QDir>
+#include <QDoubleSpinBox>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QFrame>
-#include <QVBoxLayout>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QQueue>
 #include <QRadioButton>
-#include <QIcon>
 #include <QScrollArea>
 #include <QSignalBlocker>
 #include <QSpacerItem>
 #include <QSpinBox>
-#include <QVector>
+#include <QVBoxLayout>
 #include <QVector3D>
+#include <QVector>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 namespace {
 constexpr double M_TAU = 2.0 * M_PI;
+
+struct DivisionPlan
+{
+    int xCount = 0;
+    int yCount = 0;
+    double stepW = 0.0;
+    double stepH = 0.0;
+};
 
 QSpinBox *buildPixelSpinBox(QWidget *parent)
 {
@@ -102,8 +111,8 @@ void buildResizeSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayo
 
     ui->applyResizeBySizeButton =
         new QPushButton(ImageToolsUnifiedGUI::tr("Apply Size"), ui->resizeSectionBody);
-    ui->applyResizeByScaleButton = new QPushButton(ImageToolsUnifiedGUI::tr("Apply Scale"),
-                                                    ui->resizeSectionBody);
+    ui->applyResizeByScaleButton =
+        new QPushButton(ImageToolsUnifiedGUI::tr("Apply Scale"), ui->resizeSectionBody);
     bodyLayout->addWidget(ui->applyResizeBySizeButton);
     bodyLayout->addWidget(ui->applyResizeByScaleButton);
 
@@ -126,15 +135,14 @@ void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxL
     auto *bodyLayout = new QVBoxLayout(ui->transformSectionBody);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
-    ui->rotateLeftButton = buildActionButton(ui->transformSectionBody,
-                                             ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"),
-                                             "anticlockwise");
-    ui->rotateRightButton = buildActionButton(ui->transformSectionBody,
-                                              ImageToolsUnifiedGUI::tr("Rotate Clockwise"),
-                                              "clockwise");
-    ui->flipHorizontalButton = buildActionButton(ui->transformSectionBody,
-                                                 ImageToolsUnifiedGUI::tr("Flip Horizontal"),
-                                                 "flip_horizontal");
+    ui->rotateLeftButton =
+        buildActionButton(ui->transformSectionBody,
+                          ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
+    ui->rotateRightButton = buildActionButton(
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
+    ui->flipHorizontalButton =
+        buildActionButton(ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"),
+                          "flip_horizontal");
     ui->flipVerticalButton =
         buildActionButton(ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"),
                           "flip_vertical");
@@ -215,7 +223,8 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     auto *sizeRow = new QHBoxLayout();
-    sizeRow->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), ui->divisionSectionBody));
+    sizeRow->addWidget(
+        new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), ui->divisionSectionBody));
     ui->sizeLabel = new QLabel(ImageToolsUnifiedGUI::tr("0 x 0"), ui->divisionSectionBody);
     sizeRow->addWidget(ui->sizeLabel);
     bodyLayout->addLayout(sizeRow);
@@ -296,6 +305,58 @@ void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *roo
 
     ui->toolScrollArea->setWidget(uiArea);
     rootLayout->addWidget(ui->toolScrollArea);
+}
+
+DivisionPlan buildDivisionPlan(const Ui::ImageToolsUnifiedGUI *ui, bool useDivisionMode,
+                               int sourceW, int sourceH)
+{
+    DivisionPlan plan;
+    if (useDivisionMode) {
+        plan.xCount = std::max(1, ui->hDivValue->value());
+        plan.yCount = std::max(1, ui->vDivValue->value());
+        plan.stepW = static_cast<double>(sourceW) / plan.xCount;
+        plan.stepH = static_cast<double>(sourceH) / plan.yCount;
+        return plan;
+    }
+
+    const int cellW = std::max(1, ui->cellWidthValue->value());
+    const int cellH = std::max(1, ui->cellHeightValue->value());
+    plan.xCount = ImageToolsUnifiedGUI::countByCellSize(sourceW, cellW,
+                                                        ui->ignoreRemainders->isChecked());
+    plan.yCount = ImageToolsUnifiedGUI::countByCellSize(sourceH, cellH,
+                                                        ui->ignoreRemainders->isChecked());
+    plan.stepW = cellW;
+    plan.stepH = cellH;
+    return plan;
+}
+
+QRect divisionRect(const Ui::ImageToolsUnifiedGUI *ui, const DivisionPlan &plan, int x, int y,
+                   int sourceW, int sourceH)
+{
+    int left = static_cast<int>(std::floor(x * plan.stepW));
+    int top = static_cast<int>(std::floor(y * plan.stepH));
+    int right = static_cast<int>(std::floor((x + 1) * plan.stepW));
+    int bottom = static_cast<int>(std::floor((y + 1) * plan.stepH));
+
+    if (!ui->ignoreRemainders->isChecked()) {
+        if (x == plan.xCount - 1) {
+            right = sourceW;
+        }
+        if (y == plan.yCount - 1) {
+            bottom = sourceH;
+        }
+    }
+
+    left = std::clamp(left, 0, sourceW);
+    top = std::clamp(top, 0, sourceH);
+    right = std::clamp(right, 0, sourceW);
+    bottom = std::clamp(bottom, 0, sourceH);
+
+    if (right <= left || bottom <= top) {
+        return {};
+    }
+
+    return {left, top, right - left, bottom - top};
 }
 } // namespace
 
@@ -401,7 +462,7 @@ void ImageToolsUnifiedGUI::refreshSizeInputs()
 
 void ImageToolsUnifiedGUI::onLoadImageSelected(const QString &path)
 {
-    QImage loaded(path);
+    const QImage loaded(path);
     if (loaded.isNull()) {
         QMessageBox::critical(this, tr("Load Failed"), tr("Failed to load the image."));
         return;
@@ -456,7 +517,7 @@ void ImageToolsUnifiedGUI::onApplyResizeBySizeClicked()
         return;
     }
 
-    int width = ui->widthValue->value();
+    const int width = ui->widthValue->value();
     int height = ui->heightValue->value();
 
     if (keepAspectRatio) {
@@ -674,7 +735,9 @@ void ImageToolsUnifiedGUI::applyTransparentByFloodFill(const QPoint &start)
     const QColor targetColor = currentImage.pixelColor(start);
     QVector<bool> visited(static_cast<qsizetype>(currentImage.width()) * currentImage.height(),
                           false);
-    auto index = [this](int x, int y) { return static_cast<qsizetype>(y * currentImage.width() + x); };
+    auto index = [this](int x, int y) {
+        return (static_cast<qsizetype>(y) * static_cast<qsizetype>(currentImage.width())) + x;
+    };
 
     QQueue<QPoint> queue;
     queue.enqueue(start);
@@ -686,7 +749,7 @@ void ImageToolsUnifiedGUI::applyTransparentByFloodFill(const QPoint &start)
         source.setAlpha(transparentOpacity);
         currentImage.setPixelColor(p, source);
 
-        const QPoint neighbors[] = {
+        const std::array<QPoint, 4> neighbors = {
             QPoint(p.x() + 1, p.y()),
             QPoint(p.x() - 1, p.y()),
             QPoint(p.x(), p.y() + 1),
@@ -763,7 +826,7 @@ QString ImageToolsUnifiedGUI::outputSuffix() const
         return QStringLiteral("png");
     }
 
-    QFileInfo info(loadedFilePath);
+    const QFileInfo info(loadedFilePath);
     const QString suffix = info.suffix();
     return suffix.isEmpty() ? QStringLiteral("png") : suffix;
 }
@@ -780,60 +843,26 @@ bool ImageToolsUnifiedGUI::saveDividedImages(const QString &folderPath) const
         return false;
     }
 
-    int xCount = 0;
-    int yCount = 0;
-    double stepW = 0.0;
-    double stepH = 0.0;
-    if (divisionMode == DivisionMode::DIVISION) {
-        xCount = std::max(1, ui->hDivValue->value());
-        yCount = std::max(1, ui->vDivValue->value());
-        stepW = static_cast<double>(sourceW) / xCount;
-        stepH = static_cast<double>(sourceH) / yCount;
-    } else {
-        const int cellW = std::max(1, ui->cellWidthValue->value());
-        const int cellH = std::max(1, ui->cellHeightValue->value());
-        xCount = countByCellSize(sourceW, cellW, ui->ignoreRemainders->isChecked());
-        yCount = countByCellSize(sourceH, cellH, ui->ignoreRemainders->isChecked());
-        stepW = cellW;
-        stepH = cellH;
-    }
+    const DivisionPlan plan = buildDivisionPlan(ui, divisionMode == DivisionMode::DIVISION,
+                                                sourceW, sourceH);
 
-    if (xCount <= 0 || yCount <= 0) {
+    if (plan.xCount <= 0 || plan.yCount <= 0) {
         return false;
     }
 
     const QFileInfo info(loadedFilePath);
     const QString baseName = info.baseName().isEmpty() ? QStringLiteral("image") : info.baseName();
     const QString suffix = outputSuffix();
-    QDir dir(folderPath);
+    const QDir dir(folderPath);
 
     bool result = true;
-    for (int y = 0; y < yCount; y++) {
-        for (int x = 0; x < xCount; x++) {
-            int left = static_cast<int>(std::floor(x * stepW));
-            int top = static_cast<int>(std::floor(y * stepH));
-            int right = static_cast<int>(std::floor((x + 1) * stepW));
-            int bottom = static_cast<int>(std::floor((y + 1) * stepH));
-
-            if (!ui->ignoreRemainders->isChecked()) {
-                if (x == xCount - 1) {
-                    right = sourceW;
-                }
-                if (y == yCount - 1) {
-                    bottom = sourceH;
-                }
-            }
-
-            left = std::clamp(left, 0, sourceW);
-            top = std::clamp(top, 0, sourceH);
-            right = std::clamp(right, 0, sourceW);
-            bottom = std::clamp(bottom, 0, sourceH);
-
-            if (right <= left || bottom <= top) {
+    for (int y = 0; y < plan.yCount; y++) {
+        for (int x = 0; x < plan.xCount; x++) {
+            const QRect rect = divisionRect(ui, plan, x, y, sourceW, sourceH);
+            if (rect.isEmpty()) {
                 continue;
             }
 
-            const QRect rect(left, top, right - left, bottom - top);
             const QString path =
                 dir.filePath(baseName + QStringLiteral("_%1_%2.").arg(x).arg(y) + suffix);
             result = result && currentImage.copy(rect).save(path);
