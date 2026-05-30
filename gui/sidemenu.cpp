@@ -5,6 +5,7 @@
 #include "core/exception/under_development_exception.h"
 #include "sidemenu_item.h"
 
+#include <QApplication>
 #include <QAbstractButton>
 #include <QButtonGroup>
 #include <QEvent>
@@ -12,7 +13,22 @@
 #include <QLineEdit>
 #include <QScrollArea>
 #include <QSizePolicy>
+#include <QStyle>
 #include <QVBoxLayout>
+
+namespace {
+QIcon themedIconWithFallback(const QStringList &names)
+{
+    for (const QString &name : names) {
+        const QIcon icon = QIcon::fromTheme(name);
+        if (!icon.isNull()) {
+            return icon;
+        }
+    }
+
+    return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+}
+} // namespace
 
 const QString Sidemenu::invalidSidemenuIDReason =
     QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
@@ -51,10 +67,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     connect(m_searchBoxEdit, &QLineEdit::textChanged, this, &Sidemenu::onSearchTextChanged);
 
     // WIP: 適当なボタンを追加する
-    registerItem(ID::IMAGE_RESIZE);
-    registerItem(ID::IMAGE_ROTATION);
-    registerItem(ID::IMAGE_DIVISION);
-    registerItem(ID::IMAGE_TRANSPARENT);
+    registerItem(ID::IMAGE_ALL_IN_ONE);
     registerItem(ID::PHRASE_GENERATION);
     registerItem(ID::COMMAND_GENERATION);
     registerItem(ID::HTTP_REQUEST);
@@ -80,44 +93,35 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
 
-    QString iconName;
+    QStringList iconNames;
     switch (id) {
     case ID::HTTP_REQUEST:
-        iconName = "network";
+        iconNames = {"network", "network-workgroup"};
         break;
-    case ID::IMAGE_RESIZE:
-        iconName = "resize";
-        break;
-    case ID::IMAGE_ROTATION:
-        iconName = "clockwise";
-        break;
-    case ID::IMAGE_DIVISION:
-        iconName = "division";
-        break;
-    case ID::IMAGE_TRANSPARENT:
-        iconName = "transparent";
+    case ID::IMAGE_ALL_IN_ONE:
+        iconNames = {"image-x-generic", "applications-graphics", "insert-image"};
         break;
     case ID::PHRASE_GENERATION:
-        iconName = "library_books";
+        iconNames = {"library_books", "accessories-dictionary"};
         break;
     case ID::COMMAND_GENERATION:
-        iconName = "terminal";
+        iconNames = {"terminal", "utilities-terminal"};
         break;
     case ID::DATA_CONVERSION:
-        iconName = "question_mark";
+        iconNames = {"question_mark", "view-refresh"};
         break;
     case ID::DB_TOOL:
-        iconName = "database";
+        iconNames = {"database", "server-database"};
         break;
     case ID::QR_CODE_GENERATION:
-        iconName = "qr_code";
+        iconNames = {"qr_code", "insert-link"};
         break;
 
     default:
         throw UnderDevelopmentException();
     }
 
-    return QIcon::fromTheme(iconName);
+    return themedIconWithFallback(iconNames);
 }
 
 void Sidemenu::registerItem(ID id)

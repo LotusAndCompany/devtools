@@ -131,22 +131,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
         gui/image/basic/control.h gui/image/basic/control.cpp
     )
-    qt_add_library(${PROJECT_NAME}_image_resize STATIC
-        core/image/resize/image_resize.h core/image/resize/image_resize.cpp
-        gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp
-    )
-    qt_add_library(${PROJECT_NAME}_image_rotation STATIC
-        core/image/rotation/image_rotation.h core/image/rotation/image_rotation.cpp
-        gui/image/rotation/image_rotation_gui.h gui/image/rotation/image_rotation_gui.cpp
-    )
-    qt_add_library(${PROJECT_NAME}_image_division STATIC
-        core/image/division/image_division.h core/image/division/image_division.cpp
-        gui/image/division/image_division_gui.h gui/image/division/image_division_gui.cpp
-        gui/image/division/image_view_for_image_division.h gui/image/division/image_view_for_image_division.cpp
-    )
-    qt_add_library(${PROJECT_NAME}_image_transparent STATIC
-        core/image/transparent/image_transparent.h core/image/transparent/image_transparent.cpp
-        gui/image/transparent/image_transparent_gui.h gui/image/transparent/image_transparent_gui.cpp
+    qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC
+        gui/image/basic/image_tools_unified_gui.h gui/image/basic/image_tools_unified_gui.cpp
         gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
         gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
     )
@@ -160,10 +146,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
 
     # 画像関係の依存関係
-    add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
-    add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
-    add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
-    add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+    add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
 
     # data_conversion
     qt_add_library(${PROJECT_NAME}_data_conversion STATIC
@@ -225,10 +208,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 
 # 画像関係の依存関係
 # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
-target_link_libraries(${PROJECT_NAME}_image_resize PUBLIC ${PROJECT_NAME}_image_core)
-target_link_libraries(${PROJECT_NAME}_image_rotation PUBLIC ${PROJECT_NAME}_image_core)
-target_link_libraries(${PROJECT_NAME}_image_division PUBLIC ${PROJECT_NAME}_image_core)
-target_link_libraries(${PROJECT_NAME}_image_transparent PUBLIC ${PROJECT_NAME}_image_core)
+target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}_image_core)
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
@@ -253,10 +233,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 set(MODULE_LIST
     ${PROJECT_NAME}_core
     ${PROJECT_NAME}_image_core
-    ${PROJECT_NAME}_image_resize
-    ${PROJECT_NAME}_image_rotation
-    ${PROJECT_NAME}_image_division
-    ${PROJECT_NAME}_image_transparent
+    ${PROJECT_NAME}_image_tools_unified
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
