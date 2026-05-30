@@ -1655,13 +1655,13 @@ Choose a tool from the side panel</source>
         <translation>SQLiteデータベースファイルを選択してください。</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+6"/>
+        <location line="+10"/>
+        <location line="+7"/>
         <source>Connection Failed</source>
         <translation>接続失敗</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+65"/>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
@@ -1681,7 +1681,21 @@ Choose a tool from the side panel</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+210"/>
+        <location line="+65"/>
+        <location line="+3"/>
+        <location line="+3"/>
+        <source>追加</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <location line="+3"/>
+        <location line="+3"/>
+        <source>ツリービュー切替</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+109"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -1691,7 +1705,7 @@ Choose a tool from the side panel</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="-122"/>
+        <location line="-134"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
