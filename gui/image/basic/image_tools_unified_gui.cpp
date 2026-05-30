@@ -562,7 +562,7 @@ void ImageToolsUnifiedGUI::onRotateLeftButtonClicked()
     }
 
     QTransform t;
-    t.rotate(90);
+    t.rotate(-90);
     currentImage = currentImage.transformed(t, Qt::SmoothTransformation);
     refreshPreview();
 }
@@ -574,7 +574,7 @@ void ImageToolsUnifiedGUI::onRotateRightButtonClicked()
     }
 
     QTransform t;
-    t.rotate(-90);
+    t.rotate(90);
     currentImage = currentImage.transformed(t, Qt::SmoothTransformation);
     refreshPreview();
 }
@@ -585,7 +585,11 @@ void ImageToolsUnifiedGUI::onFlipHorizontalButtonClicked()
         return;
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     currentImage = currentImage.flipped(Qt::Horizontal);
+#else
+    currentImage = currentImage.mirrored(true, false);
+#endif
     refreshPreview();
 }
 
@@ -595,7 +599,11 @@ void ImageToolsUnifiedGUI::onFlipVerticalButtonClicked()
         return;
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     currentImage = currentImage.flipped(Qt::Vertical);
+#else
+    currentImage = currentImage.mirrored(false, true);
+#endif
     refreshPreview();
 }
 
