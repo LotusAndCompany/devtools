@@ -4,7 +4,8 @@ This guide explains how to add and manage translations in DevTools.
 
 ## Overview
 
-DevTools uses Qt's internationalization (i18n) system with Qt Linguist tools. Currently supported languages:
+DevTools uses Qt's internationalization (i18n) system with Qt translation tools. Currently
+supported languages:
 
 - English (en) - Default
 - Japanese (ja_JP)
@@ -16,13 +17,13 @@ Source Code        Qt Tools           Runtime
     │                 │                  │
     ▼                 ▼                  ▼
 tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ──► Application
-                         (edit)
+                         (tracked)        (generated)
 ```
 
 1. **Source Code**: Strings marked with `tr()`
-2. **lupdate**: Extracts strings to .ts files
-3. **.ts files**: XML translation files (editable)
-4. **lrelease**: Compiles to binary .qm files
+2. **lupdate**: Extracts strings to .ts files when explicitly requested
+3. **.ts files**: XML translation source files tracked in Git
+4. **lrelease**: Compiles to binary .qm files during normal builds
 5. **Runtime**: Application loads .qm files
 
 ## Translation Files
@@ -56,7 +57,8 @@ QString items = tr("%n item(s)", "", count);
 
 ### In .ui Files
 
-Qt Designer automatically marks visible text for translation. Just use the Properties panel to set text.
+If a `.ui` file is still used, Qt Designer automatically marks visible text for translation.
+Just use the Properties panel to set text.
 
 ### In QML (if used)
 
@@ -72,17 +74,17 @@ Text {
 
 ```bash
 # Update .ts files with new strings
-cmake --build build --target update_translations
+cmake --build build --target update_devtools_translations
 
 # Compile .qm files
-cmake --build build --target release_translations
+cmake --build build --target release_devtools_translations
 ```
 
 ### Manual Commands
 
 ```bash
 # Update specific .ts file
-lupdate -recursive . -ts res/dev-tools_ja_JP.ts
+lupdate -locations none -no-obsolete -recursive . -ts res/dev-tools_ja_JP.ts
 
 # Compile to .qm
 lrelease res/dev-tools_ja_JP.ts
@@ -90,47 +92,21 @@ lrelease res/dev-tools_ja_JP.ts
 
 ## Editing Translations
 
-### Using Qt Linguist
+Edit the tracked `.ts` files when translation text changes. The update target uses
+`-locations none -no-obsolete` so source line numbers and obsolete messages do not create
+unrelated diffs.
 
-1. Open Qt Linguist
-2. File > Open > Select .ts file
-3. Navigate to strings in the left panel
-4. Enter translations in the bottom panel
-5. Mark as translated (checkmark or Ctrl+Enter)
-6. Save (Ctrl+S)
+### Translation Entry Shape
 
-### Linguist Interface
-
+```xml
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Language:</source>
+        <translation>言語:</translation>
+    </message>
+</context>
 ```
-┌──────────────────────────────────────────────┐
-│ Context/Source │     Translation Editor      │
-├────────────────┼─────────────────────────────┤
-│ MainWindow     │ Source: "Save"              │
-│ ├─ "Save"      │ Translation: "保存"          │
-│ ├─ "Open"      │                             │
-│ └─ "Exit"      │ [✓] Translated              │
-├────────────────┴─────────────────────────────┤
-│ Warnings/Errors                              │
-└──────────────────────────────────────────────┘
-```
-
-### Translation States
-
-| State | Icon | Meaning |
-|-------|------|---------|
-| Untranslated | ? | No translation entered |
-| Translated | ✓ | Translation complete |
-| Obsolete | ~ | Source string removed |
-
-### Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| Ctrl+Enter | Mark as done & next |
-| Ctrl+Shift+Enter | Mark as done |
-| Alt+Down | Next unfinished |
-| Alt+Up | Previous unfinished |
-| Ctrl+S | Save |
 
 ## Adding a New Language
 
@@ -140,38 +116,23 @@ lrelease res/dev-tools_ja_JP.ts
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en fr)  # Add 'fr'
 ```
 
-### 2. Create Translation File
+### 2. Add Translation File
+
+```cmake
+set(TRANSLATION_TS_FILES
+    res/dev-tools_ja_JP.ts
+    res/dev-tools_en.ts
+    res/dev-tools_fr.ts
+)
+```
+
+### 3. Update and Translate
 
 ```bash
-# Create empty .ts file
-lupdate -recursive . -ts res/dev-tools_fr.ts
+cmake --build build --target update_devtools_translations
 ```
 
-### 3. Translate
-
-Open in Qt Linguist and translate all strings.
-
-### 4. Compile
-
-```bash
-cmake --build build --target release_translations
-```
-
-### 5. Add to Resources
-
-Update `res/application.qrc`:
-
-```xml
-<RCC>
-    <qresource prefix="/i18n">
-        <file>dev-tools_en.qm</file>
-        <file>dev-tools_ja_JP.qm</file>
-        <file>dev-tools_fr.qm</file>  <!-- New -->
-    </qresource>
-</RCC>
-```
-
-### 6. Update Language Selection
+### 4. Update Language Selection
 
 Add the new language to the settings dialog.
 
@@ -275,34 +236,27 @@ button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 ### Missing Translations
 
 1. Check string is marked with tr()
-2. Run lupdate
-3. Open .ts in Linguist
-4. Find "Untranslated" entries
+2. Run `cmake --build build --target update_devtools_translations`
+3. Find `type="unfinished"` entries in the `.ts` files
 
 ## Translation Workflow
 
 ### For Developers
 
 1. Write new UI with tr()
-2. Run `make update_translations`
-3. Notify translators
-
-### For Translators
-
-1. Open .ts file in Linguist
-2. Translate new/modified strings
-3. Save file
-4. Commit changes
+2. Run `cmake --build build --target update_devtools_translations`
+3. Update `.ts` translations when needed
+4. Commit `.ts` changes with the code change
 
 ### Release Preparation
 
 1. Ensure all strings translated
-2. Run `make release_translations`
+2. Run `cmake --build build --target release_devtools_translations`
 3. Test in target language
-4. Include .qm files in build
+4. Keep `.qm` files as generated build artifacts
 
 ## Related Documentation
 
 - [Adding New Tools](adding-new-tools.md) - Module creation
 - [Coding Standards](coding-standards.md) - Code style
-- [Qt Linguist Manual](https://doc.qt.io/qt-6/linguist-translators.html)
+- [Qt Internationalization](https://doc.qt.io/qt-6/localization.html)

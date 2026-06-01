@@ -38,7 +38,7 @@ AGENTS.md  (single source of truth)
 - Architecture overview (core/ vs gui/ separation)
 - Qt conventions (signal/slot syntax, parent ownership, tr())
 - Git workflow (Conventional Commits, branch naming, PR rules)
-- i18n setup (Qt Linguist)
+- i18n setup (Qt translation tools)
 - Dependencies (vcpkg, Qt6, bundled libraries)
 - Pre-commit hooks
 

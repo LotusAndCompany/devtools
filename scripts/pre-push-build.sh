@@ -26,9 +26,6 @@ run_build() {
     echo "Building project..."
     cmake --build "$BUILD_DIR" --parallel || return 1
 
-    # Restore translation files modified by lupdate during build
-    git checkout -- "${REPO_ROOT}/res/"*.ts 2>/dev/null || true
-
     return 0
 }
 

@@ -262,14 +262,8 @@ ui_->processButton->setText(tr("Process"));
 #### Update Translation Files
 
 ```bash
-# Update .ts files
-cmake --build build --target update_translations
-
-# Edit translations using Qt Linguist
-linguist res/dev-tools_ja_JP.ts
-
-# Compile .qm files
-cmake --build build --target release_translations
+# Update .ts files when translatable strings changed
+cmake --build build --target update_devtools_translations
 ```
 
 ### 10. Add Icons
