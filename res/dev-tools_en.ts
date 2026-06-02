@@ -1497,34 +1497,46 @@ Choose a tool from the side panel</source>
 <context>
     <name>phraseGeneration</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="20"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="114"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="72"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="119"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="133"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="116"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="253"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="115"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="208"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="117"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="227"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="106"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="118"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="136"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="144"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="304"/>
         <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="121"/>
+        <source>Add new template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="126"/>
+        <source>Toggle template list</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

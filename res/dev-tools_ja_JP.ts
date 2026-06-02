@@ -1971,36 +1971,32 @@ Choose a tool from the side panel</source>
 <context>
     <name>phraseGeneration</name>
     <message>
-        <location filename="../gui/phrase_generation/phrase_generation.ui" line="+20"/>
+        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+114"/>
         <source>Form</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <location line="+65"/>
-        <location line="+3"/>
-        <location line="+3"/>
-        <source>追加</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <location line="+3"/>
-        <location line="+3"/>
-        <source>ツリービュー切替</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+109"/>
+        <location line="+5"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="+2"/>
+        <source>Add new template</source>
+        <translation>新規テンプレートを追加</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Toggle template list</source>
+        <translation>テンプレート一覧を表示/非表示</translation>
+    </message>
+    <message>
+        <location line="-10"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-1"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
@@ -2009,13 +2005,15 @@ Choose a tool from the side panel</source>
         <translation type="vanished">タイトルを入力...</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location filename="../gui/phrase_generation/phrase_generation.cpp" line="+97"/>
+        <location line="+1"/>
+        <location line="+18"/>
+        <location line="+8"/>
+        <location line="+153"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>

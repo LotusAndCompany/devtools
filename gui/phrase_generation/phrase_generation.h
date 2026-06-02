@@ -1,16 +1,14 @@
 #ifndef PHRASE_GENERATION_H
 #define PHRASE_GENERATION_H
 
-#include <QClipboard>
-#include <QDir>
-#include <QFile>
-#include <QTextStream>
-#include <QTreeWidgetItem>
 #include <QWidget>
 
-namespace Ui {
-class phraseGeneration;
-}
+class QFrame;
+class QLineEdit;
+class QPlainTextEdit;
+class QPushButton;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 class phraseGeneration : public QWidget
 {
@@ -18,7 +16,7 @@ class phraseGeneration : public QWidget
 
 public:
     explicit phraseGeneration(QWidget *parent = nullptr);
-    ~phraseGeneration() override;
+    ~phraseGeneration() override = default;
     phraseGeneration(const phraseGeneration &) = delete;
     phraseGeneration &operator=(const phraseGeneration &) = delete;
     phraseGeneration(phraseGeneration &&) = delete;
@@ -35,12 +33,28 @@ private slots:
     void copyContent();
 
 private:
-    Ui::phraseGeneration *ui;
-    void updateTreeStyle();
+    void buildUi();
+    void createTopBarWidgets();
+    void createBodyWidgets();
+    void layoutWidgets();
+    void retranslateUi();
+    void adjustTreeColumnWidth();
+    void applyToggleButtonIcon(const QString &theme_name, const QString &fallback_text);
     void loadTitles();
     static QString loadContent(const QString &filename, QString *title = nullptr);
     static void saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &filename);
+
+    QLineEdit *template_title{nullptr};
+    QPushButton *delete_button{nullptr};
+    QPushButton *copy_button{nullptr};
+    QPushButton *add_button{nullptr};
+    QPushButton *toggle_tree_button{nullptr};
+    QFrame *line{nullptr};
+    QPlainTextEdit *template_text{nullptr};
+    QTreeWidget *title_tree_widget{nullptr};
+    QPushButton *save_button{nullptr};
+
     QString currentFile; // 現在のファイル名を保持
 
 protected:
