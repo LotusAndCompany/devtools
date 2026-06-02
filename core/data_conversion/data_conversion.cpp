@@ -178,7 +178,6 @@ void DataConversion::parseInputText()
     if (inputText().trimmed() == "") {
         inputFormat = Format::UNKNOWN;
         intermediateData = QVariant();
-        outdated = true;
         return;
     }
 
@@ -191,7 +190,6 @@ void DataConversion::parseInputText()
         inputFormat = Format::JSON;
         intermediateData = std::move(result.data);
         _messages = {tr("Parsed as JSON")};
-        outdated = true;
         return;
     }
 
@@ -202,7 +200,6 @@ void DataConversion::parseInputText()
         inputFormat = Format::TOML;
         intermediateData = std::move(result.data);
         _messages = {tr("Parsed as TOML")};
-        outdated = true;
         return;
     }
 
@@ -220,7 +217,6 @@ void DataConversion::parseInputText()
         }
 
         intermediateData = std::move(result.data);
-        outdated = true;
         return;
     }
 
@@ -228,5 +224,4 @@ void DataConversion::parseInputText()
     inputFormat = Format::ERROR;
     intermediateData = QVariant();
     _messages = {tr("Cannot parse input text")};
-    outdated = true;
 }

@@ -1,6 +1,6 @@
 #include "yaml_parser.h"
 
-#include "core/exception/invalid_argument_exception.h"
+#include "core/exception/invalid_state_exception.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -88,8 +88,7 @@ YamlParser::ParseResult YamlParser::yamlScalarToQVariant(const YAML::Node &node)
             return result;
         } else {
             // 論理エラー; 到達不能の想定
-            throw InvalidArgumentException<bool>(
-                node.IsScalar(), "node is expected to be scalar type" + nodePosition(node));
+            throw InvalidStateException("node is expected to be scalar type" + nodePosition(node));
         }
     }
 
@@ -138,8 +137,7 @@ YamlParser::ParseResult YamlParser::yamlMapToQVariantMap(const YAML::Node &node)
             return result;
         } else {
             // 論理エラー; 到達不能の想定
-            throw InvalidArgumentException<bool>(
-                node.IsMap(), "node is expected to be map type" + nodePosition(node));
+            throw InvalidStateException("node is expected to be map type" + nodePosition(node));
         }
     }
 
@@ -174,8 +172,8 @@ YamlParser::ParseResult YamlParser::yamlSequenceToQVariantList(const YAML::Node 
             return result;
         } else {
             // 論理エラー; 到達不能の想定
-            throw InvalidArgumentException(
-                node.IsSequence(), "node is expected to be sequence type" + nodePosition(node));
+            throw InvalidStateException("node is expected to be sequence type" +
+                                        nodePosition(node));
         }
     }
 

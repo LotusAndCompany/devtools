@@ -201,8 +201,6 @@ void TestDataConversion::test_parseInputText()
         QCOMPARE_EQ(dataConversion.inputFormat, DataConversion::Format::UNKNOWN);
         // dataConversion.intermediateDataが空であること
         QCOMPARE_EQ(dataConversion.intermediateData, QVariant());
-        // outdatedがtrueになっていること
-        QCOMPARE_EQ(dataConversion.outdated, true);
     }
 
     QFile file(TEST_SRC_DIR + "/core/data_conversion/test.json");
