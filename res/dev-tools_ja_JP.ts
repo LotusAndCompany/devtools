@@ -9,11 +9,11 @@
     </message>
     <message>
         <source>About</source>
-        <translation>DevToolsについて</translation>
+        <translation>このアプリについて</translation>
     </message>
     <message>
         <source>Application Version</source>
-        <translation>バージョン</translation>
+        <translation>アプリケーションバージョン</translation>
     </message>
     <message>
         <source>Build Environment</source>
@@ -102,7 +102,175 @@
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストラベル</translation>
+    </message>
+    <message>
+        <source>Categories</source>
+        <translation>カテゴリ一覧</translation>
+    </message>
+    <message>
+        <source>1: Git commands</source>
+        <translation>1: Gitコマンド</translation>
+    </message>
+    <message>
+        <source>2: Docker commands</source>
+        <translation>2: Dockerコマンド</translation>
+    </message>
+    <message>
+        <source>3: Docker Compose commands</source>
+        <translation>3: Docker Composeコマンド</translation>
+    </message>
+    <message>
+        <source>Add changes</source>
+        <translation>変更を追加</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>なし</translation>
+    </message>
+    <message>
+        <source>Create a commit</source>
+        <translation>コミットを作成</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>メッセージ</translation>
+    </message>
+    <message>
+        <source>Show commit history</source>
+        <translation>コミット履歴を表示</translation>
+    </message>
+    <message>
+        <source>Show branch status</source>
+        <translation>ブランチの状態を表示</translation>
+    </message>
+    <message>
+        <source>Show differences</source>
+        <translation>差分を表示</translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation>対象</translation>
+    </message>
+    <message>
+        <source>Merge</source>
+        <translation>マージ</translation>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation>リモート</translation>
+    </message>
+    <message>
+        <source>Remote name and URL</source>
+        <translation>リモート名とURL</translation>
+    </message>
+    <message>
+        <source>Build</source>
+        <translation>ビルド</translation>
+    </message>
+    <message>
+        <source>Name and tag</source>
+        <translation>名前とタグ</translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <source>List images</source>
+        <translation>イメージ一覧を表示</translation>
+    </message>
+    <message>
+        <source>Create and run a container</source>
+        <translation>コンテナを作成して実行</translation>
+    </message>
+    <message>
+        <source>Remove unused images</source>
+        <translation>不要なイメージを削除</translation>
+    </message>
+    <message>
+        <source>Run a command in a running container</source>
+        <translation>実行中のコンテナ内でコマンドを実行</translation>
+    </message>
+    <message>
+        <source>Download an image from a repository</source>
+        <translation>リポジトリからイメージをダウンロード</translation>
+    </message>
+    <message>
+        <source>Push an image to a repository</source>
+        <translation>リポジトリにイメージをプッシュ</translation>
+    </message>
+    <message>
+        <source>Show logs</source>
+        <translation>ログを表示</translation>
+    </message>
+    <message>
+        <source>Stop a container</source>
+        <translation>コンテナを停止</translation>
+    </message>
+    <message>
+        <source>Remove a stopped container</source>
+        <translation>停止したコンテナを削除</translation>
+    </message>
+    <message>
+        <source>Remove an image</source>
+        <translation>イメージを削除</translation>
+    </message>
+    <message>
+        <source>List created networks</source>
+        <translation>作成済みのネットワーク一覧を表示</translation>
+    </message>
+    <message>
+        <source>List created volumes</source>
+        <translation>作成済みのボリューム一覧を表示</translation>
+    </message>
+    <message>
+        <source>Build services</source>
+        <translation>サービスをビルド</translation>
+    </message>
+    <message>
+        <source>Start containers</source>
+        <translation>コンテナを起動</translation>
+    </message>
+    <message>
+        <source>Stop containers and remove related resources</source>
+        <translation>コンテナを停止し関連リソースを削除</translation>
+    </message>
+    <message>
+        <source>Restart containers</source>
+        <translation>コンテナを再起動</translation>
+    </message>
+    <message>
+        <source>Stop containers</source>
+        <translation>コンテナを停止</translation>
+    </message>
+    <message>
+        <source>Show container logs</source>
+        <translation>コンテナのログを表示</translation>
+    </message>
+    <message>
+        <source>Show container status</source>
+        <translation>コンテナのステータスを表示</translation>
+    </message>
+    <message>
+        <source>Start stopped services</source>
+        <translation>停止中のサービスを起動</translation>
+    </message>
+    <message>
+        <source>Force stop containers</source>
+        <translation>コンテナを強制停止</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>エラー</translation>
+    </message>
+    <message>
+        <source>This value is invalid. Please check and try again.</source>
+        <translation>この値は無効です。確認してもう一度お試しください。</translation>
+    </message>
+    <message>
+        <source>Path</source>
+        <translation>パス</translation>
     </message>
 </context>
 <context>
@@ -235,7 +403,7 @@
     </message>
     <message>
         <source>TOML does not support top level array</source>
-        <translation>TOMLでは値のみのデータはサポートされていません</translation>
+        <translation>TOMLではトップレベル配列はサポートされていません</translation>
     </message>
     <message>
         <source>ignore null value in array: %1</source>
@@ -275,7 +443,7 @@
     </message>
     <message>
         <source>YAML does not support tab indentation</source>
-        <translation>YAMLはタブによ字下げをサポートしていません</translation>
+        <translation>YAMLはタブによるインデントをサポートしていません</translation>
     </message>
 </context>
 <context>
@@ -286,7 +454,7 @@
     </message>
     <message>
         <source>Paste</source>
-        <translation>読み込み</translation>
+        <translation>貼り付け</translation>
     </message>
     <message>
         <source>Input text</source>
@@ -294,7 +462,7 @@
     </message>
     <message>
         <source>Error &amp; waning messages</source>
-        <translation>エラー・警告</translation>
+        <translation>エラー・警告メッセージ</translation>
     </message>
     <message>
         <source>YAML (Flow style)</source>
@@ -334,20 +502,11 @@
     </message>
 </context>
 <context>
-    <name>ImageDivisionGUI</name>
-</context>
-<context>
     <name>ImageOpenDialog</name>
     <message>
         <source>Open Image</source>
         <translation>画像を開く</translation>
     </message>
-</context>
-<context>
-    <name>ImageResizeGUI</name>
-</context>
-<context>
-    <name>ImageRotationGUI</name>
 </context>
 <context>
     <name>ImageSaveDialog</name>
@@ -360,158 +519,152 @@
     <name>ImageToolsUnifiedGUI</name>
     <message>
         <source>Resize</source>
-        <translation type="unfinished"></translation>
+        <translation>リサイズ</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation type="unfinished">横幅:</translation>
+        <translation>幅:</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation type="unfinished">縦幅:</translation>
+        <translation>高さ:</translation>
     </message>
     <message>
         <source>Horizontal Scale:</source>
-        <translation type="unfinished">横の拡大率:</translation>
+        <translation>横方向の拡大率:</translation>
     </message>
     <message>
         <source>Vertical Scale:</source>
-        <translation type="unfinished">縦の拡大率:</translation>
+        <translation>縦方向の拡大率:</translation>
     </message>
     <message>
         <source>Keep aspect ratio</source>
-        <translation type="unfinished">縦横比を維持</translation>
+        <translation>縦横比を維持</translation>
     </message>
     <message>
         <source>Smooth scaling</source>
-        <translation type="unfinished">バイリニア補完</translation>
+        <translation>滑らかに拡大縮小</translation>
     </message>
     <message>
         <source>Apply Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズを適用</translation>
     </message>
     <message>
         <source>Apply Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>拡大率を適用</translation>
     </message>
     <message>
         <source>Rotate / Flip</source>
-        <translation type="unfinished"></translation>
+        <translation>回転 / 反転</translation>
     </message>
     <message>
         <source>Rotate Anti-clockwise</source>
-        <translation type="unfinished">左に90°回転</translation>
+        <translation>左に90°回転</translation>
     </message>
     <message>
         <source>Rotate Clockwise</source>
-        <translation type="unfinished">右に90°回転</translation>
+        <translation>右に90°回転</translation>
     </message>
     <message>
         <source>Flip Horizontal</source>
-        <translation type="unfinished">左右反転</translation>
+        <translation>左右反転</translation>
     </message>
     <message>
         <source>Flip Vertical</source>
-        <translation type="unfinished">上下反転</translation>
+        <translation>上下反転</translation>
     </message>
     <message>
         <source>Transparent (click image)</source>
-        <translation type="unfinished"></translation>
+        <translation>透明化 (画像をクリック)</translation>
     </message>
     <message>
         <source>Color mode:</source>
-        <translation type="unfinished">色空間:</translation>
+        <translation>カラーモード:</translation>
     </message>
     <message>
         <source>Color:</source>
-        <translation type="unfinished">色:</translation>
+        <translation>色:</translation>
     </message>
     <message>
         <source>Tolerance:</source>
-        <translation type="unfinished">許容誤差:</translation>
+        <translation>許容誤差:</translation>
     </message>
     <message>
         <source>Transparency:</source>
-        <translation type="unfinished">透明度:</translation>
+        <translation>透明度:</translation>
     </message>
     <message>
         <source>Only contiguous area</source>
-        <translation type="unfinished">連続領域のみ</translation>
+        <translation>連続領域のみ</translation>
     </message>
     <message>
         <source>Division</source>
-        <translation type="unfinished">分割数</translation>
+        <translation>分割</translation>
     </message>
     <message>
         <source>Image size:</source>
-        <translation type="unfinished">画像サイズ:</translation>
+        <translation>画像サイズ:</translation>
     </message>
     <message>
         <source>0 x 0</source>
-        <translation type="unfinished">0 × 0</translation>
+        <translation>0 × 0</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished">サイズ</translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <source>Horizontal division:</source>
-        <translation type="unfinished"></translation>
+        <translation>横方向の分割数:</translation>
     </message>
     <message>
         <source>Vertical division:</source>
-        <translation type="unfinished"></translation>
+        <translation>縦方向の分割数:</translation>
     </message>
     <message>
         <source>Cell width:</source>
-        <translation type="unfinished"></translation>
+        <translation>セルの幅:</translation>
     </message>
     <message>
         <source>Cell height:</source>
-        <translation type="unfinished"></translation>
+        <translation>セルの高さ:</translation>
     </message>
     <message>
         <source>Ignore remainders</source>
-        <translation type="unfinished">余りを切り捨て</translation>
+        <translation>余りを切り捨て</translation>
     </message>
     <message>
         <source>Save Divided Images</source>
-        <translation type="unfinished"></translation>
+        <translation>分割画像を保存</translation>
     </message>
     <message>
         <source>%1 x %2</source>
-        <translation type="unfinished">%1 × %2</translation>
+        <translation>%1 × %2</translation>
     </message>
     <message>
         <source>Load Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>読み込み失敗</translation>
     </message>
     <message>
         <source>Failed to load the image.</source>
-        <translation type="unfinished"></translation>
+        <translation>画像の読み込みに失敗しました。</translation>
     </message>
     <message>
         <source>Save Failed</source>
-        <translation type="unfinished">保存失敗</translation>
+        <translation>保存失敗</translation>
     </message>
     <message>
         <source>Failed to save the image.</source>
-        <translation type="unfinished">画像の保存に失敗しました。</translation>
+        <translation>画像の保存に失敗しました。</translation>
     </message>
     <message>
         <source>Select save folder</source>
-        <translation type="unfinished"></translation>
+        <translation>保存先フォルダを選択</translation>
     </message>
     <message>
         <source>Failed to save divided images.</source>
-        <translation type="unfinished"></translation>
+        <translation>分割画像の保存に失敗しました。</translation>
     </message>
-</context>
-<context>
-    <name>ImageTransparentGUI</name>
-</context>
-<context>
-    <name>ItemWidget</name>
 </context>
 <context>
     <name>MainWindow</name>
@@ -542,9 +695,6 @@
         <source>Images</source>
         <translation>画像</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
 </context>
 <context>
     <name>QRCodeGenerationGUI</name>
@@ -661,10 +811,6 @@
         <translation>必須項目を入力してください</translation>
     </message>
     <message>
-        <source>QRコードが生成されていません。</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Copied</source>
         <translation>コピー完了</translation>
     </message>
@@ -763,20 +909,8 @@ Please try reducing the amount of data or simplifying the content.</source>
 データ量を減らすか、内容を簡略化してください。</translation>
     </message>
     <message>
-        <source>QRコード画像をクリップボードにコピーしました。</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QRコード画像を保存しました: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error</source>
-        <translation type="unfinished">エラー</translation>
-    </message>
-    <message>
-        <source>QRコード画像の保存に失敗しました。</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <source>Enter name...</source>
@@ -870,6 +1004,22 @@ Please try reducing the amount of data or simplifying the content.</source>
         <source>Longitude cannot be empty</source>
         <translation>経度を入力してください</translation>
     </message>
+    <message>
+        <source>No QR code has been generated.</source>
+        <translation>QRコードが生成されていません。</translation>
+    </message>
+    <message>
+        <source>Copied the QR code image to the clipboard.</source>
+        <translation>QRコード画像をクリップボードにコピーしました。</translation>
+    </message>
+    <message>
+        <source>Saved the QR code image: %1</source>
+        <translation>QRコード画像を保存しました: %1</translation>
+    </message>
+    <message>
+        <source>Failed to save the QR code image.</source>
+        <translation>QRコード画像の保存に失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>QueryPage</name>
@@ -878,8 +1028,32 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>フォーム</translation>
     </message>
     <message>
-        <source>実行</source>
+        <source>Execute</source>
         <translation>実行</translation>
+    </message>
+    <message>
+        <source>Execution Error</source>
+        <translation>実行エラー</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <source>Query executed successfully.</source>
+        <translation>クエリを正常に実行しました。</translation>
+    </message>
+    <message>
+        <source>DB Error</source>
+        <translation>DBエラー</translation>
+    </message>
+    <message>
+        <source>Could not connect to the database.</source>
+        <translation>データベースに接続できませんでした。</translation>
+    </message>
+    <message>
+        <source>Result Fetch Error</source>
+        <translation>結果取得エラー</translation>
     </message>
 </context>
 <context>
@@ -897,20 +1071,8 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>言語:</translation>
     </message>
     <message>
-        <source>日本語</source>
-        <translation>日本語</translation>
-    </message>
-    <message>
         <source>English</source>
         <translation>English</translation>
-    </message>
-    <message>
-        <source>起動時にサイドバーを表示</source>
-        <translation>起動時にサイドバーを表示</translation>
-    </message>
-    <message>
-        <source>起動時に前回使用した機能を表示</source>
-        <translation>起動時に前回使用した機能を表示</translation>
     </message>
     <message>
         <source>Window</source>
@@ -932,6 +1094,18 @@ Please try reducing the amount of data or simplifying the content.</source>
         <source>Remember window position</source>
         <translation>ウィンドウ位置を記憶</translation>
     </message>
+    <message>
+        <source>Japanese</source>
+        <translation>日本語</translation>
+    </message>
+    <message>
+        <source>Show sidebar on startup</source>
+        <translation>起動時にサイドバーを表示</translation>
+    </message>
+    <message>
+        <source>Open last used tool on startup</source>
+        <translation>起動時に前回使用した機能を表示</translation>
+    </message>
 </context>
 <context>
     <name>Sidemenu</name>
@@ -941,35 +1115,14 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
 </context>
 <context>
-    <name>SidemenuItem</name>
-</context>
-<context>
-    <name>Test::TestBasicImageView</name>
-</context>
-<context>
-    <name>Test::TestBasicImageViewControl</name>
-</context>
-<context>
-    <name>Test::TestImageDivisionGUI</name>
-</context>
-<context>
-    <name>Test::TestImageViewForImageDivision</name>
-</context>
-<context>
-    <name>Test::TestImageViewForImageTransparent</name>
-</context>
-<context>
-    <name>Test::TestTool</name>
-</context>
-<context>
     <name>Tool</name>
     <message>
         <source>Image Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>画像編集</translation>
     </message>
     <message>
         <source>Use resize, rotation, division, and transparent processing on one image</source>
-        <translation type="unfinished"></translation>
+        <translation>1枚の画像にリサイズ、回転、分割、透明化処理を行います</translation>
     </message>
     <message>
         <source>Phrase Generation</source>
@@ -997,11 +1150,11 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
     <message>
         <source>Send HTTP Request</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPリクエストを送信</translation>
     </message>
     <message>
         <source>QR Code Generation</source>
-        <translation type="unfinished">QRコード生成</translation>
+        <translation>QRコード生成</translation>
     </message>
     <message>
         <source>DB Tool</source>
@@ -1013,7 +1166,7 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
     <message>
         <source>Generate QR codes from text or URLs</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストやURLからQRコードを生成</translation>
     </message>
     <message>
         <source>Generate command from command list</source>
@@ -1097,7 +1250,7 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>ステータス: %1 %2 時間: %3ms サイズ: %4</translation>
     </message>
 </context>
 <context>
@@ -1109,14 +1262,6 @@ Choose a tool from the side panel</source>
     <message>
         <source>Toolbar</source>
         <translation>ツールバー</translation>
-    </message>
-    <message>
-        <source>テーブル更新</source>
-        <translation>テーブル更新</translation>
-    </message>
-    <message>
-        <source>DB接続設定</source>
-        <translation>DB接続設定</translation>
     </message>
     <message>
         <source>SQL</source>
@@ -1162,9 +1307,14 @@ Choose a tool from the side panel</source>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
-</context>
-<context>
-    <name>home</name>
+    <message>
+        <source>Refresh Tables</source>
+        <translation>テーブル更新</translation>
+    </message>
+    <message>
+        <source>DB Connection Settings</source>
+        <translation>DB接続設定</translation>
+    </message>
 </context>
 <context>
     <name>phraseGeneration</name>

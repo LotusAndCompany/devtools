@@ -34,13 +34,6 @@ void ApplicationMixin::setupApplication(QCoreApplication *app)
         QCoreApplication::installTranslator(&_translator);
     } else {
         qDebug() << "Could not load application translations:" << translationFile;
-        // 日本語をデフォルトとして試行
-        if (locale != "ja_JP" && _translator.load(":i18n/dev-tools_ja_JP.qm")) {
-            qDebug() << "Fallback to Japanese translations";
-            QCoreApplication::installTranslator(&_translator);
-        } else if (locale != "en" && _translator.load(":i18n/dev-tools_en.qm")) {
-            qDebug() << "Fallback to English translations";
-            QCoreApplication::installTranslator(&_translator);
-        }
+        qDebug() << "Fallback to source language: English";
     }
 }

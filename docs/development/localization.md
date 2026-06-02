@@ -7,7 +7,7 @@ This guide explains how to add and manage translations in DevTools.
 DevTools uses Qt's internationalization (i18n) system with Qt translation tools. Currently
 supported languages:
 
-- English (en) - Default
+- English (en) - Default source language, no `.ts` file
 - Japanese (ja_JP)
 
 ## How It Works
@@ -20,19 +20,17 @@ tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ─�
                          (tracked)        (generated)
 ```
 
-1. **Source Code**: Strings marked with `tr()`
+1. **Source Code**: English strings marked with `tr()`
 2. **lupdate**: Extracts strings to .ts files when explicitly requested
 3. **.ts files**: XML translation source files tracked in Git
 4. **lrelease**: Compiles to binary .qm files during normal builds
-5. **Runtime**: Application loads .qm files
+5. **Runtime**: Application loads .qm files for translated languages; English uses the source text
 
 ## Translation Files
 
 ```
 res/
-├── dev-tools_en.ts       # English translations
 ├── dev-tools_ja_JP.ts    # Japanese translations
-├── dev-tools_en.qm       # Compiled English (generated)
 └── dev-tools_ja_JP.qm    # Compiled Japanese (generated)
 ```
 
@@ -41,7 +39,7 @@ res/
 ### In C++ Code
 
 ```cpp
-// Basic translation
+// Basic translation. Use English as the source string.
 QString message = tr("Hello, World!");
 
 // With context (for disambiguation)
@@ -113,7 +111,7 @@ unrelated diffs.
 ### 1. Update CMakeLists.txt
 
 ```cmake
-qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en fr)  # Add 'fr'
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP fr)  # Add 'fr'
 ```
 
 ### 2. Add Translation File
@@ -121,7 +119,6 @@ qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en fr)  # Add 'fr'
 ```cmake
 set(TRANSLATION_TS_FILES
     res/dev-tools_ja_JP.ts
-    res/dev-tools_en.ts
     res/dev-tools_fr.ts
 )
 ```

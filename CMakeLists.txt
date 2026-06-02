@@ -189,7 +189,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     set(TRANSLATION_TS_FILES
         res/dev-tools_ja_JP.ts
-        res/dev-tools_en.ts
     )
 
     qt_collect_translation_source_targets(I18N_SOURCE_TARGETS)

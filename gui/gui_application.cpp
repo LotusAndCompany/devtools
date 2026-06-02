@@ -34,13 +34,18 @@ void GuiApplication::setup()
     // 保存された言語設定があれば、メインウィンドウ生成前に適用しておく
     const QString savedLanguage = settings.value("language", "").toString();
     if (!savedLanguage.isEmpty()) {
-        const QString translationFile = QString(":i18n/dev-tools_%1.qm").arg(savedLanguage);
-        if (mutableTranslator().load(translationFile)) {
+        if (savedLanguage == "en") {
             removeTranslator(&mutableTranslator());
-            installTranslator(&mutableTranslator());
-            qDebug() << "Applied saved language setting:" << savedLanguage;
+            qDebug() << "Applied source language setting: English";
         } else {
-            qDebug() << "Failed to load saved language:" << translationFile;
+            const QString translationFile = QString(":i18n/dev-tools_%1.qm").arg(savedLanguage);
+            if (mutableTranslator().load(translationFile)) {
+                removeTranslator(&mutableTranslator());
+                installTranslator(&mutableTranslator());
+                qDebug() << "Applied saved language setting:" << savedLanguage;
+            } else {
+                qDebug() << "Failed to load saved language:" << translationFile;
+            }
         }
     }
 
@@ -85,6 +90,11 @@ bool GuiApplication::changeLanguage(const QString &languageCode)
     // 既存の翻訳を削除
     removeTranslator(&mutableTranslator());
 
+    if (languageCode == "en") {
+        qDebug() << "Changed language to source language: English";
+        return true;
+    }
+
     // 新しい翻訳を読み込み（正しいi18nパスを使用）
     QString const translationFile = QString(":i18n/dev-tools_%1.qm").arg(languageCode);
     if (mutableTranslator().load(translationFile)) {
@@ -93,12 +103,6 @@ bool GuiApplication::changeLanguage(const QString &languageCode)
         return true;
     } else {
         qWarning() << "Failed to load translation:" << translationFile;
-        // フォールバックを試行
-        if (languageCode != "ja_JP" && mutableTranslator().load(":i18n/dev-tools_ja_JP.qm")) {
-            installTranslator(&mutableTranslator());
-            qDebug() << "Fallback to Japanese translation";
-            return true;
-        }
         return false;
     }
 }

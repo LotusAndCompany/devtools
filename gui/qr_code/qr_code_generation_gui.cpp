@@ -1160,21 +1160,20 @@ void QRCodeGenerationGUI::onCopyClicked()
 {
     // 画像が生成されているかチェック
     if (currentQRImage.isNull()) {
-        QMessageBox::warning(this, tr("Warning"), tr("QRコードが生成されていません。"));
+        QMessageBox::warning(this, tr("Warning"), tr("No QR code has been generated."));
         return;
     }
 
     // QRコード画像をクリップボードにコピー
     QApplication::clipboard()->setImage(currentQRImage);
-    QMessageBox::information(this, tr("Copied"),
-                             tr("QRコード画像をクリップボードにコピーしました。"));
+    QMessageBox::information(this, tr("Copied"), tr("Copied the QR code image to the clipboard."));
 }
 
 void QRCodeGenerationGUI::onSaveClicked()
 {
     // 画像が生成されているかチェック
     if (currentQRImage.isNull()) {
-        QMessageBox::warning(this, tr("Warning"), tr("QRコードが生成されていません。"));
+        QMessageBox::warning(this, tr("Warning"), tr("No QR code has been generated."));
         return;
     }
 
@@ -1189,9 +1188,9 @@ void QRCodeGenerationGUI::onSaveClicked()
         // 実際にファイル保存
         if (currentQRImage.save(fileName, "PNG")) {
             QMessageBox::information(this, tr("Saved"),
-                                     tr("QRコード画像を保存しました: %1").arg(fileName));
+                                     tr("Saved the QR code image: %1").arg(fileName));
         } else {
-            QMessageBox::critical(this, tr("Error"), tr("QRコード画像の保存に失敗しました。"));
+            QMessageBox::critical(this, tr("Error"), tr("Failed to save the QR code image."));
         }
     }
 }

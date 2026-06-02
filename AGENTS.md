@@ -90,7 +90,8 @@ type: feat, fix, docs, style, refactor, test, chore, build, ci, perf
 
 ## i18n
 
-- Qt translation support for English/Japanese (`res/dev-tools_ja_JP.ts`, `res/dev-tools_en.ts`)
+- Qt translation support for English/Japanese. English is the source language; Japanese
+  translations are tracked in `res/dev-tools_ja_JP.ts`
 - Wrap all UI text with `tr()`
 - Normal builds generate `.qm` files but must not update `.ts` files
 - Update `.ts` only when translatable strings change:

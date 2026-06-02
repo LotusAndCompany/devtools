@@ -262,12 +262,11 @@ DevTools supports multiple languages using Qt translation tools:
 ```
 res/
 ├── dev-tools_ja_JP.ts    # Japanese translations
-├── dev-tools_en.ts       # English translations
 └── *.qm                  # Generated in the build directory
 ```
 
 Translation workflow:
-1. Mark strings with `tr()` in code
+1. Write source strings in English and mark them with `tr()` in code
 2. Run `cmake --build build --target update_devtools_translations` when strings change
 3. Update the tracked `.ts` translations
 4. Normal builds run `lrelease` to compile `.qm` files

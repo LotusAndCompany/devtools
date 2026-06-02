@@ -118,8 +118,8 @@ void dbMain::retranslateUi()
 {
     setWindowTitle(tr("Form"));
     toolbarGroupBox->setTitle(tr("Toolbar"));
-    refreshTableButton->setToolTip(tr("テーブル更新"));
-    connectionSettingsButton->setText(tr("DB接続設定"));
+    refreshTableButton->setToolTip(tr("Refresh Tables"));
+    connectionSettingsButton->setText(tr("DB Connection Settings"));
     addQueryTabButton->setText(tr("SQL"));
     tablesGroupBox->setTitle(tr("Tables"));
     queryGroupBox->setTitle(tr("Query"));
