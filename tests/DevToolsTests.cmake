@@ -14,7 +14,7 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt6::Test
-    ${APPLICATION_MODULE_LIST}
+    ${APPLICATION_LINK_MODULES}
 )
 target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}/tests
