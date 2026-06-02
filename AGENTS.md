@@ -10,6 +10,7 @@ This file is intentionally short. Detailed, path-scoped guidance lives in
 - Always read this file first.
 - For implementation details, consult every `.agents/rules/*.md` file whose
   `paths` front matter matches the files you will inspect or edit.
+  OpenCode loads these automatically via `opencode.json`.
 - Rules with `paths: ["**/*"]` apply globally.
 - After editing `AGENTS.md` or `.agents/rules/*.md`, run:
 

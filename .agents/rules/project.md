@@ -56,6 +56,8 @@ commit message validation, and pre-push build verification.
 
 - `AGENTS.md` is the bootstrap instruction file for all AI coding tools.
 - Path-scoped, Claude Code-like rules live in `.agents/rules/`.
+- `opencode.json` loads all `.agents/rules/*.md` via the `instructions` field.
+  It is self-maintaining — no sync step required for OpenCode.
 - Tool-specific configs should import or mirror `.agents/rules/` instead of
   duplicating guidance.
 - After editing `AGENTS.md` or `.agents/rules/*.md`, run
