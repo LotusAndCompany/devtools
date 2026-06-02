@@ -78,6 +78,13 @@ protected:
      */
     void setupApplication(QCoreApplication *app);
     /**
+     * @brief Qt標準翻訳を指定された言語へ切り替える
+     * @param app 翻訳器の親になるアプリケーション
+     * @param languageCode 新しい言語コード
+     * @return Qt標準翻訳の読み込みに成功したかどうか
+     */
+    bool loadQtTranslator(QCoreApplication *app, const QString &languageCode);
+    /**
      * @brief
      * 現在有効な[QTranslator](https://doc.qt.io/qt-6/qtranslator.html)への参照を返す
      * @return QTranslatorの参照
@@ -93,6 +100,8 @@ protected:
 private:
     /// 翻訳ファイルを読み込むオブジェクト
     QTranslator _translator;
+    /// Qt標準UI要素用の翻訳ファイルを読み込むオブジェクト
+    QTranslator *_qt_translator = nullptr;
 };
 
 #endif // APPLICATION_MIXIN_H

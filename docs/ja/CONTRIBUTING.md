@@ -81,6 +81,14 @@ devtools/
 - 意味のある変数名と関数名を使用
 - 複雑なロジックにはコメントを追加
 
+### ローカライゼーション
+
+- ユーザーに表示される source 文字列は英語で記述し、`tr()` でラップする
+- 日本語翻訳は `res/dev-tools_ja_JP.ts` で管理する
+- 英語は source 文字列を使用するため、英語用の `.ts` ファイルは追加しない
+- 翻訳対象文字列を変更した場合のみ `.ts` を更新する：
+  `cmake --build build --target update_devtools_translations`
+
 ### コードフォーマット
 
 このプロジェクトでは、自動コードフォーマットに`clang-format`、静的解析に`clang-tidy`を使用しています。

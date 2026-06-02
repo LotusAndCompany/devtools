@@ -19,7 +19,7 @@ The Database Management interface consists of:
 
 1. **Toolbar**: Action buttons for database operations
    - **Refresh** button: Reload the table list
-   - **DB接続設定** button: Open the connection settings dialog
+   - **DB Connection Settings** button: Open the connection settings dialog
    - **SQL** button: Add a new SQL query tab
 2. **Tables** panel (left): Displays a list of tables in the connected database
 3. **Query** panel (right): Tabbed area for SQL queries and table views
@@ -30,7 +30,7 @@ The Database Management interface consists of:
 
 ### Using Connection History
 
-When you click **DB接続設定**, the Connection Selector dialog opens:
+When you click **DB Connection Settings**, the Connection Selector dialog opens:
 
 1. Select a previously used connection from the **Connection History** list
 2. The connection is established automatically
@@ -43,7 +43,7 @@ You can also:
 
 ### Creating a New Connection
 
-1. Click **DB接続設定** in the toolbar
+1. Click **DB Connection Settings** in the toolbar
 2. Click **New Connection** in the Connection Selector
 3. Select the **Database Type** from the dropdown
 4. Fill in the required connection fields (see below)
@@ -100,7 +100,7 @@ Tabs are identified by table name only, not by database connection. If you switc
 ### Running a Query
 
 1. Enter your SQL statement in the text editor
-2. Click the **実行** (Execute) button
+2. Click the **Execute** button
 3. Results are displayed in the table view below
 
 ### Managing Tabs

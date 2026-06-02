@@ -257,20 +257,27 @@ CMakeLists.txt (main)
 
 ## Translation System
 
-DevTools supports multiple languages using Qt Linguist:
+DevTools supports multiple languages using Qt translation tools:
+
+Tracked translation sources:
 
 ```
 res/
-├── dev-tools_ja_JP.ts    # Japanese translations
-├── dev-tools_en.ts       # English translations
-└── dev-tools.qrc         # Resource compilation
+└── dev-tools_ja_JP.ts    # Japanese translations
+```
+
+Generated translation artifacts:
+
+```
+build/
+└── *.qm                  # Generated during normal builds
 ```
 
 Translation workflow:
-1. Mark strings with `tr()` in code
-2. Run `lupdate` to update .ts files
-3. Use Qt Linguist to translate
-4. Run `lrelease` to compile .qm files
+1. Write source strings in English and mark them with `tr()` in code
+2. Run `cmake --build build --target update_devtools_translations` when strings change
+3. Update the tracked `.ts` translations
+4. Normal builds run `lrelease` to compile `.qm` files
 
 ## Testing Architecture
 

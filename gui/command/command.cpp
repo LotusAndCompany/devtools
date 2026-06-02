@@ -93,8 +93,8 @@ void Command::buildUi()
 
 void Command::init()
 {
-    const QStringList category_items{"カテゴリ一覧", "1: Gitコマンド", "2: Dockerコマンド",
-                                     "3: DockerComposeコマンド"};
+    const QStringList category_items{tr("Categories"), tr("1: Git commands"),
+                                     tr("2: Docker commands"), tr("3: Docker Compose commands")};
 
     category_list->addItems(category_items);
 
@@ -111,92 +111,96 @@ void Command::init()
 
 QList<CommandFunction> getGitCommands()
 {
-    return {CommandFunction("git add", "変更を追加",
-                            {
-                                CommandOption("なし", true, "Path", false),
-                            }),
-            CommandFunction("git commit", "コミットを作成",
-                            {CommandOption("なし", false, "", false),
-                             CommandOption("-m", true, "メッセージ", true),
-                             CommandOption("-a", false, "", false)}),
-            CommandFunction("git log", "コミット履歴を確認",
-                            {
-                                CommandOption("なし", false, "", false),
-                            }),
-            CommandFunction("git status", "ブランチの状態確認",
-                            {
-                                CommandOption("なし", false, "", false),
-                            }),
-            CommandFunction("git diff", "差分を確認",
-                            {
-                                CommandOption("なし", true, "比較対象", false),
-                            }),
-            CommandFunction("git merge", "マージ",
-                            {CommandOption("なし", false, "", false),
-                             CommandOption("-abort", false, "", false)}),
-            CommandFunction("git remote", "リモート",
-                            {CommandOption("-v", false, "", false),
-                             CommandOption("set-url", true, "リモート名とURL", false)})};
+    return {
+        CommandFunction("git add", Command::tr("Add changes"),
+                        {
+                            CommandOption(Command::tr("None"), true, Command::tr("Path"), false),
+                        }),
+        CommandFunction("git commit", Command::tr("Create a commit"),
+                        {CommandOption(Command::tr("None"), false, "", false),
+                         CommandOption("-m", true, Command::tr("Message"), true),
+                         CommandOption("-a", false, "", false)}),
+        CommandFunction("git log", Command::tr("Show commit history"),
+                        {
+                            CommandOption(Command::tr("None"), false, "", false),
+                        }),
+        CommandFunction("git status", Command::tr("Show branch status"),
+                        {
+                            CommandOption(Command::tr("None"), false, "", false),
+                        }),
+        CommandFunction("git diff", Command::tr("Show differences"),
+                        {
+                            CommandOption(Command::tr("None"), true, Command::tr("Target"), false),
+                        }),
+        CommandFunction("git merge", Command::tr("Merge"),
+                        {CommandOption(Command::tr("None"), false, "", false),
+                         CommandOption("--abort", false, "", false)}),
+        CommandFunction(
+            "git remote", Command::tr("Remote"),
+            {CommandOption("-v", false, "", false),
+             CommandOption("set-url", true, Command::tr("Remote name and URL"), false)})};
 }
 
 QList<CommandFunction> getDockerCommands()
 {
     return {
-        CommandFunction("docker build", "ビルド",
+        CommandFunction("docker build", Command::tr("Build"),
                         {
-                            CommandOption("なし", true, "", false),
-                            CommandOption("-t", true, "名前とtag", false),
-                            CommandOption("-f", true, "ファイル", false),
+                            CommandOption(Command::tr("None"), true, "", false),
+                            CommandOption("-t", true, Command::tr("Name and tag"), false),
+                            CommandOption("-f", true, Command::tr("File"), false),
                         }),
-        CommandFunction("docker images", "イメージ一覧を表示",
+        CommandFunction("docker images", Command::tr("List images"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                             CommandOption("--all", false, "", false),
                             CommandOption("--quiet", false, "", false),
                         }),
-        CommandFunction("docker run", "コンテナの作成、実行",
+        CommandFunction("docker run", Command::tr("Create and run a container"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker image prune", "不要なイメージの削除",
+        CommandFunction("docker image prune", Command::tr("Remove unused images"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker exec", "実行中のコンテナ内でコマンドを実行",
+        CommandFunction("docker exec", Command::tr("Run a command in a running container"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker pull", "リポジトリのダウンロード",
+        CommandFunction("docker pull", Command::tr("Download an image from a repository"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker push", "リポジトリにプッシュ",
+        CommandFunction("docker push", Command::tr("Push an image to a repository"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker logs", "ログを表示",
+        CommandFunction(
+            "docker logs", Command::tr("Show logs"),
+            {
+                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
+            }),
+        CommandFunction(
+            "docker stop", Command::tr("Stop a container"),
+            {
+                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
+            }),
+        CommandFunction("docker rm", Command::tr("Remove a stopped container"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker stop", "コンテナの停止",
+        CommandFunction("docker rmi", Command::tr("Remove an image"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker rm", "停止したコンテナの削除",
+        CommandFunction("docker network ls", Command::tr("List created networks"),
                         {
-                            CommandOption("なし", true, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker rmi", "イメージの削除",
+        CommandFunction("docker volume ls", Command::tr("List created volumes"),
                         {
-                            CommandOption("なし", true, "", false),
-                        }),
-        CommandFunction("docker network ls", "作成済みのネットワーク一覧を表示",
-                        {
-                            CommandOption("なし", false, "", false),
-                        }),
-        CommandFunction("docker volume ls", "作成済みのボリューム一覧を表示",
-                        {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
     };
 }
@@ -204,45 +208,46 @@ QList<CommandFunction> getDockerCommands()
 QList<CommandFunction> getDockerComposeCommands()
 {
     return {
-        CommandFunction("docker compose build", "サービスをビルド",
+        CommandFunction("docker compose build", Command::tr("Build services"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose exec", "実行中のコンテナ内でコマンドを実行",
+        CommandFunction("docker compose exec", Command::tr("Run a command in a running container"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose up", "コンテナを起動",
+        CommandFunction("docker compose up", Command::tr("Start containers"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose down", "コンテナを停止しボリューム等を削除",
+        CommandFunction("docker compose down",
+                        Command::tr("Stop containers and remove related resources"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose restart", "コンテナを再起動",
+        CommandFunction("docker compose restart", Command::tr("Restart containers"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose stop", "コンテナを停止",
+        CommandFunction("docker compose stop", Command::tr("Stop containers"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose logs", "コンテナのログを表示",
+        CommandFunction("docker compose logs", Command::tr("Show container logs"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose ps", "コンテナのステータスを表示",
+        CommandFunction("docker compose ps", Command::tr("Show container status"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose start", "停止中のサービスを起動",
+        CommandFunction("docker compose start", Command::tr("Start stopped services"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
-        CommandFunction("docker compose kill", "コンテナを強制終了",
+        CommandFunction("docker compose kill", Command::tr("Force stop containers"),
                         {
-                            CommandOption("なし", false, "", false),
+                            CommandOption(Command::tr("None"), false, "", false),
                         }),
     };
 }
@@ -325,6 +330,7 @@ void Command::selectedFunction()
     QList<CommandOption> const optionList = commandList[selectedFunctionsIndex].getOptions();
 
     if (static_cast<int>(!optionList.empty()) != 0) {
+        text_edit->clear();
         text_label->setVisible(false);
         text_edit->setVisible(false);
         QStringList optionNames;
@@ -376,6 +382,7 @@ void Command::selectedOption()
         text_label->setVisible(true);
         text_edit->setVisible(true);
     } else {
+        text_edit->clear();
         text_label->setVisible(false);
         text_edit->setVisible(false);
     }
@@ -422,7 +429,8 @@ bool containsNoQuotes(const QString &str)
 
 void showErrorAlert()
 {
-    QMessageBox::critical(nullptr, "Error", "This value is invalid. Please check and try again.");
+    QMessageBox::critical(nullptr, Command::tr("Error"),
+                          Command::tr("This value is invalid. Please check and try again."));
 }
 
 void Command::generate()
@@ -462,10 +470,10 @@ void Command::generate()
         showErrorAlert();
     } else {
         QString command = commandList[selectedFunctionsIndex].getName();
-        if (option_list->isEnabled() && option.getName() != "なし") {
+        if (option_list->isEnabled() && option.getName() != tr("None")) {
             command += " " + option.getName();
         }
-        if (text_edit->isEnabled()) {
+        if (option.isRequired() || text_edit->isVisible()) {
             if (option.isRequiredQuotes()) {
                 command += " \"" + value1 + "\"";
             } else {

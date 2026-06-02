@@ -18,13 +18,10 @@ void ApplicationMixin::setupApplication(QCoreApplication *app)
     qDebug() << "System locale:" << locale;
 
     // Qt標準の翻訳ファイルを読み込み（ボタンやダイアログなどの標準UI要素用）
-    auto *qtTranslator = new QTranslator(app);
-    if (qtTranslator->load("qt_" + locale, QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+    if (loadQtTranslator(app, locale)) {
         qDebug() << "Loaded Qt translations for locale:" << locale;
-        QCoreApplication::installTranslator(qtTranslator);
     } else {
         qDebug() << "Could not load Qt translations for locale:" << locale;
-        delete qtTranslator;
     }
 
     // アプリケーション固有の翻訳ファイルを読み込み
@@ -34,13 +31,23 @@ void ApplicationMixin::setupApplication(QCoreApplication *app)
         QCoreApplication::installTranslator(&_translator);
     } else {
         qDebug() << "Could not load application translations:" << translationFile;
-        // 日本語をデフォルトとして試行
-        if (locale != "ja_JP" && _translator.load(":i18n/dev-tools_ja_JP.qm")) {
-            qDebug() << "Fallback to Japanese translations";
-            QCoreApplication::installTranslator(&_translator);
-        } else if (locale != "en" && _translator.load(":i18n/dev-tools_en.qm")) {
-            qDebug() << "Fallback to English translations";
-            QCoreApplication::installTranslator(&_translator);
-        }
+        qDebug() << "Fallback to source language: English";
     }
+}
+
+bool ApplicationMixin::loadQtTranslator(QCoreApplication *app, const QString &languageCode)
+{
+    if (_qt_translator == nullptr) {
+        _qt_translator = new QTranslator(app);
+    }
+
+    QCoreApplication::removeTranslator(_qt_translator);
+
+    if (_qt_translator->load("qt_" + languageCode,
+                             QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+        QCoreApplication::installTranslator(_qt_translator);
+        return true;
+    }
+
+    return false;
 }

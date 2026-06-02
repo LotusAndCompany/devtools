@@ -69,8 +69,8 @@ void SettingsDialog::buildGeneralTab()
     language_combo_box->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     language_combo_box->setMinimumSize(96, 0);
     language_combo_box->setMaximumWidth(96);
-    language_combo_box->addItem(tr("日本語"), QStringLiteral("ja_JP"));
     language_combo_box->addItem(tr("English"), QStringLiteral("en"));
+    language_combo_box->addItem(tr("Japanese"), QStringLiteral("ja_JP"));
     languageLayout->addWidget(language_combo_box);
 
     languageLayout->addSpacerItem(
@@ -87,8 +87,8 @@ void SettingsDialog::buildGeneralTab()
 
     // 翻訳可能なテキストを設定
     language_label->setText(tr("Language:"));
-    show_sidebar_on_startup_check_box->setText(tr("起動時にサイドバーを表示"));
-    show_last_tool_on_startup_check_box->setText(tr("起動時に前回使用した機能を表示"));
+    show_sidebar_on_startup_check_box->setText(tr("Show sidebar on startup"));
+    show_last_tool_on_startup_check_box->setText(tr("Open last used tool on startup"));
 }
 
 void SettingsDialog::buildWindowTab()
@@ -125,11 +125,11 @@ void SettingsDialog::retranslateUi()
     tab_widget->setTabText(1, tr("Window"));
     language_label->setText(tr("Language:"));
     if (language_combo_box->count() >= 2) {
-        language_combo_box->setItemText(0, tr("日本語"));
-        language_combo_box->setItemText(1, tr("English"));
+        language_combo_box->setItemText(0, tr("English"));
+        language_combo_box->setItemText(1, tr("Japanese"));
     }
-    show_sidebar_on_startup_check_box->setText(tr("起動時にサイドバーを表示"));
-    show_last_tool_on_startup_check_box->setText(tr("起動時に前回使用した機能を表示"));
+    show_sidebar_on_startup_check_box->setText(tr("Show sidebar on startup"));
+    show_last_tool_on_startup_check_box->setText(tr("Open last used tool on startup"));
     window_behavior_group_box->setTitle(tr("Window Behavior"));
     always_on_top_check_box->setText(tr("Always on top"));
     remember_window_size_check_box->setText(tr("Remember window size"));
@@ -160,14 +160,14 @@ void SettingsDialog::loadSettings()
     // コンボボックスのデータが空の場合、強制的に設定
     if (language_combo_box->itemData(0).toString().isEmpty()) {
         qDebug() << "Language combo data is empty, setting manually";
-        language_combo_box->setItemData(0, QStringLiteral("ja_JP"));
-        language_combo_box->setItemData(1, QStringLiteral("en"));
+        language_combo_box->setItemData(0, QStringLiteral("en"));
+        language_combo_box->setItemData(1, QStringLiteral("ja_JP"));
     }
 
     QSettings settings;
 
     // 言語設定
-    QString const language = settings.value("language", "ja_JP").toString();
+    QString const language = settings.value("language", "en").toString();
     qDebug() << "Loading language setting:" << language;
 
     qDebug() << "Language combo box has" << language_combo_box->count() << "items";
@@ -225,7 +225,7 @@ void SettingsDialog::saveSettings()
 
     // 言語設定
     QString const language = language_combo_box->currentData().toString();
-    QString const currentLanguage = settings.value("language", "ja_JP").toString();
+    QString const currentLanguage = settings.value("language", "en").toString();
     qDebug() << "SettingsDialog::saveSettings - Language change:" << currentLanguage << "->"
              << language;
     settings.setValue("language", language);

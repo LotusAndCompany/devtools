@@ -187,9 +187,31 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     #    AUTOUIC ON
     #)
 
-    qt_add_translations(${PROJECT_NAME}
-        TS_FILE_DIR res/
-        TS_FILE_BASE "dev-tools"
+    set(TRANSLATION_TS_FILES
+        res/dev-tools_ja_JP.ts
+    )
+
+    qt_collect_translation_source_targets(I18N_SOURCE_TARGETS)
+
+    qt_add_lupdate(
+        SOURCE_TARGETS ${I18N_SOURCE_TARGETS}
+        TS_FILES ${TRANSLATION_TS_FILES}
+        LUPDATE_TARGET update_devtools_translations
+        OPTIONS -locations none -no-obsolete
+        NO_GLOBAL_TARGET
+    )
+
+    qt_add_lrelease(
+        TS_FILES ${TRANSLATION_TS_FILES}
+        LRELEASE_TARGET release_devtools_translations
+        QM_FILES_OUTPUT_VARIABLE TRANSLATION_QM_FILES
+        NO_GLOBAL_TARGET
+    )
+
+    qt_add_resources(${PROJECT_NAME} "${PROJECT_NAME}_translations"
+        PREFIX "/i18n"
+        BASE "${CMAKE_CURRENT_BINARY_DIR}"
+        FILES ${TRANSLATION_QM_FILES}
     )
 else()
     # Qt5以下は使わない予定
@@ -211,11 +233,6 @@ target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
-
-# 翻訳ファイルの更新と生成を自動化
-# NOTE: 今の所動いているが、必ずしもupdate_translations→release_translationsの順に処理されるとは限らない可能性はある
-add_dependencies(${PROJECT_NAME} update_translations)
-add_dependencies(${PROJECT_NAME} release_translations)
 
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)

@@ -22,7 +22,7 @@ QueryPage::QueryPage(QWidget *parent) : QWidget(parent), model(new QSqlQueryMode
     db = QSqlDatabase::database();
 
     if (!db.open()) {
-        QMessageBox::critical(this, "DB Error", "データベースに接続できませんでした");
+        QMessageBox::critical(this, tr("DB Error"), tr("Could not connect to the database."));
         return;
     }
 
@@ -53,7 +53,7 @@ void QueryPage::buildUi()
 void QueryPage::retranslateUi()
 {
     setWindowTitle(tr("Form"));
-    executeButton->setText(tr("実行"));
+    executeButton->setText(tr("Execute"));
 }
 
 void QueryPage::executeQuery()
@@ -62,17 +62,18 @@ void QueryPage::executeQuery()
     QSqlQuery query(db);
 
     if (!query.exec(queryText)) {
-        QMessageBox::warning(this, "実行エラー", query.lastError().text());
+        QMessageBox::warning(this, tr("Execution Error"), query.lastError().text());
         return;
     }
 
     model->setQuery(std::move(query));
 
     if (model->lastError().isValid()) {
-        QMessageBox::warning(this, "結果取得エラー", model->lastError().text());
+        QMessageBox::warning(this, tr("Result Fetch Error"), model->lastError().text());
+        return;
     }
 
-    QMessageBox::information(this, "成功", "クエリを正常に実行しました");
+    QMessageBox::information(this, tr("Success"), tr("Query executed successfully."));
 }
 
 void QueryPage::changeEvent(QEvent *event)

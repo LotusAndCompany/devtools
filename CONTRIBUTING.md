@@ -81,6 +81,14 @@ devtools/
 - Use meaningful variable and function names
 - Add comments for complex logic
 
+### Localization
+
+- Write user-visible source strings in English and wrap them with `tr()`
+- Track Japanese translations in `res/dev-tools_ja_JP.ts`
+- Do not add an English `.ts` file; English uses the source text
+- Update `.ts` files only when translatable strings change:
+  `cmake --build build --target update_devtools_translations`
+
 ### Code Formatting
 
 This project uses `clang-format` for automatic code formatting and `clang-tidy` for static analysis.

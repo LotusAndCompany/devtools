@@ -90,10 +90,12 @@ type: feat, fix, docs, style, refactor, test, chore, build, ci, perf
 
 ## i18n
 
-- Qt Linguist for English/Japanese support (`res/dev-tools_ja_JP.ts`, `res/dev-tools_en.ts`)
-- Update: `/opt/homebrew/bin/lupdate -recursive . -ts res/dev-tools_en.ts res/dev-tools_ja_JP.ts`
-- Compile: `/opt/homebrew/bin/lrelease res/dev-tools_ja_JP.ts`
+- Qt translation support for English/Japanese. English is the source language; Japanese
+  translations are tracked in `res/dev-tools_ja_JP.ts`
 - Wrap all UI text with `tr()`
+- Normal builds generate `.qm` files but must not update `.ts` files
+- Update `.ts` only when translatable strings change:
+  `cmake --build build --target update_devtools_translations`
 
 ## Dependencies
 
