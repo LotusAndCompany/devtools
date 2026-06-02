@@ -29,6 +29,8 @@ AGENTS.md  (global source of truth)
     │   ├── project.md
     │   └── testing.md
     │
+    ├── opencode.json ......... loads .agents/rules/*.md via instructions glob
+    │
     ├── CLAUDE.md .............. @AGENTS.md import + author rules
     │   └── .claude/rules/ ..... thin adapters importing .agents/rules/
     │
@@ -102,6 +104,11 @@ The script regenerates:
 | `.claude/rules/*.md` | `.agents/rules/*.md` | Claude Code path-scoped adapters |
 | `GEMINI.md` generated import block | `.agents/rules/*.md` | Gemini shared rule imports |
 
+OpenCode does not require sync: `opencode.json` uses a glob pattern
+(`".agents/rules/*.md"`) in its `instructions` field, so it is
+self-maintaining — newly added or removed rule files are picked up
+automatically.
+
 Run the full harness check before opening a PR that changes the harness:
 
 ```bash
@@ -125,6 +132,22 @@ Use:
 - `docs/exec-plans/tech-debt-tracker.md` for durable follow-up items
 
 ## Tool-Specific Configurations
+
+### OpenCode
+
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Bootstrap guidelines (auto-discovered by OpenCode) |
+| `opencode.json` | Project-level config with `instructions` glob to load `.agents/rules/*.md` |
+| `~/.config/opencode/AGENTS.md` | Personal global rules (not tracked) |
+| `.opencode/` | Custom agents, commands, skills, plugins (not tracked) |
+
+**How it works**: OpenCode reads `AGENTS.md` at startup and loads all
+`.agents/rules/*.md` files via the `instructions` array in `opencode.json`.
+The glob pattern matches all shared rule files, so new or removed rules are
+automatically picked up without running the sync script. Path-scoped rules
+are loaded as general context; OpenCode relies on the front matter `paths`
+hint to decide applicability.
 
 ### Claude Code
 
@@ -187,6 +210,7 @@ When adding support for a new AI coding assistant:
 | `AGENTS.md` | All | Yes | Shared project guidelines |
 | `.agents/README.md` | All | Yes | Shared rule schema and adapter policy |
 | `.agents/rules/*.md` | All | Yes | Shared path-scoped rules |
+| `opencode.json` | OpenCode | Yes | Project config with instructions glob |
 | `CLAUDE.md` | Claude Code | Yes | Imports AGENTS.md + author rules |
 | `.claude/rules/*.md` | Claude Code | Yes | Path-scoped adapters importing shared rules |
 | `.claude/settings.local.json` | Claude Code | No | Local tool permissions |
