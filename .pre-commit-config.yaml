@@ -75,10 +75,26 @@ repos:
         name: check-merge-conflict
 
   # ===========================================================================
-  # CMake build verification (pre-push)
+  # Local project hooks
   # ===========================================================================
   - repo: local
     hooks:
+      - id: sync-agent-rules
+        name: sync-agent-rules
+        entry: scripts/sync-agent-rules.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+        files: |
+          (?x)^(
+            AGENTS\.md|
+            GEMINI\.md|
+            \.agents/README\.md|
+            \.agents/rules/.*\.md|
+            \.claude/rules/.*\.md|
+            scripts/sync-agent-rules\.py
+          )$
+
       - id: cmake-build
         name: cmake-build (pre-push)
         entry: bash scripts/pre-push-build.sh
