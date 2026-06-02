@@ -70,6 +70,7 @@ void QueryPage::executeQuery()
 
     if (model->lastError().isValid()) {
         QMessageBox::warning(this, tr("Result Fetch Error"), model->lastError().text());
+        return;
     }
 
     QMessageBox::information(this, tr("Success"), tr("Query executed successfully."));

@@ -259,10 +259,18 @@ CMakeLists.txt (main)
 
 DevTools supports multiple languages using Qt translation tools:
 
+Tracked translation sources:
+
 ```
 res/
-├── dev-tools_ja_JP.ts    # Japanese translations
-└── *.qm                  # Generated in the build directory
+└── dev-tools_ja_JP.ts    # Japanese translations
+```
+
+Generated translation artifacts:
+
+```
+build/
+└── *.qm                  # Generated during normal builds
 ```
 
 Translation workflow:

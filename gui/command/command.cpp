@@ -134,7 +134,7 @@ QList<CommandFunction> getGitCommands()
                         }),
         CommandFunction("git merge", Command::tr("Merge"),
                         {CommandOption(Command::tr("None"), false, "", false),
-                         CommandOption("-abort", false, "", false)}),
+                         CommandOption("--abort", false, "", false)}),
         CommandFunction(
             "git remote", Command::tr("Remote"),
             {CommandOption("-v", false, "", false),
@@ -176,14 +176,16 @@ QList<CommandFunction> getDockerCommands()
                         {
                             CommandOption(Command::tr("None"), true, "", false),
                         }),
-        CommandFunction("docker logs", Command::tr("Show logs"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker stop", Command::tr("Stop a container"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
+        CommandFunction(
+            "docker logs", Command::tr("Show logs"),
+            {
+                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
+            }),
+        CommandFunction(
+            "docker stop", Command::tr("Stop a container"),
+            {
+                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
+            }),
         CommandFunction("docker rm", Command::tr("Remove a stopped container"),
                         {
                             CommandOption(Command::tr("None"), true, "", false),
@@ -328,6 +330,7 @@ void Command::selectedFunction()
     QList<CommandOption> const optionList = commandList[selectedFunctionsIndex].getOptions();
 
     if (static_cast<int>(!optionList.empty()) != 0) {
+        text_edit->clear();
         text_label->setVisible(false);
         text_edit->setVisible(false);
         QStringList optionNames;
@@ -379,6 +382,7 @@ void Command::selectedOption()
         text_label->setVisible(true);
         text_edit->setVisible(true);
     } else {
+        text_edit->clear();
         text_label->setVisible(false);
         text_edit->setVisible(false);
     }
@@ -469,7 +473,7 @@ void Command::generate()
         if (option_list->isEnabled() && option.getName() != tr("None")) {
             command += " " + option.getName();
         }
-        if (text_edit->isEnabled()) {
+        if (option.isRequired() || text_edit->isVisible()) {
             if (option.isRequiredQuotes()) {
                 command += " \"" + value1 + "\"";
             } else {

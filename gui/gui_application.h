@@ -51,6 +51,13 @@ public:
 
 private:
     /**
+     * @brief アプリケーションとQt標準翻訳を指定言語へ切り替える
+     * @param languageCode 新しい言語コード（ja_JP, en など）
+     * @return 変更に成功したかどうか
+     */
+    bool applyLanguage(const QString &languageCode);
+
+    /**
      * @brief メインウィンドウ
      */
     std::unique_ptr<MainWindow> window;

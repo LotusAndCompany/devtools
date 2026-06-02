@@ -272,6 +272,10 @@
         <source>Path</source>
         <translation>パス</translation>
     </message>
+    <message>
+        <source>Container</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConnectionSelector</name>
