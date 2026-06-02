@@ -123,6 +123,17 @@ reviews:
         GitHub Actions のセキュリティ（secrets の適切な使用、permissions の最小権限）、
         キャッシュ戦略に注意してレビューしてください。
 
+    - path: ".agents/rules/**/*.md"
+      instructions: >
+        共有 AI agent rules の正本です。path frontmatter と本文が対応しているか、
+        AGENTS.md と重複しすぎていないか、変更後に scripts/sync-agent-rules.py で
+        各ツール adapter が再生成されているか確認してください。
+
+    - path: ".claude/rules/**/*.md"
+      instructions: >
+        Claude Code 用の thin adapter です。本文を直接重複させず、
+        対応する .agents/rules/*.md を参照しているか確認してください。
+
     - path: "res/**/*.ts"
       instructions: >
         Qt Linguist の翻訳ファイルです。

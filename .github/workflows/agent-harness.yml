@@ -1,0 +1,46 @@
+name: Agent Harness
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - '.agents/**'
+      - '.claude/rules/**'
+      - 'GEMINI.md'
+      - 'docs/development/ai-agent-harness.md'
+      - 'docs/exec-plans/**'
+      - 'scripts/sync-agent-rules.py'
+      - 'scripts/check-agent-harness.sh'
+      - '.github/workflows/agent-harness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - '.agents/**'
+      - '.claude/rules/**'
+      - 'GEMINI.md'
+      - 'docs/development/ai-agent-harness.md'
+      - 'docs/exec-plans/**'
+      - 'scripts/sync-agent-rules.py'
+      - 'scripts/check-agent-harness.sh'
+      - '.github/workflows/agent-harness.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check generated agent adapters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run agent harness check
+        run: scripts/check-agent-harness.sh

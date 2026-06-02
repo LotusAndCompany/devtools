@@ -37,6 +37,13 @@ Thumbs.db
 .qtc_clangd/*
 build/*
 
+# Tracked AI agent harness files
+!.claude/
+.claude/*
+!.claude/rules/
+.claude/rules/*
+!.claude/rules/*.md
+
 # qtcreator generated files
 *.pro.user*
 CMakeLists.txt.user*
@@ -68,6 +75,7 @@ CMakeLists.txt.user*
 
 # Python byte code
 *.pyc
+__pycache__/
 
 # Binaries
 # --------
