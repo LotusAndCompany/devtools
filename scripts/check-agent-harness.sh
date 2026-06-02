@@ -38,6 +38,7 @@ git diff --check -- \
   .agents \
   .claude/rules \
   GEMINI.md \
+  opencode.json \
   docs/development/ai-agent-harness.md \
   scripts/sync-agent-rules.py
 
