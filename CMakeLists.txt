@@ -258,9 +258,20 @@ set(MODULE_LIST
     ${PROJECT_NAME}_db_tool
 )
 
+set(APPLICATION_MODULE_LIST
+    ${PROJECT_NAME}_image_tools_unified
+    ${PROJECT_NAME}_phrase_generation
+    ${PROJECT_NAME}_http_request
+    ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_data_conversion
+    ${PROJECT_NAME}_qr_code_generation
+    ${PROJECT_NAME}_db_tool
+)
+
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
-    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
+    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core
+        AND NOT ${MODULE} STREQUAL ${PROJECT_NAME}_image_tools_unified)
         # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
         target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)
     endif()
@@ -311,7 +322,7 @@ add_dependencies(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${MODULE_LIST}
+    ${APPLICATION_MODULE_LIST}
 )
 
 string(TOLOWER ${CMAKE_GENERATOR} GENERATOR_LOWER)
