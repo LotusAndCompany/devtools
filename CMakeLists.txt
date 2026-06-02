@@ -390,8 +390,20 @@ install(TARGETS ${PROJECT_NAME}
 # Code Quality Tools (clang-format and clang-tidy)
 # =============================================================================
 
-find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-17 clang-format-16 clang-format-15)
-find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15)
+if(APPLE)
+    set(CLANG_FORMAT_HINTS /opt/homebrew/opt/llvm/bin /usr/local/opt/llvm/bin)
+else()
+    set(CLANG_FORMAT_HINTS)
+endif()
+find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-17 clang-format-16 clang-format-15
+    HINTS ${CLANG_FORMAT_HINTS})
+if(APPLE)
+    set(CLANG_TIDY_HINTS /opt/homebrew/opt/llvm/bin /usr/local/opt/llvm/bin)
+else()
+    set(CLANG_TIDY_HINTS)
+endif()
+find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15
+    HINTS ${CLANG_TIDY_HINTS})
 
 file(GLOB_RECURSE ALL_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/core/*.cpp
