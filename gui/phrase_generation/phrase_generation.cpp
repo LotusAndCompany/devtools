@@ -24,39 +24,14 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent), ui(new Ui
     connect(ui->titleTreeWidget, &QTreeWidget::itemClicked, this,
             &phraseGeneration::handleTitleTreeWidgetItemClick);
 
-    auto *gridLayout = new QGridLayout(this);
-
-    gridLayout->addWidget(ui->templateTitle, 0, 0, 1, 2);
-    gridLayout->addWidget(ui->deleteButton, 0, 2, 1, 1);
-    gridLayout->addWidget(ui->copyButton, 0, 3, 1, 1);
-    gridLayout->addWidget(ui->addButton, 0, 4, 1, 1);
-    gridLayout->addWidget(ui->toggleTreeButton, 0, 6, 1, 1);
-    gridLayout->addWidget(ui->line, 1, 0, 1, 7);
-    gridLayout->addWidget(ui->templateText, 2, 0, 7, 7);
-    gridLayout->addWidget(ui->titleTreeWidget, 2, 5, 7, 2);
-    gridLayout->addWidget(ui->saveButton, 8, 5, 1, 1);
-
-    // ストレッチ係数を設定
-    gridLayout->setColumnStretch(0, 3); // 左側に多くスペースを割り当てる
-    gridLayout->setColumnStretch(5, 1); // titleTreeWidget の列
-
     this->setMinimumSize(300, 200);
-
-    this->setLayout(gridLayout);
 
     ui->titleTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->titleTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->titleTreeWidget->setColumnWidth(1, 40);
+    ui->titleTreeWidget->setColumnWidth(1, 60);
 
-    // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
-    QPalette const palette = this->palette();
-    QColor const baseColor = palette.color(QPalette::Base);
-    QColor const borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
-    ui->titleTreeWidget->setStyleSheet(
-        QString("QTreeWidget::item { border-bottom: 1px solid %1; }"
-                "QTreeWidget::item:selected { background-color: #0078d7; color: "
-                "#ffffff; }")
-            .arg(borderColor.name()));
+    // スタイル適用
+    updateTreeStyle();
 
     ui->titleTreeWidget->setVisible(false);
     loadTitles();
@@ -65,6 +40,19 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent), ui(new Ui
 phraseGeneration::~phraseGeneration()
 {
     delete ui;
+}
+
+// ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
+void phraseGeneration::updateTreeStyle()
+{
+    QPalette const palette = this->palette();
+    QColor const baseColor = palette.color(QPalette::Base);
+    QColor const borderColor = (baseColor.lightness() > 128) ? Qt::black : Qt::white;
+
+    ui->titleTreeWidget->setStyleSheet(
+        QString("QTreeWidget::item { border-bottom: 1px solid %1; padding: 5px; }"
+                "QTreeWidget::item:selected { background-color: #0078d7; color: #ffffff; }")
+            .arg(borderColor.name()));
 }
 
 // カラーテーマ変更時に走る処理
@@ -209,27 +197,13 @@ void phraseGeneration::deleteContent(const QString &filename)
 
 void phraseGeneration::handleToggleTreeButtonClick()
 {
-    bool const isVisible = ui->titleTreeWidget->isVisible();
-    ui->titleTreeWidget->setVisible(!isVisible);
+    bool const nextVisible = !ui->titleTreeWidget->isVisible();
+    ui->titleTreeWidget->setVisible(nextVisible);
 
-    auto *grid = qobject_cast<QGridLayout *>(this->layout());
-    if (grid == nullptr) {
-        return;
-    }
-
-    // ボタンのテキストを切り替える
-    if (ui->titleTreeWidget->isVisible()) {
+    if (nextVisible) {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("close"));
-        this->layout()->removeWidget(ui->templateText);
-        grid->addWidget(ui->templateText, 2, 0, 7, 5);
-        this->layout()->removeWidget(ui->saveButton);
-        grid->addWidget(ui->saveButton, 8, 4, 1, 1);
     } else {
         ui->toggleTreeButton->setIcon(QIcon::fromTheme("menu"));
-        this->layout()->removeWidget(ui->templateText);
-        grid->addWidget(ui->templateText, 2, 0, 7, 7);
-        this->layout()->removeWidget(ui->saveButton);
-        grid->addWidget(ui->saveButton, 8, 5, 1, 1);
     }
 }
 

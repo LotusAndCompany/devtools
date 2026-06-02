@@ -36,6 +36,7 @@ private slots:
 
 private:
     Ui::phraseGeneration *ui;
+    void updateTreeStyle();
     void loadTitles();
     static QString loadContent(const QString &filename, QString *title = nullptr);
     static void saveContent(const QString &title, const QString &content);
