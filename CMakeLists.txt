@@ -77,6 +77,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
+        # ContentsArea instantiates feature modules, so keep it out of DevTools_core.
+        gui/contents_area.h gui/contents_area.cpp
         vcpkg.json
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
@@ -100,7 +102,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp
         gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp
         gui/sidemenu.h gui/sidemenu.cpp
-        gui/contents_area.h gui/contents_area.cpp
         gui/sidemenu_item.h gui/sidemenu_item.cpp
         gui/welcome_page.h gui/welcome_page.cpp
         gui/gui_tool.h gui/gui_tool.cpp
@@ -258,9 +259,21 @@ set(MODULE_LIST
     ${PROJECT_NAME}_db_tool
 )
 
+set(APPLICATION_MODULE_LIST
+    ${PROJECT_NAME}_image_tools_unified
+    ${PROJECT_NAME}_phrase_generation
+    ${PROJECT_NAME}_http_request
+    ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_data_conversion
+    ${PROJECT_NAME}_qr_code_generation
+    ${PROJECT_NAME}_db_tool
+)
+set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
+
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
-    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core)
+    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core
+        AND NOT ${MODULE} STREQUAL ${PROJECT_NAME}_image_tools_unified)
         # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
         target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)
     endif()
@@ -311,7 +324,7 @@ add_dependencies(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${MODULE_LIST}
+    ${APPLICATION_LINK_MODULES}
 )
 
 string(TOLOWER ${CMAKE_GENERATOR} GENERATOR_LOWER)
@@ -377,8 +390,20 @@ install(TARGETS ${PROJECT_NAME}
 # Code Quality Tools (clang-format and clang-tidy)
 # =============================================================================
 
-find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-17 clang-format-16 clang-format-15)
-find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15)
+if(APPLE)
+    set(CLANG_FORMAT_HINTS /opt/homebrew/opt/llvm/bin /usr/local/opt/llvm/bin)
+else()
+    set(CLANG_FORMAT_HINTS)
+endif()
+find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-17 clang-format-16 clang-format-15
+    HINTS ${CLANG_FORMAT_HINTS})
+if(APPLE)
+    set(CLANG_TIDY_HINTS /opt/homebrew/opt/llvm/bin /usr/local/opt/llvm/bin)
+else()
+    set(CLANG_TIDY_HINTS)
+endif()
+find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15
+    HINTS ${CLANG_TIDY_HINTS})
 
 file(GLOB_RECURSE ALL_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/core/*.cpp

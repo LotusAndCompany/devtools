@@ -11,10 +11,11 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/test_util.h tests/test_util.cpp
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
+    gui/contents_area.h gui/contents_area.cpp
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt6::Test
-    ${MODULE_LIST}
+    ${APPLICATION_LINK_MODULES}
 )
 target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}/tests
