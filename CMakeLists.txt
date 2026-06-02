@@ -77,6 +77,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
+        # ContentsArea instantiates feature modules, so keep it out of DevTools_core.
+        gui/contents_area.h gui/contents_area.cpp
         vcpkg.json
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
@@ -100,7 +102,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp
         gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp
         gui/sidemenu.h gui/sidemenu.cpp
-        gui/contents_area.h gui/contents_area.cpp
         gui/sidemenu_item.h gui/sidemenu_item.cpp
         gui/welcome_page.h gui/welcome_page.cpp
         gui/gui_tool.h gui/gui_tool.cpp
@@ -267,13 +268,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_db_tool
 )
-
-if(UNIX AND NOT APPLE)
-    list(JOIN APPLICATION_MODULE_LIST "," APPLICATION_MODULE_LINK_GROUP_LIST)
-    set(APPLICATION_LINK_MODULES "$<LINK_GROUP:RESCAN,${PROJECT_NAME}_core,${APPLICATION_MODULE_LINK_GROUP_LIST}>")
-else()
-    set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
-endif()
+set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
 
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
