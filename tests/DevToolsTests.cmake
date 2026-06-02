@@ -87,30 +87,6 @@ DevTools_add_test(test_basic_image_edit_interface
     tests/core/image/test_basic_image_edit_interface.cpp
 )
 
-# core/image/reseize
-DevTools_add_test(test_image_reisze
-    SOURCES
-    tests/core/image/resize/test_image_resize.cpp
-)
-
-# core/image/rotation
-DevTools_add_test(test_image_rotation
-    SOURCES
-    tests/core/image/rotation/test_image_rotation.cpp
-)
-
-# core/image/division
-DevTools_add_test(test_image_division
-    SOURCES
-    tests/core/image/division/test_image_division.cpp
-)
-
-# core/image/transparent
-DevTools_add_test(test_image_transparent
-    SOURCES
-    tests/core/image/transparent/test_image_transparent.cpp
-)
-
 # core/data_conversion/parser
 DevTools_add_test(test_basic_parser
     SOURCES
@@ -161,28 +137,6 @@ DevTools_add_test(test_basic_image_view
     tests/gui/image/basic/test_basic_image_view.cpp
 )
 
-# gui/image/resize
-DevTools_add_test(test_image_resize_gui
-    SOURCES
-    tests/gui/image/resize/test_image_resize_gui.cpp
-)
-
-# gui/image/rotation
-DevTools_add_test(test_image_rotation_gui
-    SOURCES
-    tests/gui/image/rotation/test_image_rotation_gui.cpp
-)
-
-# gui/image/division
-DevTools_add_test(test_image_view_for_image_division
-    SOURCES
-    tests/gui/image/division/test_image_view_for_image_division.cpp
-)
-DevTools_add_test(test_image_division_gui
-    SOURCES
-    tests/gui/image/division/test_image_division_gui.cpp
-)
-
 # gui/image/transparent
 DevTools_add_test(test_color_sample
     SOURCES
@@ -191,8 +145,4 @@ DevTools_add_test(test_color_sample
 DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
-)
-DevTools_add_test(test_image_transparent_gui
-    SOURCES
-    tests/gui/image/transparent/test_image_transparent_gui.cpp
 )

@@ -31,25 +31,10 @@ Tool::Translatable Tool::translatable(ID id)
 
     // TODO: return Translatable{tr("Tool Name"), tr("Tool description")}
     switch (id) {
-    case ID::IMAGE_RESIZE:
+    case ID::IMAGE_ALL_IN_ONE:
         return Translatable{
-            tr("Image Resize"),
-            tr("Image resizing and scaling"),
-        };
-    case ID::IMAGE_ROTATION:
-        return Translatable{
-            tr("Image Rotation"),
-            tr("Image rotation and flipping"),
-        };
-    case ID::IMAGE_DIVISION:
-        return Translatable{
-            tr("Image Division"),
-            tr("Divide image into n x m"),
-        };
-    case ID::IMAGE_TRANSPARENT:
-        return Translatable{
-            tr("Image Transparent"),
-            tr("Make the selected color transparent"),
+            tr("Image Editor"),
+            tr("Use resize, rotation, division, and transparent processing on one image"),
         };
     case ID::PHRASE_GENERATION:
         return Translatable{

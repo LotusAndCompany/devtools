@@ -18,14 +18,8 @@
     HTTP_REQUEST,               \
     /** コマンド生成 */           \
     COMMAND_GENERATION,         \
-    /** 画像リサイズ */           \
-    IMAGE_RESIZE,               \
-    /** 画像回転・反転 */         \
-    IMAGE_ROTATION,             \
-    /** 画像分割 */              \
-    IMAGE_DIVISION,             \
-    /** 画像透明化 */             \
-    IMAGE_TRANSPARENT,          \
+    /** 画像統合編集 */           \
+    IMAGE_ALL_IN_ONE,           \
     /** 画像トリミング */         \
     IMAGE_TRIM,                 \
     /** 画像結合・重ね合わせ */    \

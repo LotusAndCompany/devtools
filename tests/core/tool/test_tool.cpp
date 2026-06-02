@@ -23,11 +23,8 @@ void TestTool::test_validateID()
     // Tool::ID::MINが失敗すること
     QVERIFY_THROWS_EXCEPTION(exception_type, Tool::validateID(Tool::ID::MIN));
 
-    // Tool::ID::IMAGE_RESIZEが成功すること
-    QVERIFY_THROWS_NO_EXCEPTION(Tool::validateID(Tool::ID::IMAGE_RESIZE));
-
-    // Tool::ID::IMAGE_ROTATIONが成功すること
-    QVERIFY_THROWS_NO_EXCEPTION(Tool::validateID(Tool::ID::IMAGE_ROTATION));
+    // Tool::ID::IMAGE_ALL_IN_ONEが成功すること
+    QVERIFY_THROWS_NO_EXCEPTION(Tool::validateID(Tool::ID::IMAGE_ALL_IN_ONE));
 
     // Tool::ID::MAXが失敗すること
     QVERIFY_THROWS_EXCEPTION(exception_type, Tool::validateID(Tool::ID::MAX));

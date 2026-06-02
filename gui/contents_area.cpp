@@ -2,17 +2,10 @@
 
 #include "api_tool.h"
 #include "core/data_conversion/data_conversion.h"
-#include "core/image/division/image_division.h"
-#include "core/image/resize/image_resize.h"
-#include "core/image/rotation/image_rotation.h"
-#include "core/image/transparent/image_transparent.h"
 #include "gui/command/command.h"
 #include "gui/data_conversion/data_conversion_gui.h"
 #include "gui/db_tool/main/db_main.h"
-#include "gui/image/division/image_division_gui.h"
-#include "gui/image/resize/image_resize_gui.h"
-#include "gui/image/rotation/image_rotation_gui.h"
-#include "gui/image/transparent/image_transparent_gui.h"
+#include "gui/image/basic/image_tools_unified_gui.h"
 #include "gui/qr_code/qr_code_generation_gui.h"
 #include "gui/welcome_page.h"
 #include "phrase_generation/phrase_generation.h"
@@ -65,17 +58,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::WELCOME:
         content = new WelcomePage(this);
         break;
-    case Sidemenu::ID::IMAGE_RESIZE:
-        content = new ImageResizeGUI(new ImageResize(), this);
-        break;
-    case Sidemenu::ID::IMAGE_ROTATION:
-        content = new ImageRotationGUI(new ImageRotation(), this);
-        break;
-    case Sidemenu::ID::IMAGE_DIVISION:
-        content = new ImageDivisionGUI(new ImageDivision(), this);
-        break;
-    case Sidemenu::ID::IMAGE_TRANSPARENT:
-        content = new ImageTransparentGUI(new ImageTransparent(), this);
+    case Sidemenu::ID::IMAGE_ALL_IN_ONE:
+        content = new ImageToolsUnifiedGUI(this);
         break;
     case Sidemenu::ID::PHRASE_GENERATION:
         content = new phraseGeneration(this);
