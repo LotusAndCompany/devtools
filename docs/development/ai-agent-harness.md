@@ -1,48 +1,128 @@
 # AI Agent Harness
 
-This document describes the cross-tool AI agent configuration used in this project. Multiple AI coding assistants share a single source of truth while retaining tool-specific settings where needed.
+This document describes the cross-tool AI agent configuration used in this project. Multiple AI coding assistants share global and path-scoped guidance while retaining tool-specific settings where needed.
 
 ## Overview
 
 AI coding tools (Claude Code, Gemini CLI, OpenAI Codex, CodeRabbit, etc.) each have their own configuration format. Rather than maintaining duplicate guidelines in every tool's config, this project uses a layered architecture:
 
-1. **AGENTS.md** — shared guidelines that all tools can read
-2. **Tool-specific configs** — import or reference AGENTS.md, adding only tool-unique settings
+1. **AGENTS.md** — shared global guidelines that all tools can read
+2. **.agents/rules/** — shared path-scoped rules with a Claude Code-like shape
+3. **Tool-specific configs** — import or reference shared files, adding only tool-unique settings
 
-This means a change to AGENTS.md immediately benefits every tool.
+This means a global change to AGENTS.md, or a path-scoped change in `.agents/rules/`, can benefit every configured tool after running `scripts/sync-agent-rules.py`.
 
 ## Architecture
 
 ```text
-AGENTS.md  (single source of truth)
+AGENTS.md  (global source of truth)
+    │
+    ├── .agents/rules/ ........ shared path-scoped rules
+    │   ├── cmake.md
+    │   ├── cpp-style.md
+    │   ├── design-files.md
+    │   ├── docs.md
+    │   ├── exec-plans.md
+    │   ├── generated-files.md
+    │   ├── git-workflow.md
+    │   ├── i18n.md
+    │   ├── project.md
+    │   └── testing.md
     │
     ├── CLAUDE.md .............. @AGENTS.md import + author rules
-    │   └── .claude/rules/ ..... domain-scoped rules (C++, CMake, docs, git)
+    │   └── .claude/rules/ ..... thin adapters importing .agents/rules/
     │
-    ├── GEMINI.md .............. @AGENTS.md import + author rules
+    ├── GEMINI.md .............. @AGENTS.md + .agents/rules/ imports + author rules
     │   └── .gemini/settings.json .. fileName reference to GEMINI.md
-    │
     ├── .codex/config.toml ..... project settings (native AGENTS.md discovery)
     │   └── .codex/rules/ ...... command execution control (Starlark)
     │
-    └── .coderabbit.yaml ....... independent config, aligned with AGENTS.md
+    └── .coderabbit.yaml ....... independent config, aligned with shared guidance
 ```
 
-## Shared Guidelines (AGENTS.md)
+## Bootstrap Guidelines (AGENTS.md)
 
-`AGENTS.md` at the repository root contains project-wide guidelines:
+`AGENTS.md` at the repository root is intentionally short. It contains:
 
-- Build commands (CMake, make, ctest)
-- Code formatting rules (clang-format, editorconfig)
-- Naming conventions (PascalCase, camelCase, snake_case)
-- Architecture overview (core/ vs gui/ separation)
-- Qt conventions (signal/slot syntax, parent ownership, tr())
-- Git workflow (Conventional Commits, branch naming, PR rules)
-- i18n setup (Qt translation tools)
-- Dependencies (vcpkg, Qt6, bundled libraries)
-- Pre-commit hooks
+- a project summary
+- instructions for loading `.agents/rules/*.md`
+- a rule index
+- critical guardrails that should remain visible before any path-specific rule
+  is selected
 
-**Update policy**: Always update AGENTS.md first. Tool-specific configs should never duplicate content that belongs in the shared file.
+**Update policy**: Put detailed guidance in `.agents/rules/`. Keep `AGENTS.md`
+as a bootstrap file unless a rule must be visible before path matching happens.
+Tool-specific configs should never duplicate content that belongs in the shared
+files.
+
+## Shared Path-Scoped Rules
+
+`.agents/rules/` stores reusable rule files with Markdown front matter:
+
+```yaml
+---
+paths:
+  - "**/*.cpp"
+  - "**/*.h"
+---
+```
+
+The `paths` list describes when the rule applies. Tools that support native
+path-scoped rules can import or adapt these files directly. Tools that cannot
+activate rules by path should load them as general context and use the `paths`
+front matter as an instruction hint.
+
+Current shared rules:
+
+| File | Purpose |
+|------|---------|
+| `.agents/rules/cmake.md` | CMake module, dependency, and test registration rules |
+| `.agents/rules/cpp-style.md` | C++17, Qt, ownership, and formatting rules |
+| `.agents/rules/design-files.md` | Pencil `.pen` design file handling |
+| `.agents/rules/docs.md` | English/Japanese documentation rules |
+| `.agents/rules/exec-plans.md` | Execution plan and tech-debt tracker rules |
+| `.agents/rules/generated-files.md` | Build outputs and generated file handling |
+| `.agents/rules/git-workflow.md` | Conventional Commits and release-please guardrails |
+| `.agents/rules/i18n.md` | Qt translation workflow |
+| `.agents/rules/project.md` | Build, architecture, dependencies, hooks, and harness rules |
+| `.agents/rules/testing.md` | Google Test and CTest rules |
+
+## Sync Workflow
+
+Run the sync script after changing `AGENTS.md` or `.agents/rules/*.md`:
+
+```bash
+scripts/sync-agent-rules.py
+```
+
+The script regenerates:
+
+| Output | Source | Purpose |
+|--------|--------|---------|
+| `.claude/rules/*.md` | `.agents/rules/*.md` | Claude Code path-scoped adapters |
+| `GEMINI.md` generated import block | `.agents/rules/*.md` | Gemini shared rule imports |
+
+Run the full harness check before opening a PR that changes the harness:
+
+```bash
+scripts/check-agent-harness.sh
+```
+
+The check syncs adapters, compiles the sync script, checks diff whitespace, and
+fails if generated adapters are stale.
+
+## Execution Plans
+
+Complex or long-running agent work should use checked-in execution plans under
+`docs/exec-plans/`. Plans are intentionally lighter than formal specifications;
+they preserve objective, scope, relevant rules, validation commands, decisions,
+and completion notes across tool sessions and context compaction.
+
+Use:
+
+- `docs/exec-plans/active/` for work in progress
+- `docs/exec-plans/completed/` for useful historical plans
+- `docs/exec-plans/tech-debt-tracker.md` for durable follow-up items
 
 ## Tool-Specific Configurations
 
@@ -51,22 +131,19 @@ AGENTS.md  (single source of truth)
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Imports AGENTS.md via `@AGENTS.md`, adds author attribution rules |
-| `.claude/rules/cpp-style.md` | C++17 style rules, scoped to `*.cpp, *.h, *.hpp` |
-| `.claude/rules/cmake.md` | CMake conventions, scoped to `CMakeLists.txt` |
-| `.claude/rules/docs.md` | Bilingual documentation rules, scoped to `docs/**` |
-| `.claude/rules/git-workflow.md` | Conventional Commits and branch naming rules |
+| `.claude/rules/*.md` | Path-scoped adapters that import matching `.agents/rules/*.md` files |
 | `.claude/settings.local.json` | Tool permissions (local, not committed) |
 
-**How it works**: Claude Code reads `CLAUDE.md` at startup, which uses `@AGENTS.md` to inline the shared guidelines. The `.claude/rules/` directory provides domain-specific rules that activate only when working on matching file paths.
+**How it works**: Claude Code reads `CLAUDE.md` at startup, which uses `@AGENTS.md` to inline the shared global guidelines. The `.claude/rules/` directory provides path-scoped adapters; each adapter keeps Claude's `paths` front matter and imports the matching shared rule from `.agents/rules/`.
 
 ### Gemini CLI
 
 | File | Purpose |
 |------|---------|
-| `GEMINI.md` | Imports AGENTS.md via `@AGENTS.md`, adds author attribution rules |
+| `GEMINI.md` | Imports AGENTS.md and `.agents/rules/*.md`, adds author attribution rules |
 | `.gemini/settings.json` | Points Gemini to read `GEMINI.md` as context |
 
-**How it works**: Gemini CLI reads `GEMINI.md` at startup, which uses `@AGENTS.md` to inline the shared guidelines. The `context.fileName` array in `.gemini/settings.json` tells Gemini CLI which files to load as persistent context.
+**How it works**: Gemini CLI reads `GEMINI.md` at startup. `GEMINI.md` imports `AGENTS.md` and each shared rule file. Gemini does not need its own path-scoped rule directory; it should use the `paths` front matter in shared rules as the applicability hint.
 
 ### OpenAI Codex
 
@@ -75,7 +152,7 @@ AGENTS.md  (single source of truth)
 | `.codex/config.toml` | Project-level settings (approval mode) |
 | `.codex/rules/project.rules` | Command execution control (Starlark) |
 
-**How it works**: Codex discovers `AGENTS.md` natively by walking the directory tree from the git root. No explicit reference is needed. The `.codex/config.toml` sets project defaults (e.g., `approval_mode`), and `.codex/rules/` controls which shell commands Codex can run without user approval.
+**How it works**: Codex discovers `AGENTS.md` natively by walking the directory tree from the git root. `AGENTS.md` points Codex to `.agents/rules/` for shared path-scoped guidance. The `.codex/config.toml` sets project defaults (e.g., `approval_mode`), and `.codex/rules/` controls which shell commands Codex can run without user approval.
 
 The rules file uses Starlark `prefix_rule()` to classify commands:
 - **allow** — build, test, format, read-only git operations
@@ -88,30 +165,37 @@ The rules file uses Starlark `prefix_rule()` to classify commands:
 |------|---------|
 | `.coderabbit.yaml` | PR review configuration with path-based instructions |
 
-**How it works**: CodeRabbit is a GitHub PR review bot. It does not read AGENTS.md directly, but its `path_instructions` section mirrors the same coding standards. It is configured independently but kept aligned with AGENTS.md.
+**How it works**: CodeRabbit is a GitHub PR review bot. It does not read AGENTS.md directly, but its `path_instructions` section mirrors the same coding standards. It is configured independently but kept aligned with AGENTS.md and `.agents/rules/`.
+
+When changing `.agents/rules/`, update `.coderabbit.yaml` if the same guidance
+should appear in PR review comments.
 
 ## Adding a New AI Tool
 
 When adding support for a new AI coding assistant:
 
-1. **Check native AGENTS.md support** — Many tools (Codex, Gemini CLI, Cursor, GitHub Copilot) can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
-2. **Create a tool-specific config** — Only add settings that are unique to the tool (e.g., permission models, approval modes, author attribution rules).
-3. **Do not duplicate AGENTS.md content** — The tool-specific config should reference or import the shared guidelines, not copy them.
-4. **Update this document** — Add the new tool to the Architecture diagram and Tool-Specific Configurations section.
+1. **Check native AGENTS.md support** — Many tools (Codex, Gemini CLI, etc.) can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
+2. **Create a thin adapter** — If the tool supports path-scoped rules, adapt `.agents/rules/` rather than writing new guidance.
+3. **Create tool-specific config only for tool behavior** — Permission models, approval modes, author attribution rules, and UI settings belong in tool-specific files.
+4. **Do not duplicate shared content** — The tool-specific config should reference or import shared guidance where possible.
+5. **Update this document** — Add the new tool to the Architecture diagram and Tool-Specific Configurations section.
 
 ## File Reference
 
 | File | Tool | Tracked | Description |
 |------|------|---------|-------------|
 | `AGENTS.md` | All | Yes | Shared project guidelines |
+| `.agents/README.md` | All | Yes | Shared rule schema and adapter policy |
+| `.agents/rules/*.md` | All | Yes | Shared path-scoped rules |
 | `CLAUDE.md` | Claude Code | Yes | Imports AGENTS.md + author rules |
-| `.claude/rules/*.md` | Claude Code | Yes | Domain-scoped rules |
+| `.claude/rules/*.md` | Claude Code | Yes | Path-scoped adapters importing shared rules |
 | `.claude/settings.local.json` | Claude Code | No | Local tool permissions |
-| `GEMINI.md` | Gemini CLI | Yes | Imports AGENTS.md + author rules |
+| `GEMINI.md` | Gemini CLI | Yes | Imports AGENTS.md, shared rules, and author rules |
 | `.gemini/settings.json` | Gemini CLI | Yes | Context file reference |
 | `.codex/config.toml` | OpenAI Codex | Yes | Project settings |
 | `.codex/rules/*.rules` | OpenAI Codex | Yes | Command execution rules |
 | `.coderabbit.yaml` | CodeRabbit | Yes | PR review configuration |
+| `scripts/sync-agent-rules.py` | All | Yes | Regenerates tool-specific adapters from shared rules |
 
 ## Related Documentation
 
