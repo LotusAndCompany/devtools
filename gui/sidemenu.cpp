@@ -116,6 +116,9 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
     case ID::QR_CODE_GENERATION:
         iconNames = {"qr_code", "insert-link"};
         break;
+    case ID::REGEX_TESTER:
+        iconName = "search";
+        break;
 
     default:
         throw UnderDevelopmentException();

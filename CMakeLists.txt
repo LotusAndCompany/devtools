@@ -134,6 +134,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
     )
 
+    # regex_tester
+    qt_add_library(${PROJECT_NAME}_regex_tester STATIC
+        core/regex_tool/regex_tool.h core/regex_tool/regex_tool.cpp
+        gui/regex_tool/regex_tester_gui.h gui/regex_tool/regex_tester_gui.cpp
+    )
+
     # image
     qt_add_library(${PROJECT_NAME}_image_core STATIC
         core/image/basic_image_io.h core/image/basic_image_io.cpp
@@ -268,6 +274,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_regex_tester
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_db_tool

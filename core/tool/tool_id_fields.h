@@ -31,7 +31,9 @@
     /** DBツール */              \
     DB_TOOL,                     \
     /** QRコード生成 */           \
-    QR_CODE_GENERATION            // 末尾のカンマは不要
+    QR_CODE_GENERATION,          \
+    /** 正規表現テスター */        \
+    REGEX_TESTER                  // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

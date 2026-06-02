@@ -7,6 +7,7 @@
 #include "gui/db_tool/main/db_main.h"
 #include "gui/image/basic/image_tools_unified_gui.h"
 #include "gui/qr_code/qr_code_generation_gui.h"
+#include "gui/regex_tool/regex_tester_gui.h"
 #include "gui/welcome_page.h"
 #include "phrase_generation/phrase_generation.h"
 
@@ -83,6 +84,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::QR_CODE_GENERATION:
         content = new QRCodeGenerationGUI(this);
+        break;
+    case Sidemenu::ID::REGEX_TESTER:
+        content = new devtools::RegexTesterGUI(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

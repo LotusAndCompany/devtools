@@ -153,3 +153,13 @@ DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
 )
+DevTools_add_test(test_image_transparent_gui
+    SOURCES
+    tests/gui/image/transparent/test_image_transparent_gui.cpp
+)
+
+# core/regex_tool
+DevTools_add_test(test_regex_tool
+    SOURCES
+    tests/core/regex_tool/test_regex_tool.cpp
+)

@@ -398,6 +398,9 @@
 <context>
     <name>DataConversion</name>
     <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1103,8 +1106,9 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <source>Show sidebar on startup</source>
-        <translation>起動時にサイドバーを表示</translation>
+        <location filename="../gui/sidemenu.cpp" line="+159"/>
+        <source>Search tools</source>
+        <translation>ツールを探す</translation>
     </message>
     <message>
         <source>Open last used tool on startup</source>
@@ -1169,6 +1173,21 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>データベース関連の機能を提供します</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <source>Regex Tester</source>
+        <translation>正規表現テスター</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Test and debug regular expressions</source>
+        <translation>正規表現のテストとデバッグを行います</translation>
+    </message>
+    <message>
+        <source>Command Genration</source>
+        <translation type="vanished">コマンド生成</translation>
+    </message>
+    <message>
+        <location line="-4"/>
         <source>Generate QR codes from text or URLs</source>
         <translation>テキストやURLからQRコードを生成</translation>
     </message>
@@ -1311,6 +1330,72 @@ Choose a tool from the side panel</source>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
+</context>
+<context>
+    <name>devtools::RegexTesterGUI</name>
+    <message>
+        <location filename="../gui/regex_tool/regex_tester_gui.cpp" line="+70"/>
+        <source>Regular Expression Pattern</source>
+        <translation>正規表現パターン</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Case Insensitive</source>
+        <translation>大文字小文字を区別しない</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Multiline</source>
+        <translation>複数行マッチ</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Dot matches all (Singleline)</source>
+        <translation>ドット(.)を改行にマッチさせる</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Unicode</source>
+        <translation>Unicode</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Test Text</source>
+        <translation>テストテキスト</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Enter text to test against...</source>
+        <translation>テストするテキストを入力してください...</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Match Results</source>
+        <translation>マッチ結果</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Replacement String</source>
+        <translation>置換文字列</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Copy Result</source>
+        <translation>結果をコピー</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Replacement result will appear here...</source>
+        <translation>置換結果がここに表示されます...</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>No matches</source>
+        <translation>マッチしませんでした</translation>
+    </message>
+</context>
+<context>
+    <name>home</name>
     <message>
         <source>Refresh Tables</source>
         <translation>テーブル更新</translation>
