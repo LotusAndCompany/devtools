@@ -4,11 +4,12 @@
 #include <QWidget>
 
 class QFrame;
+class QLabel;
 class QLineEdit;
 class QPlainTextEdit;
 class QPushButton;
-class QTreeWidget;
-class QTreeWidgetItem;
+class QScrollArea;
+class QVBoxLayout;
 
 class phraseGeneration : public QWidget
 {
@@ -29,7 +30,6 @@ private slots:
     void handleCopyButtonClick();
     void handleDeleteButtonClick();
     void handleToggleTreeButtonClick();
-    void handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column);
     void copyContent();
 
 private:
@@ -38,9 +38,9 @@ private:
     void createBodyWidgets();
     void layoutWidgets();
     void retranslateUi();
-    void adjustTreeColumnWidth();
-    void applyToggleButtonIcon(const QString &theme_name, const QString &fallback_text);
+    void applyStyles();
     void loadTitles();
+    void onListItemClicked(QFrame *item);
     static QString loadContent(const QString &filename, QString *title = nullptr);
     static void saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &filename);
@@ -50,15 +50,23 @@ private:
     QPushButton *copy_button{nullptr};
     QPushButton *add_button{nullptr};
     QPushButton *toggle_tree_button{nullptr};
-    QFrame *line{nullptr};
+    QFrame *toolbar_frame{nullptr};
+    QFrame *editor_frame{nullptr};
     QPlainTextEdit *template_text{nullptr};
-    QTreeWidget *title_tree_widget{nullptr};
     QPushButton *save_button{nullptr};
+    QWidget *sidebar_container{nullptr};
+    QFrame *list_header{nullptr};
+    QLabel *list_header_label{nullptr};
+    QScrollArea *list_scroll{nullptr};
+    QWidget *list_content{nullptr};
+    QVBoxLayout *list_layout{nullptr};
+    QFrame *current_list_item{nullptr};
 
-    QString currentFile; // 現在のファイル名を保持
+    QString currentFile;
 
 protected:
     void changeEvent(QEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // PHRASE_GENERATION_H

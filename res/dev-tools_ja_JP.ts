@@ -1354,5 +1354,9 @@ Choose a tool from the side panel</source>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
+    <message>
+        <source>Saved Phrases</source>
+        <translation>保存済み定型文</translation>
+    </message>
 </context>
 </TS>

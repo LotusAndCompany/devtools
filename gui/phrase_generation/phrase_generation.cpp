@@ -6,55 +6,170 @@
 #include <QFile>
 #include <QFont>
 #include <QFrame>
-#include <QGridLayout>
-#include <QHeaderView>
-#include <QIcon>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QMouseEvent>
 #include <QPalette>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QSizePolicy>
+#include <QStyle>
 #include <QTextStream>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QUuid>
+#include <QVBoxLayout>
 
 #include <algorithm>
 
 namespace {
-const char *const SAVE_BUTTON_STYLE =
-    "margin-right: 30px;\n"
-    "margin-bottom: 15px;\n"
-    "padding-top: 3px;\n"
-    "padding-bottom: 3px;\n"
-    "padding-left: 10px;\n"
-    "padding-right: 10px;\n"
-    "border-radius: 6px;\n"
-    "background-color: rgb(175, 174, 177);";
-const char *const TEMPLATE_TITLE_STYLE = "QLineEdit {\n    padding: 2px 0px 2px 2px;\n}";
-const char *const TEMPLATE_TEXT_STYLE = "QPlainTextEdit {\n    padding: 0px 0px 5px 0px;\n}";
 
 constexpr int DEFAULT_WIDTH = 1012;
 constexpr int DEFAULT_HEIGHT = 633;
 constexpr int MIN_WIDTH = 300;
 constexpr int MIN_HEIGHT = 200;
-constexpr int TREE_FIXED_COLUMN_WIDTH = 40;
-constexpr int TREE_COLUMN_PADDING = 8;
 constexpr int LIGHTNESS_THRESHOLD = 128;
+constexpr int TREE_SIDEBAR_WIDTH = 320;
+constexpr int LIST_ITEM_SPACING = 4;
 
-constexpr int TITLE_FONT_POINTSIZE = 28;
-constexpr int TEXT_FONT_POINTSIZE = 20;
-constexpr int ADD_FONT_POINTSIZE = 30;
-constexpr int TOGGLE_FONT_POINTSIZE = 27;
+constexpr int TITLE_FONT_POINTSIZE = 16;
+constexpr int TEXT_FONT_POINTSIZE = 14;
+constexpr int BTN_HEIGHT = 40;
 
-QString treeStyleSheet(const QColor &border_color)
+QString darkButtonStyleSheet()
 {
-    return QString(
-               "QTreeWidget::item { border-bottom: 1px solid %1; padding: 5px; }"
-               "QTreeWidget::item:selected { background-color: #0078d7; color: "
-               "#ffffff; }")
-        .arg(border_color.name());
+    return QStringLiteral(
+        "QPushButton {"
+        "  background-color: transparent;"
+        "  border: 1px solid #B8B9B6;"
+        "  border-radius: 6px;"
+        "  padding: 10px 16px;"
+        "  color: #FFFFFF;"
+        "  font-size: 14px;"
+        "}"
+        "QPushButton:hover { background-color: #2E2E2E; }");
+}
+
+QString darkTitleStyleSheet()
+{
+    return QStringLiteral(
+        "QLineEdit {"
+        "  border: 1px solid #2E2E2E;"
+        "  border-radius: 20px;"
+        "  padding: 8px 16px;"
+        "  background-color: #111111;"
+        "  color: #FFFFFF;"
+        "  font-size: 16px;"
+        "}");
+}
+
+QString darkEditorStyleSheet()
+{
+    return QStringLiteral(
+        "#editorFrame {"
+        "  border: 1px solid #2E2E2E;"
+        "  border-radius: 16px;"
+        "  background-color: #1A1A1A;"
+        "}"
+        "QPlainTextEdit {"
+        "  border: none;"
+        "  background-color: transparent;"
+        "  color: #B8B9B6;"
+        "  font-size: 14px;"
+        "  padding: 16px;"
+        "}");
+}
+
+QString darkToolbarStyleSheet()
+{
+    return QStringLiteral(
+        "#toolbarFrame {"
+        "  border-bottom: 1px solid #2E2E2E;"
+        "  background-color: transparent;"
+        "}");
+}
+
+QString darkSidebarStyleSheet()
+{
+    return QStringLiteral(
+        "#sidebarContainer {"
+        "  border-left: 1px solid #2E2E2E;"
+        "  background-color: #111111;"
+        "}"
+        "#listHeader {"
+        "  border-bottom: 1px solid #2E2E2E;"
+        "  background-color: transparent;"
+        "}"
+        "#listHeader QLabel {"
+        "  color: #FFFFFF;"
+        "}");
+}
+
+QString darkListItemStyleSheet()
+{
+    return QStringLiteral(
+        "QFrame[filename] {"
+        "  background-color: #383838;"
+        "  border-radius: 8px;"
+        "}"
+        "QFrame[filename][selected=true] {"
+        "  background-color: #4A4A4A;"
+        "}"
+        "QLabel#itemTitle {"
+        "  color: #FFFFFF;"
+        "  font-size: 14px;"
+        "  background: transparent;"
+        "}"
+        "QPushButton#itemCopyBtn {"
+        "  background: transparent;"
+        "  border: 1px solid #B8B9B6;"
+        "  border-radius: 4px;"
+        "  padding: 4px 10px;"
+        "  color: #B8B9B6;"
+        "  font-size: 12px;"
+        "}"
+        "QPushButton#itemCopyBtn:hover {"
+        "  background-color: #4A4A4A;"
+        "  color: #FFFFFF;"
+        "}");
+}
+
+QString lightListItemStyleSheet()
+{
+    return QStringLiteral(
+        "QFrame[filename] {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 8px;"
+        "  background-color: palette(base);"
+        "}"
+        "QFrame[filename][selected=true] {"
+        "  background-color: #0078d7;"
+        "}"
+        "QLabel#itemTitle {"
+        "  color: palette(text);"
+        "  background: transparent;"
+        "  font-size: 14px;"
+        "}"
+        "QPushButton#itemCopyBtn {"
+        "  background: transparent;"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  padding: 4px 10px;"
+        "  color: palette(text);"
+        "  font-size: 12px;"
+        "}"
+        "QPushButton#itemCopyBtn:hover {"
+        "  background-color: palette(highlight);"
+        "}");
+}
+
+QSizePolicy makePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy vertical)
+{
+    QSizePolicy policy(horizontal, vertical);
+    policy.setHorizontalStretch(0);
+    policy.setVerticalStretch(0);
+    return policy;
 }
 } // namespace
 
@@ -68,35 +183,12 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
     connect(delete_button, &QPushButton::clicked, this, &phraseGeneration::handleDeleteButtonClick);
     connect(toggle_tree_button, &QPushButton::clicked, this,
             &phraseGeneration::handleToggleTreeButtonClick);
-    connect(title_tree_widget, &QTreeWidget::itemClicked, this,
-            &phraseGeneration::handleTitleTreeWidgetItemClick);
 
     setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
 
-    title_tree_widget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    title_tree_widget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-    adjustTreeColumnWidth();
-
-    // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
-    QPalette const palette = this->palette();
-    QColor const baseColor = palette.color(QPalette::Base);
-    QColor const borderColor =
-        (baseColor.lightness() > LIGHTNESS_THRESHOLD) ? Qt::black : Qt::white;
-    title_tree_widget->setStyleSheet(treeStyleSheet(borderColor));
-
-    title_tree_widget->setVisible(false);
+    applyStyles();
     loadTitles();
 }
-
-namespace {
-QSizePolicy makePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy vertical)
-{
-    QSizePolicy policy(horizontal, vertical);
-    policy.setHorizontalStretch(0);
-    policy.setVerticalStretch(0);
-    return policy;
-}
-} // namespace
 
 void phraseGeneration::buildUi()
 {
@@ -128,149 +220,172 @@ void phraseGeneration::retranslateUi()
     toggle_tree_button->setAccessibleName(toggle_label);
     toggle_tree_button->setAccessibleDescription(toggle_label);
 
-    // 各 tree item の Copy ボタンも再翻訳
-    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *item = title_tree_widget->topLevelItem(i);
-        auto *btn = qobject_cast<QPushButton *>(title_tree_widget->itemWidget(item, 1));
-        if (btn != nullptr) {
-            btn->setText(tr("Copy"));
+    list_header_label->setText(tr("Saved Phrases"));
+
+    for (int i = 0; i < list_layout->count(); ++i) {
+        QLayoutItem *layoutItem = list_layout->itemAt(i);
+        if (layoutItem == nullptr || layoutItem->widget() == nullptr) {
+            continue;
+        }
+        auto *frame = qobject_cast<QFrame *>(layoutItem->widget());
+        if (frame == nullptr) {
+            continue;
+        }
+        auto *copy_btn = frame->findChild<QPushButton *>(QStringLiteral("itemCopyBtn"));
+        if (copy_btn != nullptr) {
+            copy_btn->setText(tr("Copy"));
         }
     }
-}
-
-void phraseGeneration::adjustTreeColumnWidth()
-{
-    // 翻訳された Copy ボタンが切れないように sample の sizeHint から算出する
-    QPushButton const sample(tr("Copy"));
-    int const min_width =
-        std::max(TREE_FIXED_COLUMN_WIDTH, sample.sizeHint().width() + TREE_COLUMN_PADDING);
-    title_tree_widget->setColumnWidth(1, min_width);
 }
 
 void phraseGeneration::createTopBarWidgets()
 {
-    template_title = new QLineEdit(this);
+    toolbar_frame = new QFrame(this);
+    toolbar_frame->setObjectName(QStringLiteral("toolbarFrame"));
+    toolbar_frame->setFixedHeight(56);
+
+    template_title = new QLineEdit(toolbar_frame);
     template_title->setObjectName(QStringLiteral("templateTitle"));
     template_title->setEnabled(true);
+    template_title->setFixedHeight(BTN_HEIGHT);
     {
         QFont font;
         font.setPointSize(TITLE_FONT_POINTSIZE);
+        font.setWeight(QFont::DemiBold);
         template_title->setFont(font);
     }
-    template_title->setStyleSheet(QString::fromUtf8(TEMPLATE_TITLE_STYLE));
 
-    delete_button = new QPushButton(this);
-    delete_button->setObjectName(QStringLiteral("deleteButton"));
-    delete_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
+    auto createButton = [this](const QString &objName) -> QPushButton * {
+        auto *btn = new QPushButton(toolbar_frame);
+        btn->setObjectName(objName);
+        btn->setFixedHeight(BTN_HEIGHT);
+        btn->setCursor(Qt::PointingHandCursor);
+        return btn;
+    };
 
-    copy_button = new QPushButton(this);
-    copy_button->setObjectName(QStringLiteral("copyButton"));
-    copy_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
+    delete_button = createButton(QStringLiteral("deleteButton"));
+    copy_button = createButton(QStringLiteral("copyButton"));
+    add_button = createButton(QStringLiteral("addButton"));
+    add_button->setText(QStringLiteral("+"));
 
-    add_button = new QPushButton(this);
-    add_button->setObjectName(QStringLiteral("addButton"));
-    add_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
-    {
-        QFont font;
-        font.setPointSize(ADD_FONT_POINTSIZE);
-        add_button->setFont(font);
-    }
-    {
-        QIcon const icon = QIcon::fromTheme(QStringLiteral("add"));
-        if (!icon.isNull()) {
-            add_button->setIcon(icon);
-        } else {
-            add_button->setText(QStringLiteral("+"));
-        }
-    }
-
-    toggle_tree_button = new QPushButton(this);
-    toggle_tree_button->setObjectName(QStringLiteral("toggleTreeButton"));
-    toggle_tree_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
-    {
-        QFont font(QStringLiteral("Symbol"));
-        font.setPointSize(TOGGLE_FONT_POINTSIZE);
-        font.setBold(true);
-        toggle_tree_button->setFont(font);
-    }
-    applyToggleButtonIcon(QStringLiteral("menu"), QStringLiteral("☰"));
+    toggle_tree_button = createButton(QStringLiteral("toggleTreeButton"));
+    toggle_tree_button->setText(QStringLiteral("≡"));
 }
 
 void phraseGeneration::createBodyWidgets()
 {
-    line = new QFrame(this);
-    line->setObjectName(QStringLiteral("line"));
-    line->setSizePolicy(makePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
-    template_text = new QPlainTextEdit(this);
-    template_text->setObjectName(QStringLiteral("templateText"));
-    template_text->setEnabled(true);
+    editor_frame = new QFrame(this);
+    editor_frame->setObjectName(QStringLiteral("editorFrame"));
     {
-        QFont font;
-        font.setPointSize(TEXT_FONT_POINTSIZE);
-        template_text->setFont(font);
-    }
-    template_text->setStyleSheet(QString::fromUtf8(TEMPLATE_TEXT_STYLE));
+        auto *editor_inner_layout = new QVBoxLayout(editor_frame);
+        editor_inner_layout->setContentsMargins(0, 0, 0, 0);
 
-    title_tree_widget = new QTreeWidget(this);
-    title_tree_widget->setObjectName(QStringLiteral("titleTreeWidget"));
-    title_tree_widget->setSizePolicy(
-        makePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding));
-    title_tree_widget->setHeaderHidden(true);
-    title_tree_widget->setColumnCount(2);
+        template_text = new QPlainTextEdit(editor_frame);
+        template_text->setObjectName(QStringLiteral("templateText"));
+        template_text->setEnabled(true);
+        template_text->setFrameShape(QFrame::NoFrame);
+        template_text->setAttribute(Qt::WA_MacShowFocusRect, false);
+        {
+            QFont font;
+            font.setPointSize(TEXT_FONT_POINTSIZE);
+            template_text->setFont(font);
+        }
+
+        editor_inner_layout->addWidget(template_text, 1);
+    }
+
+    sidebar_container = new QWidget(this);
+    sidebar_container->setObjectName(QStringLiteral("sidebarContainer"));
+    sidebar_container->setFixedWidth(TREE_SIDEBAR_WIDTH);
+    {
+        auto *sidebar_layout = new QVBoxLayout(sidebar_container);
+        sidebar_layout->setContentsMargins(0, 0, 0, 0);
+        sidebar_layout->setSpacing(0);
+
+        list_header = new QFrame(sidebar_container);
+        list_header->setObjectName(QStringLiteral("listHeader"));
+        list_header->setFixedHeight(48);
+
+        list_header_label = new QLabel(tr("Saved Phrases"), list_header);
+        {
+            QFont font;
+            font.setPointSize(14);
+            font.setWeight(QFont::DemiBold);
+            list_header_label->setFont(font);
+        }
+
+        auto *header_layout = new QHBoxLayout(list_header);
+        header_layout->setContentsMargins(16, 0, 16, 0);
+        header_layout->addWidget(list_header_label);
+
+        sidebar_layout->addWidget(list_header);
+
+        list_scroll = new QScrollArea(sidebar_container);
+        list_scroll->setWidgetResizable(true);
+        list_scroll->setFrameShape(QFrame::NoFrame);
+        list_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        list_scroll->setSizePolicy(makePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+        list_content = new QWidget(list_scroll);
+        list_layout = new QVBoxLayout(list_content);
+        list_layout->setContentsMargins(0, 0, 0, 0);
+        list_layout->setSpacing(LIST_ITEM_SPACING);
+
+        list_scroll->setWidget(list_content);
+        sidebar_layout->addWidget(list_scroll, 1);
+    }
+
+    sidebar_container->setVisible(false);
 
     save_button = new QPushButton(this);
     save_button->setObjectName(QStringLiteral("saveButton"));
-    save_button->setSizePolicy(makePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    {
-        QFont font;
-        font.setKerning(true);
-        save_button->setFont(font);
-    }
-    save_button->setStyleSheet(QString::fromUtf8(SAVE_BUTTON_STYLE));
+    save_button->setFixedHeight(BTN_HEIGHT);
+    save_button->setCursor(Qt::PointingHandCursor);
 }
 
 void phraseGeneration::layoutWidgets()
 {
-    auto *grid_layout = new QGridLayout(this);
-    grid_layout->setObjectName(QStringLiteral("gridLayout"));
+    auto *main_layout = new QVBoxLayout(this);
+    main_layout->setObjectName(QStringLiteral("mainLayout"));
+    main_layout->setContentsMargins(0, 6, 6, 6);
 
-    grid_layout->addWidget(template_title, 0, 0, 1, 2);
-    grid_layout->addWidget(delete_button, 0, 2, 1, 1);
-    grid_layout->addWidget(copy_button, 0, 3, 1, 1);
-    grid_layout->addWidget(add_button, 0, 4, 1, 1);
-    grid_layout->addWidget(toggle_tree_button, 0, 6, 1, 1);
-    grid_layout->addWidget(line, 1, 0, 1, 7);
-    grid_layout->addWidget(template_text, 2, 0, 7, 7);
-    grid_layout->addWidget(title_tree_widget, 2, 5, 7, 2);
-    grid_layout->addWidget(save_button, 8, 5, 1, 1);
+    auto *toolbar_layout = new QHBoxLayout(toolbar_frame);
+    toolbar_layout->setObjectName(QStringLiteral("toolbarLayout"));
+    toolbar_layout->setContentsMargins(24, 0, 24, 0);
+    toolbar_layout->setSpacing(8);
+    toolbar_layout->addWidget(template_title, 1);
+    toolbar_layout->addWidget(delete_button);
+    toolbar_layout->addWidget(copy_button);
+    toolbar_layout->addWidget(add_button);
+    toolbar_layout->addWidget(toggle_tree_button);
 
-    // ストレッチ係数を設定
-    grid_layout->setColumnStretch(0, 3); // 左側に多くスペースを割り当てる
-    grid_layout->setColumnStretch(5, 1); // titleTreeWidget の列
+    main_layout->addWidget(toolbar_frame);
+
+    auto *body_layout = new QHBoxLayout();
+    body_layout->setObjectName(QStringLiteral("bodyLayout"));
+    body_layout->setSpacing(0);
+
+    auto *editor_layout = new QVBoxLayout();
+    editor_layout->setObjectName(QStringLiteral("editorLayout"));
+    editor_layout->setContentsMargins(24, 24, 24, 24);
+    editor_layout->setSpacing(16);
+    editor_layout->addWidget(editor_frame, 1);
+    editor_layout->addWidget(save_button, 0, Qt::AlignRight);
+
+    body_layout->addLayout(editor_layout, 1);
+    body_layout->addWidget(sidebar_container);
+
+    main_layout->addLayout(body_layout, 1);
 }
 
-// カラーテーマ / 言語変更時に走る処理
 void phraseGeneration::changeEvent(QEvent *event)
 {
     switch (event->type()) {
-    case QEvent::PaletteChange: {
-        QPalette const palette = this->palette();
-        QPalette templateTextPalette = template_text->palette();
-        templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
-        template_text->setPalette(templateTextPalette);
-
-        QColor const baseColor = palette.color(QPalette::Base);
-        QColor const borderColor =
-            (baseColor.lightness() > LIGHTNESS_THRESHOLD) ? Qt::black : Qt::white;
-        title_tree_widget->setStyleSheet(treeStyleSheet(borderColor));
+    case QEvent::PaletteChange:
+        applyStyles();
         break;
-    }
     case QEvent::LanguageChange:
         retranslateUi();
-        adjustTreeColumnWidth();
         break;
     default:
         break;
@@ -278,27 +393,82 @@ void phraseGeneration::changeEvent(QEvent *event)
     QWidget::changeEvent(event);
 }
 
+bool phraseGeneration::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        auto *frame = qobject_cast<QFrame *>(obj);
+        if (frame != nullptr && frame->parent() == list_content) {
+            onListItemClicked(frame);
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+void phraseGeneration::onListItemClicked(QFrame *item)
+{
+    if (current_list_item != nullptr) {
+        current_list_item->setProperty("selected", false);
+        current_list_item->style()->unpolish(current_list_item);
+        current_list_item->style()->polish(current_list_item);
+    }
+    current_list_item = item;
+    item->setProperty("selected", true);
+    item->style()->unpolish(item);
+    item->style()->polish(item);
+
+    QString const filename = item->property("filename").toString();
+    QString title;
+    QString const content = loadContent(filename, &title);
+
+    template_title->setText(title);
+    template_text->setPlainText(content);
+
+    currentFile = filename;
+}
+
 void phraseGeneration::loadTitles()
 {
-    title_tree_widget->clear();
+    current_list_item = nullptr;
+
+    QLayoutItem *child;
+    while ((child = list_layout->takeAt(0)) != nullptr) {
+        if (child->widget() != nullptr) {
+            child->widget()->deleteLater();
+        }
+        delete child;
+    }
+
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
-    // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
-        QString const content = loadContent(filename, &title);
+        loadContent(filename, &title);
 
-        auto *item = new QTreeWidgetItem(title_tree_widget);
-        item->setText(0, title);
+        auto *item_frame = new QFrame(list_content);
+        item_frame->setProperty("filename", filename);
+        item_frame->setCursor(Qt::PointingHandCursor);
+        item_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        item_frame->installEventFilter(this);
 
-        // UUIDをユーザーデータとして保持
-        item->setData(0, Qt::UserRole, filename);
+        auto *item_layout = new QHBoxLayout(item_frame);
+        item_layout->setContentsMargins(16, 12, 16, 12);
+        item_layout->setSpacing(8);
 
-        auto *copyButton = new QPushButton(tr("Copy"), title_tree_widget);
-        connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
+        auto *title_label = new QLabel(title, item_frame);
+        title_label->setObjectName(QStringLiteral("itemTitle"));
 
-        title_tree_widget->setItemWidget(item, 1, copyButton);
+        auto *copy_btn = new QPushButton(tr("Copy"), item_frame);
+        copy_btn->setObjectName(QStringLiteral("itemCopyBtn"));
+        copy_btn->setCursor(Qt::PointingHandCursor);
+        connect(copy_btn, &QPushButton::clicked, this, &phraseGeneration::copyContent);
+
+        item_layout->addWidget(title_label, 1);
+        item_layout->addWidget(copy_btn);
+
+        list_layout->addWidget(item_frame);
     }
+    list_layout->addStretch();
 }
 
 QString phraseGeneration::loadContent(const QString &filename, QString *title)
@@ -319,6 +489,12 @@ void phraseGeneration::handleAddButtonClick()
     currentFile.clear();
     template_text->clear();
     template_title->clear();
+    if (current_list_item != nullptr) {
+        current_list_item->setProperty("selected", false);
+        current_list_item->style()->unpolish(current_list_item);
+        current_list_item->style()->polish(current_list_item);
+        current_list_item = nullptr;
+    }
 }
 
 void phraseGeneration::handleSaveButtonClick()
@@ -331,7 +507,6 @@ void phraseGeneration::handleSaveButtonClick()
         return;
     }
 
-    // 既存ファイルを選択している場合は一旦削除したのちに新しい内容で更新
     if (!currentFile.isEmpty()) {
         QFile file("content/" + currentFile);
         if (file.exists()) {
@@ -351,9 +526,7 @@ void phraseGeneration::saveContent(const QString &title, const QString &content)
 {
     QDir().mkpath("content");
 
-    // UUIDを生成
     QString const uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    // UUIDでファイルを一意化
     QString const filename = uuid + ".txt";
     QFile file("content/" + filename);
 
@@ -374,13 +547,12 @@ void phraseGeneration::handleCopyButtonClick()
 
 void phraseGeneration::handleDeleteButtonClick()
 {
-    QTreeWidgetItem const *item = title_tree_widget->currentItem();
-    if (item == nullptr) {
+    if (current_list_item == nullptr) {
         QMessageBox::warning(this, "Warning", "No title selected.");
         return;
     }
 
-    QString const filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = current_list_item->property("filename").toString();
     deleteContent(filename);
     loadTitles();
     template_title->clear();
@@ -397,53 +569,45 @@ void phraseGeneration::deleteContent(const QString &filename)
 
 void phraseGeneration::handleToggleTreeButtonClick()
 {
-    bool const isVisible = title_tree_widget->isVisible();
-    title_tree_widget->setVisible(!isVisible);
+    bool const isVisible = sidebar_container->isVisible();
+    sidebar_container->setVisible(!isVisible);
 
-    auto *grid = qobject_cast<QGridLayout *>(this->layout());
-    if (grid == nullptr) {
-        return;
-    }
-
-    // ボタンのアイコン/テキストを切り替える
-    if (title_tree_widget->isVisible()) {
-        applyToggleButtonIcon(QStringLiteral("close"), QStringLiteral("✕"));
-        grid->removeWidget(template_text);
-        grid->addWidget(template_text, 2, 0, 7, 5);
-        grid->removeWidget(save_button);
-        grid->addWidget(save_button, 8, 4, 1, 1);
+    if (sidebar_container->isVisible()) {
+        toggle_tree_button->setText(QStringLiteral("✕"));
     } else {
-        applyToggleButtonIcon(QStringLiteral("menu"), QStringLiteral("☰"));
-        grid->removeWidget(template_text);
-        grid->addWidget(template_text, 2, 0, 7, 7);
-        grid->removeWidget(save_button);
-        grid->addWidget(save_button, 8, 5, 1, 1);
+        toggle_tree_button->setText(QStringLiteral("≡"));
     }
 }
 
-void phraseGeneration::applyToggleButtonIcon(const QString &theme_name,
-                                             const QString &fallback_text)
+void phraseGeneration::applyStyles()
 {
-    QIcon const icon = QIcon::fromTheme(theme_name);
-    if (!icon.isNull()) {
-        toggle_tree_button->setIcon(icon);
-        toggle_tree_button->setText(QString());
+    QPalette const palette = this->palette();
+    QColor const baseColor = palette.color(QPalette::Base);
+    bool const isDark = baseColor.lightness() < LIGHTNESS_THRESHOLD;
+
+    if (isDark) {
+        QString const btnStyle = darkButtonStyleSheet();
+        for (auto *btn :
+             {delete_button, copy_button, add_button, toggle_tree_button, save_button}) {
+            btn->setStyleSheet(btnStyle);
+        }
+        template_title->setStyleSheet(darkTitleStyleSheet());
+        editor_frame->setStyleSheet(darkEditorStyleSheet());
+        toolbar_frame->setStyleSheet(darkToolbarStyleSheet());
+        sidebar_container->setStyleSheet(darkSidebarStyleSheet());
+        list_content->setStyleSheet(darkListItemStyleSheet());
     } else {
-        toggle_tree_button->setIcon(QIcon());
-        toggle_tree_button->setText(fallback_text);
+        delete_button->setStyleSheet(QString());
+        copy_button->setStyleSheet(QString());
+        add_button->setStyleSheet(QString());
+        toggle_tree_button->setStyleSheet(QString());
+        save_button->setStyleSheet(QString());
+        template_title->setStyleSheet(QString());
+        editor_frame->setStyleSheet(QString());
+        toolbar_frame->setStyleSheet(QString());
+        sidebar_container->setStyleSheet(QString());
+        list_content->setStyleSheet(lightListItemStyleSheet());
     }
-}
-
-void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int /*column*/)
-{
-    QString const filename = item->data(0, Qt::UserRole).toString();
-    QString title;
-    QString const content = loadContent(filename, &title);
-
-    template_title->setText(title);
-    template_text->setPlainText(content);
-
-    currentFile = filename;
 }
 
 void phraseGeneration::copyContent()
@@ -453,33 +617,20 @@ void phraseGeneration::copyContent()
         return;
     }
 
-    // ボタンから直接アイテムを取得
-    QTreeWidgetItem const *item = nullptr;
-    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *currentItem = title_tree_widget->topLevelItem(i);
-        if (title_tree_widget->itemWidget(currentItem, 1) == button) {
-            item = currentItem;
-            break;
-        }
-    }
-
-    if (item == nullptr) {
-        QMessageBox::warning(this, "Error", "Unable to find the corresponding item.");
+    auto *item_frame = qobject_cast<QFrame *>(button->parent());
+    if (item_frame == nullptr) {
         return;
     }
 
-    QString const filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item_frame->property("filename").toString();
 
     QString title;
-    // 本文のみ取得
     QString content = loadContent(filename, &title);
 
-    // もし改行で始まっていたら取り除く
     if (content.startsWith("\n")) {
         content.remove(0, 1);
     }
 
-    // コピー
     QApplication::clipboard()->setText(content);
     QMessageBox::information(this, "Copied", "Text copied to clipboard.");
 }
