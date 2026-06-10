@@ -62,9 +62,10 @@ const char *typeColor(QtMsgType type)
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     const QString time = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
-    const QFileInfo file(context.file ? context.file : "");
-    const QString location =
-        context.file ? QString("%1:%2").arg(file.fileName()).arg(context.line) : QString();
+    const QFileInfo file(context.file != nullptr ? context.file : "");
+    const QString location = context.file != nullptr
+                                 ? QString("%1:%2").arg(file.fileName()).arg(context.line)
+                                 : QString();
     fprintf(stderr, "%s[%s] %s%s%s %s\n", typeColor(type), qPrintable(time),
             qPrintable(location.isEmpty() ? QString() : location + " "), typeLabel(type),
             ANSI_RESET, qPrintable(msg));
