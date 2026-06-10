@@ -26,6 +26,11 @@ constexpr const char *ANSI_DIM = "\033[2m";
 constexpr const char *ANSI_YELLOW = "\033[33m";
 constexpr const char *ANSI_RED = "\033[31m";
 
+/// Returns a fixed-width severity label for terminal output.
+/// - DEBUG / INFO  (4 chars + trailing space)
+/// - WARN  / CRIT  (4 chars + trailing space)
+/// - FATAL         (5 chars, no trailing space)
+/// - "?????"       (fallback for unknown types)
 const char *typeLabel(QtMsgType type)
 {
     switch (type) {
@@ -43,6 +48,11 @@ const char *typeLabel(QtMsgType type)
     return "?????";
 }
 
+/// Returns the ANSI escape sequence for the message type's color.
+/// - Debug:  dim     (\033[2m)
+/// - Info:   default (\033[0m)
+/// - Warning: yellow  (\033[33m)
+/// - Critical/Fatal: red (\033[31m)
 const char *typeColor(QtMsgType type)
 {
     switch (type) {
@@ -59,6 +69,13 @@ const char *typeColor(QtMsgType type)
     return ANSI_RESET;
 }
 
+/// Custom Qt message handler that outputs colored, timestamped logs to stderr.
+///
+/// Output format: {color}[HH:MM:SS.zzz] file.cpp:line TYPE{reset} message
+///
+/// - file.cpp:line is omitted when source location is unavailable
+/// - ANSI color codes are applied per severity
+/// - QtFatalMsg calls abort() after printing
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     const QString time = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");

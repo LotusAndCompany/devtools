@@ -50,6 +50,12 @@ DevTools_add_test(test_enum_cast
     tests/core/test_enum_cast.cpp
 )
 
+# core/logging
+DevTools_add_test(test_logging
+    SOURCES
+    tests/core/test_logging.cpp
+)
+
 # core/exception
 DevTools_add_test(test_common_exception
     SOURCES
