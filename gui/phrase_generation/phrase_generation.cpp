@@ -135,6 +135,75 @@ QString darkListItemStyleSheet()
         "}");
 }
 
+QString lightButtonStyleSheet()
+{
+    return QStringLiteral(
+        "QPushButton {"
+        "  background-color: transparent;"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 6px;"
+        "  padding: 10px 16px;"
+        "  color: palette(text);"
+        "  font-size: 14px;"
+        "}"
+        "QPushButton:hover { background-color: palette(highlight); }");
+}
+
+QString lightTitleStyleSheet()
+{
+    return QStringLiteral(
+        "QLineEdit {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 20px;"
+        "  padding: 8px 16px;"
+        "  background-color: palette(base);"
+        "  color: palette(text);"
+        "  font-size: 16px;"
+        "}");
+}
+
+QString lightEditorStyleSheet()
+{
+    return QStringLiteral(
+        "#editorFrame {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 16px;"
+        "  background-color: palette(base);"
+        "}"
+        "QPlainTextEdit {"
+        "  border: none;"
+        "  background-color: transparent;"
+        "  color: palette(text);"
+        "  font-size: 14px;"
+        "  padding: 16px;"
+        "}");
+}
+
+QString lightToolbarStyleSheet()
+{
+    return QStringLiteral(
+        "#toolbarFrame {"
+        "  border-bottom: 1px solid palette(mid);"
+        "  background-color: transparent;"
+        "}");
+}
+
+QString lightSidebarStyleSheet()
+{
+    return QStringLiteral(
+        "#sidebarContainer {"
+        "  border-left: 1px solid palette(mid);"
+        "  background-color: palette(base);"
+        "}"
+        "#listHeader {"
+        "  border-bottom: 1px solid palette(mid);"
+        "  background-color: transparent;"
+        "}"
+        "#listHeader QLabel {"
+        "  color: palette(text);"
+        "}");
+}
+
 QString lightListItemStyleSheet()
 {
     return QStringLiteral(
@@ -170,6 +239,16 @@ QSizePolicy makePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy verti
     policy.setHorizontalStretch(0);
     policy.setVerticalStretch(0);
     return policy;
+}
+
+QString loadTitleOnly(const QString &filename)
+{
+    QFile file("content/" + filename);
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream in(&file);
+        return in.readLine().trimmed();
+    }
+    return {};
 }
 } // namespace
 
@@ -396,10 +475,16 @@ void phraseGeneration::changeEvent(QEvent *event)
 bool phraseGeneration::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
-        auto *frame = qobject_cast<QFrame *>(obj);
-        if (frame != nullptr && frame->parent() == list_content) {
-            onListItemClicked(frame);
-            return true;
+        QWidget *widget = qobject_cast<QWidget *>(obj);
+        while (widget != nullptr) {
+            if (widget->parent() == list_content) {
+                auto *frame = qobject_cast<QFrame *>(widget);
+                if (frame != nullptr) {
+                    onListItemClicked(frame);
+                    return true;
+                }
+            }
+            widget = widget->parentWidget();
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -442,8 +527,7 @@ void phraseGeneration::loadTitles()
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     foreach (QString filename, files) {
-        QString title;
-        loadContent(filename, &title);
+        QString const title = loadTitleOnly(filename);
 
         auto *item_frame = new QFrame(list_content);
         item_frame->setProperty("filename", filename);
@@ -597,15 +681,15 @@ void phraseGeneration::applyStyles()
         sidebar_container->setStyleSheet(darkSidebarStyleSheet());
         list_content->setStyleSheet(darkListItemStyleSheet());
     } else {
-        delete_button->setStyleSheet(QString());
-        copy_button->setStyleSheet(QString());
-        add_button->setStyleSheet(QString());
-        toggle_tree_button->setStyleSheet(QString());
-        save_button->setStyleSheet(QString());
-        template_title->setStyleSheet(QString());
-        editor_frame->setStyleSheet(QString());
-        toolbar_frame->setStyleSheet(QString());
-        sidebar_container->setStyleSheet(QString());
+        QString const btnStyle = lightButtonStyleSheet();
+        for (auto *btn :
+             {delete_button, copy_button, add_button, toggle_tree_button, save_button}) {
+            btn->setStyleSheet(btnStyle);
+        }
+        template_title->setStyleSheet(lightTitleStyleSheet());
+        editor_frame->setStyleSheet(lightEditorStyleSheet());
+        toolbar_frame->setStyleSheet(lightToolbarStyleSheet());
+        sidebar_container->setStyleSheet(lightSidebarStyleSheet());
         list_content->setStyleSheet(lightListItemStyleSheet());
     }
 }
