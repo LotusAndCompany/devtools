@@ -526,7 +526,7 @@ void phraseGeneration::loadTitles()
 
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
-    foreach (QString filename, files) {
+    foreach (const QString &filename, files) {
         QString const title = loadTitleOnly(filename);
 
         auto *item_frame = new QFrame(list_content);
