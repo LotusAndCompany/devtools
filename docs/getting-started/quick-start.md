@@ -12,9 +12,19 @@ Before starting, ensure you have:
 
 ### From Terminal
 
+The simplest way is `cmake --build . --target run` from the build directory,
+which also shows colored console output.
+
 ```bash
 cd /path/to/devtools/build
-open DevTools.app
+cmake --build . --target run
+```
+
+Or run the binary directly:
+
+```bash
+cd /path/to/devtools/build
+./DevTools.app/Contents/MacOS/DevTools
 ```
 
 ### From Finder

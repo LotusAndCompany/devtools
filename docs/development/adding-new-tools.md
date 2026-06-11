@@ -334,6 +334,9 @@ ctest --output-on-failure
 
 # Run specific test
 ./test_your_tool
+
+# Build and launch the app to verify
+cmake --build . --target run
 ```
 
 ## Checklist

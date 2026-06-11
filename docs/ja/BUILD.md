@@ -85,6 +85,23 @@ make
 make -j$(sysctl -n hw.ncpu)
 ```
 
+### アプリケーションの実行
+
+ビルド後、アプリケーションを起動します：
+
+```bash
+# ビルドと実行（カラー付きコンソール出力）
+cmake --build . --target run
+
+# またはバイナリを直接実行
+./DevTools.app/Contents/MacOS/DevTools
+
+# またはApp Bundleを開く
+open DevTools.app
+```
+
+ログ出力は重要度に応じて色分けされます：DEBUG=灰色, INFO=デフォルト, WARN=黄色, CRIT=赤。
+
 ### Qt Creatorを使用する場合
 
 1. Qt Creatorで `CMakeLists.txt` を開く

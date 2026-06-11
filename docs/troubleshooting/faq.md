@@ -137,6 +137,15 @@ See [Contributing Guide](../../CONTRIBUTING.md) for details.
 
 See [Adding New Tools](../development/adding-new-tools.md) for a step-by-step guide.
 
+### How do I run the app from the terminal?
+
+```bash
+cd build
+cmake --build . --target run
+```
+
+This builds and launches the app with colored console output (DEBUG=dim, WARN=yellow, CRIT=red).
+
 ### How do I run tests?
 
 ```bash

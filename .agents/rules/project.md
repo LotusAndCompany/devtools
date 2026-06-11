@@ -16,6 +16,9 @@ cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/share/vcpkg/scripts/bu
 # Build
 make -j8
 
+# Build and run with console output
+cmake --build . --target run
+
 # Enable and run unit tests
 cmake .. -DENABLE_UNIT_TEST=ON
 ctest
