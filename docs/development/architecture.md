@@ -252,6 +252,7 @@ CMakeLists.txt (main)
 | `format-check` | Check formatting |
 | `lint` | Run clang-tidy |
 | `lint-fix` | Run clang-tidy with fixes |
+| `run` | Build and launch DevTools |
 | `quality-check` | Run all quality checks |
 | `DevTools_docs` | Generate Doxygen docs |
 

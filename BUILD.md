@@ -85,6 +85,23 @@ make
 make -j$(sysctl -n hw.ncpu)
 ```
 
+### Running DevTools
+
+After building, launch the application:
+
+```bash
+# Build and run with colored console output
+cmake --build . --target run
+
+# Or run the binary directly
+./DevTools.app/Contents/MacOS/DevTools
+
+# Or open the app bundle
+open DevTools.app
+```
+
+Log output is color-coded by severity: DEBUG=dim, INFO=default, WARN=yellow, CRIT=red.
+
 ### Using Qt Creator
 
 1. Open `CMakeLists.txt` in Qt Creator

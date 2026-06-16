@@ -129,12 +129,13 @@ make -j$(sysctl -n hw.ncpu)
 After building, run the application:
 
 ```bash
+# Build and run with colored console output (recommended)
+cmake --build . --target run
+
+# Or run the binary directly
 ./DevTools.app/Contents/MacOS/DevTools
-```
 
-Or open the app bundle:
-
-```bash
+# Or open the app bundle
 open DevTools.app
 ```
 

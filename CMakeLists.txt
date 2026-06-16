@@ -505,6 +505,13 @@ else()
     )
 endif()
 
+add_custom_target(run
+    COMMAND ${CMAKE_BINARY_DIR}/DevTools.app/Contents/MacOS/DevTools
+    DEPENDS ${PROJECT_NAME}
+    COMMENT "Running DevTools with console output"
+    VERBATIM
+)
+
 add_custom_target(quality-check
     DEPENDS format-check lint
     COMMENT "Running all code quality checks"

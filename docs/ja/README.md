@@ -66,6 +66,9 @@ cmake ..
 
 # ビルド
 make
+
+# ビルドと実行
+cmake --build . --target run
 ```
 
 詳細なビルド手順は [BUILD.md](BUILD.md) を参照してください。

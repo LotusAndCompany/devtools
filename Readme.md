@@ -66,6 +66,9 @@ cmake ..
 
 # Build
 make
+
+# Build and run
+cmake --build . --target run
 ```
 
 For detailed build instructions, see [BUILD.md](BUILD.md).
