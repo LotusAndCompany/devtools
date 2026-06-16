@@ -167,15 +167,12 @@ void QRCodeGenerationGUI::retranslateUi()
 
 void QRCodeGenerationGUI::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
-        break;
-    default:
-        QWidget::changeEvent(event);
-        break;
+        return;
     }
+    GuiTool::changeEvent(event);
 }
 
 void QRCodeGenerationGUI::setupParameterWidgets()
