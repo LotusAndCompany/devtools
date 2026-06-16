@@ -194,6 +194,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/qr_code/qr_code_generation_gui.cpp
     )
 
+    # markdown_preview
+    qt_add_library(${PROJECT_NAME}_markdown_preview STATIC
+        core/markdown_preview/markdown_preview.h
+        core/markdown_preview/markdown_preview.cpp
+        gui/markdown_preview/markdown_preview_gui.h
+        gui/markdown_preview/markdown_preview_gui.cpp
+    )
+
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
     #    AUTOMOC ON
     #    AUTOUIC ON
@@ -270,6 +278,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_command
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
+    ${PROJECT_NAME}_markdown_preview
     ${PROJECT_NAME}_db_tool
 )
 

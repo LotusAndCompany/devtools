@@ -2,10 +2,12 @@
 
 #include "api_tool.h"
 #include "core/data_conversion/data_conversion.h"
+#include "core/markdown_preview/markdown_preview.h"
 #include "gui/command/command.h"
 #include "gui/data_conversion/data_conversion_gui.h"
 #include "gui/db_tool/main/db_main.h"
 #include "gui/image/basic/image_tools_unified_gui.h"
+#include "gui/markdown_preview/markdown_preview_gui.h"
 #include "gui/qr_code/qr_code_generation_gui.h"
 #include "gui/welcome_page.h"
 #include "phrase_generation/phrase_generation.h"
@@ -83,6 +85,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::QR_CODE_GENERATION:
         content = new QRCodeGenerationGUI(this);
+        break;
+    case Sidemenu::ID::MARKDOWN_PREVIEW:
+        content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
