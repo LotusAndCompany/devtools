@@ -12,7 +12,7 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
     gui/contents_area.h gui/contents_area.cpp
-    gui/components/error_label.h gui/components/error_label.cpp
+    gui/components/status_label.h gui/components/status_label.cpp
     gui/components/section_frame.h gui/components/section_frame.cpp
     gui/components/action_button.h gui/components/action_button.cpp
     gui/components/labeled_spinbox.h gui/components/labeled_spinbox.cpp
@@ -172,4 +172,8 @@ DevTools_add_test(test_section_frame
 DevTools_add_test(test_labeled_spinbox
     SOURCES
     tests/gui/components/test_labeled_spinbox.cpp
+)
+DevTools_add_test(test_action_button
+    SOURCES
+    tests/gui/components/test_action_button.cpp
 )

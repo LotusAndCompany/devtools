@@ -2,7 +2,7 @@
 
 #include "core/qr_tool/content_generator.h"
 #include "core/qr_tool/qrcodegen.hpp"
-#include "gui/components/error_label.h"
+#include "gui/components/status_label.h"
 
 #include <QApplication>
 #include <QCheckBox>

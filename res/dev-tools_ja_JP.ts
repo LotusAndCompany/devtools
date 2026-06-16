@@ -669,6 +669,34 @@
         <source>Failed to save divided images.</source>
         <translation>分割画像の保存に失敗しました。</translation>
     </message>
+    <message>
+        <source>Contiguous area only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By division count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By cell size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save divided images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HSL</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

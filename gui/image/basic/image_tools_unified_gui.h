@@ -14,8 +14,8 @@ class QButtonGroup;
 class QCheckBox;
 class QComboBox;
 class QDoubleSpinBox;
-class QFrame;
 class QLabel;
+class SectionFrame;
 class QPushButton;
 class QRadioButton;
 class QScrollArea;
@@ -34,18 +34,10 @@ struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
     QScrollArea *toolScrollArea;
     BasicImageViewControl *control;
 
-    QFrame *resizeSection;
-    QFrame *transformSection;
-    QFrame *transparentSection;
-    QFrame *divisionSection;
-    QCheckBox *resizeSectionToggle;
-    QCheckBox *transformSectionToggle;
-    QCheckBox *transparentSectionToggle;
-    QCheckBox *divisionSectionToggle;
-    QWidget *resizeSectionBody;
-    QWidget *transformSectionBody;
-    QWidget *transparentSectionBody;
-    QWidget *divisionSectionBody;
+    SectionFrame *resizeSection;
+    SectionFrame *transformSection;
+    SectionFrame *transparentSection;
+    SectionFrame *divisionSection;
 
     QSpinBox *widthValue;
     QSpinBox *heightValue;

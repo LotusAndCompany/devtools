@@ -150,7 +150,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/components/section_frame.h gui/components/section_frame.cpp
         gui/components/action_button.h gui/components/action_button.cpp
         gui/components/labeled_spinbox.h gui/components/labeled_spinbox.cpp
-        gui/components/error_label.h gui/components/error_label.cpp
+        gui/components/status_label.h gui/components/status_label.cpp
         gui/components/translatable_widget.h
         gui/components/widget_bag.h
     )

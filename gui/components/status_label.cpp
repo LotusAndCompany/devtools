@@ -1,4 +1,4 @@
-#include "gui/components/error_label.h"
+#include "gui/components/status_label.h"
 
 StatusLabel::StatusLabel(QWidget *parent) : QLabel(parent), m_level(Level::Error)
 {

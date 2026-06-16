@@ -1,5 +1,6 @@
 #include "image_tools_unified_gui.h"
 
+#include "gui/components/section_frame.h"
 #include "gui/image/basic/control.h"
 #include "gui/image/transparent/color_sample.h"
 #include "gui/image/transparent/image_view_for_image_transparent.h"
@@ -94,116 +95,94 @@ QPushButton *buildActionButton(QWidget *parent, const QString &text, const QStri
 
 void buildResizeSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayout *layout)
 {
-    auto *frame = new QFrame(parent);
-    ui->resizeSection = frame;
-    frame->setFrameShape(QFrame::StyledPanel);
-    auto *box = new QVBoxLayout(frame);
-    ui->resizeSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Resize"), frame);
-    ui->resizeSectionToggle->setChecked(true);
-    box->addWidget(ui->resizeSectionToggle);
+    ui->resizeSection = new SectionFrame(ImageToolsUnifiedGUI::tr("Resize"), parent);
+    ui->resizeSection->setExpanded(true);
 
-    ui->resizeSectionBody = new QWidget(frame);
-    auto *bodyLayout = new QVBoxLayout(ui->resizeSectionBody);
+    auto *body = new QWidget(ui->resizeSection);
+    auto *bodyLayout = new QVBoxLayout(body);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     auto *form = new QFormLayout();
-    ui->widthValue = buildPixelSpinBox(ui->resizeSectionBody);
-    ui->heightValue = buildPixelSpinBox(ui->resizeSectionBody);
-    ui->hScaleValue = buildScaleSpinBox(ui->resizeSectionBody);
-    ui->vScaleValue = buildScaleSpinBox(ui->resizeSectionBody);
+    ui->widthValue = buildPixelSpinBox(body);
+    ui->heightValue = buildPixelSpinBox(body);
+    ui->hScaleValue = buildScaleSpinBox(body);
+    ui->vScaleValue = buildScaleSpinBox(body);
     form->addRow(ImageToolsUnifiedGUI::tr("Width:"), ui->widthValue);
     form->addRow(ImageToolsUnifiedGUI::tr("Height:"), ui->heightValue);
     form->addRow(ImageToolsUnifiedGUI::tr("Horizontal Scale:"), ui->hScaleValue);
     form->addRow(ImageToolsUnifiedGUI::tr("Vertical Scale:"), ui->vScaleValue);
     bodyLayout->addLayout(form);
 
-    ui->keepAspectRatio =
-        new QCheckBox(ImageToolsUnifiedGUI::tr("Keep aspect ratio"), ui->resizeSectionBody);
-    ui->smoothScaling =
-        new QCheckBox(ImageToolsUnifiedGUI::tr("Smooth scaling"), ui->resizeSectionBody);
+    ui->keepAspectRatio = new QCheckBox(ImageToolsUnifiedGUI::tr("Keep aspect ratio"), body);
+    ui->smoothScaling = new QCheckBox(ImageToolsUnifiedGUI::tr("Smooth scaling"), body);
     bodyLayout->addWidget(ui->keepAspectRatio);
     bodyLayout->addWidget(ui->smoothScaling);
 
-    ui->applyResizeBySizeButton =
-        new QPushButton(ImageToolsUnifiedGUI::tr("Apply Size"), ui->resizeSectionBody);
-    ui->applyResizeByScaleButton =
-        new QPushButton(ImageToolsUnifiedGUI::tr("Apply Scale"), ui->resizeSectionBody);
+    ui->applyResizeBySizeButton = new QPushButton(ImageToolsUnifiedGUI::tr("Apply Size"), body);
+    ui->applyResizeByScaleButton = new QPushButton(ImageToolsUnifiedGUI::tr("Apply Scale"), body);
     bodyLayout->addWidget(ui->applyResizeBySizeButton);
     bodyLayout->addWidget(ui->applyResizeByScaleButton);
 
-    box->addWidget(ui->resizeSectionBody);
-
-    layout->addWidget(frame);
+    ui->resizeSection->setBody(body);
+    layout->addWidget(ui->resizeSection);
 }
 
 void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayout *layout)
 {
-    auto *frame = new QFrame(parent);
-    ui->transformSection = frame;
-    frame->setFrameShape(QFrame::StyledPanel);
-    auto *box = new QVBoxLayout(frame);
-    ui->transformSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Rotate / Flip"), frame);
-    ui->transformSectionToggle->setChecked(true);
-    box->addWidget(ui->transformSectionToggle);
+    ui->transformSection = new SectionFrame(ImageToolsUnifiedGUI::tr("Rotate / Flip"), parent);
+    ui->transformSection->setExpanded(true);
 
-    ui->transformSectionBody = new QWidget(frame);
-    auto *bodyLayout = new QVBoxLayout(ui->transformSectionBody);
+    auto *body = new QWidget(ui->transformSection);
+    auto *bodyLayout = new QVBoxLayout(body);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     ui->rotateLeftButton =
-        buildActionButton(ui->transformSectionBody,
-                          ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
-    ui->rotateRightButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
-    ui->flipHorizontalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "flip_horizontal");
-    ui->flipVerticalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "flip_vertical");
+        buildActionButton(body, ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
+    ui->rotateRightButton =
+        buildActionButton(body, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
+    ui->flipHorizontalButton =
+        buildActionButton(body, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "flip_horizontal");
+    ui->flipVerticalButton =
+        buildActionButton(body, ImageToolsUnifiedGUI::tr("Flip Vertical"), "flip_vertical");
 
     bodyLayout->addWidget(ui->rotateLeftButton);
     bodyLayout->addWidget(ui->rotateRightButton);
     bodyLayout->addWidget(ui->flipHorizontalButton);
     bodyLayout->addWidget(ui->flipVerticalButton);
 
-    box->addWidget(ui->transformSectionBody);
-
-    layout->addWidget(frame);
+    ui->transformSection->setBody(body);
+    layout->addWidget(ui->transformSection);
 }
 
 void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayout *layout)
 {
-    auto *frame = new QFrame(parent);
-    ui->transparentSection = frame;
-    frame->setFrameShape(QFrame::StyledPanel);
-    auto *box = new QVBoxLayout(frame);
-    ui->transparentSectionToggle =
-        new QCheckBox(ImageToolsUnifiedGUI::tr("Transparent (click image)"), frame);
-    ui->transparentSectionToggle->setChecked(true);
-    box->addWidget(ui->transparentSectionToggle);
+    ui->transparentSection =
+        new SectionFrame(ImageToolsUnifiedGUI::tr("Transparent (click image)"), parent);
+    ui->transparentSection->setExpanded(true);
 
-    ui->transparentSectionBody = new QWidget(frame);
-    auto *bodyLayout = new QVBoxLayout(ui->transparentSectionBody);
+    auto *body = new QWidget(ui->transparentSection);
+    auto *bodyLayout = new QVBoxLayout(body);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     auto *form = new QFormLayout();
-    ui->colorMode = new QComboBox(ui->transparentSectionBody);
+    ui->colorMode = new QComboBox(body);
     ui->colorMode->addItem("RGB", static_cast<int>(QColor::Spec::Rgb));
     ui->colorMode->addItem("HSL", static_cast<int>(QColor::Spec::Hsl));
     ui->colorMode->addItem("HSV", static_cast<int>(QColor::Spec::Hsv));
     form->addRow(ImageToolsUnifiedGUI::tr("Color mode:"), ui->colorMode);
 
-    ui->colorSample = new ColorSample(ui->transparentSectionBody);
+    ui->colorSample = new ColorSample(body);
     ui->colorSample->setMinimumSize(24, 24);
     form->addRow(ImageToolsUnifiedGUI::tr("Color:"), ui->colorSample);
 
-    ui->toleranceValue = new QDoubleSpinBox(ui->transparentSectionBody);
+    ui->toleranceValue = new QDoubleSpinBox(body);
     ui->toleranceValue->setMinimum(0.0);
     ui->toleranceValue->setMaximum(1.0);
     ui->toleranceValue->setSingleStep(0.05);
     ui->toleranceValue->setValue(0.1);
     form->addRow(ImageToolsUnifiedGUI::tr("Tolerance:"), ui->toleranceValue);
 
-    ui->transparencyValue = new QDoubleSpinBox(ui->transparentSectionBody);
+    ui->transparencyValue = new QDoubleSpinBox(body);
     ui->transparencyValue->setMinimum(0.0);
     ui->transparencyValue->setMaximum(1.0);
     ui->transparencyValue->setSingleStep(0.05);
@@ -211,66 +190,52 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     form->addRow(ImageToolsUnifiedGUI::tr("Transparency:"), ui->transparencyValue);
     bodyLayout->addLayout(form);
 
-    ui->contiguousArea =
-        new QCheckBox(ImageToolsUnifiedGUI::tr("Only contiguous area"), ui->transparentSectionBody);
+    ui->contiguousArea = new QCheckBox(ImageToolsUnifiedGUI::tr("Only contiguous area"), body);
     ui->contiguousArea->setChecked(true);
     bodyLayout->addWidget(ui->contiguousArea);
 
-    box->addWidget(ui->transparentSectionBody);
-
-    layout->addWidget(frame);
+    ui->transparentSection->setBody(body);
+    layout->addWidget(ui->transparentSection);
 }
 
 void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayout *layout)
 {
-    auto *frame = new QFrame(parent);
-    ui->divisionSection = frame;
-    frame->setFrameShape(QFrame::StyledPanel);
-    auto *box = new QVBoxLayout(frame);
-    ui->divisionSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Division"), frame);
-    ui->divisionSectionToggle->setChecked(true);
-    box->addWidget(ui->divisionSectionToggle);
+    ui->divisionSection = new SectionFrame(ImageToolsUnifiedGUI::tr("Division"), parent);
+    ui->divisionSection->setExpanded(true);
 
-    ui->divisionSectionBody = new QWidget(frame);
-    auto *bodyLayout = new QVBoxLayout(ui->divisionSectionBody);
+    auto *body = new QWidget(ui->divisionSection);
+    auto *bodyLayout = new QVBoxLayout(body);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     auto *sizeRow = new QHBoxLayout();
-    sizeRow->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), ui->divisionSectionBody));
-    ui->sizeLabel = new QLabel(ImageToolsUnifiedGUI::tr("0 x 0"), ui->divisionSectionBody);
+    sizeRow->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), body));
+    ui->sizeLabel = new QLabel(ImageToolsUnifiedGUI::tr("0 x 0"), body);
     sizeRow->addWidget(ui->sizeLabel);
     bodyLayout->addLayout(sizeRow);
 
-    ui->useDivisionButton =
-        new QRadioButton(ImageToolsUnifiedGUI::tr("Division"), ui->divisionSectionBody);
+    ui->useDivisionButton = new QRadioButton(ImageToolsUnifiedGUI::tr("Division"), body);
     ui->useDivisionButton->setChecked(true);
-    ui->useSizeButton = new QRadioButton(ImageToolsUnifiedGUI::tr("Size"), ui->divisionSectionBody);
+    ui->useSizeButton = new QRadioButton(ImageToolsUnifiedGUI::tr("Size"), body);
     bodyLayout->addWidget(ui->useDivisionButton);
     bodyLayout->addWidget(ui->useSizeButton);
 
     auto *grid = new QGridLayout();
-    ui->hDivValue = new QSpinBox(ui->divisionSectionBody);
+    ui->hDivValue = new QSpinBox(body);
     ui->hDivValue->setMinimum(1);
-    ui->vDivValue = new QSpinBox(ui->divisionSectionBody);
+    ui->vDivValue = new QSpinBox(body);
     ui->vDivValue->setMinimum(1);
-    ui->cellWidthValue = buildPixelSpinBox(ui->divisionSectionBody);
-    ui->cellHeightValue = buildPixelSpinBox(ui->divisionSectionBody);
+    ui->cellWidthValue = buildPixelSpinBox(body);
+    ui->cellHeightValue = buildPixelSpinBox(body);
     ui->cellWidthValue->setEnabled(false);
     ui->cellHeightValue->setEnabled(false);
 
-    grid->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), ui->divisionSectionBody), 0,
-        0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), body), 0, 0);
     grid->addWidget(ui->hDivValue, 0, 1);
-    grid->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), ui->divisionSectionBody), 1, 0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), body), 1, 0);
     grid->addWidget(ui->vDivValue, 1, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), ui->divisionSectionBody), 2,
-                    0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), body), 2, 0);
     grid->addWidget(ui->cellWidthValue, 2, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), ui->divisionSectionBody),
-                    3, 0);
+    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), body), 3, 0);
     grid->addWidget(ui->cellHeightValue, 3, 1);
     bodyLayout->addLayout(grid);
 
@@ -278,18 +243,15 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     ui->divisionModeButtonGroup->addButton(ui->useDivisionButton);
     ui->divisionModeButtonGroup->addButton(ui->useSizeButton);
 
-    ui->ignoreRemainders =
-        new QCheckBox(ImageToolsUnifiedGUI::tr("Ignore remainders"), ui->divisionSectionBody);
+    ui->ignoreRemainders = new QCheckBox(ImageToolsUnifiedGUI::tr("Ignore remainders"), body);
     ui->ignoreRemainders->setChecked(true);
     bodyLayout->addWidget(ui->ignoreRemainders);
 
-    ui->saveDividedButton =
-        new QPushButton(ImageToolsUnifiedGUI::tr("Save Divided Images"), ui->divisionSectionBody);
+    ui->saveDividedButton = new QPushButton(ImageToolsUnifiedGUI::tr("Save Divided Images"), body);
     bodyLayout->addWidget(ui->saveDividedButton);
 
-    box->addWidget(ui->divisionSectionBody);
-
-    layout->addWidget(frame);
+    ui->divisionSection->setBody(body);
+    layout->addWidget(ui->divisionSection);
 }
 
 void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
@@ -425,13 +387,13 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
     connect(ui->saveDividedButton, &QPushButton::clicked, this,
             &ImageToolsUnifiedGUI::onSaveDividedButtonClicked);
 
-    connect(ui->resizeSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->resizeSection, &SectionFrame::expandedChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-    connect(ui->transformSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->transformSection, &SectionFrame::expandedChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-    connect(ui->transparentSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->transparentSection, &SectionFrame::expandedChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
-    connect(ui->divisionSectionToggle, &QCheckBox::checkStateChanged, this,
+    connect(ui->divisionSection, &SectionFrame::expandedChanged, this,
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
 
     onSectionVisibilityChanged();
@@ -908,15 +870,15 @@ void ImageToolsUnifiedGUI::onSaveDividedButtonClicked()
 
 void ImageToolsUnifiedGUI::onSectionVisibilityChanged()
 {
-    const bool resizeOpen = ui->resizeSectionToggle->isChecked();
-    const bool transformOpen = ui->transformSectionToggle->isChecked();
-    const bool transparentOpen = ui->transparentSectionToggle->isChecked();
-    const bool divisionOpen = ui->divisionSectionToggle->isChecked();
+    const bool resizeOpen = ui->resizeSection->isExpanded();
+    const bool transformOpen = ui->transformSection->isExpanded();
+    const bool transparentOpen = ui->transparentSection->isExpanded();
+    const bool divisionOpen = ui->divisionSection->isExpanded();
 
-    ui->resizeSectionBody->setVisible(resizeOpen);
-    ui->transformSectionBody->setVisible(transformOpen);
-    ui->transparentSectionBody->setVisible(transparentOpen);
-    ui->divisionSectionBody->setVisible(divisionOpen);
+    ui->resizeSection->body()->setVisible(resizeOpen);
+    ui->transformSection->body()->setVisible(transformOpen);
+    ui->transparentSection->body()->setVisible(transparentOpen);
+    ui->divisionSection->body()->setVisible(divisionOpen);
 
     retranslateSectionToggles();
 }
@@ -926,6 +888,7 @@ void ImageToolsUnifiedGUI::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
+        return;
     }
     GuiTool::changeEvent(event);
 }
@@ -960,19 +923,29 @@ void ImageToolsUnifiedGUI::retranslateUi()
 
 void ImageToolsUnifiedGUI::retranslateSectionToggles()
 {
-    const bool resizeOpen = ui->resizeSectionToggle->isChecked();
-    const bool transformOpen = ui->transformSectionToggle->isChecked();
-    const bool transparentOpen = ui->transparentSectionToggle->isChecked();
-    const bool divisionOpen = ui->divisionSectionToggle->isChecked();
+    const bool resizeOpen = ui->resizeSection->isExpanded();
+    const bool transformOpen = ui->transformSection->isExpanded();
+    const bool transparentOpen = ui->transparentSection->isExpanded();
+    const bool divisionOpen = ui->divisionSection->isExpanded();
 
-    ui->resizeSectionToggle->setText(
-        (resizeOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) + tr("Resize"));
-    ui->transformSectionToggle->setText(
-        (transformOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
-        tr("Rotate / Flip"));
-    ui->transparentSectionToggle->setText(
-        (transparentOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
-        tr("Transparent (click image)"));
-    ui->divisionSectionToggle->setText(
-        (divisionOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) + tr("Division"));
+    if (auto *toggle =
+            ui->resizeSection->findChild<QCheckBox *>(QString(), Qt::FindDirectChildrenOnly)) {
+        toggle->setText((resizeOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
+                        tr("Resize"));
+    }
+    if (auto *toggle =
+            ui->transformSection->findChild<QCheckBox *>(QString(), Qt::FindDirectChildrenOnly)) {
+        toggle->setText((transformOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
+                        tr("Rotate / Flip"));
+    }
+    if (auto *toggle =
+            ui->transparentSection->findChild<QCheckBox *>(QString(), Qt::FindDirectChildrenOnly)) {
+        toggle->setText((transparentOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
+                        tr("Transparent (click image)"));
+    }
+    if (auto *toggle =
+            ui->divisionSection->findChild<QCheckBox *>(QString(), Qt::FindDirectChildrenOnly)) {
+        toggle->setText((divisionOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
+                        tr("Division"));
+    }
 }

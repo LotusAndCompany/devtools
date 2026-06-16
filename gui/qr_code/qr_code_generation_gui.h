@@ -1,7 +1,7 @@
 #ifndef QR_CODE_GENERATION_GUI_H
 #define QR_CODE_GENERATION_GUI_H
 
-#include "gui/components/error_label.h"
+#include "gui/components/status_label.h"
 #include "gui/gui_tool.h"
 
 #include <QCheckBox>

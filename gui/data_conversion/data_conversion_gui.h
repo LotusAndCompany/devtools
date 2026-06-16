@@ -6,9 +6,9 @@
 
 #include <QWidget>
 
+class ActionButton;
 class QComboBox;
 class QHBoxLayout;
-class QPushButton;
 class QSplitter;
 class QTextBrowser;
 class QTextEdit;
@@ -78,11 +78,11 @@ private:
     /// 入力側のエラー・警告メッセージ表示UI
     QTextBrowser *inputMessageTextView = nullptr;
     /// 貼り付けボタン
-    QPushButton *pasteButton = nullptr;
+    ActionButton *pasteButton = nullptr;
     /// 読み込みボタン
-    QPushButton *loadButton = nullptr;
+    ActionButton *loadButton = nullptr;
     /// 消去ボタン
-    QPushButton *clearButton = nullptr;
+    ActionButton *clearButton = nullptr;
 
     /// テキスト表示UI
     QTextBrowser *outputTextView = nullptr;
@@ -93,9 +93,9 @@ private:
     /// インデント選択UI
     QComboBox *styleSelector = nullptr;
     /// コピーボタン
-    QPushButton *copyButton = nullptr;
+    ActionButton *copyButton = nullptr;
     /// 保存ボタン
-    QPushButton *saveButton = nullptr;
+    ActionButton *saveButton = nullptr;
 
 #ifdef _TEST_ImageDivisionGUI
     frientd class Test::TestDataConversionGUI;

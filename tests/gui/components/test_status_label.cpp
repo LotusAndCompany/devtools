@@ -3,7 +3,7 @@
 #include <QtTest>
 
 #define _TEST_StatusLabel
-#include "gui/components/error_label.h"
+#include "gui/components/status_label.h"
 #undef _TEST_StatusLabel
 
 namespace Test {

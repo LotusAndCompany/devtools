@@ -1,5 +1,5 @@
-#ifndef GUI_COMPONENTS_ERROR_LABEL_H
-#define GUI_COMPONENTS_ERROR_LABEL_H
+#ifndef GUI_COMPONENTS_STATUS_LABEL_H
+#define GUI_COMPONENTS_STATUS_LABEL_H
 
 #include <QLabel>
 
@@ -61,4 +61,4 @@ private:
     static const char *styleForLevel(Level level);
 };
 
-#endif // GUI_COMPONENTS_ERROR_LABEL_H
+#endif // GUI_COMPONENTS_STATUS_LABEL_H

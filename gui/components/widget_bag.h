@@ -2,10 +2,11 @@
 #define GUI_COMPONENTS_WIDGET_BAG_H
 
 /**
- * @brief Ui::* 構造体パターンの規格化
+ * @brief Ui::* 構造体パターンの規格化（ドキュメント専用・実装コードなし）
  *
  * image_tools_unified_gui.h の Ui::ImageToolsUnifiedGUI の方式を
  * 全コンポーネントで統一するためのベースパターンを示すドキュメント用ヘッダー。
+ * このファイルはコンパイル単位としてライブラリに含まれるが、実装コードは含まない。
  *
  * 使用パターン:
  * @code

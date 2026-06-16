@@ -9,7 +9,6 @@
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QIcon>
-#include <QPushButton>
 #include <QResizeEvent>
 #include <QSpacerItem>
 #include <QSplitter>
@@ -38,16 +37,16 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
     }
 
     connect(inputTextEdit, &QTextEdit::textChanged, this, &DataConversionGUI::onInputTextChanged);
-    connect(loadButton, &QPushButton::pressed, this, &DataConversionGUI::onLoadPressed);
-    connect(pasteButton, &QPushButton::pressed, this, &DataConversionGUI::onPastePressed);
-    connect(clearButton, &QPushButton::pressed, this, &DataConversionGUI::onClearPressed);
+    connect(loadButton, &ActionButton::pressed, this, &DataConversionGUI::onLoadPressed);
+    connect(pasteButton, &ActionButton::pressed, this, &DataConversionGUI::onPastePressed);
+    connect(clearButton, &ActionButton::pressed, this, &DataConversionGUI::onClearPressed);
 
     connect(formatSelector, &QComboBox::currentIndexChanged, this,
             &DataConversionGUI::onFormatSelected);
     connect(styleSelector, &QComboBox::currentIndexChanged, this,
             &DataConversionGUI::onStyleSelected);
-    connect(copyButton, &QPushButton::pressed, this, &DataConversionGUI::onCopyPressed);
-    connect(saveButton, &QPushButton::pressed, this, &DataConversionGUI::onSavePressed);
+    connect(copyButton, &ActionButton::pressed, this, &DataConversionGUI::onCopyPressed);
+    connect(saveButton, &ActionButton::pressed, this, &DataConversionGUI::onSavePressed);
 }
 
 void DataConversionGUI::buildUi()
@@ -81,20 +80,17 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
     input_action_button_layout = new QHBoxLayout(actionBar);
     input_action_button_layout->setContentsMargins(4, 0, 4, 0);
 
-    loadButton = new QPushButton(tr("Load"), actionBar);
-    loadButton->setStyleSheet(ActionButton::kPaddingStyle);
-    loadButton->setIcon(QIcon::fromTheme(QStringLiteral("file")));
+    loadButton = new ActionButton(QIcon::fromTheme(QStringLiteral("file")), tr("Load"), actionBar);
     input_action_button_layout->addWidget(loadButton);
 
-    pasteButton = new QPushButton(tr("Paste"), actionBar);
-    pasteButton->setStyleSheet(ActionButton::kPaddingStyle);
-    pasteButton->setIcon(QIcon::fromTheme(QStringLiteral("content_paste")));
+    pasteButton =
+        new ActionButton(QIcon::fromTheme(QStringLiteral("content_paste")), tr("Paste"), actionBar);
     input_action_button_layout->addWidget(pasteButton);
 
     input_action_button_layout->addItem(
         new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    clearButton = new QPushButton(actionBar);
+    clearButton = new ActionButton(QIcon::fromTheme(QStringLiteral("close")), QString(), actionBar);
     {
         QSizePolicy policy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         policy.setHorizontalStretch(0);
@@ -104,8 +100,6 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
     clearButton->setMinimumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
     clearButton->setMaximumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
     clearButton->setAutoFillBackground(false);
-    clearButton->setStyleSheet(ActionButton::kPaddingStyle);
-    clearButton->setIcon(QIcon::fromTheme(QStringLiteral("close")));
     clearButton->setIconSize(QSize(CLEAR_BUTTON_ICON_SIZE, CLEAR_BUTTON_ICON_SIZE));
     clearButton->setFlat(false);
     input_action_button_layout->addWidget(clearButton);
@@ -156,14 +150,11 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     output_action_button_layout->addItem(
         new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    saveButton = new QPushButton(tr("Save"), actionBar);
-    saveButton->setStyleSheet(ActionButton::kPaddingStyle);
-    saveButton->setIcon(QIcon::fromTheme(QStringLiteral("save")));
+    saveButton = new ActionButton(QIcon::fromTheme(QStringLiteral("save")), tr("Save"), actionBar);
     output_action_button_layout->addWidget(saveButton);
 
-    copyButton = new QPushButton(tr("Copy"), actionBar);
-    copyButton->setStyleSheet(ActionButton::kPaddingStyle);
-    copyButton->setIcon(QIcon::fromTheme(QStringLiteral("content_copy")));
+    copyButton =
+        new ActionButton(QIcon::fromTheme(QStringLiteral("content_copy")), tr("Copy"), actionBar);
     output_action_button_layout->addWidget(copyButton);
 
     layout->addWidget(actionBar);
@@ -326,6 +317,7 @@ void DataConversionGUI::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
+        return;
     }
     GuiTool::changeEvent(event);
 }
@@ -346,8 +338,10 @@ void DataConversionGUI::retranslateUi()
     const int styleIndex = styleSelector->currentIndex();
 
     formatSelector->clear();
+    formatSelector->addItem(QStringLiteral("JSON"));
     formatSelector->addItem(tr("YAML (Block style)"));
     formatSelector->addItem(tr("YAML (Flow style)"));
+    formatSelector->addItem(QStringLiteral("TOML"));
     formatSelector->setCurrentIndex(formatIndex);
 
     styleSelector->clear();
