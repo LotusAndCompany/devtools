@@ -11,6 +11,7 @@
 #include <QComboBox>
 #include <QDir>
 #include <QDoubleSpinBox>
+#include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
@@ -917,13 +918,61 @@ void ImageToolsUnifiedGUI::onSectionVisibilityChanged()
     ui->transparentSectionBody->setVisible(transparentOpen);
     ui->divisionSectionBody->setVisible(divisionOpen);
 
-    ui->resizeSectionToggle->setText((resizeOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) +
-                                     tr("Resize"));
+    retranslateSectionToggles();
+}
+
+void ImageToolsUnifiedGUI::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    }
+    GuiTool::changeEvent(event);
+}
+
+void ImageToolsUnifiedGUI::retranslateUi()
+{
+    retranslateSectionToggles();
+
+    ui->keepAspectRatio->setText(tr("Keep aspect ratio"));
+    ui->smoothScaling->setText(tr("Smooth scaling"));
+    ui->applyResizeBySizeButton->setText(tr("Apply Size"));
+    ui->applyResizeByScaleButton->setText(tr("Apply Scale"));
+
+    ui->rotateLeftButton->setText(tr("Rotate Anti-clockwise"));
+    ui->rotateRightButton->setText(tr("Rotate Clockwise"));
+    ui->flipHorizontalButton->setText(tr("Flip Horizontal"));
+    ui->flipVerticalButton->setText(tr("Flip Vertical"));
+
+    ui->contiguousArea->setText(tr("Contiguous area only"));
+    ui->useDivisionButton->setText(tr("By division count"));
+    ui->useSizeButton->setText(tr("By cell size"));
+    ui->ignoreRemainders->setText(tr("Ignore remainders"));
+    ui->saveDividedButton->setText(tr("Save divided images"));
+
+    const int colorModeIndex = ui->colorMode->currentIndex();
+    ui->colorMode->clear();
+    ui->colorMode->addItem(tr("RGB"), static_cast<int>(QColor::Spec::Rgb));
+    ui->colorMode->addItem(tr("HSV"), static_cast<int>(QColor::Spec::Hsv));
+    ui->colorMode->addItem(tr("HSL"), static_cast<int>(QColor::Spec::Hsl));
+    ui->colorMode->setCurrentIndex(colorModeIndex);
+}
+
+void ImageToolsUnifiedGUI::retranslateSectionToggles()
+{
+    const bool resizeOpen = ui->resizeSectionToggle->isChecked();
+    const bool transformOpen = ui->transformSectionToggle->isChecked();
+    const bool transparentOpen = ui->transparentSectionToggle->isChecked();
+    const bool divisionOpen = ui->divisionSectionToggle->isChecked();
+
+    ui->resizeSectionToggle->setText(
+        (resizeOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) + tr("Resize"));
     ui->transformSectionToggle->setText(
-        (transformOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) + tr("Rotate / Flip"));
+        (transformOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
+        tr("Rotate / Flip"));
     ui->transparentSectionToggle->setText(
-        (transparentOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) +
+        (transparentOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) +
         tr("Transparent (click image)"));
     ui->divisionSectionToggle->setText(
-        (divisionOpen ? QStringLiteral("▼ ") : QStringLiteral("▶ ")) + tr("Division"));
+        (divisionOpen ? QStringLiteral("\u25BC ") : QStringLiteral("\u25B6 ")) + tr("Division"));
 }

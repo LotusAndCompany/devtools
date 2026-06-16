@@ -39,6 +39,7 @@ public:
     DataConversionGUI &operator=(DataConversionGUI &&) = delete;
 
 protected:
+    void changeEvent(QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
@@ -54,6 +55,8 @@ private slots:
 private:
     /// UIを構築する
     void buildUi();
+    /// UIテキストを再翻訳する
+    void retranslateUi();
     /// 入力側のUIを構築する
     QWidget *buildInputSide(QWidget *parent);
     /// 出力側のUIを構築する

@@ -29,6 +29,7 @@ devtools/
 │   └── tool/               # Tool base classes
 ├── gui/                # GUI components
 │   ├── command/            # Command execution UI
+│   ├── components/         # Shared UI widget library
 │   ├── data_conversion/    # Data conversion UI
 │   ├── db_tool/            # Database tool UI
 │   ├── image/              # Image processing UI
@@ -69,11 +70,19 @@ devtools/
         │                    │                    │
         └────────────────────┼────────────────────┘
                              │
-                             ▼
-                    ┌──────────────────┐
-                    │  DevTools_core   │
-                    │  (main framework)│
-                    └──────────────────┘
+              ┌──────────────┴──────────────┐
+              │                             │
+              ▼                             ▼
+    ┌──────────────────┐          ┌──────────────────┐
+    │ DevTools_        │          │  DevTools_core   │
+    │ components       │          │  (main framework)│
+    └────────┬─────────┘          └──────────────────┘
+             │
+             ▼
+    ┌──────────────────┐
+    │  DevTools_core   │
+    │  (main framework)│
+    └──────────────────┘
 ```
 
 ### Module List
@@ -81,6 +90,7 @@ devtools/
 | Module | Description | Dependencies |
 |--------|-------------|--------------|
 | `DevTools_core` | Main framework, GUI base classes, main window | Qt6 |
+| `DevTools_components` | Shared UI widget library (SectionFrame, ActionButton, StatusLabel, etc.) | DevTools_core |
 | `DevTools_image_core` | Image I/O and editing base classes | DevTools_core |
 | `DevTools_image_resize` | Image resize functionality | DevTools_image_core |
 | `DevTools_image_rotation` | Image rotation functionality | DevTools_image_core |

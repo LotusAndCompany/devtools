@@ -6,9 +6,9 @@ UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `
 
 ```
 designs/
-└── screens/
-    ├── welcome-page.pen
-    ├── image-resize.pen
+├── screens/
+│   ├── welcome-page.pen
+│   ├── image-resize.pen
     ├── image-rotation.pen
     ├── image-division.pen
     ├── image-transparent.pen
@@ -22,6 +22,8 @@ designs/
     ├── regex-tester.pen
     ├── color-converter.pen
     └── dialogs.pen        # Settings / DB Connection / About 等のダイアログ群
+└── components/
+    └── components.pen    # 共有UIプリミティブ（ボタン、入力、ラベル等）
 ```
 
 One file per screen (or per related dialog group). The sidebar and other shared chrome are intentionally excluded from individual screen files so that an edit to one screen never touches another.
@@ -34,7 +36,13 @@ One file per screen (or per related dialog group). The sidebar and other shared 
 
 ## Reusable Components
 
-Shared UI primitives (buttons, inputs, checkboxes, tabs, radios) are **not** kept inline in each screen file. When you need a primitive while editing, recreate it in-file as needed or extract a shared library file in a follow-up PR.
+Shared UI primitives are maintained in `designs/components/components.pen`. This file contains reusable design tokens for common widgets (buttons, inputs, labels, layout frames, navigation elements) used across multiple screens.
+
+When editing a screen:
+- Refer to `designs/components/components.pen` for the canonical design of shared primitives.
+- Edit `.pen` files via the Pencil editor or the `pencil` MCP server only. Never read, grep, or edit `.pen` files directly; they are encrypted.
+- One component group per PR keeps diffs reviewable and minimizes auto-merge risk.
+- `.pen` files are tracked as plain text, but encrypted payloads can corrupt under text auto-merge. Keep edits localized and coordinate conflicts.
 
 ## Git Handling
 

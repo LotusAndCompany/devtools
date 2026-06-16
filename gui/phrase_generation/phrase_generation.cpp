@@ -23,7 +23,7 @@
 #include <algorithm>
 
 namespace {
-const char *const SAVE_BUTTON_STYLE =
+static constexpr const char *SAVE_BUTTON_STYLE =
     "margin-right: 30px;\n"
     "margin-bottom: 15px;\n"
     "padding-top: 3px;\n"
@@ -32,8 +32,9 @@ const char *const SAVE_BUTTON_STYLE =
     "padding-right: 10px;\n"
     "border-radius: 6px;\n"
     "background-color: rgb(175, 174, 177);";
-const char *const TEMPLATE_TITLE_STYLE = "QLineEdit {\n    padding: 2px 0px 2px 2px;\n}";
-const char *const TEMPLATE_TEXT_STYLE = "QPlainTextEdit {\n    padding: 0px 0px 5px 0px;\n}";
+static constexpr const char *TEMPLATE_TITLE_STYLE = "QLineEdit {\n    padding: 2px 0px 2px 2px;\n}";
+static constexpr const char *TEMPLATE_TEXT_STYLE =
+    "QPlainTextEdit {\n    padding: 0px 0px 5px 0px;\n}";
 
 constexpr int DEFAULT_WIDTH = 1012;
 constexpr int DEFAULT_HEIGHT = 633;

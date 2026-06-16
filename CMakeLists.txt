@@ -145,6 +145,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/db_tool/connection_selector/connection_selector.h gui/db_tool/connection_selector/connection_selector.cpp
     )
 
+    # components (shared UI widget library)
+    qt_add_library(${PROJECT_NAME}_components STATIC
+        gui/components/section_frame.h gui/components/section_frame.cpp
+        gui/components/action_button.h gui/components/action_button.cpp
+        gui/components/labeled_spinbox.h gui/components/labeled_spinbox.cpp
+        gui/components/error_label.h gui/components/error_label.cpp
+        gui/components/translatable_widget.h
+        gui/components/widget_bag.h
+    )
+
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
 
@@ -182,6 +192,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gui/qr_code/qr_code_generation_gui.h
         gui/qr_code/qr_code_generation_gui.cpp
     )
+    target_link_libraries(${PROJECT_NAME}_qr_code_generation PUBLIC ${PROJECT_NAME}_components)
 
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
     #    AUTOMOC ON
@@ -249,6 +260,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 # [モジュール一覧]
 set(MODULE_LIST
     ${PROJECT_NAME}_core
+    ${PROJECT_NAME}_components
     ${PROJECT_NAME}_image_core
     ${PROJECT_NAME}_image_tools_unified
     ${PROJECT_NAME}_phrase_generation

@@ -1,6 +1,7 @@
 #include "main_window.h"
 
 #include "contents_area.h"
+#include "gui/components/action_button.h"
 #include "gui_application.h"
 #include "menubar/about_devtools_dialog.h"
 #include "menubar/settings_dialog.h"
@@ -25,6 +26,8 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
+
+static constexpr const char *kSidebarPaddingStyle = "padding: 8px 2px 8px 2px;";
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), m_settingsDialog(new SettingsDialog(this))
@@ -126,7 +129,7 @@ void MainWindow::setupCentralWidget()
     m_sidemenuVisibilityButton = new QPushButton(centralwidget);
     m_sidemenuVisibilityButton->setObjectName("sidemenuVisibilityButton");
     m_sidemenuVisibilityButton->setMinimumSize(24, 24);
-    m_sidemenuVisibilityButton->setStyleSheet("padding: 8px 2px 8px 2px;");
+    m_sidemenuVisibilityButton->setStyleSheet(kSidebarPaddingStyle);
     m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
     m_sidemenuVisibilityButton->setIconSize(QSize(24, 24));
     m_sidemenuVisibilityButton->setFlat(true);
@@ -137,7 +140,7 @@ void MainWindow::setupCentralWidget()
     m_windowAlwaysOnTopButton = new QPushButton(centralwidget);
     m_windowAlwaysOnTopButton->setObjectName("windowAlwaysOnTopButton");
     m_windowAlwaysOnTopButton->setMinimumSize(24, 24);
-    m_windowAlwaysOnTopButton->setStyleSheet("padding: 8px 2px 8px 2px;");
+    m_windowAlwaysOnTopButton->setStyleSheet(kSidebarPaddingStyle);
     m_windowAlwaysOnTopButton->setIcon(QIcon::fromTheme("flip_to_front"));
     m_windowAlwaysOnTopButton->setIconSize(QSize(24, 24));
     m_windowAlwaysOnTopButton->setCheckable(true);

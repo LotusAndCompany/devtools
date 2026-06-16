@@ -12,6 +12,12 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
     gui/contents_area.h gui/contents_area.cpp
+    gui/components/error_label.h gui/components/error_label.cpp
+    gui/components/section_frame.h gui/components/section_frame.cpp
+    gui/components/action_button.h gui/components/action_button.cpp
+    gui/components/labeled_spinbox.h gui/components/labeled_spinbox.cpp
+    gui/components/translatable_widget.h
+    gui/components/widget_bag.h
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt6::Test
@@ -152,4 +158,18 @@ DevTools_add_test(test_color_sample
 DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
+)
+
+# gui/components
+DevTools_add_test(test_status_label
+    SOURCES
+    tests/gui/components/test_status_label.cpp
+)
+DevTools_add_test(test_section_frame
+    SOURCES
+    tests/gui/components/test_section_frame.cpp
+)
+DevTools_add_test(test_labeled_spinbox
+    SOURCES
+    tests/gui/components/test_labeled_spinbox.cpp
 )

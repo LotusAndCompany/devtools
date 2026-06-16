@@ -1,6 +1,12 @@
 #include "gui_tool.h"
 
-// NOTE: 使わない場合は定義しない
-#if _DevTools_USE_GUI_TOOL_SUPERCLASS
+#include <QEvent>
+
+#if DevTools_USE_GUI_TOOL_SUPERCLASS
 _GuiToolSuperClass::_GuiToolSuperClass(QWidget *parent) : QWidget(parent) {}
+
+void _GuiToolSuperClass::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+}
 #endif

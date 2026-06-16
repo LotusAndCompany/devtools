@@ -1,6 +1,7 @@
 ---
 paths:
   - "designs/screens/**/*.pen"
+  - "designs/components/**/*.pen"
   - "docs/development/design-files.md"
 ---
 

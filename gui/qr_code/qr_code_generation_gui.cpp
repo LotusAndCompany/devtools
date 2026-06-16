@@ -2,6 +2,7 @@
 
 #include "core/qr_tool/content_generator.h"
 #include "core/qr_tool/qrcodegen.hpp"
+#include "gui/components/error_label.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -204,9 +205,7 @@ QWidget *QRCodeGenerationGUI::createTextWidget()
     layout->addRow(tr("Text:"), textEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet("color: red; font-size: 12px;");
-    errorLabel->setVisible(false);
+    auto *errorLabel = new StatusLabel();
     errorLabels["text_content_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -230,9 +229,7 @@ QWidget *QRCodeGenerationGUI::createUrlWidget()
     layout->addRow(tr("URL:"), urlEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet("color: red; font-size: 12px;");
-    errorLabel->setVisible(false);
+    auto *errorLabel = new StatusLabel();
     errorLabels["url_content_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -256,9 +253,7 @@ QWidget *QRCodeGenerationGUI::createEmailWidget()
     layout->addRow(tr("Email:"), emailEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet("color: red; font-size: 12px;");
-    errorLabel->setVisible(false);
+    auto *errorLabel = new StatusLabel();
     errorLabels["email_address_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -282,9 +277,7 @@ QWidget *QRCodeGenerationGUI::createPhoneWidget()
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet("color: red; font-size: 12px;");
-    errorLabel->setVisible(false);
+    auto *errorLabel = new StatusLabel();
     errorLabels["phone_number_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -308,9 +301,7 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話番号エラーラベル作成
-    auto *phoneErrorLabel = new QLabel();
-    phoneErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    phoneErrorLabel->setVisible(false);
+    auto *phoneErrorLabel = new StatusLabel();
     errorLabels["sms_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
@@ -321,9 +312,7 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     layout->addRow(tr("Message:"), messageEdit);
 
     // メッセージエラーラベル作成
-    auto *messageErrorLabel = new QLabel();
-    messageErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    messageErrorLabel->setVisible(false);
+    auto *messageErrorLabel = new StatusLabel();
     errorLabels["sms_message_error"] = messageErrorLabel;
     layout->addRow("", messageErrorLabel);
 
@@ -350,9 +339,7 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     layout->addRow(tr("SSID:"), ssidEdit);
 
     // SSIDエラーラベル作成
-    auto *ssidErrorLabel = new QLabel();
-    ssidErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    ssidErrorLabel->setVisible(false);
+    auto *ssidErrorLabel = new StatusLabel();
     errorLabels["wifi_ssid_error"] = ssidErrorLabel;
     layout->addRow("", ssidErrorLabel);
 
@@ -363,9 +350,7 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     layout->addRow(tr("Password:"), passwordEdit);
 
     // パスワードエラーラベル作成
-    auto *passwordErrorLabel = new QLabel();
-    passwordErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    passwordErrorLabel->setVisible(false);
+    auto *passwordErrorLabel = new StatusLabel();
     errorLabels["wifi_password_error"] = passwordErrorLabel;
     layout->addRow("", passwordErrorLabel);
 
@@ -402,9 +387,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     layout->addRow(tr("Name:"), nameEdit);
 
     // 名前エラーラベル作成
-    auto *nameErrorLabel = new QLabel();
-    nameErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    nameErrorLabel->setVisible(false);
+    auto *nameErrorLabel = new StatusLabel();
     errorLabels["contact_name_error"] = nameErrorLabel;
     layout->addRow("", nameErrorLabel);
 
@@ -415,9 +398,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話エラーラベル作成
-    auto *phoneErrorLabel = new QLabel();
-    phoneErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    phoneErrorLabel->setVisible(false);
+    auto *phoneErrorLabel = new StatusLabel();
     errorLabels["contact_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
@@ -428,9 +409,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     layout->addRow(tr("Email:"), emailEdit);
 
     // メールエラーラベル作成
-    auto *emailErrorLabel = new QLabel();
-    emailErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    emailErrorLabel->setVisible(false);
+    auto *emailErrorLabel = new StatusLabel();
     errorLabels["contact_email_error"] = emailErrorLabel;
     layout->addRow("", emailErrorLabel);
 
@@ -460,9 +439,7 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     layout->addRow(tr("Event:"), summaryEdit);
 
     // イベントタイトルエラーラベル作成
-    auto *summaryErrorLabel = new QLabel();
-    summaryErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    summaryErrorLabel->setVisible(false);
+    auto *summaryErrorLabel = new StatusLabel();
     errorLabels["cal_summary_error"] = summaryErrorLabel;
     layout->addRow("", summaryErrorLabel);
 
@@ -475,9 +452,7 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     layout->addRow(tr("Start:"), startEdit);
 
     // 開始時刻エラーラベル作成
-    auto *startErrorLabel = new QLabel();
-    startErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    startErrorLabel->setVisible(false);
+    auto *startErrorLabel = new StatusLabel();
     errorLabels["cal_start_error"] = startErrorLabel;
     layout->addRow("", startErrorLabel);
 
@@ -490,9 +465,7 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     layout->addRow(tr("End:"), endEdit);
 
     // 終了時刻エラーラベル作成
-    auto *endErrorLabel = new QLabel();
-    endErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    endErrorLabel->setVisible(false);
+    auto *endErrorLabel = new StatusLabel();
     errorLabels["cal_end_error"] = endErrorLabel;
     layout->addRow("", endErrorLabel);
 
@@ -522,9 +495,7 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     layout->addRow(tr("Latitude:"), latEdit);
 
     // 緯度エラーラベル作成
-    auto *latErrorLabel = new QLabel();
-    latErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    latErrorLabel->setVisible(false);
+    auto *latErrorLabel = new StatusLabel();
     errorLabels["geo_lat_error"] = latErrorLabel;
     layout->addRow("", latErrorLabel);
 
@@ -535,9 +506,7 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     layout->addRow(tr("Longitude:"), lngEdit);
 
     // 経度エラーラベル作成
-    auto *lngErrorLabel = new QLabel();
-    lngErrorLabel->setStyleSheet("color: red; font-size: 12px;");
-    lngErrorLabel->setVisible(false);
+    auto *lngErrorLabel = new StatusLabel();
     errorLabels["geo_lng_error"] = lngErrorLabel;
     layout->addRow("", lngErrorLabel);
 
@@ -813,16 +782,14 @@ bool QRCodeGenerationGUI::validateCurrentType()
 
 void QRCodeGenerationGUI::showValidationError(const QString &fieldKey, const QString &message)
 {
-    if (QLabel *errorLabel = errorLabels.value(fieldKey)) {
-        errorLabel->setText(message);
-        errorLabel->setVisible(true);
+    if (StatusLabel *errorLabel = errorLabels.value(fieldKey)) {
+        errorLabel->showMessage(StatusLabel::Level::Error, message);
     }
 }
 
 void QRCodeGenerationGUI::clearValidationErrors()
 {
     for (auto *label : errorLabels.values()) {
-        label->setVisible(false);
         label->clear();
     }
 }

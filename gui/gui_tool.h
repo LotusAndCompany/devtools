@@ -6,7 +6,7 @@
 // 0: using GuiTool = QWidget;
 // 1: using GuiTool = _GuiToolSuperClass;
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define DevTools_USE_GUI_TOOL_SUPERCLASS 0
+#define DevTools_USE_GUI_TOOL_SUPERCLASS 1
 
 #if DevTools_USE_GUI_TOOL_SUPERCLASS
 // NOTE: 直接使いたくない名前にする

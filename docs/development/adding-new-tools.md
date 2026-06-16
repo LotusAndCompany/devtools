@@ -89,6 +89,16 @@ QString YourTool::process(const QString& input) {
 
 ### 4. Create GUI Components
 
+#### Check Existing Shared Components
+
+Before creating new widgets from scratch, check `gui/components/` for existing reusable components:
+- `SectionFrame` — collapsible section with toggle checkbox
+- `ActionButton` — icon + label button with standard padding
+- `LabeledSpinbox` — label + QSpinBox horizontal layout
+- `StatusLabel` — error/warning/success label with preset styles
+- `TranslatableWidget<Base>` — CRTP mixin for changeEvent + retranslateUi
+- `WidgetBag` — Ui::* POD struct pattern for widget ownership
+
 #### gui/your_tool/your_tool_gui.h
 
 ```cpp

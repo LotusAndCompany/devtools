@@ -99,6 +99,9 @@ public:
     ImageToolsUnifiedGUI(ImageToolsUnifiedGUI &&) = delete;
     ImageToolsUnifiedGUI &operator=(ImageToolsUnifiedGUI &&) = delete;
 
+protected:
+    void changeEvent(QEvent *event) override;
+
 private slots:
     void onLoadImageSelected(const QString &path);
     void onSaveImageSelected(const QString &path);
@@ -146,6 +149,8 @@ private:
     void refreshSizeInputs();
     void applyResize(const QSize &targetSize);
     bool hasImage() const;
+    void retranslateUi();
+    void retranslateSectionToggles();
 
     static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
     static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
