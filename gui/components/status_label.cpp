@@ -1,6 +1,6 @@
 #include "gui/components/status_label.h"
 
-StatusLabel::StatusLabel(QWidget *parent) : QLabel(parent), m_level(Level::Error)
+StatusLabel::StatusLabel(QWidget *parent) : QLabel(parent), mLevel(Level::Error)
 {
     setVisible(false);
     setStyleSheet(kErrorStyle);
@@ -8,7 +8,7 @@ StatusLabel::StatusLabel(QWidget *parent) : QLabel(parent), m_level(Level::Error
 
 void StatusLabel::setLevel(Level level)
 {
-    m_level = level;
+    mLevel = level;
     setStyleSheet(styleForLevel(level));
 }
 

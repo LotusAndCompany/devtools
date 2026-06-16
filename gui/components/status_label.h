@@ -57,7 +57,7 @@ public:
     static constexpr const char *kSuccessStyle = "color: green; font-size: 12px;";
 
 private:
-    Level m_level;
+    Level mLevel;
     static const char *styleForLevel(Level level);
 };
 

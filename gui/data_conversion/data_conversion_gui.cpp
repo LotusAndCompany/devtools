@@ -330,9 +330,9 @@ void DataConversionGUI::retranslateUi()
     copyButton->setText(tr("Copy"));
 
     inputTextEdit->setPlaceholderText(tr("Input text"));
-    inputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    inputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
     outputTextView->setPlaceholderText(tr("Output text"));
-    outputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    outputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
 
     const int formatIndex = formatSelector->currentIndex();
     const int styleIndex = styleSelector->currentIndex();

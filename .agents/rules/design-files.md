@@ -8,8 +8,9 @@ paths:
 # Design File Rules
 
 UI design files live under `designs/screens/`, one file per screen or dialog
-group. Common chrome such as the sidebar and header is intentionally excluded
-from individual screen files.
+group. Component-level designs live under `designs/components/`（See
+`docs/development/design-files.md` for full coverage）. Common chrome such as
+the sidebar and header is intentionally excluded from individual screen files.
 
 - Edit `.pen` files via the Pencil editor or the `pencil` MCP server only.
 - Never read, grep, or edit `.pen` files directly; they are encrypted.

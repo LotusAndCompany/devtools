@@ -18,7 +18,7 @@ SectionFrame::SectionFrame(const QString &title, QWidget *parent)
     connect(m_toggle, &QCheckBox::checkStateChanged, this, [this]() {
         const bool expanded = m_toggle->isChecked();
         updateToggleText(expanded);
-        if (m_body) {
+        if (m_body != nullptr) {
             m_body->setVisible(expanded);
         }
         emit expandedChanged(expanded);
@@ -29,12 +29,15 @@ SectionFrame::SectionFrame(const QString &title, QWidget *parent)
 
 void SectionFrame::setBody(QWidget *body)
 {
-    if (m_body) {
+    if (body == m_body) {
+        return;
+    }
+    if (m_body != nullptr) {
         m_layout->removeWidget(m_body);
         m_body->deleteLater();
     }
     m_body = body;
-    if (m_body) {
+    if (m_body != nullptr) {
         m_body->setParent(this);
         m_layout->addWidget(m_body);
         m_body->setVisible(m_toggle->isChecked());

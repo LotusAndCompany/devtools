@@ -285,6 +285,7 @@ set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
     if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core
+        AND NOT ${MODULE} STREQUAL ${PROJECT_NAME}_components
         AND NOT ${MODULE} STREQUAL ${PROJECT_NAME}_image_tools_unified)
         # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
         target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)

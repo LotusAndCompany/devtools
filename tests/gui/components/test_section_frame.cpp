@@ -16,6 +16,8 @@ private slots:
     static void test_constructorDefaults();
     static void test_setExpanded();
     static void test_setBody();
+    static void test_setBodyNullptr();
+    static void test_setBodySamePointer();
     static void test_expandedChangedSignal();
 };
 
@@ -39,6 +41,23 @@ void TestSectionFrame::test_setBody()
 {
     SectionFrame frame(QStringLiteral("Test"));
     auto *body = new QWidget();
+    frame.setBody(body);
+    QCOMPARE(frame.body(), body);
+}
+
+void TestSectionFrame::test_setBodyNullptr()
+{
+    SectionFrame frame(QStringLiteral("Test"));
+    frame.setBody(nullptr);
+    QCOMPARE(frame.body(), nullptr);
+}
+
+void TestSectionFrame::test_setBodySamePointer()
+{
+    SectionFrame frame(QStringLiteral("Test"));
+    auto *body = new QWidget();
+    frame.setBody(body);
+    QCOMPARE(frame.body(), body);
     frame.setBody(body);
     QCOMPARE(frame.body(), body);
 }

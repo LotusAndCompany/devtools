@@ -107,10 +107,14 @@ void buildResizeSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayo
     ui->heightValue = buildPixelSpinBox(body);
     ui->hScaleValue = buildScaleSpinBox(body);
     ui->vScaleValue = buildScaleSpinBox(body);
-    form->addRow(ImageToolsUnifiedGUI::tr("Width:"), ui->widthValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Height:"), ui->heightValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Horizontal Scale:"), ui->hScaleValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Vertical Scale:"), ui->vScaleValue);
+    ui->widthLabel = new QLabel(ImageToolsUnifiedGUI::tr("Width:"), body);
+    ui->heightLabel = new QLabel(ImageToolsUnifiedGUI::tr("Height:"), body);
+    ui->hScaleLabel = new QLabel(ImageToolsUnifiedGUI::tr("Horizontal Scale:"), body);
+    ui->vScaleLabel = new QLabel(ImageToolsUnifiedGUI::tr("Vertical Scale:"), body);
+    form->addRow(ui->widthLabel, ui->widthValue);
+    form->addRow(ui->heightLabel, ui->heightValue);
+    form->addRow(ui->hScaleLabel, ui->hScaleValue);
+    form->addRow(ui->vScaleLabel, ui->vScaleValue);
     bodyLayout->addLayout(form);
 
     ui->keepAspectRatio = new QCheckBox(ImageToolsUnifiedGUI::tr("Keep aspect ratio"), body);
@@ -169,25 +173,29 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     ui->colorMode->addItem("RGB", static_cast<int>(QColor::Spec::Rgb));
     ui->colorMode->addItem("HSL", static_cast<int>(QColor::Spec::Hsl));
     ui->colorMode->addItem("HSV", static_cast<int>(QColor::Spec::Hsv));
-    form->addRow(ImageToolsUnifiedGUI::tr("Color mode:"), ui->colorMode);
+    ui->colorModeLabel = new QLabel(ImageToolsUnifiedGUI::tr("Color mode:"), body);
+    form->addRow(ui->colorModeLabel, ui->colorMode);
 
     ui->colorSample = new ColorSample(body);
     ui->colorSample->setMinimumSize(24, 24);
-    form->addRow(ImageToolsUnifiedGUI::tr("Color:"), ui->colorSample);
+    ui->colorLabel = new QLabel(ImageToolsUnifiedGUI::tr("Color:"), body);
+    form->addRow(ui->colorLabel, ui->colorSample);
 
     ui->toleranceValue = new QDoubleSpinBox(body);
     ui->toleranceValue->setMinimum(0.0);
     ui->toleranceValue->setMaximum(1.0);
     ui->toleranceValue->setSingleStep(0.05);
     ui->toleranceValue->setValue(0.1);
-    form->addRow(ImageToolsUnifiedGUI::tr("Tolerance:"), ui->toleranceValue);
+    ui->toleranceLabel = new QLabel(ImageToolsUnifiedGUI::tr("Tolerance:"), body);
+    form->addRow(ui->toleranceLabel, ui->toleranceValue);
 
     ui->transparencyValue = new QDoubleSpinBox(body);
     ui->transparencyValue->setMinimum(0.0);
     ui->transparencyValue->setMaximum(1.0);
     ui->transparencyValue->setSingleStep(0.05);
     ui->transparencyValue->setValue(1.0);
-    form->addRow(ImageToolsUnifiedGUI::tr("Transparency:"), ui->transparencyValue);
+    ui->transparencyLabel = new QLabel(ImageToolsUnifiedGUI::tr("Transparency:"), body);
+    form->addRow(ui->transparencyLabel, ui->transparencyValue);
     bodyLayout->addLayout(form);
 
     ui->contiguousArea = new QCheckBox(ImageToolsUnifiedGUI::tr("Only contiguous area"), body);
@@ -208,7 +216,8 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
     auto *sizeRow = new QHBoxLayout();
-    sizeRow->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), body));
+    ui->sizeRowLabel = new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), body);
+    sizeRow->addWidget(ui->sizeRowLabel);
     ui->sizeLabel = new QLabel(ImageToolsUnifiedGUI::tr("0 x 0"), body);
     sizeRow->addWidget(ui->sizeLabel);
     bodyLayout->addLayout(sizeRow);
@@ -229,13 +238,17 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     ui->cellWidthValue->setEnabled(false);
     ui->cellHeightValue->setEnabled(false);
 
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), body), 0, 0);
+    ui->hDivLabel = new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), body);
+    grid->addWidget(ui->hDivLabel, 0, 0);
     grid->addWidget(ui->hDivValue, 0, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), body), 1, 0);
+    ui->vDivLabel = new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), body);
+    grid->addWidget(ui->vDivLabel, 1, 0);
     grid->addWidget(ui->vDivValue, 1, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), body), 2, 0);
+    ui->cellWidthLabel = new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), body);
+    grid->addWidget(ui->cellWidthLabel, 2, 0);
     grid->addWidget(ui->cellWidthValue, 2, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), body), 3, 0);
+    ui->cellHeightLabel = new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), body);
+    grid->addWidget(ui->cellHeightLabel, 3, 0);
     grid->addWidget(ui->cellHeightValue, 3, 1);
     bodyLayout->addLayout(grid);
 
@@ -896,6 +909,22 @@ void ImageToolsUnifiedGUI::changeEvent(QEvent *event)
 void ImageToolsUnifiedGUI::retranslateUi()
 {
     retranslateSectionToggles();
+
+    ui->widthLabel->setText(tr("Width:"));
+    ui->heightLabel->setText(tr("Height:"));
+    ui->hScaleLabel->setText(tr("Horizontal Scale:"));
+    ui->vScaleLabel->setText(tr("Vertical Scale:"));
+
+    ui->colorModeLabel->setText(tr("Color mode:"));
+    ui->colorLabel->setText(tr("Color:"));
+    ui->toleranceLabel->setText(tr("Tolerance:"));
+    ui->transparencyLabel->setText(tr("Transparency:"));
+
+    ui->sizeRowLabel->setText(tr("Image size:"));
+    ui->hDivLabel->setText(tr("Horizontal division:"));
+    ui->vDivLabel->setText(tr("Vertical division:"));
+    ui->cellWidthLabel->setText(tr("Cell width:"));
+    ui->cellHeightLabel->setText(tr("Cell height:"));
 
     ui->keepAspectRatio->setText(tr("Keep aspect ratio"));
     ui->smoothScaling->setText(tr("Smooth scaling"));

@@ -47,6 +47,10 @@ struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
     QCheckBox *smoothScaling;
     QPushButton *applyResizeBySizeButton;
     QPushButton *applyResizeByScaleButton;
+    QLabel *widthLabel;
+    QLabel *heightLabel;
+    QLabel *hScaleLabel;
+    QLabel *vScaleLabel;
 
     QPushButton *rotateLeftButton;
     QPushButton *rotateRightButton;
@@ -58,8 +62,17 @@ struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
     QDoubleSpinBox *toleranceValue;
     QDoubleSpinBox *transparencyValue;
     QCheckBox *contiguousArea;
+    QLabel *colorModeLabel;
+    QLabel *colorLabel;
+    QLabel *toleranceLabel;
+    QLabel *transparencyLabel;
 
     QLabel *sizeLabel;
+    QLabel *sizeRowLabel;
+    QLabel *hDivLabel;
+    QLabel *vDivLabel;
+    QLabel *cellWidthLabel;
+    QLabel *cellHeightLabel;
     QRadioButton *useDivisionButton;
     QRadioButton *useSizeButton;
     QButtonGroup *divisionModeButtonGroup;

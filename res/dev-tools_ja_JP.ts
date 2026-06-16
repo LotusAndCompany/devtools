@@ -504,6 +504,10 @@
         <source>Save</source>
         <translation>保存</translation>
     </message>
+    <message>
+        <source>Error &amp; warning messages</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageOpenDialog</name>
