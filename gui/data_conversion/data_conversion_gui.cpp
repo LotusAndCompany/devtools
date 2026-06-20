@@ -16,7 +16,6 @@
 #include <QVBoxLayout>
 
 namespace {
-const char *const BUTTON_PADDING_STYLE = "padding: 8px;";
 constexpr int MESSAGE_VIEW_MAX_HEIGHT = 64;
 constexpr int CLEAR_BUTTON_SIZE = 34;
 constexpr int CLEAR_BUTTON_ICON_SIZE = 16;
@@ -80,12 +79,10 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
     input_action_button_layout->setContentsMargins(4, 0, 4, 0);
 
     loadButton = new QPushButton(tr("Load"), actionBar);
-    loadButton->setStyleSheet(BUTTON_PADDING_STYLE);
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("file")));
     input_action_button_layout->addWidget(loadButton);
 
     pasteButton = new QPushButton(tr("Paste"), actionBar);
-    pasteButton->setStyleSheet(BUTTON_PADDING_STYLE);
     pasteButton->setIcon(QIcon::fromTheme(QStringLiteral("content_paste")));
     input_action_button_layout->addWidget(pasteButton);
 
@@ -102,7 +99,6 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
     clearButton->setMinimumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
     clearButton->setMaximumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
     clearButton->setAutoFillBackground(false);
-    clearButton->setStyleSheet(BUTTON_PADDING_STYLE);
     clearButton->setIcon(QIcon::fromTheme(QStringLiteral("close")));
     clearButton->setIconSize(QSize(CLEAR_BUTTON_ICON_SIZE, CLEAR_BUTTON_ICON_SIZE));
     clearButton->setFlat(false);
@@ -155,12 +151,10 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
         new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     saveButton = new QPushButton(tr("Save"), actionBar);
-    saveButton->setStyleSheet(BUTTON_PADDING_STYLE);
     saveButton->setIcon(QIcon::fromTheme(QStringLiteral("save")));
     output_action_button_layout->addWidget(saveButton);
 
     copyButton = new QPushButton(tr("Copy"), actionBar);
-    copyButton->setStyleSheet(BUTTON_PADDING_STYLE);
     copyButton->setIcon(QIcon::fromTheme(QStringLiteral("content_copy")));
     output_action_button_layout->addWidget(copyButton);
 

@@ -126,7 +126,6 @@ void MainWindow::setupCentralWidget()
     m_sidemenuVisibilityButton = new QPushButton(centralwidget);
     m_sidemenuVisibilityButton->setObjectName("sidemenuVisibilityButton");
     m_sidemenuVisibilityButton->setMinimumSize(24, 24);
-    m_sidemenuVisibilityButton->setStyleSheet("padding: 8px 2px 8px 2px;");
     m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
     m_sidemenuVisibilityButton->setIconSize(QSize(24, 24));
     m_sidemenuVisibilityButton->setFlat(true);
@@ -137,7 +136,6 @@ void MainWindow::setupCentralWidget()
     m_windowAlwaysOnTopButton = new QPushButton(centralwidget);
     m_windowAlwaysOnTopButton->setObjectName("windowAlwaysOnTopButton");
     m_windowAlwaysOnTopButton->setMinimumSize(24, 24);
-    m_windowAlwaysOnTopButton->setStyleSheet("padding: 8px 2px 8px 2px;");
     m_windowAlwaysOnTopButton->setIcon(QIcon::fromTheme("flip_to_front"));
     m_windowAlwaysOnTopButton->setIconSize(QSize(24, 24));
     m_windowAlwaysOnTopButton->setCheckable(true);

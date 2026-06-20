@@ -87,7 +87,6 @@ QDoubleSpinBox *buildScaleSpinBox(QWidget *parent)
 QPushButton *buildActionButton(QWidget *parent, const QString &text, const QString &iconName)
 {
     auto *button = new QPushButton(QIcon::fromTheme(iconName), text, parent);
-    button->setStyleSheet("text-align: left;");
     return button;
 }
 

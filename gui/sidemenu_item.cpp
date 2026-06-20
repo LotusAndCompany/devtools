@@ -12,7 +12,7 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     setFlat(true);
     setCheckable(true);
-    setStyleSheet("text-align:left;");
+    setStyleSheet(QStringLiteral("text-align:left;"));
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 

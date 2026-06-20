@@ -41,8 +41,14 @@ void GuiApplication::setup()
     }
 
     // qlementineスタイルを適用
-    auto *style = new oclero::qlementine::QlementineStyle(this);
-    setStyle(style);
+    qlementineStyle = new oclero::qlementine::QlementineStyle(this);
+    setStyle(qlementineStyle);
+
+    themeManager = new oclero::qlementine::ThemeManager(qlementineStyle, this);
+    themeManager->loadDirectory(":/themes");
+
+    connect(styleHints(), &QStyleHints::colorSchemeChanged, this,
+            &GuiApplication::applyColorScheme);
 
     // リソースの確認
     /*
@@ -143,18 +149,16 @@ int GuiApplication::start()
 
 void GuiApplication::applyColorScheme()
 {
-    switch (styleHints()->colorScheme()) {
-    case Qt::ColorScheme::Unknown:
-        qDebug() << "theme=Unknown";
-        break;
-    case Qt::ColorScheme::Light:
-        qDebug() << "theme=Light";
-        QIcon::setThemeName("light");
-        break;
-    case Qt::ColorScheme::Dark:
-        qDebug() << "theme=Dark";
-        QIcon::setThemeName("dark");
-        break;
+    const auto scheme = styleHints()->colorScheme();
+    const QString iconTheme = (scheme == Qt::ColorScheme::Dark) ? "dark" : "light";
+    const QString qlementineTheme = (scheme == Qt::ColorScheme::Dark) ? "Dark" : "Light";
+
+    qDebug() << "theme=" << qlementineTheme;
+
+    QIcon::setThemeName(iconTheme);
+
+    if (themeManager && themeManager->currentTheme() != qlementineTheme) {
+        themeManager->setCurrentTheme(qlementineTheme);
     }
 }
 

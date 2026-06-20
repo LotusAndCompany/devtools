@@ -9,6 +9,11 @@
 
 #include <memory>
 
+namespace oclero::qlementine {
+class QlementineStyle;
+class ThemeManager;
+} // namespace oclero::qlementine
+
 /**
  * @brief GUIアプリケーション
  */
@@ -44,7 +49,7 @@ public:
     /**
      * @brief システムのカラースキームを適用する
      */
-    static void applySystemColorScheme();
+    void applySystemColorScheme();
 
     void setup() override;
     int start() override;
@@ -62,27 +67,42 @@ private:
      */
     std::unique_ptr<MainWindow> window;
 
+    /**
+     * @brief qlementineスタイルオブジェクト
+     * @details QApplication::setStyle()に渡した所有権管理用ポインタ@n
+     *          ThemeManager経由でテーマを切り替える際に使用する
+     */
+    oclero::qlementine::QlementineStyle *qlementineStyle = nullptr;
+
+    /**
+     * @brief qlementineテーママネージャ
+     * @details light.json/dark.jsonを読み込み、システムのカラースキームに
+     *          合わせてテーマを切り替える
+     */
+    oclero::qlementine::ThemeManager *themeManager = nullptr;
+
     // NOTE: staticにできる
     /**
      * @brief カラースキームを変更をUIに反映する
      * @details ライトモードの時には黒いアイコン(res/light/)@n
      *          ダークモードの時は白いアイコン(res/dark/)
      * を使うようにアイコンテーマを変更する@n 各アイコンテーマは
-     * res/light/index.theme, res/dark/index.theme で定義されている
+     * res/light/index.theme, res/dark/index.theme で定義されている@n
+     *          また、qlementineのテーマもシステムスキームに合わせて切り替える
      *
      * @sa [QIcon::setThemeName(const QString
      * &name)](https://doc.qt.io/qt-6/qicon.html#setThemeName)
      * @sa [Freedesktop The icon theme
      * specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html)
      */
-    static void applyColorScheme();
+    void applyColorScheme();
 
     /**
      * @brief カラースキームが変更された時に呼ばれる
      * @details MainWindow::colorSchemeChanged() と接続されている
      * @sa GuiApplication::GuiApplication(int argc, char *argv)
      */
-    static void onWindowColorSchemeChanged();
+    void onWindowColorSchemeChanged();
 
 // Platform specific
 #ifdef Q_OS_MACOS
