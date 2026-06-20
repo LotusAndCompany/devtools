@@ -105,7 +105,8 @@ No, you need to save them manually. Right-click the generated QR code and select
 
 ### How do I change the theme?
 
-Go to **View > Theme** and select **Light** or **Dark**.
+DevTools follows the macOS system appearance. Change macOS between light and dark mode;
+DevTools updates the qlementine widget theme and icon theme from the system color scheme.
 
 ### Can I use keyboard shortcuts?
 

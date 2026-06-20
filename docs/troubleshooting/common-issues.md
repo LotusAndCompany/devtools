@@ -258,12 +258,16 @@ Cannot be opened because the developer cannot be verified
 **Symptoms:**
 - Icons wrong color
 - Incorrect appearance
+- Widgets look like the platform default style instead of qlementine
 
 **Solutions:**
 
-1. Restart application after theme change
-2. Check View > Theme setting
-3. Reset preferences
+1. Change the macOS appearance and verify DevTools follows the system light/dark mode.
+2. Restart DevTools after a system appearance change if the app was already running.
+3. Confirm the theme resources exist in the build: `:/themes/light.json` and
+   `:/themes/dark.json` are registered through `res/application.qrc`.
+4. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
+   linked into `DevTools_core`.
 
 ### Language Not Changed
 
