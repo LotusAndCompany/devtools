@@ -12,12 +12,20 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.9.3 (Widgets, LinguistTools, Network modules)
+- **Qt**: 6.9.3 (Widgets, LinguistTools, Network, Svg modules)
 - **vcpkg**: For dependency management
 
 ### Dependencies (via vcpkg)
 - toml11
 - yaml-cpp
+
+### Dependencies (via CMake FetchContent)
+- qlementine v1.4.2 (modern Qt Widgets `QStyle`, MIT license)
+
+Qlementine is fetched during CMake configure from
+`https://github.com/oclero/qlementine.git`. It requires Qt 6.8+ and CMake 3.21+;
+DevTools links it into `DevTools_core` and loads the bundled themes from the Qt resource
+prefix `:/themes`.
 
 ### Optional
 - **Doxygen**: 1.16+ (API documentation generation)
@@ -75,7 +83,7 @@ vcpkg install
 # Create build directory
 mkdir build && cd build
 
-# Configure
+# Configure. This also downloads qlementine through CMake FetchContent.
 cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build
@@ -119,6 +127,9 @@ Log output is color-coded by severity: DEBUG=dim, INFO=default, WARN=yellow, CRI
 |--------|---------|-------------|
 | `ENABLE_UNIT_TEST` | OFF | Enable unit tests |
 | `VCPKG_TARGET_TRIPLET` | auto | Set to `arm64-osx` for Apple Silicon |
+
+Qlementine's example applications are disabled in the project configuration
+(`QLEMENTINE_SANDBOX=OFF`, `QLEMENTINE_SHOWCASE=OFF`) so only the style library is built.
 
 Example with options:
 ```bash
@@ -202,3 +213,15 @@ The generated documentation will be in `build/doxygen/html/`.
    ```bash
    cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
    ```
+
+### qlementine FetchContent Issues
+
+If configuration fails while downloading qlementine:
+
+1. Check network access to `https://github.com/oclero/qlementine.git`.
+2. Delete the FetchContent cache and configure again:
+   ```bash
+   rm -rf build/_deps/qlementine-*
+   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   ```
+3. Verify that the active Qt installation is Qt 6.8 or later and includes the Svg module.
