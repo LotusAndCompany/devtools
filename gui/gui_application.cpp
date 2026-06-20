@@ -4,9 +4,10 @@
 #include <QDirIterator>
 #include <QIcon>
 #include <QSettings>
-#include <QStyleFactory>
 #include <QStyleHints>
 #include <QTranslator>
+
+#include <oclero/qlementine.hpp>
 
 GuiApplication::GuiApplication(int argc, char **argv)
     : QApplication(argc, argv), ApplicationMixin(AppType::GUI, argc, argv)
@@ -39,13 +40,9 @@ void GuiApplication::setup()
         }
     }
 
-    /*
-    // 利用可能なstyleの確認
-    for (const auto &key : QStyleFactory::keys()) {
-        qDebug() << key;
-    }
-    */
-    // setStyle(QStyleFactory::create("fusion"));
+    // qlementineスタイルを適用
+    auto *style = new oclero::qlementine::QlementineStyle(this);
+    setStyle(style);
 
     // リソースの確認
     /*
