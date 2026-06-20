@@ -5,6 +5,8 @@
 #include "core/tool/tool.h"
 
 #include <QMouseEvent>
+#include <QPainter>
+#include <QStyleOptionButton>
 
 const QString SidemenuItem::notConfigurableReason = "Sidemenu::ID::HOME is not confugurable";
 
@@ -12,7 +14,6 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     setFlat(true);
     setCheckable(true);
-    setStyleSheet(QStringLiteral("text-align:left;"));
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
@@ -40,5 +41,51 @@ void SidemenuItem::changeEvent(QEvent *event)
     default:
         QPushButton::changeEvent(event);
         break;
+    }
+}
+
+void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
+{
+    QPainter painter(this);
+
+    QStyleOptionButton option;
+    initStyleOption(&option);
+
+    // ベベルは qlementine に描画させる
+    style()->drawControl(QStyle::CE_PushButtonBevel, &option, &painter, this);
+
+    constexpr int LEFT_MARGIN = 8;
+    constexpr int ICON_TEXT_SPACING = 6;
+    constexpr int RIGHT_MARGIN = 8;
+
+    int contentX = option.rect.x() + LEFT_MARGIN;
+
+    if (!option.icon.isNull()) {
+        const auto iconMode =
+            (option.state & QStyle::State_Enabled) != 0 ? QIcon::Normal : QIcon::Disabled;
+        const auto iconState = (option.state & QStyle::State_On) != 0 ? QIcon::On : QIcon::Off;
+        const auto iconSz = iconSize();
+        QRect const iconRect(contentX,
+                             option.rect.y() + ((option.rect.height() - iconSz.height()) / 2),
+                             iconSz.width(), iconSz.height());
+        option.icon.paint(&painter, iconRect, Qt::AlignCenter, iconMode, iconState);
+        contentX += iconSz.width() + ICON_TEXT_SPACING;
+    }
+
+    int const textMaxWidth = option.rect.width() - contentX - RIGHT_MARGIN;
+    if (textMaxWidth > 0 && !option.text.isEmpty()) {
+        QRect const textRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
+
+        // qlementine のテーマカラーを palette から使う
+        // WindowText = secondaryColor, HighlightedText = primaryColorForeground
+        auto const textColor = (option.state & QStyle::State_On) != 0
+                                   ? palette().color(QPalette::HighlightedText)
+                                   : palette().color(QPalette::WindowText);
+        painter.setPen(textColor);
+
+        QString const elidedText =
+            fontMetrics().elidedText(option.text, Qt::ElideRight, textMaxWidth, Qt::TextSingleLine);
+        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+                         elidedText);
     }
 }
