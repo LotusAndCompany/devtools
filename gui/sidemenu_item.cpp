@@ -89,6 +89,6 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
             fontMetrics().elidedText(option.text, Qt::ElideRight, textMaxWidth, Qt::TextSingleLine);
         const auto textAlign =
             QStyle::visualAlignment(option.direction, Qt::AlignLeft | Qt::AlignVCenter);
-        painter.drawText(textRect, textAlign | Qt::TextSingleLine, elidedText);
+        painter.drawText(textRect, static_cast<int>(textAlign) | Qt::TextSingleLine, elidedText);
     }
 }
