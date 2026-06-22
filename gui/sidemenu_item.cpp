@@ -65,16 +65,18 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
             (option.state & QStyle::State_Enabled) != 0 ? QIcon::Normal : QIcon::Disabled;
         const auto iconState = (option.state & QStyle::State_On) != 0 ? QIcon::On : QIcon::Off;
         const auto iconSz = iconSize();
-        QRect const iconRect(contentX,
-                             option.rect.y() + ((option.rect.height() - iconSz.height()) / 2),
-                             iconSz.width(), iconSz.height());
+        QRect const logicalIconRect(
+            contentX, option.rect.y() + ((option.rect.height() - iconSz.height()) / 2),
+            iconSz.width(), iconSz.height());
+        QRect const iconRect = QStyle::visualRect(option.direction, option.rect, logicalIconRect);
         option.icon.paint(&painter, iconRect, Qt::AlignCenter, iconMode, iconState);
         contentX += iconSz.width() + ICON_TEXT_SPACING;
     }
 
     int const textMaxWidth = option.rect.width() - contentX - RIGHT_MARGIN;
     if (textMaxWidth > 0 && !option.text.isEmpty()) {
-        QRect const textRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
+        QRect const logicalTextRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
+        QRect const textRect = QStyle::visualRect(option.direction, option.rect, logicalTextRect);
 
         // qlementine のテーマカラーを palette から使う
         // WindowText = secondaryColor, HighlightedText = primaryColorForeground
@@ -85,7 +87,8 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
 
         QString const elidedText =
             fontMetrics().elidedText(option.text, Qt::ElideRight, textMaxWidth, Qt::TextSingleLine);
-        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-                         elidedText);
+        const auto textAlign =
+            QStyle::visualAlignment(option.direction, Qt::AlignLeft | Qt::AlignVCenter);
+        painter.drawText(textRect, textAlign | Qt::TextSingleLine, elidedText);
     }
 }
