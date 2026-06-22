@@ -41,7 +41,7 @@ void GuiApplication::setup()
     }
 
     // qlementineスタイルを適用
-    qlementineStyle = new oclero::qlementine::QlementineStyle(this);
+    qlementineStyle = new oclero::qlementine::QlementineStyle();
     setStyle(qlementineStyle);
 
     themeManager = new oclero::qlementine::ThemeManager(qlementineStyle, this);
@@ -157,7 +157,7 @@ void GuiApplication::applyColorScheme()
 
     QIcon::setThemeName(iconTheme);
 
-    if (themeManager && themeManager->currentTheme() != qlementineTheme) {
+    if (themeManager != nullptr && themeManager->currentTheme() != qlementineTheme) {
         themeManager->setCurrentTheme(qlementineTheme);
     }
 }
