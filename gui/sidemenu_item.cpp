@@ -73,7 +73,7 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
         contentX += iconSz.width() + ICON_TEXT_SPACING;
     }
 
-    int const textMaxWidth = option.rect.width() - contentX - RIGHT_MARGIN;
+    int const textMaxWidth = option.rect.width() - (contentX - option.rect.x()) - RIGHT_MARGIN;
     if (textMaxWidth > 0 && !option.text.isEmpty()) {
         QRect const logicalTextRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
         QRect const textRect = QStyle::visualRect(option.direction, option.rect, logicalTextRect);
