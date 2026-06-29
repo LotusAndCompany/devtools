@@ -98,7 +98,7 @@ void buildResizeSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayo
     frame->setFrameShape(QFrame::StyledPanel);
     auto *box = new QVBoxLayout(frame);
     ui->resizeSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Resize"), frame);
-    ui->resizeSectionToggle->setChecked(true);
+    ui->resizeSectionToggle->setChecked(false);
     box->addWidget(ui->resizeSectionToggle);
 
     ui->resizeSectionBody = new QWidget(frame);
@@ -142,7 +142,7 @@ void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxL
     frame->setFrameShape(QFrame::StyledPanel);
     auto *box = new QVBoxLayout(frame);
     ui->transformSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Rotate / Flip"), frame);
-    ui->transformSectionToggle->setChecked(true);
+    ui->transformSectionToggle->setChecked(false);
     box->addWidget(ui->transformSectionToggle);
 
     ui->transformSectionBody = new QWidget(frame);
@@ -177,7 +177,7 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     auto *box = new QVBoxLayout(frame);
     ui->transparentSectionToggle =
         new QCheckBox(ImageToolsUnifiedGUI::tr("Transparent (click image)"), frame);
-    ui->transparentSectionToggle->setChecked(true);
+    ui->transparentSectionToggle->setChecked(false);
     box->addWidget(ui->transparentSectionToggle);
 
     ui->transparentSectionBody = new QWidget(frame);
@@ -227,7 +227,7 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
     frame->setFrameShape(QFrame::StyledPanel);
     auto *box = new QVBoxLayout(frame);
     ui->divisionSectionToggle = new QCheckBox(ImageToolsUnifiedGUI::tr("Division"), frame);
-    ui->divisionSectionToggle->setChecked(true);
+    ui->divisionSectionToggle->setChecked(false);
     box->addWidget(ui->divisionSectionToggle);
 
     ui->divisionSectionBody = new QWidget(frame);
