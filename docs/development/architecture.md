@@ -216,6 +216,7 @@ User loads image
 | Qt6::Network | HTTP requests |
 | Qt6::Sql | Database operations |
 | Qt6::LinguistTools | Translations |
+| Qt6::Svg | SVG support required by qlementine |
 
 ### vcpkg Libraries
 
@@ -229,6 +230,31 @@ User loads image
 | Library | Purpose | Source |
 |---------|---------|--------|
 | qrcodegen | QR code generation | Project Nayuki |
+
+### FetchContent Libraries
+
+| Library | Purpose | Source |
+|---------|---------|--------|
+| qlementine v1.4.2 | Modern Qt Widgets `QStyle` and JSON theme support | `https://github.com/oclero/qlementine.git` |
+
+qlementine is fetched by CMake instead of vcpkg because it is built against the active
+system Qt6 installation. The project disables qlementine's sandbox and showcase targets and
+links the style library into `DevTools_core`.
+
+## Application Styling and Themes
+
+DevTools uses qlementine as the application-wide `QStyle`:
+
+1. `GuiApplication::setup()` creates `oclero::qlementine::QlementineStyle` and installs it
+   with `QApplication::setStyle()`.
+2. `oclero::qlementine::ThemeManager` loads JSON themes from the Qt resource prefix
+   `:/themes`.
+3. `GuiApplication::applyColorScheme()` maps the system color scheme to the qlementine
+   `Light` or `Dark` theme and also switches the icon theme between `light` and `dark`.
+
+Theme JSON files live in `res/themes/` and are registered in `res/application.qrc`. When
+adding or renaming a theme, keep the `meta.name` value unique because qlementine's
+`ThemeManager` uses it as the theme identifier.
 
 ## Build System
 

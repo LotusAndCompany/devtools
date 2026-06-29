@@ -46,7 +46,7 @@
 ## 必要環境
 
 - **OS**: macOS 15.0以上（Apple Silicon / arm64 専用）
-- **Qt**: 6.x
+- **Qt**: 6.9.3（qlementineのためQt 6.8以上が必要）
 - **CMake**: 3.21.1以上
 - **C++ コンパイラ**: C++17 対応
 
@@ -194,6 +194,7 @@ DevToolsは以下のサードパーティライブラリを使用しています
 | Qt6 | LGPL v3 |
 | toml11 | MIT |
 | yaml-cpp | MIT |
+| qlementine | MIT |
 | qrcodegen | MIT |
 | Material Icons | Apache 2.0 |
 | Remix Icon | Apache 2.0 |
@@ -208,6 +209,7 @@ DevToolsは以下のサードパーティライブラリを使用しています
 ## 謝辞
 
 - [Qt Project](https://www.qt.io/) - 優れたクロスプラットフォームフレームワーク
+- [Qlementine](https://github.com/oclero/qlementine) - Qt Widgets向けのモダンなスタイル
 - [Project Nayuki](https://www.nayuki.io/) - QRコード生成ライブラリ
 - DevToolsのすべてのコントリビューターとユーザーの皆様
 

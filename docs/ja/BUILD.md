@@ -12,12 +12,19 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9.3（Widgets, LinguistTools, Networkモジュール）
+- **Qt**: 6.9.3（Widgets, LinguistTools, Network, Svgモジュール）
 - **vcpkg**: 依存関係管理用
 
 ### 依存ライブラリ（vcpkg経由）
 - toml11
 - yaml-cpp
+
+### 依存ライブラリ（CMake FetchContent経由）
+- qlementine v1.4.2（Qt Widgets向けのモダンな `QStyle`、MITライセンス）
+
+qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
+Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは `DevTools_core` にリンクし、
+同梱テーマをQtリソースの `:/themes` から読み込みます。
 
 ### オプション
 - **Doxygen**: 1.16以上（APIドキュメント生成用）
@@ -75,7 +82,7 @@ vcpkg install
 # ビルドディレクトリを作成
 mkdir build && cd build
 
-# 構成
+# 構成（CMake FetchContentでqlementineも取得します）
 cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # ビルド
@@ -119,6 +126,9 @@ open DevTools.app
 |-----------|-----------|------|
 | `ENABLE_UNIT_TEST` | OFF | ユニットテストを有効にする |
 | `VCPKG_TARGET_TRIPLET` | auto | Apple Siliconの場合は `arm64-osx` を設定 |
+
+qlementineのサンプルアプリケーションはプロジェクト設定で無効化しています
+（`QLEMENTINE_SANDBOX=OFF`, `QLEMENTINE_SHOWCASE=OFF`）。ビルド対象はスタイルライブラリのみです。
 
 オプション指定の例：
 ```bash
@@ -202,6 +212,18 @@ make DevTools_docs
    ```bash
    cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
    ```
+
+### qlementineのFetchContentで失敗する場合
+
+qlementineのダウンロード中にCMake構成が失敗する場合は、以下を確認してください。
+
+1. `https://github.com/oclero/qlementine.git` へアクセスできることを確認する。
+2. FetchContentのキャッシュを削除して再構成する。
+   ```bash
+   rm -rf build/_deps/qlementine-*
+   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   ```
+3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。
 
 ## 配布
 

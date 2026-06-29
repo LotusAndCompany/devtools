@@ -46,7 +46,7 @@ A unified desktop application that combines various development tools into a sin
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
-- **Qt**: 6.x
+- **Qt**: 6.9.3 (Qt 6.8+ required by qlementine)
 - **CMake**: 3.21.1+
 - **C++ Compiler**: C++17 compatible
 
@@ -116,6 +116,7 @@ DevTools uses the following third-party libraries:
 | Qt6 | LGPL v3 |
 | toml11 | MIT |
 | yaml-cpp | MIT |
+| qlementine | MIT |
 | qrcodegen | MIT |
 | Material Icons | Apache 2.0 |
 | Remix Icon | Apache 2.0 |
@@ -123,6 +124,7 @@ DevTools uses the following third-party libraries:
 ## Acknowledgments
 
 - [Qt Project](https://www.qt.io/) for the excellent cross-platform framework
+- [Qlementine](https://github.com/oclero/qlementine) for the modern Qt Widgets style
 - [Project Nayuki](https://www.nayuki.io/) for the QR code generator library
 - All contributors and users of DevTools
 

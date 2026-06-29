@@ -26,10 +26,21 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 # Qtのパッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
+
+# qlementineはシステムQt6に対してビルドするためFetchContentを使用
+include(FetchContent)
+FetchContent_Declare(qlementine
+    GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
+    GIT_TAG        v1.4.2
+    GIT_SHALLOW    TRUE
+)
+set(QLEMENTINE_SANDBOX OFF CACHE BOOL "" FORCE)
+set(QLEMENTINE_SHOWCASE OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(qlementine)
 # Doxygenを探す（1.16以上が必要）
 find_package(Doxygen 1.16)
 
@@ -231,6 +242,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # 画像関係の依存関係
 # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
 target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}_image_core)
+
+# qlementineはgui_application.cppで使用するためDevTools_coreにリンク
+target_link_libraries(${PROJECT_NAME}_core PUBLIC qlementine)
 
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)

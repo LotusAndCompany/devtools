@@ -165,9 +165,11 @@ DevTools supports English and Japanese:
 
 Switch between light and dark themes:
 
-1. Go to **View > Theme**
-2. Select **Light** or **Dark**
-3. The theme changes immediately
+DevTools follows the macOS system appearance. When the system switches between light and
+dark mode, the application updates both the qlementine widget theme and the icon theme.
+
+Bundled qlementine themes are stored in `res/themes/light.json` and
+`res/themes/dark.json` and are loaded from the Qt resource prefix `:/themes`.
 
 ## Next Steps
 

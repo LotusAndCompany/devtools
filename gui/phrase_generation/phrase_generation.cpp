@@ -11,7 +11,6 @@
 #include <QIcon>
 #include <QLineEdit>
 #include <QMessageBox>
-#include <QPalette>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSizePolicy>
@@ -30,8 +29,7 @@ const char *const SAVE_BUTTON_STYLE =
     "padding-bottom: 3px;\n"
     "padding-left: 10px;\n"
     "padding-right: 10px;\n"
-    "border-radius: 6px;\n"
-    "background-color: rgb(175, 174, 177);";
+    "border-radius: 6px;\n";
 const char *const TEMPLATE_TITLE_STYLE = "QLineEdit {\n    padding: 2px 0px 2px 2px;\n}";
 const char *const TEMPLATE_TEXT_STYLE = "QPlainTextEdit {\n    padding: 0px 0px 5px 0px;\n}";
 
@@ -41,21 +39,11 @@ constexpr int MIN_WIDTH = 300;
 constexpr int MIN_HEIGHT = 200;
 constexpr int TREE_FIXED_COLUMN_WIDTH = 40;
 constexpr int TREE_COLUMN_PADDING = 8;
-constexpr int LIGHTNESS_THRESHOLD = 128;
 
 constexpr int TITLE_FONT_POINTSIZE = 28;
 constexpr int TEXT_FONT_POINTSIZE = 20;
 constexpr int ADD_FONT_POINTSIZE = 30;
 constexpr int TOGGLE_FONT_POINTSIZE = 27;
-
-QString treeStyleSheet(const QColor &border_color)
-{
-    return QString(
-               "QTreeWidget::item { border-bottom: 1px solid %1; padding: 5px; }"
-               "QTreeWidget::item:selected { background-color: #0078d7; color: "
-               "#ffffff; }")
-        .arg(border_color.name());
-}
 } // namespace
 
 phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
@@ -76,13 +64,6 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
     title_tree_widget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     title_tree_widget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     adjustTreeColumnWidth();
-
-    // ダークモードかライトモードかを判定してQTreeWidgetのリストの要素のボーダーカラーを決める
-    QPalette const palette = this->palette();
-    QColor const baseColor = palette.color(QPalette::Base);
-    QColor const borderColor =
-        (baseColor.lightness() > LIGHTNESS_THRESHOLD) ? Qt::black : Qt::white;
-    title_tree_widget->setStyleSheet(treeStyleSheet(borderColor));
 
     title_tree_widget->setVisible(false);
     loadTitles();
@@ -256,18 +237,6 @@ void phraseGeneration::layoutWidgets()
 void phraseGeneration::changeEvent(QEvent *event)
 {
     switch (event->type()) {
-    case QEvent::PaletteChange: {
-        QPalette const palette = this->palette();
-        QPalette templateTextPalette = template_text->palette();
-        templateTextPalette.setColor(QPalette::Base, palette.color(QPalette::Base));
-        template_text->setPalette(templateTextPalette);
-
-        QColor const baseColor = palette.color(QPalette::Base);
-        QColor const borderColor =
-            (baseColor.lightness() > LIGHTNESS_THRESHOLD) ? Qt::black : Qt::white;
-        title_tree_widget->setStyleSheet(treeStyleSheet(borderColor));
-        break;
-    }
     case QEvent::LanguageChange:
         retranslateUi();
         adjustTreeColumnWidth();

@@ -12,7 +12,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9.3 | GUI framework |
+| Qt | 6.9.3 | GUI framework; Qt 6.8+ is required by qlementine |
 | vcpkg | Latest | Package management |
 
 ### Optional Tools
@@ -111,13 +111,17 @@ This installs:
 - **toml11** - TOML parser (header-only)
 - **yaml-cpp** - YAML parser
 
+Qlementine is not installed by vcpkg in this project. CMake downloads qlementine v1.4.2
+with FetchContent during the configure step and builds it against the active Qt6
+installation.
+
 ### 6. Configure and Build
 
 ```bash
 # Create build directory
 mkdir build && cd build
 
-# Configure with CMake
+# Configure with CMake. This also downloads qlementine with FetchContent.
 cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build (using all available cores)
