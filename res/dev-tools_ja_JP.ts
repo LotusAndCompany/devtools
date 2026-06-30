@@ -1026,6 +1026,25 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
 </context>
 <context>
+    <name>QShortcut</name>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QueryPage</name>
     <message>
         <source>Form</source>
@@ -1335,10 +1354,6 @@ Choose a tool from the side panel</source>
         <translation>新規テンプレートを追加</translation>
     </message>
     <message>
-        <source>Toggle template list</source>
-        <translation>テンプレート一覧を表示/非表示</translation>
-    </message>
-    <message>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
@@ -1353,6 +1368,62 @@ Choose a tool from the side panel</source>
     <message>
         <source>Copy</source>
         <translation>コピー</translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation>エディタ</translation>
+    </message>
+    <message>
+        <source>Templates</source>
+        <translation>テンプレート</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>追加</translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+C</source>
+        <translation>Ctrl+Shift+C</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <source>Title cannot be empty.</source>
+        <translation>タイトルを入力してください。</translation>
+    </message>
+    <message>
+        <source>Copied</source>
+        <translation>コピー完了</translation>
+    </message>
+    <message>
+        <source>Text copied to clipboard.</source>
+        <translation>テキストをクリップボードにコピーしました。</translation>
+    </message>
+    <message>
+        <source>No title selected.</source>
+        <translation>タイトルが選択されていません。</translation>
+    </message>
+    <message>
+        <source>Confirm Delete</source>
+        <translation>削除の確認</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete &quot;%1&quot;?</source>
+        <translation>「%1」を削除してもよろしいですか？</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>エラー</translation>
+    </message>
+    <message>
+        <source>Failed to delete the file.</source>
+        <translation>ファイルの削除に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Unable to find the corresponding item.</source>
+        <translation>対応するアイテムが見つかりません。</translation>
     </message>
 </context>
 </TS>
