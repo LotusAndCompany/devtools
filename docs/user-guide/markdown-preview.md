@@ -15,19 +15,25 @@ The Markdown Preview tool helps developers write documentation, README files, an
 
 The Markdown Preview interface consists of:
 
-1. **Toolbar**: File actions, view toggle, export button
-2. **Editor Pane (left)**: Markdown source input with syntax highlighting and line numbers
-3. **Preview Pane (right)**: Rendered HTML output, scroll-synced with the editor
-4. **Status Bar**: Character count, word count, cursor position
+1. **Toolbar**: Open, Save, Export HTML, and a scroll-sync toggle
+2. **Editor Pane (left)**: Markdown source input
+3. **Preview Pane (right)**: Rendered HTML output
 
 ## Features
 
 ### Real-time Rendering
 
-- HTML preview updates as you type (debounced to avoid flicker)
-- Editor and preview panes are scroll-synchronized
+- HTML preview updates as you type (debounced by ~180ms to avoid flicker)
+- Rendering uses Qt's GitHub-flavored Markdown dialect
+
+### Scroll Synchronization
+
+- The editor and preview panes scroll together
+- Toggle synchronization on or off with the **Sync Scroll** checkbox in the toolbar (enabled by default)
 
 ### Supported Markdown Syntax
+
+Rendering is provided by Qt's `QTextDocument` using the GitHub Markdown dialect. Commonly supported elements include:
 
 | Element | Syntax |
 |---------|--------|
@@ -39,30 +45,18 @@ The Markdown Preview interface consists of:
 | Code (inline) | `` `code` `` |
 | Code blocks | ` ```lang ` fenced blocks |
 | Blockquote | `> text` |
-| Tables | GFM pipe tables |
-| Task lists | `- [ ]`, `- [x]` |
-| Horizontal rule | `---` |
 
-### View Modes
-
-| Mode | Description |
-|------|-------------|
-| Split | Editor and preview side-by-side (default) |
-| Editor Only | Focus on writing |
-| Preview Only | Focus on reading |
+> Note: Supported syntax follows Qt's Markdown implementation and may differ from full GitHub Flavored Markdown in some edge cases.
 
 ### File Operations
 
-- **Open**: Load a `.md` file into the editor
-- **Save**: Save editor content as `.md`
-- **Export HTML**: Save the rendered preview as a standalone `.html` file
+- **Open**: Load a `.md` / `.markdown` file into the editor
+- **Save**: Save editor content as a `.md` / `.markdown` file
+- **Export HTML**: Save the rendered output as a standalone `.html` file
 
-### Editor Features
+### Theme Support
 
-- Syntax highlighting for Markdown and fenced code blocks
-- Line numbers
-- Soft wrap toggle
-- Tab width setting (2 / 4 spaces)
+- The editor and preview honor the application's light/dark theme
 
 ## How to Use
 
@@ -70,52 +64,34 @@ The Markdown Preview interface consists of:
 
 1. Type or paste Markdown into the editor pane
 2. Watch the preview render on the right
-3. Use the toolbar to toggle view mode or export
+3. Use the toolbar to open, save, or export
 
 ### Loading a File
 
 1. Click **Open**
-2. Select a `.md` file
+2. Select a `.md` or `.markdown` file
 3. Content loads into the editor; preview renders automatically
 
 ### Exporting
 
 | Target | Action |
 |--------|--------|
-| Markdown source | **Save** → choose `.md` filename |
-| Rendered HTML | **Export HTML** → choose `.html` filename |
+| Markdown source | **Save** → choose a `.md` filename |
+| Rendered HTML | **Export HTML** → choose an `.html` filename |
 
 ## Use Cases
 
 - Writing and previewing README files
 - Drafting documentation with live feedback
-- Verifying GFM table and task list formatting before committing
 - Converting Markdown notes to HTML for sharing
-
-## Requirements
-
-### Functional Requirements
-
-- FR-1: Render Markdown to HTML on every editor change (debounced ≤ 200ms)
-- FR-2: Support CommonMark + GitHub Flavored Markdown (tables, task lists, strikethrough, autolinks)
-- FR-3: Synchronize scroll between editor and preview
-- FR-4: Provide Split / Editor Only / Preview Only view modes
-- FR-5: Open and save `.md` files
-- FR-6: Export rendered HTML as standalone `.html`
-- FR-7: Show character count and word count in the status bar
-- FR-8: Persist the last view mode and tab width across sessions
-
-### Non-functional Requirements
-
-- NFR-1: Render documents up to 10,000 lines without noticeable lag (≥ 60fps scrolling)
-- NFR-2: Honor the application light/dark theme in both editor and preview
-- NFR-3: Sanitize rendered HTML to prevent script execution from untrusted input
 
 ## Limitations
 
+- No syntax highlighting or line numbers in the editor
+- No status bar (character / word count)
+- No alternate view modes (split view only)
 - No custom CSS for the preview
-- No support for Markdown extensions beyond GFM (e.g., MathJax, Mermaid) in the initial version
-- Large images are not optimized; they are rendered as-is
+- Markdown extensions beyond Qt's GitHub dialect (e.g., MathJax, Mermaid) are not supported
 
 ## Related Documentation
 
