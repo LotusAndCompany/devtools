@@ -118,7 +118,7 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         iconNames = {"qr_code", "insert-link"};
         break;
     case ID::MARKDOWN_PREVIEW:
-        iconName = "article";
+        iconNames = {"article"};
         break;
 
     default:

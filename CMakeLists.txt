@@ -289,6 +289,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_command
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
+    ${PROJECT_NAME}_markdown_preview
     ${PROJECT_NAME}_db_tool
 )
 set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
