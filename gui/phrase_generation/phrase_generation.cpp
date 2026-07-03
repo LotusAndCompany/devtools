@@ -23,8 +23,6 @@
 #include <QUuid>
 #include <QVBoxLayout>
 
-#include <algorithm>
-
 namespace {
 const char *const TEMPLATE_TITLE_STYLE = "QLineEdit {\n    padding: 2px 0px 2px 2px;\n}";
 const char *const TEMPLATE_TEXT_STYLE = "QPlainTextEdit {\n    padding: 0px 0px 5px 0px;\n}";
@@ -33,8 +31,6 @@ constexpr int DEFAULT_WIDTH = 1012;
 constexpr int DEFAULT_HEIGHT = 633;
 constexpr int MIN_WIDTH = 300;
 constexpr int MIN_HEIGHT = 200;
-constexpr int TREE_FIXED_COLUMN_WIDTH = 40;
-constexpr int TREE_COLUMN_PADDING = 8;
 
 constexpr int TITLE_FONT_POINTSIZE = 14;
 constexpr int TEXT_FONT_POINTSIZE = 14;
@@ -58,8 +54,6 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
     setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
 
     title_tree_widget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    title_tree_widget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-    adjustTreeColumnWidth();
 
     setupShortcuts();
     loadTitles();
@@ -110,22 +104,6 @@ void phraseGeneration::retranslateUi()
     add_button->setToolTip(tr("Add new template"));
     add_button->setAccessibleName(tr("Add new template"));
     add_button->setAccessibleDescription(tr("Add new template"));
-
-    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *item = title_tree_widget->topLevelItem(i);
-        auto *btn = qobject_cast<QPushButton *>(title_tree_widget->itemWidget(item, 1));
-        if (btn != nullptr) {
-            btn->setText(tr("Copy"));
-        }
-    }
-}
-
-void phraseGeneration::adjustTreeColumnWidth()
-{
-    QPushButton const sample(tr("Copy"));
-    int const min_width =
-        std::max(TREE_FIXED_COLUMN_WIDTH, sample.sizeHint().width() + TREE_COLUMN_PADDING);
-    title_tree_widget->setColumnWidth(1, min_width);
 }
 
 void phraseGeneration::createWidgets()
@@ -151,7 +129,7 @@ void phraseGeneration::createWidgets()
     title_tree_widget->setObjectName(QStringLiteral("titleTreeWidget"));
     title_tree_widget->setSizePolicy(makePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     title_tree_widget->setHeaderHidden(true);
-    title_tree_widget->setColumnCount(2);
+    title_tree_widget->setColumnCount(1);
 
     template_title = new QLineEdit(this);
     template_title->setObjectName(QStringLiteral("templateTitle"));
@@ -165,6 +143,12 @@ void phraseGeneration::createWidgets()
     delete_button = new QPushButton(this);
     delete_button->setObjectName(QStringLiteral("deleteButton"));
     delete_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
+    {
+        QIcon const icon = QIcon::fromTheme(QStringLiteral("delete"));
+        if (!icon.isNull()) {
+            delete_button->setIcon(icon);
+        }
+    }
 
     editor_separator = makeSeparator(this);
 
@@ -180,6 +164,12 @@ void phraseGeneration::createWidgets()
     copy_button = new QPushButton(this);
     copy_button->setObjectName(QStringLiteral("copyButton"));
     copy_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
+    {
+        QIcon const icon = QIcon::fromTheme(QStringLiteral("content_copy"));
+        if (!icon.isNull()) {
+            copy_button->setIcon(icon);
+        }
+    }
 
     save_button = new QPushButton(this);
     save_button->setObjectName(QStringLiteral("saveButton"));
@@ -202,7 +192,6 @@ void phraseGeneration::layoutWidgets()
     title_row->setContentsMargins(0, 0, 0, 0);
     title_row->setSpacing(6);
     title_row->addWidget(template_title, 1);
-    title_row->addWidget(delete_button);
     editor_panel->addLayout(title_row);
 
     editor_panel->addWidget(editor_separator);
@@ -212,6 +201,7 @@ void phraseGeneration::layoutWidgets()
     action_row->setContentsMargins(0, 0, 0, 0);
     action_row->setSpacing(6);
     action_row->addStretch(1);
+    action_row->addWidget(delete_button);
     action_row->addWidget(copy_button);
     action_row->addWidget(save_button);
     editor_panel->addLayout(action_row);
@@ -249,7 +239,6 @@ void phraseGeneration::changeEvent(QEvent *event)
     switch (event->type()) {
     case QEvent::LanguageChange:
         retranslateUi();
-        adjustTreeColumnWidth();
         break;
     default:
         break;
@@ -269,14 +258,46 @@ void phraseGeneration::loadTitles()
 
         auto *item = new QTreeWidgetItem(title_tree_widget);
         item->setText(0, title);
-
         item->setData(0, Qt::UserRole, filename);
-
-        auto *copyButton = new QPushButton(tr("Copy"), title_tree_widget);
-        connect(copyButton, &QPushButton::clicked, this, &phraseGeneration::copyContent);
-
-        title_tree_widget->setItemWidget(item, 1, copyButton);
     }
+}
+
+bool phraseGeneration::hasUnsavedChanges() const
+{
+    QString const current_title = template_title->text();
+    QString const current_text = template_text->toPlainText();
+
+    if (currentFile.isEmpty()) {
+        return !current_title.isEmpty() || !current_text.isEmpty();
+    }
+
+    QString saved_title;
+    QString const saved_text = loadContent(currentFile, &saved_title);
+    return current_title != saved_title || current_text != saved_text;
+}
+
+void phraseGeneration::selectTreeItemByFilename(const QString &filename)
+{
+    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *current = title_tree_widget->topLevelItem(i);
+        if (current->data(0, Qt::UserRole).toString() == filename) {
+            title_tree_widget->setCurrentItem(current);
+            return;
+        }
+    }
+}
+
+bool phraseGeneration::confirmDiscard()
+{
+    if (!hasUnsavedChanges()) {
+        return true;
+    }
+
+    auto const result = QMessageBox::question(
+        this, tr("Unsaved Changes"), tr("You have unsaved changes. Save them?"),
+        QMessageBox::Save | QMessageBox::Discard, QMessageBox::Save);
+
+    return result == QMessageBox::Save ? (handleSaveButtonClick(), !hasUnsavedChanges()) : true;
 }
 
 QString phraseGeneration::loadContent(const QString &filename, QString *title)
@@ -294,6 +315,12 @@ QString phraseGeneration::loadContent(const QString &filename, QString *title)
 
 void phraseGeneration::handleAddButtonClick()
 {
+    if (!confirmDiscard()) {
+        return;
+    }
+    if (hasUnsavedChanges()) {
+        return;
+    }
     currentFile.clear();
     template_text->clear();
     template_title->clear();
@@ -310,6 +337,11 @@ void phraseGeneration::handleSaveButtonClick()
         return;
     }
 
+    if (content.isEmpty()) {
+        QMessageBox::warning(this, tr("Warning"), tr("Text cannot be empty."));
+        return;
+    }
+
     if (!currentFile.isEmpty()) {
         QFile file("content/" + currentFile);
         if (file.exists()) {
@@ -317,15 +349,14 @@ void phraseGeneration::handleSaveButtonClick()
         }
     }
 
-    saveContent(title, content);
+    QString const saved_filename = saveContent(title, content);
     loadTitles();
-    template_title->clear();
-    template_text->clear();
+    selectTreeItemByFilename(saved_filename);
 
-    currentFile.clear();
+    currentFile = saved_filename;
 }
 
-void phraseGeneration::saveContent(const QString &title, const QString &content)
+QString phraseGeneration::saveContent(const QString &title, const QString &content)
 {
     QDir().mkpath("content");
 
@@ -338,6 +369,7 @@ void phraseGeneration::saveContent(const QString &title, const QString &content)
         out << title << "\n" << content;
         file.close();
     }
+    return filename;
 }
 
 void phraseGeneration::handleCopyButtonClick()
@@ -359,7 +391,7 @@ void phraseGeneration::handleDeleteButtonClick()
     QString const itemTitle = item->text(0);
     auto const result = QMessageBox::question(
         this, tr("Confirm Delete"), tr("Are you sure you want to delete \"%1\"?").arg(itemTitle),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
     if (result != QMessageBox::Yes) {
         return;
@@ -383,6 +415,10 @@ void phraseGeneration::deleteContent(const QString &filename)
 void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int /*column*/)
 {
     QString const filename = item->data(0, Qt::UserRole).toString();
+    if (!confirmDiscard()) {
+        title_tree_widget->setCurrentItem(item);
+        return;
+    }
     QString title;
     QString const content = loadContent(filename, &title);
 
@@ -390,38 +426,6 @@ void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int
     template_text->setPlainText(content);
 
     currentFile = filename;
-}
 
-void phraseGeneration::copyContent()
-{
-    auto const *button = qobject_cast<QPushButton *>(sender());
-    if (button == nullptr) {
-        return;
-    }
-
-    QTreeWidgetItem const *item = nullptr;
-    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *currentItem = title_tree_widget->topLevelItem(i);
-        if (title_tree_widget->itemWidget(currentItem, 1) == button) {
-            item = currentItem;
-            break;
-        }
-    }
-
-    if (item == nullptr) {
-        QMessageBox::warning(this, tr("Error"), tr("Unable to find the corresponding item."));
-        return;
-    }
-
-    QString const filename = item->data(0, Qt::UserRole).toString();
-
-    QString title;
-    QString content = loadContent(filename, &title);
-
-    if (content.startsWith("\n")) {
-        content.remove(0, 1);
-    }
-
-    QApplication::clipboard()->setText(content);
-    QMessageBox::information(this, tr("Copied"), tr("Text copied to clipboard."));
+    selectTreeItemByFilename(filename);
 }

@@ -1422,8 +1422,16 @@ Choose a tool from the side panel</source>
         <translation>ファイルの削除に失敗しました。</translation>
     </message>
     <message>
-        <source>Unable to find the corresponding item.</source>
-        <translation>対応するアイテムが見つかりません。</translation>
+        <source>Unsaved Changes</source>
+        <translation>未保存の変更</translation>
+    </message>
+    <message>
+        <source>You have unsaved changes. Save them?</source>
+        <translation>未保存の変更があります。保存しますか？</translation>
+    </message>
+    <message>
+        <source>Text cannot be empty.</source>
+        <translation>テキストを入力してください。</translation>
     </message>
 </context>
 </TS>

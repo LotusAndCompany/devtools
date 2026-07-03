@@ -29,7 +29,6 @@ private slots:
     void handleCopyButtonClick();
     void handleDeleteButtonClick();
     void handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column);
-    void copyContent();
 
 private:
     void buildUi();
@@ -37,10 +36,12 @@ private:
     void layoutWidgets();
     void setupShortcuts();
     void retranslateUi();
-    void adjustTreeColumnWidth();
     void loadTitles();
+    void selectTreeItemByFilename(const QString &filename);
+    [[nodiscard]] bool hasUnsavedChanges() const;
+    bool confirmDiscard();
     static QString loadContent(const QString &filename, QString *title = nullptr);
-    static void saveContent(const QString &title, const QString &content);
+    static QString saveContent(const QString &title, const QString &content);
     void deleteContent(const QString &filename);
 
     QLineEdit *template_title{nullptr};
