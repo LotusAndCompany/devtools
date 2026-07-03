@@ -416,7 +416,11 @@ void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int
 {
     QString const filename = item->data(0, Qt::UserRole).toString();
     if (!confirmDiscard()) {
-        title_tree_widget->setCurrentItem(item);
+        if (!currentFile.isEmpty()) {
+            selectTreeItemByFilename(currentFile);
+        } else {
+            title_tree_widget->setCurrentItem(nullptr);
+        }
         return;
     }
     QString title;
