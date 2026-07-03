@@ -274,7 +274,7 @@
     </message>
     <message>
         <source>Container</source>
-        <translation type="unfinished"></translation>
+        <translation>コンテナ</translation>
     </message>
 </context>
 <context>
@@ -398,9 +398,6 @@
 <context>
     <name>DataConversion</name>
     <message>
-        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -699,82 +696,62 @@
 <context>
     <name>MarkdownPreviewGUI</name>
     <message>
-        <location filename="../gui/markdown_preview/markdown_preview_gui.cpp" line="+225"/>
-        <location line="+38"/>
-        <location line="+22"/>
-        <location line="+20"/>
         <source>Markdown Preview</source>
         <translation>Markdown プレビュー</translation>
     </message>
     <message>
-        <location line="-79"/>
         <source>Open</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+66"/>
         <source>Export HTML</source>
         <translation>HTML エクスポート</translation>
     </message>
     <message>
-        <location line="-65"/>
         <source>Sync scroll</source>
         <translation>同期スクロール</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Editor</source>
         <translation>エディタ</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Preview</source>
         <translation>プレビュー</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Type Markdown here...</source>
         <translation>ここに Markdown を入力...</translation>
     </message>
     <message>
-        <location line="+24"/>
         <source>Open Markdown File</source>
         <translation>Markdown ファイルを開く</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <location line="+19"/>
         <source>Markdown Files (*.md *.markdown)</source>
         <translation>Markdown ファイル (*.md *.markdown)</translation>
     </message>
     <message>
-        <location line="-12"/>
         <source>Failed to open file</source>
         <translation>ファイルを開けませんでした</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Save Markdown File</source>
         <translation>Markdown ファイルを保存</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Failed to save file</source>
         <translation>ファイルを保存できませんでした</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>HTML Files (*.html *.htm)</source>
         <translation>HTML ファイル (*.html *.htm)</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Failed to export HTML</source>
         <translation>HTML のエクスポートに失敗しました</translation>
     </message>
@@ -1112,6 +1089,25 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
 </context>
 <context>
+    <name>QShortcut</name>
+    <message>
+        <source>Left</source>
+        <translation>左</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>右</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation>上</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation>下</translation>
+    </message>
+</context>
+<context>
     <name>QueryPage</name>
     <message>
         <source>Form</source>
@@ -1200,11 +1196,6 @@ Please try reducing the amount of data or simplifying the content.</source>
 <context>
     <name>Sidemenu</name>
     <message>
-        <source>Home</source>
-        <translation type="vanished">ホーム</translation>
-    </message>
-    <message>
-        <location filename="../gui/sidemenu.cpp" line="+160"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -1260,21 +1251,14 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>データベース関連の機能を提供します</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Markdown Preview</source>
         <translation>Markdown プレビュー</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Live preview of Markdown source</source>
         <translation>Markdown ソースのライブプレビュー</translation>
     </message>
     <message>
-        <source>Command Genration</source>
-        <translation type="vanished">コマンド生成</translation>
-    </message>
-    <message>
-        <location line="-4"/>
         <source>Generate QR codes from text or URLs</source>
         <translation>テキストやURLからQRコードを生成</translation>
     </message>
