@@ -92,7 +92,7 @@ jobs:
           target: 'desktop'
 
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@7d259227a1fb6471a0253dd5ab7419835228f7d7 # v11
+        uses: lukka/run-vcpkg@b1a0dd252f06b9e25b3c022a9a03bd7a427fb6a2 # v11.6
         with:
           vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'  # 2024.10.21 release
 
