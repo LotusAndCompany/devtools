@@ -158,26 +158,24 @@ void GuiApplication::applyColorScheme()
 
     QIcon::setThemeName(iconTheme);
 
+    const auto allWidgets = QApplication::allWidgets();
+
     if (themeManager != nullptr && themeManager->currentTheme() != qlementineTheme) {
         themeManager->setCurrentTheme(qlementineTheme);
 
-        // Explicitly set the application palette and clear per-widget palettes
-        // so that all widgets inherit the new theme's palette.
         QApplication::setPalette(style()->standardPalette());
 
-        const auto widgets = QApplication::allWidgets();
-        for (auto *w : widgets) {
+        for (auto *w : allWidgets) {
             w->setPalette(QPalette());
+            w->update();
         }
+        return;
     }
 
-    // The Qlementine style might repaint children through internal routines. Force final repaint to
-    // catch any stragglers. Do this on every invocation, not just on theme changes — the signal
-    // might fire redundantly in edge cases where the palette is already stale.
-    const auto allWidgets = QApplication::allWidgets();
     for (auto *w : allWidgets) {
-        if (!w->isVisible())
+        if (!w->isVisible()) {
             continue;
+        }
         w->update();
     }
 }
