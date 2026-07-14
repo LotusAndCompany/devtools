@@ -97,6 +97,12 @@ jobs:
           vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'  # 2024.10.21 release
 
       - name: Configure CMake
+        env:
+          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
+          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
+          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
+          # fail. Falling back to "clear" rebuilds ports on every run.
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cmake -B build \
             -G Ninja \

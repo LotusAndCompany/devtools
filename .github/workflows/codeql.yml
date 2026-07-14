@@ -65,6 +65,12 @@ jobs:
           build-mode: none
 
       - name: Configure and Build
+        env:
+          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
+          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
+          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
+          # fail. Falling back to "clear" rebuilds ports on every run.
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cmake -B build \
             -G Ninja \

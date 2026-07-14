@@ -45,7 +45,10 @@ jobs:
           set -euxo pipefail
           TEMP_DIR=$(mktemp -d)
           trap 'rm -rf "$TEMP_DIR"' EXIT
-          curl -fsSL "https://doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz" \
+          # Use the GitHub Release asset mirror instead of doxygen.nl, which is
+          # behind Cloudflare and intermittently returns 403 to GitHub runner IPs.
+          DOXYGEN_TAG="Release_${DOXYGEN_VERSION//./_}"
+          curl -fsSL "https://github.com/doxygen/doxygen/releases/download/${DOXYGEN_TAG}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz" \
             -o "${TEMP_DIR}/doxygen.tar.gz"
           echo "${DOXYGEN_SHA256}  ${TEMP_DIR}/doxygen.tar.gz" | sha256sum -c -
           sudo tar -xz -C /opt -f "${TEMP_DIR}/doxygen.tar.gz"
@@ -64,6 +67,12 @@ jobs:
           vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'
 
       - name: Configure CMake
+        env:
+          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
+          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
+          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
+          # fail. Falling back to "clear" rebuilds ports on every run.
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cmake -B build \
             -G Ninja \
