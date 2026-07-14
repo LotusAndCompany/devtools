@@ -16,7 +16,6 @@ target_sources(DevTools_core PRIVATE
     gui/main_window.h gui/main_window.cpp
     gui/gui_application.h gui/gui_application.cpp
     gui/gui_tool.h gui/gui_tool.cpp
-    gui/contents_area.h gui/contents_area.cpp
     gui/sidemenu.h gui/sidemenu.cpp
     gui/sidemenu_item.h gui/sidemenu_item.cpp
     gui/welcome_page.h gui/welcome_page.cpp

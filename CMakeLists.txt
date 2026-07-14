@@ -88,7 +88,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
+        features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
         vcpkg.json
+        # ここには基本的に追加しないこと
+        # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )
 
     # modules

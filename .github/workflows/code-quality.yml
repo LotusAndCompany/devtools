@@ -117,8 +117,7 @@ jobs:
         uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
         with:
           files: |
-            core/**/*.cpp
-            gui/**/*.cpp
+            features/**/*.cpp
             main/**/*.cpp
           files_ignore: |
             build/**
@@ -165,7 +164,7 @@ jobs:
       - name: Generate format diff
         id: format-diff
         run: |
-          FILES=$(find core gui main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
+          FILES=$(find features main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
 
           if [ -z "$FILES" ]; then
             echo "has_diff=false" >> $GITHUB_OUTPUT

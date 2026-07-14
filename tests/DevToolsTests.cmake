@@ -11,6 +11,7 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/test_util.h tests/test_util.cpp
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
+    features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt6::Test
