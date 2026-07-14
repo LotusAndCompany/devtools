@@ -136,6 +136,9 @@ private:
      * @param text 変更後のテキスト
      */
     void onSearchTextChanged(const QString &text);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SIDEMENU_H
