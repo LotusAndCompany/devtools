@@ -2,10 +2,10 @@
 
 #include <QtTest>
 
-#define _TEST_TomlParser
+#define TEST_TomlParser
 #include "features/data_conversion/core/parser/toml_parser.h"
 #include "toml.hpp"
-#undef _TEST_TomlParser
+#undef TEST_TomlParser
 
 #include <QObject>
 
@@ -333,7 +333,8 @@ void TestTomlParser::test_tomlArrayToQVariantList()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestTomlParser)
+QTEST_APPLESS_MAIN(
+    Test::TestTomlParser) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

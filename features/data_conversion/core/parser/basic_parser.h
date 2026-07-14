@@ -3,7 +3,7 @@
 
 #include <QVariant>
 
-#ifdef _TEST_BasicParser
+#ifdef TEST_BasicParser
 namespace Test {
 class TestBasicParser;
 }
@@ -46,7 +46,7 @@ public:
      */
     [[nodiscard]] virtual ParseResult tryParse(const QString &src) const = 0;
 
-#ifdef _TEST_BasicParser
+#ifdef TEST_BasicParser
     friend class Test::TestBasicParser;
 #endif
 };

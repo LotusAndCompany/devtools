@@ -7,7 +7,7 @@ namespace YAML {
 class Node;
 };
 
-#ifdef _TEST_YamlEmitter
+#ifdef TEST_YamlEmitter
 namespace Test {
 class TestYamlEmitter;
 }
@@ -65,7 +65,7 @@ private:
                                    DataConversionInterface::Format style,
                                    DataConversionInterface::Indentation indentation);
 
-#ifdef _TEST_YamlEmitter
+#ifdef TEST_YamlEmitter
     friend class Test::TestYamlEmitter;
 #endif
 };

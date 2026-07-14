@@ -2,9 +2,9 @@
 
 #include <QtTest>
 
-#define _TEST_BasicEmitter
+#define TEST_BasicEmitter
 #include "features/data_conversion/core/emitter/basic_emitter.h"
-#undef _TEST_BasicEmitter
+#undef TEST_BasicEmitter
 
 #include <QObject>
 
@@ -37,7 +37,8 @@ void TestBasicEmitter::test_replace4spaceIndentation()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestBasicEmitter)
+QTEST_APPLESS_MAIN(
+    Test::TestBasicEmitter) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

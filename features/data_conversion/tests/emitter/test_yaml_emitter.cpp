@@ -2,9 +2,9 @@
 
 #include <QtTest>
 
-#define _TEST_YamlEmitter
+#define TEST_YamlEmitter
 #include "features/data_conversion/core/emitter/yaml_emitter.h"
-#undef _TEST_YamlEmitter
+#undef TEST_YamlEmitter
 
 #include <QObject>
 
@@ -83,7 +83,8 @@ void TestYamlEmitter::test_emitQString()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestYamlEmitter)
+QTEST_APPLESS_MAIN(
+    Test::TestYamlEmitter) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

@@ -1,8 +1,8 @@
 #include <QtTest>
 
-#define _TEST_BasicParser
+#define TEST_BasicParser
 #include "features/data_conversion/core/parser/basic_parser.h"
-#undef _TEST_BasicParser
+#undef TEST_BasicParser
 
 #include <QObject>
 
@@ -50,7 +50,8 @@ void TestBasicParser::test_operator_bool()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestBasicParser)
+QTEST_APPLESS_MAIN(
+    Test::TestBasicParser) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

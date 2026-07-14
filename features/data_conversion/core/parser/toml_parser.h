@@ -14,7 +14,7 @@ namespace TomlParserPrivate {
 struct Util;
 };
 
-#ifdef _TEST_TomlParser
+#ifdef TEST_TomlParser
 namespace Test {
 class TestTomlParser;
 }
@@ -54,7 +54,7 @@ private:
     static ParseResult tomlArrayToQvariantList(const toml_value_type &value);
 
     friend struct TomlParserPrivate::Util;
-#ifdef _TEST_TomlParser
+#ifdef TEST_TomlParser
     friend class Test::TestTomlParser;
 #endif
 };

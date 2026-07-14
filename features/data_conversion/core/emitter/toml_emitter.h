@@ -10,7 +10,7 @@ template <typename TC>
 class basic_value;
 }; // namespace toml
 
-#ifdef _TEST_TomlEmitter
+#ifdef TEST_TomlEmitter
 namespace Test {
 class TestTomlEmitter;
 }
@@ -74,7 +74,7 @@ private:
         DataConversionInterface::Indentation indentation) noexcept(false);
 
     friend struct TomlEmitterPrivate::Util;
-#ifdef _TEST_TomlEmitter
+#ifdef TEST_TomlEmitter
     friend class Test::TestTomlEmitter;
 #endif
 };

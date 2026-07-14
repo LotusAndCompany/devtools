@@ -3,7 +3,7 @@
 
 #include "basic_emitter.h"
 
-#ifdef _TEST_JsonEmitter
+#ifdef TEST_JsonEmitter
 namespace Test {
 class TestJsonEmitter;
 }
@@ -24,7 +24,7 @@ public:
     EmitResult emitQString(const QVariant &data, DataConversion::Indentation indentation);
 
 private:
-#ifdef _TEST_JsonEmitter
+#ifdef TEST_JsonEmitter
     friend class Test::TestJsonEmitter;
 #endif
 };

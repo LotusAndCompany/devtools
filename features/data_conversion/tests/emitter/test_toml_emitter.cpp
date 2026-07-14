@@ -2,9 +2,9 @@
 
 #include <QtTest>
 
-#define _TEST_TomlEmitter
+#define TEST_TomlEmitter
 #include "features/data_conversion/core/emitter/toml_emitter.h"
-#undef _TEST_TomlEmitter
+#undef TEST_TomlEmitter
 
 #include <QObject>
 
@@ -97,7 +97,8 @@ void TestTomlEmitter::test_emitQString()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestTomlEmitter)
+QTEST_APPLESS_MAIN(
+    Test::TestTomlEmitter) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

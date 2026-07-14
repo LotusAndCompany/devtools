@@ -3,9 +3,9 @@
 
 #include <QtTest>
 
-#define _TEST_DataConversion
+#define TEST_DataConversion
 #include "features/data_conversion/core/data_conversion.h"
-#undef _TEST_DataConversion
+#undef TEST_DataConversion
 
 #include <QObject>
 
@@ -293,7 +293,8 @@ void TestDataConversion::test_parseInputText()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestDataConversion)
+QTEST_APPLESS_MAIN(
+    Test::TestDataConversion) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

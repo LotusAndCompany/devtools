@@ -3,9 +3,9 @@
 
 #include <QtTest>
 
-#define _TEST_YamlParser
+#define TEST_YamlParser
 #include "features/data_conversion/core/parser/yaml_parser.h"
-#undef _TEST_YamlParser
+#undef TEST_YamlParser
 
 #include <QObject>
 
@@ -325,7 +325,8 @@ void TestYamlParser::test_yamlSequenceToQVariantList()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestYamlParser)
+QTEST_APPLESS_MAIN(
+    Test::TestYamlParser) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

@@ -5,7 +5,7 @@
 
 #include <QString>
 
-#ifdef _TEST_BasicEmitter
+#ifdef TEST_BasicEmitter
 namespace Test {
 class TestBasicEmitter;
 }
@@ -44,7 +44,7 @@ protected:
     /// 警告
     QStringList warnings; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
-#ifdef _TEST_BasicEmitter
+#ifdef TEST_BasicEmitter
     friend class Test::TestBasicEmitter;
 #endif
 };

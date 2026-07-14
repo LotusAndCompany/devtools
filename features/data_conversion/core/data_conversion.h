@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QVariant>
 
-#ifdef _TEST_DataConversion
+#ifdef TEST_DataConversion
 namespace Test {
 class TestDataConversion;
 }
@@ -186,7 +186,7 @@ private:
     /// 入力文字列を解析し、 `inputFormat`, `intermediateData` を設定する
     void parseInputText();
 
-#ifdef _TEST_DataConversion
+#ifdef TEST_DataConversion
     friend class Test::TestDataConversion;
 #endif
 };

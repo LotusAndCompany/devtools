@@ -7,7 +7,7 @@ namespace YAML {
 class Node;
 };
 
-#ifdef _TEST_YamlParser
+#ifdef TEST_YamlParser
 namespace Test {
 class TestYamlParser;
 }
@@ -60,7 +60,7 @@ private:
      */
     static ParseResult yamlSequenceToQVariantList(const YAML::Node &node) noexcept(false);
 
-#ifdef _TEST_YamlParser
+#ifdef TEST_YamlParser
     friend class Test::TestYamlParser;
 #endif
 };

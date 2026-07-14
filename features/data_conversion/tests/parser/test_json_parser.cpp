@@ -2,9 +2,9 @@
 
 #include <QtTest>
 
-#define _TEST_JsonParser
+#define TEST_JsonParser
 #include "features/data_conversion/core/parser/json_parser.h"
-#undef _TEST_JsonParser
+#undef TEST_JsonParser
 
 #include <QObject>
 #include <QVariantMap>
@@ -83,7 +83,8 @@ void TestJsonParser::test_tryParse()
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestJsonParser)
+QTEST_APPLESS_MAIN(
+    Test::TestJsonParser) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない

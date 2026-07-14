@@ -2,9 +2,9 @@
 
 #include <QtTest>
 
-#define _TEST_JsonEmitter
+#define TEST_JsonEmitter
 #include "features/data_conversion/core/emitter/json_emitter.h"
-#undef _TEST_JsonEmitter
+#undef TEST_JsonEmitter
 
 #include <QObject>
 
@@ -16,7 +16,7 @@ class TestJsonEmitter : public QObject
     RandomData rd;
 
 private slots:
-    void test_emitQString();
+    void test_emitQString(); // NOLINT(readability-convert-member-functions-to-static)
 };
 
 void TestJsonEmitter::test_emitQString()
@@ -56,8 +56,7 @@ void TestJsonEmitter::test_emitQString()
     // FIXME: 順番が変わってしまう
     result = emitter.emitQString(map, DataConversion::Indentation::MINIFIED);
     QCOMPARE_EQ(result.text,
-                QString("{\"a\":[],\"d\":2.25,\"f\":false,\"i\":%1,\"n\":null,\"o\":{},\"s\":\"%"
-                        "2\",\"t\":true}")
+                QString(R"({"a":[],"d":2.25,"f":false,"i":%1,"n":null,"o":{},"s":"%2","t":true})")
                     .arg(map["i"].toInt())
                     .arg(map["s"].toString()));
 
@@ -86,12 +85,13 @@ void TestJsonEmitter::test_emitQString()
     result = emitter.emitQString(list, DataConversion::Indentation::MINIFIED);
     QCOMPARE_EQ(result.text, QString("[0,1]"));
     result = emitter.emitQString(map, DataConversion::Indentation::MINIFIED);
-    QCOMPARE_EQ(result.text, QString("{\"a\":0,\"b\":1}"));
+    QCOMPARE_EQ(result.text, QString(R"({"a":0,"b":1})"));
 }
 } // namespace Test
 
 // QCoreApplicationもQApplicationも不要な場合
-QTEST_APPLESS_MAIN(Test::TestJsonEmitter)
+QTEST_APPLESS_MAIN(
+    Test::TestJsonEmitter) // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 // QCoreApplicationが必要な場合
 // WARNING: gui/gui_application.hの機能は使えない
