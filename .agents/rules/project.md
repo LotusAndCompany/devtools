@@ -32,17 +32,19 @@ cmake --build . --target lint
 
 ## Architecture
 
-- `core/`: business logic. Do not introduce Qt Widgets dependencies here.
-  QtCore, QtGui, QtSql, QtNetwork are allowed.
-- `gui/`: Qt6 Widgets UI layer.
-- `tests/`: Google Test based unit tests.
-- Each feature is a static library module.
+- `features/{feature}/core/`: business logic. Do not introduce Qt Widgets
+  dependencies here. QtCore, QtGui, QtSql, QtNetwork are allowed.
+- `features/{feature}/gui/`: Qt6 Widgets UI layer.
+- `main/`: application entry point.
+- `tests/`: shared test helpers (mock_helper, random_data, test_util).
+- `features/{feature}/tests/`: per-feature unit tests.
+- Each feature is a static library module registered in `MODULE_LIST`.
 
 ## Dependencies
 
 - vcpkg: toml11, yaml-cpp. See `vcpkg.json`.
 - Qt6: Core, Widgets, LinguistTools, Sql, Network.
-- Bundled vendor code: qrcodegen under `core/qr_tool/qrcodegen/`.
+- Bundled vendor code: qrcodegen under `features/qr_code/core/qrcodegen.*`.
 
 ## Pre-commit Hooks
 

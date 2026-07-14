@@ -21,7 +21,7 @@ set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
 # NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
 #       the user interface file "*.ui" could not be found in the following directories "SRC:..."
 set(CMAKE_AUTOUIC_SEARCH_PATHS
-    gui/image/basic/
+    features/image/gui/basic/
 )
 
 # Qtのパッケージを探す
@@ -88,94 +88,25 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
-        # ContentsArea instantiates feature modules, so keep it out of DevTools_core.
-        gui/contents_area.h gui/contents_area.cpp
         vcpkg.json
-        # ここには基本的に追加しないこと
-        # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
     )
 
     # modules
-    # core
-    qt_add_library(${PROJECT_NAME}_core STATIC
-        core/application_mixin.h core/application_mixin.cpp
-        core/tool/tool.h core/tool/tool.cpp
-        core/exception/common_exception.h
-        core/exception/out_of_range_exception.h
-        core/exception/invalid_argument_exception.h
-        core/exception/invalid_state_exception.h
-        core/exception/under_development_exception.h
-        core/tool/tool_id_fields.h
-        core/enum_cast.h
-        core/qr_tool/qrcodegen.hpp core/qr_tool/qrcodegen.cpp
-        gui/main_window.h gui/main_window.cpp
-        gui/gui_application.h gui/gui_application.cpp
-        gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp
-        gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp
-        gui/sidemenu.h gui/sidemenu.cpp
-        gui/sidemenu_item.h gui/sidemenu_item.cpp
-        gui/welcome_page.h gui/welcome_page.cpp
-        gui/gui_tool.h gui/gui_tool.cpp
-    )
-
-    # http_request
-    qt_add_library(${PROJECT_NAME}_http_request STATIC
-        gui/api_tool.h gui/api_tool.cpp
-    )
-
-    # command
-    qt_add_library(${PROJECT_NAME}_command STATIC
-        gui/command/command.h gui/command/command.cpp gui/command/command_option.h
-        gui/command/command_function.h
-    )
-
-    # phrase_generation
-    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC
-        gui/phrase_generation/phrase_generation.h gui/phrase_generation/phrase_generation.cpp
-    )
-
-    # image
-    qt_add_library(${PROJECT_NAME}_image_core STATIC
-        core/image/basic_image_io.h core/image/basic_image_io.cpp
-        core/image/basic_image_edit_interface.h core/image/basic_image_edit_interface.cpp
-        gui/image/basic/image_view.h gui/image/basic/image_view.cpp
-        gui/image/basic/file_dialogs.h gui/image/basic/file_dialogs.cpp
-        gui/image/basic/control.h gui/image/basic/control.cpp
-    )
-    qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC
-        gui/image/basic/image_tools_unified_gui.h gui/image/basic/image_tools_unified_gui.cpp
-        gui/image/transparent/color_sample.h gui/image/transparent/color_sample.cpp
-        gui/image/transparent/image_view_for_image_transparent.h gui/image/transparent/image_view_for_image_transparent.cpp
-    )
-
-    # db_tool
-    qt_add_library(${PROJECT_NAME}_db_tool STATIC
-        gui/db_tool/query_page/query_page.h gui/db_tool/query_page/query_page.cpp
-        gui/db_tool/main/db_main.h gui/db_tool/main/db_main.cpp
-        gui/db_tool/connection_window/connection_window.h gui/db_tool/connection_window/connection_window.cpp
-        gui/db_tool/connection_selector/connection_selector.h gui/db_tool/connection_selector/connection_selector.cpp
-    )
+    # Target definitions only. Source files are listed in features/*/CMakeLists.txt
+    # via target_sources().
+    qt_add_library(${PROJECT_NAME}_core STATIC)
+    qt_add_library(${PROJECT_NAME}_http_request STATIC)
+    qt_add_library(${PROJECT_NAME}_command STATIC)
+    qt_add_library(${PROJECT_NAME}_phrase_generation STATIC)
+    qt_add_library(${PROJECT_NAME}_image_core STATIC)
+    qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC)
+    qt_add_library(${PROJECT_NAME}_db_tool STATIC)
+    qt_add_library(${PROJECT_NAME}_data_conversion STATIC)
+    qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC)
 
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
 
-    # data_conversion
-    qt_add_library(${PROJECT_NAME}_data_conversion STATIC
-        # core
-        core/data_conversion/data_conversion.h core/data_conversion/data_conversion.cpp
-        core/data_conversion/parser/basic_parser.h
-        core/data_conversion/emitter/basic_emitter.h core/data_conversion/emitter/basic_emitter.cpp
-        gui/data_conversion/data_conversion_gui.h gui/data_conversion/data_conversion_gui.cpp
-        # json
-        core/data_conversion/parser/json_parser.h core/data_conversion/parser/json_parser.cpp
-        core/data_conversion/emitter/json_emitter.h core/data_conversion/emitter/json_emitter.cpp
-        # yaml
-        core/data_conversion/parser/yaml_parser.h core/data_conversion/parser/yaml_parser.cpp
-        core/data_conversion/emitter/yaml_emitter.h core/data_conversion/emitter/yaml_emitter.cpp
-        # toml
-        core/data_conversion/parser/toml_parser.h core/data_conversion/parser/toml_parser.cpp
-        core/data_conversion/emitter/toml_emitter.h core/data_conversion/emitter/toml_emitter.cpp
-    )
     # toml11, yaml-cppのインクルードディレクトリ
     target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC
         ${TOML11_INCLUDE_DIR}   # 何故か大文字
@@ -186,13 +117,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         yaml-cpp::yaml-cpp
     )
 
-    # qr_code_generation
-    qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC
-        core/qr_tool/content_generator.h
-        core/qr_tool/content_generator.cpp
-        gui/qr_code/qr_code_generation_gui.h
-        gui/qr_code/qr_code_generation_gui.cpp
-    )
+    # Load per-feature source file lists via target_sources()
+    add_subdirectory(features)
 
     #set_target_properties(${PROJECT_NAME}_core PROPERTIES
     #    AUTOMOC ON
@@ -420,10 +346,9 @@ find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 
     HINTS ${CLANG_TIDY_HINTS})
 
 file(GLOB_RECURSE ALL_SOURCE_FILES
-    ${CMAKE_SOURCE_DIR}/core/*.cpp
-    ${CMAKE_SOURCE_DIR}/core/*.h
-    ${CMAKE_SOURCE_DIR}/gui/*.cpp
-    ${CMAKE_SOURCE_DIR}/gui/*.h
+    ${CMAKE_SOURCE_DIR}/features/*.cpp
+    ${CMAKE_SOURCE_DIR}/features/*.h
+    ${CMAKE_SOURCE_DIR}/features/*.hpp
     ${CMAKE_SOURCE_DIR}/main/*.cpp
     ${CMAKE_SOURCE_DIR}/main/*.h
     ${CMAKE_SOURCE_DIR}/tests/*.cpp
