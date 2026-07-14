@@ -122,6 +122,7 @@ jobs:
           files_ignore: |
             build/**
             **/tests/**
+            **/qrcodegen.*
 
       - name: Build project
         run: cmake --build build
