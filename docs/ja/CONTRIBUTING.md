@@ -198,7 +198,7 @@ pre-commit autoupdate
 ### 新しいモジュールの追加
 
 1. 機能ディレクトリ構造を作成：
-   ```
+   ```text
    features/your_module/
    ├── CMakeLists.txt
    ├── core/
@@ -216,7 +216,7 @@ pre-commit autoupdate
 
 3. `features/your_module/CMakeLists.txt`にソースファイルを列挙：
    ```cmake
-   target_sources(DevTools_your_module PRIVATE
+   target_sources(${PROJECT_NAME}_your_module PRIVATE
        core/your_module.h core/your_module.cpp
        gui/your_module_gui.h gui/your_module_gui.cpp
    )

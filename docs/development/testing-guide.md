@@ -11,7 +11,7 @@ DevTools uses Google Test (gtest) for unit testing. Tests are organized by modul
 Test sources live alongside each feature under `features/{feature}/tests/`.
 Shared test helpers and test data live under the top-level `tests/` directory.
 
-```
+```text
 tests/
 ├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
 ├── test_util.h test_util.cpp # Shared test utilities
@@ -163,7 +163,7 @@ TEST(JsonParserTest, FailsOnInvalidJson) {
 Test GUI components (limited without display):
 
 ```cpp
-// e.g. tests/test_main_window.cpp or features/framework/tests/test_main_window.cpp
+// features/framework/tests/test_main_window.cpp
 #include <gtest/gtest.h>
 #include <QApplication>
 #include "features/framework/gui/main_window.h"

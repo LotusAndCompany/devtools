@@ -125,6 +125,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_db_tool
+    # ${PROJECT_NAME}_your_module  # 新しいモジュールをここに追加
 )
 ```
 

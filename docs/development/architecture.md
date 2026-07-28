@@ -23,7 +23,7 @@ Each feature is a self-contained module under `features/{feature}/` with
 `core/`, `gui/`, and `tests/` subdirectories. Shared application infrastructure
 lives in `features/framework/` and is compiled as the `DevTools_core` library.
 
-```
+```text
 devtools/
 ├── features/                # Feature modules (each with core/, gui/, tests/)
 │   ├── framework/           # Core framework (DevTools_core): app, main window,
@@ -61,7 +61,7 @@ devtools/
         ▼                    ▼                    ▼
 ┌──────────────────┐  ┌─────────────────┐  ┌────────────────┐
 │ DevTools_image_  │  │   DevTools_     │  │   DevTools_    │
-│ tools_unified    │  │ data_conversion │  │ qr_code_gen    │
+│ tools_unified    │  │ data_conversion │  │ qr_code_generation│
 └────────┬─────────┘  └─────────────────┘  └────────────────┘
          │
          ▼
@@ -325,7 +325,7 @@ Per-feature tests live alongside the feature under `features/{feature}/tests/`.
 Shared test helpers (mock utilities, random data generators) live under
 `tests/`.
 
-```
+```text
 tests/
 ├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
 ├── test_util.h test_util.cpp # Shared test utilities
