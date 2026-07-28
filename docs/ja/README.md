@@ -84,47 +84,69 @@ cmake --build . --target run
 ### 新しいコードを追加する
 
 コンパイル時間の短縮のため、複数の静的ライブラリに分割してコンパイルしています。
+各機能は `features/{機能名}/` 配下に `core/`, `gui/`, `tests/` を持つ自己完結型モジュールとして配置します。アプリ全体の基盤コードは `features/framework/` に置き、`DevTools_core` としてビルドします。
 
-以下のように、追加するコード群を `qt_add_library` で追加します。
-名前はそれと分かれば何でも良いです。
+新しい機能を追加する手順は以下の3ステップです。
+
+#### 1. ターゲットを宣言する（ルート `CMakeLists.txt`）
+
+ターゲットの宣言のみをルート `CMakeLists.txt` に追加します。ソースファイルはここには書きません。
 ```cmake
-qt_add_library(${PROJECT_NAME}_image_resize STATIC
-    core/image/resize/image_resize.h core/image/resize/image_resize.cpp
-    gui/image/resize/image_resize_gui.h gui/image/resize/image_resize_gui.cpp gui/image/resize/image_resize_gui.ui
+qt_add_library(${PROJECT_NAME}_your_module STATIC)
+```
+
+#### 2. ソースファイルを列挙する（`features/your_module/CMakeLists.txt`）
+
+機能ディレクトリ内の `CMakeLists.txt` で `target_sources()` を使ってソースを列挙します。
+```cmake
+target_sources(${PROJECT_NAME}_your_module PRIVATE
+    core/your_module.h core/your_module.cpp
+    gui/your_module_gui.h gui/your_module_gui.cpp
 )
 ```
 
-これらのモジュールに依存関係がある場合は依存関係を定義してください。
-例えば画像編集系のコードは以下のように依存関係を定義しています。
+#### 3. 機能を登録する（`features/CMakeLists.txt`）
+
+`features/CMakeLists.txt` に `add_subdirectory()` を追加します。
 ```cmake
-# add_dependencies(依存元 依存先)
-# ${PROJECT_NAME}_image_coreは画像処理系ツールの共通部分
-add_dependencies(${PROJECT_NAME}_image_resize ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_rotation ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_division ${PROJECT_NAME}_image_core)
-add_dependencies(${PROJECT_NAME}_image_transparent ${PROJECT_NAME}_image_core)
+add_subdirectory(your_module)
 ```
 
-下の方にあるモジュール一覧に追加します。
+更に、ルート `CMakeLists.txt` の `MODULE_LIST` に追加します。
 ```cmake
 # [モジュール一覧]
 set(MODULE_LIST
     ${PROJECT_NAME}_core
     ${PROJECT_NAME}_image_core
-    ${PROJECT_NAME}_image_resize
-    ${PROJECT_NAME}_image_rotation
-    ${PROJECT_NAME}_image_division
-    ${PROJECT_NAME}_image_transparent
+    ${PROJECT_NAME}_image_tools_unified
+    ${PROJECT_NAME}_phrase_generation
+    ${PROJECT_NAME}_http_request
+    ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_data_conversion
+    ${PROJECT_NAME}_qr_code_generation
+    ${PROJECT_NAME}_db_tool
 )
 ```
 
+#### 依存関係
+
+モジュール間に依存関係がある場合は `add_dependencies()` で定義します。
+例えば画像編集系は `DevTools_image_core` に依存するため以下のように定義しています。
+```cmake
+# add_dependencies(依存元 依存先)
+add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
+```
+
+詳細な手順は [Adding New Tools](../development/adding-new-tools.md) を参照してください。
+
 ### テストを追加する
 
+テストソースは `features/{機能名}/tests/` に配置します。共有ヘルパは `tests/` に置かれています。
 `tests/DevToolsTests.cmake` に以下のように追加します。
 ```cmake
 DevTools_add_test(test_basic_image_io   # テスト名
     SOURCES
-    tests/core/image/test_basic_image_io.cpp    # テストコード
+    features/image/tests/test_basic_image_io.cpp    # テストコード
 )
 ```
 
