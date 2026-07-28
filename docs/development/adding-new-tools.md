@@ -4,14 +4,20 @@ This guide explains how to add new tool modules to DevTools.
 
 ## Overview
 
+DevTools organizes each feature under `features/{your_tool}/` with `core/`,
+`gui/`, and `tests/` subdirectories. The application framework shared by all
+tools lives under `features/framework/` and is compiled as `DevTools_core`.
+
 Adding a new tool involves:
 
-1. Creating core logic (business logic)
-2. Creating GUI components (user interface)
-3. Registering the module in CMake
-4. Adding to the side menu
-5. Adding translations
-6. Writing tests
+1. Creating the feature directory structure under `features/{your_tool}/`
+2. Implementing core logic (no Qt Widgets dependencies)
+3. Creating GUI components (Qt Widgets)
+4. Registering the module in CMake (target declaration + `target_sources` + `add_subdirectory`)
+5. Adding a tool ID in the framework
+6. Registering in the side menu and contents area
+7. Adding translations
+8. Writing tests in `features/{your_tool}/tests/`
 
 ## Step-by-Step Guide
 
@@ -26,25 +32,25 @@ Before coding, determine:
 
 ### 2. Create Directory Structure
 
-Create directories for your tool:
+Create the feature directory with `core/`, `gui/`, and `tests/` subdirectories
+(`CMakeLists.txt` is required; `tests/` can be added later):
 
 ```bash
-# Core logic
-mkdir -p core/your_tool
-
-# GUI components  
-mkdir -p gui/your_tool
+mkdir -p features/your_tool/core
+mkdir -p features/your_tool/gui
+mkdir -p features/your_tool/tests
+touch features/your_tool/CMakeLists.txt
 ```
 
 ### 3. Implement Core Logic
 
 Create the business logic without any Qt GUI dependencies.
 
-#### core/your_tool/your_tool.h
+#### features/your_tool/core/your_tool.h
 
 ```cpp
-#ifndef DEVTOOLS_CORE_YOUR_TOOL_YOUR_TOOL_H
-#define DEVTOOLS_CORE_YOUR_TOOL_YOUR_TOOL_H
+#ifndef DEVTOOLS_FEATURES_YOUR_TOOL_CORE_YOUR_TOOL_H
+#define DEVTOOLS_FEATURES_YOUR_TOOL_CORE_YOUR_TOOL_H
 
 #include <QString>
 
@@ -67,13 +73,13 @@ private:
 
 }  // namespace devtools
 
-#endif  // DEVTOOLS_CORE_YOUR_TOOL_YOUR_TOOL_H
+#endif  // DEVTOOLS_FEATURES_YOUR_TOOL_CORE_YOUR_TOOL_H
 ```
 
-#### core/your_tool/your_tool.cpp
+#### features/your_tool/core/your_tool.cpp
 
 ```cpp
-#include "core/your_tool/your_tool.h"
+#include "features/your_tool/core/your_tool.h"
 
 namespace devtools {
 
@@ -89,14 +95,14 @@ QString YourTool::process(const QString& input) {
 
 ### 4. Create GUI Components
 
-#### gui/your_tool/your_tool_gui.h
+#### features/your_tool/gui/your_tool_gui.h
 
 ```cpp
-#ifndef DEVTOOLS_GUI_YOUR_TOOL_YOUR_TOOL_GUI_H
-#define DEVTOOLS_GUI_YOUR_TOOL_YOUR_TOOL_GUI_H
+#ifndef DEVTOOLS_FEATURES_YOUR_TOOL_GUI_YOUR_TOOL_GUI_H
+#define DEVTOOLS_FEATURES_YOUR_TOOL_GUI_YOUR_TOOL_GUI_H
 
-#include "gui/gui_tool.h"
-#include "core/your_tool/your_tool.h"
+#include "features/framework/gui/gui_tool.h"
+#include "features/your_tool/core/your_tool.h"
 
 #include <memory>
 
@@ -123,13 +129,13 @@ private:
 
 }  // namespace devtools
 
-#endif  // DEVTOOLS_GUI_YOUR_TOOL_YOUR_TOOL_GUI_H
+#endif  // DEVTOOLS_FEATURES_YOUR_TOOL_GUI_YOUR_TOOL_GUI_H
 ```
 
-#### gui/your_tool/your_tool_gui.cpp
+#### features/your_tool/gui/your_tool_gui.cpp
 
 ```cpp
-#include "gui/your_tool/your_tool_gui.h"
+#include "features/your_tool/gui/your_tool_gui.h"
 #include "ui_your_tool_gui.h"
 
 namespace devtools {
@@ -154,7 +160,7 @@ void YourToolGui::onProcessClicked() {
 }  // namespace devtools
 ```
 
-#### gui/your_tool/your_tool_gui.ui
+#### features/your_tool/gui/your_tool_gui.ui
 
 Create a UI file using Qt Designer or manually:
 
@@ -186,27 +192,47 @@ Create a UI file using Qt Designer or manually:
 </ui>
 ```
 
-### 5. Register in CMakeLists.txt
+### 5. Register in CMake
 
-Add your module to the main CMakeLists.txt:
+The tool's CMake registration involves three files: the root `CMakeLists.txt`
+(target declaration and `MODULE_LIST`), `features/your_tool/CMakeLists.txt`
+(source file list via `target_sources()`), and `features/CMakeLists.txt`
+(`add_subdirectory()`).
+
+#### 5a. Declare the target in the root `CMakeLists.txt`
 
 ```cmake
-# Add after other module definitions
+# Add after other module definitions (next to the existing qt_add_library calls)
+qt_add_library(${PROJECT_NAME}_your_tool STATIC)
+```
 
-# your_tool
-qt_add_library(${PROJECT_NAME}_your_tool STATIC
-    core/your_tool/your_tool.h
-    core/your_tool/your_tool.cpp
-    gui/your_tool/your_tool_gui.h
-    gui/your_tool/your_tool_gui.cpp
-    gui/your_tool/your_tool_gui.ui
+#### 5b. List sources in `features/your_tool/CMakeLists.txt`
+
+```cmake
+# features/your_tool/CMakeLists.txt
+target_sources(${PROJECT_NAME}_your_tool PRIVATE
+    core/your_tool.h
+    core/your_tool.cpp
+    gui/your_tool_gui.h
+    gui/your_tool_gui.cpp
+    # Optional: gui/your_tool_gui.ui  (AUTOUIC handles .ui files automatically)
 )
+```
 
-# Add to MODULE_LIST
+#### 5c. Add to `MODULE_LIST` in the root `CMakeLists.txt`
+
+```cmake
 set(MODULE_LIST
     # ... existing modules
     ${PROJECT_NAME}_your_tool
 )
+```
+
+#### 5d. Register the feature in `features/CMakeLists.txt`
+
+```cmake
+# features/CMakeLists.txt
+add_subdirectory(your_tool)
 ```
 
 If your module has external dependencies:
@@ -220,7 +246,7 @@ target_link_libraries(${PROJECT_NAME}_your_tool PUBLIC
 
 ### 6. Add Tool ID
 
-Add a new tool ID in `core/tool/tool_id_fields.h`:
+Add a new tool ID in `features/framework/core/tool/tool_id_fields.h`:
 
 ```cpp
 enum class ToolId {
@@ -231,7 +257,7 @@ enum class ToolId {
 
 ### 7. Register in Side Menu
 
-Update `gui/sidemenu.cpp` to include your tool:
+Update `features/framework/gui/sidemenu.cpp` to include your tool:
 
 ```cpp
 // In the constructor or initialization
@@ -240,10 +266,10 @@ addToolItem(ToolId::YourTool, tr("Your Tool"), QIcon(":/icons/your_tool.png"));
 
 ### 8. Register in Contents Area
 
-Update `gui/contents_area.cpp` to create your tool widget:
+Update `features/framework/gui/contents_area.cpp` to create your tool widget:
 
 ```cpp
-#include "gui/your_tool/your_tool_gui.h"
+#include "features/your_tool/gui/your_tool_gui.h"
 
 // In the widget creation method
 case ToolId::YourTool:
@@ -288,13 +314,13 @@ Update resource files:
 
 ### 11. Write Tests
 
-Create test files:
+Create test files under `features/your_tool/tests/`:
 
-#### tests/core/your_tool/test_your_tool.cpp
+#### features/your_tool/tests/test_your_tool.cpp
 
 ```cpp
 #include <gtest/gtest.h>
-#include "core/your_tool/your_tool.h"
+#include "features/your_tool/core/your_tool.h"
 
 namespace devtools {
 
@@ -318,7 +344,7 @@ Add to `tests/DevToolsTests.cmake`:
 ```cmake
 DevTools_add_test(test_your_tool
     SOURCES
-    tests/core/your_tool/test_your_tool.cpp
+    features/your_tool/tests/test_your_tool.cpp
 )
 ```
 
@@ -341,25 +367,29 @@ cmake --build . --target run
 
 ## Checklist
 
-- [ ] Core logic implemented in `core/your_tool/`
-- [ ] GUI implemented in `gui/your_tool/`
-- [ ] Module added to CMakeLists.txt
-- [ ] Tool ID added to `tool_id_fields.h`
-- [ ] Registered in side menu
-- [ ] Registered in contents area
+- [ ] Core logic implemented in `features/your_tool/core/`
+- [ ] GUI implemented in `features/your_tool/gui/`
+- [ ] `qt_add_library` declaration added to root `CMakeLists.txt`
+- [ ] Sources listed in `features/your_tool/CMakeLists.txt` via `target_sources()`
+- [ ] `add_subdirectory(your_tool)` added to `features/CMakeLists.txt`
+- [ ] Module added to `MODULE_LIST` in root `CMakeLists.txt`
+- [ ] Tool ID added to `features/framework/core/tool/tool_id_fields.h`
+- [ ] Registered in `features/framework/gui/sidemenu.cpp`
+- [ ] Registered in `features/framework/gui/contents_area.cpp`
 - [ ] Strings marked for translation
 - [ ] Translations added
 - [ ] Icons added
-- [ ] Unit tests written
+- [ ] Unit tests written in `features/your_tool/tests/`
+- [ ] Test registered in `tests/DevToolsTests.cmake`
 - [ ] Documentation updated
 
 ## Example: Complete Module
 
-For a complete example, examine an existing module:
+For a complete example, examine an existing module under `features/`:
 
-- **Simple**: `phrase_generation` - Minimal dependencies
-- **Medium**: `data_conversion` - External library (yaml-cpp)
-- **Complex**: `image_resize` - Depends on image_core
+- **Simple**: `features/phrase_generation/` - Minimal dependencies
+- **Medium**: `features/data_conversion/` - External library (yaml-cpp, toml11)
+- **Complex**: `features/image/` - Unified tools depending on `DevTools_image_core`
 
 ## Tips
 
