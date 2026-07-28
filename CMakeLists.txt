@@ -336,7 +336,7 @@ endif()
 if(DOXYGEN_FOUND)
     include(doxygen/DevToolsDocs.cmake)
 else()
-    message(WARNING "Doxygen not found")
+    message(STATUS "Doxygen not found")
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE

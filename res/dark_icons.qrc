@@ -28,5 +28,6 @@
         <file>dark/remix/save.svg</file>
         <file>dark/material/database.svg</file>
         <file>dark/material/refresh.svg</file>
+        <file>dark/material/delete.svg</file>
     </qresource>
 </RCC>

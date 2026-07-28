@@ -28,5 +28,6 @@
         <file>light/remix/save.svg</file>
         <file>light/material/database.svg</file>
         <file>light/material/refresh.svg</file>
+        <file>light/material/delete.svg</file>
     </qresource>
 </RCC>

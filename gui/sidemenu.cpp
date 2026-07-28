@@ -11,6 +11,7 @@
 #include <QEvent>
 #include <QFrame>
 #include <QLineEdit>
+#include <QPainter>
 #include <QScrollArea>
 #include <QSizePolicy>
 #include <QStyle>
@@ -54,6 +55,9 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
 
     auto *const scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
+    // QScrollArea自体の枠線はqlementine環境下では実質無効ですが、念のためNoFrameにしておきます
+    scrollArea->setFrameShape(QFrame::NoFrame);
+
     auto *const scrollAreaWidgetContents = new QWidget();
     m_scrollAreaLayout = new QVBoxLayout(scrollAreaWidgetContents);
     m_scrollAreaLayout->setSpacing(0);
@@ -194,4 +198,19 @@ void Sidemenu::filterItems(const QString &searchText)
 void Sidemenu::onSearchTextChanged(const QString &text)
 {
     filterItems(text);
+}
+
+void Sidemenu::paintEvent(QPaintEvent *event)
+{
+    // ベースクラスの描画（背景など）を確実に実行する
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+
+    // テーマのパレットから枠線に適した色を取得（MidやShadowなど）
+    const QColor borderColor = palette().color(QPalette::Mid);
+    painter.setPen(borderColor);
+
+    // ウィジェットの最も右端に垂直線を引く（上端から下端まで）
+    painter.drawLine(width() - 1, 0, width() - 1, height());
 }

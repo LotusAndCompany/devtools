@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QStyleHints>
 #include <QTranslator>
+#include <QWidget>
 
 #include <oclero/qlementine.hpp>
 
@@ -157,8 +158,25 @@ void GuiApplication::applyColorScheme()
 
     QIcon::setThemeName(iconTheme);
 
+    const auto allWidgets = QApplication::allWidgets();
+
     if (themeManager != nullptr && themeManager->currentTheme() != qlementineTheme) {
         themeManager->setCurrentTheme(qlementineTheme);
+
+        QApplication::setPalette(style()->standardPalette());
+
+        for (auto *w : allWidgets) {
+            w->setPalette(QPalette());
+            w->update();
+        }
+        return;
+    }
+
+    for (auto *w : allWidgets) {
+        if (!w->isVisible()) {
+            continue;
+        }
+        w->update();
     }
 }
 
