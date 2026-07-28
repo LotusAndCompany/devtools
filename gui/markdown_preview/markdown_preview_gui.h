@@ -49,7 +49,6 @@ private slots:
 
 private:
     void buildUi();
-    void applyTheme();
     void retranslateUi();
     void renderPreview();
     void syncScroll(QAbstractSlider *source, QAbstractSlider *target);
@@ -70,7 +69,6 @@ private:
 
     bool syncScrollEnabled{true};
     bool suppressScrollSignal{false};
-    bool applyingTheme{false};
     QString currentFilePath;
 };
 
