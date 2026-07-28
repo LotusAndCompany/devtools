@@ -65,8 +65,8 @@ Add path to `CMAKE_AUTOUIC_SEARCH_PATHS` in CMakeLists.txt:
 
 ```cmake
 set(CMAKE_AUTOUIC_SEARCH_PATHS
-    gui/image/basic/
-    gui/your_path/
+    features/image/gui/basic/
+    features/your_module/gui/
 )
 ```
 
