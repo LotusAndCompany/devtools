@@ -12,6 +12,6 @@ paths:
 - Register new tests in `tests/DevToolsTests.cmake` with `DevTools_add_test()`.
 - Prefer `ctest --output-on-failure` when diagnosing failures.
 - Keep core tests focused on business logic and avoid GUI dependencies unless
-  the component under test is explicitly in `gui/`.
+  the component under test is explicitly in a `gui/` subdirectory.
 - Use `ASSERT_*` only when continuing would make the rest of the test invalid;
   otherwise prefer `EXPECT_*`.

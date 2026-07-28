@@ -1,4 +1,4 @@
-#include "gui/gui_application.h"
+#include "features/framework/gui/gui_application.h"
 
 #include <QDateTime>
 #include <QFileInfo>
