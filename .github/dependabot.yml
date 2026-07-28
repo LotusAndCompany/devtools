@@ -8,3 +8,7 @@ updates:
       codeql-action:
         patterns:
           - "github/codeql-action/*"
+      codeql-action-security:
+        applies-to: security-updates
+        patterns:
+          - "github/codeql-action/*"
