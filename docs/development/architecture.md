@@ -19,28 +19,31 @@ DevTools is a Qt6-based desktop application built with C++17. The architecture u
 
 ## Directory Structure
 
+Each feature is a self-contained module under `features/{feature}/` with
+`core/`, `gui/`, and `tests/` subdirectories. Shared application infrastructure
+lives in `features/framework/` and is compiled as the `DevTools_core` library.
+
 ```
 devtools/
-├── core/               # Business logic and algorithms
-│   ├── data_conversion/    # JSON/YAML/TOML conversion
-│   ├── exception/          # Custom exceptions
-│   ├── image/              # Image processing algorithms
-│   ├── qr_tool/            # QR code generation
-│   └── tool/               # Tool base classes
-├── gui/                # GUI components
-│   ├── command/            # Command execution UI
-│   ├── data_conversion/    # Data conversion UI
-│   ├── db_tool/            # Database tool UI
-│   ├── image/              # Image processing UI
-│   ├── menubar/            # Menu dialogs
-│   ├── phrase_generation/  # Phrase generation UI
-│   └── qr_code/            # QR code UI
-├── main/               # Application entry point
-├── res/                # Resources
-│   ├── *.qrc               # Qt resource files
-│   └── *.ts                # Translation files
-├── tests/              # Unit tests
-└── distribution/       # Packaging files
+├── features/                # Feature modules (each with core/, gui/, tests/)
+│   ├── framework/           # Core framework (DevTools_core): app, main window,
+│   │                        # side menu, tool base, exceptions
+│   ├── data_conversion/     # JSON/YAML/TOML conversion
+│   ├── qr_code/             # QR code generation
+│   ├── image/               # Unified image processing tools
+│   │                        # (resize/rotation/division/transparency)
+│   ├── db_tool/             # Database tool
+│   ├── http_request/        # HTTP API testing
+│   ├── command/             # Shell command execution
+│   └── phrase_generation/   # Random phrase generation
+├── main/                    # Application entry point
+├── res/                     # Resources
+│   ├── *.qrc                # Qt resource files
+│   ├── themes/              # qlementine theme JSON files
+│   └── *.ts                 # Translation files
+├── tests/                   # Shared test helpers (per-feature tests live in
+│                            # features/{feature}/tests/)
+└── distribution/            # Packaging files
 ```
 
 ## Module Architecture
@@ -56,37 +59,39 @@ devtools/
         ┌────────────────────┼────────────────────┐
         │                    │                    │
         ▼                    ▼                    ▼
-┌───────────────┐  ┌─────────────────┐  ┌────────────────┐
-│  DevTools_    │  │   DevTools_     │  │   DevTools_    │
-│  image_*      │  │  data_conversion│  │  qr_code_gen   │
-└───────┬───────┘  └─────────────────┘  └────────────────┘
-        │                    │                    │
-        ▼                    │                    │
-┌───────────────┐            │                    │
-│  DevTools_    │            │                    │
-│  image_core   │            │                    │
-└───────┬───────┘            │                    │
-        │                    │                    │
-        └────────────────────┼────────────────────┘
-                             │
-                             ▼
+┌──────────────────┐  ┌─────────────────┐  ┌────────────────┐
+│ DevTools_image_  │  │   DevTools_     │  │   DevTools_    │
+│ tools_unified    │  │ data_conversion │  │ qr_code_gen    │
+└────────┬─────────┘  └─────────────────┘  └────────────────┘
+         │
+         ▼
+┌──────────────────┐
+│ DevTools_image_  │
+│ core             │
+└────────┬─────────┘
+         │
+         └──────────────────────┐
+                                │
+                                ▼
                     ┌──────────────────┐
                     │  DevTools_core   │
-                    │  (main framework)│
+                    │  (main framework,│
+                    │  features/framework)│
                     └──────────────────┘
 ```
+
+Other feature modules (`DevTools_http_request`, `DevTools_command`,
+`DevTools_phrase_generation`, `DevTools_db_tool`) depend directly on
+`DevTools_core` without intermediate shared modules.
 
 ### Module List
 
 | Module | Description | Dependencies |
 |--------|-------------|--------------|
-| `DevTools_core` | Main framework, GUI base classes, main window | Qt6 |
+| `DevTools_core` | Main framework (application, main window, side menu, tool base, exceptions). Sources live under `features/framework/`. | Qt6, qlementine |
 | `DevTools_image_core` | Image I/O and editing base classes | DevTools_core |
-| `DevTools_image_resize` | Image resize functionality | DevTools_image_core |
-| `DevTools_image_rotation` | Image rotation functionality | DevTools_image_core |
-| `DevTools_image_division` | Image splitting functionality | DevTools_image_core |
-| `DevTools_image_transparent` | Image transparency functionality | DevTools_image_core |
-| `DevTools_data_conversion` | JSON/YAML/TOML conversion | DevTools_core, yaml-cpp |
+| `DevTools_image_tools_unified` | Unified image processing tools (resize, rotation, division, transparency) | DevTools_image_core |
+| `DevTools_data_conversion` | JSON/YAML/TOML conversion | DevTools_core, yaml-cpp, toml11 |
 | `DevTools_qr_code_generation` | QR code generation | DevTools_core |
 | `DevTools_http_request` | HTTP API testing | DevTools_core |
 | `DevTools_command` | Shell command execution | DevTools_core |
@@ -95,15 +100,16 @@ devtools/
 
 ### Core Module Structure
 
-The `DevTools_core` module contains:
+`DevTools_core` encapsulates application infrastructure and is implemented in
+`features/framework/`. Its sources are listed via `target_sources()` in
+`features/framework/CMakeLists.txt`. Key components:
 
-- **Application Framework**: `gui_application.cpp`, `application_mixin.cpp`
-- **Main Window**: `main_window.cpp`
-- **Navigation**: `sidemenu.cpp`, `contents_area.cpp`
-- **Dialogs**: `about_devtools_dialog.cpp`, `settings_dialog.cpp`
-- **Tool Base**: `gui_tool.cpp`, `tool.cpp`
-- **QR Code Base**: `qrcodegen.cpp`
-- **Exceptions**: Custom exception classes
+- **Application Framework**: `features/framework/gui/gui_application.cpp`, `features/framework/core/application_mixin.cpp`
+- **Main Window**: `features/framework/gui/main_window.cpp`
+- **Navigation**: `features/framework/gui/sidemenu.cpp`, `features/framework/gui/contents_area.cpp`
+- **Dialogs**: `features/framework/gui/menubar/about_devtools_dialog.cpp`, `settings_dialog.cpp`
+- **Tool Base**: `features/framework/gui/gui_tool.cpp`, `features/framework/core/tool/tool.cpp`
+- **Exceptions**: `features/framework/core/exception/` (custom exception classes)
 
 ## Design Patterns
 
@@ -129,13 +135,20 @@ Each tool follows a similar pattern:
 
 ### Static Library Pattern
 
-Each module is compiled as a static library (`STATIC`):
+Each feature is compiled as a static library (`STATIC`). The library target is
+declared in the root `CMakeLists.txt` with `qt_add_library(${PROJECT_NAME}_your_module STATIC)`
+and the source files are listed in `features/your_module/CMakeLists.txt` via
+`target_sources()`. The feature is then registered in `features/CMakeLists.txt`
+with `add_subdirectory()`.
 
 ```cmake
-qt_add_library(${PROJECT_NAME}_module_name STATIC
-    core/module_name/logic.cpp
-    gui/module_name/gui.cpp
-    gui/module_name/gui.ui
+# Root CMakeLists.txt
+qt_add_library(${PROJECT_NAME}_your_module STATIC)
+
+# features/your_module/CMakeLists.txt
+target_sources(${PROJECT_NAME}_your_module PRIVATE
+    core/your_module.h core/your_module.cpp
+    gui/your_module_gui.h gui/your_module_gui.cpp
 )
 ```
 
@@ -308,19 +321,23 @@ Translation workflow:
 
 ## Testing Architecture
 
-Tests are organized by module:
+Per-feature tests live alongside the feature under `features/{feature}/tests/`.
+Shared test helpers (mock utilities, random data generators) live under
+`tests/`.
 
 ```
 tests/
-├── DevToolsTests.cmake       # Test configuration
-├── core/                     # Core logic tests
-│   ├── data_conversion/
-│   ├── exception/
-│   └── image/
-├── gui/                      # GUI tests
-└── helpers/                  # Test utilities
+├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
+├── test_util.h test_util.cpp # Shared test utilities
+├── random_data.h random_data.cpp
+└── mock_helper.h
+
+features/{feature}/
+└── tests/                    # Per-feature test sources
+    └── test_*.cpp
 ```
 
+Tests are registered in `tests/DevToolsTests.cmake` via `DevTools_add_test()`.
 See [Testing Guide](testing-guide.md) for details.
 
 ## Related Documentation
