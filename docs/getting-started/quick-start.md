@@ -175,7 +175,7 @@ Bundled qlementine themes are stored in `res/themes/light.json` and
 
 - [User Guide](../user-guide/overview.md) - Detailed feature documentation
 - [Troubleshooting](../troubleshooting/common-issues.md) - If something doesn't work
-- [Contributing](../../CONTRIBUTING.md) - Help improve DevTools
+- [Contributing](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Help improve DevTools
 
 ## Getting Help
 

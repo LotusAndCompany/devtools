@@ -198,7 +198,7 @@ ctest --output-on-failure
 
 - [Quick Start Guide](quick-start.md) - Learn the basics
 - [Architecture Overview](../development/architecture.md) - Understand the codebase
-- [Contributing Guide](../../CONTRIBUTING.md) - Start contributing
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Start contributing
 
 ## Troubleshooting
 

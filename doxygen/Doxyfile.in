@@ -4,7 +4,7 @@ PROJECT_BRIEF = "New Development Tools"
 # ビルドディレクトリからの相対パス
 PROJECT_ICON = "doxygen/dev-tools_icon.doxygen.png"
 # ビルドディレクトリからの相対パス
-INPUT = @CMAKE_CURRENT_SOURCE_DIR@/docs/ @CMAKE_CURRENT_SOURCE_DIR@/core/ @CMAKE_CURRENT_SOURCE_DIR@/gui/
+INPUT = @CMAKE_CURRENT_SOURCE_DIR@/docs/ @CMAKE_CURRENT_SOURCE_DIR@/features/
 FILE_PATTERNS = *.cpp *.h *.dox *.md
 RECURSIVE = YES
 # サードパーティコードと日本語ドキュメントを除外
@@ -60,7 +60,8 @@ USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/docs/index.md
 
 # 警告設定（未ドキュメントのメンバーやコメントエラーを検出）
 WARNINGS = YES
-WARN_IF_UNDOCUMENTED = YES
+# 未文書化の実装メンバーは対象外。コメントの構文・参照エラーは検出する。
+WARN_IF_UNDOCUMENTED = NO
 WARN_IF_DOC_ERROR = YES
 WARN_IF_INCOMPLETE_DOC = YES
 WARN_AS_ERROR = NO

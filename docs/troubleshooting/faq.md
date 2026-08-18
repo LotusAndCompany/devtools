@@ -132,7 +132,7 @@ The API testing feature supports HTTPS. If you're having issues:
 3. Make changes
 4. Submit a pull request
 
-See [Contributing Guide](../../CONTRIBUTING.md) for details.
+See [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) for details.
 
 ### How do I add a new tool?
 

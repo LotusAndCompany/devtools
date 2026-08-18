@@ -55,7 +55,7 @@ For contributors and developers:
 
 - [GitHub Repository](https://github.com/LotusAndCompany/devtools)
 - [Issue Tracker](https://github.com/LotusAndCompany/devtools/issues)
-- [Contributing Guide](../CONTRIBUTING.md)
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md)
 
 ## License
 

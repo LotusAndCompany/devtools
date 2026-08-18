@@ -401,4 +401,4 @@ Code quality checks run automatically on:
 
 - [Architecture](architecture.md) - System architecture
 - [Adding New Tools](adding-new-tools.md) - How to add features
-- [Contributing Guide](../../CONTRIBUTING.md) - Contribution process
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Contribution process

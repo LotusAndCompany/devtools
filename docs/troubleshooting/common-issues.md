@@ -337,4 +337,4 @@ If your issue is not listed:
 
 - [Installation](../getting-started/installation.md) - Setup guide
 - [FAQ](faq.md) - Frequently asked questions
-- [Build Instructions](../../BUILD.md) - Detailed build guide
+- [Build Instructions](https://github.com/LotusAndCompany/devtools/blob/main/BUILD.md) - Detailed build guide
