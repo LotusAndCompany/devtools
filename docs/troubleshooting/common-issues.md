@@ -52,24 +52,6 @@ Could not find a package configuration file provided by "yaml-cpp"
 
 ### Compilation Errors
 
-#### UI File Not Found
-
-**Error:**
-```
-The user interface file "*.ui" could not be found
-```
-
-**Solution:**
-
-Add path to `CMAKE_AUTOUIC_SEARCH_PATHS` in CMakeLists.txt:
-
-```cmake
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    features/image/gui/basic/
-    features/your_module/gui/
-)
-```
-
 #### Linker Errors
 
 **Error:**

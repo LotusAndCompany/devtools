@@ -195,10 +195,10 @@ auto* widget = new QWidget(this);  // 'this' takes ownership
 std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
 ```
 
-### UI Files
+### UI Construction
 
-- Use `.ui` files for complex layouts
-- Keep simple layouts in code
+- Build Qt Widgets layouts in C++.
+- Use Qt parent-child ownership for widget lifetime management.
 - Name UI elements descriptively: `saveButton`, `inputLineEdit`
 
 ## C++17 Features

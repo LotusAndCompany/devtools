@@ -53,19 +53,6 @@ QString greeting = tr("Hello, %1!").arg(userName);
 QString items = tr("%n item(s)", "", count);
 ```
 
-### In .ui Files
-
-If a `.ui` file is still used, Qt Designer automatically marks visible text for translation.
-Just use the Properties panel to set text.
-
-### In QML (if used)
-
-```qml
-Text {
-    text: qsTr("Hello, World!")
-}
-```
-
 ## Updating Translations
 
 ### Using CMake

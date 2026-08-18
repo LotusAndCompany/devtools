@@ -125,7 +125,8 @@ Each tool follows a similar pattern:
 │  │  core/  │      │    gui/     │   │
 │  │         │◄────►│             │   │
 │  │ Logic   │      │ Interface   │   │
-│  │         │      │ (.ui + .cpp)│   │
+│  │         │      │ (Widgets +  │   │
+│  │         │      │    .cpp)    │   │
 │  └─────────┘      └─────────────┘   │
 └─────────────────────────────────────┘
 ```

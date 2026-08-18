@@ -104,11 +104,9 @@ QString YourTool::process(const QString& input) {
 #include "features/framework/gui/gui_tool.h"
 #include "features/your_tool/core/your_tool.h"
 
-#include <memory>
-
-namespace Ui {
-class YourToolGui;
-}
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 
 namespace devtools {
 
@@ -123,7 +121,9 @@ private slots:
     void onProcessClicked();
 
 private:
-    std::unique_ptr<Ui::YourToolGui> ui_;
+    QLineEdit* inputEdit_;
+    QPushButton* processButton_;
+    QLabel* outputLabel_;
     YourTool tool_;
 };
 
@@ -136,60 +136,36 @@ private:
 
 ```cpp
 #include "features/your_tool/gui/your_tool_gui.h"
-#include "ui_your_tool_gui.h"
+
+#include <QVBoxLayout>
 
 namespace devtools {
 
 YourToolGui::YourToolGui(QWidget* parent)
     : GuiTool(parent)
-    , ui_(std::make_unique<Ui::YourToolGui>()) {
-    ui_->setupUi(this);
+    , inputEdit_(new QLineEdit(this))
+    , processButton_(new QPushButton(tr("Process"), this))
+    , outputLabel_(new QLabel(this)) {
+    auto* layout = new QVBoxLayout(this);
+    layout->addWidget(inputEdit_);
+    layout->addWidget(processButton_);
+    layout->addWidget(outputLabel_);
+
+    inputEdit_->setPlaceholderText(tr("Enter input..."));
     
-    connect(ui_->processButton, &QPushButton::clicked,
+    connect(processButton_, &QPushButton::clicked,
             this, &YourToolGui::onProcessClicked);
 }
 
 YourToolGui::~YourToolGui() = default;
 
 void YourToolGui::onProcessClicked() {
-    QString input = ui_->inputEdit->text();
+    QString input = inputEdit_->text();
     QString result = tool_.process(input);
-    ui_->outputLabel->setText(result);
+    outputLabel_->setText(result);
 }
 
 }  // namespace devtools
-```
-
-#### features/your_tool/gui/your_tool_gui.ui
-
-Create a UI file using Qt Designer or manually:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
- <class>YourToolGui</class>
- <widget class="QWidget" name="YourToolGui">
-  <layout class="QVBoxLayout">
-   <item>
-    <widget class="QLineEdit" name="inputEdit">
-     <property name="placeholderText">
-      <string>Enter input...</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="processButton">
-     <property name="text">
-      <string>Process</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="outputLabel"/>
-   </item>
-  </layout>
- </widget>
-</ui>
 ```
 
 ### 5. Register in CMake
@@ -215,7 +191,6 @@ target_sources(${PROJECT_NAME}_your_tool PRIVATE
     core/your_tool.cpp
     gui/your_tool_gui.h
     gui/your_tool_gui.cpp
-    # Optional: gui/your_tool_gui.ui  (AUTOUIC handles .ui files automatically)
 )
 ```
 
@@ -282,7 +257,7 @@ case ToolId::YourTool:
 
 ```cpp
 // Use tr() for user-visible strings
-ui_->processButton->setText(tr("Process"));
+processButton_->setText(tr("Process"));
 ```
 
 #### Update Translation Files
