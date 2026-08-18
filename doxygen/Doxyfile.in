@@ -46,9 +46,6 @@ FULL_SIDEBAR = NO
 # カラースキーム（ライト/ダーク自動切替）
 HTML_COLORSTYLE = AUTO_LIGHT
 
-# メインページにはページアウトラインが表示されず、ページごとに本文幅が変わるため無効化
-PAGE_OUTLINE_PANEL = NO
-
 # コードブロックのコピーボタン
 HTML_COPY_CLIPBOARD = YES
 
