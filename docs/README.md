@@ -44,7 +44,7 @@ For contributors and developers:
 
 ### API Reference
 
-- [API Documentation](api/README.md) - Overview and links to Doxygen-generated docs
+- [Doxygen API Reference](https://LotusAndCompany.github.io/devtools/)
 
 ### Troubleshooting
 

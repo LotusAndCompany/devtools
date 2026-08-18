@@ -18,7 +18,7 @@ This means a global change to AGENTS.md, or a path-scoped change in `.agents/rul
 flowchart TD
     agents["AGENTS.md<br/>(global source of truth)"]
     agents --> rules[".agents/rules/<br/>shared path-scoped rules"]
-    rules --> rule_files["cmake.md, cpp-style.md, design-files.md,<br/>docs.md, exec-plans.md, generated-files.md,<br/>git-workflow.md, i18n.md, project.md, testing.md"]
+    rules --> rule_files["cmake.md, cpp-style.md, design-files.md,<br/>docs.md, generated-files.md, git-workflow.md,<br/>i18n.md, project.md, testing.md"]
     agents --> opencode["opencode.json<br/>loads .agents/rules/*.md"]
     agents --> claude["CLAUDE.md<br/>@AGENTS.md import + author rules"]
     claude --> claude_rules[".claude/rules/<br/>thin adapters"]
@@ -67,7 +67,6 @@ Current shared rules:
 | `.agents/rules/cpp-style.md` | C++17, Qt, ownership, and formatting rules |
 | `.agents/rules/design-files.md` | Pencil `.pen` design file handling |
 | `.agents/rules/docs.md` | English/Japanese documentation rules |
-| `.agents/rules/exec-plans.md` | Execution plan and tech-debt tracker rules |
 | `.agents/rules/generated-files.md` | Build outputs and generated file handling |
 | `.agents/rules/git-workflow.md` | Conventional Commits and release-please guardrails |
 | `.agents/rules/i18n.md` | Qt translation workflow |
@@ -101,19 +100,6 @@ scripts/check-agent-harness.sh
 
 The check syncs adapters, compiles the sync script, checks diff whitespace, and
 fails if generated adapters are stale.
-
-## Execution Plans
-
-Complex or long-running agent work should use checked-in execution plans under
-`docs/exec-plans/`. Plans are intentionally lighter than formal specifications;
-they preserve objective, scope, relevant rules, validation commands, decisions,
-and completion notes across tool sessions and context compaction.
-
-Use:
-
-- `docs/exec-plans/active/` for work in progress
-- `docs/exec-plans/completed/` for useful historical plans
-- `docs/exec-plans/tech-debt-tracker.md` for durable follow-up items
 
 ## Tool-Specific Configurations
 

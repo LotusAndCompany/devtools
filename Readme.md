@@ -76,7 +76,7 @@ For detailed build instructions, see [BUILD.md](BUILD.md).
 ## Documentation
 
 ### Quick Links
-- [Documentation Index](docs/index.md)
+- [Documentation Index](docs/README.md)
 - [Quick Start Guide](docs/getting-started/quick-start.md)
 - [Installation Guide](docs/getting-started/installation.md)
 
