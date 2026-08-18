@@ -7,6 +7,8 @@
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
 #include "features/image/gui/basic/image_tools_unified_gui.h"
+#include "features/markdown_preview/core/markdown_preview.h"
+#include "features/markdown_preview/gui/markdown_preview_gui.h"
 #include "features/phrase_generation/gui/phrase_generation.h"
 #include "features/qr_code/gui/qr_code_generation_gui.h"
 
@@ -83,6 +85,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::QR_CODE_GENERATION:
         content = new QRCodeGenerationGUI(this);
+        break;
+    case Sidemenu::ID::MARKDOWN_PREVIEW:
+        content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

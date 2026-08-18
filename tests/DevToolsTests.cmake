@@ -84,6 +84,12 @@ DevTools_add_test(test_tool
     features/framework/tests/test_tool.cpp
 )
 
+# core/markdown_preview
+DevTools_add_test(test_markdown_preview
+    SOURCES
+    features/markdown_preview/tests/test_markdown_preview.cpp
+)
+
 # core/iamge
 DevTools_add_test(test_basic_image_io
     SOURCES
