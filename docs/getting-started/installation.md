@@ -74,7 +74,7 @@ vcpkg version
 
 ### 3. Install Additional Tools
 
-#### Doxygen (Optional, 1.16+)
+#### Doxygen (Optional, 1.18+)
 
 ```bash
 brew install doxygen

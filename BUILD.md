@@ -151,7 +151,7 @@ ctest
 
 ## Generating Documentation
 
-Doxygen 1.16+ is required to generate API documentation.
+Doxygen 1.18+ is required to generate API documentation.
 
 ### Install Doxygen
 ```bash

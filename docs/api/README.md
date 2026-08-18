@@ -12,7 +12,7 @@ DevTools uses Doxygen for API documentation generation. The full API reference i
 
 ### Prerequisites
 
-Install Doxygen (1.16+):
+Install Doxygen (1.18+):
 
 ```bash
 brew install doxygen

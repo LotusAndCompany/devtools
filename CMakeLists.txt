@@ -41,8 +41,8 @@ FetchContent_Declare(qlementine
 set(QLEMENTINE_SANDBOX OFF CACHE BOOL "" FORCE)
 set(QLEMENTINE_SHOWCASE OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(qlementine)
-# Doxygenを探す（1.16以上が必要）
-find_package(Doxygen 1.16)
+# Doxygenを探す（1.18以上が必要）
+find_package(Doxygen 1.18)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 

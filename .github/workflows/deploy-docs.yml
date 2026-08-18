@@ -17,9 +17,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DOXYGEN_VERSION: '1.17.0'
+  DOXYGEN_VERSION: '1.18.0'
   # SHA256 of doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz; update together with DOXYGEN_VERSION
-  DOXYGEN_SHA256: '75419ef4f446fc1c24ef12514b574e66e898ee6f527c6ae2ad84f91a905823c2'
+  DOXYGEN_SHA256: '14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90'
 
 jobs:
   build:
