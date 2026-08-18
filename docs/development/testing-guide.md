@@ -8,17 +8,22 @@ DevTools uses Google Test (gtest) for unit testing. Tests are organized by modul
 
 ## Test Structure
 
-```
+Test sources live alongside each feature under `features/{feature}/tests/`.
+Shared test helpers and test data live under the top-level `tests/` directory.
+
+```text
 tests/
-├── DevToolsTests.cmake       # Test configuration
-├── core/                     # Core logic tests
-│   ├── data_conversion/
-│   ├── exception/
-│   └── image/
-├── gui/                      # GUI tests
-└── helpers/                  # Test utilities
-    ├── mock_helper.h
-    └── random_data.h
+├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
+├── test_util.h test_util.cpp # Shared test utilities
+├── random_data.h random_data.cpp
+├── mock_helper.h
+└── core/                     # Test fixtures (images, YAML/JSON/TOML samples)
+    ├── data_conversion/
+    └── image/
+
+features/{feature}/
+└── tests/                    # Per-feature test sources
+    └── test_*.cpp
 ```
 
 ## Enabling Tests
@@ -45,7 +50,7 @@ ctest --output-on-failure
 
 ```cpp
 #include <gtest/gtest.h>
-#include "core/module/class.h"
+#include "features/your_module/core/your_class.h"
 
 namespace devtools {
 
@@ -92,7 +97,7 @@ TEST(MyClassSimpleTest, BasicFunctionality) {
 ### Testing Exceptions
 
 ```cpp
-#include "core/exception/invalid_argument_exception.h"
+#include "features/framework/core/exception/invalid_argument_exception.h"
 
 TEST(ValidationTest, ThrowsOnInvalidInput) {
     MyClass obj;
@@ -132,9 +137,9 @@ TEST(StringTest, ProcessesQString) {
 Test business logic without GUI dependencies:
 
 ```cpp
-// tests/core/data_conversion/test_json_parser.cpp
+// features/data_conversion/tests/test_json_parser.cpp
 #include <gtest/gtest.h>
-#include "core/data_conversion/parser/json_parser.h"
+#include "features/data_conversion/core/parser/json_parser.h"
 
 namespace devtools {
 
@@ -158,10 +163,10 @@ TEST(JsonParserTest, FailsOnInvalidJson) {
 Test GUI components (limited without display):
 
 ```cpp
-// tests/gui/test_main_window.cpp
+// features/framework/tests/test_main_window.cpp
 #include <gtest/gtest.h>
 #include <QApplication>
-#include "gui/main_window.h"
+#include "features/framework/gui/main_window.h"
 
 namespace devtools {
 
@@ -215,7 +220,7 @@ endmacro()
 # Register your test
 DevTools_add_test(test_your_module
     SOURCES
-    tests/core/your_module/test_your_module.cpp
+    features/your_module/tests/test_your_module.cpp
 )
 ```
 
@@ -224,7 +229,7 @@ DevTools_add_test(test_your_module
 ### Mock Helper
 
 ```cpp
-// tests/helpers/mock_helper.h
+// tests/mock_helper.h
 #include <QString>
 
 namespace devtools::test {
@@ -238,7 +243,7 @@ void deleteTempFile(const QString& path);
 ### Random Data Generator
 
 ```cpp
-// tests/helpers/random_data.h
+// tests/random_data.h
 #include <QString>
 
 namespace devtools::test {
@@ -252,7 +257,7 @@ QByteArray randomBytes(int size);
 Usage:
 
 ```cpp
-#include "tests/helpers/random_data.h"
+#include "tests/random_data.h"
 
 TEST(ProcessorTest, HandlesRandomInput) {
     QString input = test::randomString(100);

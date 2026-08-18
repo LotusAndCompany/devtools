@@ -31,14 +31,13 @@ Before contributing, make sure you have:
 
 ```
 devtools/
-├── core/           # Business logic and algorithms
-├── gui/            # GUI components and tool interfaces
-├── main/           # Application entry point
-├── res/            # Resources and translation files
-├── tests/          # Unit tests
-├── designs/        # UI design files (.pen)
-├── docs/           # Documentation
-└── distribution/   # Platform-specific packaging files
+├── features/        # Feature modules (each with core/, gui/, tests/)
+├── main/            # Application entry point
+├── res/             # Resources and translation files
+├── tests/           # Shared test helpers
+├── designs/         # UI design files (.pen)
+├── docs/            # Documentation
+└── distribution/    # Platform-specific packaging files
 ```
 
 ## How to Contribute
@@ -198,28 +197,42 @@ Code quality checks run automatically on:
 
 ### Adding New Modules
 
-1. Create a new static library in `CMakeLists.txt`:
+1. Create the feature directory structure:
+   ```
+   features/your_module/
+   ├── CMakeLists.txt
+   ├── core/
+   │   └── your_module.h, your_module.cpp
+   ├── gui/
+   │   └── your_module_gui.h, your_module_gui.cpp
+   └── tests/
+       └── test_your_module.cpp
+   ```
+
+2. Register the static library target in root `CMakeLists.txt`:
    ```cmake
-   qt_add_library(${PROJECT_NAME}_your_module STATIC
-       core/your_module/your_module.h
-       core/your_module/your_module.cpp
-       gui/your_module/your_module_gui.h
-       gui/your_module/your_module_gui.cpp
-       gui/your_module/your_module_gui.ui
+   qt_add_library(${PROJECT_NAME}_your_module STATIC)
+   ```
+
+3. List source files in `features/your_module/CMakeLists.txt`:
+   ```cmake
+   target_sources(DevTools_your_module PRIVATE
+       core/your_module.h core/your_module.cpp
+       gui/your_module_gui.h gui/your_module_gui.cpp
    )
    ```
 
-2. Add dependencies if needed:
-   ```cmake
-   add_dependencies(${PROJECT_NAME}_your_module ${PROJECT_NAME}_core)
-   ```
-
-3. Add to `MODULE_LIST`:
+4. Add to `MODULE_LIST` in root `CMakeLists.txt`:
    ```cmake
    set(MODULE_LIST
        # ... existing modules
        ${PROJECT_NAME}_your_module
    )
+   ```
+
+5. Register the feature in `features/CMakeLists.txt`:
+   ```cmake
+   add_subdirectory(your_module)
    ```
 
 ### Adding Tests
@@ -228,7 +241,7 @@ Add tests to `tests/DevToolsTests.cmake`:
 ```cmake
 DevTools_add_test(test_your_module
     SOURCES
-    tests/core/your_module/test_your_module.cpp
+    features/your_module/tests/test_your_module.cpp
 )
 ```
 
