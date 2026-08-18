@@ -23,61 +23,46 @@ Each feature is a self-contained module under `features/{feature}/` with
 `core/`, `gui/`, and `tests/` subdirectories. Shared application infrastructure
 lives in `features/framework/` and is compiled as the `DevTools_core` library.
 
-```text
-devtools/
-├── features/                # Feature modules (each with core/, gui/, tests/)
-│   ├── framework/           # Core framework (DevTools_core): app, main window,
-│   │                        # side menu, tool base, exceptions
-│   ├── data_conversion/     # JSON/YAML/TOML conversion
-│   ├── qr_code/             # QR code generation
-│   ├── image/               # Unified image processing tools
-│   │                        # (resize/rotation/division/transparency)
-│   ├── db_tool/             # Database tool
-│   ├── http_request/        # HTTP API testing
-│   ├── command/             # Shell command execution
-│   └── phrase_generation/   # Random phrase generation
-├── main/                    # Application entry point
-├── res/                     # Resources
-│   ├── *.qrc                # Qt resource files
-│   ├── themes/              # qlementine theme JSON files
-│   └── *.ts                 # Translation files
-├── tests/                   # Shared test helpers (per-feature tests live in
-│                            # features/{feature}/tests/)
-└── distribution/            # Packaging files
+```mermaid
+flowchart TD
+    root["devtools/"]
+    root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
+    features --> framework["framework/<br/>Core framework<br/>DevTools_core"]
+    features --> conversion["data_conversion/<br/>JSON/YAML/TOML conversion"]
+    features --> qr["qr_code/<br/>QR code generation"]
+    features --> image["image/<br/>Resize, rotation, division, transparency"]
+    features --> db["db_tool/<br/>Database tool"]
+    features --> http["http_request/<br/>HTTP API testing"]
+    features --> command["command/<br/>Shell command execution"]
+    features --> phrase["phrase_generation/<br/>Random phrase generation"]
+    root --> main["main/<br/>Application entry point"]
+    root --> resources["res/"]
+    resources --> qrc["*.qrc<br/>Qt resource files"]
+    resources --> themes["themes/<br/>qlementine theme JSON files"]
+    resources --> translations["*.ts<br/>Translation files"]
+    root --> tests["tests/<br/>Shared test helpers<br/>(per-feature tests live in features/{feature}/tests/)"]
+    root --> distribution["distribution/<br/>Packaging files"]
 ```
 
 ## Module Architecture
 
 ### Module Diagram
 
-```
-                    ┌──────────────────┐
-                    │    DevTools      │
-                    │   (executable)   │
-                    └────────┬─────────┘
-                             │
-        ┌────────────────────┼────────────────────┐
-        │                    │                    │
-        ▼                    ▼                    ▼
-┌──────────────────┐  ┌─────────────────┐  ┌────────────────┐
-│ DevTools_image_  │  │   DevTools_     │  │   DevTools_    │
-│ tools_unified    │  │ data_conversion │  │ qr_code_generation│
-└────────┬─────────┘  └─────────────────┘  └────────────────┘
-         │
-         ▼
-┌──────────────────┐
-│ DevTools_image_  │
-│ core             │
-└────────┬─────────┘
-         │
-         └──────────────────────┐
-                                │
-                                ▼
-                    ┌──────────────────┐
-                    │  DevTools_core   │
-                    │  (main framework,│
-                    │  features/framework)│
-                    └──────────────────┘
+```mermaid
+flowchart TD
+    app["DevTools<br/>(executable)"]
+    image["DevTools_image_tools_unified"]
+    conversion["DevTools_data_conversion"]
+    qr["DevTools_qr_code_generation"]
+    image_core["DevTools_image_core"]
+    core["DevTools_core<br/>(main framework,<br/>features/framework)"]
+    app --> image
+    app --> conversion
+    app --> qr
+    image --> image_core
+    image_core --> core
+    conversion --> core
+    qr --> core
 ```
 
 Other feature modules (`DevTools_http_request`, `DevTools_command`,
@@ -117,18 +102,13 @@ Other feature modules (`DevTools_http_request`, `DevTools_command`,
 
 Each tool follows a similar pattern:
 
-```
-┌─────────────────────────────────────┐
-│            Tool Module              │
-├─────────────────────────────────────┤
-│  ┌─────────┐      ┌─────────────┐   │
-│  │  core/  │      │    gui/     │   │
-│  │         │◄────►│             │   │
-│  │ Logic   │      │ Interface   │   │
-│  │         │      │ (Widgets +  │   │
-│  │         │      │    .cpp)    │   │
-│  └─────────┘      └─────────────┘   │
-└─────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph module["Tool Module"]
+        core_layer["core/<br/>Logic"]
+        gui_layer["gui/<br/>Interface<br/>(Widgets + .cpp)"]
+    end
+    core_layer <--> gui_layer
 ```
 
 - **core/**: Business logic, algorithms, no UI dependencies
@@ -162,61 +142,23 @@ Benefits:
 
 ### Tool Selection Flow
 
-```
-User clicks side menu
-        │
-        ▼
-┌───────────────┐
-│   SideMenu    │
-│  (sidemenu.h) │
-└───────┬───────┘
-        │ signal: toolSelected(ToolId)
-        ▼
-┌───────────────┐
-│  MainWindow   │
-│(main_window.h)│
-└───────┬───────┘
-        │
-        ▼
-┌───────────────┐
-│ ContentsArea  │
-│(contents_area)│
-└───────┬───────┘
-        │ shows appropriate widget
-        ▼
-┌───────────────┐
-│   Tool GUI    │
-│ (e.g., QR)    │
-└───────────────┘
+```mermaid
+flowchart TD
+    user["User clicks side menu"] --> side["SideMenu<br/>(sidemenu.h)"]
+    side -->|"signal: toolSelected(ToolId)"| main["MainWindow<br/>(main_window.h)"]
+    main --> area["ContentsArea<br/>(contents_area)"]
+    area -->|"shows appropriate widget"| tool["Tool GUI<br/>(e.g., QR)"]
 ```
 
 ### Image Processing Flow
 
-```
-User loads image
-        │
-        ▼
-┌───────────────┐     ┌───────────────┐
-│  GUI Layer    │────►│  File Dialog  │
-│ (image_gui.h) │◄────│  (Qt native)  │
-└───────┬───────┘     └───────────────┘
-        │
-        ▼
-┌───────────────┐
-│  ImageView    │ displays image
-│(image_view.h) │
-└───────┬───────┘
-        │ user configures options
-        ▼
-┌───────────────┐
-│  Core Layer   │ processes image
-│(image_*.cpp)  │
-└───────┬───────┘
-        │
-        ▼
-┌───────────────┐
-│    Output     │ save dialog
-└───────────────┘
+```mermaid
+flowchart TD
+    user["User loads image"] --> gui["GUI Layer<br/>(image_gui.h)"]
+    gui <-->|"open/save"| dialog["File Dialog<br/>(Qt native)"]
+    gui --> view["ImageView<br/>(image_view.h)<br/>displays image"]
+    view -->|"user configures options"| core["Core Layer<br/>(image_*.cpp)<br/>processes image"]
+    core --> output["Output<br/>save dialog"]
 ```
 
 ## External Dependencies
@@ -274,13 +216,14 @@ adding or renaming a theme, keep the `meta.name` value unique because qlementine
 
 ### CMake Structure
 
-```
-CMakeLists.txt (main)
-├── Module definitions (qt_add_library)
-├── Dependencies (add_dependencies)
-├── Linking (target_link_libraries)
-├── Tests (tests/DevToolsTests.cmake)
-└── Docs (doxygen/DevToolsDocs.cmake)
+```mermaid
+flowchart TD
+    cmake["CMakeLists.txt<br/>(main)"]
+    cmake --> modules["Module definitions<br/>(qt_add_library)"]
+    cmake --> dependencies["Dependencies<br/>(add_dependencies)"]
+    cmake --> linking["Linking<br/>(target_link_libraries)"]
+    cmake --> tests["Tests<br/>(tests/DevToolsTests.cmake)"]
+    cmake --> docs["Docs<br/>(doxygen/DevToolsDocs.cmake)"]
 ```
 
 ### Build Targets
@@ -302,16 +245,16 @@ DevTools supports multiple languages using Qt translation tools:
 
 Tracked translation sources:
 
-```
-res/
-└── dev-tools_ja_JP.ts    # Japanese translations
+```mermaid
+flowchart TD
+    res["res/"] --> ts["dev-tools_ja_JP.ts<br/>Japanese translations"]
 ```
 
 Generated translation artifacts:
 
-```
-build/
-└── *.qm                  # Generated during normal builds
+```mermaid
+flowchart TD
+    build["build/"] --> qm["*.qm<br/>Generated during normal builds"]
 ```
 
 Translation workflow:
@@ -326,16 +269,13 @@ Per-feature tests live alongside the feature under `features/{feature}/tests/`.
 Shared test helpers (mock utilities, random data generators) live under
 `tests/`.
 
-```text
-tests/
-├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
-├── test_util.h test_util.cpp # Shared test utilities
-├── random_data.h random_data.cpp
-└── mock_helper.h
-
-features/{feature}/
-└── tests/                    # Per-feature test sources
-    └── test_*.cpp
+```mermaid
+flowchart TD
+    tests["tests/"]
+    tests --> registration["DevToolsTests.cmake<br/>Test registration"]
+    tests --> helpers["test_util.h/.cpp<br/>random_data.h/.cpp<br/>mock_helper.h"]
+    feature["features/{feature}/"] --> feature_tests["tests/<br/>Per-feature test sources"]
+    feature_tests --> test_file["test_*.cpp"]
 ```
 
 Tests are registered in `tests/DevToolsTests.cmake` via `DevTools_add_test()`.

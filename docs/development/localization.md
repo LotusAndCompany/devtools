@@ -12,12 +12,13 @@ supported languages:
 
 ## How It Works
 
-```
-Source Code        Qt Tools           Runtime
-    │                 │                  │
-    ▼                 ▼                  ▼
-tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ──► Application
-                         (tracked)        (generated)
+```mermaid
+flowchart LR
+    source["Source Code<br/>tr(text)"] --> lupdate["lupdate"]
+    lupdate --> ts[".ts<br/>(tracked)"]
+    ts --> lrelease["lrelease"]
+    lrelease --> qm[".qm<br/>(generated)"]
+    qm --> app["Application<br/>(runtime)"]
 ```
 
 1. **Source Code**: English strings marked with `tr()`
@@ -28,10 +29,11 @@ tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ─�
 
 ## Translation Files
 
-```
-res/
-├── dev-tools_ja_JP.ts    # Japanese translations
-└── dev-tools_ja_JP.qm    # Compiled Japanese (generated)
+```mermaid
+flowchart TD
+    res["res/"]
+    res --> ts["dev-tools_ja_JP.ts<br/>Japanese translations"]
+    res --> qm["dev-tools_ja_JP.qm<br/>Compiled Japanese (generated)"]
 ```
 
 ## Marking Strings for Translation

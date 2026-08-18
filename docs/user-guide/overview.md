@@ -22,20 +22,10 @@ DevTools eliminates the need for multiple web services by providing all essentia
 
 ### Layout
 
-```
-+------------------+--------------------------------+
-|                  |                                |
-|   Side Menu      |      Main Content Area         |
-|                  |                                |
-|   - QR Code      |   (Selected tool interface)    |
-|   - Image        |                                |
-|   - Data Conv.   |                                |
-|   - API          |                                |
-|   - Command      |                                |
-|   - Phrase       |                                |
-|   - DB           |                                |
-|                  |                                |
-+------------------+--------------------------------+
+```mermaid
+flowchart LR
+    side["Side Menu<br/>• QR Code<br/>• Image<br/>• Data Conversion<br/>• API<br/>• Command<br/>• Phrase<br/>• DB"]
+    side --> content["Main Content Area<br/>(Selected tool interface)"]
 ```
 
 ### Side Menu

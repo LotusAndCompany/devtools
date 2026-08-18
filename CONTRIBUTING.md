@@ -29,15 +29,16 @@ Before contributing, make sure you have:
 
 ### Project Structure
 
-```
-devtools/
-├── features/        # Feature modules (each with core/, gui/, tests/)
-├── main/            # Application entry point
-├── res/             # Resources and translation files
-├── tests/           # Shared test helpers
-├── designs/         # UI design files (.pen)
-├── docs/            # Documentation
-└── distribution/    # Platform-specific packaging files
+```mermaid
+flowchart TD
+    root["devtools/"]
+    root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
+    root --> main["main/<br/>Application entry point"]
+    root --> resources["res/<br/>Resources and translations"]
+    root --> tests["tests/<br/>Shared test helpers"]
+    root --> designs["designs/<br/>UI design files (.pen)"]
+    root --> docs["docs/<br/>Documentation"]
+    root --> distribution["distribution/<br/>Platform packaging"]
 ```
 
 ## How to Contribute
@@ -198,15 +199,16 @@ Code quality checks run automatically on:
 ### Adding New Modules
 
 1. Create the feature directory structure:
-   ```
-   features/your_module/
-   ├── CMakeLists.txt
-   ├── core/
-   │   └── your_module.h, your_module.cpp
-   ├── gui/
-   │   └── your_module_gui.h, your_module_gui.cpp
-   └── tests/
-       └── test_your_module.cpp
+   ```mermaid
+   flowchart TD
+       module["features/your_module/"]
+       module --> cmake["CMakeLists.txt"]
+       module --> core["core/"]
+       core --> core_files["your_module.h<br/>your_module.cpp"]
+       module --> gui["gui/"]
+       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       module --> tests["tests/"]
+       tests --> test_file["test_your_module.cpp"]
    ```
 
 2. Register the static library target in root `CMakeLists.txt`:

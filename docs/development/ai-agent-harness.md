@@ -14,32 +14,19 @@ This means a global change to AGENTS.md, or a path-scoped change in `.agents/rul
 
 ## Architecture
 
-```text
-AGENTS.md  (global source of truth)
-    │
-    ├── .agents/rules/ ........ shared path-scoped rules
-    │   ├── cmake.md
-    │   ├── cpp-style.md
-    │   ├── design-files.md
-    │   ├── docs.md
-    │   ├── exec-plans.md
-    │   ├── generated-files.md
-    │   ├── git-workflow.md
-    │   ├── i18n.md
-    │   ├── project.md
-    │   └── testing.md
-    │
-    ├── opencode.json ......... loads .agents/rules/*.md via instructions glob
-    │
-    ├── CLAUDE.md .............. @AGENTS.md import + author rules
-    │   └── .claude/rules/ ..... thin adapters importing .agents/rules/
-    │
-    ├── GEMINI.md .............. @AGENTS.md + .agents/rules/ imports + author rules
-    │   └── .gemini/settings.json .. fileName reference to GEMINI.md
-    ├── .codex/config.toml ..... project settings (native AGENTS.md discovery)
-    │   └── .codex/rules/ ...... command execution control (Starlark)
-    │
-    └── .coderabbit.yaml ....... independent config, aligned with shared guidance
+```mermaid
+flowchart TD
+    agents["AGENTS.md<br/>(global source of truth)"]
+    agents --> rules[".agents/rules/<br/>shared path-scoped rules"]
+    rules --> rule_files["cmake.md, cpp-style.md, design-files.md,<br/>docs.md, exec-plans.md, generated-files.md,<br/>git-workflow.md, i18n.md, project.md, testing.md"]
+    agents --> opencode["opencode.json<br/>loads .agents/rules/*.md"]
+    agents --> claude["CLAUDE.md<br/>@AGENTS.md import + author rules"]
+    claude --> claude_rules[".claude/rules/<br/>thin adapters"]
+    agents --> gemini["GEMINI.md<br/>@AGENTS.md + rules imports"]
+    gemini --> gemini_settings[".gemini/settings.json<br/>GEMINI.md reference"]
+    agents --> codex[".codex/config.toml<br/>native AGENTS.md discovery"]
+    codex --> codex_rules[".codex/rules/<br/>command execution control"]
+    agents --> coderabbit[".coderabbit.yaml<br/>independent aligned config"]
 ```
 
 ## Bootstrap Guidelines (AGENTS.md)

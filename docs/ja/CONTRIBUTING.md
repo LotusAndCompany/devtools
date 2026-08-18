@@ -29,15 +29,16 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 
 ### プロジェクト構造
 
-```
-devtools/
-├── features/        # 機能モジュール（各モジュールに core/, gui/, tests/ を内包）
-├── main/            # アプリケーションエントリーポイント
-├── res/             # リソースと翻訳ファイル
-├── tests/           # 共有テストヘルパー
-├── designs/         # UIデザインファイル（.pen）
-├── docs/            # ドキュメント
-└── distribution/    # プラットフォーム固有のパッケージングファイル
+```mermaid
+flowchart TD
+    root["devtools/"]
+    root --> features["features/<br/>機能モジュール<br/>(core/, gui/, tests/)"]
+    root --> main["main/<br/>アプリケーションエントリーポイント"]
+    root --> resources["res/<br/>リソースと翻訳ファイル"]
+    root --> tests["tests/<br/>共有テストヘルパー"]
+    root --> designs["designs/<br/>UIデザインファイル (.pen)"]
+    root --> docs["docs/<br/>ドキュメント"]
+    root --> distribution["distribution/<br/>プラットフォーム固有のパッケージング"]
 ```
 
 ## 貢献の方法
@@ -198,15 +199,16 @@ pre-commit autoupdate
 ### 新しいモジュールの追加
 
 1. 機能ディレクトリ構造を作成：
-   ```text
-   features/your_module/
-   ├── CMakeLists.txt
-   ├── core/
-   │   └── your_module.h, your_module.cpp
-   ├── gui/
-   │   └── your_module_gui.h, your_module_gui.cpp
-   └── tests/
-       └── test_your_module.cpp
+   ```mermaid
+   flowchart TD
+       module["features/your_module/"]
+       module --> cmake["CMakeLists.txt"]
+       module --> core["core/"]
+       core --> core_files["your_module.h<br/>your_module.cpp"]
+       module --> gui["gui/"]
+       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       module --> tests["tests/"]
+       tests --> test_file["test_your_module.cpp"]
    ```
 
 2. ルートの`CMakeLists.txt`に静的ライブラリターゲットを登録：
