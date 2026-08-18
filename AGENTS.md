@@ -28,7 +28,7 @@ scripts/sync-agent-rules.py
 - `.agents/rules/docs.md`: English/Japanese documentation rules
 - `.agents/rules/design-files.md`: Pencil `.pen` design file handling
 - `.agents/rules/generated-files.md`: generated artifacts and vendor files
-- `.agents/rules/git-workflow.md`: branches, commits, PRs, release-please
+- `.agents/rules/git-workflow.md`: PRs and release-please
 
 ## Critical Guardrails
 

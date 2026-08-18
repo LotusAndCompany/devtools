@@ -68,7 +68,7 @@ Current shared rules:
 | `.agents/rules/design-files.md` | Pencil `.pen` design file handling |
 | `.agents/rules/docs.md` | English/Japanese documentation rules |
 | `.agents/rules/generated-files.md` | Build outputs and generated file handling |
-| `.agents/rules/git-workflow.md` | Conventional Commits and release-please guardrails |
+| `.agents/rules/git-workflow.md` | PR title and release-please guardrails |
 | `.agents/rules/i18n.md` | Qt translation workflow |
 | `.agents/rules/project.md` | Build, architecture, dependencies, hooks, and harness rules |
 | `.agents/rules/testing.md` | Google Test and CTest rules |

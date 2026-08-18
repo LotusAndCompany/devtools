@@ -351,7 +351,7 @@ brew install pre-commit  # macOS
 # or: pip install pre-commit
 
 # Install hooks
-pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+pre-commit install --install-hooks -t pre-commit -t pre-push
 ```
 
 ### Hooks
@@ -362,7 +362,6 @@ pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
 | pre-commit | trailing-whitespace | Remove trailing whitespace |
 | pre-commit | end-of-file-fixer | Ensure newline at EOF |
 | pre-commit | check-added-large-files | Prevent large file commits |
-| commit-msg | conventional-pre-commit | Validate commit message format |
 | pre-push | cmake-build | Verify build succeeds |
 
 ### Manual Execution
