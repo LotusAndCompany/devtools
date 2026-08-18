@@ -57,6 +57,8 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("QR Code Generation"), tr("Generate QR codes from text or URLs")};
     case ID::DB_TOOL:
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
+    case ID::MARKDOWN_PREVIEW:
+        return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
     default:
         throw UnderDevelopmentException();
     }

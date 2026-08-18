@@ -31,6 +31,9 @@ A unified desktop application that combines various development tools into a sin
 - Send HTTP requests (GET, POST, PUT, DELETE, etc.)
 - View responses with syntax highlighting
 
+### Markdown Preview
+- Edit Markdown and preview rendered HTML in real time
+
 ### Command Execution
 - Execute shell commands from the GUI
 - View command output in real-time

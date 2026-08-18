@@ -14,6 +14,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [Image Processing](image-processing.md) | Resize, rotate, split images, and add transparency |
 | [Data Conversion](data-conversion.md) | Convert between JSON, YAML, and TOML formats |
 | [API Testing](api-testing.md) | Send HTTP requests and view responses |
+| [Markdown Preview](markdown-preview.md) | Edit Markdown with real-time HTML preview |
 | [Command Execution](command-execution.md) | Run shell commands from the GUI |
 | [Phrase Generation](phrase-generation.md) | Generate random text and phrases |
 | [Database Management](database-management.md) | Connect to databases and execute SQL queries |
@@ -24,7 +25,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 
 ```mermaid
 flowchart LR
-    side["Side Menu<br/>• QR Code<br/>• Image<br/>• Data Conversion<br/>• API<br/>• Command<br/>• Phrase<br/>• DB"]
+    side["Side Menu<br/>• Image<br/>• Phrase<br/>• Command<br/>• API<br/>• Data Conversion<br/>• QR Code<br/>• Markdown Preview<br/>• DB"]
     side --> content["Main Content Area<br/>(Selected tool interface)"]
 ```
 

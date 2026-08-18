@@ -77,6 +77,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::HTTP_REQUEST);
     registerItem(ID::DATA_CONVERSION);
     registerItem(ID::QR_CODE_GENERATION);
+    registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DB_TOOL);
 
     m_scrollAreaLayout->addStretch();
@@ -119,6 +120,9 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::QR_CODE_GENERATION:
         iconNames = {"qr_code", "insert-link"};
+        break;
+    case ID::MARKDOWN_PREVIEW:
+        iconNames = {"article"};
         break;
 
     default:
