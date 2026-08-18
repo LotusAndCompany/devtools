@@ -4,7 +4,7 @@ This document describes the cross-tool AI agent configuration used in this proje
 
 ## Overview
 
-AI coding tools (Claude Code, Gemini CLI, OpenAI Codex, CodeRabbit, etc.) each have their own configuration format. Rather than maintaining duplicate guidelines in every tool's config, this project uses a layered architecture:
+AI coding tools (Claude Code, OpenAI Codex, CodeRabbit, etc.) each have their own configuration format. Rather than maintaining duplicate guidelines in every tool's config, this project uses a layered architecture:
 
 1. **AGENTS.md** — shared global guidelines that all tools can read
 2. **.agents/rules/** — shared path-scoped rules with a Claude Code-like shape
@@ -22,8 +22,6 @@ flowchart TD
     agents --> opencode["opencode.json<br/>loads .agents/rules/*.md"]
     agents --> claude["CLAUDE.md<br/>@AGENTS.md import + author rules"]
     claude --> claude_rules[".claude/rules/<br/>thin adapters"]
-    agents --> gemini["GEMINI.md<br/>@AGENTS.md + rules imports"]
-    gemini --> gemini_settings[".gemini/settings.json<br/>GEMINI.md reference"]
     agents --> codex[".codex/config.toml<br/>native AGENTS.md discovery"]
     codex --> codex_rules[".codex/rules/<br/>command execution control"]
     agents --> coderabbit[".coderabbit.yaml<br/>independent aligned config"]
@@ -89,7 +87,6 @@ The script regenerates:
 | Output | Source | Purpose |
 |--------|--------|---------|
 | `.claude/rules/*.md` | `.agents/rules/*.md` | Claude Code path-scoped adapters |
-| `GEMINI.md` generated import block | `.agents/rules/*.md` | Gemini shared rule imports |
 
 OpenCode does not require sync: `opencode.json` uses a glob pattern
 (`".agents/rules/*.md"`) in its `instructions` field, so it is
@@ -146,15 +143,6 @@ hint to decide applicability.
 
 **How it works**: Claude Code reads `CLAUDE.md` at startup, which uses `@AGENTS.md` to inline the shared global guidelines. The `.claude/rules/` directory provides path-scoped adapters; each adapter keeps Claude's `paths` front matter and imports the matching shared rule from `.agents/rules/`.
 
-### Gemini CLI
-
-| File | Purpose |
-|------|---------|
-| `GEMINI.md` | Imports AGENTS.md and `.agents/rules/*.md`, adds author attribution rules |
-| `.gemini/settings.json` | Points Gemini to read `GEMINI.md` as context |
-
-**How it works**: Gemini CLI reads `GEMINI.md` at startup. `GEMINI.md` imports `AGENTS.md` and each shared rule file. Gemini does not need its own path-scoped rule directory; it should use the `paths` front matter in shared rules as the applicability hint.
-
 ### OpenAI Codex
 
 | File | Purpose |
@@ -184,7 +172,7 @@ should appear in PR review comments.
 
 When adding support for a new AI coding assistant:
 
-1. **Check native AGENTS.md support** — Many tools (Codex, Gemini CLI, etc.) can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
+1. **Check native AGENTS.md support** — Many tools can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
 2. **Create a thin adapter** — If the tool supports path-scoped rules, adapt `.agents/rules/` rather than writing new guidance.
 3. **Create tool-specific config only for tool behavior** — Permission models, approval modes, author attribution rules, and UI settings belong in tool-specific files.
 4. **Do not duplicate shared content** — The tool-specific config should reference or import shared guidance where possible.
@@ -201,8 +189,6 @@ When adding support for a new AI coding assistant:
 | `CLAUDE.md` | Claude Code | Yes | Imports AGENTS.md + author rules |
 | `.claude/rules/*.md` | Claude Code | Yes | Path-scoped adapters importing shared rules |
 | `.claude/settings.local.json` | Claude Code | No | Local tool permissions |
-| `GEMINI.md` | Gemini CLI | Yes | Imports AGENTS.md, shared rules, and author rules |
-| `.gemini/settings.json` | Gemini CLI | Yes | Context file reference |
 | `.codex/config.toml` | OpenAI Codex | Yes | Project settings |
 | `.codex/rules/*.rules` | OpenAI Codex | Yes | Command execution rules |
 | `.coderabbit.yaml` | CodeRabbit | Yes | PR review configuration |

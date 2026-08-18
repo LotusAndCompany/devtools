@@ -88,7 +88,6 @@ repos:
         files: |
           (?x)^(
             AGENTS\.md|
-            GEMINI\.md|
             \.agents/README\.md|
             \.agents/rules/.*\.md|
             \.claude/rules/.*\.md|
