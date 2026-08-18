@@ -46,7 +46,7 @@ find_package(Doxygen 1.16)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
-set(APP_INFO_FILE app_info.autogen.cpp)
+set(APP_INFO_FILE ${CMAKE_CURRENT_BINARY_DIR}/app_info.autogen.cpp)
 
 # プラットフォーム固有の設定
 if(APPLE)
@@ -178,6 +178,7 @@ target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}_core PUBLIC qlementine)
 
 # app_info.autogen.cppを自動生成
+add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # vcpkgのパッケージを探す
