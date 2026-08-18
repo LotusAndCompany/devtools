@@ -82,7 +82,7 @@ When you launch DevTools, you'll see:
 **Example: Convert JSON to YAML**
 1. Paste your JSON:
    ```json
-   {"name": "DevTools", "version": "0.7.0"}
+   {"name": "DevTools"}
    ```
 2. Set input: **JSON**
 3. Set output: **YAML**
@@ -90,7 +90,6 @@ When you launch DevTools, you'll see:
 5. Result:
    ```yaml
    name: DevTools
-   version: 0.7.0
    ```
 
 ### API Testing

@@ -4,12 +4,9 @@
 
 ## サポートされているバージョン
 
-以下のDevToolsのバージョンが現在セキュリティアップデートでサポートされています：
-
-| バージョン | サポート状況 |
-| ---------- | ------------ |
-| 0.7.x      | :white_check_mark: |
-| < 0.7      | :x:          |
+セキュリティアップデートは、サポート対象のDevToolsリリースに対して提供されます。
+現在のサポート状況は[GitHub Releases](https://github.com/LotusAndCompany/devtools/releases)
+で確認してください。
 
 ## 脆弱性の報告
 

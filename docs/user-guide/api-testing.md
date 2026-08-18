@@ -93,7 +93,7 @@ Add header (varies by API):
 | Content-Type | Request body format | `application/json` |
 | Accept | Expected response format | `application/json` |
 | Authorization | Authentication | `Bearer token123` |
-| User-Agent | Client identification | `DevTools/0.7.0` |
+| User-Agent | Client identification | `DevTools` |
 
 ### Removing Headers
 

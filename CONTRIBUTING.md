@@ -376,9 +376,9 @@ This project uses [release-please](https://github.com/googleapis/release-please)
 ### How It Works
 
 1. **Conventional Commits determine version bumps:**
-   - `fix:` commits → PATCH version (0.3.0 → 0.3.1)
-   - `feat:` commits → MINOR version (0.3.0 → 0.4.0)
-   - `BREAKING CHANGE:` in footer → MAJOR version (0.3.0 → 1.0.0)
+   - `fix:` commits → PATCH release
+   - `feat:` commits → MINOR release
+   - `BREAKING CHANGE:` in footer → MAJOR release
 
 2. **Automated workflow:**
    - When changes are merged to `main`, release-please creates/updates a Release PR

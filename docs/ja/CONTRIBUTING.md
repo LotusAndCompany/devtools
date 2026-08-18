@@ -375,9 +375,9 @@ docs: macOS用ビルド手順を更新
 ### 仕組み
 
 1. **Conventional Commitsによるバージョン決定：**
-   - `fix:` コミット → PATCHバージョン (0.3.0 → 0.3.1)
-   - `feat:` コミット → MINORバージョン (0.3.0 → 0.4.0)
-   - フッターの`BREAKING CHANGE:` → MAJORバージョン (0.3.0 → 1.0.0)
+   - `fix:` コミット → PATCHリリース
+   - `feat:` コミット → MINORリリース
+   - フッターの`BREAKING CHANGE:` → MAJORリリース
 
 2. **自動化ワークフロー：**
    - `main`に変更がマージされると、release-pleaseがRelease PRを作成/更新
