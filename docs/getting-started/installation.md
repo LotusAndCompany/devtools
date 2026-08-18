@@ -18,7 +18,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 ### Optional Tools
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Doxygen | - | API documentation generation |
+| Doxygen | 1.18+ | API documentation generation |
 | Qt Creator | 18.0.1+ | IDE with Qt integration |
 | Ninja | 1.12.1+ | Fast build tool |
 | Qt Installer Framework | 4.10 | Application packaging |

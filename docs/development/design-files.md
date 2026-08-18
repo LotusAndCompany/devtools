@@ -1,6 +1,7 @@
 # Design Files
 
 UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`.
+Some screens are design-only and are not available in the current application yet.
 
 ## File Layout
 

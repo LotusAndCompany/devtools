@@ -37,7 +37,7 @@ When you launch DevTools, you'll see:
 
 1. **Side Menu** (left) - Navigate between tools
 2. **Main Content Area** (center) - Tool interface
-3. **Menu Bar** (top) - File, Edit, View, Help menus
+3. **Menu Bar** (top) - File and DevTools menus
 
 ## Using the Tools
 
@@ -82,7 +82,7 @@ When you launch DevTools, you'll see:
 **Example: Convert JSON to YAML**
 1. Paste your JSON:
    ```json
-   {"name": "DevTools", "version": "0.2.0"}
+   {"name": "DevTools", "version": "0.7.0"}
    ```
 2. Set input: **JSON**
 3. Set output: **YAML**
@@ -90,7 +90,7 @@ When you launch DevTools, you'll see:
 5. Result:
    ```yaml
    name: DevTools
-   version: 0.2.0
+   version: 0.7.0
    ```
 
 ### API Testing
@@ -148,22 +148,18 @@ When you launch DevTools, you'll see:
 
 | Shortcut | Action |
 |----------|--------|
-| `Cmd + Q` | Quit application |
-| `Cmd + ,` | Open preferences |
-| `Cmd + W` | Close window |
+| `Ctrl + W` | Close window |
 
 ## Changing Language
 
 DevTools supports English and Japanese:
 
-1. Go to **DevTools > Preferences** (or `Cmd + ,`)
+1. Go to **DevTools > Settings**
 2. Select **Language**
 3. Choose your preferred language
-4. Restart the application
+4. Click **Apply** or **OK**; the UI changes immediately
 
 ## Changing Theme
-
-Switch between light and dark themes:
 
 DevTools follows the macOS system appearance. When the system switches between light and
 dark mode, the application updates both the qlementine widget theme and the icon theme.

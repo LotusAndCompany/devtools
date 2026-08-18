@@ -208,7 +208,7 @@ macro(DevTools_add_test test_name)
     target_link_libraries(${test_name} PRIVATE
         GTest::gtest
         GTest::gtest_main
-        ${MODULE_LIST}
+        ${APPLICATION_LINK_MODULES}
         ${TEST_LIBRARIES}
     )
     add_test(NAME ${test_name} COMMAND ${test_name})

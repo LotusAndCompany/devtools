@@ -177,11 +177,11 @@ QString date = locale.toString(QDate::currentDate());
 
 ### Switch Language at Runtime
 
-For testing, you can switch language in preferences:
+For testing, you can switch language in settings:
 
-1. DevTools > Preferences
+1. DevTools > Settings
 2. Select Language
-3. Restart application
+3. Click Apply or OK; the UI changes immediately
 
 ### Check for Untranslated Strings
 

@@ -224,7 +224,3 @@ qlementineのダウンロード中にCMake構成が失敗する場合は、以�
    cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。
-
-## 配布
-
-App Store用の配布ビルドの作成については、[docs/distribution/how_to_distribute.md](../distribution/how_to_distribute.md)を参照してください。

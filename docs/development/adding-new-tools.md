@@ -224,31 +224,35 @@ target_link_libraries(${PROJECT_NAME}_your_tool PUBLIC
 Add a new tool ID in `features/framework/core/tool/tool_id_fields.h`:
 
 ```cpp
-enum class ToolId {
-    // ... existing IDs
-    YourTool,
-};
+#define TOOL_ID_FIELDS() \
+    ... \
+    YOUR_TOOL_ID
 ```
+
+`Tool::ID` and `Sidemenu::ID` expand the same macro, keeping the two IDs
+aligned.
 
 ### 7. Register in Side Menu
 
-Update `features/framework/gui/sidemenu.cpp` to include your tool:
+Register the tool in `Sidemenu::Sidemenu()`:
 
 ```cpp
-// In the constructor or initialization
-addToolItem(ToolId::YourTool, tr("Your Tool"), QIcon(":/icons/your_tool.png"));
+registerItem(ID::YOUR_TOOL_ID);
 ```
+
+Add its icon names in `Sidemenu::icon()` and its translated name and
+description in `Tool::translatable()`.
 
 ### 8. Register in Contents Area
 
-Update `features/framework/gui/contents_area.cpp` to create your tool widget:
+Include your GUI and add it to `ContentsArea::changeContent`:
 
 ```cpp
 #include "features/your_tool/gui/your_tool_gui.h"
 
-// In the widget creation method
-case ToolId::YourTool:
-    return new YourToolGui(this);
+case Sidemenu::ID::YOUR_TOOL_ID:
+    content = new YourToolGui(this);
+    break;
 ```
 
 ### 9. Add Translations
@@ -267,24 +271,16 @@ processButton_->setText(tr("Process"));
 cmake --build build --target update_devtools_translations
 ```
 
-### 10. Add Icons
+### 10. Add an Icon
 
-Place icons in the resource directories:
+Prefer an existing `QIcon::fromTheme` name. If a new asset is needed, add
+matching SVGs under the light and dark icon resource directories, list them in
+`res/light_icons.qrc` and `res/dark_icons.qrc`, and add the fallback names in
+`Sidemenu::icon()`.
 
 ```
-res/light/your_tool.png
-res/dark/your_tool.png
-```
-
-Update resource files:
-
-```xml
-<!-- res/light_icons.qrc -->
-<RCC>
-  <qresource prefix="/light">
-    <file>your_tool.png</file>
-  </qresource>
-</RCC>
+res/light/material/your_tool.svg
+res/dark/material/your_tool.svg
 ```
 
 ### 11. Write Tests
