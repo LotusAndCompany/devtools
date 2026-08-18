@@ -90,7 +90,7 @@ void MarkdownPreviewGUI::buildUi()
     // 枠 (角丸のテキストフィールド) は qlementine スタイルに描画させる。
     // .pen のエディタは等幅フォント。インストール環境に依存しないよう
     // システム標準の等幅フォントを使う。
-    QFont monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    const QFont monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     editor->setFont(monoFont);
 
     preview = new QTextBrowser;
