@@ -8,6 +8,11 @@ Security updates are provided for supported DevTools releases. Check the
 [GitHub Releases](https://github.com/LotusAndCompany/devtools/releases) page
 for the current support status.
 
+**Version Support Policy:**
+- The latest stable release receives security updates.
+- Versions marked as pre-release or draft on GitHub Releases are not supported.
+- Once a new stable release is published, the previous release may receive critical security fixes for 30 days.
+
 ## Reporting a Vulnerability
 
 We take security vulnerabilities seriously. If you discover a security issue, please report it responsibly.

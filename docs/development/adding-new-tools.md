@@ -117,10 +117,15 @@ public:
     explicit YourToolGui(QWidget* parent = nullptr);
     ~YourToolGui() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void onProcessClicked();
 
 private:
+    void retranslateUi();
+
     QLineEdit* inputEdit_;
     QPushButton* processButton_;
     QLabel* outputLabel_;
@@ -144,15 +149,15 @@ namespace devtools {
 YourToolGui::YourToolGui(QWidget* parent)
     : GuiTool(parent)
     , inputEdit_(new QLineEdit(this))
-    , processButton_(new QPushButton(tr("Process"), this))
+    , processButton_(new QPushButton(this))
     , outputLabel_(new QLabel(this)) {
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(inputEdit_);
     layout->addWidget(processButton_);
     layout->addWidget(outputLabel_);
 
-    inputEdit_->setPlaceholderText(tr("Enter input..."));
-    
+    retranslateUi();
+
     connect(processButton_, &QPushButton::clicked,
             this, &YourToolGui::onProcessClicked);
 }
@@ -163,6 +168,18 @@ void YourToolGui::onProcessClicked() {
     QString input = inputEdit_->text();
     QString result = tool_.process(input);
     outputLabel_->setText(result);
+}
+
+void YourToolGui::changeEvent(QEvent* event) {
+    GuiTool::changeEvent(event);
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+}
+
+void YourToolGui::retranslateUi() {
+    processButton_->setText(tr("Process"));
+    inputEdit_->setPlaceholderText(tr("Enter input..."));
 }
 
 }  // namespace devtools
@@ -278,7 +295,7 @@ matching SVGs under the light and dark icon resource directories, list them in
 `res/light_icons.qrc` and `res/dark_icons.qrc`, and add the fallback names in
 `Sidemenu::icon()`.
 
-```
+```text
 res/light/material/your_tool.svg
 res/dark/material/your_tool.svg
 ```

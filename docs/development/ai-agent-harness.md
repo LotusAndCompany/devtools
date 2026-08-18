@@ -24,7 +24,7 @@ flowchart TD
     claude --> claude_rules[".claude/rules/<br/>thin adapters"]
     agents --> codex[".codex/config.toml<br/>native AGENTS.md discovery"]
     codex --> codex_rules[".codex/rules/<br/>command execution control"]
-    agents --> coderabbit[".coderabbit.yaml<br/>independent aligned config"]
+    coderabbit[".coderabbit.yaml<br/>independent aligned config"]
 ```
 
 ## Bootstrap Guidelines (AGENTS.md)

@@ -60,8 +60,8 @@ USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/docs/README.md
 
 # 警告設定（未ドキュメントのメンバーやコメントエラーを検出）
 WARNINGS = YES
-# 未文書化の実装メンバーは対象外。コメントの構文・参照エラーは検出する。
-WARN_IF_UNDOCUMENTED = NO
+# 未文書化のメンバーを警告。コメントの構文・参照エラーは検出する。
+WARN_IF_UNDOCUMENTED = YES
 WARN_IF_DOC_ERROR = YES
 WARN_IF_INCOMPLETE_DOC = YES
 WARN_AS_ERROR = NO

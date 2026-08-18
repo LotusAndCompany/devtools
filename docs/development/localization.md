@@ -33,7 +33,8 @@ flowchart LR
 flowchart TD
     res["res/"]
     res --> ts["dev-tools_ja_JP.ts<br/>Japanese translations"]
-    res --> qm["dev-tools_ja_JP.qm<br/>Compiled Japanese (generated)"]
+    build["build/"]
+    build --> qm["dev-tools_ja_JP.qm<br/>Compiled Japanese (generated)"]
 ```
 
 ## Marking Strings for Translation

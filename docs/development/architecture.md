@@ -108,7 +108,7 @@ flowchart LR
         core_layer["core/<br/>Logic"]
         gui_layer["gui/<br/>Interface<br/>(Widgets + .cpp)"]
     end
-    core_layer <--> gui_layer
+    gui_layer --> core_layer
 ```
 
 - **core/**: Business logic, algorithms, no UI dependencies
@@ -144,9 +144,11 @@ Benefits:
 
 ```mermaid
 flowchart TD
-    user["User clicks side menu"] --> side["SideMenu<br/>(sidemenu.h)"]
-    side -->|"signal: toolSelected(ToolId)"| main["MainWindow<br/>(main_window.h)"]
-    main --> area["ContentsArea<br/>(contents_area)"]
+    user["User clicks side menu"] --> side["Sidemenu<br/>(sidemenu.h)"]
+    side -->|"signal: itemSelected(Sidemenu::ID id)"| main["MainWindow<br/>(main_window.h)"]
+    main -->|"MainWindow::onSidemenuItemSelected"| main
+    side -->|"signal: itemSelected(Sidemenu::ID id)"| area["ContentsArea<br/>(contents_area.h)"]
+    area -->|"ContentsArea::onSidemenuItemChanged"| area
     area -->|"shows appropriate widget"| tool["Tool GUI<br/>(e.g., QR)"]
 ```
 
@@ -220,8 +222,8 @@ adding or renaming a theme, keep the `meta.name` value unique because qlementine
 flowchart TD
     cmake["CMakeLists.txt<br/>(main)"]
     cmake --> modules["Module definitions<br/>(qt_add_library)"]
-    cmake --> dependencies["Dependencies<br/>(add_dependencies)"]
-    cmake --> linking["Linking<br/>(target_link_libraries)"]
+    cmake --> dependencies["Build-order dependencies<br/>(add_dependencies)"]
+    cmake --> linking["Link dependencies + usage requirements<br/>(target_link_libraries)"]
     cmake --> tests["Tests<br/>(tests/DevToolsTests.cmake)"]
     cmake --> docs["Docs<br/>(doxygen/DevToolsDocs.cmake)"]
 ```
