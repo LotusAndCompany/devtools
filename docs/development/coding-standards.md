@@ -102,7 +102,7 @@ void saveToFile(const QString& path);
 #include <QWidget>
 
 // Project includes
-#include "core/tool/tool.h"
+#include "features/framework/core/tool/tool.h"
 
 namespace devtools {
 
@@ -245,10 +245,10 @@ Widget* ptr = nullptr;
 
 ### Exceptions
 
-Use project-specific exceptions defined in `core/exception/`:
+Use project-specific exceptions defined in `features/framework/core/exception/`:
 
 ```cpp
-#include "core/exception/invalid_argument_exception.h"
+#include "features/framework/core/exception/invalid_argument_exception.h"
 
 void processValue(int value) {
     if (value < 0) {
@@ -335,8 +335,8 @@ QString processData(const QString& param);
 
 #include <yaml-cpp/yaml.h>
 
-#include "core/tool/tool.h"
-#include "gui/main_window.h"
+#include "features/framework/core/tool/tool.h"
+#include "features/framework/gui/main_window.h"
 ```
 
 ## Git Hooks (pre-commit)

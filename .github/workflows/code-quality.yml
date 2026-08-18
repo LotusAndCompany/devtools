@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -77,7 +77,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install dependencies
         run: |
@@ -92,11 +92,17 @@ jobs:
           target: 'desktop'
 
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@7d259227a1fb6471a0253dd5ab7419835228f7d7 # v11
+        uses: lukka/run-vcpkg@b1a0dd252f06b9e25b3c022a9a03bd7a427fb6a2 # v11.6
         with:
           vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'  # 2024.10.21 release
 
       - name: Configure CMake
+        env:
+          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
+          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
+          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
+          # fail. Falling back to "clear" rebuilds ports on every run.
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cmake -B build \
             -G Ninja \
@@ -111,12 +117,12 @@ jobs:
         uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
         with:
           files: |
-            core/**/*.cpp
-            gui/**/*.cpp
+            features/**/*.cpp
             main/**/*.cpp
           files_ignore: |
             build/**
-            tests/**
+            **/tests/**
+            **/qrcodegen.*
 
       - name: Build project
         run: cmake --build build
@@ -149,7 +155,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install clang-format
         run: |
@@ -159,7 +165,7 @@ jobs:
       - name: Generate format diff
         id: format-diff
         run: |
-          FILES=$(find core gui main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
+          FILES=$(find features main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
 
           if [ -z "$FILES" ]; then
             echo "has_diff=false" >> $GITHUB_OUTPUT

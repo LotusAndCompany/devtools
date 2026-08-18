@@ -31,14 +31,13 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 
 ```
 devtools/
-├── core/           # ビジネスロジックとアルゴリズム
-├── gui/            # GUIコンポーネントとツールインターフェース
-├── main/           # アプリケーションエントリーポイント
-├── res/            # リソースと翻訳ファイル
-├── tests/          # ユニットテスト
-├── designs/        # UIデザインファイル（.pen）
-├── docs/           # ドキュメント
-└── distribution/   # プラットフォーム固有のパッケージングファイル
+├── features/        # 機能モジュール（各モジュールに core/, gui/, tests/ を内包）
+├── main/            # アプリケーションエントリーポイント
+├── res/             # リソースと翻訳ファイル
+├── tests/           # 共有テストヘルパー
+├── designs/         # UIデザインファイル（.pen）
+├── docs/            # ドキュメント
+└── distribution/    # プラットフォーム固有のパッケージングファイル
 ```
 
 ## 貢献の方法
@@ -198,28 +197,42 @@ pre-commit autoupdate
 
 ### 新しいモジュールの追加
 
-1. `CMakeLists.txt`に新しい静的ライブラリを作成：
+1. 機能ディレクトリ構造を作成：
+   ```text
+   features/your_module/
+   ├── CMakeLists.txt
+   ├── core/
+   │   └── your_module.h, your_module.cpp
+   ├── gui/
+   │   └── your_module_gui.h, your_module_gui.cpp
+   └── tests/
+       └── test_your_module.cpp
+   ```
+
+2. ルートの`CMakeLists.txt`に静的ライブラリターゲットを登録：
    ```cmake
-   qt_add_library(${PROJECT_NAME}_your_module STATIC
-       core/your_module/your_module.h
-       core/your_module/your_module.cpp
-       gui/your_module/your_module_gui.h
-       gui/your_module/your_module_gui.cpp
-       gui/your_module/your_module_gui.ui
+   qt_add_library(${PROJECT_NAME}_your_module STATIC)
+   ```
+
+3. `features/your_module/CMakeLists.txt`にソースファイルを列挙：
+   ```cmake
+   target_sources(${PROJECT_NAME}_your_module PRIVATE
+       core/your_module.h core/your_module.cpp
+       gui/your_module_gui.h gui/your_module_gui.cpp
    )
    ```
 
-2. 必要に応じて依存関係を追加：
-   ```cmake
-   add_dependencies(${PROJECT_NAME}_your_module ${PROJECT_NAME}_core)
-   ```
-
-3. `MODULE_LIST`に追加：
+4. ルートの`CMakeLists.txt`の`MODULE_LIST`に追加：
    ```cmake
    set(MODULE_LIST
        # ... 既存のモジュール
        ${PROJECT_NAME}_your_module
    )
+   ```
+
+5. `features/CMakeLists.txt`に機能を登録：
+   ```cmake
+   add_subdirectory(your_module)
    ```
 
 ### テストの追加
@@ -228,7 +241,7 @@ pre-commit autoupdate
 ```cmake
 DevTools_add_test(test_your_module
     SOURCES
-    tests/core/your_module/test_your_module.cpp
+    features/your_module/tests/test_your_module.cpp
 )
 ```
 

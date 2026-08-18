@@ -11,7 +11,7 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/test_util.h tests/test_util.cpp
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
-    gui/contents_area.h gui/contents_area.cpp
+    features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
     Qt6::Test
@@ -47,111 +47,111 @@ endfunction()
 # core
 DevTools_add_test(test_enum_cast
     SOURCES
-    tests/core/test_enum_cast.cpp
+    features/framework/tests/test_enum_cast.cpp
 )
 
 # core/logging
 DevTools_add_test(test_logging
     SOURCES
-    tests/core/test_logging.cpp
+    features/framework/tests/test_logging.cpp
 )
 
 # core/exception
 DevTools_add_test(test_common_exception
     SOURCES
-    tests/core/exception/test_common_exception.cpp
+    features/framework/tests/test_common_exception.cpp
 )
 DevTools_add_test(test_under_development_exception
     SOURCES
-    tests/core/exception/test_under_development_exception.cpp
+    features/framework/tests/test_under_development_exception.cpp
 )
 DevTools_add_test(test_invalid_argument_exception
     SOURCES
-    tests/core/exception/test_invalid_argument_exception.cpp
+    features/framework/tests/test_invalid_argument_exception.cpp
 )
 DevTools_add_test(test_invalid_state_exception
     SOURCES
-    tests/core/exception/test_invalid_state_exception.cpp
+    features/framework/tests/test_invalid_state_exception.cpp
 )
 DevTools_add_test(test_out_of_range_exception
     SOURCES
-    tests/core/exception/test_out_of_range_exception.cpp
+    features/framework/tests/test_out_of_range_exception.cpp
 )
 
 # core/tool
 DevTools_add_test(test_tool
     SOURCES
-    tests/core/tool/test_tool.cpp
+    features/framework/tests/test_tool.cpp
 )
 
 # core/iamge
 DevTools_add_test(test_basic_image_io
     SOURCES
-    tests/core/image/test_basic_image_io.cpp
+    features/image/tests/test_basic_image_io.cpp
 )
 DevTools_add_test(test_basic_image_edit_interface
     SOURCES
-    tests/core/image/test_basic_image_edit_interface.cpp
+    features/image/tests/test_basic_image_edit_interface.cpp
 )
 
 # core/data_conversion/parser
 DevTools_add_test(test_basic_parser
     SOURCES
-    tests/core/data_conversion/parser/test_basic_parser.cpp
+    features/data_conversion/tests/parser/test_basic_parser.cpp
 )
 DevTools_add_test(test_json_parser
     SOURCES
-    tests/core/data_conversion/parser/test_json_parser.cpp
+    features/data_conversion/tests/parser/test_json_parser.cpp
 )
 DevTools_add_test(test_yaml_parser VCPKG_YAML
     SOURCES
-    tests/core/data_conversion/parser/test_yaml_parser.cpp
+    features/data_conversion/tests/parser/test_yaml_parser.cpp
 )
 DevTools_add_test(test_toml_parser VCPKG_YAML
     SOURCES
-    tests/core/data_conversion/parser/test_toml_parser.cpp
+    features/data_conversion/tests/parser/test_toml_parser.cpp
 )
 # core/data_conversion/emitter
 DevTools_add_test(test_basic_emitter
     SOURCES
-    tests/core/data_conversion/emitter/test_basic_emitter.cpp
+    features/data_conversion/tests/emitter/test_basic_emitter.cpp
 )
 DevTools_add_test(test_json_emitter
     SOURCES
-    tests/core/data_conversion/emitter/test_json_emitter.cpp
+    features/data_conversion/tests/emitter/test_json_emitter.cpp
 )
 DevTools_add_test(test_toml_emitter
     SOURCES
-    tests/core/data_conversion/emitter/test_toml_emitter.cpp
+    features/data_conversion/tests/emitter/test_toml_emitter.cpp
 )
 DevTools_add_test(test_yaml_emitter
     SOURCES
-    tests/core/data_conversion/emitter/test_yaml_emitter.cpp
+    features/data_conversion/tests/emitter/test_yaml_emitter.cpp
 )
 # core/data_conversion
 DevTools_add_test(test_data_conversion
     SOURCES
-    tests/core/data_conversion/test_data_conversion.cpp
+    features/data_conversion/tests/test_data_conversion.cpp
 )
 
 # gui/image/basic
 DevTools_add_test(test_basic_image_view_control
     SOURCES
-    tests/gui/image/basic/test_control.cpp
+    features/image/tests/basic/test_control.cpp
 )
 DevTools_add_test(test_basic_image_view
     SOURCES
-    tests/gui/image/basic/test_basic_image_view.cpp
+    features/image/tests/basic/test_basic_image_view.cpp
 )
 
 # gui/image/transparent
 DevTools_add_test(test_color_sample
     SOURCES
-    tests/gui/image/transparent/test_color_sample.cpp
+    features/image/tests/transparent/test_color_sample.cpp
 )
 DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
-    tests/gui/image/transparent/test_image_view_for_image_transparent.cpp
+    features/image/tests/transparent/test_image_view_for_image_transparent.cpp
 )
 DevTools_add_test(test_image_transparent_gui
     SOURCES
