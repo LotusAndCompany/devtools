@@ -73,10 +73,6 @@
 <context>
     <name>Command</name>
     <message>
-        <source>GroupBox</source>
-        <translation>グループボックス</translation>
-    </message>
-    <message>
         <source>Generate command</source>
         <translation>コマンド生成</translation>
     </message>
@@ -276,6 +272,14 @@
         <source>Container</source>
         <translation>コンテナ</translation>
     </message>
+    <message>
+        <source>Input</source>
+        <translation>入力</translation>
+    </message>
+    <message>
+        <source>Generated Result</source>
+        <translation>生成結果</translation>
+    </message>
 </context>
 <context>
     <name>ConnectionSelector</name>
@@ -396,6 +400,13 @@
     </message>
 </context>
 <context>
+    <name>ContentsArea</name>
+    <message>
+        <source>Under development...</source>
+        <translation>開発中です…</translation>
+    </message>
+</context>
+<context>
     <name>DataConversion</name>
     <message>
         <source>Invalid input value</source>
@@ -503,6 +514,18 @@
     <message>
         <source>Save</source>
         <translation>保存</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation>入力</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>出力</translation>
     </message>
 </context>
 <context>
@@ -669,6 +692,14 @@
         <source>Failed to save divided images.</source>
         <translation>分割画像の保存に失敗しました。</translation>
     </message>
+    <message>
+        <source>Operation Panel</source>
+        <translation>操作パネル</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>画像</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -691,6 +722,14 @@
     <message>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示</translation>
+    </message>
+    <message>
+        <source>Toggle sidebar</source>
+        <translation>サイドバーの表示切替</translation>
+    </message>
+    <message>
+        <source>Always on top</source>
+        <translation>常に最前面に表示</translation>
     </message>
 </context>
 <context>
@@ -754,6 +793,10 @@
     <message>
         <source>Failed to export HTML</source>
         <translation>HTML のエクスポートに失敗しました</translation>
+    </message>
+    <message>
+        <source>Toolbar</source>
+        <translation>ツールバー</translation>
     </message>
 </context>
 <context>
@@ -1345,6 +1388,18 @@ Choose a tool from the side panel</source>
     <message>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation>ステータス: %1 %2 時間: %3ms サイズ: %4</translation>
+    </message>
+    <message>
+        <source>Request</source>
+        <translation>リクエスト</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation>オプション</translation>
+    </message>
+    <message>
+        <source>Response</source>
+        <translation>レスポンス</translation>
     </message>
 </context>
 <context>

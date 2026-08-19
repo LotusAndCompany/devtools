@@ -3,6 +3,7 @@
 #include "../connection_selector/connection_selector.h"
 #include "../connection_window/connection_window.h"
 #include "../query_page/query_page.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -14,8 +15,6 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
@@ -27,12 +26,6 @@
 #include <QWidget>
 
 namespace {
-constexpr int DEFAULT_WIDTH = 943;
-constexpr int DEFAULT_HEIGHT = 349;
-constexpr int CONTENT_STRETCH_TABLES = 1;
-constexpr int CONTENT_STRETCH_QUERY = 3;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
 constexpr int MAX_HISTORY_ENTRIES = 10;
 } // namespace
 
@@ -70,44 +63,49 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent)
 
 void dbMain::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *verticalLayoutMain = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayoutMain);
 
     toolbarGroupBox = new QGroupBox(this);
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
+    DevTools::Ui::applyPanelLayout(toolbarLayout);
 
     refreshTableButton = new QPushButton(toolbarGroupBox);
-    refreshTableButton->setIcon(QIcon::fromTheme("refresh"));
+    DevTools::Ui::configureIconButton(refreshTableButton, QStringLiteral("refresh"),
+                                      tr("Refresh Tables"));
     toolbarLayout->addWidget(refreshTableButton);
 
-    auto *horizontalSpacer =
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    toolbarLayout->addItem(horizontalSpacer);
+    toolbarLayout->addStretch();
 
     connectionSettingsButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(connectionSettingsButton);
     toolbarLayout->addWidget(connectionSettingsButton);
 
     addQueryTabButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(addQueryTabButton);
     toolbarLayout->addWidget(addQueryTabButton);
 
     verticalLayoutMain->addWidget(toolbarGroupBox);
 
     auto *contentLayout = new QHBoxLayout();
+    DevTools::Ui::applySplitLayout(contentLayout);
 
     tablesGroupBox = new QGroupBox(this);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
+    DevTools::Ui::applyPanelLayout(tablesLayout);
     tableListWidget = new QListWidget(tablesGroupBox);
     tablesLayout->addWidget(tableListWidget);
-    contentLayout->addWidget(tablesGroupBox, CONTENT_STRETCH_TABLES);
+    contentLayout->addWidget(tablesGroupBox, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
 
     queryGroupBox = new QGroupBox(this);
     auto *queryLayout = new QVBoxLayout(queryGroupBox);
+    DevTools::Ui::applyPanelLayout(queryLayout);
     queryTabWidget = new QTabWidget(queryGroupBox);
     queryTabWidget->setCurrentIndex(-1);
     queryTabWidget->setTabsClosable(true);
     queryLayout->addWidget(queryTabWidget);
-    contentLayout->addWidget(queryGroupBox, CONTENT_STRETCH_QUERY);
+    contentLayout->addWidget(queryGroupBox, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
+    DevTools::Ui::configureSideMainLayout(contentLayout);
 
     verticalLayoutMain->addLayout(contentLayout);
 
@@ -247,15 +245,15 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
 
     // 更新ボタン
     auto *refreshButton = new QPushButton;
-    refreshButton->setIcon(QIcon::fromTheme("refresh"));
-    refreshButton->setToolTip(tr("Refresh"));
+    DevTools::Ui::configureIconButton(refreshButton, QStringLiteral("refresh"), tr("Refresh"));
     connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
     // 左寄せのレイアウト
     auto *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(refreshButton);
-    buttonLayout->addStretch();
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Leading);
 
     auto *mainLayout = new QVBoxLayout;
+    DevTools::Ui::applyPanelLayout(mainLayout);
     mainLayout->addLayout(buttonLayout); // 更新ボタン
     mainLayout->addWidget(tableView);    // テーブルビュー
 

@@ -1,7 +1,8 @@
 #include "connection_selector.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QEvent>
-#include <QFont>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
@@ -12,20 +13,8 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QSqlError>
 #include <QVBoxLayout>
-
-namespace {
-constexpr int DEFAULT_WIDTH = 400;
-constexpr int DEFAULT_HEIGHT = 300;
-constexpr int DELETE_BUTTON_SIZE = 24;
-constexpr int ITEM_MARGIN_HORIZONTAL = 5;
-constexpr int ITEM_MARGIN_VERTICAL = 2;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
-} // namespace
 
 ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
 {
@@ -45,30 +34,28 @@ ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
 
 void ConnectionSelector::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    DevTools::Ui::configureDialog(this);
 
     auto *verticalLayout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayout);
 
-    titleLabel = new QLabel(this);
-    QFont titleFont = titleLabel->font();
-    titleFont.setBold(true);
-    titleLabel->setFont(titleFont);
+    titleLabel = DevTools::Ui::createPaneHeading(QString(), this);
     verticalLayout->addWidget(titleLabel);
 
     historyListWidget = new QListWidget(this);
-    historyListWidget->setAlternatingRowColors(true);
+    DevTools::Ui::configureAlternatingList(historyListWidget);
     verticalLayout->addWidget(historyListWidget);
 
     auto *buttonLayout = new QHBoxLayout();
-    auto *horizontalSpacer =
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    buttonLayout->addItem(horizontalSpacer);
 
     newConnectionButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(newConnectionButton);
     buttonLayout->addWidget(newConnectionButton);
 
     closeButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(closeButton);
     buttonLayout->addWidget(closeButton);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
 
     verticalLayout->addLayout(buttonLayout);
 
@@ -109,21 +96,17 @@ void ConnectionSelector::refreshHistoryList()
 
         auto *itemWidget = new QWidget();
         auto *layout = new QHBoxLayout(itemWidget);
-        layout->setContentsMargins(ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL,
-                                   ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL);
+        DevTools::Ui::applyToolbarLayout(layout);
 
         auto *label = new QLabel(displayName);
-        label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
         auto *deleteButton = new QPushButton();
-        deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
-        deleteButton->setFixedSize(DELETE_BUTTON_SIZE, DELETE_BUTTON_SIZE);
-        deleteButton->setToolTip(tr("Delete"));
+        DevTools::Ui::configureIconButton(deleteButton, QStringLiteral("edit-delete"),
+                                          tr("Delete"));
         deleteButton->setProperty("historyIndex", i);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, i]() { removeHistoryItem(i); });
 
-        layout->addWidget(label);
+        layout->addWidget(label, 1);
         layout->addWidget(deleteButton);
 
         auto *item = new QListWidgetItem();

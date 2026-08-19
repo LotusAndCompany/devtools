@@ -145,7 +145,7 @@ private:
     void refreshPreview(bool resetScale = false);
     void refreshSizeInputs();
     void applyResize(const QSize &targetSize);
-    bool hasImage() const;
+    [[nodiscard]] bool hasImage() const;
 
     static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
     static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
@@ -158,9 +158,9 @@ private:
     void applyTransparentByFloodFill(const QPoint &start);
     void applyTransparencyAt(const QPoint &point, const QColor &color);
 
-    bool saveDividedImages(const QString &folderPath) const;
+    [[nodiscard]] bool saveDividedImages(const QString &folderPath) const;
     static int countByCellSize(int source, int cell, bool ignoreRemainders);
-    QString outputSuffix() const;
+    [[nodiscard]] QString outputSuffix() const;
 };
 
 #endif // IMAGE_TOOLS_UNIFIED_GUI_H

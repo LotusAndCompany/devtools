@@ -109,7 +109,6 @@ private:
     /// 一回の zoomIn() zoomOut() で変化する拡大率(対数スケール)
     static constexpr const double zoomStep = 0.2;
 
-    void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;

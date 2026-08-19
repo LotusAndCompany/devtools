@@ -6,8 +6,8 @@
 #include <QWidget>
 
 class QPushButton;
+class QPlainTextEdit;
 class QTableView;
-class QTextEdit;
 
 class QueryPage : public QWidget
 {
@@ -31,7 +31,7 @@ private:
     void buildUi();
     void retranslateUi();
 
-    QTextEdit *queryTextEdit{nullptr};
+    QPlainTextEdit *queryTextEdit{nullptr};
     QPushButton *executeButton{nullptr};
     QTableView *queryResultView{nullptr};
 

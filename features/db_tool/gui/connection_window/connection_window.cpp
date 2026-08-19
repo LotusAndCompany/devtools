@@ -1,5 +1,7 @@
 #include "connection_window.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QComboBox>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -7,7 +9,7 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QFont>
+#include <QFormLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -20,12 +22,6 @@
 #include <QVBoxLayout>
 
 namespace {
-constexpr int DEFAULT_WIDTH = 621;
-constexpr int DEFAULT_HEIGHT = 600;
-constexpr int FIXED_HEIGHT_FULL = 600;
-constexpr int FIXED_HEIGHT_SQLITE = 300;
-constexpr int LAYOUT_SPACING = 25;
-
 bool isSQLiteFilePath(const QString &filePath)
 {
     QFileInfo const fileInfo(filePath);
@@ -75,57 +71,59 @@ ConnectionWindow::ConnectionWindow(QWidget *parent) : QWidget(parent)
 
 void ConnectionWindow::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    QFont baseFont = font();
-    baseFont.setFamily(".AppleSystemUIFont");
-    setFont(baseFont);
-
-    setAutoFillBackground(false);
+    DevTools::Ui::configureDialog(this);
 
     auto *verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setSpacing(LAYOUT_SPACING);
+    DevTools::Ui::applyPageLayout(verticalLayout);
+
+    form_heading = DevTools::Ui::createPaneHeading(QString(), this);
+    verticalLayout->addWidget(form_heading);
+
+    auto *formLayout = new QFormLayout;
+    DevTools::Ui::configureInlineFormLayout(formLayout);
 
     dbTypeLabel = new QLabel(this);
-    verticalLayout->addWidget(dbTypeLabel);
-
     dbTypeComboBox = new QComboBox(this);
     dbTypeComboBox->addItem(QString());
-    verticalLayout->addWidget(dbTypeComboBox);
+    DevTools::Ui::configureFormField(dbTypeComboBox);
+    formLayout->addRow(dbTypeLabel, dbTypeComboBox);
 
     hostNameLabel = new QLabel(this);
-    verticalLayout->addWidget(hostNameLabel);
-
-    hostNameLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(hostNameLineEdit);
+    hostNameLineEdit = DevTools::Ui::createLineEdit(this);
+    DevTools::Ui::configureFormField(hostNameLineEdit);
+    formLayout->addRow(hostNameLabel, hostNameLineEdit);
 
     dbNameLabel = new QLabel(this);
-    verticalLayout->addWidget(dbNameLabel);
-
     auto *dbNameLayout = new QHBoxLayout();
-    dbNamelineEdit = new QLineEdit(this);
+    DevTools::Ui::applyInlineLayout(dbNameLayout);
+    dbNamelineEdit = DevTools::Ui::createLineEdit(this);
+    DevTools::Ui::configureFormField(dbNamelineEdit);
     dbNameLayout->addWidget(dbNamelineEdit);
     browseButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(browseButton);
     dbNameLayout->addWidget(browseButton);
-    verticalLayout->addLayout(dbNameLayout);
+    formLayout->addRow(dbNameLabel, dbNameLayout);
 
     userNameLabel = new QLabel(this);
-    verticalLayout->addWidget(userNameLabel);
-
-    userNameLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(userNameLineEdit);
+    userNameLineEdit = DevTools::Ui::createLineEdit(this);
+    DevTools::Ui::configureFormField(userNameLineEdit);
+    formLayout->addRow(userNameLabel, userNameLineEdit);
 
     passwordLabel = new QLabel(this);
-    verticalLayout->addWidget(passwordLabel);
+    passwordLineEdit = DevTools::Ui::createLineEdit(this);
+    DevTools::Ui::configureFormField(passwordLineEdit);
+    formLayout->addRow(passwordLabel, passwordLineEdit);
 
-    passwordLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(passwordLineEdit);
+    verticalLayout->addLayout(formLayout);
 
     auto *buttonLayout = new QHBoxLayout();
     ConnectPushButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(ConnectPushButton);
     buttonLayout->addWidget(ConnectPushButton);
     ClosePushButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(ClosePushButton);
     buttonLayout->addWidget(ClosePushButton);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
     verticalLayout->addLayout(buttonLayout);
 
     retranslateUi();
@@ -134,6 +132,7 @@ void ConnectionWindow::buildUi()
 void ConnectionWindow::retranslateUi()
 {
     setWindowTitle(tr("New Connection"));
+    form_heading->setText(tr("New Connection"));
     dbTypeLabel->setText(tr("Database Type"));
     if (dbTypeComboBox->count() > 0) {
         dbTypeComboBox->setItemText(0, tr("SQLite"));
@@ -157,12 +156,6 @@ void ConnectionWindow::selectedDBType()
     QString const dbTypeText = dbTypeComboBox->currentText();
     bool const isSQLite = (dbTypeText == tr("SQLite"));
     bool const display = !isSQLite;
-
-    if (display) {
-        this->setFixedHeight(FIXED_HEIGHT_FULL);
-    } else {
-        this->setFixedHeight(FIXED_HEIGHT_SQLITE);
-    }
 
     hostNameLabel->setVisible(display);
     hostNameLineEdit->setVisible(display);

@@ -1,10 +1,12 @@
 #include "color_sample.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QPainter>
 
 ColorSample::ColorSample(QWidget *parent) : QFrame(parent), _color(QColorConstants::White)
 {
-    setFrameStyle(QFrame::Panel | QFrame::Raised);
+    DevTools::Ui::configureColorSample(this);
 }
 
 void ColorSample::paintEvent(QPaintEvent *event)

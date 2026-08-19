@@ -3,6 +3,7 @@
 #include "features/framework/core/enum_cast.h"
 #include "features/framework/core/exception/invalid_argument_exception.h"
 #include "features/framework/core/tool/tool.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -12,9 +13,8 @@ const QString SidemenuItem::notConfigurableReason = "Sidemenu::ID::HOME is not c
 
 SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(parent), id(id)
 {
-    setFlat(true);
+    DevTools::Ui::configureSidebarItem(this);
     setCheckable(true);
-    setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
     Sidemenu::validateID(id);
@@ -54,11 +54,7 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
     // ベベルは qlementine に描画させる
     style()->drawControl(QStyle::CE_PushButtonBevel, &option, &painter, this);
 
-    constexpr int LEFT_MARGIN = 8;
-    constexpr int ICON_TEXT_SPACING = 6;
-    constexpr int RIGHT_MARGIN = 8;
-
-    int contentX = option.rect.x() + LEFT_MARGIN;
+    int contentX = option.rect.x() + DevTools::Ui::Metrics::PANEL_MARGIN;
 
     if (!option.icon.isNull()) {
         const auto iconMode =
@@ -70,10 +66,11 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
             iconSz.width(), iconSz.height());
         QRect const iconRect = QStyle::visualRect(option.direction, option.rect, logicalIconRect);
         option.icon.paint(&painter, iconRect, Qt::AlignCenter, iconMode, iconState);
-        contentX += iconSz.width() + ICON_TEXT_SPACING;
+        contentX += iconSz.width() + DevTools::Ui::Metrics::COMPACT_SPACING;
     }
 
-    int const textMaxWidth = option.rect.width() - (contentX - option.rect.x()) - RIGHT_MARGIN;
+    int const textMaxWidth =
+        option.rect.width() - (contentX - option.rect.x()) - DevTools::Ui::Metrics::PANEL_MARGIN;
     if (textMaxWidth > 0 && !option.text.isEmpty()) {
         QRect const logicalTextRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
         QRect const textRect = QStyle::visualRect(option.direction, option.rect, logicalTextRect);

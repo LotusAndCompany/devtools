@@ -11,9 +11,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMap>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QStackedWidget>
-#include <QTextEdit>
 #include <QWidget>
 
 class QRCodeGenerationGUI : public GuiTool
@@ -70,7 +70,7 @@ private:
     QPushButton *copyButton{nullptr};
     QPushButton *saveButton{nullptr};
     QLabel *qrCodeLabel{nullptr};
-    QTextEdit *contentPreviewEdit{nullptr};
+    QPlainTextEdit *contentPreviewEdit{nullptr};
 
     QRCodeType currentType{QRCodeType::Text};
 

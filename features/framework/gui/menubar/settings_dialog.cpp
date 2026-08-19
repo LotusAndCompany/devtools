@@ -1,17 +1,17 @@
 #include "settings_dialog.h"
 
+#include "../design_system.h"
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QEvent>
+#include <QFormLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QSettings>
 #include <QShowEvent>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QTabWidget>
 #include <QVBoxLayout>
 
@@ -19,9 +19,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Settings"));
     setModal(true);
-    resize(480, 360);
+    DevTools::Ui::configureDialog(this);
 
     auto *rootLayout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(rootLayout);
 
     tab_widget = new QTabWidget(this);
     buildGeneralTab();
@@ -52,40 +53,34 @@ void SettingsDialog::buildGeneralTab()
 {
     general_tab = new QWidget(tab_widget);
 
-    auto *layout = new QVBoxLayout(general_tab);
-    layout->setSpacing(10);
-    layout->setContentsMargins(8, 8, 8, 8);
+    auto *tabLayout = new QVBoxLayout(general_tab);
+    DevTools::Ui::applyPanelLayout(tabLayout);
 
-    auto *languageLayout = new QHBoxLayout;
-    languageLayout->setSpacing(6);
-    languageLayout->setContentsMargins(0, 0, 0, 0);
+    general_group_box = new QGroupBox(general_tab);
+    auto *groupLayout = new QVBoxLayout(general_group_box);
+    DevTools::Ui::applyPanelLayout(groupLayout);
 
-    language_label = new QLabel(general_tab);
-    language_label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    language_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    languageLayout->addWidget(language_label);
+    auto *languageLayout = new QFormLayout;
+    DevTools::Ui::configureInlineFormLayout(languageLayout);
 
-    language_combo_box = new QComboBox(general_tab);
-    language_combo_box->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    language_combo_box->setMinimumSize(96, 0);
-    language_combo_box->setMaximumWidth(96);
+    language_label = new QLabel(general_group_box);
+    language_combo_box = new QComboBox(general_group_box);
     language_combo_box->addItem(tr("English"), QStringLiteral("en"));
     language_combo_box->addItem(tr("Japanese"), QStringLiteral("ja_JP"));
-    languageLayout->addWidget(language_combo_box);
+    languageLayout->addRow(language_label, language_combo_box);
+    groupLayout->addLayout(languageLayout);
 
-    languageLayout->addSpacerItem(
-        new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    layout->addLayout(languageLayout);
+    show_sidebar_on_startup_check_box = new QCheckBox(general_group_box);
+    groupLayout->addWidget(show_sidebar_on_startup_check_box);
 
-    show_sidebar_on_startup_check_box = new QCheckBox(general_tab);
-    layout->addWidget(show_sidebar_on_startup_check_box);
+    show_last_tool_on_startup_check_box = new QCheckBox(general_group_box);
+    groupLayout->addWidget(show_last_tool_on_startup_check_box);
 
-    show_last_tool_on_startup_check_box = new QCheckBox(general_tab);
-    layout->addWidget(show_last_tool_on_startup_check_box);
-
-    layout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    tabLayout->addWidget(general_group_box);
+    tabLayout->addStretch();
 
     // 翻訳可能なテキストを設定
+    general_group_box->setTitle(tr("General"));
     language_label->setText(tr("Language:"));
     show_sidebar_on_startup_check_box->setText(tr("Show sidebar on startup"));
     show_last_tool_on_startup_check_box->setText(tr("Open last used tool on startup"));
@@ -95,9 +90,11 @@ void SettingsDialog::buildWindowTab()
 {
     window_tab = new QWidget(tab_widget);
     auto *layout = new QVBoxLayout(window_tab);
+    DevTools::Ui::applyPanelLayout(layout);
 
     window_behavior_group_box = new QGroupBox(window_tab);
     auto *groupLayout = new QVBoxLayout(window_behavior_group_box);
+    DevTools::Ui::applyPanelLayout(groupLayout);
 
     always_on_top_check_box = new QCheckBox(window_behavior_group_box);
     groupLayout->addWidget(always_on_top_check_box);
@@ -109,7 +106,7 @@ void SettingsDialog::buildWindowTab()
     groupLayout->addWidget(remember_window_position_check_box);
 
     layout->addWidget(window_behavior_group_box);
-    layout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    layout->addStretch();
 
     // 翻訳可能なテキストを設定
     window_behavior_group_box->setTitle(tr("Window Behavior"));
@@ -123,6 +120,7 @@ void SettingsDialog::retranslateUi()
     setWindowTitle(tr("Settings"));
     tab_widget->setTabText(0, tr("General"));
     tab_widget->setTabText(1, tr("Window"));
+    general_group_box->setTitle(tr("General"));
     language_label->setText(tr("Language:"));
     if (language_combo_box->count() >= 2) {
         language_combo_box->setItemText(0, tr("English"));

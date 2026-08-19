@@ -1,6 +1,7 @@
 #include "main_window.h"
 
 #include "contents_area.h"
+#include "design_system.h"
 #include "gui_application.h"
 #include "menubar/about_devtools_dialog.h"
 #include "menubar/settings_dialog.h"
@@ -19,8 +20,6 @@
 #include <QMimeData>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QTranslator>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -32,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "=== MainWindow Constructor START ===";
 
     setObjectName("MainWindow");
-    resize(1280, 720);
+    DevTools::Ui::configureMainWindow(this);
     setWindowTitle("DevTools");
     setAcceptDrops(true);
 
@@ -104,50 +103,41 @@ void MainWindow::setupCentralWidget()
 {
     auto *const centralwidget = new QWidget(this);
     centralwidget->setObjectName("centralwidget");
-    centralwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    DevTools::Ui::configureExpandingSurface(centralwidget);
 
     auto *const horizontalLayout = new QHBoxLayout(centralwidget);
-    horizontalLayout->setSpacing(0);
-    horizontalLayout->setContentsMargins(0, 0, 0, 0);
+    DevTools::Ui::applyFullBleedLayout(horizontalLayout);
 
     m_sidemenu = new Sidemenu(centralwidget);
     m_sidemenu->setObjectName("sidemenu");
-    const QSizePolicy sidemenuPolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    m_sidemenu->setSizePolicy(sidemenuPolicy);
-    m_sidemenu->setMinimumWidth(240);
     horizontalLayout->addWidget(m_sidemenu);
 
     auto *const verticalLayout = new QVBoxLayout();
-    verticalLayout->setContentsMargins(6, 0, 6, 6);
+    DevTools::Ui::applyPanelLayout(verticalLayout);
 
     auto *const toolbarLayout = new QHBoxLayout();
-    toolbarLayout->setContentsMargins(0, 0, 0, 0);
+    DevTools::Ui::applyToolbarLayout(toolbarLayout);
 
     m_sidemenuVisibilityButton = new QPushButton(centralwidget);
     m_sidemenuVisibilityButton->setObjectName("sidemenuVisibilityButton");
-    m_sidemenuVisibilityButton->setMinimumSize(24, 24);
-    m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
-    m_sidemenuVisibilityButton->setIconSize(QSize(24, 24));
-    m_sidemenuVisibilityButton->setFlat(true);
+    DevTools::Ui::configureWindowControlButton(m_sidemenuVisibilityButton, "left_panel_close",
+                                               tr("Toggle sidebar"));
     toolbarLayout->addWidget(m_sidemenuVisibilityButton);
 
-    toolbarLayout->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    toolbarLayout->addStretch();
 
     m_windowAlwaysOnTopButton = new QPushButton(centralwidget);
     m_windowAlwaysOnTopButton->setObjectName("windowAlwaysOnTopButton");
-    m_windowAlwaysOnTopButton->setMinimumSize(24, 24);
-    m_windowAlwaysOnTopButton->setIcon(QIcon::fromTheme("flip_to_front"));
-    m_windowAlwaysOnTopButton->setIconSize(QSize(24, 24));
+    DevTools::Ui::configureWindowControlButton(m_windowAlwaysOnTopButton, "flip_to_front",
+                                               tr("Always on top"));
     m_windowAlwaysOnTopButton->setCheckable(true);
-    m_windowAlwaysOnTopButton->setFlat(true);
     toolbarLayout->addWidget(m_windowAlwaysOnTopButton);
 
     verticalLayout->addLayout(toolbarLayout);
 
     m_contentsArea = new ContentsArea(centralwidget);
     m_contentsArea->setObjectName("contentsArea");
-    const QSizePolicy contentsPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    m_contentsArea->setSizePolicy(contentsPolicy);
+    DevTools::Ui::configureExpandingSurface(m_contentsArea);
     verticalLayout->addWidget(m_contentsArea);
 
     horizontalLayout->addLayout(verticalLayout);
@@ -186,6 +176,8 @@ void MainWindow::retranslateUi()
     m_actionShowMainWindow->setText(tr("Show Main Window"));
     m_actionAboutDevTools->setText(tr("About DevTools"));
     m_actionSettings->setText(tr("Settings"));
+    m_sidemenuVisibilityButton->setToolTip(tr("Toggle sidebar"));
+    m_windowAlwaysOnTopButton->setToolTip(tr("Always on top"));
 }
 
 #ifdef Q_OS_MACOS

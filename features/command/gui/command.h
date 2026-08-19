@@ -1,15 +1,15 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <QGroupBox>
+#include <QWidget>
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
+class QPlainTextEdit;
 class QPushButton;
-class QTextBrowser;
 
-class Command : public QGroupBox
+class Command : public QWidget
 {
     Q_OBJECT
 
@@ -31,9 +31,10 @@ private:
     void reset();
     void clear();
     void copy();
-    void adjustCommandBoxWidth();
 
     QComboBox *category_list{nullptr};
+    QLabel *input_heading{nullptr};
+    QLabel *output_heading{nullptr};
     QLabel *functions_label{nullptr};
     QComboBox *functions_list{nullptr};
     QLabel *option_label{nullptr};
@@ -42,7 +43,7 @@ private:
     QLineEdit *text_edit{nullptr};
     QPushButton *reset_button{nullptr};
     QPushButton *generate_button{nullptr};
-    QTextBrowser *text_browser{nullptr};
+    QPlainTextEdit *text_browser{nullptr};
     QPushButton *copy_button{nullptr};
     QPushButton *clear_button{nullptr};
 };

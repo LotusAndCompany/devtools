@@ -1,18 +1,18 @@
 #include "markdown_preview_gui.h"
 
+#include "features/framework/gui/design_system.h"
 #include "features/markdown_preview/core/markdown_preview.h"
 
 #include <QAbstractSlider>
-#include <QAction>
 #include <QCheckBox>
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QFont>
-#include <QFontDatabase>
-#include <QLabel>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QPushButton>
 #include <QScrollBar>
 #include <QSizePolicy>
 #include <QSplitter>
@@ -25,12 +25,8 @@
 
 #include <cmath>
 
-#include <oclero/qlementine/widgets/Label.hpp>
-
 namespace {
 constexpr int RENDER_DEBOUNCE_MS = 180;
-constexpr int DEFAULT_WIDTH = 800;
-constexpr int DEFAULT_HEIGHT = 600;
 } // namespace
 
 MarkdownPreviewGUI::MarkdownPreviewGUI(MarkdownPreview *tool, QWidget *parent)
@@ -43,9 +39,10 @@ MarkdownPreviewGUI::MarkdownPreviewGUI(MarkdownPreview *tool, QWidget *parent)
         tool->setParent(this);
     }
 
-    connect(openAction, &QAction::triggered, this, &MarkdownPreviewGUI::onOpenClicked);
-    connect(saveAction, &QAction::triggered, this, &MarkdownPreviewGUI::onSaveClicked);
-    connect(exportHtmlAction, &QAction::triggered, this, &MarkdownPreviewGUI::onExportHtmlClicked);
+    connect(openButton, &QPushButton::clicked, this, &MarkdownPreviewGUI::onOpenClicked);
+    connect(saveButton, &QPushButton::clicked, this, &MarkdownPreviewGUI::onSaveClicked);
+    connect(exportHtmlButton, &QPushButton::clicked, this,
+            &MarkdownPreviewGUI::onExportHtmlClicked);
     connect(syncScrollCheck, &QCheckBox::toggled, this, &MarkdownPreviewGUI::onSyncScrollToggled);
     connect(editor, &QPlainTextEdit::textChanged, this, &MarkdownPreviewGUI::onEditorTextChanged);
     connect(renderTimer, &QTimer::timeout, this, &MarkdownPreviewGUI::onRenderTimeout);
@@ -57,55 +54,49 @@ MarkdownPreviewGUI::MarkdownPreviewGUI(MarkdownPreview *tool, QWidget *parent)
 
 void MarkdownPreviewGUI::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(16, 16, 16, 16);
-    mainLayout->setSpacing(12);
+    DevTools::Ui::applyPageLayout(mainLayout);
 
-    toolbar = new QToolBar(this);
-    // 専用アイコン (file/save 等) はリソース未登録のため、空アイコンで隙間が
-    // 空くのを避けてテキストのみのボタンにする。
-    toolbar->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    openAction = toolbar->addAction(QString());
-    saveAction = toolbar->addAction(QString());
-    exportHtmlAction = toolbar->addAction(QString());
-    toolbar->addSeparator();
+    toolbarGroupBox = new QGroupBox(this);
+    toolbarGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
+    DevTools::Ui::applyPanelLayout(toolbarLayout);
 
-    auto *spacer = new QWidget(toolbar);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    toolbar->addWidget(spacer);
+    openButton = new QPushButton(toolbarGroupBox);
+    saveButton = new QPushButton(toolbarGroupBox);
+    exportHtmlButton = new QPushButton(toolbarGroupBox);
+    for (auto *button : {openButton, saveButton, exportHtmlButton}) {
+        DevTools::Ui::configureCompactButton(button);
+        toolbarLayout->addWidget(button);
+    }
 
-    syncScrollCheck = new QCheckBox(toolbar);
+    toolbarLayout->addStretch();
+
+    syncScrollCheck = new QCheckBox(toolbarGroupBox);
     syncScrollCheck->setChecked(syncScrollEnabled);
-    toolbar->addWidget(syncScrollCheck);
-
-    mainLayout->addWidget(toolbar);
+    toolbarLayout->addWidget(syncScrollCheck);
+    mainLayout->addWidget(toolbarGroupBox);
 
     auto *splitter = new QSplitter(Qt::Horizontal, this);
-    splitter->setHandleWidth(16); // .pen の panes gap (16px) に合わせる
 
-    editor = new QPlainTextEdit;
+    editor = DevTools::Ui::createPlainTextEdit(splitter);
     editor->setLineWrapMode(QPlainTextEdit::NoWrap);
     // 枠 (角丸のテキストフィールド) は qlementine スタイルに描画させる。
     // .pen のエディタは等幅フォント。インストール環境に依存しないよう
     // システム標準の等幅フォントを使う。
-    const QFont monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    editor->setFont(monoFont);
+    DevTools::Ui::configureCodeEditor(editor);
 
-    preview = new QTextBrowser;
+    preview = DevTools::Ui::createTextBrowser();
     preview->setOpenExternalLinks(true);
-    // レンダリング結果が等幅にならないよう、本文は UI 標準フォントにする。
-    preview->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    DevTools::Ui::configureDocumentPreview(preview);
 
-    auto *editorPane = buildPane(editorLabel, editor);
-    auto *previewPane = buildPane(previewLabel, preview);
+    editorPane = buildPane(editor);
+    previewPane = buildPane(preview);
 
     splitter->addWidget(editorPane);
     splitter->addWidget(previewPane);
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 1);
-    mainLayout->addWidget(splitter);
+    DevTools::Ui::configureEqualSplitter(splitter);
+    mainLayout->addWidget(splitter, 1);
 
     renderTimer = new QTimer(this);
     renderTimer->setSingleShot(true);
@@ -114,19 +105,12 @@ void MarkdownPreviewGUI::buildUi()
     retranslateUi();
 }
 
-QWidget *MarkdownPreviewGUI::buildPane(QLabel *&sectionLabel, QWidget *content)
+QGroupBox *MarkdownPreviewGUI::buildPane(QWidget *content)
 {
-    auto *pane = new QWidget(this);
+    auto *pane = new QGroupBox(this);
 
     auto *layout = new QVBoxLayout(pane);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
-
-    // セクション見出しは qlementine の Caption ロールでテーマに追従させる。
-    sectionLabel =
-        new oclero::qlementine::Label(QString(), oclero::qlementine::TextRole::Caption, pane);
-
-    layout->addWidget(sectionLabel);
+    DevTools::Ui::applyPanelLayout(layout);
     layout->addWidget(content);
 
     return pane;
@@ -135,12 +119,14 @@ QWidget *MarkdownPreviewGUI::buildPane(QLabel *&sectionLabel, QWidget *content)
 void MarkdownPreviewGUI::retranslateUi()
 {
     setWindowTitle(tr("Markdown Preview"));
-    openAction->setText(tr("Open"));
-    saveAction->setText(tr("Save"));
-    exportHtmlAction->setText(tr("Export HTML"));
+    toolbarGroupBox->setTitle(tr("Toolbar"));
+    toolbarGroupBox->setFixedHeight(76);
+    openButton->setText(tr("Open"));
+    saveButton->setText(tr("Save"));
+    exportHtmlButton->setText(tr("Export HTML"));
     syncScrollCheck->setText(tr("Sync scroll"));
-    editorLabel->setText(tr("Editor"));
-    previewLabel->setText(tr("Preview"));
+    editorPane->setTitle(tr("Editor"));
+    previewPane->setTitle(tr("Preview"));
     editor->setPlaceholderText(tr("Type Markdown here..."));
 }
 

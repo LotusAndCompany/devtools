@@ -14,7 +14,7 @@ class QSplitter;
 class QStandardItemModel;
 class QStringListModel;
 class QTableView;
-class QTextEdit;
+class QPlainTextEdit;
 
 class api_tool : public QFrame
 {
@@ -39,12 +39,12 @@ private:
     void buildUi();
 
     QComboBox *method_combo{};
-    QTextEdit *url_edit{};
+    QLineEdit *url_edit{};
     QPushButton *send_button{};
     QTableView *params_table{};
     QLineEdit *username_edit{};
     QLineEdit *password_edit{};
-    QTextEdit *body_edit{};
+    QPlainTextEdit *body_edit{};
     QSplitter *main_splitter{};
 
     QNetworkAccessManager *network_manager;

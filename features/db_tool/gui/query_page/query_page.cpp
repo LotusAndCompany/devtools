@@ -1,19 +1,15 @@
 #include "query_page.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QEvent>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 #include <QPushButton>
-#include <QSizePolicy>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTableView>
-#include <QTextEdit>
 #include <QVBoxLayout>
-
-namespace {
-constexpr int DEFAULT_WIDTH = 400;
-constexpr int DEFAULT_HEIGHT = 300;
-} // namespace
 
 QueryPage::QueryPage(QWidget *parent) : QWidget(parent), model(new QSqlQueryModel(this))
 {
@@ -33,16 +29,19 @@ QueryPage::QueryPage(QWidget *parent) : QWidget(parent), model(new QSqlQueryMode
 
 void QueryPage::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *verticalLayout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayout);
 
-    queryTextEdit = new QTextEdit(this);
+    queryTextEdit = DevTools::Ui::createPlainTextEdit(this);
+    DevTools::Ui::configureCodeEditor(queryTextEdit);
     verticalLayout->addWidget(queryTextEdit);
 
+    auto *actionLayout = new QHBoxLayout();
     executeButton = new QPushButton(this);
-    executeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    verticalLayout->addWidget(executeButton);
+    DevTools::Ui::configureCompactButton(executeButton);
+    actionLayout->addWidget(executeButton);
+    DevTools::Ui::configureActionBar(actionLayout, DevTools::Ui::ActionBarAlignment::Trailing);
+    verticalLayout->addLayout(actionLayout);
 
     queryResultView = new QTableView(this);
     verticalLayout->addWidget(queryResultView);

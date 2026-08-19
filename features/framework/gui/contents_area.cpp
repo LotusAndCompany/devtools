@@ -4,6 +4,7 @@
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/data_conversion/gui/data_conversion_gui.h"
 #include "features/db_tool/gui/db_main/db_main.h"
+#include "features/framework/gui/design_system.h"
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
 #include "features/image/gui/basic/image_tools_unified_gui.h"
@@ -18,10 +19,9 @@
 ContentsArea::ContentsArea(QWidget *parent)
     : QFrame(parent), m_contentsAreaLayout(new QVBoxLayout(this))
 {
-    setFrameShape(QFrame::StyledPanel);
+    DevTools::Ui::configureSection(this);
 
-    m_contentsAreaLayout->setSpacing(0);
-    m_contentsAreaLayout->setContentsMargins(6, 6, 6, 6);
+    DevTools::Ui::applyFullBleedLayout(m_contentsAreaLayout);
 
     changeContent(Sidemenu::ID::WELCOME);
 }
@@ -91,8 +91,8 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
-        content = new QLabel("Under development...", this);
-        dynamic_cast<QLabel *>(content)->setAlignment(Qt::AlignCenter);
+        content = new QLabel(tr("Under development..."), this);
+        DevTools::Ui::configureCenteredLabel(dynamic_cast<QLabel *>(content));
         break;
     }
 
