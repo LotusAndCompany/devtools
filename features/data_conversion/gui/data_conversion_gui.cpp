@@ -88,7 +88,7 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
     inputMessageTextView = new QPlainTextEdit(container);
     DevTools::Ui::configureStatusView(inputMessageTextView);
-    inputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    inputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
     layout->addWidget(inputMessageTextView);
 
     return container;
@@ -142,7 +142,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 
     outputMessageTextView = new QPlainTextEdit(container);
     DevTools::Ui::configureStatusView(outputMessageTextView);
-    outputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    outputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
     layout->addWidget(outputMessageTextView);
 
     return container;

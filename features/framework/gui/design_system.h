@@ -4,6 +4,7 @@
 #include <QFont>
 #include <QMargins>
 #include <QSize>
+#include <QString>
 
 #include <cstdint>
 
@@ -19,7 +20,6 @@ class QPlainTextEdit;
 class QPushButton;
 class QScrollArea;
 class QSplitter;
-class QString;
 class QTextBrowser;
 class QToolButton;
 class QWidget;

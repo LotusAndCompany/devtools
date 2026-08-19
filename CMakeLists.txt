@@ -441,6 +441,7 @@ if(CLANG_TIDY_EXECUTABLE)
 
     add_custom_target(lint
         COMMAND ${CLANG_TIDY_LINT_EXECUTABLE} ${CLANG_TIDY_LINT_OPTIONS} -p ${CMAKE_BINARY_DIR}
+            -header-filter='^${CMAKE_SOURCE_DIR}/features/.*'
             ${CLANG_TIDY_LINT_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
@@ -449,6 +450,7 @@ if(CLANG_TIDY_EXECUTABLE)
 
     add_custom_target(lint-fix
         COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
+            -header-filter='^${CMAKE_SOURCE_DIR}/features/.*'
             ${CLANG_TIDY_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"
