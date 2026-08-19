@@ -184,8 +184,7 @@ void api_tool::setupResponseView()
     main_splitter->addWidget(responseWidget);
     main_splitter->setHandleWidth(DevTools::Ui::Metrics::SPLITTER_HANDLE_WIDTH);
     main_splitter->setStretchFactor(0, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
-    main_splitter->setStretchFactor(1, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
-    main_splitter->setStretchFactor(2, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
+    main_splitter->setStretchFactor(1, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 }
 
 QString formatDataSize(qint64 bytes)

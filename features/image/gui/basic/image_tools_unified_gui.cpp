@@ -311,10 +311,10 @@ void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *roo
     DevTools::Ui::applyPanelLayout(toolPaneLayout);
 
     ui->toolScrollArea = new QScrollArea(toolPane);
-    ui->toolScrollArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    ui->toolScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->toolScrollArea->setMinimumWidth(DevTools::Ui::Metrics::TOOL_PANEL_WIDTH);
     ui->toolScrollArea->setWidgetResizable(true);
-    ui->toolScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->toolScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->toolScrollArea->setFrameShape(QFrame::NoFrame);
     DevTools::Ui::configurePaneSurface(ui->toolScrollArea);
 

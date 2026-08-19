@@ -111,6 +111,7 @@ void ConnectionWindow::buildUi()
 
     passwordLabel = new QLabel(this);
     passwordLineEdit = new QLineEdit(this);
+    passwordLineEdit->setEchoMode(QLineEdit::Password);
     DevTools::Ui::configureFormField(passwordLineEdit);
     formLayout->addRow(passwordLabel, passwordLineEdit);
 
