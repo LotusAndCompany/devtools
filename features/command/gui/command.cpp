@@ -75,9 +75,8 @@ void Command::buildUi()
     text_label->setObjectName(QStringLiteral("label"));
     inputLayout->addWidget(text_label, 5, 0);
 
-    text_edit = DevTools::Ui::createLineEdit(inputPane);
+    text_edit = new QLineEdit(inputPane);
     text_edit->setObjectName(QStringLiteral("textEdit"));
-    DevTools::Ui::configureTextControl(text_edit);
     inputLayout->addWidget(text_edit, 6, 0, 1, 2);
 
     reset_button = new QPushButton(tr("Reset"), inputPane);
@@ -104,7 +103,7 @@ void Command::buildUi()
     auto *const outputLayout = new QGridLayout(outputPane);
     DevTools::Ui::applyPanelLayout(outputLayout);
 
-    text_browser = DevTools::Ui::createPlainTextEdit(outputPane);
+    text_browser = new QPlainTextEdit(outputPane);
     text_browser->setObjectName(QStringLiteral("textBrowser"));
     DevTools::Ui::configureCodeEditor(text_browser);
     text_browser->setReadOnly(true);

@@ -88,7 +88,8 @@ void dbMain::buildUi()
     verticalLayoutMain->addWidget(toolbarGroupBox);
 
     auto *contentLayout = new QHBoxLayout();
-    DevTools::Ui::applySplitLayout(contentLayout);
+    contentLayout->setContentsMargins(0, 0, 0, 0);
+    contentLayout->setSpacing(DevTools::Ui::Metrics::PAGE_SPACING);
 
     tablesGroupBox = new QGroupBox(this);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
@@ -105,7 +106,6 @@ void dbMain::buildUi()
     queryTabWidget->setTabsClosable(true);
     queryLayout->addWidget(queryTabWidget);
     contentLayout->addWidget(queryGroupBox, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
-    DevTools::Ui::configureSideMainLayout(contentLayout);
 
     verticalLayoutMain->addLayout(contentLayout);
 

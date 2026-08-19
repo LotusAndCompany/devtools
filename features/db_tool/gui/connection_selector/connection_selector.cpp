@@ -43,7 +43,7 @@ void ConnectionSelector::buildUi()
     verticalLayout->addWidget(titleLabel);
 
     historyListWidget = new QListWidget(this);
-    DevTools::Ui::configureAlternatingList(historyListWidget);
+    historyListWidget->setAlternatingRowColors(true);
     verticalLayout->addWidget(historyListWidget);
 
     auto *buttonLayout = new QHBoxLayout();

@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QFontDatabase>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -79,7 +80,7 @@ void MarkdownPreviewGUI::buildUi()
 
     auto *splitter = new QSplitter(Qt::Horizontal, this);
 
-    editor = DevTools::Ui::createPlainTextEdit(splitter);
+    editor = new QPlainTextEdit(splitter);
     editor->setLineWrapMode(QPlainTextEdit::NoWrap);
     // 枠 (角丸のテキストフィールド) は qlementine スタイルに描画させる。
     // .pen のエディタは等幅フォント。インストール環境に依存しないよう
@@ -88,7 +89,8 @@ void MarkdownPreviewGUI::buildUi()
 
     preview = DevTools::Ui::createTextBrowser();
     preview->setOpenExternalLinks(true);
-    DevTools::Ui::configureDocumentPreview(preview);
+    DevTools::Ui::configureTextControl(preview);
+    preview->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     editorPane = buildPane(editor);
     previewPane = buildPane(preview);

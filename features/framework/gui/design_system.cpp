@@ -1,7 +1,6 @@
 #include "design_system.h"
 
 #include <QAbstractButton>
-#include <QAbstractItemView>
 #include <QAbstractScrollArea>
 #include <QApplication>
 #include <QBoxLayout>
@@ -13,7 +12,6 @@
 #include <QIcon>
 #include <QLabel>
 #include <QLayout>
-#include <QLineEdit>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -25,7 +23,6 @@
 #include <QSplitter>
 #include <QStyleOption>
 #include <QTextBrowser>
-#include <QToolBar>
 #include <QToolButton>
 #include <QWidget>
 
@@ -169,12 +166,6 @@ void applyFullBleedLayout(QLayout *layout)
     layout->setSpacing(0);
 }
 
-void applySplitLayout(QLayout *layout)
-{
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(Metrics::PAGE_SPACING);
-}
-
 void configureFormLayout(QFormLayout *layout)
 {
     layout->setContentsMargins(panelMargins());
@@ -205,31 +196,11 @@ void configureEqualLayout(QBoxLayout *layout)
     layout->setStretch(1, Metrics::EQUAL_SPLIT_STRETCH);
 }
 
-void configureMainSideLayout(QBoxLayout *layout)
-{
-    layout->setStretch(0, Metrics::MAIN_PANEL_STRETCH);
-    layout->setStretch(1, Metrics::SIDE_PANEL_STRETCH);
-}
-
-void configureSideMainLayout(QBoxLayout *layout)
-{
-    layout->setStretch(0, Metrics::SIDE_PANEL_STRETCH);
-    layout->setStretch(1, Metrics::MAIN_PANEL_STRETCH);
-}
-
 void configureEqualSplitter(QSplitter *splitter)
 {
     splitter->setHandleWidth(Metrics::SPLITTER_HANDLE_WIDTH);
     splitter->setStretchFactor(0, Metrics::EQUAL_SPLIT_STRETCH);
     splitter->setStretchFactor(1, Metrics::EQUAL_SPLIT_STRETCH);
-}
-
-void configureRequestOptionsResultSplitter(QSplitter *splitter)
-{
-    splitter->setHandleWidth(Metrics::SPLITTER_HANDLE_WIDTH);
-    splitter->setStretchFactor(0, Metrics::SIDE_PANEL_STRETCH);
-    splitter->setStretchFactor(1, Metrics::SIDE_PANEL_STRETCH);
-    splitter->setStretchFactor(2, Metrics::MAIN_PANEL_STRETCH);
 }
 
 void configureCaptionValueGrid(QGridLayout *layout)
@@ -238,19 +209,9 @@ void configureCaptionValueGrid(QGridLayout *layout)
     layout->setColumnStretch(1, Metrics::VALUE_COLUMN_STRETCH);
 }
 
-void configureTextToolbar(QToolBar *toolbar)
-{
-    toolbar->setToolButtonStyle(Qt::ToolButtonTextOnly);
-}
-
 void addBottomRightOverlay(QGridLayout *layout, QWidget *overlay)
 {
     layout->addWidget(overlay, 0, 0, Qt::AlignRight | Qt::AlignBottom);
-}
-
-void configureMainWindow(QWidget *window)
-{
-    window->resize(mainWindowSize());
 }
 
 void configureDialog(QWidget *dialog)
@@ -284,37 +245,9 @@ void configurePaneHeading(QLabel *label)
     }
 }
 
-void configureHeroLabel(QLabel *label)
-{
-    QFont font = label->font();
-    font.setPointSize(Metrics::HERO_POINT_SIZE);
-    label->setFont(font);
-    label->setAlignment(Qt::AlignCenter);
-}
-
-void configureDisplayTitle(QLabel *label)
-{
-    QFont font = label->font();
-    font.setPointSize(Metrics::TITLE_POINT_SIZE);
-    font.setBold(true);
-    label->setFont(font);
-}
-
-void configureLogoLabel(QLabel *label)
-{
-    label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    label->setFixedSize(Metrics::LOGO_SIZE, Metrics::LOGO_SIZE);
-    label->setScaledContents(true);
-}
-
 void configureCenteredLabel(QLabel *label)
 {
     label->setAlignment(Qt::AlignCenter);
-}
-
-void configureCaptionLabel(QLabel *label)
-{
-    label->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
 }
 
 void configureSidebarItem(QPushButton *button)
@@ -340,32 +273,13 @@ void configureDivider(QFrame *divider)
     divider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
-QLineEdit *createLineEdit(QWidget *parent)
-{
-    return new QLineEdit(parent);
-}
-
-QPlainTextEdit *createPlainTextEdit(QWidget *parent)
-{
-    return new QPlainTextEdit(parent);
-}
-
 QTextBrowser *createTextBrowser(QWidget *parent)
 {
     return new QlementineTextBrowser(parent);
 }
 
-void configureDocumentPreview(QTextBrowser *preview)
-{
-    configureTextControl(preview);
-    preview->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
-}
-
 void configureFormField(QWidget *field)
 {
-    if (auto *const lineEdit = qobject_cast<QLineEdit *>(field)) {
-        configureTextControl(lineEdit);
-    }
     field->setMinimumWidth(Metrics::FIELD_MIN_WIDTH);
     field->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
@@ -375,12 +289,6 @@ void configureMultilineField(QPlainTextEdit *field)
     configureTextControl(field);
     field->setMinimumHeight(Metrics::MULTILINE_EDITOR_MIN_HEIGHT);
     field->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-}
-
-void configurePreviewEditor(QPlainTextEdit *editor)
-{
-    configureCodeEditor(editor);
-    editor->setMaximumHeight(Metrics::STATUS_VIEW_HEIGHT);
 }
 
 void configureStatusView(QPlainTextEdit *view)
@@ -397,12 +305,6 @@ void configurePreviewSurface(QLabel *surface)
     surface->setMinimumSize(Metrics::PREVIEW_MIN_SIZE, Metrics::PREVIEW_MIN_SIZE);
     surface->setFrameShape(QFrame::Box);
     surface->setAlignment(Qt::AlignCenter);
-}
-
-void configureColorSample(QFrame *sample)
-{
-    sample->setFixedSize(Metrics::ICON_BUTTON_SIZE, Metrics::ICON_BUTTON_SIZE);
-    sample->setFrameStyle(QFrame::Panel | QFrame::Raised);
 }
 
 void configureExpandingSurface(QWidget *surface)
@@ -449,34 +351,9 @@ void configureScrollView(QScrollArea *view)
     view->setAlignment(Qt::AlignCenter);
 }
 
-void configureAlternatingList(QAbstractItemView *view)
-{
-    view->setAlternatingRowColors(true);
-}
-
-void configureSidebar(QWidget *sidebar)
-{
-    sidebar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    sidebar->setMinimumWidth(Metrics::SIDEMENU_WIDTH);
-}
-
-void configureToolbarSpacer(QWidget *spacer)
-{
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-}
-
 void configureSection(QFrame *section)
 {
     section->setFrameShape(QFrame::StyledPanel);
-}
-
-void configureToolPanel(QScrollArea *panel)
-{
-    panel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    panel->setMinimumWidth(Metrics::TOOL_PANEL_WIDTH);
-    panel->setWidgetResizable(true);
-    panel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    panel->setFrameShape(QFrame::NoFrame);
 }
 
 void configureZoomButton(QToolButton *button, const QString &iconName, const QString &toolTip)
@@ -536,11 +413,6 @@ void configureErrorLabel(QLabel *label)
     if (qlementineStyle != nullptr) {
         applyErrorColor(label, qlementineStyle);
     }
-}
-
-void configureTextControl(QLineEdit *control)
-{
-    control->setFrame(true);
 }
 
 void configureTextControl(QAbstractScrollArea *control)

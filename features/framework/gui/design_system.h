@@ -8,7 +8,6 @@
 #include <cstdint>
 
 class QAbstractButton;
-class QAbstractItemView;
 class QAbstractScrollArea;
 class QBoxLayout;
 class QFormLayout;
@@ -16,13 +15,11 @@ class QFrame;
 class QGridLayout;
 class QLabel;
 class QLayout;
-class QLineEdit;
 class QPlainTextEdit;
 class QPushButton;
 class QScrollArea;
 class QSplitter;
 class QString;
-class QToolBar;
 class QTextBrowser;
 class QToolButton;
 class QWidget;
@@ -75,53 +72,34 @@ void applyPanelLayout(QLayout *layout);
 void applyToolbarLayout(QLayout *layout);
 void applyInlineLayout(QLayout *layout);
 void applyFullBleedLayout(QLayout *layout);
-void applySplitLayout(QLayout *layout);
 void configureFormLayout(QFormLayout *layout);
 void configureInlineFormLayout(QFormLayout *layout);
 void configureActionBar(QBoxLayout *layout, ActionBarAlignment alignment);
 void configureEqualLayout(QBoxLayout *layout);
-void configureMainSideLayout(QBoxLayout *layout);
-void configureSideMainLayout(QBoxLayout *layout);
 void configureEqualSplitter(QSplitter *splitter);
-void configureRequestOptionsResultSplitter(QSplitter *splitter);
 void configureCaptionValueGrid(QGridLayout *layout);
-void configureTextToolbar(QToolBar *toolbar);
 void addBottomRightOverlay(QGridLayout *layout, QWidget *overlay);
 
-void configureMainWindow(QWidget *window);
 void configureDialog(QWidget *dialog);
 QLabel *createPaneHeading(const QString &text, QWidget *parent);
 void configurePaneHeading(QLabel *label);
-void configureHeroLabel(QLabel *label);
-void configureDisplayTitle(QLabel *label);
-void configureLogoLabel(QLabel *label);
 void configureCenteredLabel(QLabel *label);
-void configureCaptionLabel(QLabel *label);
 void configureSidebarItem(QPushButton *button);
 void configurePrimaryButton(QAbstractButton *button);
 void configureCompactButton(QAbstractButton *button);
 void configureWindowControlButton(QPushButton *button, const QString &iconName,
                                   const QString &toolTip = {});
 void configureDivider(QFrame *divider);
-QLineEdit *createLineEdit(QWidget *parent = nullptr);
-QPlainTextEdit *createPlainTextEdit(QWidget *parent = nullptr);
 QTextBrowser *createTextBrowser(QWidget *parent = nullptr);
-void configureDocumentPreview(QTextBrowser *preview);
 void configureFormField(QWidget *field);
 void configureMultilineField(QPlainTextEdit *field);
-void configurePreviewEditor(QPlainTextEdit *editor);
 void configureStatusView(QPlainTextEdit *view);
 void configurePreviewSurface(QLabel *surface);
 void configureImageSurface(QLabel *surface);
-void configureColorSample(QFrame *sample);
 void configureExpandingSurface(QWidget *surface);
 void configurePaneSurface(QWidget *surface);
 void configureScrollView(QScrollArea *view);
-void configureAlternatingList(QAbstractItemView *view);
-void configureSidebar(QWidget *sidebar);
-void configureToolbarSpacer(QWidget *spacer);
 void configureSection(QFrame *section);
-void configureToolPanel(QScrollArea *panel);
 void configureZoomButton(QToolButton *button, const QString &iconName, const QString &toolTip);
 QLabel *createErrorLabel(QWidget *parent);
 QSize previewContentSize(const QSize &surfaceSize);
@@ -131,7 +109,6 @@ void configureIconButton(QAbstractButton *button, const QString &iconName,
 void configureErrorLabel(QLabel *label);
 void refreshStatusColors();
 
-void configureTextControl(QLineEdit *control);
 void configureTextControl(QAbstractScrollArea *control);
 
 QFont codeFont();

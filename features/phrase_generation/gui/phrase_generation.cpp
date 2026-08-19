@@ -87,9 +87,8 @@ void phraseGeneration::createWidgets()
     title_tree_widget->setHeaderHidden(true);
     title_tree_widget->setColumnCount(1);
 
-    template_title = DevTools::Ui::createLineEdit(this);
+    template_title = new QLineEdit(this);
     template_title->setObjectName(QStringLiteral("templateTitle"));
-    DevTools::Ui::configureTextControl(template_title);
 
     delete_button = new QPushButton(this);
     delete_button->setObjectName(QStringLiteral("deleteButton"));
@@ -104,7 +103,7 @@ void phraseGeneration::createWidgets()
     editor_separator = new QFrame(this);
     DevTools::Ui::configureDivider(editor_separator);
 
-    template_text = DevTools::Ui::createPlainTextEdit(this);
+    template_text = new QPlainTextEdit(this);
     template_text->setObjectName(QStringLiteral("templateText"));
     DevTools::Ui::configureCodeEditor(template_text);
 
@@ -158,7 +157,6 @@ void phraseGeneration::layoutWidgets()
 
     root_layout->addWidget(editor_group, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
     root_layout->addWidget(tree_group, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
-    DevTools::Ui::configureMainSideLayout(root_layout);
 }
 
 void phraseGeneration::setupShortcuts()

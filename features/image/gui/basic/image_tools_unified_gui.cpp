@@ -27,6 +27,7 @@
 #include <QRadioButton>
 #include <QScrollArea>
 #include <QSignalBlocker>
+#include <QSizePolicy>
 #include <QSpinBox>
 #include <QVBoxLayout>
 #include <QVector3D>
@@ -310,7 +311,11 @@ void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *roo
     DevTools::Ui::applyPanelLayout(toolPaneLayout);
 
     ui->toolScrollArea = new QScrollArea(toolPane);
-    DevTools::Ui::configureToolPanel(ui->toolScrollArea);
+    ui->toolScrollArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    ui->toolScrollArea->setMinimumWidth(DevTools::Ui::Metrics::TOOL_PANEL_WIDTH);
+    ui->toolScrollArea->setWidgetResizable(true);
+    ui->toolScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->toolScrollArea->setFrameShape(QFrame::NoFrame);
     DevTools::Ui::configurePaneSurface(ui->toolScrollArea);
 
     auto *uiArea = new QWidget(ui->toolScrollArea);
@@ -400,7 +405,6 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
     rootLayout->addWidget(imagePane, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 
     buildUiArea(ui, this, rootLayout);
-    DevTools::Ui::configureMainSideLayout(rootLayout);
 
     connect(ui->imageView, &ImageViewForImageTransparent::loadFileSelected, ui->control,
             &BasicImageViewControl::loadFileSelected);

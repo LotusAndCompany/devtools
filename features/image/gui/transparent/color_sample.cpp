@@ -6,7 +6,8 @@
 
 ColorSample::ColorSample(QWidget *parent) : QFrame(parent), _color(QColorConstants::White)
 {
-    DevTools::Ui::configureColorSample(this);
+    setFixedSize(DevTools::Ui::Metrics::ICON_BUTTON_SIZE, DevTools::Ui::Metrics::ICON_BUTTON_SIZE);
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
 }
 
 void ColorSample::paintEvent(QPaintEvent *event)

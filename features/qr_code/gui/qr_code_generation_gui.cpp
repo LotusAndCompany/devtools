@@ -114,8 +114,9 @@ void QRCodeGenerationGUI::buildUi()
                                      DevTools::Ui::ActionBarAlignment::Trailing);
     outputLayout->addLayout(outputButtonLayout);
 
-    contentPreviewEdit = DevTools::Ui::createPlainTextEdit(outputGroupBox);
-    DevTools::Ui::configurePreviewEditor(contentPreviewEdit);
+    contentPreviewEdit = new QPlainTextEdit(outputGroupBox);
+    DevTools::Ui::configureCodeEditor(contentPreviewEdit);
+    contentPreviewEdit->setMaximumHeight(DevTools::Ui::Metrics::STATUS_VIEW_HEIGHT);
     contentPreviewEdit->setReadOnly(true);
     outputLayout->addWidget(contentPreviewEdit);
 
@@ -182,7 +183,7 @@ QWidget *QRCodeGenerationGUI::createTextWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *textEdit = DevTools::Ui::createPlainTextEdit();
+    auto *textEdit = new QPlainTextEdit;
     textEdit->setPlaceholderText(tr("Enter text..."));
     DevTools::Ui::configureMultilineField(textEdit);
     layout->addRow(tr("Text:"), textEdit);
@@ -205,7 +206,7 @@ QWidget *QRCodeGenerationGUI::createUrlWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *urlEdit = DevTools::Ui::createLineEdit();
+    auto *urlEdit = new QLineEdit;
     urlEdit->setPlaceholderText(tr("Enter URL..."));
     DevTools::Ui::configureFormField(urlEdit);
     layout->addRow(tr("URL:"), urlEdit);
@@ -228,7 +229,7 @@ QWidget *QRCodeGenerationGUI::createEmailWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *emailEdit = DevTools::Ui::createLineEdit();
+    auto *emailEdit = new QLineEdit;
     emailEdit->setPlaceholderText(tr("Enter email address..."));
     DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
@@ -251,7 +252,7 @@ QWidget *QRCodeGenerationGUI::createPhoneWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *phoneEdit = DevTools::Ui::createLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
     DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
@@ -274,7 +275,7 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *phoneEdit = DevTools::Ui::createLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
     DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
@@ -284,7 +285,7 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     errorLabels["sms_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
-    auto *messageEdit = DevTools::Ui::createPlainTextEdit();
+    auto *messageEdit = new QPlainTextEdit;
     messageEdit->setPlaceholderText(tr("Enter message..."));
     DevTools::Ui::configureMultilineField(messageEdit);
     layout->addRow(tr("Message:"), messageEdit);
@@ -310,7 +311,7 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *ssidEdit = DevTools::Ui::createLineEdit();
+    auto *ssidEdit = new QLineEdit;
     ssidEdit->setPlaceholderText(tr("Enter SSID..."));
     DevTools::Ui::configureFormField(ssidEdit);
     layout->addRow(tr("SSID:"), ssidEdit);
@@ -320,7 +321,7 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     errorLabels["wifi_ssid_error"] = ssidErrorLabel;
     layout->addRow("", ssidErrorLabel);
 
-    auto *passwordEdit = DevTools::Ui::createLineEdit();
+    auto *passwordEdit = new QLineEdit;
     passwordEdit->setPlaceholderText(tr("Enter password..."));
     DevTools::Ui::configureFormField(passwordEdit);
     layout->addRow(tr("Password:"), passwordEdit);
@@ -359,7 +360,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *nameEdit = DevTools::Ui::createLineEdit();
+    auto *nameEdit = new QLineEdit;
     nameEdit->setPlaceholderText(tr("Enter name..."));
     DevTools::Ui::configureFormField(nameEdit);
     layout->addRow(tr("Name:"), nameEdit);
@@ -369,7 +370,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     errorLabels["contact_name_error"] = nameErrorLabel;
     layout->addRow("", nameErrorLabel);
 
-    auto *phoneEdit = DevTools::Ui::createLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone..."));
     DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
@@ -379,7 +380,7 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     errorLabels["contact_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
-    auto *emailEdit = DevTools::Ui::createLineEdit();
+    auto *emailEdit = new QLineEdit;
     emailEdit->setPlaceholderText(tr("Enter email..."));
     DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
@@ -408,7 +409,7 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *summaryEdit = DevTools::Ui::createLineEdit();
+    auto *summaryEdit = new QLineEdit;
     summaryEdit->setPlaceholderText(tr("Enter event title..."));
     DevTools::Ui::configureFormField(summaryEdit);
     layout->addRow(tr("Event:"), summaryEdit);
@@ -461,7 +462,7 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     auto *layout = new QFormLayout(widget);
     DevTools::Ui::configureFormLayout(layout);
 
-    auto *latEdit = DevTools::Ui::createLineEdit();
+    auto *latEdit = new QLineEdit;
     latEdit->setPlaceholderText(tr("Enter latitude..."));
     DevTools::Ui::configureFormField(latEdit);
     layout->addRow(tr("Latitude:"), latEdit);
@@ -471,7 +472,7 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     errorLabels["geo_lat_error"] = latErrorLabel;
     layout->addRow("", latErrorLabel);
 
-    auto *lngEdit = DevTools::Ui::createLineEdit();
+    auto *lngEdit = new QLineEdit;
     lngEdit->setPlaceholderText(tr("Enter longitude..."));
     DevTools::Ui::configureFormField(lngEdit);
     layout->addRow(tr("Longitude:"), lngEdit);

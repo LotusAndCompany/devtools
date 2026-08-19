@@ -81,12 +81,12 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
     layout->addLayout(input_action_button_layout);
 
-    inputTextEdit = DevTools::Ui::createPlainTextEdit(container);
+    inputTextEdit = new QPlainTextEdit(container);
     DevTools::Ui::configureCodeEditor(inputTextEdit);
     inputTextEdit->setPlaceholderText(tr("Input text"));
     layout->addWidget(inputTextEdit);
 
-    inputMessageTextView = DevTools::Ui::createPlainTextEdit(container);
+    inputMessageTextView = new QPlainTextEdit(container);
     DevTools::Ui::configureStatusView(inputMessageTextView);
     inputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
     layout->addWidget(inputMessageTextView);
@@ -132,7 +132,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 
     layout->addLayout(output_action_button_layout);
 
-    outputTextView = DevTools::Ui::createPlainTextEdit(container);
+    outputTextView = new QPlainTextEdit(container);
     DevTools::Ui::configureCodeEditor(outputTextView);
     outputTextView->setReadOnly(true);
     outputTextView->setTextInteractionFlags(Qt::TextSelectableByKeyboard |
@@ -140,7 +140,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     outputTextView->setPlaceholderText(tr("Output text"));
     layout->addWidget(outputTextView);
 
-    outputMessageTextView = DevTools::Ui::createPlainTextEdit(container);
+    outputMessageTextView = new QPlainTextEdit(container);
     DevTools::Ui::configureStatusView(outputMessageTextView);
     outputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
     layout->addWidget(outputMessageTextView);

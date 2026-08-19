@@ -32,7 +32,7 @@ void QueryPage::buildUi()
     auto *verticalLayout = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(verticalLayout);
 
-    queryTextEdit = DevTools::Ui::createPlainTextEdit(this);
+    queryTextEdit = new QPlainTextEdit(this);
     DevTools::Ui::configureCodeEditor(queryTextEdit);
     verticalLayout->addWidget(queryTextEdit);
 

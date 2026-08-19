@@ -89,14 +89,14 @@ void ConnectionWindow::buildUi()
     formLayout->addRow(dbTypeLabel, dbTypeComboBox);
 
     hostNameLabel = new QLabel(this);
-    hostNameLineEdit = DevTools::Ui::createLineEdit(this);
+    hostNameLineEdit = new QLineEdit(this);
     DevTools::Ui::configureFormField(hostNameLineEdit);
     formLayout->addRow(hostNameLabel, hostNameLineEdit);
 
     dbNameLabel = new QLabel(this);
     auto *dbNameLayout = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(dbNameLayout);
-    dbNamelineEdit = DevTools::Ui::createLineEdit(this);
+    dbNamelineEdit = new QLineEdit(this);
     DevTools::Ui::configureFormField(dbNamelineEdit);
     dbNameLayout->addWidget(dbNamelineEdit);
     browseButton = new QPushButton(this);
@@ -105,12 +105,12 @@ void ConnectionWindow::buildUi()
     formLayout->addRow(dbNameLabel, dbNameLayout);
 
     userNameLabel = new QLabel(this);
-    userNameLineEdit = DevTools::Ui::createLineEdit(this);
+    userNameLineEdit = new QLineEdit(this);
     DevTools::Ui::configureFormField(userNameLineEdit);
     formLayout->addRow(userNameLabel, userNameLineEdit);
 
     passwordLabel = new QLabel(this);
-    passwordLineEdit = DevTools::Ui::createLineEdit(this);
+    passwordLineEdit = new QLineEdit(this);
     DevTools::Ui::configureFormField(passwordLineEdit);
     formLayout->addRow(passwordLabel, passwordLineEdit);
 

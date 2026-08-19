@@ -7,12 +7,14 @@
 
 #include <QDialogButtonBox>
 #include <QFile>
+#include <QFont>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPixmap>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QSizePolicy>
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -22,7 +24,7 @@ namespace {
 QLabel *createCaptionLabel(const QString &text, QWidget *parent)
 {
     auto *label = new QLabel(text, parent);
-    DevTools::Ui::configureCaptionLabel(label);
+    label->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
     label->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::TextSelectableByKeyboard |
                                    Qt::TextSelectableByMouse);
     return label;
@@ -71,12 +73,17 @@ QWidget *AboutDevToolsDialog::createAboutTab(QWidget *parent)
     titleLayout->addStretch();
 
     auto *appLogo = new QLabel(tab);
-    DevTools::Ui::configureLogoLabel(appLogo);
+    appLogo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    appLogo->setFixedSize(DevTools::Ui::Metrics::LOGO_SIZE, DevTools::Ui::Metrics::LOGO_SIZE);
+    appLogo->setScaledContents(true);
     appLogo->setPixmap(QPixmap(QStringLiteral(":/logo/dev-tools_logo.png")));
     titleLayout->addWidget(appLogo);
 
     auto *appName = new QLabel(QStringLiteral("DevTools"), tab);
-    DevTools::Ui::configureDisplayTitle(appName);
+    QFont appNameFont = appName->font();
+    appNameFont.setPointSize(DevTools::Ui::Metrics::TITLE_POINT_SIZE);
+    appNameFont.setBold(true);
+    appName->setFont(appNameFont);
     appName->setTextFormat(Qt::AutoText);
     titleLayout->addWidget(appName);
 
@@ -126,7 +133,7 @@ QWidget *AboutDevToolsDialog::createLicenseTab(QWidget *parent)
     auto *tab = new QWidget(parent);
     auto *layout = new QVBoxLayout(tab);
     DevTools::Ui::applyPanelLayout(layout);
-    auto *licenseText = DevTools::Ui::createPlainTextEdit(tab);
+    auto *licenseText = new QPlainTextEdit(tab);
     DevTools::Ui::configureTextControl(licenseText);
     licenseText->setReadOnly(true);
 

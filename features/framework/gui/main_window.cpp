@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "=== MainWindow Constructor START ===";
 
     setObjectName("MainWindow");
-    DevTools::Ui::configureMainWindow(this);
+    resize(DevTools::Ui::mainWindowSize());
     setWindowTitle("DevTools");
     setAcceptDrops(true);
 

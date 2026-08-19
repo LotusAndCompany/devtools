@@ -69,8 +69,7 @@ void api_tool::buildUi()
     method_combo->addItem(tr("DELETE"));
     request_row->addWidget(method_combo);
 
-    url_edit = DevTools::Ui::createLineEdit(request_container);
-    DevTools::Ui::configureTextControl(url_edit);
+    url_edit = new QLineEdit(request_container);
     request_row->addWidget(url_edit);
 
     send_button = new QPushButton(tr("Send"), request_container);
@@ -101,11 +100,9 @@ void api_tool::buildUi()
     auto *auth_layout = new QFormLayout(auth_tab);
     DevTools::Ui::configureFormLayout(auth_layout);
     auto *username_label = new QLabel(tr("Username:"), auth_tab);
-    username_edit = DevTools::Ui::createLineEdit(auth_tab);
-    DevTools::Ui::configureTextControl(username_edit);
+    username_edit = new QLineEdit(auth_tab);
     auto *password_label = new QLabel(tr("Password:"), auth_tab);
-    password_edit = DevTools::Ui::createLineEdit(auth_tab);
-    DevTools::Ui::configureTextControl(password_edit);
+    password_edit = new QLineEdit(auth_tab);
     password_edit->setEchoMode(QLineEdit::Password);
     auth_layout->addRow(username_label, username_edit);
     auth_layout->addRow(password_label, password_edit);
@@ -114,7 +111,7 @@ void api_tool::buildUi()
     auto *body_tab = new QWidget(tab_widget);
     auto *body_layout = new QVBoxLayout(body_tab);
     DevTools::Ui::applyPanelLayout(body_layout);
-    body_edit = DevTools::Ui::createPlainTextEdit(body_tab);
+    body_edit = new QPlainTextEdit(body_tab);
     DevTools::Ui::configureTextControl(body_edit);
     body_layout->addWidget(body_edit);
     tab_widget->addTab(body_tab, tr("Body"));
@@ -185,7 +182,10 @@ void api_tool::setupResponseView()
     responseLayout->addWidget(responseListView);
 
     main_splitter->addWidget(responseWidget);
-    DevTools::Ui::configureRequestOptionsResultSplitter(main_splitter);
+    main_splitter->setHandleWidth(DevTools::Ui::Metrics::SPLITTER_HANDLE_WIDTH);
+    main_splitter->setStretchFactor(0, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
+    main_splitter->setStretchFactor(1, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
+    main_splitter->setStretchFactor(2, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 }
 
 QString formatDataSize(qint64 bytes)

@@ -14,6 +14,7 @@
 #include <QLineEdit>
 #include <QPainter>
 #include <QScrollArea>
+#include <QSizePolicy>
 #include <QStyle>
 #include <QVBoxLayout>
 
@@ -36,13 +37,13 @@ const QString Sidemenu::invalidSidemenuIDReason =
 
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
-    DevTools::Ui::configureSidebar(this);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    setMinimumWidth(DevTools::Ui::Metrics::SIDEMENU_WIDTH);
 
     auto *const verticalLayout = new QVBoxLayout(this);
     DevTools::Ui::applyPanelLayout(verticalLayout);
 
-    m_searchBoxEdit = DevTools::Ui::createLineEdit(this);
-    DevTools::Ui::configureTextControl(m_searchBoxEdit);
+    m_searchBoxEdit = new QLineEdit(this);
     m_searchBoxEdit->setFocusPolicy(Qt::ClickFocus);
     verticalLayout->addWidget(m_searchBoxEdit);
 
