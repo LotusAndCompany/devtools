@@ -2,53 +2,64 @@
 
 [English README](../../README.md)
 
-開発の際に使う様々なツールを一つのアプリケーションにまとめたデスクトップアプリケーションです。今まで適当なWebサービスを使っていた簡単な作業を、一つのツールで完結できます。
+DevToolsは、開発に使うさまざまなツールを、ひとつの使いやすいデスクトップアプリケーションにまとめたものです。複数のWebサービスを使い分けることなく、開発に必要なユーティリティをひとつのアプリケーションで利用できます。
 
 <!-- TODO: スクリーンショットを追加 -->
-<!-- ![DevTools スクリーンショット](docs/images/screenshot.png) -->
+<!-- ![DevToolsのスクリーンショット](docs/images/screenshot.png) -->
 
-## 機能一覧
+## 機能
 
 ### QRコード生成
+
 - **テキスト**: 任意のテキストからQRコードを生成
 - **URL**: WebサイトのリンクをQRコード化
-- **メール**: mailto: 形式のQRコードを生成
-- **電話番号**: tel: 形式のQRコードを生成
+- **メール**: mailto:形式のQRコードを生成
+- **電話番号**: 電話番号用のtel:形式のQRコードを生成
 - **SMS**: SMS送信用のQRコードを生成
-- **位置情報**: 地理座標のQRコードを生成
+- **位置情報**: 位置情報をQRコード化
 
 ### 画像処理
-- **リサイズ**: 画像を指定サイズに拡大・縮小
-- **回転**: 任意の角度で画像を回転
+
+- **リサイズ**: 画像を指定したサイズに拡大・縮小
+- **回転**: 画像を任意の角度で回転
 - **分割**: 画像を複数のパーツに分割
-- **透過**: 特定の色を透明化
+- **透過**: 指定した色を透明化
 
 ### データ変換
-- **JSON**、**YAML**、**TOML** 形式の相互変換
-- 構文検証とフォーマット機能
+
+- **JSON**、**YAML**、**TOML**形式を相互変換
+- 構文検証とフォーマット
 
 ### APIテスト
-- HTTPリクエストの送信（GET, POST, PUT, DELETE など）
-- シンタックスハイライト付きのレスポンス表示
+
+- HTTPリクエスト（GET、POST、PUT、DELETEなど）を送信
+- シンタックスハイライト付きでレスポンスを表示
+
+### Markdownプレビュー
+
+- Markdownを編集し、HTMLプレビューをリアルタイムで確認
 
 ### コマンド実行
+
 - GUIからシェルコマンドを実行
-- リアルタイムで出力を確認
+- コマンドの出力をリアルタイムで表示
 
 ### データベース管理
-- **SQLite**、**MySQL**、**PostgreSQL** データベースへの接続
-- テーブルの閲覧とデータ表示
-- タブ付きインターフェースでSQLクエリを実行
+
+- **SQLite**、**MySQL**、**PostgreSQL**に接続
+- テーブルの閲覧とデータの確認
+- タブ形式のインターフェースでSQLクエリを実行
 
 ### フレーズ生成
+
 - ランダムなフレーズやテキストを生成
 
 ## 必要環境
 
-- **OS**: macOS 15.0以上（Apple Silicon / arm64 専用）
-- **Qt**: 6.9.3（qlementineのためQt 6.8以上が必要）
-- **CMake**: 3.21.1以上
-- **C++ コンパイラ**: C++17 対応
+- **OS**: macOS 15.0以降（Apple Silicon / arm64のみ）
+- **Qt**: 6.9.3（qlementineにはQt 6.8以降が必要）
+- **CMake**: 3.21.1以降
+- **C++コンパイラ**: C++17対応
 
 ## クイックスタート
 
@@ -67,133 +78,35 @@ cmake ..
 # ビルド
 make
 
-# ビルドと実行
+# ビルドして実行
 cmake --build . --target run
 ```
 
-詳細なビルド手順は [BUILD.md](BUILD.md) を参照してください。
+詳しいビルド手順は[BUILD.md](BUILD.md)を参照してください。
 
 ## ドキュメント
 
-- [ビルド手順](BUILD.md) / [Build Instructions](../../BUILD.md)
-- [貢献ガイド](CONTRIBUTING.md) / [Contributing Guide](../../CONTRIBUTING.md)
+### クイックリンク
+
+- [ドキュメント一覧](../README.md)
+- [クイックスタート](../getting-started/quick-start.md)
+- [インストールガイド](../getting-started/installation.md)
+
+### 詳細ドキュメント
+
+- [ユーザーガイド](../user-guide/overview.md) - 各機能の使い方
+- [開発者向けガイド](../development/architecture.md) - コントリビューター向け
 - [APIドキュメント](https://LotusAndCompany.github.io/devtools/)（Doxygen）
 
-## 開発
+### その他のリソース
 
-### 新しいコードを追加する
-
-コンパイル時間の短縮のため、複数の静的ライブラリに分割してコンパイルしています。
-各機能は `features/{機能名}/` 配下に `core/`, `gui/`, `tests/` を持つ自己完結型モジュールとして配置します。アプリ全体の基盤コードは `features/framework/` に置き、`DevTools_core` としてビルドします。
-
-新しい機能を追加する手順は以下の3ステップです。
-
-#### 1. ターゲットを宣言する（ルート `CMakeLists.txt`）
-
-ターゲットの宣言のみをルート `CMakeLists.txt` に追加します。ソースファイルはここには書きません。
-```cmake
-qt_add_library(${PROJECT_NAME}_your_module STATIC)
-```
-
-#### 2. ソースファイルを列挙する（`features/your_module/CMakeLists.txt`）
-
-機能ディレクトリ内の `CMakeLists.txt` で `target_sources()` を使ってソースを列挙します。
-```cmake
-target_sources(${PROJECT_NAME}_your_module PRIVATE
-    core/your_module.h core/your_module.cpp
-    gui/your_module_gui.h gui/your_module_gui.cpp
-)
-```
-
-#### 3. 機能を登録する（`features/CMakeLists.txt`）
-
-`features/CMakeLists.txt` に `add_subdirectory()` を追加します。
-```cmake
-add_subdirectory(your_module)
-```
-
-更に、ルート `CMakeLists.txt` の `MODULE_LIST` に追加します。
-```cmake
-# [モジュール一覧]
-set(MODULE_LIST
-    ${PROJECT_NAME}_core
-    ${PROJECT_NAME}_image_core
-    ${PROJECT_NAME}_image_tools_unified
-    ${PROJECT_NAME}_phrase_generation
-    ${PROJECT_NAME}_http_request
-    ${PROJECT_NAME}_command
-    ${PROJECT_NAME}_data_conversion
-    ${PROJECT_NAME}_qr_code_generation
-    ${PROJECT_NAME}_db_tool
-    # ${PROJECT_NAME}_your_module  # 新しいモジュールをここに追加
-)
-```
-
-#### 依存関係
-
-モジュール間に依存関係がある場合は `add_dependencies()` で定義します。
-例えば画像編集系は `DevTools_image_core` に依存するため以下のように定義しています。
-```cmake
-# add_dependencies(依存元 依存先)
-add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
-```
-
-詳細な手順は [Adding New Tools](../development/adding-new-tools.md) を参照してください。
-
-### テストを追加する
-
-テストソースは `features/{機能名}/tests/` に配置します。共有ヘルパは `tests/` に置かれています。
-`tests/DevToolsTests.cmake` に以下のように追加します。
-```cmake
-DevTools_add_test(test_basic_image_io   # テスト名
-    SOURCES
-    features/image/tests/test_basic_image_io.cpp    # テストコード
-)
-```
-
-デフォルトではテストはビルドしない設定になっています。
-CMakeの設定で `ENABLE_UNIT_TEST` をONにするとテストができるようになります。
-ただし、デバッグ実行時などにもテストコードがビルドされるのでコンパイル時間が伸びます。
-
-### 外部ライブラリを追加する
-
-**手間が掛かります。可能な限りQtで用意されている機能を使いましょう。**
-
-Qt以外の外部ライブラリを利用する場合は[vcpkg](https://vcpkg.io/)を使います。
-Qt Creatorの方でプラグインを有効にしてください。
-macOSではなぜかarm64と判定されないのでCMakeの引数に以下を追加してください。
-`-DVCPKG_TARGET_TRIPLET=arm64-osx`
-
-また、小規模のものであれば `git submodule` で追加しても構いません。
-submoduleの場合は普通にコードを追加すれば動くはずです。
-
-vcpkgを使う場合は、
-```cmake
-# ここをOFFする
-set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
-
-(中略)
-
-# 使いたいパッケージをfind_packageで探す
-find_package(toml11 CONFIG REQUIRED)
-find_package(yaml-cpp CONFIG REQUIRED)
-```
-更に、インクルードディレクトリとライブラリへのリンクを定義してください。
-```cmake
-# インクルードディレクトリ
-target_include_directories(${PROJECT_NAME}_data_conversion PRIVATE
-    ${TOML11_INCLUDE_DIR}
-    ${YAML_CPP_INCLUDE_DIR}
-)
-# リンク
-target_link_libraries(${PROJECT_NAME}_data_conversion PRIVATE
-    ${YAML_CPP_LIBRARIES}
-)
-```
+- [ビルド手順](BUILD.md)
+- [貢献ガイド](CONTRIBUTING.md)
+- [トラブルシューティング](../troubleshooting/common-issues.md) / [FAQ](../troubleshooting/faq.md)
 
 ## 貢献
 
-貢献を歓迎します！詳細は[貢献ガイド](CONTRIBUTING.md)をご覧ください。
+貢献を歓迎します。詳しくは[貢献ガイド](CONTRIBUTING.md)を参照してください。
 
 - バグの報告方法
 - 機能リクエストの方法
@@ -202,15 +115,15 @@ target_link_libraries(${PROJECT_NAME}_data_conversion PRIVATE
 
 ## セキュリティ
 
-セキュリティに関する脆弱性については、[セキュリティポリシー](SECURITY.md)をご覧ください。
+セキュリティ上の脆弱性については、[セキュリティポリシー](SECURITY.md)を参照してください。
 
 ## ライセンス
 
-このプロジェクトはApache License 2.0の下で公開されています。詳細は[LICENSE](../../LICENSE)ファイルをご覧ください。
+このプロジェクトはApache License 2.0でライセンスされています。詳しくは[LICENSE](../../LICENSE)を参照してください。
 
 ### サードパーティライセンス
 
-DevToolsは以下のサードパーティライブラリを使用しています：
+DevToolsは以下のサードパーティライブラリを使用しています。
 
 | ライブラリ | ライセンス |
 |-----------|-----------|
@@ -222,20 +135,13 @@ DevToolsは以下のサードパーティライブラリを使用しています
 | Material Icons | Apache 2.0 |
 | Remix Icon | Apache 2.0 |
 
-## トラブルシューティング
-
-### CMakeでエラーが出たら
-- 構文エラーなどの確認
-- `build/Qt_*/CMakeCache.txt` を消してみる
-- `build/Qt_*` フォルダを消す
-
 ## 謝辞
 
 - [Qt Project](https://www.qt.io/) - 優れたクロスプラットフォームフレームワーク
 - [Qlementine](https://github.com/oclero/qlementine) - Qt Widgets向けのモダンなスタイル
 - [Project Nayuki](https://www.nayuki.io/) - QRコード生成ライブラリ
-- DevToolsのすべてのコントリビューターとユーザーの皆様
+- DevToolsのすべてのコントリビューターとユーザー
 
 ---
 
-Made with by [Lotus&Company Inc.](https://lotusandcompanyinc.com/)
+[Lotus&Company Inc.](https://lotusandcompanyinc.com/)が開発しています。

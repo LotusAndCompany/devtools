@@ -1,9 +1,12 @@
 #include "color_sample.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QPainter>
 
 ColorSample::ColorSample(QWidget *parent) : QFrame(parent), _color(QColorConstants::White)
 {
+    setFixedSize(DevTools::Ui::Metrics::ICON_BUTTON_SIZE, DevTools::Ui::Metrics::ICON_BUTTON_SIZE);
     setFrameStyle(QFrame::Panel | QFrame::Raised);
 }
 

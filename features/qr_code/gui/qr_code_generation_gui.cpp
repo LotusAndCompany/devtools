@@ -1,5 +1,6 @@
 #include "qr_code_generation_gui.h"
 
+#include "features/framework/gui/design_system.h"
 #include "features/qr_code/core/content_generator.h"
 #include "features/qr_code/core/qrcodegen.hpp"
 
@@ -10,18 +11,15 @@
 #include <QDateTimeEdit>
 #include <QFileDialog>
 #include <QFormLayout>
-#include <QFrame>
 #include <QHBoxLayout>
 #include <QImage>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QResizeEvent>
-#include <QSizePolicy>
-#include <QSpacerItem>
-#include <QTextEdit>
 #include <QVBoxLayout>
 #include <QVariantMap>
 
@@ -29,19 +27,7 @@ using qrcodegen::QrCode;
 
 namespace {
 constexpr int CATEGORY_ITEM_COUNT = 9;
-constexpr int DEFAULT_WIDTH = 818;
-constexpr int DEFAULT_HEIGHT = 600;
-constexpr int CATEGORY_MIN_WIDTH = 400;
-constexpr int CATEGORY_MAX_WIDTH = 800;
-constexpr int CATEGORY_MAX_HEIGHT = 600;
-constexpr int PARAMETERS_MIN_WIDTH = 400;
-constexpr int PARAMETERS_MIN_HEIGHT = 200;
-constexpr int QR_LABEL_MIN_SIZE = 350;
-constexpr int PREVIEW_MAX_HEIGHT = 100;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
 constexpr int QR_SCALE = 8;
-const char *const ERROR_LABEL_STYLE = "color: red;";
 } // namespace
 
 QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent) : GuiTool(parent)
@@ -64,16 +50,15 @@ QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent) : GuiTool(parent)
 // NOLINTNEXTLINE(readability-function-size)
 void QRCodeGenerationGUI::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *horizontalLayoutMain = new QHBoxLayout(this);
     auto *verticalLayoutLeft = new QVBoxLayout();
+    DevTools::Ui::applyPageLayout(horizontalLayoutMain);
+    DevTools::Ui::applyPanelLayout(verticalLayoutLeft);
 
     // Category group box
     categoryGroupBox = new QGroupBox(this);
-    categoryGroupBox->setMinimumSize(QSize(CATEGORY_MIN_WIDTH, 0));
-    categoryGroupBox->setMaximumSize(QSize(CATEGORY_MAX_WIDTH, CATEGORY_MAX_HEIGHT));
     auto *categoryLayout = new QVBoxLayout(categoryGroupBox);
+    DevTools::Ui::applyPanelLayout(categoryLayout);
     categoryComboBox = new QComboBox(categoryGroupBox);
     for (int i = 0; i < CATEGORY_ITEM_COUNT; ++i) {
         categoryComboBox->addItem(QString());
@@ -83,16 +68,9 @@ void QRCodeGenerationGUI::buildUi()
 
     // Parameters group box
     parametersGroupBox = new QGroupBox(this);
-    {
-        QSizePolicy parametersPolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        parametersPolicy.setHorizontalStretch(1);
-        parametersPolicy.setVerticalStretch(0);
-        parametersGroupBox->setSizePolicy(parametersPolicy);
-    }
-    parametersGroupBox->setMinimumSize(QSize(PARAMETERS_MIN_WIDTH, PARAMETERS_MIN_HEIGHT));
     auto *paramsLayout = new QVBoxLayout(parametersGroupBox);
+    DevTools::Ui::applyPanelLayout(paramsLayout);
     parameterStackedWidget = new QStackedWidget(parametersGroupBox);
-    parameterStackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     auto *emptyPage = new QWidget();
     parameterStackedWidget->addWidget(emptyPage); // index 0
     parameterStackedWidget->setCurrentIndex(0);
@@ -102,42 +80,49 @@ void QRCodeGenerationGUI::buildUi()
     // Button row
     auto *buttonLayout = new QHBoxLayout();
     generateButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(generateButton);
     clearButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(clearButton);
     buttonLayout->addWidget(generateButton);
     buttonLayout->addWidget(clearButton);
-    buttonLayout->addItem(
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
     verticalLayoutLeft->addLayout(buttonLayout);
 
     horizontalLayoutMain->addLayout(verticalLayoutLeft);
 
     // Right side: output
     auto *verticalLayoutRight = new QVBoxLayout();
+    DevTools::Ui::applyPanelLayout(verticalLayoutRight);
     outputGroupBox = new QGroupBox(this);
     auto *outputLayout = new QVBoxLayout(outputGroupBox);
+    DevTools::Ui::applyPanelLayout(outputLayout);
 
     qrCodeLabel = new QLabel(outputGroupBox);
-    qrCodeLabel->setMinimumSize(QSize(QR_LABEL_MIN_SIZE, QR_LABEL_MIN_SIZE));
-    qrCodeLabel->setFrameShape(QFrame::Box);
-    qrCodeLabel->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configurePreviewSurface(qrCodeLabel);
     outputLayout->addWidget(qrCodeLabel);
 
     auto *outputButtonLayout = new QHBoxLayout();
     copyButton = new QPushButton(outputGroupBox);
+    DevTools::Ui::configureCompactButton(copyButton);
     copyButton->setEnabled(false);
     saveButton = new QPushButton(outputGroupBox);
+    DevTools::Ui::configureCompactButton(saveButton);
     saveButton->setEnabled(false);
     outputButtonLayout->addWidget(copyButton);
     outputButtonLayout->addWidget(saveButton);
+    DevTools::Ui::configureActionBar(outputButtonLayout,
+                                     DevTools::Ui::ActionBarAlignment::Trailing);
     outputLayout->addLayout(outputButtonLayout);
 
-    contentPreviewEdit = new QTextEdit(outputGroupBox);
-    contentPreviewEdit->setMaximumSize(QSize(QWIDGETSIZE_MAX, PREVIEW_MAX_HEIGHT));
+    contentPreviewEdit = new QPlainTextEdit(outputGroupBox);
+    DevTools::Ui::configureCodeEditor(contentPreviewEdit);
+    contentPreviewEdit->setMaximumHeight(DevTools::Ui::Metrics::STATUS_VIEW_HEIGHT);
     contentPreviewEdit->setReadOnly(true);
     outputLayout->addWidget(contentPreviewEdit);
 
     verticalLayoutRight->addWidget(outputGroupBox);
     horizontalLayoutMain->addLayout(verticalLayoutRight);
+    DevTools::Ui::configureEqualLayout(horizontalLayoutMain);
 
     retranslateUi();
 }
@@ -196,23 +181,20 @@ QWidget *QRCodeGenerationGUI::createTextWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *textEdit = new QTextEdit();
+    auto *textEdit = new QPlainTextEdit;
     textEdit->setPlaceholderText(tr("Enter text..."));
-    textEdit->setMinimumHeight(100);
-    textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    DevTools::Ui::configureMultilineField(textEdit);
     layout->addRow(tr("Text:"), textEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    errorLabel->setVisible(false);
+    auto *errorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["text_content_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
     parameterWidgets["text_content"] = textEdit;
-    connect(textEdit, &QTextEdit::textChanged, this,
+    connect(textEdit, &QPlainTextEdit::textChanged, this,
             &QRCodeGenerationGUI::updateGenerateButtonState);
 
     return widget;
@@ -222,18 +204,15 @@ QWidget *QRCodeGenerationGUI::createUrlWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *urlEdit = new QLineEdit();
+    auto *urlEdit = new QLineEdit;
     urlEdit->setPlaceholderText(tr("Enter URL..."));
-    urlEdit->setMinimumWidth(200);
-    urlEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(urlEdit);
     layout->addRow(tr("URL:"), urlEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    errorLabel->setVisible(false);
+    auto *errorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["url_content_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -248,18 +227,15 @@ QWidget *QRCodeGenerationGUI::createEmailWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *emailEdit = new QLineEdit();
+    auto *emailEdit = new QLineEdit;
     emailEdit->setPlaceholderText(tr("Enter email address..."));
-    emailEdit->setMinimumWidth(200);
-    emailEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    errorLabel->setVisible(false);
+    auto *errorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["email_address_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -274,18 +250,15 @@ QWidget *QRCodeGenerationGUI::createPhoneWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *phoneEdit = new QLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
-    phoneEdit->setMinimumWidth(200);
-    phoneEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // エラーラベル作成
-    auto *errorLabel = new QLabel();
-    errorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    errorLabel->setVisible(false);
+    auto *errorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["phone_number_error"] = errorLabel;
     layout->addRow("", errorLabel);
 
@@ -300,31 +273,25 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *phoneEdit = new QLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
-    phoneEdit->setMinimumWidth(200);
-    phoneEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話番号エラーラベル作成
-    auto *phoneErrorLabel = new QLabel();
-    phoneErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    phoneErrorLabel->setVisible(false);
+    auto *phoneErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["sms_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
-    auto *messageEdit = new QTextEdit();
+    auto *messageEdit = new QPlainTextEdit;
     messageEdit->setPlaceholderText(tr("Enter message..."));
-    messageEdit->setMinimumHeight(80);
-    messageEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    DevTools::Ui::configureMultilineField(messageEdit);
     layout->addRow(tr("Message:"), messageEdit);
 
     // メッセージエラーラベル作成
-    auto *messageErrorLabel = new QLabel();
-    messageErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    messageErrorLabel->setVisible(false);
+    auto *messageErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["sms_message_error"] = messageErrorLabel;
     layout->addRow("", messageErrorLabel);
 
@@ -332,7 +299,7 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     parameterWidgets["sms_message"] = messageEdit;
     connect(phoneEdit, &QLineEdit::textChanged, this,
             &QRCodeGenerationGUI::updateGenerateButtonState);
-    connect(messageEdit, &QTextEdit::textChanged, this,
+    connect(messageEdit, &QPlainTextEdit::textChanged, this,
             &QRCodeGenerationGUI::updateGenerateButtonState);
 
     return widget;
@@ -342,31 +309,25 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *ssidEdit = new QLineEdit();
+    auto *ssidEdit = new QLineEdit;
     ssidEdit->setPlaceholderText(tr("Enter SSID..."));
-    ssidEdit->setMinimumWidth(200);
-    ssidEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(ssidEdit);
     layout->addRow(tr("SSID:"), ssidEdit);
 
     // SSIDエラーラベル作成
-    auto *ssidErrorLabel = new QLabel();
-    ssidErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    ssidErrorLabel->setVisible(false);
+    auto *ssidErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["wifi_ssid_error"] = ssidErrorLabel;
     layout->addRow("", ssidErrorLabel);
 
-    auto *passwordEdit = new QLineEdit();
+    auto *passwordEdit = new QLineEdit;
     passwordEdit->setPlaceholderText(tr("Enter password..."));
-    passwordEdit->setMinimumWidth(200);
-    passwordEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(passwordEdit);
     layout->addRow(tr("Password:"), passwordEdit);
 
     // パスワードエラーラベル作成
-    auto *passwordErrorLabel = new QLabel();
-    passwordErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    passwordErrorLabel->setVisible(false);
+    auto *passwordErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["wifi_password_error"] = passwordErrorLabel;
     layout->addRow("", passwordErrorLabel);
 
@@ -397,41 +358,35 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *nameEdit = new QLineEdit();
+    auto *nameEdit = new QLineEdit;
     nameEdit->setPlaceholderText(tr("Enter name..."));
+    DevTools::Ui::configureFormField(nameEdit);
     layout->addRow(tr("Name:"), nameEdit);
 
     // 名前エラーラベル作成
-    auto *nameErrorLabel = new QLabel();
-    nameErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    nameErrorLabel->setVisible(false);
+    auto *nameErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["contact_name_error"] = nameErrorLabel;
     layout->addRow("", nameErrorLabel);
 
-    auto *phoneEdit = new QLineEdit();
+    auto *phoneEdit = new QLineEdit;
     phoneEdit->setPlaceholderText(tr("Enter phone..."));
-    phoneEdit->setMinimumWidth(200);
-    phoneEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話エラーラベル作成
-    auto *phoneErrorLabel = new QLabel();
-    phoneErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    phoneErrorLabel->setVisible(false);
+    auto *phoneErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["contact_phone_error"] = phoneErrorLabel;
     layout->addRow("", phoneErrorLabel);
 
-    auto *emailEdit = new QLineEdit();
+    auto *emailEdit = new QLineEdit;
     emailEdit->setPlaceholderText(tr("Enter email..."));
-    emailEdit->setMinimumWidth(200);
-    emailEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
 
     // メールエラーラベル作成
-    auto *emailErrorLabel = new QLabel();
-    emailErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    emailErrorLabel->setVisible(false);
+    auto *emailErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["contact_email_error"] = emailErrorLabel;
     layout->addRow("", emailErrorLabel);
 
@@ -452,48 +407,39 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *summaryEdit = new QLineEdit();
+    auto *summaryEdit = new QLineEdit;
     summaryEdit->setPlaceholderText(tr("Enter event title..."));
-    summaryEdit->setMinimumWidth(200);
-    summaryEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(summaryEdit);
     layout->addRow(tr("Event:"), summaryEdit);
 
     // イベントタイトルエラーラベル作成
-    auto *summaryErrorLabel = new QLabel();
-    summaryErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    summaryErrorLabel->setVisible(false);
+    auto *summaryErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["cal_summary_error"] = summaryErrorLabel;
     layout->addRow("", summaryErrorLabel);
 
     auto *startEdit = new QDateTimeEdit();
     startEdit->setDisplayFormat("yyyy/MM/dd hh:mm:ss");
     startEdit->setDateTime(QDateTime::currentDateTime());
-    startEdit->setMinimumWidth(200);
-    startEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(startEdit);
     startEdit->setCalendarPopup(true);
     layout->addRow(tr("Start:"), startEdit);
 
     // 開始時刻エラーラベル作成
-    auto *startErrorLabel = new QLabel();
-    startErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    startErrorLabel->setVisible(false);
+    auto *startErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["cal_start_error"] = startErrorLabel;
     layout->addRow("", startErrorLabel);
 
     auto *endEdit = new QDateTimeEdit();
     endEdit->setDisplayFormat("yyyy/MM/dd hh:mm:ss");
     endEdit->setDateTime(QDateTime::currentDateTime().addSecs(3600));
-    endEdit->setMinimumWidth(200);
-    endEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(endEdit);
     endEdit->setCalendarPopup(true);
     layout->addRow(tr("End:"), endEdit);
 
     // 終了時刻エラーラベル作成
-    auto *endErrorLabel = new QLabel();
-    endErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    endErrorLabel->setVisible(false);
+    auto *endErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["cal_end_error"] = endErrorLabel;
     layout->addRow("", endErrorLabel);
 
@@ -514,31 +460,25 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
 {
     auto *widget = new QWidget();
     auto *layout = new QFormLayout(widget);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    DevTools::Ui::configureFormLayout(layout);
 
-    auto *latEdit = new QLineEdit();
+    auto *latEdit = new QLineEdit;
     latEdit->setPlaceholderText(tr("Enter latitude..."));
-    latEdit->setMinimumWidth(200);
-    latEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(latEdit);
     layout->addRow(tr("Latitude:"), latEdit);
 
     // 緯度エラーラベル作成
-    auto *latErrorLabel = new QLabel();
-    latErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    latErrorLabel->setVisible(false);
+    auto *latErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["geo_lat_error"] = latErrorLabel;
     layout->addRow("", latErrorLabel);
 
-    auto *lngEdit = new QLineEdit();
+    auto *lngEdit = new QLineEdit;
     lngEdit->setPlaceholderText(tr("Enter longitude..."));
-    lngEdit->setMinimumWidth(200);
-    lngEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    DevTools::Ui::configureFormField(lngEdit);
     layout->addRow(tr("Longitude:"), lngEdit);
 
     // 経度エラーラベル作成
-    auto *lngErrorLabel = new QLabel();
-    lngErrorLabel->setStyleSheet(ERROR_LABEL_STYLE);
-    lngErrorLabel->setVisible(false);
+    auto *lngErrorLabel = DevTools::Ui::createErrorLabel(widget);
     errorLabels["geo_lng_error"] = lngErrorLabel;
     layout->addRow("", lngErrorLabel);
 
@@ -609,7 +549,7 @@ void QRCodeGenerationGUI::clearAllParameters()
     for (auto *widget : parameterWidgets.values()) {
         if (auto *lineEdit = qobject_cast<QLineEdit *>(widget)) {
             lineEdit->clear();
-        } else if (auto *textEdit = qobject_cast<QTextEdit *>(widget)) {
+        } else if (auto *textEdit = qobject_cast<QPlainTextEdit *>(widget)) {
             textEdit->clear();
         } else if (auto *combo = qobject_cast<QComboBox *>(widget)) {
             combo->setCurrentIndex(0);
@@ -632,7 +572,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
 
     switch (currentType) {
     case QRCodeType::Text: {
-        auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"]);
+        auto const *edit = qobject_cast<QPlainTextEdit *>(parameterWidgets["text_content"]);
         if ((edit == nullptr) || edit->toPlainText().trimmed().isEmpty()) {
             showValidationError("text_content_error", tr("Text cannot be empty"));
             isValid = false;
@@ -678,7 +618,7 @@ bool QRCodeGenerationGUI::validateCurrentType()
 
     case QRCodeType::Sms: {
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
-        auto const *messageEdit = qobject_cast<QTextEdit *>(parameterWidgets["sms_message"]);
+        auto const *messageEdit = qobject_cast<QPlainTextEdit *>(parameterWidgets["sms_message"]);
 
         if ((phoneEdit == nullptr) || phoneEdit->text().trimmed().isEmpty()) {
             showValidationError("sms_phone_error", tr("Phone number cannot be empty"));
@@ -862,7 +802,7 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
 
     switch (currentType) {
     case QRCodeType::Text: {
-        if (auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"])) {
+        if (auto const *edit = qobject_cast<QPlainTextEdit *>(parameterWidgets["text_content"])) {
             params["text"] = edit->toPlainText();
         }
         type = "text";
@@ -897,7 +837,8 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
         if (auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"])) {
             params["number"] = phoneEdit->text();
         }
-        if (auto const *messageEdit = qobject_cast<QTextEdit *>(parameterWidgets["sms_message"])) {
+        if (auto const *messageEdit =
+                qobject_cast<QPlainTextEdit *>(parameterWidgets["sms_message"])) {
             params["text"] = messageEdit->toPlainText();
         }
         type = "sms";
@@ -979,7 +920,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
 
     switch (currentType) {
     case QRCodeType::Text: {
-        if (auto const *edit = qobject_cast<QTextEdit *>(parameterWidgets["text_content"])) {
+        if (auto const *edit = qobject_cast<QPlainTextEdit *>(parameterWidgets["text_content"])) {
             enabled = !edit->toPlainText().trimmed().isEmpty();
         }
         break;
@@ -1008,7 +949,7 @@ void QRCodeGenerationGUI::updateGenerateButtonState()
 
     case QRCodeType::Sms: {
         auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
-        auto const *messageEdit = qobject_cast<QTextEdit *>(parameterWidgets["sms_message"]);
+        auto const *messageEdit = qobject_cast<QPlainTextEdit *>(parameterWidgets["sms_message"]);
         enabled = (phoneEdit != nullptr) && (messageEdit != nullptr) &&
                   !phoneEdit->text().trimmed().isEmpty() &&
                   !messageEdit->toPlainText().trimmed().isEmpty();
@@ -1118,7 +1059,7 @@ void QRCodeGenerationGUI::onGenerateClicked()
         // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
         QSize labelSize = qrCodeLabel->size();
         // マージンを考慮してサイズを少し小さくする
-        labelSize -= QSize(10, 10);
+        labelSize = DevTools::Ui::previewContentSize(labelSize);
 
         QPixmap const pixmap = QPixmap::fromImage(image);
         // アスペクト比を保持しながら、ラベルサイズに収まるようにスケーリング
@@ -1215,7 +1156,7 @@ void QRCodeGenerationGUI::refreshQRCodeDisplay()
     // QLabelのサイズに合わせて画像をリサイズ（アスペクト比を保持）
     QSize labelSize = qrCodeLabel->size();
     // マージンを考慮してサイズを少し小さくする
-    labelSize -= QSize(10, 10);
+    labelSize = DevTools::Ui::previewContentSize(labelSize);
 
     QPixmap const pixmap = QPixmap::fromImage(currentQRImage);
     // アスペクト比を保持しながら、ラベルサイズに収まるようにスケーリング

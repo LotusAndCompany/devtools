@@ -50,7 +50,6 @@ The Data Conversion tool helps developers quickly convert configuration files an
 ```json
 {
   "name": "DevTools",
-  "version": "0.2.0",
   "features": ["qr-code", "image", "data-conversion"],
   "settings": {
     "theme": "dark",
@@ -63,7 +62,6 @@ The Data Conversion tool helps developers quickly convert configuration files an
 
 ```yaml
 name: DevTools
-version: "0.2.0"
 features:
   - qr-code
   - image
@@ -77,7 +75,6 @@ settings:
 
 ```toml
 name = "DevTools"
-version = "0.2.0"
 features = ["qr-code", "image", "data-conversion"]
 
 [settings]

@@ -41,12 +41,12 @@ FetchContent_Declare(qlementine
 set(QLEMENTINE_SANDBOX OFF CACHE BOOL "" FORCE)
 set(QLEMENTINE_SHOWCASE OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(qlementine)
-# Doxygenを探す（1.16以上が必要）
-find_package(Doxygen 1.16)
+# Doxygenを探す（1.18以上が必要）
+find_package(Doxygen 1.18)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
-set(APP_INFO_FILE app_info.autogen.cpp)
+set(APP_INFO_FILE ${CMAKE_CURRENT_BINARY_DIR}/app_info.autogen.cpp)
 
 # プラットフォーム固有の設定
 if(APPLE)
@@ -177,6 +177,7 @@ target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}_core PUBLIC qlementine)
 
 # app_info.autogen.cppを自動生成
+add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # vcpkgのパッケージを探す
@@ -350,6 +351,8 @@ else()
 endif()
 find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15
     HINTS ${CLANG_TIDY_HINTS})
+find_program(CLANG_TIDY_RUNNER_EXECUTABLE NAMES run-clang-tidy run-clang-tidy.py
+    HINTS ${CLANG_TIDY_HINTS})
 
 file(GLOB_RECURSE ALL_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/features/*.cpp
@@ -371,6 +374,9 @@ list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.hpp$")
 # Create LINT_SOURCE_FILES excluding tests (format still applies to tests)
 set(LINT_SOURCE_FILES ${ALL_SOURCE_FILES})
 list(FILTER LINT_SOURCE_FILES EXCLUDE REGEX ".*/tests/.*")
+# clang-tidy uses the compilation database, so analyze translation units only.
+# Headers are checked when included by their corresponding source file.
+list(FILTER LINT_SOURCE_FILES INCLUDE REGEX ".*\\.cpp$")
 
 if(CLANG_FORMAT_EXECUTABLE)
     message(STATUS "Found clang-format: ${CLANG_FORMAT_EXECUTABLE}")
@@ -407,6 +413,7 @@ if(CLANG_TIDY_EXECUTABLE)
 
     # Get macOS SDK path for proper system header resolution (macOS only)
     set(CLANG_TIDY_EXTRA_ARGS "")
+    set(CLANG_TIDY_RUNNER_EXTRA_ARGS "")
     if(APPLE)
         find_program(XCRUN_EXECUTABLE xcrun)
         if(XCRUN_EXECUTABLE)
@@ -417,13 +424,25 @@ if(CLANG_TIDY_EXECUTABLE)
             )
             if(MACOS_SDK_PATH)
                 list(APPEND CLANG_TIDY_EXTRA_ARGS "--extra-arg=-isysroot${MACOS_SDK_PATH}")
+                list(APPEND CLANG_TIDY_RUNNER_EXTRA_ARGS "-extra-arg=-isysroot${MACOS_SDK_PATH}")
             endif()
         endif()
     endif()
 
+    if(CLANG_TIDY_RUNNER_EXECUTABLE)
+        message(STATUS "Using parallel clang-tidy runner: ${CLANG_TIDY_RUNNER_EXECUTABLE}")
+        set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_RUNNER_EXECUTABLE})
+        set(CLANG_TIDY_LINT_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_RUNNER_EXTRA_ARGS})
+    else()
+        set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_EXTRA_ARGS})
+    endif()
+
     add_custom_target(lint
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR}
-            ${CLANG_TIDY_EXTRA_ARGS}
+        COMMAND ${CLANG_TIDY_LINT_EXECUTABLE} ${CLANG_TIDY_LINT_OPTIONS} -p ${CMAKE_BINARY_DIR}
+            -header-filter=^${CMAKE_SOURCE_DIR}/features/.*
+            ${CLANG_TIDY_LINT_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
         VERBATIM
@@ -431,6 +450,7 @@ if(CLANG_TIDY_EXECUTABLE)
 
     add_custom_target(lint-fix
         COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
+            -header-filter=^${CMAKE_SOURCE_DIR}/features/.*
             ${CLANG_TIDY_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"

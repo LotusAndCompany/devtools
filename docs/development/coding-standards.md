@@ -195,11 +195,19 @@ auto* widget = new QWidget(this);  // 'this' takes ownership
 std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
 ```
 
-### UI Files
+### UI Construction
 
-- Use `.ui` files for complex layouts
-- Keep simple layouts in code
+- Build Qt Widgets layouts in C++.
+- Use Qt parent-child ownership for widget lifetime management.
 - Name UI elements descriptively: `saveButton`, `inputLineEdit`
+- Reuse `DevTools::Ui` helpers from `features/framework/gui/design_system.h` for
+  common layouts and widget configuration.
+- Use `DevTools::Ui::Metrics` for shared spacing and size values instead of
+  repeating literals in feature screens.
+- Use the active qlementine palette for common colors. Avoid feature-local
+  style sheets or duplicate theme values.
+- Add a helper to the design system only when the pattern is shared by more
+  than one screen; keep one-off layout decisions in the feature GUI.
 
 ## C++17 Features
 
@@ -351,7 +359,7 @@ brew install pre-commit  # macOS
 # or: pip install pre-commit
 
 # Install hooks
-pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+pre-commit install --install-hooks -t pre-commit -t pre-push
 ```
 
 ### Hooks
@@ -362,7 +370,6 @@ pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
 | pre-commit | trailing-whitespace | Remove trailing whitespace |
 | pre-commit | end-of-file-fixer | Ensure newline at EOF |
 | pre-commit | check-added-large-files | Prevent large file commits |
-| commit-msg | conventional-pre-commit | Validate commit message format |
 | pre-push | cmake-build | Verify build succeeds |
 
 ### Manual Execution
@@ -401,4 +408,4 @@ Code quality checks run automatically on:
 
 - [Architecture](architecture.md) - System architecture
 - [Adding New Tools](adding-new-tools.md) - How to add features
-- [Contributing Guide](../../CONTRIBUTING.md) - Contribution process
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Contribution process

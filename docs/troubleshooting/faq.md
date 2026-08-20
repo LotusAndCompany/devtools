@@ -98,10 +98,10 @@ No, you need to save them manually. Right-click the generated QR code and select
 
 ### How do I change the language?
 
-1. Go to **DevTools > Preferences**
+1. Go to **DevTools > Settings**
 2. Select the **Language** tab
 3. Choose your language
-4. Restart the application
+4. Click **Apply** or **OK**; the UI changes immediately
 
 ### How do I change the theme?
 
@@ -110,11 +110,9 @@ DevTools updates the qlementine widget theme and icon theme from the system colo
 
 ### Can I use keyboard shortcuts?
 
-Yes, common shortcuts:
-- `Cmd + Q`: Quit
-- `Cmd + ,`: Preferences
-- `Cmd + C`: Copy
-- `Cmd + V`: Paste
+The application provides `Ctrl + W` to close the window. Standard macOS
+shortcuts such as `Cmd + C` and `Cmd + V` are handled by the operating system
+and individual widgets.
 
 ### Why does the API test feature not work with HTTPS?
 
@@ -132,7 +130,7 @@ The API testing feature supports HTTPS. If you're having issues:
 3. Make changes
 4. Submit a pull request
 
-See [Contributing Guide](../../CONTRIBUTING.md) for details.
+See [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) for details.
 
 ### How do I add a new tool?
 

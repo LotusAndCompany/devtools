@@ -104,11 +104,9 @@ QString YourTool::process(const QString& input) {
 #include "features/framework/gui/gui_tool.h"
 #include "features/your_tool/core/your_tool.h"
 
-#include <memory>
-
-namespace Ui {
-class YourToolGui;
-}
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 
 namespace devtools {
 
@@ -119,11 +117,18 @@ public:
     explicit YourToolGui(QWidget* parent = nullptr);
     ~YourToolGui() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void onProcessClicked();
 
 private:
-    std::unique_ptr<Ui::YourToolGui> ui_;
+    void retranslateUi();
+
+    QLineEdit* inputEdit_;
+    QPushButton* processButton_;
+    QLabel* outputLabel_;
     YourTool tool_;
 };
 
@@ -136,60 +141,52 @@ private:
 
 ```cpp
 #include "features/your_tool/gui/your_tool_gui.h"
-#include "ui_your_tool_gui.h"
+#include "features/framework/gui/design_system.h"
+
+#include <QVBoxLayout>
 
 namespace devtools {
 
 YourToolGui::YourToolGui(QWidget* parent)
     : GuiTool(parent)
-    , ui_(std::make_unique<Ui::YourToolGui>()) {
-    ui_->setupUi(this);
-    
-    connect(ui_->processButton, &QPushButton::clicked,
+    , inputEdit_(new QLineEdit(this))
+    , processButton_(new QPushButton(this))
+    , outputLabel_(new QLabel(this)) {
+    auto* layout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(layout);
+    DevTools::Ui::configureFormField(inputEdit_);
+    DevTools::Ui::configurePrimaryButton(processButton_);
+    layout->addWidget(inputEdit_);
+    layout->addWidget(processButton_);
+    layout->addWidget(outputLabel_);
+
+    retranslateUi();
+
+    connect(processButton_, &QPushButton::clicked,
             this, &YourToolGui::onProcessClicked);
 }
 
 YourToolGui::~YourToolGui() = default;
 
 void YourToolGui::onProcessClicked() {
-    QString input = ui_->inputEdit->text();
+    QString input = inputEdit_->text();
     QString result = tool_.process(input);
-    ui_->outputLabel->setText(result);
+    outputLabel_->setText(result);
+}
+
+void YourToolGui::changeEvent(QEvent* event) {
+    GuiTool::changeEvent(event);
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+}
+
+void YourToolGui::retranslateUi() {
+    processButton_->setText(tr("Process"));
+    inputEdit_->setPlaceholderText(tr("Enter input..."));
 }
 
 }  // namespace devtools
-```
-
-#### features/your_tool/gui/your_tool_gui.ui
-
-Create a UI file using Qt Designer or manually:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
- <class>YourToolGui</class>
- <widget class="QWidget" name="YourToolGui">
-  <layout class="QVBoxLayout">
-   <item>
-    <widget class="QLineEdit" name="inputEdit">
-     <property name="placeholderText">
-      <string>Enter input...</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="processButton">
-     <property name="text">
-      <string>Process</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="outputLabel"/>
-   </item>
-  </layout>
- </widget>
-</ui>
 ```
 
 ### 5. Register in CMake
@@ -215,7 +212,6 @@ target_sources(${PROJECT_NAME}_your_tool PRIVATE
     core/your_tool.cpp
     gui/your_tool_gui.h
     gui/your_tool_gui.cpp
-    # Optional: gui/your_tool_gui.ui  (AUTOUIC handles .ui files automatically)
 )
 ```
 
@@ -249,31 +245,35 @@ target_link_libraries(${PROJECT_NAME}_your_tool PUBLIC
 Add a new tool ID in `features/framework/core/tool/tool_id_fields.h`:
 
 ```cpp
-enum class ToolId {
-    // ... existing IDs
-    YourTool,
-};
+#define TOOL_ID_FIELDS() \
+    ... \
+    YOUR_TOOL_ID
 ```
+
+`Tool::ID` and `Sidemenu::ID` expand the same macro, keeping the two IDs
+aligned.
 
 ### 7. Register in Side Menu
 
-Update `features/framework/gui/sidemenu.cpp` to include your tool:
+Register the tool in `Sidemenu::Sidemenu()`:
 
 ```cpp
-// In the constructor or initialization
-addToolItem(ToolId::YourTool, tr("Your Tool"), QIcon(":/icons/your_tool.png"));
+registerItem(ID::YOUR_TOOL_ID);
 ```
+
+Add its icon names in `Sidemenu::icon()` and its translated name and
+description in `Tool::translatable()`.
 
 ### 8. Register in Contents Area
 
-Update `features/framework/gui/contents_area.cpp` to create your tool widget:
+Include your GUI and add it to `ContentsArea::changeContent`:
 
 ```cpp
 #include "features/your_tool/gui/your_tool_gui.h"
 
-// In the widget creation method
-case ToolId::YourTool:
-    return new YourToolGui(this);
+case Sidemenu::ID::YOUR_TOOL_ID:
+    content = new YourToolGui(this);
+    break;
 ```
 
 ### 9. Add Translations
@@ -282,7 +282,7 @@ case ToolId::YourTool:
 
 ```cpp
 // Use tr() for user-visible strings
-ui_->processButton->setText(tr("Process"));
+processButton_->setText(tr("Process"));
 ```
 
 #### Update Translation Files
@@ -292,24 +292,16 @@ ui_->processButton->setText(tr("Process"));
 cmake --build build --target update_devtools_translations
 ```
 
-### 10. Add Icons
+### 10. Add an Icon
 
-Place icons in the resource directories:
+Prefer an existing `QIcon::fromTheme` name. If a new asset is needed, add
+matching SVGs under the light and dark icon resource directories, list them in
+`res/light_icons.qrc` and `res/dark_icons.qrc`, and add the fallback names in
+`Sidemenu::icon()`.
 
-```
-res/light/your_tool.png
-res/dark/your_tool.png
-```
-
-Update resource files:
-
-```xml
-<!-- res/light_icons.qrc -->
-<RCC>
-  <qresource prefix="/light">
-    <file>your_tool.png</file>
-  </qresource>
-</RCC>
+```text
+res/light/material/your_tool.svg
+res/dark/material/your_tool.svg
 ```
 
 ### 11. Write Tests
@@ -376,6 +368,7 @@ cmake --build . --target run
 - [ ] Tool ID added to `features/framework/core/tool/tool_id_fields.h`
 - [ ] Registered in `features/framework/gui/sidemenu.cpp`
 - [ ] Registered in `features/framework/gui/contents_area.cpp`
+- [ ] Reused `DevTools::Ui` helpers and `DevTools::Ui::Metrics` where applicable
 - [ ] Strings marked for translation
 - [ ] Translations added
 - [ ] Icons added

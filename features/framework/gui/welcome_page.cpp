@@ -1,5 +1,7 @@
 #include "welcome_page.h"
 
+#include "design_system.h"
+
 #include <QEvent>
 #include <QFont>
 #include <QLabel>
@@ -11,16 +13,17 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
     setWindowTitle(tr("DevTools - Welcome"));
 
     auto *const layout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(layout);
     layout->addStretch();
 
     auto *const logoLabel = new QLabel(this);
     logoLabel->setPixmap(QPixmap(":/logo/dev-tools_logo.png"));
-    logoLabel->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configureCenteredLabel(logoLabel);
     layout->addWidget(logoLabel);
 
     m_messageLabel = new QLabel(this);
     QFont font = m_messageLabel->font();
-    font.setPointSize(24);
+    font.setPointSize(DevTools::Ui::Metrics::HERO_POINT_SIZE);
     m_messageLabel->setFont(font);
     m_messageLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(m_messageLabel);

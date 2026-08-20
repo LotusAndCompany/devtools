@@ -3,6 +3,7 @@
 #include "features/framework/core/enum_cast.h"
 #include "features/framework/core/exception/invalid_argument_exception.h"
 #include "features/framework/core/exception/under_development_exception.h"
+#include "features/framework/gui/design_system.h"
 #include "sidemenu_item.h"
 
 #include <QAbstractButton>
@@ -36,32 +37,26 @@ const QString Sidemenu::invalidSidemenuIDReason =
 
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
-    const QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    setSizePolicy(sizePolicy);
-    setMinimumWidth(240);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    setMinimumWidth(DevTools::Ui::Metrics::SIDEMENU_WIDTH);
 
     auto *const verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setSpacing(4);
-    verticalLayout->setContentsMargins(6, 6, 6, 6);
+    DevTools::Ui::applyPanelLayout(verticalLayout);
 
     m_searchBoxEdit = new QLineEdit(this);
     m_searchBoxEdit->setFocusPolicy(Qt::ClickFocus);
     verticalLayout->addWidget(m_searchBoxEdit);
 
     auto *const line = new QFrame(this);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
+    DevTools::Ui::configureDivider(line);
     verticalLayout->addWidget(line);
 
     auto *const scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    // QScrollArea自体の枠線はqlementine環境下では実質無効ですが、念のためNoFrameにしておきます
-    scrollArea->setFrameShape(QFrame::NoFrame);
+    DevTools::Ui::configureScrollView(scrollArea);
 
     auto *const scrollAreaWidgetContents = new QWidget();
     m_scrollAreaLayout = new QVBoxLayout(scrollAreaWidgetContents);
-    m_scrollAreaLayout->setSpacing(0);
-    m_scrollAreaLayout->setContentsMargins(0, 0, 0, 0);
+    DevTools::Ui::applyFullBleedLayout(m_scrollAreaLayout);
     scrollArea->setWidget(scrollAreaWidgetContents);
     verticalLayout->addWidget(scrollArea);
 

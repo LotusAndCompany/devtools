@@ -1,19 +1,15 @@
 #include "image_view.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileInfo>
-#include <QFont>
-#include <QFrame>
-#include <QGraphicsOpacityEffect>
 #include <QGridLayout>
-#include <QIcon>
 #include <QImageReader>
 #include <QLabel>
 #include <QMimeData>
-#include <QResizeEvent>
 #include <QScrollArea>
-#include <QSizePolicy>
 #include <QToolButton>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -49,23 +45,16 @@ QString droppedImagePath(const QMimeData *mimeData)
 void buildScrollArea(Ui::BasicImageView *ui, QWidget *parent)
 {
     ui->scrollArea = new QScrollArea(parent);
-    ui->scrollArea->setGeometry(0, 0, 400, 300);
-    ui->scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->scrollArea->setFrameShape(QFrame::NoFrame);
-    ui->scrollArea->setWidgetResizable(true);
-    ui->scrollArea->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configureScrollView(ui->scrollArea);
 
     ui->scrollAreaWidgetContents = new QWidget();
-    ui->scrollAreaWidgetContents->setGeometry(0, 0, 400, 300);
-    ui->scrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    DevTools::Ui::configureExpandingSurface(ui->scrollAreaWidgetContents);
 
     auto *gridLayout = new QGridLayout(ui->scrollAreaWidgetContents);
-    gridLayout->setContentsMargins(0, 0, 0, 0);
-    gridLayout->setSpacing(0);
+    DevTools::Ui::applyFullBleedLayout(gridLayout);
 
     ui->image = new QLabel(BasicImageView::tr("No Image"), ui->scrollAreaWidgetContents);
-    ui->image->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->image->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configureImageSurface(ui->image);
     gridLayout->addWidget(ui->image, 0, 0);
 
     ui->scrollArea->setWidget(ui->scrollAreaWidgetContents);
@@ -74,25 +63,7 @@ void buildScrollArea(Ui::BasicImageView *ui, QWidget *parent)
 QToolButton *buildZoomButton(QWidget *parent, const QString &iconName, const QString &toolTip)
 {
     auto *button = new QToolButton(parent);
-    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    button->setMinimumSize(32, 32);
-    button->setMaximumSize(32, 32);
-    button->setToolTip(toolTip);
-    button->setAutoFillBackground(true);
-
-    const QIcon icon = QIcon::fromTheme(iconName);
-    if (icon.isNull()) {
-        // NOTE: テーマアイコンが解決できない環境では、ボタンが空にならないよう toolTip を表示する
-        button->setText(toolTip);
-    } else {
-        button->setIcon(icon);
-        button->setIconSize(QSize(24, 24));
-    }
-
-    // NOTE: 少しだけ透明にする
-    auto *opacityEffect = new QGraphicsOpacityEffect(button);
-    opacityEffect->setOpacity(0.8);
-    button->setGraphicsEffect(opacityEffect);
+    DevTools::Ui::configureZoomButton(button, iconName, toolTip);
 
     return button;
 }
@@ -100,22 +71,18 @@ QToolButton *buildZoomButton(QWidget *parent, const QString &iconName, const QSt
 void buildScalingUI(Ui::BasicImageView *ui, QWidget *parent)
 {
     ui->scalingUI = new QWidget(parent);
-    ui->scalingUI->setGeometry(347, 180, 51, 111);
 
     auto *layout = new QVBoxLayout(ui->scalingUI);
-    layout->setContentsMargins(8, 8, 8, 8);
+    DevTools::Ui::applyPanelLayout(layout);
 
     ui->zoomInButton = buildZoomButton(ui->scalingUI, "zoom_in", BasicImageView::tr("Zoom In"));
     layout->addWidget(ui->zoomInButton);
 
     ui->zoomOutButton = buildZoomButton(ui->scalingUI, "zoom_out", BasicImageView::tr("Zoom Out"));
-    QFont zoomOutFont;
-    zoomOutFont.setPointSize(13);
-    ui->zoomOutButton->setFont(zoomOutFont);
     layout->addWidget(ui->zoomOutButton);
 
     ui->scaleLabel = new QLabel("x1", ui->scalingUI);
-    ui->scaleLabel->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configureCenteredLabel(ui->scaleLabel);
     layout->addWidget(ui->scaleLabel);
 }
 } // namespace
@@ -123,11 +90,13 @@ void buildScalingUI(Ui::BasicImageView *ui, QWidget *parent)
 // TODO: ScrollAreaをドラッグで操作できるようにする
 BasicImageView::BasicImageView(QWidget *parent) : QWidget(parent), ui(new Ui::BasicImageView)
 {
-    resize(400, 300);
-    setMinimumSize(64, 128);
-
     buildScrollArea(ui, this);
     buildScalingUI(ui, this);
+
+    auto *layout = new QGridLayout(this);
+    DevTools::Ui::applyFullBleedLayout(layout);
+    layout->addWidget(ui->scrollArea, 0, 0);
+    DevTools::Ui::addBottomRightOverlay(layout, ui->scalingUI);
 
     ui->scalingUI->raise();
     setAcceptDrops(true);
@@ -151,14 +120,6 @@ void BasicImageView::setPixmap(const QPixmap &pixmap, bool reset)
     } else {
         updateScale(scale);
     }
-}
-
-void BasicImageView::resizeEvent(QResizeEvent *event)
-{
-    ui->scrollArea->resize(event->size());
-    const auto s = event->size() - ui->scalingUI->size();
-    ui->scalingUI->move(s.width(), s.height());
-    event->accept();
 }
 
 void BasicImageView::keyPressEvent(QKeyEvent *event)

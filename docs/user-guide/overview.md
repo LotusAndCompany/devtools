@@ -14,31 +14,19 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [Image Processing](image-processing.md) | Resize, rotate, split images, and add transparency |
 | [Data Conversion](data-conversion.md) | Convert between JSON, YAML, and TOML formats |
 | [API Testing](api-testing.md) | Send HTTP requests and view responses |
+| [Markdown Preview](markdown-preview.md) | Edit Markdown with real-time HTML preview |
 | [Command Execution](command-execution.md) | Run shell commands from the GUI |
 | [Phrase Generation](phrase-generation.md) | Generate random text and phrases |
 | [Database Management](database-management.md) | Connect to databases and execute SQL queries |
-| [Markdown Preview](markdown-preview.md) | Edit Markdown with real-time HTML preview |
-| [Regex Tester](regex-tester.md) | Build and test regular expressions interactively |
-| [Color Converter](color-converter.md) | Convert colors between HEX, RGB, HSL, HSV, and CMYK |
 
 ## User Interface
 
 ### Layout
 
-```
-+------------------+--------------------------------+
-|                  |                                |
-|   Side Menu      |      Main Content Area         |
-|                  |                                |
-|   - QR Code      |   (Selected tool interface)    |
-|   - Image        |                                |
-|   - Data Conv.   |                                |
-|   - API          |                                |
-|   - Command      |                                |
-|   - Phrase       |                                |
-|   - DB           |                                |
-|                  |                                |
-+------------------+--------------------------------+
+```mermaid
+flowchart LR
+    side["Side Menu<br/>• Image<br/>• Phrase<br/>• Command<br/>• API<br/>• Data Conversion<br/>• QR Code<br/>• Markdown Preview<br/>• DB"]
+    side --> content["Main Content Area<br/>(Selected tool interface)"]
 ```
 
 ### Side Menu
@@ -57,61 +45,36 @@ The main content area displays the selected tool's interface. Each tool has its 
 
 | Menu | Contents |
 |------|----------|
-| **DevTools** | About, Preferences, Quit |
-| **File** | Open, Save, Export options |
-| **Edit** | Copy, Paste, Select All |
-| **View** | Theme selection, Window options |
-| **Help** | Documentation links |
+| **File** | Close Window, Show Main Window |
+| **DevTools** | About DevTools, Settings |
 
-## Preferences
+## Settings
 
-Access preferences via **DevTools > Preferences** or `Cmd + ,`.
+Open settings via **DevTools > Settings**.
 
 ### General Settings
 
 - **Language**: Switch between English and Japanese
-- **Theme**: Light or Dark mode
+- **Show sidebar on startup**: Show or hide the side menu when the app starts
+- **Open last used tool on startup**: Restore the last selected tool
 
-### Tool-Specific Settings
+### Window Settings
 
-Some tools have additional configuration options accessible within their interface.
+- **Always on top**: Keep the main window above other windows
+- **Remember window size**: Restore the previous window size
+- **Remember window position**: Restore the previous window position
 
 ## Keyboard Shortcuts
 
-### Global Shortcuts
-
 | Shortcut | Action |
 |----------|--------|
-| `Cmd + Q` | Quit DevTools |
-| `Cmd + ,` | Open Preferences |
-| `Cmd + W` | Close Window |
-| `Cmd + M` | Minimize Window |
-
-### Common Actions
-
-| Shortcut | Action |
-|----------|--------|
-| `Cmd + C` | Copy |
-| `Cmd + V` | Paste |
-| `Cmd + A` | Select All |
-| `Cmd + S` | Save (context-dependent) |
-| `Cmd + O` | Open File (context-dependent) |
+| `Ctrl + W` | Close Window |
 
 ## Themes
 
-DevTools supports two themes:
-
-### Light Theme
-- Clean, bright interface
-- Best for well-lit environments
-- Default theme
-
-### Dark Theme
-- Dark background with light text
-- Reduces eye strain in low-light conditions
-- Easier on the eyes during extended use
-
-To change themes: **View > Theme > Light/Dark**
+The application follows the macOS system appearance. When macOS switches between
+light and dark mode, DevTools updates the qlementine widget theme and icon theme
+automatically.
 
 ## Language Support
 
@@ -121,10 +84,10 @@ DevTools is available in:
 - **Japanese** (日本語)
 
 To change language:
-1. Open **Preferences**
+1. Open **DevTools > Settings**
 2. Select the **Language** tab
 3. Choose your language
-4. Restart the application
+4. Click **Apply** or **OK**; the UI changes immediately
 
 ## File Formats
 

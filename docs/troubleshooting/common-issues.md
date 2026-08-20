@@ -52,24 +52,6 @@ Could not find a package configuration file provided by "yaml-cpp"
 
 ### Compilation Errors
 
-#### UI File Not Found
-
-**Error:**
-```
-The user interface file "*.ui" could not be found
-```
-
-**Solution:**
-
-Add path to `CMAKE_AUTOUIC_SEARCH_PATHS` in CMakeLists.txt:
-
-```cmake
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    features/image/gui/basic/
-    features/your_module/gui/
-)
-```
-
 #### Linker Errors
 
 **Error:**
@@ -263,7 +245,7 @@ Cannot be opened because the developer cannot be verified
 **Solutions:**
 
 1. Change the macOS appearance and verify DevTools follows the system light/dark mode.
-2. Restart DevTools after a system appearance change if the app was already running.
+2. If the appearance does not update, restart DevTools and try again.
 3. Confirm the theme resources exist in the build: `:/themes/light.json` and
    `:/themes/dark.json` are registered through `res/application.qrc`.
 4. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
@@ -276,8 +258,8 @@ Cannot be opened because the developer cannot be verified
 
 **Solutions:**
 
-1. Restart application after language change
-2. Check all windows are closed before restart
+1. Click **Apply** or **OK** after changing the language in **DevTools > Settings**.
+2. If the UI does not update, close and reopen the application.
 
 ## Installation Issues
 
@@ -355,4 +337,4 @@ If your issue is not listed:
 
 - [Installation](../getting-started/installation.md) - Setup guide
 - [FAQ](faq.md) - Frequently asked questions
-- [Build Instructions](../../BUILD.md) - Detailed build guide
+- [Build Instructions](https://github.com/LotusAndCompany/devtools/blob/main/BUILD.md) - Detailed build guide

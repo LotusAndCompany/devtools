@@ -5,16 +5,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-import re
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SHARED_RULE_DIR = REPO_ROOT / ".agents" / "rules"
 CLAUDE_RULE_DIR = REPO_ROOT / ".claude" / "rules"
-GEMINI_FILE = REPO_ROOT / "GEMINI.md"
-
-BEGIN_GEMINI_IMPORTS = "<!-- BEGIN GENERATED AGENT RULE IMPORTS -->"
-END_GEMINI_IMPORTS = "<!-- END GENERATED AGENT RULE IMPORTS -->"
 
 
 @dataclass(frozen=True)
@@ -85,30 +80,6 @@ def sync_claude(rule: SharedRule) -> None:
     write_file(CLAUDE_RULE_DIR / f"{rule.slug}.md", content)
 
 
-def sync_gemini(rules: list[SharedRule]) -> None:
-    imports = "\n".join(f"@.agents/rules/{rule.source_path.name}" for rule in rules)
-    generated_block = (
-        f"{BEGIN_GEMINI_IMPORTS}\n"
-        f"{imports}\n"
-        f"{END_GEMINI_IMPORTS}"
-    )
-
-    text = GEMINI_FILE.read_text(encoding="utf-8")
-    pattern = re.compile(
-        rf"{re.escape(BEGIN_GEMINI_IMPORTS)}.*?{re.escape(END_GEMINI_IMPORTS)}",
-        re.DOTALL,
-    )
-    if pattern.search(text):
-        text = pattern.sub(generated_block, text)
-    else:
-        heading = "## Shared Path-Scoped Rules"
-        if heading not in text:
-            raise ValueError(f"{GEMINI_FILE} is missing the shared rules section")
-        text = text.replace(heading, f"{heading}\n\n{generated_block}", 1)
-
-    write_file(GEMINI_FILE, text)
-
-
 def write_file(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -124,7 +95,6 @@ def main() -> None:
 
     for rule in rules:
         sync_claude(rule)
-    sync_gemini(rules)
 
     print(f"Synchronized {len(rules)} shared agent rules")
 

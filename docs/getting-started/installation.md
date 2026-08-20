@@ -18,7 +18,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 ### Optional Tools
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Doxygen | - | API documentation generation |
+| Doxygen | 1.18+ | API documentation generation |
 | Qt Creator | 18.0.1+ | IDE with Qt integration |
 | Ninja | 1.12.1+ | Fast build tool |
 | Qt Installer Framework | 4.10 | Application packaging |
@@ -74,7 +74,7 @@ vcpkg version
 
 ### 3. Install Additional Tools
 
-#### Doxygen (Optional, 1.16+)
+#### Doxygen (Optional, 1.18+)
 
 ```bash
 brew install doxygen
@@ -198,7 +198,7 @@ ctest --output-on-failure
 
 - [Quick Start Guide](quick-start.md) - Learn the basics
 - [Architecture Overview](../development/architecture.md) - Understand the codebase
-- [Contributing Guide](../../CONTRIBUTING.md) - Start contributing
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Start contributing
 
 ## Troubleshooting
 

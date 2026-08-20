@@ -26,12 +26,10 @@ Learn how to use each feature:
 - [Image Processing](user-guide/image-processing.md) - Resize, rotate, split, and add transparency
 - [Data Conversion](user-guide/data-conversion.md) - Convert between JSON, YAML, and TOML
 - [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
+- [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
 - [Command Execution](user-guide/command-execution.md) - Run shell commands from the GUI
 - [Phrase Generation](user-guide/phrase-generation.md) - Generate random text and phrases
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
-- [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
-- [Regex Tester](user-guide/regex-tester.md) - Build and test regular expressions interactively
-- [Color Converter](user-guide/color-converter.md) - Convert colors between HEX, RGB, HSL, HSV, and CMYK
 
 ### Development
 
@@ -47,7 +45,7 @@ For contributors and developers:
 
 ### API Reference
 
-- [API Documentation](api/README.md) - Overview and links to Doxygen-generated docs
+- [Doxygen API Reference](https://LotusAndCompany.github.io/devtools/)
 
 ### Troubleshooting
 
@@ -58,7 +56,7 @@ For contributors and developers:
 
 - [GitHub Repository](https://github.com/LotusAndCompany/devtools)
 - [Issue Tracker](https://github.com/LotusAndCompany/devtools/issues)
-- [Contributing Guide](../CONTRIBUTING.md)
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md)
 
 ## License
 

@@ -55,6 +55,15 @@ DevTools_add_test(test_logging
     SOURCES
     features/framework/tests/test_logging.cpp
 )
+DevTools_add_test(test_design_system
+    SOURCES
+    features/framework/tests/test_design_system.cpp
+)
+
+DevTools_add_test(test_command
+    SOURCES
+    features/command/tests/test_command.cpp
+)
 
 # core/exception
 DevTools_add_test(test_common_exception

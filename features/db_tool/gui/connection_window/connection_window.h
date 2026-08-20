@@ -38,6 +38,7 @@ private:
     void createNewConnect();
     void browseForDatabase();
 
+    QLabel *form_heading{nullptr};
     QLabel *dbTypeLabel{nullptr};
     QComboBox *dbTypeComboBox{nullptr};
     QLabel *hostNameLabel{nullptr};

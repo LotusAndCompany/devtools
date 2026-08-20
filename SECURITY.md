@@ -4,12 +4,14 @@
 
 ## Supported Versions
 
-The following versions of DevTools are currently supported with security updates:
+Security updates are provided for supported DevTools releases. Check the
+[GitHub Releases](https://github.com/LotusAndCompany/devtools/releases) page
+for the current support status.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.2.x   | :white_check_mark: |
-| < 0.2   | :x:                |
+**Version Support Policy:**
+- The latest stable release receives security updates.
+- Versions marked as pre-release or draft on GitHub Releases are not supported.
+- Once a new stable release is published, the previous release may receive critical security fixes for 30 days.
 
 ## Reporting a Vulnerability
 

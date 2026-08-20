@@ -8,10 +8,9 @@
 
 class QComboBox;
 class QHBoxLayout;
+class QPlainTextEdit;
 class QPushButton;
 class QSplitter;
-class QTextBrowser;
-class QTextEdit;
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {
@@ -37,9 +36,6 @@ public:
     DataConversionGUI &operator=(const DataConversionGUI &) = delete;
     DataConversionGUI(DataConversionGUI &&) = delete;
     DataConversionGUI &operator=(DataConversionGUI &&) = delete;
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void onInputTextChanged();
@@ -71,9 +67,9 @@ private:
     QHBoxLayout *output_action_button_layout = nullptr;
 
     /// テキスト入力UI
-    QTextEdit *inputTextEdit = nullptr;
+    QPlainTextEdit *inputTextEdit = nullptr;
     /// 入力側のエラー・警告メッセージ表示UI
-    QTextBrowser *inputMessageTextView = nullptr;
+    QPlainTextEdit *inputMessageTextView = nullptr;
     /// 貼り付けボタン
     QPushButton *pasteButton = nullptr;
     /// 読み込みボタン
@@ -82,9 +78,9 @@ private:
     QPushButton *clearButton = nullptr;
 
     /// テキスト表示UI
-    QTextBrowser *outputTextView = nullptr;
+    QPlainTextEdit *outputTextView = nullptr;
     /// 出力側のエラー・警告メッセージ表示UI
-    QTextBrowser *outputMessageTextView = nullptr;
+    QPlainTextEdit *outputMessageTextView = nullptr;
     /// 出力フォーマット選択UI
     QComboBox *formatSelector = nullptr;
     /// インデント選択UI
