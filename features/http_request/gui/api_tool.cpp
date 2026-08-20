@@ -63,7 +63,10 @@ void api_tool::buildUi()
     DevTools::Ui::applyInlineLayout(request_row);
 
     method_combo = new QComboBox(request_container);
-    method_combo->addItems({tr("GET"), tr("POST"), tr("PUT"), tr("DELETE")});
+    method_combo->addItem(tr("GET"), QStringLiteral("GET"));
+    method_combo->addItem(tr("POST"), QStringLiteral("POST"));
+    method_combo->addItem(tr("PUT"), QStringLiteral("PUT"));
+    method_combo->addItem(tr("DELETE"), QStringLiteral("DELETE"));
     request_row->addWidget(method_combo);
 
     url_edit = new QLineEdit(request_container);
@@ -134,7 +137,7 @@ void api_tool::handleSendButtonClick()
     QString const username = username_edit->text();
     QString const password = password_edit->text();
 
-    QString const selectedMethod = method_combo->currentText();
+    QString const selectedMethod = method_combo->currentData().toString();
     QString const url = url_edit->text();
     QNetworkRequest request((QUrl(url)));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
