@@ -32,3 +32,9 @@ paths:
 - Pass `QString`, `QStringList`, `QVariant`, `QByteArray`, `QImage`, and
   `QPixmap` by const reference unless moving or storing is intentional.
 - Wrap user-visible UI text with `tr()`.
+- Reuse `DevTools::Ui` helpers and `DevTools::Ui::Metrics` for shared layout,
+  widget configuration, spacing, and sizing.
+- Keep common widget styling centralized in `features/framework/gui/design_system.*`
+  and use qlementine theme resources for colors; do not duplicate them in
+  feature screens. Extend the design system only for a pattern reused by
+  multiple screens.

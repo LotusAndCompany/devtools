@@ -93,6 +93,7 @@ Other feature modules (`DevTools_http_request`, `DevTools_command`,
 - **Main Window**: `features/framework/gui/main_window.cpp`
 - **Navigation**: `features/framework/gui/sidemenu.cpp`, `features/framework/gui/contents_area.cpp`
 - **Dialogs**: `features/framework/gui/menubar/about_devtools_dialog.cpp`, `settings_dialog.cpp`
+- **Shared UI Design System**: `features/framework/gui/design_system.h`, `design_system.cpp`
 - **Tool Base**: `features/framework/gui/gui_tool.cpp`, `features/framework/core/tool/tool.cpp`
 - **Exceptions**: `features/framework/core/exception/` (custom exception classes)
 
@@ -213,6 +214,9 @@ DevTools uses qlementine as the application-wide `QStyle`:
 Theme JSON files live in `res/themes/` and are registered in `res/application.qrc`. When
 adding or renaming a theme, keep the `meta.name` value unique because qlementine's
 `ThemeManager` uses it as the theme identifier.
+
+Feature GUIs use `DevTools::Ui` for shared layout, widget configuration, and metrics.
+Colors, borders, and text roles come from the active qlementine style.
 
 ## Build System
 

@@ -141,6 +141,7 @@ private:
 
 ```cpp
 #include "features/your_tool/gui/your_tool_gui.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QVBoxLayout>
 
@@ -152,6 +153,9 @@ YourToolGui::YourToolGui(QWidget* parent)
     , processButton_(new QPushButton(this))
     , outputLabel_(new QLabel(this)) {
     auto* layout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(layout);
+    DevTools::Ui::configureFormField(inputEdit_);
+    DevTools::Ui::configurePrimaryButton(processButton_);
     layout->addWidget(inputEdit_);
     layout->addWidget(processButton_);
     layout->addWidget(outputLabel_);
@@ -364,6 +368,7 @@ cmake --build . --target run
 - [ ] Tool ID added to `features/framework/core/tool/tool_id_fields.h`
 - [ ] Registered in `features/framework/gui/sidemenu.cpp`
 - [ ] Registered in `features/framework/gui/contents_area.cpp`
+- [ ] Reused `DevTools::Ui` helpers and `DevTools::Ui::Metrics` where applicable
 - [ ] Strings marked for translation
 - [ ] Translations added
 - [ ] Icons added
