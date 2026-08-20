@@ -63,10 +63,7 @@ void api_tool::buildUi()
     DevTools::Ui::applyInlineLayout(request_row);
 
     method_combo = new QComboBox(request_container);
-    method_combo->addItem(tr("GET"));
-    method_combo->addItem(tr("POST"));
-    method_combo->addItem(tr("PUT"));
-    method_combo->addItem(tr("DELETE"));
+    method_combo->addItems({tr("GET"), tr("POST"), tr("PUT"), tr("DELETE")});
     request_row->addWidget(method_combo);
 
     url_edit = new QLineEdit(request_container);
@@ -99,13 +96,11 @@ void api_tool::buildUi()
     auto *auth_tab = new QWidget(tab_widget);
     auto *auth_layout = new QFormLayout(auth_tab);
     DevTools::Ui::configureFormLayout(auth_layout);
-    auto *username_label = new QLabel(tr("Username:"), auth_tab);
     username_edit = new QLineEdit(auth_tab);
-    auto *password_label = new QLabel(tr("Password:"), auth_tab);
     password_edit = new QLineEdit(auth_tab);
     password_edit->setEchoMode(QLineEdit::Password);
-    auth_layout->addRow(username_label, username_edit);
-    auth_layout->addRow(password_label, password_edit);
+    auth_layout->addRow(tr("Username:"), username_edit);
+    auth_layout->addRow(tr("Password:"), password_edit);
     tab_widget->addTab(auth_tab, tr("Authentication"));
 
     auto *body_tab = new QWidget(tab_widget);
