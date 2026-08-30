@@ -100,6 +100,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_core STATIC)
     qt_add_library(${PROJECT_NAME}_http_request STATIC)
     qt_add_library(${PROJECT_NAME}_command STATIC)
+    qt_add_library(${PROJECT_NAME}_regex_tester STATIC)
     qt_add_library(${PROJECT_NAME}_phrase_generation STATIC)
     qt_add_library(${PROJECT_NAME}_image_core STATIC)
     qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC)
@@ -208,6 +209,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_regex_tester
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_db_tool

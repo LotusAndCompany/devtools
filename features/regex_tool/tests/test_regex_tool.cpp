@@ -1,4 +1,4 @@
-#include "core/regex_tool/regex_tool.h"
+#include "features/regex_tool/core/regex_tool.h"
 
 #include <QtTest>
 
@@ -52,6 +52,11 @@ void TestRegexTool::testReplace_data()
     QTest::newRow("simple replace") << "abc" << "abc abc" << "xyz" << "xyz xyz";
     QTest::newRow("no match") << "123" << "abc abc" << "xyz" << "abc abc";
     QTest::newRow("empty pattern") << "" << "abc abc" << "xyz" << "abc abc";
+    QTest::newRow("numbered capture group replacement")
+        << R"((\w+)@(\w+))" << "alice@example" << "$2/$1" << "example/alice";
+    QTest::newRow("named capture group replacement")
+        << R"((?<user>\w+)@(?<domain>\w+))" << "alice@example" << "$<domain>/$<user>"
+        << "example/alice";
 }
 
 void TestRegexTool::testReplace()

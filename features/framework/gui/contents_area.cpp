@@ -9,6 +9,7 @@
 #include "features/image/gui/basic/image_tools_unified_gui.h"
 #include "features/phrase_generation/gui/phrase_generation.h"
 #include "features/qr_code/gui/qr_code_generation_gui.h"
+#include "features/regex_tool/gui/regex_tester_gui.h"
 
 #include <QLabel>
 #include <QVBoxLayout>

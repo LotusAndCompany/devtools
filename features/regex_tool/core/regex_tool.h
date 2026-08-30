@@ -1,5 +1,5 @@
-#ifndef DEVTOOLS_CORE_REGEX_TOOL_REGEX_TOOL_H
-#define DEVTOOLS_CORE_REGEX_TOOL_REGEX_TOOL_H
+#ifndef REGEX_TOOL_H
+#define REGEX_TOOL_H
 
 #include <QRegularExpression>
 #include <QString>
@@ -59,4 +59,4 @@ public:
 
 } // namespace devtools
 
-#endif // DEVTOOLS_CORE_REGEX_TOOL_REGEX_TOOL_H
+#endif // REGEX_TOOL_H
