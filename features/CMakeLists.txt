@@ -5,6 +5,7 @@
 add_subdirectory(framework)
 add_subdirectory(data_conversion)
 add_subdirectory(qr_code)
+add_subdirectory(markdown_preview)
 add_subdirectory(image)
 add_subdirectory(db_tool)
 add_subdirectory(http_request)

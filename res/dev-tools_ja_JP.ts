@@ -274,7 +274,7 @@
     </message>
     <message>
         <source>Container</source>
-        <translation type="unfinished"></translation>
+        <translation>コンテナ</translation>
     </message>
 </context>
 <context>
@@ -697,6 +697,69 @@
     </message>
 </context>
 <context>
+    <name>MarkdownPreviewGUI</name>
+    <message>
+        <source>Markdown Preview</source>
+        <translation>Markdown プレビュー</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>開く</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <source>Export HTML</source>
+        <translation>HTML エクスポート</translation>
+    </message>
+    <message>
+        <source>Sync scroll</source>
+        <translation>同期スクロール</translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation>エディタ</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>プレビュー</translation>
+    </message>
+    <message>
+        <source>Type Markdown here...</source>
+        <translation>ここに Markdown を入力...</translation>
+    </message>
+    <message>
+        <source>Open Markdown File</source>
+        <translation>Markdown ファイルを開く</translation>
+    </message>
+    <message>
+        <source>Markdown Files (*.md *.markdown)</source>
+        <translation>Markdown ファイル (*.md *.markdown)</translation>
+    </message>
+    <message>
+        <source>Failed to open file</source>
+        <translation>ファイルを開けませんでした</translation>
+    </message>
+    <message>
+        <source>Save Markdown File</source>
+        <translation>Markdown ファイルを保存</translation>
+    </message>
+    <message>
+        <source>Failed to save file</source>
+        <translation>ファイルを保存できませんでした</translation>
+    </message>
+    <message>
+        <source>HTML Files (*.html *.htm)</source>
+        <translation>HTML ファイル (*.html *.htm)</translation>
+    </message>
+    <message>
+        <source>Failed to export HTML</source>
+        <translation>HTML のエクスポートに失敗しました</translation>
+    </message>
+</context>
+<context>
     <name>QCoreApplication</name>
     <message>
         <source>Images</source>
@@ -1032,19 +1095,19 @@ Please try reducing the amount of data or simplifying the content.</source>
     <name>QShortcut</name>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>左</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>右</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>上</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>下</translation>
     </message>
 </context>
 <context>
@@ -1192,6 +1255,22 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>データベース関連の機能を提供します</translation>
     </message>
     <message>
+        <source>Markdown Preview</source>
+        <translation>Markdown プレビュー</translation>
+    </message>
+    <message>
+        <source>Live preview of Markdown source</source>
+        <translation>Markdown ソースのライブプレビュー</translation>
+    </message>
+    <message>
+        <source>Generate QR codes from text or URLs</source>
+        <translation>テキストやURLからQRコードを生成</translation>
+    </message>
+    <message>
+        <source>Generate command from command list</source>
+        <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
         <location line="+2"/>
         <source>Regex Tester</source>
         <translation>正規表現テスター</translation>
@@ -1200,19 +1279,6 @@ Please try reducing the amount of data or simplifying the content.</source>
         <location line="+0"/>
         <source>Test and debug regular expressions</source>
         <translation>正規表現のテストとデバッグを行います</translation>
-    </message>
-    <message>
-        <source>Command Genration</source>
-        <translation type="vanished">コマンド生成</translation>
-    </message>
-    <message>
-        <location line="-4"/>
-        <source>Generate QR codes from text or URLs</source>
-        <translation>テキストやURLからQRコードを生成</translation>
-    </message>
-    <message>
-        <source>Generate command from command list</source>
-        <translation>コマンドリストからコマンドを生成</translation>
     </message>
 </context>
 <context>
