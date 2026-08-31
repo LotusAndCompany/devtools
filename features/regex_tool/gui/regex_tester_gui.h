@@ -131,6 +131,7 @@ private:
 
     RegexHighlighter *m_highlighter = nullptr;
     RegexWorker *m_worker = nullptr;
+    bool m_updatePending = false;
     QTimer *m_debounceTimer = nullptr;
     QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;

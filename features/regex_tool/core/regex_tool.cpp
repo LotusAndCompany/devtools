@@ -11,8 +11,8 @@ namespace {
 QString substituteReplacement(const QString &replacement, const QRegularExpressionMatch &match)
 {
     QString result;
-    const int length = replacement.size();
-    for (int i = 0; i < length; ++i) {
+    const qsizetype length = replacement.size();
+    for (qsizetype i = 0; i < length; ++i) {
         const QChar current = replacement.at(i);
         if (current != '$' || i + 1 >= length) {
             result.append(current);
@@ -27,7 +27,7 @@ QString substituteReplacement(const QString &replacement, const QRegularExpressi
             result.append(match.captured(0));
             ++i;
         } else if (next == '<') {
-            const int end = replacement.indexOf('>', i + 2);
+            const qsizetype end = replacement.indexOf('>', i + 2);
             if (end > i + 2) {
                 result.append(match.captured(replacement.mid(i + 2, end - i - 2)));
                 i = end;

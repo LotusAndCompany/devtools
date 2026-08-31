@@ -35,7 +35,7 @@ void RegexWorker::setParams(int requestId, const QString &pattern, const QString
                             const QString &replacePattern,
                             QRegularExpression::PatternOptions options, bool global)
 {
-    QMutexLocker locker(&m_mutex);
+    const QMutexLocker locker(&m_mutex);
     m_requestId = requestId;
     m_pattern = pattern;
     m_text = text;
@@ -53,7 +53,7 @@ void RegexWorker::run()
     QRegularExpression::PatternOptions options;
     bool global;
     {
-        QMutexLocker locker(&m_mutex);
+        const QMutexLocker locker(&m_mutex);
         requestId = m_requestId;
         pattern = m_pattern;
         text = m_text;
@@ -506,12 +506,15 @@ void RegexTesterGUI::updateResults()
     m_debounceTimer->stop();
     m_watchdogTimer->stop();
 
-    // Abandon the previous worker without blocking the GUI thread. It stops
-    // cooperatively at its next interruption check and is deleted via the
-    // finished signal once it completes.
+    // Keep tracking the previous worker until it finishes, then evaluate the
+    // latest inputs without allowing multiple workers to run concurrently.
     if (m_worker != nullptr) {
-        m_worker->requestInterruption();
-        m_worker = nullptr;
+        ++m_requestId;
+        m_updatePending = true;
+        if (m_worker->isRunning()) {
+            m_worker->requestInterruption();
+        }
+        return;
     }
 
     const QString pattern = m_patternEdit->text();
@@ -529,10 +532,14 @@ void RegexTesterGUI::updateResults()
             m_worker = nullptr;
         }
         worker->deleteLater();
+        if (m_updatePending) {
+            m_updatePending = false;
+            updateResults();
+        }
     });
     worker->setParams(requestId, pattern, text, replacePattern, options, global);
     worker->start();
-    m_watchdogTimer->start(500); // 500ms limit
+    m_watchdogTimer->start(500); // 500ms cooperative timeout watchdog
 }
 
 void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
@@ -569,10 +576,10 @@ void RegexTesterGUI::onWatchdogTimeout()
 {
     m_watchdogTimer->stop();
 
+    // Invalidate queued results even if the worker stopped before this slot ran.
+    ++m_requestId;
     if (m_worker != nullptr && m_worker->isRunning()) {
         m_worker->requestInterruption();
-        // Invalidate any late result from the still-running worker.
-        ++m_requestId;
     }
 
     m_errorLabel->setText(tr("Error: Evaluation timed out (catastrophic backtracking detected)"));
