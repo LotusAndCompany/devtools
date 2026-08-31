@@ -30,18 +30,20 @@ class RegexWorker : public QThread
     Q_OBJECT
 public:
     explicit RegexWorker(QObject *parent = nullptr);
-    void setParams(const QString &pattern, const QString &text, const QString &replacePattern,
-                   QRegularExpression::PatternOptions options, bool global);
+    void setParams(int requestId, const QString &pattern, const QString &text,
+                   const QString &replacePattern, QRegularExpression::PatternOptions options,
+                   bool global);
 
 signals:
-    void finishedMatching(const QVector<MatchResult> &matches, const QString &replacedText,
-                          bool isValid, const QString &errorStr);
+    void finishedMatching(int requestId, const QVector<MatchResult> &matches,
+                          const QString &replacedText, bool isValid, const QString &errorStr);
 
 protected:
     void run() override;
 
 private:
     QMutex m_mutex;
+    int m_requestId;
     QString m_pattern;
     QString m_text;
     QString m_replacePattern;
@@ -81,8 +83,8 @@ public:
 private slots:
     void triggerUpdate();
     void updateResults();
-    void onMatchingFinished(const QVector<MatchResult> &matches, const QString &replacedText,
-                            bool isValid, const QString &errorStr);
+    void onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
+                            const QString &replacedText, bool isValid, const QString &errorStr);
     void onWatchdogTimeout();
     void copyPattern();
     void copyMatches();
@@ -132,6 +134,7 @@ private:
     QTimer *m_debounceTimer = nullptr;
     QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;
+    int m_requestId = 0;
 };
 
 } // namespace devtools
