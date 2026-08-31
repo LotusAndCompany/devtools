@@ -1,5 +1,52 @@
 #include "features/regex_tool/core/regex_tool.h"
 
+namespace {
+
+/**
+ * @brief 置換文字列を1回だけ走査して展開する
+ *
+ * ECMA風の置換トークン（$&, $<name>, $1..$9, $$）を解決する。キャプチャ値は
+ * そのまま出力し、再走査は行わない。
+ */
+QString substituteReplacement(const QString &replacement, const QRegularExpressionMatch &match)
+{
+    QString result;
+    const int length = replacement.size();
+    for (int i = 0; i < length; ++i) {
+        const QChar current = replacement.at(i);
+        if (current != '$' || i + 1 >= length) {
+            result.append(current);
+            continue;
+        }
+
+        const QChar next = replacement.at(i + 1);
+        if (next == '$') {
+            result.append('$');
+            ++i;
+        } else if (next == '&') {
+            result.append(match.captured(0));
+            ++i;
+        } else if (next == '<') {
+            const int end = replacement.indexOf('>', i + 2);
+            if (end > i + 2) {
+                result.append(match.captured(replacement.mid(i + 2, end - i - 2)));
+                i = end;
+            } else {
+                result.append("$<");
+                ++i;
+            }
+        } else if (next.isDigit() && next.digitValue() >= 1 && next.digitValue() <= 9) {
+            result.append(match.captured(next.digitValue()));
+            ++i;
+        } else {
+            result.append('$');
+        }
+    }
+    return result;
+}
+
+} // namespace
+
 namespace devtools {
 
 QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &text,
@@ -60,47 +107,8 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
         // Append the text before this match
         result.append(text.mid(lastPos, match.capturedStart() - lastPos));
 
-        // Process the replacement string for this match
-        QString substituted = replacement;
-
-        // 1. Replace $$ with a placeholder, then restore to literal $ later
-        substituted.replace("$$", "\x01");
-
-        // 2. Replace $& with the full match
-        substituted.replace("$&", match.captured(0));
-
-        // 3. Replace named capture groups: $<name>
-        QRegularExpression const namedGroupRx(R"(\$<([a-zA-Z0-9_]+)>)");
-        QRegularExpressionMatchIterator namedIt = namedGroupRx.globalMatch(substituted);
-        QList<QRegularExpressionMatch> namedMatches;
-        while (namedIt.hasNext()) {
-            namedMatches.append(namedIt.next());
-        }
-        for (int j = namedMatches.size() - 1; j >= 0; --j) {
-            const auto &nm = namedMatches[j];
-            QString const name = nm.captured(1);
-            QString const capturedValue = match.captured(name);
-            substituted.replace(nm.capturedStart(), nm.capturedLength(), capturedValue);
-        }
-
-        // 4. Replace numbered capture groups: $1..$9
-        QRegularExpression const numGroupRx(R"(\$([1-9]))");
-        QRegularExpressionMatchIterator numIt = numGroupRx.globalMatch(substituted);
-        QList<QRegularExpressionMatch> numMatches;
-        while (numIt.hasNext()) {
-            numMatches.append(numIt.next());
-        }
-        for (int j = numMatches.size() - 1; j >= 0; --j) {
-            const auto &nm = numMatches[j];
-            int const groupIdx = nm.captured(1).toInt();
-            QString const capturedValue = match.captured(groupIdx);
-            substituted.replace(nm.capturedStart(), nm.capturedLength(), capturedValue);
-        }
-
-        // 5. Restore literal $ from placeholder
-        substituted.replace("\x01", "$");
-
-        result.append(substituted);
+        // Expand the replacement string exactly once for this match
+        result.append(substituteReplacement(replacement, match));
         lastPos = match.capturedEnd();
     }
 

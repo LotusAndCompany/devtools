@@ -57,6 +57,11 @@ void TestRegexTool::testReplace_data()
     QTest::newRow("named capture group replacement")
         << R"((?<user>\w+)@(?<domain>\w+))" << "alice@example" << "$<domain>/$<user>"
         << "example/alice";
+    QTest::newRow("dollar sign escape") << "a" << "a" << "$$" << "$";
+    QTest::newRow("full match token") << R"(\d+)" << "42" << "[$&]" << "[42]";
+    QTest::newRow("capture value is not re-expanded") << R"((?<x>\$2))" << "$2" << "$<x>" << "$2";
+    QTest::newRow("literal control char preserved")
+        << "a" << "a" << QString(QChar(0x0001)) << QString(QChar(0x0001));
 }
 
 void TestRegexTool::testReplace()
