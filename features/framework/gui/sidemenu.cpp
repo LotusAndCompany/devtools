@@ -31,8 +31,13 @@ QIcon themedIconWithFallback(const QStringList &names)
 }
 } // namespace
 
-const QString Sidemenu::invalidSidemenuIDReason =
-    QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
+const QString &Sidemenu::invalidSidemenuIDReason()
+{
+    static const QString reason = QString("Sidemenu::ID must be in range (%1, %2)")
+                                      .arg(Sidemenu::ID_MIN)
+                                      .arg(Sidemenu::ID_MAX);
+    return reason;
+}
 
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
@@ -91,7 +96,7 @@ void Sidemenu::validateID(Sidemenu::ID id)
     const int intID = static_cast<int>(id);
 
     if (intID <= ID_MIN || ID_MAX <= intID) {
-        throw InvalidArgumentException(intID, invalidSidemenuIDReason);
+        throw InvalidArgumentException(intID, invalidSidemenuIDReason());
     }
 }
 
@@ -156,14 +161,11 @@ void Sidemenu::selectItem(ID id)
 
 void Sidemenu::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
-        break;
-    default:
+    } else {
         QWidget::changeEvent(event);
-        break;
     }
 }
 

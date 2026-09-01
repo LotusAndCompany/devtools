@@ -94,7 +94,7 @@ protected:
     explicit Tool(ID id, QString stringID, QObject *parent = nullptr) noexcept(false);
 
     /// ツールIDが無効
-    static const QString invalidToolIDReason;
+    static const QString &invalidToolIDReason();
 
     /**
      * @brief 渡された ID が正しいか判定する
