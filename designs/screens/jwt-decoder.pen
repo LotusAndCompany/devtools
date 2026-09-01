@@ -1,0 +1,2276 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "DMl17",
+      "x": 0,
+      "y": 0,
+      "name": "JWT デコーダー",
+      "theme": {
+        "Mode": "Dark"
+      },
+      "clip": true,
+      "width": 1040,
+      "height": 720,
+      "fill": "$--background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "a73pu",
+          "name": "Main",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "F4TA7q",
+              "name": "headerBar",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                8,
+                0
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N5Qoyf",
+                  "name": "Screen Title",
+                  "fill": "$--foreground",
+                  "content": "JWT デコーダー",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "w2Ertz",
+                  "name": "Notice Chip",
+                  "fill": "$--color-warning",
+                  "cornerRadius": "$--radius-pill",
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DiFEQ",
+                      "name": "Notice Text",
+                      "fill": "$--color-warning-foreground",
+                      "content": "署名は検証しません / 完全ローカル処理",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bEyZU",
+              "name": "Input Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                16,
+                20
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "u2e7hu",
+                  "name": "Card Label Row",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HNgNm",
+                      "name": "Card Label",
+                      "fill": "$--muted-foreground",
+                      "content": "エンコード済み JWT",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "S8Ofdy",
+                      "name": "Card Note",
+                      "fill": "$--muted-foreground",
+                      "content": "入力から 180ms で自動デコード",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VblPN",
+                  "name": "Token",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "teFh1",
+                      "name": "Header Segment",
+                      "fill": "$--primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Yavd3",
+                      "name": "Payload Segment",
+                      "fill": "$--color-info-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kdPh4",
+                      "name": "Signature Segment",
+                      "fill": "$--color-success-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "EhpEF",
+              "name": "panes",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dfso4",
+                  "name": "ヘッダー Card",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jVi4F",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jfyz9",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "fWjCA",
+                              "name": "Segment Dot",
+                              "fill": "$--primary",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "JM8NZ",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ヘッダー",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "HuZJ6",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "Base64URL デコード済み · JSON",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wyasX",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "iJMPX",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "PHVlX",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "{",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RUc9f",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "cXVF3",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Vv6eR",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"alg\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Ci4Pi",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "tHHwS",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"HS256\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KTcSR",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "UQVAX",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "e6n1C",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"typ\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "oBCou",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "Rtmqa",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"JWT\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vMpPc",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "X4Wzc",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "}",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c7mLGD",
+                  "name": "ペイロード Card",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "rflng",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "kEjVT",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "xuG5o",
+                              "name": "Segment Dot",
+                              "fill": "$--color-info-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "HIOhN",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ペイロード",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "mFS9B",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "Base64URL デコード済み · JSON",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JCD7r",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "O4P0SA",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cr2Jq",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "{",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "eOlcg",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "bv9CP",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "wMeKH",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"sub\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "w4VW3k",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "VW9A8",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"1234567890\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "X3aLK7",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PKp5k",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "qpQVw",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"name\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "jQomC",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "zIJ9m",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"John Doe\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "tSzKz",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "XUqW4",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "V1oD6",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"iat\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "lbgXp",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "A4yfk",
+                              "name": "Value",
+                              "fill": "$--primary",
+                              "content": "1516239022",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GuW3r",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "oiQxQ",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "}",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cmOtw",
+                  "name": "署名 Card",
+                  "width": "fill_container",
+                  "height": 120,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "MBZS9",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "BLvNf",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "X2DcVb",
+                              "name": "Segment Dot",
+                              "fill": "$--color-success-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "vhu4x",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "署名",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "g5hO5f",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "デコードなし · 検証なし",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aORNW",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "T4vZk",
+                          "name": "Signature Value",
+                          "fill": "$--color-success-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "lk5gp",
+                          "name": "Signature Hint",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Base64URL 文字列のまま表示します。",
+                          "lineHeight": 1.6,
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "aucem",
+      "x": 1120,
+      "y": 0,
+      "name": "JWT デコーダー / デコード失敗",
+      "theme": {
+        "Mode": "Dark"
+      },
+      "clip": true,
+      "width": 1040,
+      "height": 720,
+      "fill": "$--background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "gaoPe",
+          "name": "Main",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "fvsUh",
+              "name": "headerBar",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                8,
+                0
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jGN5a",
+                  "name": "Screen Title",
+                  "fill": "$--foreground",
+                  "content": "JWT デコーダー",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "eZTIt",
+                  "name": "Notice Chip",
+                  "fill": "$--color-warning",
+                  "cornerRadius": "$--radius-pill",
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Vm6tj",
+                      "name": "Notice Text",
+                      "fill": "$--color-warning-foreground",
+                      "content": "署名は検証しません / 完全ローカル処理",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TkSA4",
+              "name": "Input Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                16,
+                20
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "KP6bD",
+                  "name": "Card Label Row",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fUFWU",
+                      "name": "Card Label",
+                      "fill": "$--muted-foreground",
+                      "content": "エンコード済み JWT",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "jTs1S",
+                      "name": "Card Note",
+                      "fill": "$--muted-foreground",
+                      "content": "入力から 180ms で自動デコード",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KNtEt",
+                  "name": "Token",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d0fdx",
+                      "name": "Header Segment",
+                      "fill": "$--primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "W9KHS",
+                      "name": "Payload Segment",
+                      "fill": "$--destructive",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "bm90LWEtdmFsaWQtc2VnbWVudCEhIQ.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "VqJJo",
+                      "name": "Signature Segment",
+                      "fill": "$--color-success-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZVmJA",
+              "name": "panes",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "D0AqpB",
+                  "name": "ヘッダー Card",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "JPtSF",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "omxYV",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "Fqyd5",
+                              "name": "Segment Dot",
+                              "fill": "$--primary",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "Fuilp",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ヘッダー",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "wRwXQ",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "Base64URL デコード済み · JSON",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yf57W",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g0FSKZ",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "R5cJt",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "{",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "jPiRP",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "bCUyV",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "VHtbz",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"alg\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "TLiZy",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "HMkU2",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"HS256\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "tzezC",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ovoy8",
+                              "name": "JSON Key",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "rSDUR",
+                                  "name": "Key",
+                                  "fill": "$--foreground",
+                                  "content": "\"typ\"",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Bejgd",
+                                  "name": "Colon",
+                                  "fill": "$--muted-foreground",
+                                  "content": ":",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$--font-primary",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "Rbrc4",
+                              "name": "Value",
+                              "fill": "$--color-success-foreground",
+                              "content": "\"JWT\"",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rL6uI",
+                          "name": "JSON Line",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Tetoj",
+                              "name": "Brace",
+                              "fill": "$--muted-foreground",
+                              "content": "}",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$--font-primary",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bhEQu",
+                  "name": "ペイロード Card",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "iGqRu",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "uNhjD",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "rUa4v",
+                              "name": "Segment Dot",
+                              "fill": "$--color-info-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "a9t4PY",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ペイロード",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "G8fQsW",
+                          "name": "Card Note",
+                          "fill": "$--color-error-foreground",
+                          "content": "デコード失敗",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "X4tOme",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "fKwee",
+                          "name": "Error Strip",
+                          "width": "fill_container",
+                          "fill": "$--color-error",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            10,
+                            14
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "yQirh",
+                              "name": "Error Message",
+                              "fill": "$--color-error-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Base64URL デコードに失敗しました",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "JYFSh",
+                              "name": "Error Detail",
+                              "fill": "$--muted-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "ペイロードのセグメントが不正です。ヘッダーと署名は引き続き表示します。",
+                              "lineHeight": 1.6,
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GEeQo",
+                  "name": "署名 Card",
+                  "width": "fill_container",
+                  "height": 120,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bX5ox",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "QSIjw",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "HkZfF",
+                              "name": "Segment Dot",
+                              "fill": "$--color-success-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "fFyEJ",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "署名",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Sypfu",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "デコードなし · 検証なし",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yHdfZ",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ss4lZ",
+                          "name": "Signature Value",
+                          "fill": "$--color-success-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kCs2K",
+                          "name": "Signature Hint",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Base64URL 文字列のまま表示します。",
+                          "lineHeight": 1.6,
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W0wux",
+      "x": 2240,
+      "y": 0,
+      "name": "JWT デコーダー / 形式不正",
+      "theme": {
+        "Mode": "Dark"
+      },
+      "clip": true,
+      "width": 1040,
+      "height": 720,
+      "fill": "$--background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "RWxai",
+          "name": "Main",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ohcos",
+              "name": "headerBar",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                8,
+                0
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ZnvxY",
+                  "name": "Screen Title",
+                  "fill": "$--foreground",
+                  "content": "JWT デコーダー",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "W64zp",
+                  "name": "Notice Chip",
+                  "fill": "$--color-warning",
+                  "cornerRadius": "$--radius-pill",
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "NZ5zx",
+                      "name": "Notice Text",
+                      "fill": "$--color-warning-foreground",
+                      "content": "署名は検証しません / 完全ローカル処理",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IlXeW",
+              "name": "Input Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                16,
+                20
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SfByR",
+                  "name": "Card Label Row",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "j9gOi",
+                      "name": "Card Label",
+                      "fill": "$--muted-foreground",
+                      "content": "エンコード済み JWT",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "N7LtSA",
+                      "name": "Card Note",
+                      "fill": "$--muted-foreground",
+                      "content": "入力から 180ms で自動デコード",
+                      "fontFamily": "$--font-secondary",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kWdX8",
+                  "name": "Token",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "IuRiM",
+                      "name": "Header Segment",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "this-is-not-a-jwt",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$--font-primary",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bkIcS",
+              "name": "Structure Error",
+              "width": "fill_container",
+              "fill": "$--color-error",
+              "cornerRadius": 8,
+              "gap": 8,
+              "padding": [
+                10,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "p86YRK",
+                  "name": "Error Message",
+                  "fill": "$--color-error-foreground",
+                  "content": "JWT の形式が不正です — header.payload.signature の形式で入力してください",
+                  "fontFamily": "$--font-secondary",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "y7b9O7",
+              "name": "panes",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ExFxu",
+                  "name": "ヘッダー Card",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DJzeu",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "RDM2u",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "P59O3C",
+                              "name": "Segment Dot",
+                              "fill": "$--primary",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "n2glbI",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ヘッダー",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "L0wPD",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "データなし",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RY8bU",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "R2fuay",
+                          "name": "Empty State",
+                          "fill": "$--muted-foreground",
+                          "content": "—",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zr1nI",
+                  "name": "ペイロード Card",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IKC5Y",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "AnM7m",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "jOXvi",
+                              "name": "Segment Dot",
+                              "fill": "$--color-info-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "byk4T",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "ペイロード",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "pbWTC",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "データなし",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "hv2ZH",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "mNTcM",
+                          "name": "Empty State",
+                          "fill": "$--muted-foreground",
+                          "content": "—",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "i6HE6",
+                  "name": "署名 Card",
+                  "width": "fill_container",
+                  "height": 120,
+                  "fill": "$--card",
+                  "cornerRadius": "$--radius-m",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "k8Kv3G",
+                      "name": "Card Label Row",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "l6KCKR",
+                          "name": "Card Label Group",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "n1QFRV",
+                              "name": "Segment Dot",
+                              "fill": "$--color-success-foreground",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "Aoqav",
+                              "name": "Card Label",
+                              "fill": "$--muted-foreground",
+                              "content": "署名",
+                              "fontFamily": "$--font-secondary",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "aF8LK",
+                          "name": "Card Note",
+                          "fill": "$--muted-foreground",
+                          "content": "データなし",
+                          "fontFamily": "$--font-secondary",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ER0H2",
+                      "name": "Card Body",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M7NKy1",
+                          "name": "Empty State",
+                          "fill": "$--muted-foreground",
+                          "content": "—",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "Mode": [
+      "Dark"
+    ]
+  },
+  "variables": {
+    "--sidebar": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#18181b",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#fafafa",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#18181b",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-primary-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#fafafa",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-border": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#ffffff1a",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-accent": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2a2a30",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-accent-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#fafafa",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--sidebar-ring": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#71717a",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--background": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#111111",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--card": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1A1A1A",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--card-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--popover": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1A1A1A",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--popover-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FF8400",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--primary-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#111111",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#383838",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--secondary-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--muted": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2E2E2E",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--muted-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#B8B9B6",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--accent": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#111111",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--accent-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F2F3F0",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--destructive": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FF5C33",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--border": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2E2E2E",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--input": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2E2E2E",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--ring": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#666666",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--white": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "--black": {
+      "type": "color",
+      "value": "#000000"
+    },
+    "--font-primary": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "--font-secondary": {
+      "type": "string",
+      "value": "Geist"
+    },
+    "--radius-none": {
+      "type": "number",
+      "value": 0
+    },
+    "--radius-pill": {
+      "type": "number",
+      "value": 999
+    },
+    "--radius-m": {
+      "type": "number",
+      "value": 16
+    },
+    "--color-success": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#222924",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-success-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#B6FFCE",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-warning": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#291C0F",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-warning-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FF8400",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-error": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#24100B",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-error-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FF5C33",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-info": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#222229",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    },
+    "--color-info-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#B2B2FF",
+          "theme": {
+            "Mode": "Dark"
+          }
+        }
+      ]
+    }
+  },
+  "fileToken": "df153439-74ef-41ea-9e7d-818b09a65ba9"
+}

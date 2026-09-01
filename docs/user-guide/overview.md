@@ -18,6 +18,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [Phrase Generation](phrase-generation.md) | Generate random text and phrases |
 | [Database Management](database-management.md) | Connect to databases and execute SQL queries |
 | [Markdown Preview](markdown-preview.md) | Edit Markdown with real-time HTML preview |
+| [JWT Decoder](jwt-decoder.md) | Decode JSON Web Tokens and inspect their claims |
 | [Regex Tester](regex-tester.md) | Build and test regular expressions interactively |
 | [Color Converter](color-converter.md) | Convert colors between HEX, RGB, HSL, HSV, and CMYK |
 

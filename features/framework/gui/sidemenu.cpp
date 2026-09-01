@@ -78,6 +78,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::DATA_CONVERSION);
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
+    registerItem(ID::JWT_DECODER);
     registerItem(ID::DB_TOOL);
 
     m_scrollAreaLayout->addStretch();
@@ -123,6 +124,9 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::MARKDOWN_PREVIEW:
         iconNames = {"article"};
+        break;
+    case ID::JWT_DECODER:
+        iconNames = {"key", "vpn_key", "dialog-password"};
         break;
 
     default:

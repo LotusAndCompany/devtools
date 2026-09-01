@@ -30,6 +30,7 @@ Learn how to use each feature:
 - [Phrase Generation](user-guide/phrase-generation.md) - Generate random text and phrases
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
 - [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
+- [JWT Decoder](user-guide/jwt-decoder.md) - Decode JSON Web Tokens and inspect their claims
 - [Regex Tester](user-guide/regex-tester.md) - Build and test regular expressions interactively
 - [Color Converter](user-guide/color-converter.md) - Convert colors between HEX, RGB, HSL, HSV, and CMYK
 

@@ -59,6 +59,8 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
     case ID::MARKDOWN_PREVIEW:
         return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
+    case ID::JWT_DECODER:
+        return Translatable{tr("JWT Decoder"), tr("Decode JSON Web Tokens")};
     default:
         throw UnderDevelopmentException();
     }

@@ -90,6 +90,18 @@ DevTools_add_test(test_markdown_preview
     features/markdown_preview/tests/test_markdown_preview.cpp
 )
 
+# core/jwt_decoder
+DevTools_add_test(test_jwt_decoder
+    SOURCES
+    features/jwt_decoder/tests/test_jwt_decoder.cpp
+)
+
+# gui/jwt_decoder
+DevTools_add_test(test_jwt_decoder_gui
+    SOURCES
+    features/jwt_decoder/tests/test_jwt_decoder_gui.cpp
+)
+
 # core/iamge
 DevTools_add_test(test_basic_image_io
     SOURCES

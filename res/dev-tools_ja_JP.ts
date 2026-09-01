@@ -671,6 +671,76 @@
     </message>
 </context>
 <context>
+    <name>JwtDecoder</name>
+    <message>
+        <source>Failed to Base64URL-decode</source>
+        <translation>Base64URL デコードに失敗しました</translation>
+    </message>
+    <message>
+        <source>Invalid JSON</source>
+        <translation>JSON が不正です</translation>
+    </message>
+</context>
+<context>
+    <name>JwtDecoderGUI</name>
+    <message>
+        <source>JWT Decoder</source>
+        <translation>JWT デコーダー</translation>
+    </message>
+    <message>
+        <source>This tool does not verify signatures. Decoding only, fully local — nothing is sent over the network.</source>
+        <translation>このツールは署名を検証しません。デコードのみを行い、処理は完全にローカルで完結します (ネットワーク送信なし)。</translation>
+    </message>
+    <message>
+        <source>Encoded JWT</source>
+        <translation>エンコードされた JWT</translation>
+    </message>
+    <message>
+        <source>Auto-decodes as you type (180 ms debounce)</source>
+        <translation>入力に応じて自動でデコードします (180ms デバウンス)</translation>
+    </message>
+    <message>
+        <source>Paste a JWT here...</source>
+        <translation>ここに JWT を貼り付けてください...</translation>
+    </message>
+    <message>
+        <source>Invalid JWT structure — expected header.payload.signature</source>
+        <translation>JWT の形式が不正です — header.payload.signature 形式である必要があります</translation>
+    </message>
+    <message>
+        <source>Header</source>
+        <translation>ヘッダー</translation>
+    </message>
+    <message>
+        <source>Payload</source>
+        <translation>ペイロード</translation>
+    </message>
+    <message>
+        <source>Signature</source>
+        <translation>署名</translation>
+    </message>
+    <message>
+        <source>Base64URL decoded · JSON</source>
+        <translation>Base64URL デコード済み · JSON</translation>
+    </message>
+    <message>
+        <source>Decode failed</source>
+        <translation>デコード失敗</translation>
+    </message>
+    <message>
+        <source>Not decoded · not verified</source>
+        <translation>デコードなし · 検証なし</translation>
+    </message>
+    <message>
+        <source>Shown as the raw Base64URL string.</source>
+        <translation>Base64URL 文字列のまま表示しています。</translation>
+    </message>
+    <message>
+        <source>No data</source>
+        <translation>データなし</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>File</source>
@@ -1265,6 +1335,14 @@ Please try reducing the amount of data or simplifying the content.</source>
     <message>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <source>JWT Decoder</source>
+        <translation>JWT デコーダー</translation>
+    </message>
+    <message>
+        <source>Decode JSON Web Tokens</source>
+        <translation>JSON Web Token をデコードする</translation>
     </message>
 </context>
 <context>
