@@ -12,9 +12,13 @@ namespace devtools {
  */
 struct CaptureGroup
 {
+    /// キャプチャされた文字列
     QString value;
+    /// キャプチャグループのインデックス
     int index;
+    /// テキスト内のオフセット位置
     int offset;
+    /// キャプチャされた文字列の長さ
     int length;
 };
 
@@ -23,9 +27,13 @@ struct CaptureGroup
  */
 struct MatchResult
 {
+    /// マッチのインデックス
     int index;
+    /// テキスト内のオフセット位置
     int offset;
+    /// マッチした文字列の長さ
     int length;
+    /// キャプチャグループのリスト
     QVector<CaptureGroup> groups;
 };
 
