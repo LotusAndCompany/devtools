@@ -16,6 +16,8 @@ struct CaptureGroup
     QString value;
     /// キャプチャグループのインデックス
     int index;
+    /// 名前付きキャプチャグループの名前（名前がない場合は空文字列）
+    QString name;
     /// テキスト内のオフセット位置
     qsizetype offset;
     /// キャプチャされた文字列の長さ

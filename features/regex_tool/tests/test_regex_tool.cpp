@@ -23,6 +23,7 @@ void TestRegexTool::testMatch_data()
     QTest::newRow("no match") << "xyz" << "abc abc" << 0;
     QTest::newRow("empty pattern") << "" << "abc abc" << 0;
     QTest::newRow("capture groups") << "(a)(b)c" << "abc" << 1;
+    QTest::newRow("named capture group") << R"((?<year>\d{4}))" << "2026" << 1;
 }
 
 void TestRegexTool::testMatch()
@@ -37,8 +38,15 @@ void TestRegexTool::testMatch()
 
     if (pattern == "(a)(b)c" && expectedMatches == 1) {
         QCOMPARE(matches[0].groups.size(), 3); // Full match + 2 groups
+        QCOMPARE(matches[0].groups[1].index, 1);
         QCOMPARE(matches[0].groups[1].value, QString("a"));
+        QCOMPARE(matches[0].groups[2].index, 2);
         QCOMPARE(matches[0].groups[2].value, QString("b"));
+    } else if (pattern == R"((?<year>\d{4}))" && expectedMatches == 1) {
+        QCOMPARE(matches[0].groups.size(), 2); // Full match + named group
+        QCOMPARE(matches[0].groups[1].index, 1);
+        QCOMPARE(matches[0].groups[1].name, QString("year"));
+        QCOMPARE(matches[0].groups[1].value, QString("2026"));
     }
 }
 

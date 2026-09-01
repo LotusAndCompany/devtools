@@ -28,6 +28,7 @@ namespace {
 QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString &text, bool global)
 {
     QVector<MatchResult> matches;
+    const QStringList capture_group_names = re.namedCaptureGroups();
 
     if (global) {
         QRegularExpressionMatchIterator i = re.globalMatch(text);
@@ -45,6 +46,7 @@ QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString 
             for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
                 CaptureGroup group;
                 group.index = j;
+                group.name = capture_group_names.value(j);
                 group.value = match.captured(j);
                 group.offset = match.capturedStart(j);
                 group.length = match.capturedLength(j);
@@ -63,6 +65,7 @@ QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString 
             for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
                 CaptureGroup group;
                 group.index = j;
+                group.name = capture_group_names.value(j);
                 group.value = match.captured(j);
                 group.offset = match.capturedStart(j);
                 group.length = match.capturedLength(j);
@@ -654,8 +657,11 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
 
             for (int i = 1; i < match.groups.size(); ++i) {
                 const auto &group = match.groups.at(i);
+                const QString groupIdentifier =
+                    group.name.isEmpty() ? QString::number(group.index)
+                                         : QString("%1 (%2)").arg(group.index).arg(group.name);
                 QString const groupText = QString("  Group %1: [%2, %3]\n  \"%4\"")
-                                              .arg(group.index)
+                                              .arg(groupIdentifier)
                                               .arg(group.offset)
                                               .arg(group.offset + group.length)
                                               .arg(group.value);
@@ -697,8 +703,11 @@ void RegexTesterGUI::copyMatches()
                       .arg(match.offset + match.length);
         for (int i = 1; i < match.groups.size(); ++i) {
             const auto &group = match.groups.at(i);
+            const QString groupIdentifier =
+                group.name.isEmpty() ? QString::number(group.index)
+                                     : QString("%1 (%2)").arg(group.index).arg(group.name);
             stream << QString("  Group %1: \"%2\" [%3, %4]\n")
-                          .arg(group.index)
+                          .arg(groupIdentifier)
                           .arg(group.value)
                           .arg(group.offset)
                           .arg(group.offset + group.length);

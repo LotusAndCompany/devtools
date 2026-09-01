@@ -62,6 +62,7 @@ QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &tex
         return results;
     }
 
+    const QStringList capture_group_names = re.namedCaptureGroups();
     QRegularExpressionMatchIterator i = re.globalMatch(text);
     int match_index = 0;
     while (i.hasNext()) {
@@ -74,6 +75,7 @@ QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &tex
         for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
             CaptureGroup group;
             group.index = j;
+            group.name = capture_group_names.value(j);
             group.value = match.captured(j);
             group.offset = match.capturedStart(j);
             group.length = match.capturedLength(j);
