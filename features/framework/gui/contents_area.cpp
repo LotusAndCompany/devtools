@@ -1,5 +1,7 @@
 #include "contents_area.h"
 
+#include "features/color_converter/core/color_converter.h"
+#include "features/color_converter/gui/color_converter.h"
 #include "features/command/gui/command.h"
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/data_conversion/gui/data_conversion_gui.h"
@@ -88,6 +90,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::MARKDOWN_PREVIEW:
         content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
+        break;
+    case Sidemenu::ID::COLOR_CONVERSION:
+        content = new ColorConverterGUI(new ColorConverter(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

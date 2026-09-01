@@ -3,6 +3,7 @@
 # Each feature directory lists its sources via target_sources().
 
 add_subdirectory(framework)
+add_subdirectory(color_converter)
 add_subdirectory(data_conversion)
 add_subdirectory(qr_code)
 add_subdirectory(markdown_preview)

@@ -78,6 +78,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::DATA_CONVERSION);
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
+    registerItem(ID::COLOR_CONVERSION);
     registerItem(ID::DB_TOOL);
 
     m_scrollAreaLayout->addStretch();
@@ -123,6 +124,9 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::MARKDOWN_PREVIEW:
         iconNames = {"article"};
+        break;
+    case ID::COLOR_CONVERSION:
+        iconNames = {"color-picker", "gtk-color-picker", "applications-graphics"};
         break;
 
     default:

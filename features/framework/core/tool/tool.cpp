@@ -59,6 +59,10 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
     case ID::MARKDOWN_PREVIEW:
         return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
+    case ID::COLOR_CONVERSION:
+        return Translatable{
+            tr("Color Converter"), tr("Pick colors and convert between HEX/RGB/HSL/HSV/CMYK"),
+        };
     default:
         throw UnderDevelopmentException();
     }
