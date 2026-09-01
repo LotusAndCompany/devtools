@@ -98,7 +98,7 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
     }
 
     QString result;
-    int lastPos = 0;
+    qsizetype lastPos = 0;
 
     QRegularExpressionMatchIterator i = re.globalMatch(text);
     while (i.hasNext()) {

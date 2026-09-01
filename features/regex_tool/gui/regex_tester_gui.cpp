@@ -20,6 +20,63 @@
 
 namespace devtools {
 
+namespace {
+
+/**
+ * @brief 正規表現のマッチを収集する（中断要求を随時確認する）
+ */
+QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString &text, bool global)
+{
+    QVector<MatchResult> matches;
+
+    if (global) {
+        QRegularExpressionMatchIterator i = re.globalMatch(text);
+        int match_index = 0;
+        while (i.hasNext()) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                return matches;
+            }
+            const QRegularExpressionMatch match = i.next();
+            MatchResult res;
+            res.index = match_index++;
+            res.offset = match.capturedStart();
+            res.length = match.capturedLength();
+
+            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
+                CaptureGroup group;
+                group.index = j;
+                group.value = match.captured(j);
+                group.offset = match.capturedStart(j);
+                group.length = match.capturedLength(j);
+                res.groups.append(group);
+            }
+            matches.append(res);
+        }
+    } else {
+        const QRegularExpressionMatch match = re.match(text);
+        if (match.hasMatch()) {
+            MatchResult res;
+            res.index = 0;
+            res.offset = match.capturedStart();
+            res.length = match.capturedLength();
+
+            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
+                CaptureGroup group;
+                group.index = j;
+                group.value = match.captured(j);
+                group.offset = match.capturedStart(j);
+                group.length = match.capturedLength(j);
+                res.groups.append(group);
+            }
+            matches.append(res);
+        }
+    }
+
+    return matches;
+}
+
+} // namespace
+
 // ============================================================================
 // RegexWorker Implementation
 // ============================================================================
@@ -62,66 +119,25 @@ void RegexWorker::run()
         global = m_global;
     }
 
-    QVector<MatchResult> matches;
     if (pattern.isEmpty()) {
-        emit finishedMatching(requestId, matches, text, true, QString());
+        emit finishedMatching(requestId, QVector<MatchResult>(), text, true, QString());
         return;
     }
 
-    QRegularExpression const re(pattern, options);
+    const QRegularExpression re(pattern, options);
     if (!re.isValid()) {
-        emit finishedMatching(requestId, matches, text, false, re.errorString());
+        emit finishedMatching(requestId, QVector<MatchResult>(), text, false, re.errorString());
         return;
     }
 
-    // Execute match
-    if (global) {
-        QRegularExpressionMatchIterator i = re.globalMatch(text);
-        int match_index = 0;
-        while (i.hasNext()) {
-            if (isInterruptionRequested())
-                return;
-            QRegularExpressionMatch const match = i.next();
-            MatchResult res;
-            res.index = match_index++;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
+    const QVector<MatchResult> matches = collectMatches(re, text, global);
 
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
-        }
-    } else {
-        QRegularExpressionMatch match = re.match(text);
-        if (match.hasMatch()) {
-            MatchResult res;
-            res.index = 0;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
-
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
-        }
-    }
-
-    if (isInterruptionRequested())
+    if (isInterruptionRequested()) {
         return;
+    }
 
     // Execute replace using custom ECMA-like substitution
-    QString replacedText = RegexTool::replace(pattern, text, replacePattern, options);
+    const QString replacedText = RegexTool::replace(pattern, text, replacePattern, options);
 
     emit finishedMatching(requestId, matches, replacedText, true, QString());
 }
@@ -144,20 +160,20 @@ void RegexHighlighter::setMatches(const QVector<MatchResult> &matches)
 
 void RegexHighlighter::highlightBlock(const QString &text)
 {
-    int const blockStart = currentBlock().position();
-    int const blockLength = text.length();
+    const qsizetype blockStart = currentBlock().position();
+    const qsizetype blockLength = text.length();
 
     for (const auto &match : m_matches) {
-        int const start = match.offset;
-        int const end = match.offset + match.length;
+        const qsizetype start = match.offset;
+        const qsizetype end = match.offset + match.length;
 
         if (end <= blockStart || start >= blockStart + blockLength) {
             continue;
         }
 
-        int const relativeStart = qMax(0, start - blockStart);
-        int const relativeLength =
-            qMin(blockLength - relativeStart, end - (blockStart + relativeStart));
+        const int relativeStart = static_cast<int>(qMax<qsizetype>(0, start - blockStart));
+        const int relativeLength =
+            static_cast<int>(qMin(blockLength - relativeStart, end - (blockStart + relativeStart)));
 
         setFormat(relativeStart, relativeLength, m_matchFormat);
     }
@@ -203,10 +219,14 @@ void RegexTesterGUI::setupUi()
     auto *const splitter = new QSplitter(Qt::Horizontal, this);
     mainLayout->addWidget(splitter);
 
-    // --------------------------------------------------
-    // Left Pane (Inputs & Replaced Output)
-    // --------------------------------------------------
-    auto *const leftWidget = new QWidget(splitter);
+    splitter->addWidget(setupLeftPane(splitter));
+    splitter->addWidget(setupRightPane(splitter));
+    splitter->setSizes({600, 300});
+}
+
+QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
+{
+    auto *const leftWidget = new QWidget(parent);
     auto *const leftLayout = new QVBoxLayout(leftWidget);
     leftLayout->setContentsMargins(0, 0, 0, 0);
     leftLayout->setSpacing(8);
@@ -222,15 +242,7 @@ void RegexTesterGUI::setupUi()
     // Presets Row
     auto *const presetsRow = new QHBoxLayout();
     presetsRow->setSpacing(8);
-    m_presetCombo = new QComboBox(leftWidget);
-    m_presetCombo->addItem(tr("Select preset pattern..."));
-    m_presetCombo->addItem(tr("Email Address"));
-    m_presetCombo->addItem(tr("URL (Web Address)"));
-    m_presetCombo->addItem(tr("IPv4 Address"));
-    m_presetCombo->addItem(tr("ISO Date (YYYY-MM-DD)"));
-    m_presetCombo->addItem(tr("Phone Number (E.164)"));
-    m_presetCombo->addItem(tr("UUID v4"));
-    presetsRow->addWidget(m_presetCombo, 1);
+    presetsRow->addWidget(createPresetCombo(leftWidget), 1);
 
     m_copyPatternButton = new QPushButton(tr("Copy Pattern"), leftWidget);
     presetsRow->addWidget(m_copyPatternButton);
@@ -245,44 +257,7 @@ void RegexTesterGUI::setupUi()
     // Flags Row
     auto *const flagsLayout = new QHBoxLayout();
     flagsLayout->setSpacing(4);
-
-    m_flagG = new QToolButton(leftWidget);
-    m_flagG->setText("g");
-    m_flagG->setCheckable(true);
-    m_flagG->setChecked(true);
-    m_flagG->setToolTip(tr("Global (match all)"));
-    flagsLayout->addWidget(m_flagG);
-
-    m_flagI = new QToolButton(leftWidget);
-    m_flagI->setText("i");
-    m_flagI->setCheckable(true);
-    m_flagI->setToolTip(tr("Case Insensitive"));
-    flagsLayout->addWidget(m_flagI);
-
-    m_flagM = new QToolButton(leftWidget);
-    m_flagM->setText("m");
-    m_flagM->setCheckable(true);
-    m_flagM->setToolTip(tr("Multiline"));
-    flagsLayout->addWidget(m_flagM);
-
-    m_flagS = new QToolButton(leftWidget);
-    m_flagS->setText("s");
-    m_flagS->setCheckable(true);
-    m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
-    flagsLayout->addWidget(m_flagS);
-
-    m_flagU = new QToolButton(leftWidget);
-    m_flagU->setText("u");
-    m_flagU->setCheckable(true);
-    m_flagU->setToolTip(tr("Unicode"));
-    flagsLayout->addWidget(m_flagU);
-
-    m_flagX = new QToolButton(leftWidget);
-    m_flagX->setText("x");
-    m_flagX->setCheckable(true);
-    m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
-    flagsLayout->addWidget(m_flagX);
-
+    setupFlagButtons(leftWidget, flagsLayout);
     flagsLayout->addStretch();
     leftLayout->addLayout(flagsLayout);
 
@@ -302,33 +277,90 @@ void RegexTesterGUI::setupUi()
     m_testTextEdit->setFont(QFont("monospace", 13));
     leftLayout->addWidget(m_testTextEdit, 2);
 
-    // Replace Label / Row
-    leftLayout->addWidget(new QLabel(tr("Substitution / Replace"), leftWidget));
+    // Replace Label / Row / Result
+    setupReplaceSection(leftWidget, leftLayout);
+
+    return leftWidget;
+}
+
+QComboBox *RegexTesterGUI::createPresetCombo(QWidget *parent)
+{
+    m_presetCombo = new QComboBox(parent);
+    m_presetCombo->addItem(tr("Select preset pattern..."));
+    m_presetCombo->addItem(tr("Email Address"));
+    m_presetCombo->addItem(tr("URL (Web Address)"));
+    m_presetCombo->addItem(tr("IPv4 Address"));
+    m_presetCombo->addItem(tr("ISO Date (YYYY-MM-DD)"));
+    m_presetCombo->addItem(tr("Phone Number (E.164)"));
+    m_presetCombo->addItem(tr("UUID v4"));
+    return m_presetCombo;
+}
+
+void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
+{
+    layout->addWidget(new QLabel(tr("Substitution / Replace"), parent));
 
     auto *const replaceRow = new QHBoxLayout();
     replaceRow->setSpacing(8);
-    m_replacePatternEdit = new QLineEdit(leftWidget);
+    m_replacePatternEdit = new QLineEdit(parent);
     m_replacePatternEdit->setPlaceholderText(tr("Replacement String"));
     m_replacePatternEdit->setFont(QFont("monospace", 13));
     replaceRow->addWidget(m_replacePatternEdit, 1);
 
-    m_copyResultButton = new QPushButton(tr("Copy Result"), leftWidget);
+    m_copyResultButton = new QPushButton(tr("Copy Result"), parent);
     replaceRow->addWidget(m_copyResultButton);
-    leftLayout->addLayout(replaceRow);
+    layout->addLayout(replaceRow);
 
-    // Replace Result Edit
-    m_replaceResultEdit = new QPlainTextEdit(leftWidget);
+    m_replaceResultEdit = new QPlainTextEdit(parent);
     m_replaceResultEdit->setReadOnly(true);
     m_replaceResultEdit->setPlaceholderText(tr("Replacement result will appear here..."));
     m_replaceResultEdit->setFont(QFont("monospace", 13));
-    leftLayout->addWidget(m_replaceResultEdit, 1);
+    layout->addWidget(m_replaceResultEdit, 1);
+}
 
-    splitter->addWidget(leftWidget);
+void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
+{
+    m_flagG = new QToolButton(parent);
+    m_flagG->setText("g");
+    m_flagG->setCheckable(true);
+    m_flagG->setChecked(true);
+    m_flagG->setToolTip(tr("Global (match all)"));
+    layout->addWidget(m_flagG);
 
-    // --------------------------------------------------
-    // Right Pane (Match Inspector & Quick Reference)
-    // --------------------------------------------------
-    auto *const rightWidget = new QWidget(splitter);
+    m_flagI = new QToolButton(parent);
+    m_flagI->setText("i");
+    m_flagI->setCheckable(true);
+    m_flagI->setToolTip(tr("Case Insensitive"));
+    layout->addWidget(m_flagI);
+
+    m_flagM = new QToolButton(parent);
+    m_flagM->setText("m");
+    m_flagM->setCheckable(true);
+    m_flagM->setToolTip(tr("Multiline"));
+    layout->addWidget(m_flagM);
+
+    m_flagS = new QToolButton(parent);
+    m_flagS->setText("s");
+    m_flagS->setCheckable(true);
+    m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
+    layout->addWidget(m_flagS);
+
+    m_flagU = new QToolButton(parent);
+    m_flagU->setText("u");
+    m_flagU->setCheckable(true);
+    m_flagU->setToolTip(tr("Unicode"));
+    layout->addWidget(m_flagU);
+
+    m_flagX = new QToolButton(parent);
+    m_flagX->setText("x");
+    m_flagX->setCheckable(true);
+    m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
+    layout->addWidget(m_flagX);
+}
+
+QWidget *RegexTesterGUI::setupRightPane(QWidget *parent)
+{
+    auto *const rightWidget = new QWidget(parent);
     auto *const rightLayout = new QVBoxLayout(rightWidget);
     rightLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setSpacing(8);
@@ -371,9 +403,19 @@ void RegexTesterGUI::setupUi()
     m_quickRefTree->setColumnWidth(0, 110);
     m_quickRefTree->setToolTip(tr("Double-click to insert token into pattern"));
 
+    populateQuickReference(m_quickRefTree);
+
+    m_quickRefTree->expandAll();
+    quickRefLayout->addWidget(m_quickRefTree);
+    rightLayout->addWidget(m_quickRefContainer, 1);
+
+    return rightWidget;
+}
+
+void RegexTesterGUI::populateQuickReference(QTreeWidget *tree)
+{
     // Character Classes
-    auto *charClasses =
-        new QTreeWidgetItem(m_quickRefTree, QStringList() << tr("Character Classes"));
+    auto *charClasses = new QTreeWidgetItem(tree, QStringList() << tr("Character Classes"));
     new QTreeWidgetItem(charClasses, QStringList() << R"(\d)" << tr("Digit (0-9)"));
     new QTreeWidgetItem(charClasses, QStringList() << R"(\D)" << tr("Non-digit"));
     new QTreeWidgetItem(charClasses, QStringList() << R"(\w)" << tr("Word char (a-z, 0-9, _)"));
@@ -383,7 +425,7 @@ void RegexTesterGUI::setupUi()
     new QTreeWidgetItem(charClasses, QStringList() << R"(.)" << tr("Any character except newline"));
 
     // Quantifiers
-    auto *quantifiers = new QTreeWidgetItem(m_quickRefTree, QStringList() << tr("Quantifiers"));
+    auto *quantifiers = new QTreeWidgetItem(tree, QStringList() << tr("Quantifiers"));
     new QTreeWidgetItem(quantifiers, QStringList() << R"(*)" << tr("0 or more times"));
     new QTreeWidgetItem(quantifiers, QStringList() << R"(+)" << tr("1 or more times"));
     new QTreeWidgetItem(quantifiers, QStringList() << R"(?)" << tr("0 or 1 time (optional)"));
@@ -393,27 +435,20 @@ void RegexTesterGUI::setupUi()
     new QTreeWidgetItem(quantifiers, QStringList() << R"(*?)" << tr("Lazy quantifier"));
 
     // Anchors
-    auto *anchors = new QTreeWidgetItem(m_quickRefTree, QStringList() << tr("Anchors"));
+    auto *anchors = new QTreeWidgetItem(tree, QStringList() << tr("Anchors"));
     new QTreeWidgetItem(anchors, QStringList() << R"(^)" << tr("Start of string / line"));
     new QTreeWidgetItem(anchors, QStringList() << R"($)" << tr("End of string / line"));
     new QTreeWidgetItem(anchors, QStringList() << R"(\b)" << tr("Word boundary"));
     new QTreeWidgetItem(anchors, QStringList() << R"(\B)" << tr("Non-word boundary"));
 
     // Groups & References
-    auto *groups = new QTreeWidgetItem(m_quickRefTree, QStringList() << tr("Groups & References"));
+    auto *groups = new QTreeWidgetItem(tree, QStringList() << tr("Groups & References"));
     new QTreeWidgetItem(groups, QStringList() << R"((...))" << tr("Capture group"));
     new QTreeWidgetItem(groups, QStringList() << R"((?:...))" << tr("Non-capturing group"));
     new QTreeWidgetItem(groups, QStringList() << R"((?<name>...))" << tr("Named capture group"));
     new QTreeWidgetItem(groups, QStringList() << R"(\1)" << tr("Match group #1 reference"));
     new QTreeWidgetItem(groups, QStringList()
                                     << R"(\k<name>)" << tr("Match named group reference"));
-
-    m_quickRefTree->expandAll();
-    quickRefLayout->addWidget(m_quickRefTree);
-    rightLayout->addWidget(m_quickRefContainer, 1);
-
-    splitter->addWidget(rightWidget);
-    splitter->setSizes({600, 300});
 }
 
 void RegexTesterGUI::setupConnections()
@@ -447,7 +482,7 @@ void RegexTesterGUI::setupConnections()
 
 void RegexTesterGUI::loadSettings()
 {
-    QSettings settings;
+    const QSettings settings;
     m_patternEdit->setText(settings.value("RegexTester/pattern", "").toString());
     m_testTextEdit->setPlainText(settings.value("RegexTester/testText", "").toString());
     m_replacePatternEdit->setText(settings.value("RegexTester/replacePattern", "").toString());
@@ -506,15 +541,12 @@ void RegexTesterGUI::updateResults()
     m_debounceTimer->stop();
     m_watchdogTimer->stop();
 
-    // Keep tracking the previous worker until it finishes, then evaluate the
-    // latest inputs without allowing multiple workers to run concurrently.
+    // Abandon the previous worker without blocking the GUI thread. It stops
+    // cooperatively at its next interruption check and is deleted via the
+    // finished signal once it completes.
     if (m_worker != nullptr) {
-        ++m_requestId;
-        m_updatePending = true;
-        if (m_worker->isRunning()) {
-            m_worker->requestInterruption();
-        }
-        return;
+        m_worker->requestInterruption();
+        m_worker = nullptr;
     }
 
     const QString pattern = m_patternEdit->text();
@@ -527,19 +559,15 @@ void RegexTesterGUI::updateResults()
     auto *const worker = new RegexWorker;
     m_worker = worker;
     connect(worker, &RegexWorker::finishedMatching, this, &RegexTesterGUI::onMatchingFinished);
-    connect(worker, &QThread::finished, this, [this, worker]() {
+    connect(worker, &QThread::finished, this, [this, worker] {
         if (m_worker == worker) {
             m_worker = nullptr;
         }
         worker->deleteLater();
-        if (m_updatePending) {
-            m_updatePending = false;
-            updateResults();
-        }
     });
     worker->setParams(requestId, pattern, text, replacePattern, options, global);
     worker->start();
-    m_watchdogTimer->start(500); // 500ms cooperative timeout watchdog
+    m_watchdogTimer->start(500); // 500ms limit
 }
 
 void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
@@ -596,7 +624,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
     // Clear old result
     QLayoutItem *item;
     while ((item = m_matchResultLayout->takeAt(0)) != nullptr) {
-        if (item->widget()) {
+        if (item->widget() != nullptr) {
             delete item->widget();
         }
         delete item;
@@ -625,7 +653,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
             m_matchResultLayout->addWidget(label);
 
             for (int i = 1; i < match.groups.size(); ++i) {
-                const auto &group = match.groups[i];
+                const auto &group = match.groups.at(i);
                 QString const groupText = QString("  Group %1: [%2, %3]\n  \"%4\"")
                                               .arg(group.index)
                                               .arg(group.offset)
@@ -668,7 +696,7 @@ void RegexTesterGUI::copyMatches()
                       .arg(match.offset)
                       .arg(match.offset + match.length);
         for (int i = 1; i < match.groups.size(); ++i) {
-            const auto &group = match.groups[i];
+            const auto &group = match.groups.at(i);
             stream << QString("  Group %1: \"%2\" [%3, %4]\n")
                           .arg(group.index)
                           .arg(group.value)
@@ -688,8 +716,9 @@ void RegexTesterGUI::copyToClipboard()
 
 void RegexTesterGUI::onPresetSelected(int index)
 {
-    if (index == 0)
+    if (index == 0) {
         return;
+    }
 
     switch (index) {
     case 1: // Email
@@ -724,6 +753,8 @@ void RegexTesterGUI::onPresetSelected(int index)
             R"(\b[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b)");
         m_testTextEdit->setPlainText(tr("Generated ID: f47ac10b-58cc-4372-a567-0e02b2c3d479."));
         break;
+    default:
+        break;
     }
 
     m_presetCombo->setCurrentIndex(0);
@@ -739,8 +770,9 @@ void RegexTesterGUI::toggleQuickRef()
 void RegexTesterGUI::onQuickRefDoubleClicked(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED(column);
-    if (item->childCount() > 0)
+    if (item->childCount() > 0) {
         return; // ignore category headers
+    }
     QString const token = item->text(0);
     m_patternEdit->insert(token);
     m_patternEdit->setFocus();

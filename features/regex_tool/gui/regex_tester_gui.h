@@ -15,6 +15,7 @@ class QToolButton;
 class QPlainTextEdit;
 class QPushButton;
 class QVBoxLayout;
+class QHBoxLayout;
 class QComboBox;
 class QLabel;
 class QTreeWidget;
@@ -95,6 +96,12 @@ private slots:
 
 private:
     void setupUi();
+    QWidget *setupLeftPane(QWidget *parent);
+    QWidget *setupRightPane(QWidget *parent);
+    void setupFlagButtons(QWidget *parent, QHBoxLayout *layout);
+    QComboBox *createPresetCombo(QWidget *parent);
+    void setupReplaceSection(QWidget *parent, QVBoxLayout *layout);
+    static void populateQuickReference(QTreeWidget *tree);
     void setupConnections();
     void loadSettings();
     void saveSettings();
@@ -131,7 +138,6 @@ private:
 
     RegexHighlighter *m_highlighter = nullptr;
     RegexWorker *m_worker = nullptr;
-    bool m_updatePending = false;
     QTimer *m_debounceTimer = nullptr;
     QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;

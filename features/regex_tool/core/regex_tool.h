@@ -17,9 +17,9 @@ struct CaptureGroup
     /// キャプチャグループのインデックス
     int index;
     /// テキスト内のオフセット位置
-    int offset;
+    qsizetype offset;
     /// キャプチャされた文字列の長さ
-    int length;
+    qsizetype length;
 };
 
 /**
@@ -30,9 +30,9 @@ struct MatchResult
     /// マッチのインデックス
     int index;
     /// テキスト内のオフセット位置
-    int offset;
+    qsizetype offset;
     /// マッチした文字列の長さ
-    int length;
+    qsizetype length;
     /// キャプチャグループのリスト
     QVector<CaptureGroup> groups;
 };
