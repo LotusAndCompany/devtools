@@ -101,25 +101,25 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
     QStringList iconNames;
     switch (id) {
     case ID::HTTP_REQUEST:
-        iconNames = {"network", "network-workgroup"};
+        iconNames = {"http", "lan"};
         break;
     case ID::IMAGE_ALL_IN_ONE:
-        iconNames = {"image-x-generic", "applications-graphics", "insert-image"};
+        iconNames = {"image"};
         break;
     case ID::PHRASE_GENERATION:
-        iconNames = {"library_books", "accessories-dictionary"};
+        iconNames = {"library_books"};
         break;
     case ID::COMMAND_GENERATION:
-        iconNames = {"terminal", "utilities-terminal"};
+        iconNames = {"terminal"};
         break;
     case ID::DATA_CONVERSION:
-        iconNames = {"question_mark", "view-refresh"};
+        iconNames = {"transform", "question_mark"};
         break;
     case ID::DB_TOOL:
-        iconNames = {"database", "server-database"};
+        iconNames = {"database"};
         break;
     case ID::QR_CODE_GENERATION:
-        iconNames = {"qr_code", "insert-link"};
+        iconNames = {"qr_code", "link"};
         break;
     case ID::MARKDOWN_PREVIEW:
         iconNames = {"article"};

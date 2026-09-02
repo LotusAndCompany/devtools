@@ -12,7 +12,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9.3 | GUI framework; Qt 6.8+ is required by qlementine |
+| Qt | 6.9+ | GUI framework; 6.9.3 is tested and required for named-glyph QIcon support |
 | vcpkg | Latest | Package management |
 
 ### Optional Tools
@@ -46,7 +46,7 @@ export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
 
 1. Download the installer from [qt.io](https://www.qt.io/download)
 2. Run the installer
-3. Select Qt 6.x for macOS
+3. Select Qt 6.9 or later for macOS
 4. Optionally install Qt Creator
 
 ### 2. Install vcpkg
@@ -149,7 +149,7 @@ open DevTools.app
 
 1. Open Qt Creator
 2. Go to **Preferences > Kits**
-3. Ensure a Qt 6.x kit is configured
+3. Ensure a Qt 6.9 or later kit is configured
 4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
 5. Open `CMakeLists.txt` from the project root
 6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`

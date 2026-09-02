@@ -257,11 +257,14 @@ enum class ToolId {
 
 ### 7. Register in Side Menu
 
-Update `features/framework/gui/sidemenu.cpp` to include your tool:
+Update `features/framework/gui/sidemenu.cpp` to include your tool and choose a
+Material Symbols glyph:
 
 ```cpp
-// In the constructor or initialization
-addToolItem(ToolId::YourTool, tr("Your Tool"), QIcon(":/icons/your_tool.png"));
+// In Sidemenu::icon()
+case ID::YOUR_TOOL:
+    iconNames = {"your_material_symbol"};
+    break;
 ```
 
 ### 8. Register in Contents Area
@@ -294,23 +297,20 @@ cmake --build build --target update_devtools_translations
 
 ### 10. Add Icons
 
-Place icons in the resource directories:
+Use a named glyph from the bundled Material Symbols Outlined font. Do not add
+light/dark SVG files or update an icon resource file.
 
-```
-res/light/your_tool.png
-res/dark/your_tool.png
+1. Choose the icon name from the [Material Symbols catalog](https://fonts.google.com/icons).
+2. Use the snake_case glyph name with `QIcon::fromTheme()`.
+3. Verify the name with `QIcon::hasThemeIcon()` when adding a new icon.
+
+For example:
+
+```cpp
+button->setIcon(QIcon::fromTheme("download"));
 ```
 
-Update resource files:
-
-```xml
-<!-- res/light_icons.qrc -->
-<RCC>
-  <qresource prefix="/light">
-    <file>your_tool.png</file>
-  </qresource>
-</RCC>
-```
+The font is registered by `GuiApplication` and requires Qt 6.9 or later.
 
 ### 11. Write Tests
 

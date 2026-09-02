@@ -46,7 +46,7 @@
 ## 必要環境
 
 - **OS**: macOS 15.0以上（Apple Silicon / arm64 専用）
-- **Qt**: 6.9.3（qlementineのためQt 6.8以上が必要）
+- **Qt**: 6.9以上（6.9.3で検証済み。名前付きグリフのQIconに必要）
 - **CMake**: 3.21.1以上
 - **C++ コンパイラ**: C++17 対応
 
@@ -76,6 +76,7 @@ cmake --build . --target run
 ## ドキュメント
 
 - [ビルド手順](BUILD.md) / [Build Instructions](../../BUILD.md)
+- [アイコン資産](../development/icon-assets.md) / [Icon Assets](../development/icon-assets.md)
 - [貢献ガイド](CONTRIBUTING.md) / [Contributing Guide](../../CONTRIBUTING.md)
 - [APIドキュメント](https://LotusAndCompany.github.io/devtools/)（Doxygen）
 
@@ -219,8 +220,7 @@ DevToolsは以下のサードパーティライブラリを使用しています
 | yaml-cpp | MIT |
 | qlementine | MIT |
 | qrcodegen | MIT |
-| Material Icons | Apache 2.0 |
-| Remix Icon | Apache 2.0 |
+| Material Symbols | Apache 2.0 |
 
 ## トラブルシューティング
 

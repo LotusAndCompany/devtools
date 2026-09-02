@@ -1,5 +1,6 @@
 #include "image_tools_unified_gui.h"
 
+#include "features/framework/gui/icon_utils.h"
 #include "features/image/gui/basic/control.h"
 #include "features/image/gui/transparent/color_sample.h"
 #include "features/image/gui/transparent/image_view_for_image_transparent.h"
@@ -86,7 +87,7 @@ QDoubleSpinBox *buildScaleSpinBox(QWidget *parent)
 
 QPushButton *buildActionButton(QWidget *parent, const QString &text, const QString &iconName)
 {
-    auto *button = new QPushButton(QIcon::fromTheme(iconName), text, parent);
+    auto *button = new QPushButton(IconUtils::themedIcon(iconName), text, parent);
     return button;
 }
 
