@@ -101,7 +101,7 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
     QStringList iconNames;
     switch (id) {
     case ID::HTTP_REQUEST:
-        iconNames = {"http", "lan"};
+        iconNames = {"lan"};
         break;
     case ID::IMAGE_ALL_IN_ONE:
         iconNames = {"image"};

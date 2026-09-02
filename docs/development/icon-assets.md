@@ -32,7 +32,7 @@ The following names are used by the application:
 
 | Use | Material Symbols glyph |
 |-----|------------------------|
-| HTTP request tool | `http` |
+| HTTP request tool | `lan` |
 | Image tool | `image` |
 | Phrase generation | `library_books` |
 | Command tool | `terminal` |

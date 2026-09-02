@@ -1,4 +1,5 @@
 #include "features/framework/gui/icon_utils.h"
+#include "features/framework/gui/sidemenu.h"
 
 #include <QApplication>
 #include <QColor>
@@ -35,6 +36,7 @@ class TestIconTheme : public QObject
 private slots:
     void initTestCase();
     static void resolvesMaterialSymbols();
+    static void resolvesHttpSidemenuIcon();
     static void fallsBackForMissingGlyph();
     static void followsApplicationPalette();
 };
@@ -57,7 +59,6 @@ void TestIconTheme::resolvesMaterialSymbols()
         QStringLiteral("delete"),
         QStringLiteral("file_open"),
         QStringLiteral("flip_to_front"),
-        QStringLiteral("http"),
         QStringLiteral("image"),
         QStringLiteral("lan"),
         QStringLiteral("left_panel_close"),
@@ -83,9 +84,21 @@ void TestIconTheme::resolvesMaterialSymbols()
 
         const QIcon icon = QIcon::fromTheme(name);
         QVERIFY2(!icon.isNull(), qPrintable(QStringLiteral("Null icon: %1").arg(name)));
-        QVERIFY2(!icon.pixmap(QSize(24, 24)).isNull(),
+        const QPixmap pixmap = icon.pixmap(QSize(24, 24));
+        QVERIFY2(!pixmap.isNull(),
+                 qPrintable(QStringLiteral("Could not render icon: %1").arg(name)));
+        QVERIFY2(firstOpaqueColor(pixmap).isValid(),
                  qPrintable(QStringLiteral("Could not render icon: %1").arg(name)));
     }
+}
+
+void TestIconTheme::resolvesHttpSidemenuIcon()
+{
+    const QIcon icon = Sidemenu::icon(Sidemenu::ID::HTTP_REQUEST);
+
+    QCOMPARE(icon.name(), QStringLiteral("lan"));
+    QVERIFY(!icon.isNull());
+    QVERIFY(firstOpaqueColor(icon.pixmap(QSize(20, 20))).isValid());
 }
 
 void TestIconTheme::fallsBackForMissingGlyph()
