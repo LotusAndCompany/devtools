@@ -3,10 +3,10 @@
 #include "features/framework/core/enum_cast.h"
 #include "features/framework/core/exception/invalid_argument_exception.h"
 #include "features/framework/core/exception/under_development_exception.h"
+#include "features/framework/gui/icon_utils.h"
 #include "sidemenu_item.h"
 
 #include <QAbstractButton>
-#include <QApplication>
 #include <QButtonGroup>
 #include <QEvent>
 #include <QFrame>
@@ -14,22 +14,7 @@
 #include <QPainter>
 #include <QScrollArea>
 #include <QSizePolicy>
-#include <QStyle>
 #include <QVBoxLayout>
-
-namespace {
-QIcon themedIconWithFallback(const QStringList &names)
-{
-    for (const QString &name : names) {
-        const QIcon icon = QIcon::fromTheme(name);
-        if (!icon.isNull()) {
-            return icon;
-        }
-    }
-
-    return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
-}
-} // namespace
 
 const QString Sidemenu::invalidSidemenuIDReason =
     QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
@@ -98,38 +83,27 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
 
-    QStringList iconNames;
     switch (id) {
     case ID::HTTP_REQUEST:
-        iconNames = {"lan"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("lan"));
     case ID::IMAGE_ALL_IN_ONE:
-        iconNames = {"image"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("image"));
     case ID::PHRASE_GENERATION:
-        iconNames = {"library_books"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("library_books"));
     case ID::COMMAND_GENERATION:
-        iconNames = {"terminal"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("terminal"));
     case ID::DATA_CONVERSION:
-        iconNames = {"transform", "question_mark"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("transform"));
     case ID::DB_TOOL:
-        iconNames = {"database"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("database"));
     case ID::QR_CODE_GENERATION:
-        iconNames = {"qr_code", "link"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("qr_code"));
     case ID::MARKDOWN_PREVIEW:
-        iconNames = {"article"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("article"));
 
     default:
         throw UnderDevelopmentException();
     }
-
-    return themedIconWithFallback(iconNames);
 }
 
 void Sidemenu::registerItem(ID id)

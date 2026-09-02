@@ -11,7 +11,6 @@ qt_add_library(${PROJECT_NAME}_test_lib SHARED
     tests/test_util.h tests/test_util.cpp
     tests/random_data.h tests/random_data.cpp
     tests/mock_helper.h
-    res/application.qrc
     features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
 )
 target_link_libraries(${PROJECT_NAME}_test_lib PUBLIC
@@ -88,6 +87,7 @@ DevTools_add_test(test_tool
 DevTools_add_test(test_icon_theme
     SOURCES
     features/framework/tests/test_icon_theme.cpp
+    res/application.qrc
 )
 
 # core/markdown_preview
