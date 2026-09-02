@@ -12,7 +12,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9+ | GUI framework; 6.9.3 is tested and required for named-glyph QIcon support |
+| Qt | 6.9+ | GUI framework; 6.9.3 is tested; 6.9+ is required for named-glyph QIcon support |
 | vcpkg | Latest | Package management |
 
 ### Optional Tools

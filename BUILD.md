@@ -12,7 +12,7 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.9+ (6.9.3 tested; Widgets, LinguistTools, Network, Svg modules)
+- **Qt**: 6.9+ (6.9.3 tested; Widgets, LinguistTools, Sql, Network, Svg modules)
 - **vcpkg**: For dependency management
 
 ### Dependencies (via vcpkg)

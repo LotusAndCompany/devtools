@@ -301,13 +301,15 @@ Use a named glyph from the bundled Material Symbols Outlined font. Do not add
 light/dark SVG files or update an icon resource file.
 
 1. Choose the icon name from the [Material Symbols catalog](https://fonts.google.com/icons).
-2. Use the snake_case glyph name with `QIcon::fromTheme()`.
+2. Use the snake_case glyph name with `IconUtils::themedIcon()` and choose an
+   appropriate `QStyle::StandardPixmap` fallback.
 3. Verify the name with `QIcon::hasThemeIcon()` when adding a new icon.
 
 For example:
 
 ```cpp
-button->setIcon(QIcon::fromTheme("download"));
+button->setIcon(
+    IconUtils::themedIcon(QStringLiteral("download"), QStyle::SP_ArrowDown));
 ```
 
 The font is registered by `GuiApplication` and requires Qt 6.9 or later.

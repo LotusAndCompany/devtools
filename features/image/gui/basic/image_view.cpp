@@ -1,7 +1,5 @@
 #include "image_view.h"
 
-#include "features/framework/gui/icon_utils.h"
-
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileInfo>
@@ -82,7 +80,7 @@ QToolButton *buildZoomButton(QWidget *parent, const QString &iconName, const QSt
     button->setToolTip(toolTip);
     button->setAutoFillBackground(true);
 
-    const QIcon icon = IconUtils::themedIcon(iconName);
+    const QIcon icon = QIcon::fromTheme(iconName);
     if (icon.isNull()) {
         // NOTE: テーマアイコンが解決できない環境では、ボタンが空にならないよう toolTip を表示する
         button->setText(toolTip);

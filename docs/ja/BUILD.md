@@ -12,7 +12,7 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Network, Svgモジュール）
+- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Sql, Network, Svgモジュール）
 - **vcpkg**: 依存関係管理用
 
 ### 依存ライブラリ（vcpkg経由）

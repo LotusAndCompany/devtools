@@ -28,7 +28,8 @@ provide the named-glyph `QIcon` engine.
 
 ## Glyph Mapping
 
-The following names are used by the application:
+The following table lists the primary glyph names used by the application UI.
+It is not an exhaustive list of glyphs used in examples or tests.
 
 | Use | Material Symbols glyph |
 |-----|------------------------|
