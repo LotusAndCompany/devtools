@@ -398,6 +398,9 @@
 <context>
     <name>DataConversion</name>
     <message>
+        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
+        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
+        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1185,8 +1188,9 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <source>Show sidebar on startup</source>
-        <translation>起動時にサイドバーを表示</translation>
+        <location filename="../gui/sidemenu.cpp" line="+159"/>
+        <source>Search tools</source>
+        <translation>ツールを探す</translation>
     </message>
     <message>
         <source>Open last used tool on startup</source>
@@ -1265,6 +1269,16 @@ Please try reducing the amount of data or simplifying the content.</source>
     <message>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Regex Tester</source>
+        <translation>正規表現テスター</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Test and debug regular expressions</source>
+        <translation>正規表現のテストとデバッグを行います</translation>
     </message>
 </context>
 <context>
@@ -1401,6 +1415,272 @@ Choose a tool from the side panel</source>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
+</context>
+<context>
+    <name>devtools::RegexTesterGUI</name>
+    <message>
+        <source>Regex Tester</source>
+        <translation>正規表現テスター</translation>
+    </message>
+    <message>
+        <source>Select preset pattern...</source>
+        <translation>プリセットパターンを選択...</translation>
+    </message>
+    <message>
+        <source>Email Address</source>
+        <translation>メールアドレス</translation>
+    </message>
+    <message>
+        <source>URL (Web Address)</source>
+        <translation>URL（ウェブアドレス）</translation>
+    </message>
+    <message>
+        <source>IPv4 Address</source>
+        <translation>IPv4 アドレス</translation>
+    </message>
+    <message>
+        <source>ISO Date (YYYY-MM-DD)</source>
+        <translation>ISO 日付 (YYYY-MM-DD)</translation>
+    </message>
+    <message>
+        <source>Phone Number (E.164)</source>
+        <translation>電話番号 (E.164)</translation>
+    </message>
+    <message>
+        <source>UUID v4</source>
+        <translation>UUID v4</translation>
+    </message>
+    <message>
+        <source>Copy Pattern</source>
+        <translation>パターンをコピー</translation>
+    </message>
+    <message>
+        <source>Regular Expression Pattern</source>
+        <translation>正規表現パターン</translation>
+    </message>
+    <message>
+        <source>Global (match all)</source>
+        <translation>グローバル（すべてマッチ）</translation>
+    </message>
+    <message>
+        <source>Case Insensitive</source>
+        <translation>大文字小文字を区別しない</translation>
+    </message>
+    <message>
+        <source>Multiline</source>
+        <translation>複数行マッチ</translation>
+    </message>
+    <message>
+        <source>Dot matches all (Singleline)</source>
+        <translation>ドット(.)を改行にマッチさせる</translation>
+    </message>
+    <message>
+        <source>Unicode</source>
+        <translation>Unicode</translation>
+    </message>
+    <message>
+        <source>Extended (ignore whitespace in pattern)</source>
+        <translation>拡張（パターン内の空白を無視）</translation>
+    </message>
+    <message>
+        <source>Test Text</source>
+        <translation>テストテキスト</translation>
+    </message>
+    <message>
+        <source>Enter text to test against...</source>
+        <translation>テストするテキストを入力してください...</translation>
+    </message>
+    <message>
+        <source>Substitution / Replace</source>
+        <translation>置換</translation>
+    </message>
+    <message>
+        <source>Replacement String</source>
+        <translation>置換文字列</translation>
+    </message>
+    <message>
+        <source>Copy Result</source>
+        <translation>結果をコピー</translation>
+    </message>
+    <message>
+        <source>Replacement result will appear here...</source>
+        <translation>置換結果がここに表示されます...</translation>
+    </message>
+    <message>
+        <source>Matches (0)</source>
+        <translation>マッチ (0)</translation>
+    </message>
+    <message>
+        <source>Copy Matches</source>
+        <translation>マッチ結果をコピー</translation>
+    </message>
+    <message>
+        <source>Hide Quick Reference</source>
+        <translation>クイックリファレンスを隠す</translation>
+    </message>
+    <message>
+        <source>Show Quick Reference</source>
+        <translation>クイックリファレンスを表示</translation>
+    </message>
+    <message>
+        <source>Double-click to insert token into pattern</source>
+        <translation>ダブルクリックでトークンをパターンに挿入</translation>
+    </message>
+    <message>
+        <source>Character Classes</source>
+        <translation>文字クラス</translation>
+    </message>
+    <message>
+        <source>Digit (0-9)</source>
+        <translation>数字 (0-9)</translation>
+    </message>
+    <message>
+        <source>Non-digit</source>
+        <translation>数字以外</translation>
+    </message>
+    <message>
+        <source>Word char (a-z, 0-9, _)</source>
+        <translation>単語文字 (a-z, 0-9, _)</translation>
+    </message>
+    <message>
+        <source>Non-word char</source>
+        <translation>単語文字以外</translation>
+    </message>
+    <message>
+        <source>Whitespace</source>
+        <translation>空白</translation>
+    </message>
+    <message>
+        <source>Non-whitespace</source>
+        <translation>空白以外</translation>
+    </message>
+    <message>
+        <source>Any character except newline</source>
+        <translation>改行以外の任意の文字</translation>
+    </message>
+    <message>
+        <source>Quantifiers</source>
+        <translation>量指定子</translation>
+    </message>
+    <message>
+        <source>0 or more times</source>
+        <translation>0回以上</translation>
+    </message>
+    <message>
+        <source>1 or more times</source>
+        <translation>1回以上</translation>
+    </message>
+    <message>
+        <source>0 or 1 time (optional)</source>
+        <translation>0回または1回（任意）</translation>
+    </message>
+    <message>
+        <source>Exactly n times</source>
+        <translation>ちょうどn回</translation>
+    </message>
+    <message>
+        <source>n or more times</source>
+        <translation>n回以上</translation>
+    </message>
+    <message>
+        <source>Between n and m times</source>
+        <translation>n回以上m回以下</translation>
+    </message>
+    <message>
+        <source>Lazy quantifier</source>
+        <translation>遅延量指定子</translation>
+    </message>
+    <message>
+        <source>Anchors</source>
+        <translation>アンカー</translation>
+    </message>
+    <message>
+        <source>Start of string / line</source>
+        <translation>文字列 / 行の先頭</translation>
+    </message>
+    <message>
+        <source>End of string / line</source>
+        <translation>文字列 / 行の末尾</translation>
+    </message>
+    <message>
+        <source>Word boundary</source>
+        <translation>単語境界</translation>
+    </message>
+    <message>
+        <source>Non-word boundary</source>
+        <translation>非単語境界</translation>
+    </message>
+    <message>
+        <source>Groups &amp; References</source>
+        <translation>グループと参照</translation>
+    </message>
+    <message>
+        <source>Capture group</source>
+        <translation>キャプチャグループ</translation>
+    </message>
+    <message>
+        <source>Non-capturing group</source>
+        <translation>非キャプチャグループ</translation>
+    </message>
+    <message>
+        <source>Named capture group</source>
+        <translation>名前付きキャプチャグループ</translation>
+    </message>
+    <message>
+        <source>Match group #1 reference</source>
+        <translation>グループ1への後方参照</translation>
+    </message>
+    <message>
+        <source>Match named group reference</source>
+        <translation>名前付きグループへの後方参照</translation>
+    </message>
+    <message>
+        <source>Syntax Error: %1</source>
+        <translation>構文エラー: %1</translation>
+    </message>
+    <message>
+        <source>Error: Evaluation timed out (catastrophic backtracking detected)</source>
+        <translation>エラー: 評価がタイムアウトしました（壊滅的バックトラッキングを検出）</translation>
+    </message>
+    <message>
+        <source>Matches (%1)</source>
+        <translation>マッチ (%1)</translation>
+    </message>
+    <message>
+        <source>No matches</source>
+        <translation>マッチしませんでした</translation>
+    </message>
+    <message>
+        <source>Match Results (Count: %1)</source>
+        <translation>マッチ結果（件数: %1）</translation>
+    </message>
+    <message>
+        <source>Please contact support@example.com or sales-info@example.org for help.</source>
+        <translation>サポートは support@example.com または sales-info@example.org までご連絡ください。</translation>
+    </message>
+    <message>
+        <source>Visit https://google.com or http://localhost:8080/index.html.</source>
+        <translation>https://google.com または http://localhost:8080/index.html にアクセスしてください。</translation>
+    </message>
+    <message>
+        <source>The local router is at 192.168.1.1 and the DNS is 8.8.8.8.</source>
+        <translation>ローカルルーターは 192.168.1.1、DNS は 8.8.8.8 です。</translation>
+    </message>
+    <message>
+        <source>The project started on 2026-07-14 and ends on 2026-12-31.</source>
+        <translation>プロジェクトは 2026-07-14 に開始し、2026-12-31 に終了します。</translation>
+    </message>
+    <message>
+        <source>Call us at +14155552671 or international line +81312345678.</source>
+        <translation>+14155552671 または国際電話 +81312345678 までお電話ください。</translation>
+    </message>
+    <message>
+        <source>Generated ID: f47ac10b-58cc-4372-a567-0e02b2c3d479.</source>
+        <translation>生成されたID: f47ac10b-58cc-4372-a567-0e02b2c3d479</translation>
+    </message>
+</context>
+<context>
+    <name>home</name>
     <message>
         <source>Refresh Tables</source>
         <translation>テーブル更新</translation>

@@ -165,3 +165,8 @@ DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     features/image/tests/transparent/test_image_view_for_image_transparent.cpp
 )
+# features/regex_tool/core
+DevTools_add_test(test_regex_tool
+    SOURCES
+    features/regex_tool/tests/test_regex_tool.cpp
+)

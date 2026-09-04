@@ -11,6 +11,7 @@
 #include "features/markdown_preview/gui/markdown_preview_gui.h"
 #include "features/phrase_generation/gui/phrase_generation.h"
 #include "features/qr_code/gui/qr_code_generation_gui.h"
+#include "features/regex_tool/gui/regex_tester_gui.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -88,6 +89,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::MARKDOWN_PREVIEW:
         content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
+        break;
+    case Sidemenu::ID::REGEX_TESTER:
+        content = new devtools::RegexTesterGUI(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
