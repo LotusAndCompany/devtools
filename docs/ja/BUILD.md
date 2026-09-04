@@ -12,7 +12,7 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9.3（Widgets, LinguistTools, Network, Svgモジュール）
+- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Sql, Network, Svgモジュール）
 - **vcpkg**: 依存関係管理用
 
 ### 依存ライブラリ（vcpkg経由）
@@ -23,7 +23,8 @@
 - qlementine v1.4.2（Qt Widgets向けのモダンな `QStyle`、MITライセンス）
 
 qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
-Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは `DevTools_core` にリンクし、
+Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは名前付きグリフのアイコンのためQt 6.9以上を
+必要とし、`DevTools_core` にリンクし、
 同梱テーマをQtリソースの `:/themes` から読み込みます。
 
 ### オプション
@@ -43,8 +44,8 @@ brew install qt@6
 ```
 
 #### Qt Online Installerを使用する場合
-[qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.xをインストール：
-- Qt 6.x for macOS
+[qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.9以上をインストール：
+- Qt 6.9以上 for macOS
 - Qt Creator（オプション、推奨）
 
 ### 2. vcpkgのインストール

@@ -1,5 +1,7 @@
 #include "connection_selector.h"
 
+#include "features/framework/gui/icon_utils.h"
+
 #include <QEvent>
 #include <QFont>
 #include <QHBoxLayout>
@@ -15,6 +17,7 @@
 #include <QSizePolicy>
 #include <QSpacerItem>
 #include <QSqlError>
+#include <QStyle>
 #include <QVBoxLayout>
 
 namespace {
@@ -116,7 +119,8 @@ void ConnectionSelector::refreshHistoryList()
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
         auto *deleteButton = new QPushButton();
-        deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
+        deleteButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("delete"), QStyle::SP_TrashIcon));
         deleteButton->setFixedSize(DELETE_BUTTON_SIZE, DELETE_BUTTON_SIZE);
         deleteButton->setToolTip(tr("Delete"));
         deleteButton->setProperty("historyIndex", i);

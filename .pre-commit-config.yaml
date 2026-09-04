@@ -69,7 +69,7 @@ repos:
       - id: check-added-large-files
         name: check-added-large-files
         args: ['--maxkb=1024']
-        exclude: ^(.*\.icns|.*\.png|.*\.qm)$
+        exclude: ^(.*\.icns|.*\.png|.*\.qm|res/fonts/.*\.ttf)$
 
       - id: check-merge-conflict
         name: check-merge-conflict

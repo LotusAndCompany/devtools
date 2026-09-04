@@ -1,5 +1,6 @@
 #include "image_tools_unified_gui.h"
 
+#include "features/framework/gui/icon_utils.h"
 #include "features/image/gui/basic/control.h"
 #include "features/image/gui/transparent/color_sample.h"
 #include "features/image/gui/transparent/image_view_for_image_transparent.h"
@@ -86,7 +87,7 @@ QDoubleSpinBox *buildScaleSpinBox(QWidget *parent)
 
 QPushButton *buildActionButton(QWidget *parent, const QString &text, const QString &iconName)
 {
-    auto *button = new QPushButton(QIcon::fromTheme(iconName), text, parent);
+    auto *button = new QPushButton(IconUtils::themedIcon(iconName), text, parent);
     return button;
 }
 
@@ -148,15 +149,14 @@ void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxL
     auto *bodyLayout = new QVBoxLayout(ui->transformSectionBody);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
-    ui->rotateLeftButton =
-        buildActionButton(ui->transformSectionBody,
-                          ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
+    ui->rotateLeftButton = buildActionButton(
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "rotate_left");
     ui->rotateRightButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "rotate_right");
     ui->flipHorizontalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "flip_horizontal");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "swap_horiz");
     ui->flipVerticalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "flip_vertical");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "swap_vert");
 
     bodyLayout->addWidget(ui->rotateLeftButton);
     bodyLayout->addWidget(ui->rotateRightButton);
