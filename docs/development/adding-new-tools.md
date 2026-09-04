@@ -263,8 +263,7 @@ Material Symbols glyph:
 ```cpp
 // In Sidemenu::icon()
 case ID::YOUR_TOOL:
-    iconNames = {"your_material_symbol"};
-    break;
+    return IconUtils::themedIcon(QStringLiteral("your_material_symbol"));
 ```
 
 ### 8. Register in Contents Area

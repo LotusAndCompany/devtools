@@ -149,15 +149,14 @@ void buildTransformSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxL
     auto *bodyLayout = new QVBoxLayout(ui->transformSectionBody);
     bodyLayout->setContentsMargins(0, 0, 0, 0);
 
-    ui->rotateLeftButton =
-        buildActionButton(ui->transformSectionBody,
-                          ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "anticlockwise");
+    ui->rotateLeftButton = buildActionButton(
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Anti-clockwise"), "rotate_left");
     ui->rotateRightButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "clockwise");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Rotate Clockwise"), "rotate_right");
     ui->flipHorizontalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "flip_horizontal");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Horizontal"), "swap_horiz");
     ui->flipVerticalButton = buildActionButton(
-        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "flip_vertical");
+        ui->transformSectionBody, ImageToolsUnifiedGUI::tr("Flip Vertical"), "swap_vert");
 
     bodyLayout->addWidget(ui->rotateLeftButton);
     bodyLayout->addWidget(ui->rotateRightButton);
