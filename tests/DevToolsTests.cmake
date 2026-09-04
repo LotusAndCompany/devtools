@@ -84,6 +84,12 @@ DevTools_add_test(test_tool
     features/framework/tests/test_tool.cpp
 )
 
+DevTools_add_test(test_icon_theme
+    SOURCES
+    features/framework/tests/test_icon_theme.cpp
+    res/application.qrc
+)
+
 # core/markdown_preview
 DevTools_add_test(test_markdown_preview
     SOURCES

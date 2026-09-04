@@ -26,7 +26,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 # Qtのパッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
+find_package(Qt6 6.9 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -83,8 +83,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
-        res/light_icons.qrc
-        res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp

@@ -11,7 +11,7 @@ DevTools is a Qt6-based desktop application built with C++17. The architecture u
 | Component | Technology |
 |-----------|------------|
 | Language | C++17 |
-| GUI Framework | Qt 6.x (Widgets) |
+| GUI Framework | Qt 6.9+ (Widgets) |
 | Build System | CMake 3.21.1+ |
 | Package Manager | vcpkg |
 | Code Formatting | clang-format |
@@ -40,6 +40,7 @@ devtools/
 ├── res/                     # Resources
 │   ├── *.qrc                # Qt resource files
 │   ├── themes/              # qlementine theme JSON files
+│   ├── fonts/               # Bundled Material Symbols icon font
 │   └── *.ts                 # Translation files
 ├── tests/                   # Shared test helpers (per-feature tests live in
 │                            # features/{feature}/tests/)

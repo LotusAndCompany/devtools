@@ -46,7 +46,7 @@ A unified desktop application that combines various development tools into a sin
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
-- **Qt**: 6.9.3 (Qt 6.8+ required by qlementine)
+- **Qt**: 6.9+ (6.9.3 tested; required for named-glyph QIcon support)
 - **CMake**: 3.21.1+
 - **C++ Compiler**: C++17 compatible
 
@@ -83,6 +83,7 @@ For detailed build instructions, see [BUILD.md](BUILD.md).
 ### Detailed Documentation
 - [User Guide](docs/user-guide/overview.md) - How to use each feature
 - [Development Guide](docs/development/architecture.md) - For contributors
+- [Icon Assets](docs/development/icon-assets.md) - Bundled icon font and license records
 - [API Documentation](https://LotusAndCompany.github.io/devtools/) (Doxygen)
 
 ### Other Resources
@@ -118,8 +119,7 @@ DevTools uses the following third-party libraries:
 | yaml-cpp | MIT |
 | qlementine | MIT |
 | qrcodegen | MIT |
-| Material Icons | Apache 2.0 |
-| Remix Icon | Apache 2.0 |
+| Material Symbols | Apache 2.0 |
 
 ## Acknowledgments
 
