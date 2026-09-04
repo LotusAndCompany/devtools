@@ -5,6 +5,8 @@
 #include "features/framework/core/tool/tool.h"
 
 #include <QMouseEvent>
+#include <QPainter>
+#include <QStyleOptionButton>
 
 const QString SidemenuItem::notConfigurableReason = "Sidemenu::ID::HOME is not confugurable";
 
@@ -41,4 +43,22 @@ void SidemenuItem::changeEvent(QEvent *event)
         QPushButton::changeEvent(event);
         break;
     }
+}
+
+void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
+{
+    QPainter painter(this);
+
+    QStyleOptionButton option;
+    initStyleOption(&option);
+
+    const QRect contentsRect =
+        style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
+    const int iconWidth = option.icon.isNull() ? 0 : option.iconSize.width();
+    constexpr int ICON_TEXT_SPACING = 6;
+    const int availableTextWidth = contentsRect.width() - iconWidth - ICON_TEXT_SPACING;
+    option.text = fontMetrics().elidedText(option.text, Qt::ElideRight, availableTextWidth,
+                                           Qt::TextSingleLine);
+
+    style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
 }
