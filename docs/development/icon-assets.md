@@ -1,8 +1,9 @@
 # Icon Assets
 
 DevTools uses the Qt 6.9 named-glyph icon support with the Material Symbols
-Outlined application font. Icons are requested with `QIcon::fromTheme()` and
-are rendered using the active application palette.
+Outlined application font. The standard icon helper is
+`IconUtils::themedIcon()`, which wraps `QIcon::fromTheme()` with a standard Qt
+fallback. Icons are rendered using the active application palette.
 
 ## Material Symbols Outlined
 
