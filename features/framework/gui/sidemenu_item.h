@@ -3,7 +3,6 @@
 
 #include "sidemenu.h"
 
-#include <QPaintEvent>
 #include <QPushButton>
 
 // TODO: ツールの説明文を表示しようとすると機能が足りないのでQWidgetに変える
@@ -31,7 +30,6 @@ private:
     const Sidemenu::ID id;
 
     void changeEvent(QEvent *event) noexcept(false) override;
-    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SIDEMENU_ITEM_H
