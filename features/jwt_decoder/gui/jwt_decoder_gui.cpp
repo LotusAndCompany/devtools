@@ -3,12 +3,14 @@
 #include "features/jwt_decoder/gui/jwt_highlighters.h"
 #include "features/jwt_decoder/gui/jwt_palette.h"
 
+#include <QColor>
 #include <QEvent>
 #include <QFont>
 #include <QFontDatabase>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QSizePolicy>
 #include <QSplitter>
 #include <QTextBrowser>
 #include <QTextEdit>
@@ -22,7 +24,7 @@ namespace {
 constexpr int DECODE_DEBOUNCE_MS = 180;
 constexpr int DEFAULT_WIDTH = 1000;
 constexpr int DEFAULT_HEIGHT = 700;
-/// .pen の Input Edit の高さ
+/// .pen の Input Edit の高さ (下限として使い、レイアウトに合わせて伸びられるようにする)
 constexpr int INPUT_HEIGHT = 132;
 /// .pen の Header / Signature ペインの高さ (QSplitter の初期値)
 constexpr int HEADER_PANE_HEIGHT = 148;
@@ -30,8 +32,8 @@ constexpr int PAYLOAD_PANE_HEIGHT = 300;
 constexpr int SIGNATURE_PANE_HEIGHT = 100;
 /// ペインタイトルのセグメント色ドット
 constexpr int DOT_SIZE = 8;
-/// 値が無いことを示すプレースホルダ
-constexpr const char *EMPTY_PLACEHOLDER = "—";
+/// .pen の gap に合わせた QSplitter のハンドル幅
+constexpr int SPLITTER_HANDLE_WIDTH = 10;
 
 QLabel *captionLabel(QWidget *parent)
 {
@@ -49,10 +51,32 @@ void setPlainTextIfChanged(QTextBrowser *view, const QString &text)
     view->setPlainText(text);
 }
 
-QString coloredHtml(const QString &text, const char *color)
+QString coloredHtml(const QString &text, const QColor &color)
 {
     return QStringLiteral("<span style=\"color: %1;\">%2</span>")
-        .arg(QString::fromLatin1(color), text.toHtmlEscaped());
+        .arg(color.name(QColor::HexRgb), text.toHtmlEscaped());
+}
+
+/// バナーの背景色を設定する
+void setBannerStyle(QWidget *banner, const QColor &background)
+{
+    banner->setStyleSheet(QStringLiteral("background-color: %1; border-radius: 6px;")
+                              .arg(background.name(QColor::HexRgb)));
+}
+
+/// バナー内ラベルの文字色を設定する (背景はバナー側に描かせる)
+void setBannerTextStyle(QLabel *label, const QColor &foreground)
+{
+    label->setStyleSheet(
+        QStringLiteral("color: %1; background: transparent;").arg(foreground.name(QColor::HexRgb)));
+}
+
+/// ペインタイトルのセグメント色ドットを設定する
+void setDotStyle(QLabel *dot, const QColor &color)
+{
+    dot->setStyleSheet(QStringLiteral("background-color: %1; border-radius: %2px;")
+                           .arg(color.name(QColor::HexRgb))
+                           .arg(DOT_SIZE / 2));
 }
 } // namespace
 
@@ -75,16 +99,17 @@ void JwtDecoderGUI::buildUi()
     resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     auto *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(20, 20, 20, 20);
-    mainLayout->setSpacing(14);
+    // ContentsArea が既に 6px の余白を持つため、markdown_preview と同じ 16 / 12 に揃える
+    mainLayout->setContentsMargins(16, 16, 16, 16);
+    mainLayout->setSpacing(12);
 
     mainLayout->addWidget(buildNotice());
     mainLayout->addWidget(buildInputArea());
     mainLayout->addWidget(buildStructureError());
 
-    headerPane = buildPane(JwtPalette::SEGMENT_HEADER);
-    payloadPane = buildPane(JwtPalette::SEGMENT_PAYLOAD);
-    signaturePane = buildPane(JwtPalette::SEGMENT_SIGNATURE);
+    headerPane = buildPane();
+    payloadPane = buildPane();
+    signaturePane = buildPane();
 
     headerHighlighter = new JsonHighlighter(headerPane.view->document());
     payloadHighlighter = new JsonHighlighter(payloadPane.view->document());
@@ -96,29 +121,31 @@ void JwtDecoderGUI::buildUi()
     // .pen のペイン高さを初期値にする (ペイロードのみ伸縮させる)
     splitter->setSizes({HEADER_PANE_HEIGHT, PAYLOAD_PANE_HEIGHT, SIGNATURE_PANE_HEIGHT});
     splitter->setStretchFactor(1, 1);
+    splitter->setHandleWidth(SPLITTER_HANDLE_WIDTH);
     mainLayout->addWidget(splitter);
 
     decodeTimer = new QTimer(this);
     decodeTimer->setSingleShot(true);
     decodeTimer->setInterval(DECODE_DEBOUNCE_MS);
 
+    jwtPalette = JwtPalette::current();
+    applyPalette();
+
     retranslateUi();
 }
 
 QWidget *JwtDecoderGUI::buildNotice()
 {
-    auto *notice = new QFrame(this);
-    notice->setStyleSheet(QStringLiteral("background-color: %1; border-radius: 6px;")
-                              .arg(QString::fromLatin1(JwtPalette::NOTICE_BACKGROUND)));
+    notice = new QFrame(this);
 
     auto *layout = new QHBoxLayout(notice);
     layout->setContentsMargins(12, 10, 12, 10);
 
     noticeLabel = new QLabel(notice);
     noticeLabel->setWordWrap(true);
-    noticeLabel->setStyleSheet(QStringLiteral("color: %1; background: transparent;")
-                                   .arg(QString::fromLatin1(JwtPalette::NOTICE_TEXT)));
     layout->addWidget(noticeLabel);
+
+    // 配色は applyPalette() でまとめて設定する
 
     return notice;
 }
@@ -141,7 +168,9 @@ QWidget *JwtDecoderGUI::buildInputArea()
 
     inputEdit = new QTextEdit(area);
     inputEdit->setAcceptRichText(false);
-    inputEdit->setFixedHeight(INPUT_HEIGHT);
+    // 高さは固定せず、長いトークンでレイアウトに余裕があれば広がるようにする
+    inputEdit->setMinimumHeight(INPUT_HEIGHT);
+    inputEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     // インストール環境に依存しないようシステム標準の等幅フォントを使う
     inputEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     layout->addWidget(inputEdit);
@@ -154,8 +183,6 @@ QWidget *JwtDecoderGUI::buildInputArea()
 QWidget *JwtDecoderGUI::buildStructureError()
 {
     structureError = new QFrame(this);
-    structureError->setStyleSheet(QStringLiteral("background-color: %1; border-radius: 6px;")
-                                      .arg(QString::fromLatin1(JwtPalette::ERROR_BACKGROUND)));
     structureError->hide();
 
     auto *layout = new QHBoxLayout(structureError);
@@ -163,14 +190,14 @@ QWidget *JwtDecoderGUI::buildStructureError()
 
     structureErrorLabel = new QLabel(structureError);
     structureErrorLabel->setWordWrap(true);
-    structureErrorLabel->setStyleSheet(QStringLiteral("color: %1; background: transparent;")
-                                           .arg(QString::fromLatin1(JwtPalette::ERROR_TEXT)));
     layout->addWidget(structureErrorLabel);
+
+    // 配色は applyPalette() でまとめて設定する
 
     return structureError;
 }
 
-JwtDecoderGUI::Pane JwtDecoderGUI::buildPane(const char *dotColor)
+JwtDecoderGUI::Pane JwtDecoderGUI::buildPane()
 {
     Pane pane;
     pane.widget = new QWidget(this);
@@ -182,16 +209,14 @@ JwtDecoderGUI::Pane JwtDecoderGUI::buildPane(const char *dotColor)
     auto *titleRow = new QHBoxLayout;
     titleRow->setSpacing(8);
 
-    auto *dot = new QLabel(pane.widget);
-    dot->setFixedSize(DOT_SIZE, DOT_SIZE);
-    dot->setStyleSheet(QStringLiteral("background-color: %1; border-radius: %2px;")
-                           .arg(QString::fromLatin1(dotColor))
-                           .arg(DOT_SIZE / 2));
+    // ドットの色は applyPalette() でセグメントごとに設定する
+    pane.dot = new QLabel(pane.widget);
+    pane.dot->setFixedSize(DOT_SIZE, DOT_SIZE);
 
     pane.label = captionLabel(pane.widget);
     pane.note = captionLabel(pane.widget);
 
-    titleRow->addWidget(dot);
+    titleRow->addWidget(pane.dot);
     titleRow->addWidget(pane.label);
     titleRow->addStretch();
     titleRow->addWidget(pane.note);
@@ -199,6 +224,8 @@ JwtDecoderGUI::Pane JwtDecoderGUI::buildPane(const char *dotColor)
 
     pane.view = new QTextBrowser(pane.widget);
     pane.view->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    // 出力ビューは選択・コピーのみ (data_conversion と同じ扱い)
+    pane.view->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
     layout->addWidget(pane.view);
 
     return pane;
@@ -218,7 +245,42 @@ void JwtDecoderGUI::retranslateUi()
     payloadPane.label->setText(tr("Payload"));
     signaturePane.label->setText(tr("Signature"));
 
+    // 値が無いことはプレースホルダで示す (本文に書くと全選択コピーに混ざるため)
+    headerPane.view->setPlaceholderText(tr("No data"));
+    payloadPane.view->setPlaceholderText(tr("No data"));
+    signaturePane.view->setPlaceholderText(tr("No data"));
+
     // ペインの注記と本文は状態に依存するため、まとめて再生成する
+    updateViews();
+}
+
+void JwtDecoderGUI::updatePalette()
+{
+    const JwtPalette current = JwtPalette::current();
+    if (current == jwtPalette) {
+        return;
+    }
+
+    jwtPalette = current;
+    applyPalette();
+}
+
+void JwtDecoderGUI::applyPalette()
+{
+    setBannerStyle(notice, jwtPalette.noticeBackground);
+    setBannerTextStyle(noticeLabel, jwtPalette.noticeText);
+    setBannerStyle(structureError, jwtPalette.errorBackground);
+    setBannerTextStyle(structureErrorLabel, jwtPalette.errorText);
+
+    setDotStyle(headerPane.dot, jwtPalette.segmentHeader);
+    setDotStyle(payloadPane.dot, jwtPalette.segmentPayload);
+    setDotStyle(signaturePane.dot, jwtPalette.segmentSignature);
+
+    segmentHighlighter->setPalette(jwtPalette);
+    headerHighlighter->setPalette(jwtPalette);
+    payloadHighlighter->setPalette(jwtPalette);
+
+    // ペイン本文は HTML に色を埋め込んでいるため作り直す
     updateViews();
 }
 
@@ -227,6 +289,13 @@ void JwtDecoderGUI::changeEvent(QEvent *event)
     switch (event->type()) {
     case QEvent::LanguageChange:
         retranslateUi();
+        event->accept();
+        break;
+    case QEvent::PaletteChange:
+    case QEvent::ApplicationPaletteChange:
+        // GuiApplication::applyColorScheme() がテーマを切り替えるとパレットが届く。
+        // スタイルシートはリセットされないため、ここで色を取り直す。
+        updatePalette();
         event->accept();
         break;
     default:
@@ -287,7 +356,7 @@ void JwtDecoderGUI::updateViews()
     showSignature();
 }
 
-void JwtDecoderGUI::showPart(const Pane &pane, const JwtDecoder::DecodedPart &part)
+void JwtDecoderGUI::showPart(const Pane &pane, const JwtDecoder::DecodedPart &part) const
 {
     if (part.ok) {
         pane.note->setText(tr("Base64URL decoded · JSON"));
@@ -297,7 +366,7 @@ void JwtDecoderGUI::showPart(const Pane &pane, const JwtDecoder::DecodedPart &pa
     }
 
     pane.note->setText(tr("Decode failed"));
-    pane.view->setHtml(coloredHtml(part.error, JwtPalette::ERROR_TEXT));
+    pane.view->setHtml(coloredHtml(part.error, jwtPalette.errorText));
 }
 
 void JwtDecoderGUI::showSignature()
@@ -305,17 +374,21 @@ void JwtDecoderGUI::showSignature()
     const QString signature = decoder->signature();
 
     signaturePane.note->setText(tr("Not decoded · not verified"));
+
+    // 2 パートの JWS では署名が無い。プレースホルダに任せる
+    if (signature.isEmpty()) {
+        signaturePane.view->clear();
+        return;
+    }
+
     signaturePane.view->setHtml(
-        coloredHtml(signature.isEmpty() ? QString::fromUtf8(EMPTY_PLACEHOLDER) : signature,
-                    JwtPalette::SEGMENT_SIGNATURE) +
+        coloredHtml(signature, jwtPalette.segmentSignature) +
         QStringLiteral("<p>%1</p>")
-            .arg(
-                coloredHtml(tr("Shown as the raw Base64URL string."), JwtPalette::SECONDARY_TEXT)));
+            .arg(coloredHtml(tr("Shown as the raw Base64URL string."), jwtPalette.secondaryText)));
 }
 
 void JwtDecoderGUI::showEmpty(const Pane &pane)
 {
     pane.note->setText(tr("No data"));
-    pane.view->setHtml(
-        coloredHtml(QString::fromUtf8(EMPTY_PLACEHOLDER), JwtPalette::SECONDARY_TEXT));
+    pane.view->clear();
 }

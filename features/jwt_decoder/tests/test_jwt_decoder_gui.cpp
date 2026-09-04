@@ -1,6 +1,10 @@
 #include "features/jwt_decoder/core/jwt_decoder.h"
 #include "features/jwt_decoder/gui/jwt_decoder_gui.h"
+#include "features/jwt_decoder/gui/jwt_palette.h"
 
+#include <QApplication>
+#include <QColor>
+#include <QEvent>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QScrollBar>
@@ -8,6 +12,9 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 #include <QtTest>
+
+#include <oclero/qlementine/style/QlementineStyle.hpp>
+#include <oclero/qlementine/style/Theme.hpp>
 
 namespace Test {
 
@@ -44,6 +51,17 @@ bool anyViewContains(const QList<QTextBrowser *> &views, const QString &text)
         return view->toPlainText().contains(text);
     });
 }
+
+/// 配下のいずれかのウィジェットのスタイルシートが指定の色名を含むか
+bool anyStyleSheetContains(const QWidget &root, const QColor &color)
+{
+    const QString name = color.name(QColor::HexRgb);
+    const QList<QWidget *> children = root.findChildren<QWidget *>();
+
+    return std::any_of(children.begin(), children.end(), [&name](const QWidget *widget) {
+        return widget->styleSheet().contains(name);
+    });
+}
 } // namespace
 
 class TestJwtDecoderGUI : public QObject
@@ -53,6 +71,8 @@ class TestJwtDecoderGUI : public QObject
 private slots:
     static void test_panes_updateOnInput();
     void test_scrollPosition_isKeptWhileIdle();
+    // NOTE: アプリ全体のスタイルを差し替えるため、必ず最後に実行する
+    static void test_colors_followTheme();
 };
 
 void TestJwtDecoderGUI::test_panes_updateOnInput()
@@ -74,12 +94,13 @@ void TestJwtDecoderGUI::test_panes_updateOnInput()
     QVERIFY(anyViewContains(views, "John Doe"));
     QVERIFY(anyViewContains(views, "SflKxwRJ"));
 
-    // 形式が不正になったら 3 ペインとも空表示に戻る
+    // 形式が不正になったら 3 ペインとも空表示 (プレースホルダ) に戻る
     input->setPlainText("this-is-not-a-jwt");
     QTest::qWait(DECODE_WAIT_MS);
 
     for (const QTextBrowser *view : views) {
-        QVERIFY(view->toPlainText().contains(QString::fromUtf8("—")));
+        QVERIFY(view->toPlainText().isEmpty());
+        QCOMPARE(view->placeholderText(), QString("No data"));
     }
 
     // 失敗したパートだけがエラーになり、他のパートは表示される
@@ -125,6 +146,33 @@ void TestJwtDecoderGUI::test_scrollPosition_isKeptWhileIdle()
 
     QCOMPARE(scrollBar->value(), scrolledTo);
     QCOMPARE(textChangedCount, 0);
+}
+
+void TestJwtDecoderGUI::test_colors_followTheme()
+{
+    // QlementineStyle が入っていない間は Light 相当の既定値にフォールバックする
+    QCOMPARE(JwtPalette::current().noticeBackground, QColor::fromRgb(0xfeefd8));
+
+    JwtDecoderGUI gui(new JwtDecoder());
+    QVERIFY(anyStyleSheetContains(gui, QColor::fromRgb(0xfeefd8)));
+
+    // Dark テーマ相当の色を持つ QlementineStyle に差し替える
+    auto *style = new oclero::qlementine::QlementineStyle();
+    oclero::qlementine::Theme theme;
+    theme.statusColorWarningDisabled = QColor::fromRgb(0x393737);
+    theme.statusColorErrorDisabled = QColor::fromRgb(0x3f333b);
+    style->setTheme(theme);
+    QApplication::setStyle(style);
+
+    QCOMPARE(JwtPalette::current().noticeBackground, QColor::fromRgb(0x393737));
+
+    // GuiApplication::applyColorScheme() は setPalette() 経由で PaletteChange を届ける
+    QEvent paletteChange(QEvent::PaletteChange);
+    QApplication::sendEvent(&gui, &paletteChange);
+
+    QVERIFY(anyStyleSheetContains(gui, QColor::fromRgb(0x393737)));
+    QVERIFY(anyStyleSheetContains(gui, QColor::fromRgb(0x3f333b)));
+    QVERIFY(!anyStyleSheetContains(gui, QColor::fromRgb(0xfeefd8)));
 }
 
 } // namespace Test

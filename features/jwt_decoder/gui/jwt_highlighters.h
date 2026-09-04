@@ -1,6 +1,8 @@
 #ifndef JWT_HIGHLIGHTERS_H
 #define JWT_HIGHLIGHTERS_H
 
+#include "features/jwt_decoder/gui/jwt_palette.h"
+
 #include <QList>
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
@@ -31,12 +33,20 @@ public:
      */
     void updateState(bool enabled, bool header, bool payload);
 
+    /**
+     * @brief 色をテーマのものに差し替える
+     * @details `updateState()` と同様、色が変化した場合のみ再ハイライトする。
+     * @param palette 適用するパレット
+     */
+    void setPalette(const JwtPalette &palette);
+
 protected:
     void highlightBlock(const QString &text) override;
 
 private:
     [[nodiscard]] QTextCharFormat segmentFormat(int segment) const;
 
+    JwtPalette colors;
     bool coloringEnabled = true;
     bool headerFailed = false;
     bool payloadFailed = false;
@@ -52,6 +62,13 @@ class JsonHighlighter : public QSyntaxHighlighter
 public:
     explicit JsonHighlighter(QTextDocument *parent = nullptr);
 
+    /**
+     * @brief 色をテーマのものに差し替える
+     * @details 色が変化した場合のみルールを組み直して再ハイライトする。
+     * @param palette 適用するパレット
+     */
+    void setPalette(const JwtPalette &palette);
+
 protected:
     void highlightBlock(const QString &text) override;
 
@@ -63,6 +80,9 @@ private:
         QTextCharFormat format;
     };
 
+    void buildRules();
+
+    JwtPalette colors;
     QList<Rule> rules;
 };
 

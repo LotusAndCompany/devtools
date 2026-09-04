@@ -1,8 +1,5 @@
 #include "jwt_highlighters.h"
 
-#include "features/jwt_decoder/gui/jwt_palette.h"
-
-#include <QColor>
 #include <QRegularExpressionMatchIterator>
 #include <QTextDocument>
 
@@ -10,10 +7,10 @@ namespace {
 /// signature 以降はすべて署名として扱うためのセグメント上限
 constexpr int LAST_SEGMENT = 2;
 
-QTextCharFormat colorFormat(const char *color)
+QTextCharFormat colorFormat(const QColor &color)
 {
     QTextCharFormat format;
-    format.setForeground(QColor(color));
+    format.setForeground(color);
 
     return format;
 }
@@ -30,6 +27,19 @@ void JwtSegmentHighlighter::updateState(bool enabled, bool header, bool payload)
     coloringEnabled = enabled;
     headerFailed = header;
     payloadFailed = payload;
+
+    rehighlight();
+}
+
+void JwtSegmentHighlighter::setPalette(const JwtPalette &palette)
+{
+    // NOTE: 無条件の rehighlight() は入力欄の textChanged を発火させるため、
+    //       updateState() と同様に色が変わったときだけ呼ぶ。
+    if (colors == palette) {
+        return;
+    }
+
+    colors = palette;
 
     rehighlight();
 }
@@ -65,26 +75,43 @@ QTextCharFormat JwtSegmentHighlighter::segmentFormat(int segment) const
 {
     switch (segment) {
     case 0:
-        return colorFormat(headerFailed ? JwtPalette::ERROR_TEXT : JwtPalette::SEGMENT_HEADER);
+        return colorFormat(headerFailed ? colors.errorText : colors.segmentHeader);
     case 1:
-        return colorFormat(payloadFailed ? JwtPalette::ERROR_TEXT : JwtPalette::SEGMENT_PAYLOAD);
+        return colorFormat(payloadFailed ? colors.errorText : colors.segmentPayload);
     default:
-        return colorFormat(JwtPalette::SEGMENT_SIGNATURE);
+        return colorFormat(colors.segmentSignature);
     }
 }
 
 JsonHighlighter::JsonHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
+    buildRules();
+}
+
+void JsonHighlighter::setPalette(const JwtPalette &palette)
+{
+    if (colors == palette) {
+        return;
+    }
+
+    colors = palette;
+    buildRules();
+
+    rehighlight();
+}
+
+void JsonHighlighter::buildRules()
+{
+    rules.clear();
+
     // NOTE: 後のルールが前のルールを上書きするため、数値 → 文字列 → キーの順に並べる。
     //       文字列中の数字がリテラルとして色付けされないようにするための順序。
     rules.append({QRegularExpression(R"(-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)"),
-                  colorFormat(JwtPalette::JSON_NUMBER)});
+                  colorFormat(colors.jsonNumber)});
     rules.append(
-        {QRegularExpression(R"(\b(?:true|false|null)\b)"), colorFormat(JwtPalette::JSON_NUMBER)});
-    rules.append(
-        {QRegularExpression(R"("(?:[^"\\]|\\.)*")"), colorFormat(JwtPalette::JSON_STRING)});
-    rules.append(
-        {QRegularExpression(R"("(?:[^"\\]|\\.)*"(?=\s*:))"), colorFormat(JwtPalette::JSON_KEY)});
+        {QRegularExpression(R"(\b(?:true|false|null)\b)"), colorFormat(colors.jsonNumber)});
+    rules.append({QRegularExpression(R"("(?:[^"\\]|\\.)*")"), colorFormat(colors.jsonString)});
+    rules.append({QRegularExpression(R"("(?:[^"\\]|\\.)*"(?=\s*:))"), colorFormat(colors.jsonKey)});
 }
 
 void JsonHighlighter::highlightBlock(const QString &text)

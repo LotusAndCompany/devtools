@@ -3,6 +3,7 @@
 
 #include "features/framework/gui/gui_tool.h"
 #include "features/jwt_decoder/core/jwt_decoder.h"
+#include "features/jwt_decoder/gui/jwt_palette.h"
 
 #include <QString>
 
@@ -45,6 +46,7 @@ private:
     struct Pane
     {
         QWidget *widget = nullptr;
+        QLabel *dot = nullptr;
         QLabel *label = nullptr;
         QLabel *note = nullptr;
         QTextBrowser *view = nullptr;
@@ -54,16 +56,26 @@ private:
     QWidget *buildNotice();
     QWidget *buildInputArea();
     QWidget *buildStructureError();
-    Pane buildPane(const char *dotColor);
+    Pane buildPane();
 
     void retranslateUi();
+
+    /// 現在のテーマから色を取り直し、変化していれば適用する
+    void updatePalette();
+    /// 保持しているパレットをスタイルシート・ハイライタ・ペイン本文に反映する
+    void applyPalette();
+
     void updateViews();
-    static void showPart(const Pane &pane, const JwtDecoder::DecodedPart &part);
+    void showPart(const Pane &pane, const JwtDecoder::DecodedPart &part) const;
     void showSignature();
     static void showEmpty(const Pane &pane);
 
     JwtDecoder *const decoder;
 
+    /// テーマ由来の意味色 (`QWidget::palette()` と紛れないよう接頭辞を付ける)
+    JwtPalette jwtPalette;
+
+    QWidget *notice = nullptr;             ///< 署名非検証の注意バナー
     QLabel *noticeLabel = nullptr;         ///< 署名非検証の注意文
     QLabel *inputLabel = nullptr;          ///< "Encoded JWT"
     QLabel *inputHint = nullptr;           ///< デバウンスの注記
