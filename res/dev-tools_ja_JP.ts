@@ -1185,8 +1185,8 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <source>Search tools</source>
-        <translation>ツールを探す</translation>
+        <source>Show sidebar on startup</source>
+        <translation>起動時にサイドバーを表示</translation>
     </message>
     <message>
         <source>Open last used tool on startup</source>
