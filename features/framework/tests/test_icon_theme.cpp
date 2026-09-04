@@ -128,7 +128,8 @@ void TestIconTheme::followsApplicationPalette()
     QApplication::setPalette(darkPalette);
     IconUtils::refreshMaterialSymbolsTheme();
 
-    const QColor darkColor = firstOpaqueColor(icon.pixmap(QSize(24, 24)));
+    const QIcon darkIcon = QIcon::fromTheme(QStringLiteral("home"));
+    const QColor darkColor = firstOpaqueColor(darkIcon.pixmap(QSize(24, 24)));
 
     QApplication::setPalette(originalPalette);
     IconUtils::refreshMaterialSymbolsTheme();
