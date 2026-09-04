@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0](https://github.com/LotusAndCompany/devtools/compare/v0.7.0...v0.8.0) (2026-09-04)
+
+
+### Features
+
+* add Markdown preview feature with GUI support ([#98](https://github.com/LotusAndCompany/devtools/issues/98)) ([43fe411](https://github.com/LotusAndCompany/devtools/commit/43fe4112bc284c50f6585374bd47ae481d9a5624))
+* **build,logging:** add make run target and colored console output ([#84](https://github.com/LotusAndCompany/devtools/issues/84)) ([215428d](https://github.com/LotusAndCompany/devtools/commit/215428da1ae3525b8a200b8b951a99fec8314c19))
+* **gui:** adopt material symbols icon font ([#118](https://github.com/LotusAndCompany/devtools/issues/118)) ([5cd29ee](https://github.com/LotusAndCompany/devtools/commit/5cd29eedde2a68490d9ea36eec55adab10aec470))
+* **image:** replace legacy image tools with unified editor ([#69](https://github.com/LotusAndCompany/devtools/issues/69)) ([ad4a4da](https://github.com/LotusAndCompany/devtools/commit/ad4a4daa45d62ec30609a27c089f5ab89b5cc0b5))
+* **phrase_generation:** restructure UI layout and improve usability ([#97](https://github.com/LotusAndCompany/devtools/issues/97)) ([59507c0](https://github.com/LotusAndCompany/devtools/commit/59507c01a80a1a3eefe5570c2439a0f294035990))
+* **style:** apply qlementine modern Qt6 QStyle theme ([#91](https://github.com/LotusAndCompany/devtools/issues/91)) ([0ec4876](https://github.com/LotusAndCompany/devtools/commit/0ec4876d20619d6163a72a35c5c953c8cf74ec51))
+
+
+### Bug Fixes
+
+* **build:** avoid duplicate static library links ([#76](https://github.com/LotusAndCompany/devtools/issues/76)) ([aff6c1d](https://github.com/LotusAndCompany/devtools/commit/aff6c1dbe8307f1839ea5b7a84fe7aae29cb30c2))
+* **ci:** add build-mode: none to CodeQL C++ init step ([#101](https://github.com/LotusAndCompany/devtools/issues/101)) ([9197f0e](https://github.com/LotusAndCompany/devtools/commit/9197f0e28d98d26667aea4fc3315ee6de2ff8c02))
+* **ci:** disable vcpkg binary cache, bump run-vcpkg to v11.6, mirror Doxygen ([#102](https://github.com/LotusAndCompany/devtools/issues/102)) ([2d7f6a9](https://github.com/LotusAndCompany/devtools/commit/2d7f6a94097548fac0df64513e007ba8b58494c8))
+* **ci:** pin codeql-action to v4 tag and add dependabot grouping ([#112](https://github.com/LotusAndCompany/devtools/issues/112)) ([18b51a4](https://github.com/LotusAndCompany/devtools/commit/18b51a47da44f4601772588800b2268c5aa38841))
+* **cmake:** change Doxygen not found message from WARNING to STATUS ([#100](https://github.com/LotusAndCompany/devtools/issues/100)) ([17b5434](https://github.com/LotusAndCompany/devtools/commit/17b5434da2c9581d30da159d52bbfacbf5a1c9d3))
+* **data_conversion:** resolve 4 ctest failures in parser and outdated flag ([#78](https://github.com/LotusAndCompany/devtools/issues/78)) ([e71a3bd](https://github.com/LotusAndCompany/devtools/commit/e71a3bd51d18f9ef014c71918c934b9de9f5ff3a))
+* **image-tool:** change section checkbox default value to false. ([#88](https://github.com/LotusAndCompany/devtools/issues/88)) ([aa2d010](https://github.com/LotusAndCompany/devtools/commit/aa2d010f24ec3d4f6faa1ed3157c02620c1f82ea))
+* **phrase_generation:** improve save button position in phrase generation UI ([#43](https://github.com/LotusAndCompany/devtools/issues/43)) ([5db7227](https://github.com/LotusAndCompany/devtools/commit/5db7227ba405c05db06394e850e1764a050de58a))
+* **ui:** manually draw right border on sidemenu to fix qlementine issue ([#99](https://github.com/LotusAndCompany/devtools/issues/99)) ([c9b909a](https://github.com/LotusAndCompany/devtools/commit/c9b909a8db5042b982a41442b39a34abc6c60670))
+
+
+### Build System
+
+* **i18n:** make translation updates explicit ([#71](https://github.com/LotusAndCompany/devtools/issues/71)) ([cfb5745](https://github.com/LotusAndCompany/devtools/commit/cfb5745fde64f293378fb28a45366b457d2d4bcb))
+
 ## [0.7.0](https://github.com/LotusAndCompany/devtools/compare/v0.6.0...v0.7.0) (2026-05-01)
 
 
