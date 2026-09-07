@@ -398,9 +398,6 @@
 <context>
     <name>DataConversion</name>
     <message>
-        <location filename="../core/data_conversion/emitter/json_emitter.cpp" line="+18"/>
-        <location filename="../core/data_conversion/emitter/yaml_emitter.cpp" line="+19"/>
-        <location filename="../core/data_conversion/emitter/toml_emitter.cpp" line="+21"/>
         <source>Invalid input value</source>
         <translation>無効なデータです</translation>
     </message>
@@ -1188,7 +1185,6 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <location filename="../gui/sidemenu.cpp" line="+159"/>
         <source>Search tools</source>
         <translation>ツールを探す</translation>
     </message>
@@ -1271,12 +1267,10 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>コマンドリストからコマンドを生成</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Regex Tester</source>
         <translation>正規表現テスター</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Test and debug regular expressions</source>
         <translation>正規表現のテストとデバッグを行います</translation>
     </message>
