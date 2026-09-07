@@ -140,7 +140,7 @@ void RegexWorker::run()
     }
 
     // Execute replace using custom ECMA-like substitution
-    const QString replacedText = RegexTool::replace(pattern, text, replacePattern, options);
+    const QString replacedText = RegexTool::replace(pattern, text, replacePattern, options, global);
 
     emit finishedMatching(requestId, matches, replacedText, true, QString());
 }
@@ -457,7 +457,7 @@ void RegexTesterGUI::populateQuickReference(QTreeWidget *tree)
 void RegexTesterGUI::setupConnections()
 {
     connect(m_patternEdit, &QLineEdit::textChanged, this, &RegexTesterGUI::triggerUpdate);
-    connect(m_presetCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+    connect(m_presetCombo, QOverload<int>::of(&QComboBox::activated), this,
             &RegexTesterGUI::onPresetSelected);
     connect(m_copyPatternButton, &QPushButton::clicked, this, &RegexTesterGUI::copyPattern);
 
