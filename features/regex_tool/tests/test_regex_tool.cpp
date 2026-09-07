@@ -11,6 +11,7 @@ private slots:
     void testMatch();
     void testReplace_data();
     void testReplace();
+    void testReplaceSingle();
 };
 
 void TestRegexTool::testMatch_data()
@@ -82,6 +83,13 @@ void TestRegexTool::testReplace()
     const QString result = devtools::RegexTool::replace(pattern, text, replacement,
                                                         QRegularExpression::NoPatternOption);
     QCOMPARE(result, expectedResult);
+}
+
+void TestRegexTool::testReplaceSingle()
+{
+    const QString result = devtools::RegexTool::replace("abc", "abc abc", "xyz",
+                                                        QRegularExpression::NoPatternOption, false);
+    QCOMPARE(result, QString("xyz abc"));
 }
 
 QTEST_MAIN(TestRegexTool)

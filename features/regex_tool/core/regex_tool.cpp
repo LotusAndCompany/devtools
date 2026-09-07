@@ -88,7 +88,7 @@ QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &tex
 }
 
 QString RegexTool::replace(const QString &pattern, const QString &text, const QString &replacement,
-                           QRegularExpression::PatternOptions options)
+                           QRegularExpression::PatternOptions options, bool global)
 {
     if (pattern.isEmpty()) {
         return text;
@@ -102,16 +102,21 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
     QString result;
     qsizetype lastPos = 0;
 
-    QRegularExpressionMatchIterator i = re.globalMatch(text);
-    while (i.hasNext()) {
-        QRegularExpressionMatch const match = i.next();
-
-        // Append the text before this match
-        result.append(text.mid(lastPos, match.capturedStart() - lastPos));
-
-        // Expand the replacement string exactly once for this match
-        result.append(substituteReplacement(replacement, match));
-        lastPos = match.capturedEnd();
+    if (global) {
+        QRegularExpressionMatchIterator i = re.globalMatch(text);
+        while (i.hasNext()) {
+            const QRegularExpressionMatch match = i.next();
+            result.append(text.mid(lastPos, match.capturedStart() - lastPos));
+            result.append(substituteReplacement(replacement, match));
+            lastPos = match.capturedEnd();
+        }
+    } else {
+        const QRegularExpressionMatch match = re.match(text);
+        if (match.hasMatch()) {
+            result.append(text.mid(lastPos, match.capturedStart() - lastPos));
+            result.append(substituteReplacement(replacement, match));
+            lastPos = match.capturedEnd();
+        }
     }
 
     // Append the remaining text

@@ -61,10 +61,11 @@ public:
      * @param text 対象テキスト
      * @param replacement 置換文字列
      * @param options オプション
+     * @param global 全てのマッチを置換するか（falseの場合は最初のマッチのみ）
      * @return 置換後のテキスト
      */
     static QString replace(const QString &pattern, const QString &text, const QString &replacement,
-                           QRegularExpression::PatternOptions options);
+                           QRegularExpression::PatternOptions options, bool global = true);
 };
 
 } // namespace devtools
