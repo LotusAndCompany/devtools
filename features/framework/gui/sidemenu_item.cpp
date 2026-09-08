@@ -14,7 +14,9 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     setFlat(true);
     setCheckable(true);
-    setStyleSheet("text-align:left;");
+    setStyleSheet(
+        "QPushButton { text-align:left; color: palette(window-text); }"
+        "QPushButton:checked { color: palette(highlighted-text); }");
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
