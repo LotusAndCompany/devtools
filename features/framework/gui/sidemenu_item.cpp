@@ -14,9 +14,7 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     setFlat(true);
     setCheckable(true);
-    setStyleSheet(
-        "QPushButton { text-align:left; color: palette(window-text); }"
-        "QPushButton:checked { color: palette(highlighted-text); }");
+    setStyleSheet("QPushButton { text-align:left; }");
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
@@ -53,6 +51,13 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
 
     QStyleOptionButton option;
     initStyleOption(&option);
+
+    const auto textRole =
+        (option.state & QStyle::State_On) != 0 ? QPalette::HighlightedText : QPalette::Text;
+    const auto colorGroup =
+        (option.state & QStyle::State_Enabled) != 0 ? QPalette::Normal : QPalette::Disabled;
+    option.palette.setColor(QPalette::All, QPalette::ButtonText,
+                            style()->standardPalette().color(colorGroup, textRole));
 
     constexpr int ICON_TEXT_SPACING = 6;
     const int iconWidth = option.icon.isNull() ? 0 : option.iconSize.width();
