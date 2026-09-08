@@ -59,7 +59,7 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
     option.palette.setColor(QPalette::All, QPalette::ButtonText,
                             style()->standardPalette().color(colorGroup, textRole));
 
-    constexpr int ICON_TEXT_SPACING = 6;
+    constexpr int ICON_TEXT_SPACING = 4;
     const int iconWidth = option.icon.isNull() ? 0 : option.iconSize.width();
     const int availableTextWidth =
         style()->subElementRect(QStyle::SE_PushButtonContents, &option, this).width() - iconWidth -
