@@ -96,6 +96,12 @@ DevTools_add_test(test_markdown_preview
     features/markdown_preview/tests/test_markdown_preview.cpp
 )
 
+# core/diff_tool
+DevTools_add_test(test_diff_tool
+    SOURCES
+    features/diff_tool/tests/test_diff_tool.cpp
+)
+
 # core/iamge
 DevTools_add_test(test_basic_image_io
     SOURCES

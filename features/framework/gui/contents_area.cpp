@@ -4,6 +4,8 @@
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/data_conversion/gui/data_conversion_gui.h"
 #include "features/db_tool/gui/db_main/db_main.h"
+#include "features/diff_tool/core/diff_tool.h"
+#include "features/diff_tool/gui/diff_tool_gui.h"
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
 #include "features/image/gui/basic/image_tools_unified_gui.h"
@@ -88,6 +90,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::MARKDOWN_PREVIEW:
         content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
+        break;
+    case Sidemenu::ID::DIFF_TOOL:
+        content = new DiffToolGUI(new DiffTool(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
