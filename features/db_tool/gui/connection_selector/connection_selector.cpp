@@ -1,6 +1,7 @@
 #include "connection_selector.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
 #include <QHBoxLayout>
@@ -14,6 +15,7 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QSqlError>
+#include <QStyle>
 #include <QVBoxLayout>
 
 ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
@@ -100,8 +102,9 @@ void ConnectionSelector::refreshHistoryList()
 
         auto *label = new QLabel(displayName);
         auto *deleteButton = new QPushButton();
-        DevTools::Ui::configureIconButton(deleteButton, QStringLiteral("edit-delete"),
-                                          tr("Delete"));
+        DevTools::Ui::configureIconButton(deleteButton, QStringLiteral("delete"), tr("Delete"));
+        deleteButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("delete"), QStyle::SP_TrashIcon));
         deleteButton->setProperty("historyIndex", i);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, i]() { removeHistoryItem(i); });

@@ -39,6 +39,10 @@ DevToolsは、開発に使うさまざまなツールを、ひとつの使いや
 
 - Markdownを編集し、HTMLプレビューをリアルタイムで確認
 
+### 正規表現テスター
+
+- 正規表現でテキストを検索し、マッチ結果と置換結果を確認
+
 ### コマンド実行
 
 - GUIからシェルコマンドを実行
@@ -57,7 +61,7 @@ DevToolsは、開発に使うさまざまなツールを、ひとつの使いや
 ## 必要環境
 
 - **OS**: macOS 15.0以降（Apple Silicon / arm64のみ）
-- **Qt**: 6.9.3（qlementineにはQt 6.8以降が必要）
+- **Qt**: 6.9以上（6.9.3で検証済み。Material Symbolsの名前付きグリフに必要）
 - **CMake**: 3.21.1以降
 - **C++コンパイラ**: C++17対応
 
@@ -96,6 +100,7 @@ cmake --build . --target run
 
 - [ユーザーガイド](../user-guide/overview.md) - 各機能の使い方
 - [開発者向けガイド](../development/architecture.md) - コントリビューター向け
+- [アイコン資産](../development/icon-assets.md) - Material Symbolsアイコンの追加方法
 - [APIドキュメント](https://LotusAndCompany.github.io/devtools/)（Doxygen）
 
 ### その他のリソース
@@ -132,8 +137,7 @@ DevToolsは以下のサードパーティライブラリを使用しています
 | yaml-cpp | MIT |
 | qlementine | MIT |
 | qrcodegen | MIT |
-| Material Icons | Apache 2.0 |
-| Remix Icon | Apache 2.0 |
+| Material Symbols | Apache 2.0 |
 
 ## 謝辞
 

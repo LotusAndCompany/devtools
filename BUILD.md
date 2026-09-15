@@ -12,7 +12,7 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.9.3 (Widgets, LinguistTools, Network, Svg modules)
+- **Qt**: 6.9+ (6.9.3 tested; Widgets, LinguistTools, Sql, Network, Svg modules)
 - **vcpkg**: For dependency management
 
 ### Dependencies (via vcpkg)
@@ -24,7 +24,8 @@ This document describes how to build DevTools from source.
 
 Qlementine is fetched during CMake configure from
 `https://github.com/oclero/qlementine.git`. It requires Qt 6.8+ and CMake 3.21+;
-DevTools links it into `DevTools_core` and loads the bundled themes from the Qt resource
+DevTools additionally requires Qt 6.9+ for named-glyph icon support, links qlementine into
+`DevTools_core`, and loads the bundled themes from the Qt resource
 prefix `:/themes`.
 
 ### Optional
@@ -44,8 +45,8 @@ brew install qt@6
 ```
 
 #### Using Qt Online Installer
-Download from [qt.io](https://www.qt.io/download) and install Qt 6.x with the following components:
-- Qt 6.x for macOS
+Download from [qt.io](https://www.qt.io/download) and install Qt 6.9 or later with the following components:
+- Qt 6.9 or later for macOS
 - Qt Creator (optional, but recommended)
 
 ### 2. Install vcpkg
@@ -224,4 +225,4 @@ If configuration fails while downloading qlementine:
    rm -rf build/_deps/qlementine-*
    cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
-3. Verify that the active Qt installation is Qt 6.8 or later and includes the Svg module.
+3. Verify that the active Qt installation is Qt 6.9 or later and includes the Svg module.

@@ -259,6 +259,9 @@ Register the tool in `Sidemenu::Sidemenu()`:
 
 ```cpp
 registerItem(ID::YOUR_TOOL_ID);
+// In Sidemenu::icon()
+case ID::YOUR_TOOL_ID:
+    return IconUtils::themedIcon(QStringLiteral("your_material_symbol"));
 ```
 
 Add its icon names in `Sidemenu::icon()` and its translated name and
@@ -294,15 +297,22 @@ cmake --build build --target update_devtools_translations
 
 ### 10. Add an Icon
 
-Prefer an existing `QIcon::fromTheme` name. If a new asset is needed, add
-matching SVGs under the light and dark icon resource directories, list them in
-`res/light_icons.qrc` and `res/dark_icons.qrc`, and add the fallback names in
-`Sidemenu::icon()`.
+Use a named glyph from the bundled Material Symbols Outlined font. Do not add
+light/dark SVG files or update an icon resource file.
 
-```text
-res/light/material/your_tool.svg
-res/dark/material/your_tool.svg
+1. Choose the icon name from the [Material Symbols catalog](https://fonts.google.com/icons).
+2. Use the snake_case glyph name with `IconUtils::themedIcon()` and choose an
+   appropriate `QStyle::StandardPixmap` fallback.
+3. Verify the name with `QIcon::hasThemeIcon()` when adding a new icon.
+
+For example:
+
+```cpp
+button->setIcon(
+    IconUtils::themedIcon(QStringLiteral("download"), QStyle::SP_ArrowDown));
 ```
+
+The font is registered by `GuiApplication` and requires Qt 6.9 or later.
 
 ### 11. Write Tests
 

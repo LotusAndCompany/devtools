@@ -84,16 +84,11 @@ private:
     // NOTE: staticにできる
     /**
      * @brief カラースキームを変更をUIに反映する
-     * @details ライトモードの時には黒いアイコン(res/light/)@n
-     *          ダークモードの時は白いアイコン(res/dark/)
-     * を使うようにアイコンテーマを変更する@n 各アイコンテーマは
-     * res/light/index.theme, res/dark/index.theme で定義されている@n
-     *          また、qlementineのテーマもシステムスキームに合わせて切り替える
+     * @details Material Symbols Outlined のグリフをアプリケーションフォントから生成し、
+     *          qlementineのテーマとシステムスキームに合わせてパレットを切り替える
      *
      * @sa [QIcon::setThemeName(const QString
      * &name)](https://doc.qt.io/qt-6/qicon.html#setThemeName)
-     * @sa [Freedesktop The icon theme
-     * specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html)
      */
     void applyColorScheme();
 
@@ -103,6 +98,9 @@ private:
      * @sa GuiApplication::GuiApplication(int argc, char *argv)
      */
     void onWindowColorSchemeChanged();
+
+    /// Material Symbols Outlined の登録に成功したかどうか
+    bool material_symbols_loaded = false;
 
 // Platform specific
 #ifdef Q_OS_MACOS

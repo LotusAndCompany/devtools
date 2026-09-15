@@ -1,6 +1,7 @@
 #include "data_conversion_gui.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/framework/gui/icon_utils.h"
 
 #include <QClipboard>
 #include <QComboBox>
@@ -8,12 +9,12 @@
 #include <QGroupBox>
 #include <QGuiApplication>
 #include <QHBoxLayout>
-#include <QIcon>
 #include <QLabel>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSplitter>
 #include <QStandardPaths>
+#include <QStyle>
 #include <QVBoxLayout>
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
@@ -65,18 +66,21 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
     loadButton = new QPushButton(tr("Load"), container);
     DevTools::Ui::configureCompactButton(loadButton);
-    loadButton->setIcon(QIcon::fromTheme(QStringLiteral("file")));
+    loadButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("file_open"), QStyle::SP_DialogOpenButton));
     input_action_button_layout->addWidget(loadButton);
 
     pasteButton = new QPushButton(tr("Paste"), container);
     DevTools::Ui::configureCompactButton(pasteButton);
-    pasteButton->setIcon(QIcon::fromTheme(QStringLiteral("content_paste")));
+    pasteButton->setIcon(IconUtils::themedIcon(QStringLiteral("content_paste")));
     input_action_button_layout->addWidget(pasteButton);
 
     input_action_button_layout->addStretch();
 
     clearButton = new QPushButton(container);
     DevTools::Ui::configureIconButton(clearButton, QStringLiteral("close"), tr("Clear"));
+    clearButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("close"), QStyle::SP_DialogCloseButton));
     input_action_button_layout->addWidget(clearButton);
 
     layout->addLayout(input_action_button_layout);
@@ -122,12 +126,12 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 
     saveButton = new QPushButton(tr("Save"), container);
     DevTools::Ui::configureCompactButton(saveButton);
-    saveButton->setIcon(QIcon::fromTheme(QStringLiteral("save")));
+    saveButton->setIcon(IconUtils::themedIcon(QStringLiteral("save"), QStyle::SP_DialogSaveButton));
     output_action_button_layout->addWidget(saveButton);
 
     copyButton = new QPushButton(tr("Copy"), container);
     DevTools::Ui::configureCompactButton(copyButton);
-    copyButton->setIcon(QIcon::fromTheme(QStringLiteral("content_copy")));
+    copyButton->setIcon(IconUtils::themedIcon(QStringLiteral("content_copy")));
     output_action_button_layout->addWidget(copyButton);
 
     layout->addLayout(output_action_button_layout);

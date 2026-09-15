@@ -4,10 +4,10 @@
 #include "features/framework/core/exception/invalid_argument_exception.h"
 #include "features/framework/core/exception/under_development_exception.h"
 #include "features/framework/gui/design_system.h"
+#include "features/framework/gui/icon_utils.h"
 #include "sidemenu_item.h"
 
 #include <QAbstractButton>
-#include <QApplication>
 #include <QButtonGroup>
 #include <QEvent>
 #include <QFrame>
@@ -15,25 +15,15 @@
 #include <QPainter>
 #include <QScrollArea>
 #include <QSizePolicy>
-#include <QStyle>
 #include <QVBoxLayout>
 
-namespace {
-QIcon themedIconWithFallback(const QStringList &names)
+const QString &Sidemenu::invalidSidemenuIDReason()
 {
-    for (const QString &name : names) {
-        const QIcon icon = QIcon::fromTheme(name);
-        if (!icon.isNull()) {
-            return icon;
-        }
-    }
-
-    return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+    static const QString reason = QString("Sidemenu::ID must be in range (%1, %2)")
+                                      .arg(Sidemenu::ID_MIN)
+                                      .arg(Sidemenu::ID_MAX);
+    return reason;
 }
-} // namespace
-
-const QString Sidemenu::invalidSidemenuIDReason =
-    QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
 
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
@@ -74,6 +64,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DB_TOOL);
+    registerItem(ID::REGEX_TESTER);
 
     m_scrollAreaLayout->addStretch();
 
@@ -85,7 +76,7 @@ void Sidemenu::validateID(Sidemenu::ID id)
     const int intID = static_cast<int>(id);
 
     if (intID <= ID_MIN || ID_MAX <= intID) {
-        throw InvalidArgumentException(intID, invalidSidemenuIDReason);
+        throw InvalidArgumentException(intID, invalidSidemenuIDReason());
     }
 }
 
@@ -93,38 +84,29 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
 
-    QStringList iconNames;
     switch (id) {
     case ID::HTTP_REQUEST:
-        iconNames = {"network", "network-workgroup"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("lan"));
     case ID::IMAGE_ALL_IN_ONE:
-        iconNames = {"image-x-generic", "applications-graphics", "insert-image"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("image"));
     case ID::PHRASE_GENERATION:
-        iconNames = {"library_books", "accessories-dictionary"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("library_books"));
     case ID::COMMAND_GENERATION:
-        iconNames = {"terminal", "utilities-terminal"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("terminal"));
     case ID::DATA_CONVERSION:
-        iconNames = {"question_mark", "view-refresh"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("transform"));
     case ID::DB_TOOL:
-        iconNames = {"database", "server-database"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("database"));
     case ID::QR_CODE_GENERATION:
-        iconNames = {"qr_code", "insert-link"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("qr_code"));
     case ID::MARKDOWN_PREVIEW:
-        iconNames = {"article"};
-        break;
+        return IconUtils::themedIcon(QStringLiteral("article"));
+    case ID::REGEX_TESTER:
+        return IconUtils::themedIcon(QStringLiteral("regular_expression"));
 
     default:
         throw UnderDevelopmentException();
     }
-
-    return themedIconWithFallback(iconNames);
 }
 
 void Sidemenu::registerItem(ID id)
@@ -147,14 +129,11 @@ void Sidemenu::selectItem(ID id)
 
 void Sidemenu::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
-        break;
-    default:
+    } else {
         QWidget::changeEvent(event);
-        break;
     }
 }
 

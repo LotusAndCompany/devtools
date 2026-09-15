@@ -4,6 +4,7 @@
 #include "../connection_window/connection_window.h"
 #include "../query_page/query_page.h"
 #include "features/framework/gui/design_system.h"
+#include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -18,6 +19,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QStyle>
 #include <QTabWidget>
 #include <QTableView>
 #include <QTimer>
@@ -73,6 +75,8 @@ void dbMain::buildUi()
     refreshTableButton = new QPushButton(toolbarGroupBox);
     DevTools::Ui::configureIconButton(refreshTableButton, QStringLiteral("refresh"),
                                       tr("Refresh Tables"));
+    refreshTableButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     toolbarLayout->addWidget(refreshTableButton);
 
     toolbarLayout->addStretch();
@@ -246,6 +250,9 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     // 更新ボタン
     auto *refreshButton = new QPushButton;
     DevTools::Ui::configureIconButton(refreshButton, QStringLiteral("refresh"), tr("Refresh"));
+    refreshButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
+    refreshButton->setToolTip(tr("Refresh"));
     connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
     // 左寄せのレイアウト
     auto *buttonLayout = new QHBoxLayout;

@@ -11,7 +11,7 @@ DevTools is a Qt6-based desktop application built with C++17. The architecture u
 | Component | Technology |
 |-----------|------------|
 | Language | C++17 |
-| GUI Framework | Qt 6.x (Widgets) |
+| GUI Framework | Qt 6.9+ (Widgets) |
 | Build System | CMake 3.21.1+ |
 | Package Manager | vcpkg |
 | Code Formatting | clang-format |
@@ -35,10 +35,12 @@ flowchart TD
     features --> http["http_request/<br/>HTTP API testing"]
     features --> command["command/<br/>Shell command execution"]
     features --> phrase["phrase_generation/<br/>Random phrase generation"]
+    features --> regex["regex_tool/<br/>Regular expression testing"]
     root --> main["main/<br/>Application entry point"]
     root --> resources["res/"]
     resources --> qrc["*.qrc<br/>Qt resource files"]
     resources --> themes["themes/<br/>qlementine theme JSON files"]
+    resources --> fonts["fonts/<br/>Material Symbols icon font"]
     resources --> translations["*.ts<br/>Translation files"]
     root --> tests["tests/<br/>Shared test helpers<br/>(per-feature tests live in features/{feature}/tests/)"]
     root --> distribution["distribution/<br/>Packaging files"]
@@ -82,6 +84,7 @@ Other feature modules (`DevTools_http_request`, `DevTools_command`,
 | `DevTools_command` | Shell command execution | DevTools_core |
 | `DevTools_phrase_generation` | Random phrase generation | DevTools_core |
 | `DevTools_db_tool` | Database tool | DevTools_core |
+| `DevTools_regex_tool` | Regular expression matching and replacement | DevTools_core |
 
 ### Core Module Structure
 
@@ -209,7 +212,7 @@ DevTools uses qlementine as the application-wide `QStyle`:
 2. `oclero::qlementine::ThemeManager` loads JSON themes from the Qt resource prefix
    `:/themes`.
 3. `GuiApplication::applyColorScheme()` maps the system color scheme to the qlementine
-   `Light` or `Dark` theme and also switches the icon theme between `light` and `dark`.
+   `Light` or `Dark` theme and refreshes the Material Symbols icon theme.
 
 Theme JSON files live in `res/themes/` and are registered in `res/application.qrc`. When
 adding or renaming a theme, keep the `meta.name` value unique because qlementine's

@@ -3,6 +3,7 @@
 #include "contents_area.h"
 #include "design_system.h"
 #include "gui_application.h"
+#include "icon_utils.h"
 #include "menubar/about_devtools_dialog.h"
 #include "menubar/settings_dialog.h"
 
@@ -20,6 +21,7 @@
 #include <QMimeData>
 #include <QPushButton>
 #include <QSettings>
+#include <QStyle>
 #include <QTranslator>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -122,6 +124,8 @@ void MainWindow::setupCentralWidget()
     m_sidemenuVisibilityButton->setObjectName("sidemenuVisibilityButton");
     DevTools::Ui::configureWindowControlButton(m_sidemenuVisibilityButton, "left_panel_close",
                                                tr("Toggle sidebar"));
+    m_sidemenuVisibilityButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("left_panel_close"), QStyle::SP_ArrowLeft));
     toolbarLayout->addWidget(m_sidemenuVisibilityButton);
 
     toolbarLayout->addStretch();
@@ -130,6 +134,7 @@ void MainWindow::setupCentralWidget()
     m_windowAlwaysOnTopButton->setObjectName("windowAlwaysOnTopButton");
     DevTools::Ui::configureWindowControlButton(m_windowAlwaysOnTopButton, "flip_to_front",
                                                tr("Always on top"));
+    m_windowAlwaysOnTopButton->setIcon(IconUtils::themedIcon(QStringLiteral("flip_to_front")));
     m_windowAlwaysOnTopButton->setCheckable(true);
     toolbarLayout->addWidget(m_windowAlwaysOnTopButton);
 
@@ -267,10 +272,12 @@ void MainWindow::dropEvent(QDropEvent *event)
 void MainWindow::setSidemenuHidden(bool hide)
 {
     if (hide) {
-        m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_open"));
+        m_sidemenuVisibilityButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("left_panel_open"), QStyle::SP_ArrowRight));
         m_sidemenu->hide();
     } else {
-        m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
+        m_sidemenuVisibilityButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("left_panel_close"), QStyle::SP_ArrowLeft));
         m_sidemenu->show();
     }
 }

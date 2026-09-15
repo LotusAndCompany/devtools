@@ -7,8 +7,12 @@
 
 #include <utility>
 
-const QString Tool::invalidToolIDReason =
-    QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
+const QString &Tool::invalidToolIDReason()
+{
+    static const QString reason =
+        QString("Tool::ID must be in range (%1, %2)").arg(Tool::ID_MIN).arg(Tool::ID_MAX);
+    return reason;
+}
 
 Tool::Tool(Tool::ID id, QString stringID, QObject *parent)
     : QObject(parent), id(id), stringID(std::move(stringID)), _translatable(translatable(id))
@@ -21,7 +25,7 @@ void Tool::validateID(ID id)
     const int intID = static_cast<int>(id);
 
     if (intID <= ID_MIN || ID_MAX <= intID) {
-        throw InvalidArgumentException(intID, invalidToolIDReason);
+        throw InvalidArgumentException(intID, invalidToolIDReason());
     }
 }
 
@@ -59,6 +63,8 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
     case ID::MARKDOWN_PREVIEW:
         return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
+    case ID::REGEX_TESTER:
+        return Translatable{tr("Regex Tester"), tr("Test and debug regular expressions")};
     default:
         throw UnderDevelopmentException();
     }
@@ -66,12 +72,10 @@ Tool::Translatable Tool::translatable(ID id)
 
 bool Tool::event(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         QObject::event(event);
         _translatable = translatable(id);
         return true;
-    default:
-        return QObject::event(event);
     }
+    return QObject::event(event);
 }
