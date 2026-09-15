@@ -202,6 +202,17 @@ grep "type=\"unfinished\"" res/dev-tools_ja_JP.ts
    - Missing translations
    - Wrong context translations
 
+### Shared UI and Localization
+
+Use the shared UI contract in `features/framework/gui/design_system.*` when
+adding or changing translatable controls. Shared field, pane, action-bar, and
+dialog-footer helpers provide the size policies and spacing that allow English
+and Japanese text to fit consistently across screens.
+
+Do not compensate for a translation with a screen-specific fixed width, font,
+or stylesheet. Prefer layouts and size hints; if a reusable role cannot fit a
+translation, update the shared helper and add a focused UI regression test.
+
 ## Common Issues
 
 ### Text Truncation

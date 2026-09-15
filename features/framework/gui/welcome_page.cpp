@@ -3,7 +3,6 @@
 #include "design_system.h"
 
 #include <QEvent>
-#include <QFont>
 #include <QLabel>
 #include <QPixmap>
 #include <QVBoxLayout>
@@ -22,10 +21,7 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
     layout->addWidget(logoLabel);
 
     m_messageLabel = new QLabel(this);
-    QFont font = m_messageLabel->font();
-    font.setPointSize(DevTools::Ui::Metrics::HERO_POINT_SIZE);
-    m_messageLabel->setFont(font);
-    m_messageLabel->setAlignment(Qt::AlignCenter);
+    DevTools::Ui::configureHeroLabel(m_messageLabel);
     layout->addWidget(m_messageLabel);
 
     layout->addStretch();

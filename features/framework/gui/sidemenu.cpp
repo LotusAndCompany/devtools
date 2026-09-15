@@ -34,6 +34,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     DevTools::Ui::applyPanelLayout(verticalLayout);
 
     m_searchBoxEdit = new QLineEdit(this);
+    DevTools::Ui::configureLineEdit(m_searchBoxEdit);
     m_searchBoxEdit->setFocusPolicy(Qt::ClickFocus);
     verticalLayout->addWidget(m_searchBoxEdit);
 

@@ -56,10 +56,12 @@ void QRCodeGenerationGUI::buildUi()
     DevTools::Ui::applyPanelLayout(verticalLayoutLeft);
 
     // Category group box
-    categoryGroupBox = new QGroupBox(this);
+    categoryGroupBox = DevTools::Ui::createPane(QString(), this);
+    DevTools::Ui::configureCompactPane(categoryGroupBox);
     auto *categoryLayout = new QVBoxLayout(categoryGroupBox);
     DevTools::Ui::applyPanelLayout(categoryLayout);
     categoryComboBox = new QComboBox(categoryGroupBox);
+    DevTools::Ui::configureComboBox(categoryComboBox);
     for (int i = 0; i < CATEGORY_ITEM_COUNT; ++i) {
         categoryComboBox->addItem(QString());
     }
@@ -67,7 +69,7 @@ void QRCodeGenerationGUI::buildUi()
     verticalLayoutLeft->addWidget(categoryGroupBox);
 
     // Parameters group box
-    parametersGroupBox = new QGroupBox(this);
+    parametersGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *paramsLayout = new QVBoxLayout(parametersGroupBox);
     DevTools::Ui::applyPanelLayout(paramsLayout);
     parameterStackedWidget = new QStackedWidget(parametersGroupBox);
@@ -93,7 +95,7 @@ void QRCodeGenerationGUI::buildUi()
     // Right side: output
     auto *verticalLayoutRight = new QVBoxLayout();
     DevTools::Ui::applyPanelLayout(verticalLayoutRight);
-    outputGroupBox = new QGroupBox(this);
+    outputGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *outputLayout = new QVBoxLayout(outputGroupBox);
     DevTools::Ui::applyPanelLayout(outputLayout);
 
@@ -115,9 +117,7 @@ void QRCodeGenerationGUI::buildUi()
     outputLayout->addLayout(outputButtonLayout);
 
     contentPreviewEdit = new QPlainTextEdit(outputGroupBox);
-    DevTools::Ui::configureCodeEditor(contentPreviewEdit);
-    contentPreviewEdit->setMaximumHeight(DevTools::Ui::Metrics::STATUS_VIEW_HEIGHT);
-    contentPreviewEdit->setReadOnly(true);
+    DevTools::Ui::configureCodeStatusView(contentPreviewEdit);
     outputLayout->addWidget(contentPreviewEdit);
 
     verticalLayoutRight->addWidget(outputGroupBox);
@@ -207,8 +207,8 @@ QWidget *QRCodeGenerationGUI::createUrlWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *urlEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(urlEdit);
     urlEdit->setPlaceholderText(tr("Enter URL..."));
-    DevTools::Ui::configureFormField(urlEdit);
     layout->addRow(tr("URL:"), urlEdit);
 
     // エラーラベル作成
@@ -230,8 +230,8 @@ QWidget *QRCodeGenerationGUI::createEmailWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *emailEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(emailEdit);
     emailEdit->setPlaceholderText(tr("Enter email address..."));
-    DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
 
     // エラーラベル作成
@@ -253,8 +253,8 @@ QWidget *QRCodeGenerationGUI::createPhoneWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *phoneEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(phoneEdit);
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
-    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // エラーラベル作成
@@ -276,8 +276,8 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *phoneEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(phoneEdit);
     phoneEdit->setPlaceholderText(tr("Enter phone number..."));
-    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話番号エラーラベル作成
@@ -286,8 +286,8 @@ QWidget *QRCodeGenerationGUI::createSmsWidget()
     layout->addRow("", phoneErrorLabel);
 
     auto *messageEdit = new QPlainTextEdit;
-    messageEdit->setPlaceholderText(tr("Enter message..."));
     DevTools::Ui::configureMultilineField(messageEdit);
+    messageEdit->setPlaceholderText(tr("Enter message..."));
     layout->addRow(tr("Message:"), messageEdit);
 
     // メッセージエラーラベル作成
@@ -312,8 +312,8 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *ssidEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(ssidEdit);
     ssidEdit->setPlaceholderText(tr("Enter SSID..."));
-    DevTools::Ui::configureFormField(ssidEdit);
     layout->addRow(tr("SSID:"), ssidEdit);
 
     // SSIDエラーラベル作成
@@ -322,8 +322,8 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     layout->addRow("", ssidErrorLabel);
 
     auto *passwordEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(passwordEdit);
     passwordEdit->setPlaceholderText(tr("Enter password..."));
-    DevTools::Ui::configureFormField(passwordEdit);
     layout->addRow(tr("Password:"), passwordEdit);
 
     // パスワードエラーラベル作成
@@ -332,6 +332,7 @@ QWidget *QRCodeGenerationGUI::createWifiWidget()
     layout->addRow("", passwordErrorLabel);
 
     auto *securityCombo = new QComboBox();
+    DevTools::Ui::configureComboBox(securityCombo);
     securityCombo->addItem("WPA");
     securityCombo->addItem("WEP");
     securityCombo->addItem("nopass");
@@ -361,8 +362,8 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *nameEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(nameEdit);
     nameEdit->setPlaceholderText(tr("Enter name..."));
-    DevTools::Ui::configureFormField(nameEdit);
     layout->addRow(tr("Name:"), nameEdit);
 
     // 名前エラーラベル作成
@@ -371,8 +372,8 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     layout->addRow("", nameErrorLabel);
 
     auto *phoneEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(phoneEdit);
     phoneEdit->setPlaceholderText(tr("Enter phone..."));
-    DevTools::Ui::configureFormField(phoneEdit);
     layout->addRow(tr("Phone:"), phoneEdit);
 
     // 電話エラーラベル作成
@@ -381,8 +382,8 @@ QWidget *QRCodeGenerationGUI::createContactWidget()
     layout->addRow("", phoneErrorLabel);
 
     auto *emailEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(emailEdit);
     emailEdit->setPlaceholderText(tr("Enter email..."));
-    DevTools::Ui::configureFormField(emailEdit);
     layout->addRow(tr("Email:"), emailEdit);
 
     // メールエラーラベル作成
@@ -410,8 +411,8 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *summaryEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(summaryEdit);
     summaryEdit->setPlaceholderText(tr("Enter event title..."));
-    DevTools::Ui::configureFormField(summaryEdit);
     layout->addRow(tr("Event:"), summaryEdit);
 
     // イベントタイトルエラーラベル作成
@@ -420,9 +421,9 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     layout->addRow("", summaryErrorLabel);
 
     auto *startEdit = new QDateTimeEdit();
+    DevTools::Ui::configureFormField(startEdit);
     startEdit->setDisplayFormat("yyyy/MM/dd hh:mm:ss");
     startEdit->setDateTime(QDateTime::currentDateTime());
-    DevTools::Ui::configureFormField(startEdit);
     startEdit->setCalendarPopup(true);
     layout->addRow(tr("Start:"), startEdit);
 
@@ -432,9 +433,9 @@ QWidget *QRCodeGenerationGUI::createCalendarWidget()
     layout->addRow("", startErrorLabel);
 
     auto *endEdit = new QDateTimeEdit();
+    DevTools::Ui::configureFormField(endEdit);
     endEdit->setDisplayFormat("yyyy/MM/dd hh:mm:ss");
     endEdit->setDateTime(QDateTime::currentDateTime().addSecs(3600));
-    DevTools::Ui::configureFormField(endEdit);
     endEdit->setCalendarPopup(true);
     layout->addRow(tr("End:"), endEdit);
 
@@ -463,8 +464,8 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     DevTools::Ui::configureFormLayout(layout);
 
     auto *latEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(latEdit);
     latEdit->setPlaceholderText(tr("Enter latitude..."));
-    DevTools::Ui::configureFormField(latEdit);
     layout->addRow(tr("Latitude:"), latEdit);
 
     // 緯度エラーラベル作成
@@ -473,8 +474,8 @@ QWidget *QRCodeGenerationGUI::createGeoWidget()
     layout->addRow("", latErrorLabel);
 
     auto *lngEdit = new QLineEdit;
+    DevTools::Ui::configureLineEdit(lngEdit);
     lngEdit->setPlaceholderText(tr("Enter longitude..."));
-    DevTools::Ui::configureFormField(lngEdit);
     layout->addRow(tr("Longitude:"), lngEdit);
 
     // 経度エラーラベル作成

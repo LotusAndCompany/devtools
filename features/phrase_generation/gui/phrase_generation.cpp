@@ -88,9 +88,11 @@ void phraseGeneration::createWidgets()
     title_tree_widget->setObjectName(QStringLiteral("titleTreeWidget"));
     title_tree_widget->setHeaderHidden(true);
     title_tree_widget->setColumnCount(1);
+    DevTools::Ui::configureItemView(title_tree_widget);
 
     template_title = new QLineEdit(this);
     template_title->setObjectName(QStringLiteral("templateTitle"));
+    DevTools::Ui::configureLineEdit(template_title);
 
     delete_button = new QPushButton(this);
     delete_button->setObjectName(QStringLiteral("deleteButton"));
@@ -129,7 +131,7 @@ void phraseGeneration::layoutWidgets()
     auto *root_layout = new QHBoxLayout(this);
     DevTools::Ui::applyPageLayout(root_layout);
 
-    editor_group = new QGroupBox(this);
+    editor_group = DevTools::Ui::createPane(QString(), this);
     editor_group->setObjectName(QStringLiteral("editorGroup"));
     auto *editor_panel = new QVBoxLayout(editor_group);
     DevTools::Ui::applyPanelLayout(editor_panel);
@@ -149,7 +151,7 @@ void phraseGeneration::layoutWidgets()
     DevTools::Ui::configureActionBar(action_row, DevTools::Ui::ActionBarAlignment::Trailing);
     editor_panel->addLayout(action_row);
 
-    tree_group = new QGroupBox(this);
+    tree_group = DevTools::Ui::createPane(QString(), this);
     tree_group->setObjectName(QStringLiteral("treeGroup"));
     auto *tree_panel = new QVBoxLayout(tree_group);
     DevTools::Ui::applyPanelLayout(tree_panel);

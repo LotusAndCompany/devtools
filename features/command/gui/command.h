@@ -68,10 +68,6 @@ private:
 
     /// カテゴリ選択用のコンボボックス
     QComboBox *category_list{nullptr};
-    /// 入力セクションの見出し
-    QLabel *input_heading{nullptr};
-    /// 出力セクションの見出し
-    QLabel *output_heading{nullptr};
     QLabel *functions_label{nullptr};
     /// 機能選択用のコンボボックス
     QComboBox *functions_list{nullptr};

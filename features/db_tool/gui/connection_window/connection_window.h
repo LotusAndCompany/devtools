@@ -6,6 +6,7 @@
 #include <QWidget>
 
 class QComboBox;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -87,7 +88,7 @@ private:
      */
     void browseForDatabase();
 
-    QLabel *form_heading{nullptr};
+    QGroupBox *form_group_box{nullptr};
     /// データベースタイプのラベル
     QLabel *dbTypeLabel{nullptr};
     /// データベースタイプ選択用のコンボボックス

@@ -1,8 +1,12 @@
 #include "features/regex_tool/gui/regex_tester_gui.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
+#include <QFrame>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
@@ -216,68 +220,60 @@ RegexTesterGUI::~RegexTesterGUI()
 void RegexTesterGUI::setupUi()
 {
     auto *const mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(8);
-    mainLayout->setContentsMargins(16, 16, 16, 16);
+    DevTools::Ui::applyPageLayout(mainLayout);
 
     auto *const splitter = new QSplitter(Qt::Horizontal, this);
     mainLayout->addWidget(splitter);
 
     splitter->addWidget(setupLeftPane(splitter));
     splitter->addWidget(setupRightPane(splitter));
-    splitter->setSizes({600, 300});
+    DevTools::Ui::configureMainSideSplitter(splitter);
 }
 
 QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 {
-    auto *const leftWidget = new QWidget(parent);
+    auto *const leftWidget = DevTools::Ui::createPane(tr("Regex Tester"), parent);
     auto *const leftLayout = new QVBoxLayout(leftWidget);
-    leftLayout->setContentsMargins(0, 0, 0, 0);
-    leftLayout->setSpacing(8);
-
-    // Title Row
-    auto *const titleLabel = new QLabel(tr("Regex Tester"), leftWidget);
-    QFont titleFont = titleLabel->font();
-    titleFont.setBold(true);
-    titleFont.setPointSize(16);
-    titleLabel->setFont(titleFont);
-    leftLayout->addWidget(titleLabel);
+    DevTools::Ui::applyPanelLayout(leftLayout);
 
     // Presets Row
     auto *const presetsRow = new QHBoxLayout();
-    presetsRow->setSpacing(8);
-    presetsRow->addWidget(createPresetCombo(leftWidget), 1);
+    DevTools::Ui::applyInlineLayout(presetsRow);
+    auto *const presetCombo = createPresetCombo(leftWidget);
+    DevTools::Ui::configureComboBox(presetCombo);
+    presetsRow->addWidget(presetCombo, 1);
 
     m_copyPatternButton = new QPushButton(tr("Copy Pattern"), leftWidget);
+    DevTools::Ui::configureCompactButton(m_copyPatternButton);
     presetsRow->addWidget(m_copyPatternButton);
     leftLayout->addLayout(presetsRow);
 
     // Pattern Edit
     m_patternEdit = new QLineEdit(leftWidget);
     m_patternEdit->setPlaceholderText(tr("Regular Expression Pattern"));
-    m_patternEdit->setFont(QFont("monospace", 13));
+    DevTools::Ui::configureCodeLineEdit(m_patternEdit);
     leftLayout->addWidget(m_patternEdit);
 
     // Flags Row
     auto *const flagsLayout = new QHBoxLayout();
-    flagsLayout->setSpacing(4);
+    DevTools::Ui::applyInlineLayout(flagsLayout);
     setupFlagButtons(leftWidget, flagsLayout);
     flagsLayout->addStretch();
     leftLayout->addLayout(flagsLayout);
 
     // Error Label
-    m_errorLabel = new QLabel(leftWidget);
-    m_errorLabel->setStyleSheet("color: red; font-family: monospace; font-size: 11px;");
+    m_errorLabel = DevTools::Ui::createErrorLabel(leftWidget);
+    DevTools::Ui::configureCodeLabel(m_errorLabel);
     m_errorLabel->setWordWrap(true);
-    m_errorLabel->hide();
     leftLayout->addWidget(m_errorLabel);
 
     // Test Text Label
-    leftLayout->addWidget(new QLabel(tr("Test Text"), leftWidget));
+    leftLayout->addWidget(DevTools::Ui::createPaneHeading(tr("Test Text"), leftWidget));
 
     // Test Text Edit
     m_testTextEdit = new QPlainTextEdit(leftWidget);
     m_testTextEdit->setPlaceholderText(tr("Enter text to test against..."));
-    m_testTextEdit->setFont(QFont("monospace", 13));
+    DevTools::Ui::configureCodeEditor(m_testTextEdit);
     leftLayout->addWidget(m_testTextEdit, 2);
 
     // Replace Label / Row / Result
@@ -301,23 +297,24 @@ QComboBox *RegexTesterGUI::createPresetCombo(QWidget *parent)
 
 void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
 {
-    layout->addWidget(new QLabel(tr("Substitution / Replace"), parent));
+    layout->addWidget(DevTools::Ui::createPaneHeading(tr("Substitution / Replace"), parent));
 
     auto *const replaceRow = new QHBoxLayout();
-    replaceRow->setSpacing(8);
+    DevTools::Ui::applyInlineLayout(replaceRow);
     m_replacePatternEdit = new QLineEdit(parent);
     m_replacePatternEdit->setPlaceholderText(tr("Replacement String"));
-    m_replacePatternEdit->setFont(QFont("monospace", 13));
+    DevTools::Ui::configureCodeLineEdit(m_replacePatternEdit);
     replaceRow->addWidget(m_replacePatternEdit, 1);
 
     m_copyResultButton = new QPushButton(tr("Copy Result"), parent);
+    DevTools::Ui::configureCompactButton(m_copyResultButton);
     replaceRow->addWidget(m_copyResultButton);
     layout->addLayout(replaceRow);
 
     m_replaceResultEdit = new QPlainTextEdit(parent);
     m_replaceResultEdit->setReadOnly(true);
     m_replaceResultEdit->setPlaceholderText(tr("Replacement result will appear here..."));
-    m_replaceResultEdit->setFont(QFont("monospace", 13));
+    DevTools::Ui::configureCodeEditor(m_replaceResultEdit);
     layout->addWidget(m_replaceResultEdit, 1);
 }
 
@@ -328,79 +325,89 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     m_flagG->setCheckable(true);
     m_flagG->setChecked(true);
     m_flagG->setToolTip(tr("Global (match all)"));
+    DevTools::Ui::configureCompactButton(m_flagG);
     layout->addWidget(m_flagG);
 
     m_flagI = new QToolButton(parent);
     m_flagI->setText("i");
     m_flagI->setCheckable(true);
     m_flagI->setToolTip(tr("Case Insensitive"));
+    DevTools::Ui::configureCompactButton(m_flagI);
     layout->addWidget(m_flagI);
 
     m_flagM = new QToolButton(parent);
     m_flagM->setText("m");
     m_flagM->setCheckable(true);
     m_flagM->setToolTip(tr("Multiline"));
+    DevTools::Ui::configureCompactButton(m_flagM);
     layout->addWidget(m_flagM);
 
     m_flagS = new QToolButton(parent);
     m_flagS->setText("s");
     m_flagS->setCheckable(true);
     m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
+    DevTools::Ui::configureCompactButton(m_flagS);
     layout->addWidget(m_flagS);
 
     m_flagU = new QToolButton(parent);
     m_flagU->setText("u");
     m_flagU->setCheckable(true);
     m_flagU->setToolTip(tr("Unicode"));
+    DevTools::Ui::configureCompactButton(m_flagU);
     layout->addWidget(m_flagU);
 
     m_flagX = new QToolButton(parent);
     m_flagX->setText("x");
     m_flagX->setCheckable(true);
     m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
+    DevTools::Ui::configureCompactButton(m_flagX);
     layout->addWidget(m_flagX);
 }
 
 QWidget *RegexTesterGUI::setupRightPane(QWidget *parent)
 {
-    auto *const rightWidget = new QWidget(parent);
+    auto *const rightWidget = DevTools::Ui::createPane(tr("Matches"), parent);
     auto *const rightLayout = new QVBoxLayout(rightWidget);
-    rightLayout->setContentsMargins(0, 0, 0, 0);
-    rightLayout->setSpacing(8);
+    DevTools::Ui::applyPanelLayout(rightLayout);
 
     // Matches Header Row
     auto *const matchesHeaderRow = new QHBoxLayout();
-    m_matchCountLabel = new QLabel(tr("Matches (0)"), rightWidget);
-    QFont boldFont = m_matchCountLabel->font();
-    boldFont.setBold(true);
-    m_matchCountLabel->setFont(boldFont);
+    DevTools::Ui::applyInlineLayout(matchesHeaderRow);
+    m_matchCountLabel = DevTools::Ui::createPaneHeading(tr("Matches (0)"), rightWidget);
     matchesHeaderRow->addWidget(m_matchCountLabel);
 
     matchesHeaderRow->addStretch();
 
     m_copyMatchesButton = new QPushButton(tr("Copy Matches"), rightWidget);
+    DevTools::Ui::configureCompactButton(m_copyMatchesButton);
     matchesHeaderRow->addWidget(m_copyMatchesButton);
     rightLayout->addLayout(matchesHeaderRow);
 
     // Match Result Scroll Area
     auto *const matchResultArea = new QScrollArea(rightWidget);
-    matchResultArea->setWidgetResizable(true);
+    DevTools::Ui::configureScrollView(matchResultArea);
     auto *const matchResultContent = new QWidget();
+    DevTools::Ui::configurePaneSurface(matchResultContent);
     m_matchResultLayout = new QVBoxLayout(matchResultContent);
-    m_matchResultLayout->setSpacing(4);
-    m_matchResultLayout->setContentsMargins(4, 4, 4, 4);
+    DevTools::Ui::applyPanelLayout(m_matchResultLayout);
     matchResultArea->setWidget(matchResultContent);
     rightLayout->addWidget(matchResultArea, 2);
 
     // Quick Reference Collapsible Section
-    m_quickRefToggle = new QPushButton(tr("Hide Quick Reference"), rightWidget);
-    rightLayout->addWidget(m_quickRefToggle);
+    auto *const quickReferencePane = DevTools::Ui::createPane(tr("Quick Reference"), rightWidget);
+    auto *const quickReferenceLayout = new QVBoxLayout(quickReferencePane);
+    DevTools::Ui::applyPanelLayout(quickReferenceLayout);
 
-    m_quickRefContainer = new QWidget(rightWidget);
+    m_quickRefToggle = new QPushButton(tr("Hide Quick Reference"), quickReferencePane);
+    DevTools::Ui::configureCompactButton(m_quickRefToggle);
+    quickReferenceLayout->addWidget(m_quickRefToggle, 0, Qt::AlignLeft);
+
+    m_quickRefContainer = new QWidget(quickReferencePane);
     auto *const quickRefLayout = new QVBoxLayout(m_quickRefContainer);
-    quickRefLayout->setContentsMargins(0, 0, 0, 0);
+    DevTools::Ui::applyInlineLayout(quickRefLayout);
 
     m_quickRefTree = new QTreeWidget(m_quickRefContainer);
+    DevTools::Ui::configureItemView(m_quickRefTree);
     m_quickRefTree->setHeaderHidden(true);
     m_quickRefTree->setColumnCount(2);
     m_quickRefTree->setColumnWidth(0, 110);
@@ -410,7 +417,8 @@ QWidget *RegexTesterGUI::setupRightPane(QWidget *parent)
 
     m_quickRefTree->expandAll();
     quickRefLayout->addWidget(m_quickRefTree);
-    rightLayout->addWidget(m_quickRefContainer, 1);
+    quickReferenceLayout->addWidget(m_quickRefContainer, 1);
+    rightLayout->addWidget(quickReferencePane, 1);
 
     return rightWidget;
 }
@@ -637,7 +645,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
 
     if (matches.isEmpty()) {
         auto *const label = new QLabel(tr("No matches"), this);
-        label->setStyleSheet("color: gray;");
+        DevTools::Ui::configureCodeLabel(label);
         m_matchResultLayout->addWidget(label);
     } else {
         for (const auto &match : matches) {
@@ -651,8 +659,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
             auto *const label = new QLabel(resultText, this);
             label->setWordWrap(true);
             label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-            label->setStyleSheet(
-                "font-family: monospace; border-bottom: 1px solid #ccc; padding: 4px;");
+            DevTools::Ui::configureCodeLabel(label);
             m_matchResultLayout->addWidget(label);
 
             for (int i = 1; i < match.groups.size(); ++i) {
@@ -668,11 +675,14 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
                 auto *const groupLabel = new QLabel(groupText, this);
                 groupLabel->setWordWrap(true);
                 groupLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-                groupLabel->setStyleSheet(
-                    "font-family: monospace; color: #666; padding-left: 16px; border-bottom: 1px "
-                    "dashed #eee;");
+                DevTools::Ui::configureCodeLabel(groupLabel);
+                groupLabel->setIndent(DevTools::Ui::Metrics::PANEL_MARGIN);
                 m_matchResultLayout->addWidget(groupLabel);
             }
+
+            auto *const divider = new QFrame(this);
+            DevTools::Ui::configureDivider(divider);
+            m_matchResultLayout->addWidget(divider);
         }
     }
     m_matchResultLayout->addStretch();

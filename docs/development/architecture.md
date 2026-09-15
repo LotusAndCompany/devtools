@@ -221,6 +221,24 @@ adding or renaming a theme, keep the `meta.name` value unique because qlementine
 Feature GUIs use `DevTools::Ui` for shared layout, widget configuration, and metrics.
 Colors, borders, and text roles come from the active qlementine style.
 
+### UI Consistency Contract
+
+Every screen is composed from the shared UI contract in
+`features/framework/gui/design_system.h` and `.cpp`. The contract defines page,
+content, panel, toolbar, and inline layout roles, along with standard and
+compact panes, form fields, code editors, status views, item views, table views,
+splitters, and dialog footers.
+
+Screen-specific composition remains allowed when it reflects the tool's real
+workflow. The same UI role must use the same shared configuration, however. A
+feature GUI must not introduce private fonts, colors, CSS, control dimensions,
+or duplicated spacing values for a role already covered by `DevTools::Ui`.
+
+When adding a reusable role, extend the design system first and add a focused
+GUI test in `features/framework/tests/test_design_system.cpp`. Keep color and
+typography decisions in the active qlementine theme or the design-system
+helpers so that light and dark themes behave identically.
+
 ## Build System
 
 ### CMake Structure

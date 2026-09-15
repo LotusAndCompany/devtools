@@ -68,7 +68,8 @@ void dbMain::buildUi()
     auto *verticalLayoutMain = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(verticalLayoutMain);
 
-    toolbarGroupBox = new QGroupBox(this);
+    toolbarGroupBox = DevTools::Ui::createPane(tr("Toolbar"), this);
+    DevTools::Ui::configureToolbarPane(toolbarGroupBox);
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
     DevTools::Ui::applyPanelLayout(toolbarLayout);
 
@@ -92,17 +93,17 @@ void dbMain::buildUi()
     verticalLayoutMain->addWidget(toolbarGroupBox);
 
     auto *contentLayout = new QHBoxLayout();
-    contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->setSpacing(DevTools::Ui::Metrics::PAGE_SPACING);
+    DevTools::Ui::applyContentLayout(contentLayout);
 
-    tablesGroupBox = new QGroupBox(this);
+    tablesGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
     DevTools::Ui::applyPanelLayout(tablesLayout);
     tableListWidget = new QListWidget(tablesGroupBox);
+    DevTools::Ui::configureItemView(tableListWidget);
     tablesLayout->addWidget(tableListWidget);
     contentLayout->addWidget(tablesGroupBox, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
 
-    queryGroupBox = new QGroupBox(this);
+    queryGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *queryLayout = new QVBoxLayout(queryGroupBox);
     DevTools::Ui::applyPanelLayout(queryLayout);
     queryTabWidget = new QTabWidget(queryGroupBox);
@@ -245,6 +246,7 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     model->select();
 
     auto *tableView = new QTableView;
+    DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);
 
     // 更新ボタン

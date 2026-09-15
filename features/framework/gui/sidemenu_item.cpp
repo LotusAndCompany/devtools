@@ -15,7 +15,6 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     DevTools::Ui::configureSidebarItem(this);
     setCheckable(true);
-    setStyleSheet("QPushButton { text-align:left; }");
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
     Sidemenu::validateID(id);

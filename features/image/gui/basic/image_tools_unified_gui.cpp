@@ -72,6 +72,7 @@ QSpinBox *buildPixelSpinBox(QWidget *parent)
     spin->setSingleStep(1);
     spin->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
     spin->setDisplayIntegerBase(10);
+    DevTools::Ui::configureFormField(spin);
     return spin;
 }
 
@@ -84,6 +85,7 @@ QDoubleSpinBox *buildScaleSpinBox(QWidget *parent)
     spin->setMaximum(1000.0);
     spin->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
     spin->setValue(100.0);
+    DevTools::Ui::configureFormField(spin);
     return spin;
 }
 
@@ -195,6 +197,7 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     auto *form = new QFormLayout();
     DevTools::Ui::configureInlineFormLayout(form);
     ui->colorMode = new QComboBox(ui->transparentSectionBody);
+    DevTools::Ui::configureComboBox(ui->colorMode);
     ui->colorMode->addItem(QStringLiteral("RGB"), static_cast<int>(QColor::Spec::Rgb));
     ui->colorMode->addItem(QStringLiteral("HSL"), static_cast<int>(QColor::Spec::Hsl));
     ui->colorMode->addItem(QStringLiteral("HSV"), static_cast<int>(QColor::Spec::Hsv));
@@ -204,6 +207,7 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     form->addRow(ImageToolsUnifiedGUI::tr("Color:"), ui->colorSample);
 
     ui->toleranceValue = new QDoubleSpinBox(ui->transparentSectionBody);
+    DevTools::Ui::configureFormField(ui->toleranceValue);
     ui->toleranceValue->setMinimum(0.0);
     ui->toleranceValue->setMaximum(1.0);
     ui->toleranceValue->setSingleStep(0.05);
@@ -211,6 +215,7 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     form->addRow(ImageToolsUnifiedGUI::tr("Tolerance:"), ui->toleranceValue);
 
     ui->transparencyValue = new QDoubleSpinBox(ui->transparentSectionBody);
+    DevTools::Ui::configureFormField(ui->transparencyValue);
     ui->transparencyValue->setMinimum(0.0);
     ui->transparencyValue->setMaximum(1.0);
     ui->transparencyValue->setSingleStep(0.05);
@@ -234,8 +239,10 @@ void buildDivisionValueGrid(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBox
     DevTools::Ui::applyInlineLayout(grid);
     DevTools::Ui::configureCaptionValueGrid(grid);
     ui->hDivValue = new QSpinBox(parent);
+    DevTools::Ui::configureFormField(ui->hDivValue);
     ui->hDivValue->setMinimum(1);
     ui->vDivValue = new QSpinBox(parent);
+    DevTools::Ui::configureFormField(ui->vDivValue);
     ui->vDivValue->setMinimum(1);
     ui->cellWidthValue = buildPixelSpinBox(parent);
     ui->cellHeightValue = buildPixelSpinBox(parent);
@@ -306,16 +313,16 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
 
 void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
 {
-    auto *toolPane = new QGroupBox(ImageToolsUnifiedGUI::tr("Operation Panel"), parent);
+    auto *toolPane = DevTools::Ui::createPane(ImageToolsUnifiedGUI::tr("Operation Panel"), parent);
     auto *toolPaneLayout = new QVBoxLayout(toolPane);
     DevTools::Ui::applyPanelLayout(toolPaneLayout);
 
     ui->toolScrollArea = new QScrollArea(toolPane);
-    ui->toolScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->toolScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     ui->toolScrollArea->setMinimumWidth(DevTools::Ui::Metrics::TOOL_PANEL_WIDTH);
     ui->toolScrollArea->setWidgetResizable(true);
     ui->toolScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    ui->toolScrollArea->setFrameShape(QFrame::NoFrame);
+    DevTools::Ui::configureScrollView(ui->toolScrollArea);
     DevTools::Ui::configurePaneSurface(ui->toolScrollArea);
 
     auto *uiArea = new QWidget(ui->toolScrollArea);
@@ -392,9 +399,9 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
     : GuiTool(parent), ui(new Ui::ImageToolsUnifiedGUI)
 {
     auto *rootLayout = new QHBoxLayout(this);
-    DevTools::Ui::applyFullBleedLayout(rootLayout);
+    DevTools::Ui::applyPageLayout(rootLayout);
 
-    auto *imagePane = new QGroupBox(ImageToolsUnifiedGUI::tr("Image"), this);
+    auto *imagePane = DevTools::Ui::createPane(ImageToolsUnifiedGUI::tr("Image"), this);
     auto *imagePaneLayout = new QVBoxLayout(imagePane);
     DevTools::Ui::applyPanelLayout(imagePaneLayout);
 

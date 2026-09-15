@@ -80,6 +80,33 @@ TEST(MyClassSimpleTest, BasicFunctionality) {
 }  // namespace devtools
 ```
 
+### UI Consistency Tests
+
+Shared UI behavior is tested in
+`features/framework/tests/test_design_system.cpp`. When a design-system helper
+changes, test the observable contract rather than implementation details: size
+policies, margins, spacing roles, frame configuration, item-view selection,
+table headers, splitter configuration, and dialog-footer alignment are suitable
+examples.
+
+GUI tests should cover both the default widget state and the state that matters
+to the user, such as disabled controls, empty results, validation errors, and
+read-only output. Keep feature-specific workflow tests in that feature's test
+directory and keep reusable widget rules in the framework test.
+
+For a UI-wide change, perform a manual smoke pass with the application running:
+
+1. Open every registered tool from the side menu.
+2. Check the default, empty, error, and result states relevant to each tool.
+3. Resize the main window through the supported range and check splitter and
+   scroll behavior.
+4. Verify both light and dark themes and both English and Japanese text.
+5. Open Settings, About, and DB connection windows and confirm the same pane,
+   field, action-bar, and footer rules.
+
+Record any visual regression with the affected screen and state before changing
+the shared helper or adding a screen-specific exception.
+
 ### Test Macros
 
 | Macro | Description |

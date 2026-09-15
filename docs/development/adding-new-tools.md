@@ -95,6 +95,28 @@ QString YourTool::process(const QString& input) {
 
 ### 4. Create GUI Components
 
+Build the GUI from the shared UI contract before adding screen-specific
+composition:
+
+- Start the root layout with `DevTools::Ui::applyPageLayout()`.
+- Use `createPane()` for titled content regions, `configureCompactPane()` for
+  form/control panes that should size to their contents, and
+  `configureToolbarPane()` for compact toolbars.
+- Configure every single-line field, combo box, code editor, status view,
+  list, and table with the matching `DevTools::Ui` helper immediately after
+  construction.
+- Use `configureEqualSplitter()`, `configureMainSideSplitter()`, or
+  `configureSideMainSplitter()` instead of repeating splitter handle widths
+  and stretch factors.
+- Use `configureActionBar()` for action placement and
+  `configureDialogButtonBox()` for dialog footers.
+- Keep all visible strings in `tr()` and provide a `LanguageChange` path when
+  the screen has dynamic or re-translatable labels.
+
+Do not add a local stylesheet, hard-coded font, color, spacing, or control size
+to compensate for a missing shared role. Extend `features/framework/gui/design_system.*`
+and its focused tests when the role is genuinely reusable.
+
 #### features/your_tool/gui/your_tool_gui.h
 
 ```cpp

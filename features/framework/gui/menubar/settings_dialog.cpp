@@ -35,6 +35,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
     button_box = new QDialogButtonBox(
         QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal,
         this);
+    DevTools::Ui::configureDialogButtonBox(button_box);
     rootLayout->addWidget(button_box);
 
     qDebug() << "Setting up combo boxes...";
@@ -56,7 +57,8 @@ void SettingsDialog::buildGeneralTab()
     auto *tabLayout = new QVBoxLayout(general_tab);
     DevTools::Ui::applyPanelLayout(tabLayout);
 
-    general_group_box = new QGroupBox(general_tab);
+    general_group_box = DevTools::Ui::createPane(QString(), general_tab);
+    DevTools::Ui::configureCompactPane(general_group_box);
     auto *groupLayout = new QVBoxLayout(general_group_box);
     DevTools::Ui::applyPanelLayout(groupLayout);
 
@@ -65,6 +67,7 @@ void SettingsDialog::buildGeneralTab()
 
     language_label = new QLabel(general_group_box);
     language_combo_box = new QComboBox(general_group_box);
+    DevTools::Ui::configureComboBox(language_combo_box);
     language_combo_box->addItem(tr("English"), QStringLiteral("en"));
     language_combo_box->addItem(tr("Japanese"), QStringLiteral("ja_JP"));
     languageLayout->addRow(language_label, language_combo_box);
@@ -92,7 +95,8 @@ void SettingsDialog::buildWindowTab()
     auto *layout = new QVBoxLayout(window_tab);
     DevTools::Ui::applyPanelLayout(layout);
 
-    window_behavior_group_box = new QGroupBox(window_tab);
+    window_behavior_group_box = DevTools::Ui::createPane(QString(), window_tab);
+    DevTools::Ui::configureCompactPane(window_behavior_group_box);
     auto *groupLayout = new QVBoxLayout(window_behavior_group_box);
     DevTools::Ui::applyPanelLayout(groupLayout);
 

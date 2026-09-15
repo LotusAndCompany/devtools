@@ -4,6 +4,7 @@
 #include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
@@ -41,12 +42,14 @@ void ConnectionSelector::buildUi()
     auto *verticalLayout = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(verticalLayout);
 
-    titleLabel = DevTools::Ui::createPaneHeading(QString(), this);
-    verticalLayout->addWidget(titleLabel);
+    history_group_box = DevTools::Ui::createPane(QString(), this);
+    auto *historyLayout = new QVBoxLayout(history_group_box);
+    DevTools::Ui::applyPanelLayout(historyLayout);
 
-    historyListWidget = new QListWidget(this);
-    historyListWidget->setAlternatingRowColors(true);
-    verticalLayout->addWidget(historyListWidget);
+    historyListWidget = new QListWidget(history_group_box);
+    DevTools::Ui::configureItemView(historyListWidget);
+    historyLayout->addWidget(historyListWidget);
+    verticalLayout->addWidget(history_group_box, 1);
 
     auto *buttonLayout = new QHBoxLayout();
 
@@ -67,7 +70,7 @@ void ConnectionSelector::buildUi()
 void ConnectionSelector::retranslateUi()
 {
     setWindowTitle(tr("DB Connection"));
-    titleLabel->setText(tr("Connection History"));
+    history_group_box->setTitle(tr("Connection History"));
     newConnectionButton->setText(tr("New Connection"));
     closeButton->setText(tr("Close"));
 }

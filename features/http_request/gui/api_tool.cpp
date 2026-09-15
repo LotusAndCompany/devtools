@@ -48,14 +48,15 @@ api_tool::~api_tool()
     qDebug() << "Destroying api_tool";
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 void api_tool::buildUi()
 {
     setWindowTitle(tr("API Tool"));
     auto *root_layout = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(root_layout);
 
-    auto *request_container = new QGroupBox(this);
-    request_container->setTitle(tr("Request"));
+    auto *request_container = DevTools::Ui::createPane(tr("Request"), this);
+    DevTools::Ui::configureCompactPane(request_container);
     auto *request_layout = new QVBoxLayout(request_container);
     DevTools::Ui::applyPanelLayout(request_layout);
 
@@ -63,11 +64,13 @@ void api_tool::buildUi()
     DevTools::Ui::applyInlineLayout(request_row);
 
     method_combo = new QComboBox(request_container);
+    DevTools::Ui::configureComboBox(method_combo);
     method_combo->addItems({tr("GET"), tr("POST"), tr("PUT"), tr("DELETE")});
     request_row->addWidget(method_combo);
 
     url_edit = new QLineEdit(request_container);
-    request_row->addWidget(url_edit);
+    DevTools::Ui::configureLineEdit(url_edit);
+    request_row->addWidget(url_edit, 1);
 
     send_button = new QPushButton(tr("Send"), request_container);
     DevTools::Ui::configureCompactButton(send_button);
@@ -79,8 +82,7 @@ void api_tool::buildUi()
     main_splitter = new QSplitter(Qt::Horizontal, this);
     root_layout->addWidget(main_splitter, 1);
 
-    auto *tabs_container = new QGroupBox(main_splitter);
-    tabs_container->setTitle(tr("Options"));
+    auto *tabs_container = DevTools::Ui::createPane(tr("Options"), main_splitter);
     auto *tabs_layout = new QVBoxLayout(tabs_container);
     DevTools::Ui::applyPanelLayout(tabs_layout);
 
@@ -90,6 +92,7 @@ void api_tool::buildUi()
     auto *params_layout = new QVBoxLayout(params_tab);
     DevTools::Ui::applyPanelLayout(params_layout);
     params_table = new QTableView(params_tab);
+    DevTools::Ui::configureTableView(params_table);
     params_layout->addWidget(params_table);
     tab_widget->addTab(params_tab, tr("Parameters"));
 
@@ -97,7 +100,9 @@ void api_tool::buildUi()
     auto *auth_layout = new QFormLayout(auth_tab);
     DevTools::Ui::configureFormLayout(auth_layout);
     username_edit = new QLineEdit(auth_tab);
+    DevTools::Ui::configureLineEdit(username_edit);
     password_edit = new QLineEdit(auth_tab);
+    DevTools::Ui::configureLineEdit(password_edit);
     password_edit->setEchoMode(QLineEdit::Password);
     auth_layout->addRow(tr("Username:"), username_edit);
     auth_layout->addRow(tr("Password:"), password_edit);
@@ -166,22 +171,20 @@ void api_tool::handleSendButtonClick()
 
 void api_tool::setupResponseView()
 {
-    auto *responseWidget = new QGroupBox(main_splitter);
-    responseWidget->setTitle(tr("Response"));
+    auto *responseWidget = DevTools::Ui::createPane(tr("Response"), main_splitter);
     auto *responseLayout = new QVBoxLayout(responseWidget);
     DevTools::Ui::applyPanelLayout(responseLayout);
 
     status_label = new QLabel();
     responseLayout->addWidget(status_label);
     auto *responseListView = new QListView();
+    DevTools::Ui::configureItemView(responseListView);
     response_model = new QStringListModel(this);
     responseListView->setModel(response_model);
     responseLayout->addWidget(responseListView);
 
     main_splitter->addWidget(responseWidget);
-    main_splitter->setHandleWidth(DevTools::Ui::Metrics::SPLITTER_HANDLE_WIDTH);
-    main_splitter->setStretchFactor(0, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
-    main_splitter->setStretchFactor(1, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
+    DevTools::Ui::configureSideMainSplitter(main_splitter);
 }
 
 QString formatDataSize(qint64 bytes)

@@ -40,15 +40,14 @@ void Command::buildUi()
     auto *const layout = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(layout);
 
-    input_heading = DevTools::Ui::createPaneHeading(tr("Input"), this);
-    layout->addWidget(input_heading);
-
-    auto *const inputPane = new QGroupBox(this);
+    auto *const inputPane = DevTools::Ui::createPane(tr("Input"), this);
+    DevTools::Ui::configureCompactPane(inputPane);
     inputPane->setObjectName(QStringLiteral("inputPane"));
     auto *const inputLayout = new QGridLayout(inputPane);
     DevTools::Ui::applyPanelLayout(inputLayout);
 
     category_list = new QComboBox(inputPane);
+    DevTools::Ui::configureComboBox(category_list);
     category_list->setObjectName(QStringLiteral("categoryList"));
     inputLayout->addWidget(category_list, 0, 0, 1, 2);
 
@@ -57,6 +56,7 @@ void Command::buildUi()
     inputLayout->addWidget(functions_label, 1, 0);
 
     functions_list = new QComboBox(inputPane);
+    DevTools::Ui::configureComboBox(functions_list);
     functions_list->setObjectName(QStringLiteral("functionsList"));
     functions_list->setEnabled(false);
     functions_list->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -67,6 +67,7 @@ void Command::buildUi()
     inputLayout->addWidget(option_label, 3, 0);
 
     option_list = new QComboBox(inputPane);
+    DevTools::Ui::configureComboBox(option_list);
     option_list->setObjectName(QStringLiteral("optionList"));
     option_list->setEnabled(false);
     inputLayout->addWidget(option_list, 4, 0, 1, 2);
@@ -76,6 +77,7 @@ void Command::buildUi()
     inputLayout->addWidget(text_label, 5, 0);
 
     text_edit = new QLineEdit(inputPane);
+    DevTools::Ui::configureLineEdit(text_edit);
     text_edit->setObjectName(QStringLiteral("textEdit"));
     inputLayout->addWidget(text_edit, 6, 0, 1, 2);
 
@@ -95,10 +97,7 @@ void Command::buildUi()
 
     layout->addWidget(inputPane);
 
-    output_heading = DevTools::Ui::createPaneHeading(tr("Generated Result"), this);
-    layout->addWidget(output_heading);
-
-    auto *const outputPane = new QGroupBox(this);
+    auto *const outputPane = DevTools::Ui::createPane(tr("Generated Result"), this);
     outputPane->setObjectName(QStringLiteral("outputPane"));
     auto *const outputLayout = new QGridLayout(outputPane);
     DevTools::Ui::applyPanelLayout(outputLayout);
@@ -126,7 +125,7 @@ void Command::buildUi()
     outputLayout->addLayout(outputActionLayout, 1, 0, 1, 2);
 
     layout->addWidget(outputPane);
-    layout->setStretch(3, 1);
+    layout->setStretch(1, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 }
 
 void Command::init()

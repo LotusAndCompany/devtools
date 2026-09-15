@@ -7,7 +7,6 @@
 
 #include <QDialogButtonBox>
 #include <QFile>
-#include <QFont>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -56,7 +55,7 @@ AboutDevToolsDialog::AboutDevToolsDialog(QWidget *parent) : QDialog(parent)
     rootLayout->addWidget(tabWidget);
 
     auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
-    buttonBox->setCenterButtons(true);
+    DevTools::Ui::configureDialogButtonBox(buttonBox);
     rootLayout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -80,10 +79,7 @@ QWidget *AboutDevToolsDialog::createAboutTab(QWidget *parent)
     titleLayout->addWidget(appLogo);
 
     auto *appName = new QLabel(QStringLiteral("DevTools"), tab);
-    QFont appNameFont = appName->font();
-    appNameFont.setPointSize(DevTools::Ui::Metrics::TITLE_POINT_SIZE);
-    appNameFont.setBold(true);
-    appName->setFont(appNameFont);
+    DevTools::Ui::configureTitleLabel(appName);
     appName->setTextFormat(Qt::AutoText);
     titleLayout->addWidget(appName);
 

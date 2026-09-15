@@ -101,5 +101,6 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     }
 
     currentContent = content;
-    m_contentsAreaLayout->addWidget(currentContent);
+    DevTools::Ui::configureExpandingSurface(currentContent);
+    m_contentsAreaLayout->addWidget(currentContent, 1);
 }

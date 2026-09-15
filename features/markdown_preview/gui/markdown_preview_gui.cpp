@@ -8,7 +8,6 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QFontDatabase>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -58,8 +57,8 @@ void MarkdownPreviewGUI::buildUi()
     auto *mainLayout = new QVBoxLayout(this);
     DevTools::Ui::applyPageLayout(mainLayout);
 
-    toolbarGroupBox = new QGroupBox(this);
-    toolbarGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    toolbarGroupBox = DevTools::Ui::createPane(tr("Toolbar"), this);
+    DevTools::Ui::configureToolbarPane(toolbarGroupBox);
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
     DevTools::Ui::applyPanelLayout(toolbarLayout);
 
@@ -90,7 +89,6 @@ void MarkdownPreviewGUI::buildUi()
     preview = DevTools::Ui::createTextBrowser();
     preview->setOpenExternalLinks(true);
     DevTools::Ui::configureTextControl(preview);
-    preview->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     editorPane = buildPane(editor);
     previewPane = buildPane(preview);
@@ -109,7 +107,7 @@ void MarkdownPreviewGUI::buildUi()
 
 QGroupBox *MarkdownPreviewGUI::buildPane(QWidget *content)
 {
-    auto *pane = new QGroupBox(this);
+    auto *pane = DevTools::Ui::createPane(QString(), this);
 
     auto *layout = new QVBoxLayout(pane);
     DevTools::Ui::applyPanelLayout(layout);
@@ -122,7 +120,6 @@ void MarkdownPreviewGUI::retranslateUi()
 {
     setWindowTitle(tr("Markdown Preview"));
     toolbarGroupBox->setTitle(tr("Toolbar"));
-    toolbarGroupBox->setFixedHeight(76);
     openButton->setText(tr("Open"));
     saveButton->setText(tr("Save"));
     exportHtmlButton->setText(tr("Export HTML"));

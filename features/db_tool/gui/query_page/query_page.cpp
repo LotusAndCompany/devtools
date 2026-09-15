@@ -44,6 +44,7 @@ void QueryPage::buildUi()
     verticalLayout->addLayout(actionLayout);
 
     queryResultView = new QTableView(this);
+    DevTools::Ui::configureTableView(queryResultView);
     verticalLayout->addWidget(queryResultView);
 
     retranslateUi();

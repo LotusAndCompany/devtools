@@ -56,8 +56,7 @@ void DataConversionGUI::buildUi()
 
 QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 {
-    auto *const container = new QGroupBox(parent);
-    container->setTitle(tr("Input"));
+    auto *const container = DevTools::Ui::createPane(tr("Input"), parent);
     auto *const layout = new QVBoxLayout(container);
     DevTools::Ui::applyPanelLayout(layout);
 
@@ -100,8 +99,7 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
 QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 {
-    auto *const container = new QGroupBox(parent);
-    container->setTitle(tr("Output"));
+    auto *const container = DevTools::Ui::createPane(tr("Output"), parent);
     auto *const layout = new QVBoxLayout(container);
     DevTools::Ui::applyPanelLayout(layout);
 
@@ -109,6 +107,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     DevTools::Ui::applyToolbarLayout(output_action_button_layout);
 
     formatSelector = new QComboBox(container);
+    DevTools::Ui::configureComboBox(formatSelector);
     formatSelector->addItem(QStringLiteral("JSON"));
     formatSelector->addItem(tr("YAML (Block style)"));
     formatSelector->addItem(tr("YAML (Flow style)"));
@@ -116,6 +115,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     output_action_button_layout->addWidget(formatSelector);
 
     styleSelector = new QComboBox(container);
+    DevTools::Ui::configureComboBox(styleSelector);
     styleSelector->addItem(tr("4 Spaces"));
     styleSelector->addItem(tr("2 Spaces"));
     styleSelector->addItem(tr("Tabs"));

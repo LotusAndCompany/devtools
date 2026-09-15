@@ -1,17 +1,23 @@
 #include "design_system.h"
 
 #include <QAbstractButton>
+#include <QAbstractItemView>
 #include <QAbstractScrollArea>
 #include <QApplication>
 #include <QBoxLayout>
+#include <QComboBox>
+#include <QDialogButtonBox>
 #include <QFontDatabase>
 #include <QFormLayout>
 #include <QFrame>
 #include <QGraphicsOpacityEffect>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
 #include <QIcon>
 #include <QLabel>
 #include <QLayout>
+#include <QLineEdit>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -22,6 +28,7 @@
 #include <QSizePolicy>
 #include <QSplitter>
 #include <QStyleOption>
+#include <QTableView>
 #include <QTextBrowser>
 #include <QToolButton>
 #include <QWidget>
@@ -166,6 +173,12 @@ void applyFullBleedLayout(QLayout *layout)
     layout->setSpacing(0);
 }
 
+void applyContentLayout(QLayout *layout)
+{
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(Metrics::PAGE_SPACING);
+}
+
 void configureFormLayout(QFormLayout *layout)
 {
     layout->setContentsMargins(panelMargins());
@@ -203,6 +216,20 @@ void configureEqualSplitter(QSplitter *splitter)
     splitter->setStretchFactor(1, Metrics::EQUAL_SPLIT_STRETCH);
 }
 
+void configureMainSideSplitter(QSplitter *splitter)
+{
+    splitter->setHandleWidth(Metrics::SPLITTER_HANDLE_WIDTH);
+    splitter->setStretchFactor(0, Metrics::MAIN_PANEL_STRETCH);
+    splitter->setStretchFactor(1, Metrics::SIDE_PANEL_STRETCH);
+}
+
+void configureSideMainSplitter(QSplitter *splitter)
+{
+    splitter->setHandleWidth(Metrics::SPLITTER_HANDLE_WIDTH);
+    splitter->setStretchFactor(0, Metrics::SIDE_PANEL_STRETCH);
+    splitter->setStretchFactor(1, Metrics::MAIN_PANEL_STRETCH);
+}
+
 void configureCaptionValueGrid(QGridLayout *layout)
 {
     layout->setColumnStretch(0, Metrics::CAPTION_COLUMN_STRETCH);
@@ -217,6 +244,35 @@ void addBottomRightOverlay(QGridLayout *layout, QWidget *overlay)
 void configureDialog(QWidget *dialog)
 {
     dialog->resize(dialogSize());
+}
+
+void configureDialogButtonBox(QDialogButtonBox *buttonBox)
+{
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setCenterButtons(false);
+    buttonBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
+QGroupBox *createPane(const QString &title, QWidget *parent)
+{
+    auto *const pane = new QGroupBox(title, parent);
+    configurePane(pane);
+    return pane;
+}
+
+void configurePane(QGroupBox *pane)
+{
+    pane->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void configureCompactPane(QGroupBox *pane)
+{
+    pane->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+}
+
+void configureToolbarPane(QGroupBox *pane)
+{
+    configureCompactPane(pane);
 }
 
 QLabel *createPaneHeading(const QString &text, QWidget *parent)
@@ -250,10 +306,19 @@ void configureCenteredLabel(QLabel *label)
     label->setAlignment(Qt::AlignCenter);
 }
 
+void configureHeroLabel(QLabel *label)
+{
+    auto heroFont = label->font();
+    heroFont.setPointSize(Metrics::HERO_POINT_SIZE);
+    label->setFont(heroFont);
+    configureCenteredLabel(label);
+}
+
 void configureSidebarItem(QPushButton *button)
 {
     button->setFlat(true);
     button->setIconSize(QSize(Metrics::ICON_SIZE, Metrics::ICON_SIZE));
+    button->setStyleSheet(QStringLiteral("QPushButton { text-align: left; }"));
 }
 
 void configurePrimaryButton(QAbstractButton *button)
@@ -264,6 +329,14 @@ void configurePrimaryButton(QAbstractButton *button)
 void configureCompactButton(QAbstractButton *button)
 {
     button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+}
+
+void configureTitleLabel(QLabel *label)
+{
+    auto titleFont = label->font();
+    titleFont.setPointSize(Metrics::TITLE_POINT_SIZE);
+    titleFont.setBold(true);
+    label->setFont(titleFont);
 }
 
 void configureDivider(QFrame *divider)
@@ -284,6 +357,38 @@ void configureFormField(QWidget *field)
     field->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
+void configureLineEdit(QLineEdit *field)
+{
+    configureFormField(field);
+}
+
+void configureComboBox(QComboBox *field)
+{
+    configureFormField(field);
+}
+
+void configureCodeLineEdit(QLineEdit *field)
+{
+    configureLineEdit(field);
+    field->setFont(codeFont());
+}
+
+void configureItemView(QAbstractItemView *view)
+{
+    view->setFrameShape(QFrame::StyledPanel);
+    view->setAlternatingRowColors(true);
+    view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    view->setTextElideMode(Qt::ElideRight);
+}
+
+void configureTableView(QTableView *view)
+{
+    configureItemView(view);
+    view->horizontalHeader()->setStretchLastSection(true);
+    view->verticalHeader()->setDefaultSectionSize(view->fontMetrics().height() +
+                                                  (2 * Metrics::COMPACT_SPACING));
+}
+
 void configureMultilineField(QPlainTextEdit *field)
 {
     configureTextControl(field);
@@ -297,6 +402,12 @@ void configureStatusView(QPlainTextEdit *view)
     view->setReadOnly(true);
     view->setMaximumHeight(Metrics::STATUS_VIEW_HEIGHT);
     view->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+}
+
+void configureCodeStatusView(QPlainTextEdit *view)
+{
+    configureStatusView(view);
+    view->setFont(codeFont());
 }
 
 void configurePreviewSurface(QLabel *surface)
@@ -413,6 +524,11 @@ void configureErrorLabel(QLabel *label)
     if (qlementineStyle != nullptr) {
         applyErrorColor(label, qlementineStyle);
     }
+}
+
+void configureCodeLabel(QLabel *label)
+{
+    label->setFont(codeFont());
 }
 
 void configureTextControl(QAbstractScrollArea *control)
