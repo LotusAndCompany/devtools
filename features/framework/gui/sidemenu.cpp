@@ -16,8 +16,13 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
-const QString Sidemenu::invalidSidemenuIDReason =
-    QString("Sidemenu::ID must be in range (%1, %2)").arg(Sidemenu::ID_MIN).arg(Sidemenu::ID_MAX);
+const QString &Sidemenu::invalidSidemenuIDReason()
+{
+    static const QString reason = QString("Sidemenu::ID must be in range (%1, %2)")
+                                      .arg(Sidemenu::ID_MIN)
+                                      .arg(Sidemenu::ID_MAX);
+    return reason;
+}
 
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
@@ -64,6 +69,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DB_TOOL);
+    registerItem(ID::REGEX_TESTER);
 
     m_scrollAreaLayout->addStretch();
 
@@ -75,7 +81,7 @@ void Sidemenu::validateID(Sidemenu::ID id)
     const int intID = static_cast<int>(id);
 
     if (intID <= ID_MIN || ID_MAX <= intID) {
-        throw InvalidArgumentException(intID, invalidSidemenuIDReason);
+        throw InvalidArgumentException(intID, invalidSidemenuIDReason());
     }
 }
 
@@ -100,6 +106,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("qr_code"));
     case ID::MARKDOWN_PREVIEW:
         return IconUtils::themedIcon(QStringLiteral("article"));
+    case ID::REGEX_TESTER:
+        return IconUtils::themedIcon(QStringLiteral("regular_expression"));
 
     default:
         throw UnderDevelopmentException();
@@ -126,14 +134,11 @@ void Sidemenu::selectItem(ID id)
 
 void Sidemenu::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
         event->accept();
-        break;
-    default:
+    } else {
         QWidget::changeEvent(event);
-        break;
     }
 }
 

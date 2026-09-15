@@ -6,7 +6,6 @@ paths:
   - "Testing/**"
   - "vcpkg_installed/**"
   - "res/**/*.qm"
-  - "app_info.autogen.cpp"
   - "**/moc_*.cpp"
   - "**/moc_*.h"
   - "**/ui_*.h"
