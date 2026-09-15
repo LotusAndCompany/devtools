@@ -433,16 +433,21 @@ if(CLANG_TIDY_EXECUTABLE)
     if(CLANG_TIDY_RUNNER_EXECUTABLE)
         message(STATUS "Using parallel clang-tidy runner: ${CLANG_TIDY_RUNNER_EXECUTABLE}")
         set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_RUNNER_EXECUTABLE})
-        set(CLANG_TIDY_LINT_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_LINT_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE} -j 0)
         set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_RUNNER_EXTRA_ARGS})
+        set(CLANG_TIDY_FIX_EXECUTABLE ${CLANG_TIDY_RUNNER_EXECUTABLE})
+        set(CLANG_TIDY_FIX_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE} -j 0 -fix)
+        set(CLANG_TIDY_FIX_EXTRA_ARGS ${CLANG_TIDY_RUNNER_EXTRA_ARGS})
     else()
         set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_EXECUTABLE})
         set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_EXTRA_ARGS})
+        set(CLANG_TIDY_FIX_EXECUTABLE ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_FIX_OPTIONS --fix --fix-errors)
+        set(CLANG_TIDY_FIX_EXTRA_ARGS ${CLANG_TIDY_EXTRA_ARGS})
     endif()
 
     add_custom_target(lint
         COMMAND ${CLANG_TIDY_LINT_EXECUTABLE} ${CLANG_TIDY_LINT_OPTIONS} -p ${CMAKE_BINARY_DIR}
-            -header-filter=^${CMAKE_SOURCE_DIR}/features/.*
             ${CLANG_TIDY_LINT_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
@@ -450,9 +455,8 @@ if(CLANG_TIDY_EXECUTABLE)
     )
 
     add_custom_target(lint-fix
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
-            -header-filter=^${CMAKE_SOURCE_DIR}/features/.*
-            ${CLANG_TIDY_EXTRA_ARGS}
+        COMMAND ${CLANG_TIDY_FIX_EXECUTABLE} ${CLANG_TIDY_FIX_OPTIONS} -p ${CMAKE_BINARY_DIR}
+            ${CLANG_TIDY_FIX_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"
         VERBATIM
