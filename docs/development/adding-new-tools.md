@@ -105,6 +105,10 @@ composition:
 - Configure every single-line field, combo box, code editor, status view,
   list, and table with the matching `DevTools::Ui` helper immediately after
   construction.
+- All text fields use the standard system font through the shared helpers.
+  Use `configureCodeEditor()` / `configureCodeLineEdit()` when structured or
+  machine-readable content needs code-specific behavior; these helpers do not
+  introduce a separate font.
 - Use `configureEqualSplitter()`, `configureMainSideSplitter()`, or
   `configureSideMainSplitter()` instead of repeating splitter handle widths
   and stretch factors.

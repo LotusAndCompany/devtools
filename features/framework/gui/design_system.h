@@ -134,7 +134,7 @@ void refreshStatusColors();
 
 void configureTextControl(QAbstractScrollArea *control);
 
-QFont codeFont();
+QFont standardFont();
 void configureCodeEditor(QPlainTextEdit *editor);
 
 } // namespace DevTools::Ui

@@ -476,7 +476,9 @@ else()
 endif()
 
 add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/DevTools.app/Contents/MacOS/DevTools
+    COMMAND ${CMAKE_COMMAND}
+            -DDEVTOOLS_BINARY=${CMAKE_BINARY_DIR}/DevTools.app/Contents/MacOS/DevTools
+            -P ${CMAKE_SOURCE_DIR}/scripts/run_devtools.cmake
     DEPENDS ${PROJECT_NAME}
     COMMENT "Running DevTools with console output"
     VERBATIM

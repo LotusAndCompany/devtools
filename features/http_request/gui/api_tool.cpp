@@ -112,7 +112,7 @@ void api_tool::buildUi()
     auto *body_layout = new QVBoxLayout(body_tab);
     DevTools::Ui::applyPanelLayout(body_layout);
     body_edit = new QPlainTextEdit(body_tab);
-    DevTools::Ui::configureTextControl(body_edit);
+    DevTools::Ui::configureCodeEditor(body_edit);
     body_layout->addWidget(body_edit);
     tab_widget->addTab(body_tab, tr("Body"));
 

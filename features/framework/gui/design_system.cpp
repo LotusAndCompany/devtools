@@ -353,6 +353,7 @@ QTextBrowser *createTextBrowser(QWidget *parent)
 
 void configureFormField(QWidget *field)
 {
+    field->setFont(standardFont());
     field->setMinimumWidth(Metrics::FIELD_MIN_WIDTH);
     field->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
@@ -370,7 +371,6 @@ void configureComboBox(QComboBox *field)
 void configureCodeLineEdit(QLineEdit *field)
 {
     configureLineEdit(field);
-    field->setFont(codeFont());
 }
 
 void configureItemView(QAbstractItemView *view)
@@ -407,7 +407,6 @@ void configureStatusView(QPlainTextEdit *view)
 void configureCodeStatusView(QPlainTextEdit *view)
 {
     configureStatusView(view);
-    view->setFont(codeFont());
 }
 
 void configurePreviewSurface(QLabel *surface)
@@ -528,11 +527,12 @@ void configureErrorLabel(QLabel *label)
 
 void configureCodeLabel(QLabel *label)
 {
-    label->setFont(codeFont());
+    label->setFont(standardFont());
 }
 
 void configureTextControl(QAbstractScrollArea *control)
 {
+    control->setFont(standardFont());
     const int borderWidth = textControlBorderWidth(control);
     control->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     control->setLineWidth(borderWidth);
@@ -560,15 +560,14 @@ void refreshStatusColors()
     }
 }
 
-QFont codeFont()
+QFont standardFont()
 {
-    return QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    return QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void configureCodeEditor(QPlainTextEdit *editor)
 {
     configureTextControl(editor);
-    editor->setFont(codeFont());
     editor->setTabStopDistance(Metrics::CODE_TAB_STOP);
 }
 

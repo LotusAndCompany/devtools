@@ -133,15 +133,20 @@ make -j$(sysctl -n hw.ncpu)
 After building, run the application:
 
 ```bash
-# Build and run with colored console output (recommended)
+# Build and run with colored console output (recommended).
+# This replaces older project-local processes before starting.
 cmake --build . --target run
 
 # Or run the binary directly
 ./DevTools.app/Contents/MacOS/DevTools
-
-# Or open the app bundle
-open DevTools.app
 ```
+
+Use the `run` target when iterating on the source tree. It replaces older
+project-local DevTools processes before launching the canonical binary. If a
+DevTools bundle outside the source tree is running, the target stops with an
+explicit error instead of allowing an ambiguous application-name selection.
+Separately packaged builds, such as `build-appstore`, are not used for source
+validation.
 
 ## IDE Setup
 

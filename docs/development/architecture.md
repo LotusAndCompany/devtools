@@ -229,6 +229,10 @@ content, panel, toolbar, and inline layout roles, along with standard and
 compact panes, form fields, code editors, status views, item views, table views,
 splitters, and dialog footers.
 
+All text controls use the standard system font through the design-system
+helpers. Code-specific helpers may add behavior such as tab-stop configuration,
+but must not introduce a separate font or private widget styling.
+
 Screen-specific composition remains allowed when it reflects the tool's real
 workflow. The same UI role must use the same shared configuration, however. A
 feature GUI must not introduce private fonts, colors, CSS, control dimensions,

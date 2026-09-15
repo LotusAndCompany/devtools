@@ -13,7 +13,8 @@ Before starting, ensure you have:
 ### From Terminal
 
 The simplest way is `cmake --build . --target run` from the build directory,
-which also shows colored console output.
+which also shows colored console output and replaces older project-local
+processes before starting.
 
 ```bash
 cd /path/to/devtools/build
@@ -27,9 +28,11 @@ cd /path/to/devtools/build
 ./DevTools.app/Contents/MacOS/DevTools
 ```
 
-### From Finder
-
-Navigate to the build directory and double-click `DevTools.app`.
+Use the terminal command for source validation instead of launching a second
+copy from Finder or the Dock. If another DevTools bundle outside the source
+tree is running, the target reports it explicitly so it can be closed before
+validation. Separately packaged builds are not interchangeable with the
+development build in `build/`.
 
 ## Application Overview
 

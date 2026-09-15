@@ -34,6 +34,7 @@ void TestDesignSystem::configuresTextControl()
     QPlainTextEdit editor;
     DevTools::Ui::configureTextControl(&editor);
 
+    QCOMPARE(editor.font(), DevTools::Ui::standardFont());
     QCOMPARE(editor.frameShape(), QFrame::StyledPanel);
     QCOMPARE(editor.frameShadow(), QFrame::Raised);
     QCOMPARE(DevTools::Ui::previewContentSize(QSize(100, 100)), QSize(80, 80));
@@ -44,13 +45,27 @@ void TestDesignSystem::configuresStandardFields()
 {
     QLineEdit lineEdit;
     DevTools::Ui::configureLineEdit(&lineEdit);
+    QCOMPARE(lineEdit.font(), DevTools::Ui::standardFont());
     QCOMPARE(lineEdit.minimumWidth(), DevTools::Ui::Metrics::FIELD_MIN_WIDTH);
     QCOMPARE(lineEdit.sizePolicy().verticalPolicy(), QSizePolicy::Fixed);
 
     QComboBox comboBox;
     DevTools::Ui::configureComboBox(&comboBox);
+    QCOMPARE(comboBox.font(), DevTools::Ui::standardFont());
     QCOMPARE(comboBox.minimumWidth(), DevTools::Ui::Metrics::FIELD_MIN_WIDTH);
     QCOMPARE(comboBox.sizePolicy().verticalPolicy(), QSizePolicy::Fixed);
+
+    QLineEdit codeLineEdit;
+    DevTools::Ui::configureCodeLineEdit(&codeLineEdit);
+    QCOMPARE(codeLineEdit.font(), DevTools::Ui::standardFont());
+
+    QPlainTextEdit multilineField;
+    DevTools::Ui::configureMultilineField(&multilineField);
+    QCOMPARE(multilineField.font(), DevTools::Ui::standardFont());
+
+    QPlainTextEdit codeEditor;
+    DevTools::Ui::configureCodeEditor(&codeEditor);
+    QCOMPARE(codeEditor.font(), DevTools::Ui::standardFont());
 }
 
 void TestDesignSystem::configuresPaneAndDialogFooter()

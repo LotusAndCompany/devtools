@@ -109,7 +109,7 @@ void phraseGeneration::createWidgets()
 
     template_text = new QPlainTextEdit(this);
     template_text->setObjectName(QStringLiteral("templateText"));
-    DevTools::Ui::configureCodeEditor(template_text);
+    DevTools::Ui::configureMultilineField(template_text);
 
     copy_button = new QPushButton(this);
     copy_button->setObjectName(QStringLiteral("copyButton"));
