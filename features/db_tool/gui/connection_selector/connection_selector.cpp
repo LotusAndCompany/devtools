@@ -43,9 +43,9 @@ void ConnectionSelector::buildUi()
     DevTools::Ui::applyPageLayout(verticalLayout);
 
     history_group_box = DevTools::Ui::createPane(QString(), this);
+    history_group_box->setFlat(true);
     auto *historyLayout = new QVBoxLayout(history_group_box);
     DevTools::Ui::applyPanelLayout(historyLayout);
-
     historyListWidget = new QListWidget(history_group_box);
     DevTools::Ui::configureItemView(historyListWidget);
     historyLayout->addWidget(historyListWidget);
@@ -100,12 +100,18 @@ void ConnectionSelector::refreshHistoryList()
         QString const displayName = conn["displayName"].toString();
 
         auto *itemWidget = new QWidget();
+        itemWidget->setFont(DevTools::Ui::standardFont());
         auto *layout = new QHBoxLayout(itemWidget);
-        DevTools::Ui::applyToolbarLayout(layout);
+        layout->setContentsMargins(2 * DevTools::Ui::Metrics::LIST_ROW_HORIZONTAL_INSET, 0,
+                                   2 * DevTools::Ui::Metrics::LIST_ROW_HORIZONTAL_INSET, 0);
+        layout->setSpacing(DevTools::Ui::Metrics::COMPACT_SPACING);
 
         auto *label = new QLabel(displayName);
+        label->setFont(DevTools::Ui::standardFont());
+        label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         auto *deleteButton = new QPushButton();
-        DevTools::Ui::configureIconButton(deleteButton, QStringLiteral("delete"), tr("Delete"));
+        DevTools::Ui::configureListActionButton(deleteButton, QStringLiteral("delete"),
+                                                tr("Delete"));
         deleteButton->setIcon(
             IconUtils::themedIcon(QStringLiteral("delete"), QStyle::SP_TrashIcon));
         deleteButton->setProperty("historyIndex", i);
@@ -116,7 +122,7 @@ void ConnectionSelector::refreshHistoryList()
         layout->addWidget(deleteButton);
 
         auto *item = new QListWidgetItem();
-        item->setSizeHint(itemWidget->sizeHint());
+        DevTools::Ui::configureListItem(item);
         historyListWidget->addItem(item);
         historyListWidget->setItemWidget(item, itemWidget);
     }

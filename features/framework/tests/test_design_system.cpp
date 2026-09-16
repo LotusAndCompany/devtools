@@ -10,9 +10,11 @@
 #include <QJsonDocument>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QListWidgetItem>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSplitter>
+#include <QStandardItemModel>
 #include <QStringList>
 #include <QTableView>
 #include <QtTest>
@@ -99,16 +101,40 @@ void TestDesignSystem::configuresItemViews()
     QCOMPARE(listWidget.frameShadow(), QFrame::Plain);
     QVERIFY(listWidget.lineWidth() > 0);
     QVERIFY(listWidget.styleSheet().contains(QStringLiteral("QListView")));
+    QVERIFY(listWidget.styleSheet().contains(QStringLiteral("border-radius")));
     QVERIFY(listWidget.alternatingRowColors());
     QCOMPARE(listWidget.selectionBehavior(), QAbstractItemView::SelectRows);
+    QCOMPARE(listWidget.selectionMode(), QAbstractItemView::SingleSelection);
+    QCOMPARE(listWidget.verticalScrollMode(), QAbstractItemView::ScrollPerPixel);
+    QCOMPARE(listWidget.iconSize(),
+             QSize(DevTools::Ui::Metrics::ICON_SIZE, DevTools::Ui::Metrics::ICON_SIZE));
+    QCOMPARE(listWidget.spacing(), DevTools::Ui::Metrics::LIST_ROW_SPACING);
+    QVERIFY(listWidget.uniformItemSizes());
+
+    auto *const listItem = new QListWidgetItem;
+    DevTools::Ui::configureListItem(listItem);
+    QCOMPARE(listItem->sizeHint(), QSize(0, DevTools::Ui::Metrics::LIST_ROW_HEIGHT));
+    delete listItem;
+
+    QPushButton listActionButton;
+    DevTools::Ui::configureListActionButton(&listActionButton, QStringLiteral("delete"));
+    QCOMPARE(listActionButton.size(), QSize(DevTools::Ui::Metrics::LIST_ACTION_BUTTON_SIZE,
+                                            DevTools::Ui::Metrics::LIST_ACTION_BUTTON_SIZE));
 
     QTableView tableView;
     DevTools::Ui::configureTableView(&tableView);
-    QCOMPARE(tableView.frameShape(), QFrame::StyledPanel);
-    QCOMPARE(tableView.frameShadow(), QFrame::Plain);
-    QVERIFY(tableView.styleSheet().contains(QStringLiteral("QTableView")));
+    QCOMPARE(tableView.frameShape(), QFrame::NoFrame);
+    QCOMPARE(tableView.lineWidth(), 0);
+    QCOMPARE(tableView.midLineWidth(), 0);
+    QVERIFY(!tableView.styleSheet().contains(QStringLiteral("QTableView")));
     QVERIFY(tableView.alternatingRowColors());
     QVERIFY(tableView.horizontalHeader()->stretchLastSection());
+
+    QStandardItemModel model(2, 1);
+    tableView.setModel(&model);
+    DevTools::Ui::fitTableViewToContents(&tableView);
+    QCOMPARE(tableView.sizePolicy().verticalPolicy(), QSizePolicy::Fixed);
+    QVERIFY(tableView.height() > tableView.horizontalHeader()->sizeHint().height());
 }
 
 void TestDesignSystem::configuresActionBarsAndSplitters()

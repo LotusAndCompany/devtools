@@ -21,6 +21,7 @@ class QGridLayout;
 class QLabel;
 class QLayout;
 class QLineEdit;
+class QListWidgetItem;
 class QPlainTextEdit;
 class QPushButton;
 class QScrollArea;
@@ -46,6 +47,11 @@ constexpr int CONTROL_SPACING = 8;
 constexpr int COMPACT_SPACING = 4;
 constexpr int ICON_BUTTON_SIZE = 32;
 constexpr int ICON_SIZE = 20;
+constexpr int LIST_ROW_HEIGHT = 32;
+constexpr int LIST_ROW_HORIZONTAL_INSET = 4;
+constexpr int LIST_ROW_VERTICAL_INSET = 2;
+constexpr int LIST_ROW_SPACING = 2;
+constexpr int LIST_ACTION_BUTTON_SIZE = LIST_ROW_HEIGHT - (2 * LIST_ROW_VERTICAL_INSET);
 constexpr int STATUS_VIEW_HEIGHT = 64;
 constexpr int SIDEMENU_WIDTH = 240;
 constexpr int TOOL_PANEL_WIDTH = 360;
@@ -113,7 +119,9 @@ void configureLineEdit(QLineEdit *field);
 void configureComboBox(QComboBox *field);
 void configureCodeLineEdit(QLineEdit *field);
 void configureItemView(QAbstractItemView *view);
+void configureListItem(QListWidgetItem *item);
 void configureTableView(QTableView *view);
+void fitTableViewToContents(QTableView *view);
 void configureMultilineField(QPlainTextEdit *field);
 void configureStatusView(QPlainTextEdit *view);
 void configureCodeStatusView(QPlainTextEdit *view);
@@ -129,6 +137,8 @@ QSize previewContentSize(const QSize &surfaceSize);
 
 void configureIconButton(QAbstractButton *button, const QString &iconName,
                          const QString &toolTip = {});
+void configureListActionButton(QAbstractButton *button, const QString &iconName,
+                               const QString &toolTip = {});
 void configureErrorLabel(QLabel *label);
 void configureCodeLabel(QLabel *label);
 void refreshStatusColors();

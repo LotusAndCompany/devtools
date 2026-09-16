@@ -19,6 +19,7 @@
 #include <QNetworkRequest>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QSizePolicy>
 #include <QStandardItemModel>
 #include <QTabWidget>
 #include <QTableView>
@@ -93,6 +94,7 @@ void api_tool::buildUi()
     params_table = new QTableView(params_tab);
     DevTools::Ui::configureTableView(params_table);
     params_layout->addWidget(params_table);
+    params_layout->addStretch();
     tab_widget->addTab(params_tab, tr("Parameters"));
 
     auto *auth_tab = new QWidget(tab_widget);
@@ -129,6 +131,7 @@ void api_tool::setupParametersTable()
     params_model->setHeaderData(2, Qt::Horizontal, tr("Description"));
     params_table->setModel(params_model);
     params_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    DevTools::Ui::fitTableViewToContents(params_table);
 }
 
 void api_tool::handleSendButtonClick()

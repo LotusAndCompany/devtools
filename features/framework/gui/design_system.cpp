@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
+#include <QListView>
+#include <QListWidgetItem>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -28,6 +30,7 @@
 #include <QSizePolicy>
 #include <QSplitter>
 #include <QStyleOption>
+#include <QStyledItemDelegate>
 #include <QTableView>
 #include <QTextBrowser>
 #include <QToolButton>
@@ -72,6 +75,80 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+};
+
+class RoundedListItemDelegate final : public QStyledItemDelegate
+{
+public:
+    RoundedListItemDelegate(const QColor &normalRowColor, const QColor &alternateRowColor,
+                            QObject *parent = nullptr)
+        : QStyledItemDelegate(parent)
+        , normal_row_color(normalRowColor)
+        , alternate_row_color(alternateRowColor)
+    {}
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override
+    {
+        const QRect itemRect = option.rect.adjusted(
+            Metrics::LIST_ROW_HORIZONTAL_INSET, Metrics::LIST_ROW_VERTICAL_INSET,
+            -Metrics::LIST_ROW_HORIZONTAL_INSET, -Metrics::LIST_ROW_VERTICAL_INSET);
+        const qreal radius =
+            qMin<qreal>(Metrics::CORNER_RADIUS, qMin(itemRect.width(), itemRect.height()) / 2.0);
+
+        QPainterPath roundedPath;
+        roundedPath.addRoundedRect(QRectF(itemRect), radius, radius);
+        const QColor &rowColor = option.features.testFlag(QStyleOptionViewItem::Alternate)
+                                     ? alternate_row_color
+                                     : normal_row_color;
+
+        painter->save();
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(rowColor);
+        painter->drawPath(roundedPath);
+        painter->setClipPath(roundedPath);
+
+        QStyleOptionViewItem roundedOption(option);
+        roundedOption.rect = itemRect;
+        QStyledItemDelegate::paint(painter, roundedOption, index);
+        painter->restore();
+    }
+
+private:
+    QColor normal_row_color;
+    QColor alternate_row_color;
+};
+
+class RoundedListStyle final : public oclero::qlementine::QlementineStyle
+{
+public:
+    explicit RoundedListStyle(const oclero::qlementine::QlementineStyle &source,
+                              QObject *parent = nullptr)
+        : QlementineStyle(parent), source_style(&source)
+    {
+        syncTheme();
+        QObject::connect(&source, &QlementineStyle::themeChanged, this, [this]() { syncTheme(); });
+    }
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
+                       const QWidget *widget = nullptr) const override
+    {
+        if (element == PE_PanelItemViewRow) {
+            return;
+        }
+
+        QlementineStyle::drawPrimitive(element, option, painter, widget);
+    }
+
+private:
+    void syncTheme()
+    {
+        setTheme(source_style->theme());
+        setAutoIconColor(source_style->autoIconColor());
+    }
+
+    const oclero::qlementine::QlementineStyle *source_style;
 };
 
 void setTextControlViewportMargins(QAbstractScrollArea *control, int borderWidth)
@@ -377,25 +454,60 @@ void configureCodeLineEdit(QLineEdit *field)
 void configureItemView(QAbstractItemView *view)
 {
     view->setFont(standardFont());
-    const int borderWidth = textControlBorderWidth(view);
-    int borderRadius = Metrics::CORNER_RADIUS;
-    QColor borderColor = view->palette().color(QPalette::Mid);
-    if (auto *const qlementineStyle =
-            qobject_cast<oclero::qlementine::QlementineStyle *>(view->style())) {
-        borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
-        borderColor = qlementineStyle->theme().borderColor;
-    }
-    view->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    view->setLineWidth(borderWidth);
-    view->setStyleSheet(
-        QStringLiteral(
-            "QListView, QTreeView, QTableView { border: %1px solid %2; border-radius: %3px; }")
-            .arg(borderWidth)
-            .arg(borderColor.name(QColor::HexArgb))
-            .arg(borderRadius));
+    view->setFrameStyle(QFrame::NoFrame);
+    view->setLineWidth(0);
+    view->setMidLineWidth(0);
+    configurePaneSurface(view);
     view->setAlternatingRowColors(true);
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     view->setTextElideMode(Qt::ElideRight);
+    view->setIconSize(QSize(Metrics::ICON_SIZE, Metrics::ICON_SIZE));
+
+    if (auto *const listView = qobject_cast<QListView *>(view)) {
+        const int borderWidth = textControlBorderWidth(listView);
+        int borderRadius = Metrics::CORNER_RADIUS;
+        QColor borderColor = listView->palette().color(QPalette::Mid);
+        QColor normalRowColor = listView->palette().color(QPalette::Base);
+        QColor alternateRowColor = listView->palette().color(QPalette::AlternateBase);
+        if (auto *const qlementineStyle =
+                qobject_cast<oclero::qlementine::QlementineStyle *>(listView->style())) {
+            borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
+            borderColor = qlementineStyle->theme().borderColor;
+            normalRowColor = qlementineStyle->listItemRowBackgroundColor(
+                oclero::qlementine::MouseState::Normal,
+                oclero::qlementine::AlternateState::NotAlternate);
+            alternateRowColor = qlementineStyle->listItemRowBackgroundColor(
+                oclero::qlementine::MouseState::Normal,
+                oclero::qlementine::AlternateState::Alternate);
+            listView->setStyle(new RoundedListStyle(*qlementineStyle, listView));
+        }
+
+        listView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        listView->setLineWidth(borderWidth);
+        listView->setStyleSheet(QStringLiteral("QListView { border: %1px solid %2; border-radius: "
+                                               "%3px; background: transparent; }")
+                                    .arg(borderWidth)
+                                    .arg(borderColor.name(QColor::HexArgb))
+                                    .arg(borderRadius));
+        listView->setAutoFillBackground(false);
+        listView->viewport()->setAutoFillBackground(false);
+        listView->viewport()->setAttribute(Qt::WA_OpaquePaintEvent, false);
+        listView->setItemDelegate(
+            new RoundedListItemDelegate(normalRowColor, alternateRowColor, listView));
+        listView->setSpacing(Metrics::LIST_ROW_SPACING);
+        listView->setUniformItemSizes(true);
+    }
+}
+
+void configureListItem(QListWidgetItem *item)
+{
+    if (item == nullptr) {
+        return;
+    }
+
+    item->setSizeHint(QSize(0, Metrics::LIST_ROW_HEIGHT));
 }
 
 void configureTableView(QTableView *view)
@@ -404,6 +516,18 @@ void configureTableView(QTableView *view)
     view->horizontalHeader()->setStretchLastSection(true);
     view->verticalHeader()->setDefaultSectionSize(view->fontMetrics().height() +
                                                   (2 * Metrics::COMPACT_SPACING));
+}
+
+void fitTableViewToContents(QTableView *view)
+{
+    if (view == nullptr) {
+        return;
+    }
+
+    const int tableContentHeight = view->horizontalHeader()->sizeHint().height() +
+                                   view->verticalHeader()->length() + (2 * view->frameWidth());
+    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    view->setFixedHeight(tableContentHeight);
 }
 
 void configureMultilineField(QPlainTextEdit *field)
@@ -521,6 +645,13 @@ void configureIconButton(QAbstractButton *button, const QString &iconName, const
     if (!toolTip.isEmpty()) {
         button->setToolTip(toolTip);
     }
+}
+
+void configureListActionButton(QAbstractButton *button, const QString &iconName,
+                               const QString &toolTip)
+{
+    configureIconButton(button, iconName, toolTip);
+    button->setFixedSize(Metrics::LIST_ACTION_BUTTON_SIZE, Metrics::LIST_ACTION_BUTTON_SIZE);
 }
 
 void configureWindowControlButton(QPushButton *button, const QString &iconName,

@@ -45,6 +45,7 @@ void QueryPage::buildUi()
     queryResultView = new QTableView(this);
     DevTools::Ui::configureTableView(queryResultView);
     verticalLayout->addWidget(queryResultView);
+    verticalLayout->addStretch();
 
     retranslateUi();
 }
@@ -66,6 +67,7 @@ void QueryPage::executeQuery()
     }
 
     model->setQuery(std::move(query));
+    DevTools::Ui::fitTableViewToContents(queryResultView);
 
     if (model->lastError().isValid()) {
         QMessageBox::warning(this, tr("Result Fetch Error"), model->lastError().text());

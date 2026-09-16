@@ -148,6 +148,7 @@ void phraseGeneration::layoutWidgets()
 
     tree_group = DevTools::Ui::createPane(QString(), this);
     tree_group->setObjectName(QStringLiteral("treeGroup"));
+    tree_group->setFlat(true);
     auto *tree_panel = new QVBoxLayout(tree_group);
     DevTools::Ui::applyPanelLayout(tree_panel);
     tree_panel->addWidget(add_button);
@@ -190,12 +191,15 @@ void phraseGeneration::loadTitles()
     title_list_widget->clear();
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    QIcon const templateIcon =
+        IconUtils::themedIcon(QStringLiteral("article"), QStyle::SP_FileIcon);
     // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
         QString const content = loadContent(filename, &title);
 
-        auto *item = new QListWidgetItem(title, title_list_widget);
+        auto *item = new QListWidgetItem(templateIcon, title, title_list_widget);
+        DevTools::Ui::configureListItem(item);
         item->setData(Qt::UserRole, filename);
     }
 }

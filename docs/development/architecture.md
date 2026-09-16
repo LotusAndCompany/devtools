@@ -233,8 +233,13 @@ Display-only text uses `configureDisplayTextControl`: it keeps the normal
 qlementine frame and standard font while disabling focus and hover state.
 Selectable output must explicitly opt into keyboard and mouse text selection.
 Flat collections use list widgets; hierarchical data uses tree widgets. All
-list and table views use the shared item-view configuration so borders, fonts,
-selection behavior, and row treatment do not drift between tools.
+list and table views use the shared item-view configuration so fonts, selection
+behavior, and row treatment do not drift between tools. List views own their
+shared rounded frame; feature panes must not wrap them in a second framed
+surface. Table and tree views use the containing pane as their outer frame.
+qlementine remains responsible for row, selection, and table separator
+rendering, while list viewports stay transparent so their rounded corners remain
+visible.
 
 All text controls use the standard system font through the design-system
 helpers. Code-specific helpers may add behavior such as tab-stop configuration,

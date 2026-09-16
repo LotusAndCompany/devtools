@@ -218,6 +218,9 @@ std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
   single response or result string as a one-item list.
 - Keep `configureItemView()` and `configureTableView()` on all list and table
   views so their font, frame, selection, and theme treatment stay shared.
+- List views must use the shared rounded frame from `configureItemView()` and
+  must not be wrapped in another framed pane. Table and tree views use the
+  containing pane as their outer frame; do not add feature-local borders.
 - Display-only text controls must not receive focus or hover styling. Preserve
   text or link interaction only when the screen explicitly needs selection,
   copying, or link activation.

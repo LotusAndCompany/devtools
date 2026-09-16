@@ -96,6 +96,7 @@ void dbMain::buildUi()
     DevTools::Ui::applyContentLayout(contentLayout);
 
     tablesGroupBox = DevTools::Ui::createPane(QString(), this);
+    tablesGroupBox->setFlat(true);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
     DevTools::Ui::applyPanelLayout(tablesLayout);
     tableListWidget = new QListWidget(tablesGroupBox);
@@ -223,7 +224,12 @@ void dbMain::handleTabCloseRequested(int index)
 
 void dbMain::populateTableList()
 {
-    tableListWidget->addItems(db.tables(QSql::Tables));
+    QIcon const tableIcon =
+        IconUtils::themedIcon(QStringLiteral("database"), QStyle::SP_DriveHDIcon);
+    for (const QString &tableName : db.tables(QSql::Tables)) {
+        auto *const item = new QListWidgetItem(tableIcon, tableName, tableListWidget);
+        DevTools::Ui::configureListItem(item);
+    }
 }
 
 void dbMain::handleTableClicked(QListWidgetItem *item)
@@ -245,6 +251,7 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     auto *tableView = new QTableView;
     DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);
+    DevTools::Ui::fitTableViewToContents(tableView);
 
     // 更新ボタン
     auto *refreshButton = new QPushButton;
@@ -252,16 +259,20 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     refreshButton->setIcon(
         IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     refreshButton->setToolTip(tr("Refresh"));
-    connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
+    connect(refreshButton, &QPushButton::clicked, this, [model, tableView]() {
+        model->select();
+        DevTools::Ui::fitTableViewToContents(tableView);
+    });
     // 左寄せのレイアウト
     auto *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(refreshButton);
+    buttonLayout->addWidget(refreshButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
     DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Leading);
 
     auto *mainLayout = new QVBoxLayout;
     DevTools::Ui::applyPanelLayout(mainLayout);
     mainLayout->addLayout(buttonLayout); // 更新ボタン
     mainLayout->addWidget(tableView);    // テーブルビュー
+    mainLayout->addStretch();
 
     auto *container = new QWidget;
     container->setLayout(mainLayout);
