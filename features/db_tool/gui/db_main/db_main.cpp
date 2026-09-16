@@ -132,7 +132,7 @@ void dbMain::handleAddQueryTabButtonClick()
 {
     auto *page = new QueryPage(this);
 
-    QString const baseName = "Query";
+    QString const baseName = tr("Query");
     int counter = 1;
     QString newTabName;
 

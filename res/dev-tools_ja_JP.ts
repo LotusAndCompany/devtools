@@ -39,6 +39,14 @@
         <source>Failed to load license information.</source>
         <translation>ライセンス情報を読み込めませんでした。</translation>
     </message>
+    <message>
+        <source>Copyright</source>
+        <translation>著作権</translation>
+    </message>
+    <message>
+        <source>2025 © Lotus&amp;Company Inc. All rights reserved.</source>
+        <translation>2025 © Lotus&amp;Company Inc. 無断転載を禁じます。</translation>
+    </message>
 </context>
 <context>
     <name>BasicImageView</name>
@@ -476,10 +484,6 @@
         <translation>入力文字列</translation>
     </message>
     <message>
-        <source>Error &amp; waning messages</source>
-        <translation>エラー・警告メッセージ</translation>
-    </message>
-    <message>
         <source>YAML (Flow style)</source>
         <translation>YAML (Flowスタイル)</translation>
     </message>
@@ -526,6 +530,14 @@
     <message>
         <source>Output</source>
         <translation>出力</translation>
+    </message>
+    <message>
+        <source>Error &amp; warning messages</source>
+        <translation>エラーと警告メッセージ</translation>
+    </message>
+    <message>
+        <source>Plain Text (*.txt *.json *.toml *.yml *.yaml)</source>
+        <translation>プレーンテキスト (*.txt *.json *.toml *.yml *.yaml)</translation>
     </message>
 </context>
 <context>
@@ -1409,6 +1421,10 @@ Choose a tool from the side panel</source>
         <source>Response</source>
         <translation>レスポンス</translation>
     </message>
+    <message>
+        <source>Error</source>
+        <translation>エラー</translation>
+    </message>
 </context>
 <context>
     <name>dbMain</name>
@@ -1463,6 +1479,14 @@ Choose a tool from the side panel</source>
     <message>
         <source>Refresh</source>
         <translation>更新</translation>
+    </message>
+    <message>
+        <source>Refresh Tables</source>
+        <translation>テーブルを更新</translation>
+    </message>
+    <message>
+        <source>DB Connection Settings</source>
+        <translation>DB接続設定</translation>
     </message>
 </context>
 <context>
@@ -1727,16 +1751,37 @@ Choose a tool from the side panel</source>
         <source>Generated ID: f47ac10b-58cc-4372-a567-0e02b2c3d479.</source>
         <translation>生成されたID: f47ac10b-58cc-4372-a567-0e02b2c3d479</translation>
     </message>
-</context>
-<context>
-    <name>home</name>
     <message>
-        <source>Refresh Tables</source>
-        <translation>テーブル更新</translation>
+        <source>Matches</source>
+        <translation>マッチ結果</translation>
     </message>
     <message>
-        <source>DB Connection Settings</source>
-        <translation>DB接続設定</translation>
+        <source>Quick Reference</source>
+        <translation>クイックリファレンス</translation>
+    </message>
+    <message>
+        <source>Match %1: [%2, %3]
+&quot;%4&quot;</source>
+        <translation>マッチ %1: [%2, %3]
+&quot;%4&quot;</translation>
+    </message>
+    <message>
+        <source>  Group %1: [%2, %3]
+  &quot;%4&quot;</source>
+        <translation>  グループ %1: [%2, %3]
+  &quot;%4&quot;</translation>
+    </message>
+    <message>
+        <source>Match %1: &quot;%2&quot; [%3, %4]
+</source>
+        <translation>マッチ %1: &quot;%2&quot; [%3, %4]
+</translation>
+    </message>
+    <message>
+        <source>  Group %1: &quot;%2&quot; [%3, %4]
+</source>
+        <translation>  グループ %1: &quot;%2&quot; [%3, %4]
+</translation>
     </message>
 </context>
 <context>

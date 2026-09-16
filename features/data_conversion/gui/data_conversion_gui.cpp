@@ -184,7 +184,7 @@ void DataConversionGUI::onLoadPressed()
     dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
-    dialog.setNameFilter("Plain Text (*.txt *.json *.toml *.yml *yaml)");
+    dialog.setNameFilter(tr("Plain Text (*.txt *.json *.toml *.yml *.yaml)"));
     connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) {

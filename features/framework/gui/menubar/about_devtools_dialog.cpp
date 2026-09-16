@@ -104,10 +104,9 @@ QWidget *AboutDevToolsDialog::createAboutTab(QWidget *parent)
     gridLayout->addWidget(createValueLabel(buildEnvText, tab), 2, 1);
     gridLayout->addWidget(createCaptionLabel(tr("Qt Version"), tab), 3, 0);
     gridLayout->addWidget(createValueLabel(QString::fromUtf8(qVersion()), tab), 3, 1);
-    gridLayout->addWidget(createCaptionLabel(QStringLiteral("Copyright"), tab), 4, 0);
+    gridLayout->addWidget(createCaptionLabel(tr("Copyright"), tab), 4, 0);
     gridLayout->addWidget(
-        createValueLabel(QStringLiteral("2025 © Lotus&Company Inc. All rights reserved."), tab), 4,
-        1);
+        createValueLabel(tr("2025 © Lotus&Company Inc. All rights reserved."), tab), 4, 1);
 
     layout->addLayout(gridLayout);
 

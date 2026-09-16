@@ -187,10 +187,13 @@ For testing, you can switch language in settings:
 ### Check for Untranslated Strings
 
 ```bash
-# Find untranslated strings
-lconvert -i res/dev-tools_ja_JP.ts -o report.txt -of csv
-grep "type=\"unfinished\"" res/dev-tools_ja_JP.ts
+# Refresh the source inventory and then verify that every entry is translated
+cmake --build build --target update_devtools_translations
+cmake --build build --target check_devtools_translations
 ```
+
+The check target fails when the Japanese `.ts` file contains an unfinished or
+empty translation. Run it after adding or changing any user-visible string.
 
 ### Visual Testing
 

@@ -650,7 +650,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
     } else {
         for (const auto &match : matches) {
             QString const matchText = m_testTextEdit->toPlainText().mid(match.offset, match.length);
-            QString const resultText = QString("Match %1: [%2, %3]\n\"%4\"")
+            QString const resultText = tr("Match %1: [%2, %3]\n\"%4\"")
                                            .arg(match.index + 1)
                                            .arg(match.offset)
                                            .arg(match.offset + match.length)
@@ -667,7 +667,7 @@ void RegexTesterGUI::updateMatchResultDisplay(const QVector<MatchResult> &matche
                 const QString groupIdentifier =
                     group.name.isEmpty() ? QString::number(group.index)
                                          : QString("%1 (%2)").arg(group.index).arg(group.name);
-                QString const groupText = QString("  Group %1: [%2, %3]\n  \"%4\"")
+                QString const groupText = tr("  Group %1: [%2, %3]\n  \"%4\"")
                                               .arg(groupIdentifier)
                                               .arg(group.offset)
                                               .arg(group.offset + group.length)
@@ -706,7 +706,7 @@ void RegexTesterGUI::copyMatches()
 
     for (const auto &match : m_lastMatches) {
         QString const matchStr = m_testTextEdit->toPlainText().mid(match.offset, match.length);
-        stream << QString("Match %1: \"%2\" [%3, %4]\n")
+        stream << tr("Match %1: \"%2\" [%3, %4]\n")
                       .arg(match.index + 1)
                       .arg(matchStr)
                       .arg(match.offset)
@@ -716,7 +716,7 @@ void RegexTesterGUI::copyMatches()
             const QString groupIdentifier =
                 group.name.isEmpty() ? QString::number(group.index)
                                      : QString("%1 (%2)").arg(group.index).arg(group.name);
-            stream << QString("  Group %1: \"%2\" [%3, %4]\n")
+            stream << tr("  Group %1: \"%2\" [%3, %4]\n")
                           .arg(groupIdentifier)
                           .arg(group.value)
                           .arg(group.offset)

@@ -235,7 +235,7 @@ void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
 
         QString const statusInfo = tr("Status: %1 %2 Time: %3ms Size: %4")
                                        .arg(statusCode)
-                                       .arg(statusText.isEmpty() ? "Error" : statusText)
+                                       .arg(statusText.isEmpty() ? tr("Error") : statusText)
                                        .arg(responseTime)
                                        .arg(formattedSize);
         status_label->setText(statusInfo);

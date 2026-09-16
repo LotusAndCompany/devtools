@@ -149,6 +149,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         NO_GLOBAL_TARGET
     )
 
+    add_custom_target(check_devtools_translations
+        COMMAND ${CMAKE_COMMAND}
+                -DTRANSLATION_TS_FILE=${CMAKE_SOURCE_DIR}/res/dev-tools_ja_JP.ts
+                -P ${CMAKE_SOURCE_DIR}/scripts/check_translations.cmake
+        COMMENT "Checking for incomplete translations"
+        VERBATIM
+    )
+
     qt_add_resources(${PROJECT_NAME} "${PROJECT_NAME}_translations"
         PREFIX "/i18n"
         BASE "${CMAKE_CURRENT_BINARY_DIR}"
@@ -485,7 +493,7 @@ add_custom_target(run
 )
 
 add_custom_target(quality-check
-    DEPENDS format-check lint
+    DEPENDS format-check lint check_devtools_translations
     COMMENT "Running all code quality checks"
 )
 
