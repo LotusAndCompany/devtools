@@ -79,6 +79,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DB_TOOL);
+    registerItem(ID::TIMESTAMP_CONVERSION);
 
     m_scrollAreaLayout->addStretch();
 
@@ -123,6 +124,9 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         break;
     case ID::MARKDOWN_PREVIEW:
         iconNames = {"article"};
+        break;
+    case ID::TIMESTAMP_CONVERSION:
+        iconNames = {"clock", "appointment-new", "chronometer"};
         break;
 
     default:

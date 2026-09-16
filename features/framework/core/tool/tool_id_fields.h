@@ -33,7 +33,9 @@
     /** QRコード生成 */           \
     QR_CODE_GENERATION,           \
     /** Markdownプレビュー */      \
-    MARKDOWN_PREVIEW              // 末尾のカンマは不要
+    MARKDOWN_PREVIEW,             \
+    /** タイムスタンプ変換 */       \
+    TIMESTAMP_CONVERSION           // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

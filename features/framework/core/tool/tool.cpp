@@ -59,6 +59,11 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
     case ID::MARKDOWN_PREVIEW:
         return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
+    case ID::TIMESTAMP_CONVERSION:
+        return Translatable{
+            tr("Timestamp Conversion"),
+            tr("Convert between Unix timestamps and human-readable date/time"),
+        };
     default:
         throw UnderDevelopmentException();
     }

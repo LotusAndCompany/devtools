@@ -140,6 +140,12 @@ DevTools_add_test(test_data_conversion
     features/data_conversion/tests/test_data_conversion.cpp
 )
 
+# core/timestamp_conversion
+DevTools_add_test(test_timestamp_conversion
+    SOURCES
+    features/timestamp_conversion/tests/test_timestamp_conversion.cpp
+)
+
 # gui/image/basic
 DevTools_add_test(test_basic_image_view_control
     SOURCES
