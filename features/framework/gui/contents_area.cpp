@@ -12,6 +12,7 @@
 #include "features/phrase_generation/gui/phrase_generation.h"
 #include "features/qr_code/gui/qr_code_generation_gui.h"
 #include "features/regex_tool/gui/regex_tester_gui.h"
+#include "features/timestamp_conversion/gui/timestamp_conversion_gui.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -89,6 +90,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::MARKDOWN_PREVIEW:
         content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
+        break;
+    case Sidemenu::ID::TIMESTAMP_CONVERSION:
+        content = new TimestampConversionGUI(this);
         break;
     case Sidemenu::ID::REGEX_TESTER:
         content = new devtools::RegexTesterGUI(this);
