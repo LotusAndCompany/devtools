@@ -208,7 +208,8 @@ void TimestampConversionGUI::changeEvent(QEvent *event)
 
 void TimestampConversionGUI::applyCanonical(const QDateTime &utcInstant)
 {
-    secondsEdit->setText(TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Seconds));
+    secondsEdit->setText(
+        TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Seconds));
     millisecondsEdit->setText(
         TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Milliseconds));
 
@@ -238,8 +239,8 @@ void TimestampConversionGUI::onNowClicked()
 void TimestampConversionGUI::onConvertFromSecondsClicked()
 {
     bool ok = false;
-    const QDateTime utcInstant =
-        TimestampConversion::fromUnixTimestamp(secondsEdit->text(), TimestampConversion::Unit::Seconds, &ok);
+    const QDateTime utcInstant = TimestampConversion::fromUnixTimestamp(
+        secondsEdit->text(), TimestampConversion::Unit::Seconds, &ok);
 
     if (!ok) {
         showInvalidValueError();

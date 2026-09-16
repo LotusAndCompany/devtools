@@ -67,8 +67,7 @@ void TestTimestampConversion::test_fromIso8601_withMilliseconds()
     const QDateTime result = TimestampConversion::fromIso8601("2026-09-13T20:32:37.497Z", &ok);
 
     QVERIFY(ok);
-    QCOMPARE(result,
-              QDateTime::fromString("2026-09-13T20:32:37.497Z", Qt::ISODateWithMs).toUTC());
+    QCOMPARE(result, QDateTime::fromString("2026-09-13T20:32:37.497Z", Qt::ISODateWithMs).toUTC());
 }
 
 void TestTimestampConversion::test_fromIso8601_withoutMilliseconds()

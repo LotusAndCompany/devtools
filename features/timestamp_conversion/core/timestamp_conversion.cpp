@@ -8,10 +8,10 @@ QDateTime TimestampConversion::fromUnixTimestamp(const QString &text, Unit unit,
     const qint64 value = text.trimmed().toLongLong(&parsedOk);
 
     const QDateTime utcInstant =
-        parsedOk ? (unit == Unit::Milliseconds
-                        ? QDateTime::fromMSecsSinceEpoch(value, QTimeZone::UTC)
-                        : QDateTime::fromSecsSinceEpoch(value, QTimeZone::UTC))
-                 : QDateTime();
+        parsedOk
+            ? (unit == Unit::Milliseconds ? QDateTime::fromMSecsSinceEpoch(value, QTimeZone::UTC)
+                                          : QDateTime::fromSecsSinceEpoch(value, QTimeZone::UTC))
+            : QDateTime();
 
     const bool success = parsedOk && utcInstant.isValid();
     if (ok != nullptr) {
@@ -42,7 +42,7 @@ QDateTime TimestampConversion::fromLocalDateTime(const QDateTime &localDateTime)
     }
 
     const QDateTime interpreted(localDateTime.date(), localDateTime.time(),
-                                 QTimeZone::systemTimeZone());
+                                QTimeZone::systemTimeZone());
     return interpreted.toUTC();
 }
 
@@ -62,7 +62,7 @@ QString TimestampConversion::toUnixTimestamp(const QDateTime &utcInstant, Unit u
     }
 
     return (unit == Unit::Milliseconds) ? QString::number(utcInstant.toMSecsSinceEpoch())
-                                         : QString::number(utcInstant.toSecsSinceEpoch());
+                                        : QString::number(utcInstant.toSecsSinceEpoch());
 }
 
 QString TimestampConversion::toIso8601(const QDateTime &utcInstant)
