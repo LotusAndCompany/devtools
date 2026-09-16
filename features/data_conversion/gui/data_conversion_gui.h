@@ -12,7 +12,6 @@ class QGroupBox;
 class QHBoxLayout;
 class QPlainTextEdit;
 class QPushButton;
-class QSplitter;
 
 #ifdef _TEST_ImageDivisionGUI
 namespace Test {
@@ -61,8 +60,7 @@ private:
     /// ロジック部分
     DataConversionInterface *const dataConversion;
 
-    /// メインスプリッタ
-    QSplitter *splitter = nullptr;
+    /// 入出力ペイン
     QGroupBox *inputPane = nullptr;
     QGroupBox *outputPane = nullptr;
 

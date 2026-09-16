@@ -7,12 +7,12 @@
 class QComboBox;
 class QEvent;
 class QGroupBox;
+class QHBoxLayout;
 class QLabel;
 class QLineEdit;
 class QNetworkAccessManager;
 class QNetworkReply;
 class QPushButton;
-class QSplitter;
 class QStandardItemModel;
 class QTabWidget;
 class QTableView;
@@ -89,8 +89,8 @@ private:
     QLineEdit *password_edit{};
     /// リクエストボディ入力用のテキストエディット
     QPlainTextEdit *body_edit{};
-    /// メインスプリッター
-    QSplitter *main_splitter{};
+    /// オプションとレスポンスを中央で等分するレイアウト
+    QHBoxLayout *content_layout{};
 
     /// ネットワークアクセスマネージャ
     QNetworkAccessManager *network_manager;

@@ -15,7 +15,6 @@
 #include <QPushButton>
 #include <QScrollBar>
 #include <QSizePolicy>
-#include <QSplitter>
 #include <QTextBrowser>
 #include <QTextDocument>
 #include <QTimer>
@@ -77,9 +76,10 @@ void MarkdownPreviewGUI::buildUi()
     toolbarLayout->addWidget(syncScrollCheck);
     mainLayout->addWidget(toolbarGroupBox);
 
-    auto *splitter = new QSplitter(Qt::Horizontal, this);
+    auto *contentLayout = new QHBoxLayout;
+    DevTools::Ui::applyInlineLayout(contentLayout);
 
-    editor = new QPlainTextEdit(splitter);
+    editor = new QPlainTextEdit(this);
     editor->setLineWrapMode(QPlainTextEdit::NoWrap);
     DevTools::Ui::configureCodeEditor(editor);
 
@@ -91,10 +91,10 @@ void MarkdownPreviewGUI::buildUi()
     editorPane = buildPane(editor);
     previewPane = buildPane(preview);
 
-    splitter->addWidget(editorPane);
-    splitter->addWidget(previewPane);
-    DevTools::Ui::configureEqualSplitter(splitter);
-    mainLayout->addWidget(splitter, 1);
+    contentLayout->addWidget(editorPane);
+    contentLayout->addWidget(previewPane);
+    DevTools::Ui::configureEqualLayout(contentLayout);
+    mainLayout->addLayout(contentLayout, 1);
 
     renderTimer = new QTimer(this);
     renderTimer->setSingleShot(true);

@@ -13,7 +13,6 @@
 #include <QLabel>
 #include <QPlainTextEdit>
 #include <QPushButton>
-#include <QSplitter>
 #include <QStandardPaths>
 #include <QStyle>
 #include <QVBoxLayout>
@@ -43,16 +42,11 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
 
 void DataConversionGUI::buildUi()
 {
-    splitter = new QSplitter(this);
-    splitter->setOrientation(Qt::Horizontal);
-
-    splitter->addWidget(buildInputSide(splitter));
-    splitter->addWidget(buildOutputSide(splitter));
-    DevTools::Ui::configureEqualSplitter(splitter);
-
     auto *const rootLayout = new QHBoxLayout(this);
     DevTools::Ui::applyPageLayout(rootLayout);
-    rootLayout->addWidget(splitter);
+    rootLayout->addWidget(buildInputSide(this));
+    rootLayout->addWidget(buildOutputSide(this));
+    DevTools::Ui::configureEqualLayout(rootLayout);
 }
 
 QWidget *DataConversionGUI::buildInputSide(QWidget *parent)

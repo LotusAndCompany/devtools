@@ -19,7 +19,6 @@
 #include <QNetworkRequest>
 #include <QPlainTextEdit>
 #include <QPushButton>
-#include <QSplitter>
 #include <QStandardItemModel>
 #include <QTabWidget>
 #include <QTableView>
@@ -78,10 +77,11 @@ void api_tool::buildUi()
 
     root_layout->addWidget(request_container);
 
-    main_splitter = new QSplitter(Qt::Horizontal, this);
-    root_layout->addWidget(main_splitter, 1);
+    content_layout = new QHBoxLayout;
+    DevTools::Ui::applyInlineLayout(content_layout);
+    root_layout->addLayout(content_layout, 1);
 
-    tabs_container = DevTools::Ui::createPane(tr("Options"), main_splitter);
+    tabs_container = DevTools::Ui::createPane(tr("Options"), this);
     auto *tabs_layout = new QVBoxLayout(tabs_container);
     DevTools::Ui::applyPanelLayout(tabs_layout);
 
@@ -118,7 +118,7 @@ void api_tool::buildUi()
     tab_widget->addTab(body_tab, tr("Body"));
 
     tabs_layout->addWidget(tab_widget);
-    main_splitter->addWidget(tabs_container);
+    content_layout->addWidget(tabs_container);
 }
 
 void api_tool::setupParametersTable()
@@ -172,7 +172,7 @@ void api_tool::handleSendButtonClick()
 
 void api_tool::setupResponseView()
 {
-    response_container = DevTools::Ui::createPane(tr("Response"), main_splitter);
+    response_container = DevTools::Ui::createPane(tr("Response"), this);
     auto *responseLayout = new QVBoxLayout(response_container);
     DevTools::Ui::applyPanelLayout(responseLayout);
 
@@ -186,8 +186,8 @@ void api_tool::setupResponseView()
                                            Qt::TextSelectableByMouse);
     responseLayout->addWidget(response_edit, 1);
 
-    main_splitter->addWidget(response_container);
-    DevTools::Ui::configureSideMainSplitter(main_splitter);
+    content_layout->addWidget(response_container);
+    DevTools::Ui::configureEqualLayout(content_layout);
 }
 
 void api_tool::retranslateUi()
