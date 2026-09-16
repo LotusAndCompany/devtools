@@ -7,6 +7,7 @@
 #include <QWidget>
 
 class QDateTimeEdit;
+class QGridLayout;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -49,6 +50,18 @@ private slots:
 private:
     void buildUi();
     void retranslateUi();
+
+    /**
+     * @brief グリッドに1行分(ラベル・入力欄・変換ボタン・コピーボタン)を追加する
+     * @param grid 追加先のグリッドレイアウト
+     * @param row 追加する行番号
+     * @param label 生成したラベルを受け取る出力先
+     * @param editor 入力欄ウィジェット(呼び出し側で生成済み)
+     * @param convertButton 生成した変換ボタンを受け取る出力先
+     * @param copyButton 生成したコピーボタンを受け取る出力先
+     */
+    void addRow(QGridLayout *grid, int row, QLabel *&label, QWidget *editor,
+                QPushButton *&convertButton, QPushButton *&copyButton);
 
     /**
      * @brief 変換に成功した基準時刻(UTC)を、指定した行以外の全ての表示欄に反映する

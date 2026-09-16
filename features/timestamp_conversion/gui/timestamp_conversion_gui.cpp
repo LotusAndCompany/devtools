@@ -60,6 +60,18 @@ TimestampConversionGUI::TimestampConversionGUI(QWidget *parent) : GuiTool(parent
             [this]() { QApplication::clipboard()->setText(isoLocalEdit->text()); });
 }
 
+void TimestampConversionGUI::addRow(QGridLayout *grid, int row, QLabel *&label, QWidget *editor,
+                                    QPushButton *&convertButton, QPushButton *&copyButton)
+{
+    label = new QLabel(this);
+    convertButton = createIconButton(QStringLiteral("view-refresh"), this);
+    copyButton = createIconButton(QStringLiteral("edit-copy"), this);
+    grid->addWidget(label, row, 0);
+    grid->addWidget(editor, row, 1);
+    grid->addWidget(convertButton, row, 2);
+    grid->addWidget(copyButton, row, 3);
+}
+
 void TimestampConversionGUI::buildUi()
 {
     resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -78,69 +90,28 @@ void TimestampConversionGUI::buildUi()
 
     int row = 0;
 
-    secondsLabel = new QLabel(this);
     secondsEdit = new QLineEdit(this);
-    secondsConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    secondsCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(secondsLabel, row, 0);
-    grid->addWidget(secondsEdit, row, 1);
-    grid->addWidget(secondsConvertButton, row, 2);
-    grid->addWidget(secondsCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, secondsLabel, secondsEdit, secondsConvertButton, secondsCopyButton);
 
-    millisecondsLabel = new QLabel(this);
     millisecondsEdit = new QLineEdit(this);
-    millisecondsConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    millisecondsCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(millisecondsLabel, row, 0);
-    grid->addWidget(millisecondsEdit, row, 1);
-    grid->addWidget(millisecondsConvertButton, row, 2);
-    grid->addWidget(millisecondsCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, millisecondsLabel, millisecondsEdit, millisecondsConvertButton,
+           millisecondsCopyButton);
 
-    localLabel = new QLabel(this);
     localEdit = new QDateTimeEdit(this);
     localEdit->setDisplayFormat(DATE_TIME_DISPLAY_FORMAT);
     localEdit->setCalendarPopup(true);
-    localConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    localCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(localLabel, row, 0);
-    grid->addWidget(localEdit, row, 1);
-    grid->addWidget(localConvertButton, row, 2);
-    grid->addWidget(localCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, localLabel, localEdit, localConvertButton, localCopyButton);
 
-    utcLabel = new QLabel(this);
     utcEdit = new QDateTimeEdit(this);
     utcEdit->setDisplayFormat(DATE_TIME_DISPLAY_FORMAT);
     utcEdit->setCalendarPopup(true);
-    utcConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    utcCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(utcLabel, row, 0);
-    grid->addWidget(utcEdit, row, 1);
-    grid->addWidget(utcConvertButton, row, 2);
-    grid->addWidget(utcCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, utcLabel, utcEdit, utcConvertButton, utcCopyButton);
 
-    isoUtcLabel = new QLabel(this);
     isoUtcEdit = new QLineEdit(this);
-    isoUtcConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    isoUtcCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(isoUtcLabel, row, 0);
-    grid->addWidget(isoUtcEdit, row, 1);
-    grid->addWidget(isoUtcConvertButton, row, 2);
-    grid->addWidget(isoUtcCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, isoUtcLabel, isoUtcEdit, isoUtcConvertButton, isoUtcCopyButton);
 
-    isoLocalLabel = new QLabel(this);
     isoLocalEdit = new QLineEdit(this);
-    isoLocalConvertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    isoLocalCopyButton = createIconButton(QStringLiteral("edit-copy"), this);
-    grid->addWidget(isoLocalLabel, row, 0);
-    grid->addWidget(isoLocalEdit, row, 1);
-    grid->addWidget(isoLocalConvertButton, row, 2);
-    grid->addWidget(isoLocalCopyButton, row, 3);
-    ++row;
+    addRow(grid, row++, isoLocalLabel, isoLocalEdit, isoLocalConvertButton, isoLocalCopyButton);
 
     mainLayout->addLayout(grid);
     mainLayout->addStretch();
