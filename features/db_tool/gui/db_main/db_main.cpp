@@ -3,6 +3,7 @@
 #include "../connection_selector/connection_selector.h"
 #include "../connection_window/connection_window.h"
 #include "../query_page/query_page.h"
+#include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -19,6 +20,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QStyle>
 #include <QTabWidget>
 #include <QTableView>
 #include <QTimer>
@@ -78,7 +80,8 @@ void dbMain::buildUi()
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
 
     refreshTableButton = new QPushButton(toolbarGroupBox);
-    refreshTableButton->setIcon(QIcon::fromTheme("refresh"));
+    refreshTableButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     toolbarLayout->addWidget(refreshTableButton);
 
     auto *horizontalSpacer =
@@ -247,7 +250,8 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
 
     // 更新ボタン
     auto *refreshButton = new QPushButton;
-    refreshButton->setIcon(QIcon::fromTheme("refresh"));
+    refreshButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     refreshButton->setToolTip(tr("Refresh"));
     connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
     // 左寄せのレイアウト

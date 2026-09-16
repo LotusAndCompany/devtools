@@ -1,5 +1,6 @@
 #include "features/timestamp_conversion/core/timestamp_conversion.h"
 
+#include <QTimeZone>
 #include <QtTest>
 
 namespace Test {
@@ -37,7 +38,7 @@ void TestTimestampConversion::test_fromUnixTimestamp_seconds()
         "1700000000", TimestampConversion::Unit::Seconds, &ok);
 
     QVERIFY(ok);
-    QCOMPARE(result, QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC));
+    QCOMPARE(result, QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC));
 }
 
 void TestTimestampConversion::test_fromUnixTimestamp_milliseconds()
@@ -47,7 +48,7 @@ void TestTimestampConversion::test_fromUnixTimestamp_milliseconds()
         "1700000000497", TimestampConversion::Unit::Milliseconds, &ok);
 
     QVERIFY(ok);
-    QCOMPARE(result, QDateTime::fromMSecsSinceEpoch(1700000000497, Qt::UTC));
+    QCOMPARE(result, QDateTime::fromMSecsSinceEpoch(1700000000497, QTimeZone::UTC));
 }
 
 void TestTimestampConversion::test_fromUnixTimestamp_invalidText()
@@ -76,7 +77,7 @@ void TestTimestampConversion::test_fromIso8601_withoutMilliseconds()
     const QDateTime result = TimestampConversion::fromIso8601("2023-11-14T22:13:20Z", &ok);
 
     QVERIFY(ok);
-    QCOMPARE(result, QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC));
+    QCOMPARE(result, QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC));
 }
 
 void TestTimestampConversion::test_fromIso8601_invalidText()
@@ -93,7 +94,7 @@ void TestTimestampConversion::test_fromLocalDateTime()
     const QDateTime localDateTime(QDate(2023, 11, 14), QTime(22, 13, 20));
     const QDateTime result = TimestampConversion::fromLocalDateTime(localDateTime);
 
-    const QDateTime expected(QDate(2023, 11, 14), QTime(22, 13, 20), Qt::LocalTime);
+    const QDateTime expected(QDate(2023, 11, 14), QTime(22, 13, 20), QTimeZone::systemTimeZone());
     QCOMPARE(result, expected.toUTC());
 }
 
@@ -108,7 +109,7 @@ void TestTimestampConversion::test_fromUtcDateTime()
     const QDateTime utcWallClock(QDate(2023, 11, 14), QTime(22, 13, 20));
     const QDateTime result = TimestampConversion::fromUtcDateTime(utcWallClock);
 
-    QCOMPARE(result, QDateTime(QDate(2023, 11, 14), QTime(22, 13, 20), Qt::UTC));
+    QCOMPARE(result, QDateTime(QDate(2023, 11, 14), QTime(22, 13, 20), QTimeZone::UTC));
 }
 
 void TestTimestampConversion::test_fromUtcDateTime_invalid()
@@ -119,7 +120,7 @@ void TestTimestampConversion::test_fromUtcDateTime_invalid()
 
 void TestTimestampConversion::test_toUnixTimestamp_seconds()
 {
-    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC);
+    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC);
     const QString result =
         TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Seconds);
 
@@ -128,7 +129,7 @@ void TestTimestampConversion::test_toUnixTimestamp_seconds()
 
 void TestTimestampConversion::test_toUnixTimestamp_milliseconds()
 {
-    const QDateTime utcInstant = QDateTime::fromMSecsSinceEpoch(1700000000497, Qt::UTC);
+    const QDateTime utcInstant = QDateTime::fromMSecsSinceEpoch(1700000000497, QTimeZone::UTC);
     const QString result =
         TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Milliseconds);
 
@@ -144,7 +145,7 @@ void TestTimestampConversion::test_toUnixTimestamp_invalid()
 
 void TestTimestampConversion::test_toIso8601()
 {
-    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC);
+    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC);
     const QString result = TimestampConversion::toIso8601(utcInstant);
 
     QCOMPARE(result, QStringLiteral("2023-11-14T22:13:20.000Z"));
@@ -158,7 +159,7 @@ void TestTimestampConversion::test_toIso8601_invalid()
 
 void TestTimestampConversion::test_toIso8601Local_roundTrip()
 {
-    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC);
+    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC);
     const QString result = TimestampConversion::toIso8601Local(utcInstant);
 
     QVERIFY(!result.isEmpty());
@@ -177,7 +178,7 @@ void TestTimestampConversion::test_toIso8601Local_invalid()
 
 void TestTimestampConversion::test_toLocalDateTime()
 {
-    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, Qt::UTC);
+    const QDateTime utcInstant = QDateTime::fromSecsSinceEpoch(1700000000, QTimeZone::UTC);
     const QDateTime result = TimestampConversion::toLocalDateTime(utcInstant);
 
     QCOMPARE(result, utcInstant.toLocalTime());

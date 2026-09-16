@@ -166,7 +166,9 @@ DevTools supports English and Japanese:
 Switch between light and dark themes:
 
 DevTools follows the macOS system appearance. When the system switches between light and
-dark mode, the application updates both the qlementine widget theme and the icon theme.
+dark mode, the application updates the qlementine widget theme. Material Symbols are bundled
+ as an application font, and their icons follow the active UI palette instead of using separate
+ light and dark SVG files.
 
 Bundled qlementine themes are stored in `res/themes/light.json` and
 `res/themes/dark.json` and are loaded from the Qt resource prefix `:/themes`.

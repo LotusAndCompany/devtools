@@ -14,6 +14,7 @@ SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(paren
 {
     setFlat(true);
     setCheckable(true);
+    setStyleSheet("QPushButton { text-align:left; }");
     setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
@@ -51,44 +52,22 @@ void SidemenuItem::paintEvent(QPaintEvent * /*event*/)
     QStyleOptionButton option;
     initStyleOption(&option);
 
-    // ベベルは qlementine に描画させる
-    style()->drawControl(QStyle::CE_PushButtonBevel, &option, &painter, this);
+    const auto textRole =
+        (option.state & QStyle::State_On) != 0 ? QPalette::HighlightedText : QPalette::Text;
+    const auto colorGroup =
+        (option.state & QStyle::State_Enabled) != 0 ? QPalette::Normal : QPalette::Disabled;
+    option.palette.setColor(QPalette::All, QPalette::ButtonText,
+                            style()->standardPalette().color(colorGroup, textRole));
 
-    constexpr int LEFT_MARGIN = 8;
-    constexpr int ICON_TEXT_SPACING = 6;
-    constexpr int RIGHT_MARGIN = 8;
+    constexpr int ICON_TEXT_SPACING = 4;
+    const int iconWidth = option.icon.isNull() ? 0 : option.iconSize.width();
+    const int availableTextWidth =
+        style()->subElementRect(QStyle::SE_PushButtonContents, &option, this).width() - iconWidth -
+        (iconWidth > 0 && !option.text.isEmpty() ? ICON_TEXT_SPACING : 0);
+    option.text = availableTextWidth > 0
+                      ? fontMetrics().elidedText(option.text, Qt::ElideRight, availableTextWidth,
+                                                 Qt::TextSingleLine)
+                      : QString();
 
-    int contentX = option.rect.x() + LEFT_MARGIN;
-
-    if (!option.icon.isNull()) {
-        const auto iconMode =
-            (option.state & QStyle::State_Enabled) != 0 ? QIcon::Normal : QIcon::Disabled;
-        const auto iconState = (option.state & QStyle::State_On) != 0 ? QIcon::On : QIcon::Off;
-        const auto iconSz = iconSize();
-        QRect const logicalIconRect(
-            contentX, option.rect.y() + ((option.rect.height() - iconSz.height()) / 2),
-            iconSz.width(), iconSz.height());
-        QRect const iconRect = QStyle::visualRect(option.direction, option.rect, logicalIconRect);
-        option.icon.paint(&painter, iconRect, Qt::AlignCenter, iconMode, iconState);
-        contentX += iconSz.width() + ICON_TEXT_SPACING;
-    }
-
-    int const textMaxWidth = option.rect.width() - (contentX - option.rect.x()) - RIGHT_MARGIN;
-    if (textMaxWidth > 0 && !option.text.isEmpty()) {
-        QRect const logicalTextRect(contentX, option.rect.y(), textMaxWidth, option.rect.height());
-        QRect const textRect = QStyle::visualRect(option.direction, option.rect, logicalTextRect);
-
-        // qlementine のテーマカラーを palette から使う
-        // WindowText = secondaryColor, HighlightedText = primaryColorForeground
-        auto const textColor = (option.state & QStyle::State_On) != 0
-                                   ? palette().color(QPalette::HighlightedText)
-                                   : palette().color(QPalette::WindowText);
-        painter.setPen(textColor);
-
-        QString const elidedText =
-            fontMetrics().elidedText(option.text, Qt::ElideRight, textMaxWidth, Qt::TextSingleLine);
-        const auto textAlign =
-            QStyle::visualAlignment(option.direction, Qt::AlignLeft | Qt::AlignVCenter);
-        painter.drawText(textRect, static_cast<int>(textAlign) | Qt::TextSingleLine, elidedText);
-    }
+    style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
 }

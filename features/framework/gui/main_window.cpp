@@ -2,6 +2,7 @@
 
 #include "contents_area.h"
 #include "gui_application.h"
+#include "icon_utils.h"
 #include "menubar/about_devtools_dialog.h"
 #include "menubar/settings_dialog.h"
 
@@ -21,6 +22,7 @@
 #include <QSettings>
 #include <QSizePolicy>
 #include <QSpacerItem>
+#include <QStyle>
 #include <QTranslator>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -126,7 +128,8 @@ void MainWindow::setupCentralWidget()
     m_sidemenuVisibilityButton = new QPushButton(centralwidget);
     m_sidemenuVisibilityButton->setObjectName("sidemenuVisibilityButton");
     m_sidemenuVisibilityButton->setMinimumSize(24, 24);
-    m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
+    m_sidemenuVisibilityButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("left_panel_close"), QStyle::SP_ArrowLeft));
     m_sidemenuVisibilityButton->setIconSize(QSize(24, 24));
     m_sidemenuVisibilityButton->setFlat(true);
     toolbarLayout->addWidget(m_sidemenuVisibilityButton);
@@ -136,7 +139,7 @@ void MainWindow::setupCentralWidget()
     m_windowAlwaysOnTopButton = new QPushButton(centralwidget);
     m_windowAlwaysOnTopButton->setObjectName("windowAlwaysOnTopButton");
     m_windowAlwaysOnTopButton->setMinimumSize(24, 24);
-    m_windowAlwaysOnTopButton->setIcon(QIcon::fromTheme("flip_to_front"));
+    m_windowAlwaysOnTopButton->setIcon(IconUtils::themedIcon(QStringLiteral("flip_to_front")));
     m_windowAlwaysOnTopButton->setIconSize(QSize(24, 24));
     m_windowAlwaysOnTopButton->setCheckable(true);
     m_windowAlwaysOnTopButton->setFlat(true);
@@ -275,10 +278,12 @@ void MainWindow::dropEvent(QDropEvent *event)
 void MainWindow::setSidemenuHidden(bool hide)
 {
     if (hide) {
-        m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_open"));
+        m_sidemenuVisibilityButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("left_panel_open"), QStyle::SP_ArrowRight));
         m_sidemenu->hide();
     } else {
-        m_sidemenuVisibilityButton->setIcon(QIcon::fromTheme("left_panel_close"));
+        m_sidemenuVisibilityButton->setIcon(
+            IconUtils::themedIcon(QStringLiteral("left_panel_close"), QStyle::SP_ArrowLeft));
         m_sidemenu->show();
     }
 }

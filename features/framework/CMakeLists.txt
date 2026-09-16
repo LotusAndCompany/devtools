@@ -13,6 +13,7 @@ target_sources(DevTools_core PRIVATE
     core/exception/out_of_range_exception.h
     core/exception/under_development_exception.h
     # GUI
+    gui/icon_utils.h gui/icon_utils.cpp
     gui/main_window.h gui/main_window.cpp
     gui/gui_application.h gui/gui_application.cpp
     gui/gui_tool.h gui/gui_tool.cpp

@@ -35,7 +35,9 @@
     /** Markdownプレビュー */      \
     MARKDOWN_PREVIEW,             \
     /** タイムスタンプ変換 */       \
-    TIMESTAMP_CONVERSION           // 末尾のカンマは不要
+    TIMESTAMP_CONVERSION,          \
+    /** 正規表現テスター */        \
+    REGEX_TESTER                  // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

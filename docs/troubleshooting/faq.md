@@ -29,7 +29,7 @@ Yes, DevTools is open source under the Apache License 2.0. You can use, modify, 
 
 **For users**: No, the distributed application includes all necessary Qt libraries.
 
-**For developers**: Yes, you need Qt 6.x installed to build from source.
+**For developers**: Yes, you need Qt 6.9 or later installed to build from source.
 
 ### How do I install vcpkg?
 
@@ -106,7 +106,7 @@ No, you need to save them manually. Right-click the generated QR code and select
 ### How do I change the theme?
 
 DevTools follows the macOS system appearance. Change macOS between light and dark mode;
-DevTools updates the qlementine widget theme and icon theme from the system color scheme.
+DevTools updates the qlementine widget theme and renders Material Symbols with the active palette.
 
 ### Can I use keyboard shortcuts?
 

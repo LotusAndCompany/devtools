@@ -1,5 +1,7 @@
 #include "phrase_generation.h"
 
+#include "features/framework/gui/icon_utils.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QDir>
@@ -17,6 +19,7 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QSizePolicy>
+#include <QStyle>
 #include <QTextStream>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -117,7 +120,7 @@ void phraseGeneration::createWidgets()
         add_button->setFont(font);
     }
     {
-        QIcon const icon = QIcon::fromTheme(QStringLiteral("add"));
+        QIcon const icon = IconUtils::themedIcon(QStringLiteral("add"), QStyle::SP_DialogYesButton);
         if (!icon.isNull()) {
             add_button->setIcon(icon);
         }
@@ -144,7 +147,7 @@ void phraseGeneration::createWidgets()
     delete_button->setObjectName(QStringLiteral("deleteButton"));
     delete_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
     {
-        QIcon const icon = QIcon::fromTheme(QStringLiteral("delete"));
+        QIcon const icon = IconUtils::themedIcon(QStringLiteral("delete"), QStyle::SP_TrashIcon);
         if (!icon.isNull()) {
             delete_button->setIcon(icon);
         }
@@ -165,7 +168,7 @@ void phraseGeneration::createWidgets()
     copy_button->setObjectName(QStringLiteral("copyButton"));
     copy_button->setSizePolicy(makePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
     {
-        QIcon const icon = QIcon::fromTheme(QStringLiteral("content_copy"));
+        QIcon const icon = IconUtils::themedIcon(QStringLiteral("content_copy"));
         if (!icon.isNull()) {
             copy_button->setIcon(icon);
         }

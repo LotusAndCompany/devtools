@@ -26,7 +26,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 # Qtのパッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
+find_package(Qt6 6.9 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -46,7 +46,7 @@ find_package(Doxygen 1.16)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
-set(APP_INFO_FILE app_info.autogen.cpp)
+set(APP_INFO_FILE ${CMAKE_CURRENT_BINARY_DIR}/app_info.autogen.cpp)
 
 # プラットフォーム固有の設定
 if(APPLE)
@@ -83,8 +83,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         res/application.qrc
-        res/light_icons.qrc
-        res/dark_icons.qrc
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
@@ -100,6 +98,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_core STATIC)
     qt_add_library(${PROJECT_NAME}_http_request STATIC)
     qt_add_library(${PROJECT_NAME}_command STATIC)
+    qt_add_library(${PROJECT_NAME}_regex_tester STATIC)
     qt_add_library(${PROJECT_NAME}_phrase_generation STATIC)
     qt_add_library(${PROJECT_NAME}_image_core STATIC)
     qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC)
@@ -178,6 +177,7 @@ target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}_core PUBLIC qlementine)
 
 # app_info.autogen.cppを自動生成
+add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # vcpkgのパッケージを探す
@@ -199,6 +199,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_regex_tester
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_markdown_preview
@@ -211,6 +212,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
+    ${PROJECT_NAME}_regex_tester
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_markdown_preview

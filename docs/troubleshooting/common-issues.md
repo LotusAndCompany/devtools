@@ -266,7 +266,9 @@ Cannot be opened because the developer cannot be verified
 2. Restart DevTools after a system appearance change if the app was already running.
 3. Confirm the theme resources exist in the build: `:/themes/light.json` and
    `:/themes/dark.json` are registered through `res/application.qrc`.
-4. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
+4. Confirm the Material Symbols font resource `:/fonts/MaterialSymbolsOutlined.ttf` is registered
+   by `res/application.qrc`.
+5. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
    linked into `DevTools_core`.
 
 ### Language Not Changed

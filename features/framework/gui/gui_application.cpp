@@ -1,8 +1,8 @@
 #include "gui_application.h"
 
+#include "icon_utils.h"
+
 #include <QApplicationStateChangeEvent>
-#include <QDirIterator>
-#include <QIcon>
 #include <QSettings>
 #include <QStyleHints>
 #include <QTranslator>
@@ -51,21 +51,8 @@ void GuiApplication::setup()
     connect(styleHints(), &QStyleHints::colorSchemeChanged, this,
             &GuiApplication::applyColorScheme);
 
-    // リソースの確認
-    /*
-    QDirIterator it(":", QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        const auto &name = it.next();
-        if (!name.startsWith(":/qt-project.org"))
-            qDebug() << name;
-    }
-    */
-
-    // アイコンテーマの読み込み
-    QStringList themeSearchPaths = QIcon::themeSearchPaths();
-    themeSearchPaths.append(":/dark");
-    themeSearchPaths.append(":/light");
-    QIcon::setThemeSearchPaths(themeSearchPaths);
+    // アイコンフォントの読み込み
+    material_symbols_loaded = IconUtils::initializeMaterialSymbols();
 
     // システムテーマを自動適用
     applyColorScheme();
@@ -151,20 +138,25 @@ int GuiApplication::start()
 void GuiApplication::applyColorScheme()
 {
     const auto scheme = styleHints()->colorScheme();
-    const QString iconTheme = (scheme == Qt::ColorScheme::Dark) ? "dark" : "light";
     const QString qlementineTheme = (scheme == Qt::ColorScheme::Dark) ? "Dark" : "Light";
 
     qDebug() << "theme=" << qlementineTheme;
 
-    QIcon::setThemeName(iconTheme);
-
-    const auto allWidgets = QApplication::allWidgets();
-
-    if (themeManager != nullptr && themeManager->currentTheme() != qlementineTheme) {
+    const bool themeChanged =
+        themeManager != nullptr && themeManager->currentTheme() != qlementineTheme;
+    if (themeChanged) {
         themeManager->setCurrentTheme(qlementineTheme);
 
         QApplication::setPalette(style()->standardPalette());
+    }
 
+    if (material_symbols_loaded) {
+        IconUtils::refreshMaterialSymbolsTheme();
+    }
+
+    const auto allWidgets = QApplication::allWidgets();
+
+    if (themeChanged) {
         for (auto *w : allWidgets) {
             w->setPalette(QPalette());
             w->update();
