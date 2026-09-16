@@ -20,9 +20,10 @@ class QueryPage : public QWidget
 public:
     /**
      * @brief コンストラクタ
+     * @param database 使用するデータベース接続
      * @param parent 親ウィジェット
      */
-    explicit QueryPage(QWidget *parent = nullptr);
+    explicit QueryPage(const QSqlDatabase &database, QWidget *parent = nullptr);
     /**
      * @brief デストラクタ
      */

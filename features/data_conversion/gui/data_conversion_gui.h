@@ -7,6 +7,8 @@
 #include <QWidget>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
 class QHBoxLayout;
 class QPlainTextEdit;
 class QPushButton;
@@ -54,12 +56,15 @@ private:
     QWidget *buildInputSide(QWidget *parent);
     /// 出力側のUIを構築する
     QWidget *buildOutputSide(QWidget *parent);
+    void retranslateUi();
 
     /// ロジック部分
     DataConversionInterface *const dataConversion;
 
     /// メインスプリッタ
     QSplitter *splitter = nullptr;
+    QGroupBox *inputPane = nullptr;
+    QGroupBox *outputPane = nullptr;
 
     /// 入力側アクションボタン行のレイアウト
     QHBoxLayout *input_action_button_layout = nullptr;
@@ -93,6 +98,9 @@ private:
 #ifdef _TEST_ImageDivisionGUI
     frientd class Test::TestDataConversionGUI;
 #endif
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // DATA_CONVERSION_GUI_H

@@ -216,6 +216,18 @@ Do not compensate for a translation with a screen-specific fixed width, font,
 or stylesheet. Prefer layouts and size hints; if a reusable role cannot fit a
 translation, update the shared helper and add a focused UI regression test.
 
+### Runtime Language Changes
+
+Every screen that keeps user-visible labels, pane titles, button text,
+placeholders, combo-box items, or table headers must provide a `retranslateUi()`
+method and handle `QEvent::LanguageChange`. Text created only in a constructor
+will remain in the old language when the user changes the language while the
+screen is open. Preserve user data and selection state while refreshing the
+labels and translated item text.
+
+Use `tr()` at the point where runtime messages are shown as well, so dialogs,
+errors, and status messages use the language active at the time of the action.
+
 ## Common Issues
 
 ### Text Truncation

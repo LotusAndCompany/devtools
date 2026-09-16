@@ -209,6 +209,19 @@ std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
 - Add a helper to the design system only when the pattern is shared by more
   than one screen; keep one-off layout decisions in the feature GUI.
 
+### Widget Roles
+
+- Use `QListWidget` or `QListView` for flat collections, and reserve tree
+  widgets for genuinely hierarchical data.
+- Use a read-only `QPlainTextEdit` configured with
+  `configureDisplayTextControl()` for multi-line text output. Do not model a
+  single response or result string as a one-item list.
+- Keep `configureItemView()` and `configureTableView()` on all list and table
+  views so their font, frame, selection, and theme treatment stay shared.
+- Display-only text controls must not receive focus or hover styling. Preserve
+  text or link interaction only when the screen explicitly needs selection,
+  copying, or link activation.
+
 ## C++17 Features
 
 Use modern C++ features appropriately:

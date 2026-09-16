@@ -27,9 +27,10 @@ Learn how to use each feature:
 - [Data Conversion](user-guide/data-conversion.md) - Convert between JSON, YAML, and TOML
 - [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
 - [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
-- [Command Execution](user-guide/command-execution.md) - Run shell commands from the GUI
-- [Phrase Generation](user-guide/phrase-generation.md) - Generate random text and phrases
+- [Command Generation](user-guide/command-execution.md) - Build Git and Docker commands from the GUI
+- [Phrase Generation](user-guide/phrase-generation.md) - Create and reuse named text templates
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
+- [Regular Expression Tester](user-guide/regex-tester.md) - Test patterns and replacements
 
 ### Development
 

@@ -5,6 +5,8 @@
 #include <QStringList>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QNetworkAccessManager;
@@ -12,7 +14,7 @@ class QNetworkReply;
 class QPushButton;
 class QSplitter;
 class QStandardItemModel;
-class QStringListModel;
+class QTabWidget;
 class QTableView;
 class QPlainTextEdit;
 
@@ -61,6 +63,7 @@ private slots:
      * @brief レスポンスビューを設定する
      */
     void setupResponseView();
+    void retranslateUi();
 
 private:
     /**
@@ -70,6 +73,10 @@ private:
 
     /// HTTPメソッド選択用のコンボボックス
     QComboBox *method_combo{};
+    QGroupBox *request_container{};
+    QGroupBox *tabs_container{};
+    QGroupBox *response_container{};
+    QTabWidget *tab_widget{};
     /// URL入力用のラインエディット
     QLineEdit *url_edit{};
     /// 送信ボタン
@@ -91,12 +98,17 @@ private:
     QStringList list;
     /// パラメータテーブルのモデル
     QStandardItemModel *params_model;
-    /// レスポンス表示用のモデル
-    QStringListModel *response_model{};
+    /// レスポンス表示用のテキストビュー
+    QPlainTextEdit *response_edit{};
     /// ステータス表示用のラベル
     QLabel *status_label{};
+    QLabel *username_label{};
+    QLabel *password_label{};
     /// リクエスト開始時刻
     qint64 request_start_time{};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // API_TOOL_H

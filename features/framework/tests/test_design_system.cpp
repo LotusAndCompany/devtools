@@ -2,15 +2,18 @@
 
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QFile>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QJsonDocument>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSplitter>
+#include <QStringList>
 #include <QTableView>
 #include <QtTest>
 
@@ -26,7 +29,9 @@ private slots:
     void configuresItemViews();
     void configuresActionBarsAndSplitters();
     void configuresStatusView();
+    void configuresDisplayTextControl();
     void configuresExpandingSurface();
+    void keepsInteractionColorsNeutral();
 };
 
 void TestDesignSystem::configuresTextControl()
@@ -37,6 +42,7 @@ void TestDesignSystem::configuresTextControl()
     QCOMPARE(editor.font(), DevTools::Ui::standardFont());
     QCOMPARE(editor.frameShape(), QFrame::StyledPanel);
     QCOMPARE(editor.frameShadow(), QFrame::Raised);
+    QVERIFY(editor.styleSheet().contains(QStringLiteral("QPlainTextEdit")));
     QCOMPARE(DevTools::Ui::previewContentSize(QSize(100, 100)), QSize(80, 80));
     QCOMPARE(DevTools::Ui::previewContentSize(QSize(10, 10)), QSize(1, 1));
 }
@@ -72,6 +78,7 @@ void TestDesignSystem::configuresPaneAndDialogFooter()
 {
     auto *const pane = DevTools::Ui::createPane(QStringLiteral("Pane"));
     QCOMPARE(pane->title(), QStringLiteral("Pane"));
+    QVERIFY(!pane->isFlat());
     QCOMPARE(pane->sizePolicy().horizontalPolicy(), QSizePolicy::Expanding);
     DevTools::Ui::configureCompactPane(pane);
     QCOMPARE(pane->sizePolicy().verticalPolicy(), QSizePolicy::Maximum);
@@ -87,11 +94,19 @@ void TestDesignSystem::configuresItemViews()
 {
     QListWidget listWidget;
     DevTools::Ui::configureItemView(&listWidget);
+    QCOMPARE(listWidget.font(), DevTools::Ui::standardFont());
+    QCOMPARE(listWidget.frameShape(), QFrame::StyledPanel);
+    QCOMPARE(listWidget.frameShadow(), QFrame::Plain);
+    QVERIFY(listWidget.lineWidth() > 0);
+    QVERIFY(listWidget.styleSheet().contains(QStringLiteral("QListView")));
     QVERIFY(listWidget.alternatingRowColors());
     QCOMPARE(listWidget.selectionBehavior(), QAbstractItemView::SelectRows);
 
     QTableView tableView;
     DevTools::Ui::configureTableView(&tableView);
+    QCOMPARE(tableView.frameShape(), QFrame::StyledPanel);
+    QCOMPARE(tableView.frameShadow(), QFrame::Plain);
+    QVERIFY(tableView.styleSheet().contains(QStringLiteral("QTableView")));
     QVERIFY(tableView.alternatingRowColors());
     QVERIFY(tableView.horizontalHeader()->stretchLastSection());
 }
@@ -136,9 +151,27 @@ void TestDesignSystem::configuresStatusView()
     DevTools::Ui::configureStatusView(&statusView);
 
     QVERIFY(statusView.isReadOnly());
+    QCOMPARE(statusView.frameShape(), QFrame::StyledPanel);
+    QCOMPARE(statusView.frameShadow(), QFrame::Plain);
+    QVERIFY(statusView.lineWidth() > 0);
+    QCOMPARE(statusView.focusPolicy(), Qt::NoFocus);
+    QCOMPARE(statusView.textInteractionFlags(), Qt::NoTextInteraction);
     QCOMPARE(statusView.maximumHeight(), DevTools::Ui::Metrics::STATUS_VIEW_HEIGHT);
-    QCOMPARE(statusView.textInteractionFlags(),
-             Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+}
+
+void TestDesignSystem::configuresDisplayTextControl()
+{
+    QPlainTextEdit display;
+    DevTools::Ui::configureDisplayTextControl(&display);
+
+    QCOMPARE(display.font(), DevTools::Ui::standardFont());
+    QCOMPARE(display.frameShape(), QFrame::StyledPanel);
+    QCOMPARE(display.frameShadow(), QFrame::Plain);
+    QVERIFY(display.lineWidth() > 0);
+    QCOMPARE(display.focusPolicy(), Qt::NoFocus);
+    QCOMPARE(display.viewport()->focusPolicy(), Qt::NoFocus);
+    QVERIFY(!display.testAttribute(Qt::WA_Hover));
+    QVERIFY(!display.hasMouseTracking());
 }
 
 void TestDesignSystem::configuresExpandingSurface()
@@ -148,6 +181,50 @@ void TestDesignSystem::configuresExpandingSurface()
 
     QCOMPARE(surface.sizePolicy().horizontalPolicy(), QSizePolicy::Expanding);
     QCOMPARE(surface.sizePolicy().verticalPolicy(), QSizePolicy::Expanding);
+}
+
+void TestDesignSystem::keepsInteractionColorsNeutral()
+{
+    const QStringList interactionColorKeys{
+        QStringLiteral("focusColor"),
+        QStringLiteral("primaryColor"),
+        QStringLiteral("primaryColorHovered"),
+        QStringLiteral("primaryColorPressed"),
+        QStringLiteral("primaryColorDisabled"),
+        QStringLiteral("primaryAlternativeColor"),
+        QStringLiteral("primaryAlternativeColorHovered"),
+        QStringLiteral("primaryAlternativeColorPressed"),
+        QStringLiteral("primaryAlternativeColorDisabled"),
+        QStringLiteral("primaryColorForegroundDisabled"),
+        QStringLiteral("statusColorInfo"),
+        QStringLiteral("statusColorInfoHovered"),
+        QStringLiteral("statusColorInfoPressed"),
+        QStringLiteral("statusColorInfoDisabled"),
+    };
+
+    for (const QString &themeName : {QStringLiteral("light"), QStringLiteral("dark")}) {
+        QFile themeFile(QStringLiteral(":/themes/%1.json").arg(themeName));
+        QVERIFY2(themeFile.open(QIODevice::ReadOnly), qPrintable(themeFile.fileName()));
+
+        QJsonParseError parseError;
+        const QJsonDocument theme = QJsonDocument::fromJson(themeFile.readAll(), &parseError);
+        QCOMPARE(parseError.error, QJsonParseError::NoError);
+
+        for (const QString &key : interactionColorKeys) {
+            QString colorValue = theme.object().value(key).toString();
+            if (colorValue.size() == 9) {
+                colorValue.chop(2);
+            }
+            const QColor color(colorValue);
+            QVERIFY2(color.isValid(), qPrintable(key));
+
+            const int maxChannelDelta =
+                qMax(qAbs(color.red() - color.green()),
+                     qMax(qAbs(color.green() - color.blue()), qAbs(color.blue() - color.red())));
+            QVERIFY2(maxChannelDelta <= 8,
+                     qPrintable(QStringLiteral("%1 in %2").arg(key, themeName)));
+        }
+    }
 }
 } // namespace Test
 

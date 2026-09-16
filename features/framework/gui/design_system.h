@@ -57,6 +57,7 @@ constexpr int PREVIEW_INSET = 10;
 constexpr int LOGO_SIZE = 64;
 constexpr int HERO_POINT_SIZE = 24;
 constexpr int TITLE_POINT_SIZE = 36;
+constexpr int CORNER_RADIUS = 6;
 constexpr int SPLITTER_HANDLE_WIDTH = 8;
 constexpr int EQUAL_SPLIT_STRETCH = 1;
 constexpr int SIDE_PANEL_STRETCH = 1;
@@ -133,6 +134,7 @@ void configureCodeLabel(QLabel *label);
 void refreshStatusColors();
 
 void configureTextControl(QAbstractScrollArea *control);
+void configureDisplayTextControl(QAbstractScrollArea *control);
 
 QFont standardFont();
 void configureCodeEditor(QPlainTextEdit *editor);

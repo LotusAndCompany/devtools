@@ -81,14 +81,12 @@ void MarkdownPreviewGUI::buildUi()
 
     editor = new QPlainTextEdit(splitter);
     editor->setLineWrapMode(QPlainTextEdit::NoWrap);
-    // 枠 (角丸のテキストフィールド) は qlementine スタイルに描画させる。
-    // .pen のエディタは等幅フォント。インストール環境に依存しないよう
-    // システム標準の等幅フォントを使う。
     DevTools::Ui::configureCodeEditor(editor);
 
     preview = DevTools::Ui::createTextBrowser();
     preview->setOpenExternalLinks(true);
-    DevTools::Ui::configureTextControl(preview);
+    DevTools::Ui::configureDisplayTextControl(preview);
+    preview->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
 
     editorPane = buildPane(editor);
     previewPane = buildPane(preview);

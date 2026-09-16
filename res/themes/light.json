@@ -20,25 +20,30 @@
   "borderColorHovered": "#afafb4",
   "borderColorPressed": "#8e8e93",
 
-  "focusColor": "#007aff55",
+  "borderRadius": 6.0,
+  "checkBoxBorderRadius": 6.0,
+  "menuItemBorderRadius": 6.0,
+  "menuBarItemBorderRadius": 6.0,
+
+  "focusColor": "#8e8e9355",
 
   "neutralColor": "#e5e5ea",
   "neutralColorHovered": "#d1d1d6",
   "neutralColorPressed": "#c7c7cc",
   "neutralColorDisabled": "#f2f2f7",
 
-  "primaryColor": "#0066cc",
-  "primaryColorHovered": "#0071e3",
-  "primaryColorPressed": "#0055aa",
-  "primaryColorDisabled": "#b8d7ff",
+  "primaryColor": "#6e6e73",
+  "primaryColorHovered": "#48484a",
+  "primaryColorPressed": "#3a3a3c",
+  "primaryColorDisabled": "#c7c7cc",
 
-  "primaryAlternativeColor": "#0055aa",
-  "primaryAlternativeColorDisabled": "#a8c8f4",
-  "primaryAlternativeColorHovered": "#0066cc",
-  "primaryAlternativeColorPressed": "#004488",
+  "primaryAlternativeColor": "#48484a",
+  "primaryAlternativeColorDisabled": "#c7c7cc",
+  "primaryAlternativeColorHovered": "#3a3a3c",
+  "primaryAlternativeColorPressed": "#1d1d1f",
 
   "primaryColorForeground": "#ffffff",
-  "primaryColorForegroundDisabled": "#ecf6ff",
+  "primaryColorForegroundDisabled": "#8e8e93",
   "primaryColorForegroundHovered": "#ffffff",
   "primaryColorForegroundPressed": "#ffffff",
 
@@ -76,10 +81,10 @@
   "statusColorForegroundPressed": "#ffffff",
   "statusColorForegroundDisabled": "#ffffff99",
 
-  "statusColorInfo": "#007aff",
-  "statusColorInfoHovered": "#147efb",
-  "statusColorInfoPressed": "#0066cc",
-  "statusColorInfoDisabled": "#b8d7ff",
+  "statusColorInfo": "#6e6e73",
+  "statusColorInfoHovered": "#48484a",
+  "statusColorInfoPressed": "#3a3a3c",
+  "statusColorInfoDisabled": "#c7c7cc",
 
   "statusColorSuccess": "#34c759",
   "statusColorSuccessHovered": "#30d158",

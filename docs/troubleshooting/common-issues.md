@@ -184,18 +184,18 @@ Cannot be opened because the developer cannot be verified
 3. Check firewall settings
 4. Verify the API server is running
 
-#### Command Execution Hangs
+#### Command Generation Does Not Produce a Result
 
 **Symptoms:**
-- Command doesn't return
-- No output
+- The generated command area is empty
+- The **Generate command** button is unavailable
 
 **Solutions:**
 
-1. Command may be interactive (not supported)
-2. Command may need input (not supported)
-3. Try simpler commands first
-4. Use terminal for complex operations
+1. Select a command category and command
+2. Select an option when one is available
+3. Enter the requested value when the input field is shown
+4. The tool generates command text; execute it in a terminal yourself
 
 #### Database Connection Failed
 

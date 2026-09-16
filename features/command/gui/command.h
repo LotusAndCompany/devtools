@@ -4,6 +4,8 @@
 #include <QWidget>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QPlainTextEdit;
@@ -65,9 +67,12 @@ private:
      * @brief 生成されたコマンドをクリップボードにコピーする
      */
     void copy();
+    void retranslateUi();
 
     /// カテゴリ選択用のコンボボックス
     QComboBox *category_list{nullptr};
+    QGroupBox *input_pane{nullptr};
+    QGroupBox *output_pane{nullptr};
     QLabel *functions_label{nullptr};
     /// 機能選択用のコンボボックス
     QComboBox *functions_list{nullptr};
@@ -89,6 +94,9 @@ private:
     QPushButton *copy_button{nullptr};
     /// クリアボタン
     QPushButton *clear_button{nullptr};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // COMMAND_H

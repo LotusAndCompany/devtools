@@ -4,6 +4,7 @@
 
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
 #include <QImageReader>
@@ -109,6 +110,25 @@ BasicImageView::BasicImageView(QWidget *parent) : QWidget(parent), ui(new Ui::Ba
 BasicImageView::~BasicImageView()
 {
     delete ui;
+}
+
+void BasicImageView::retranslateUi()
+{
+    ui->zoomInButton->setToolTip(tr("Zoom In"));
+    ui->zoomOutButton->setToolTip(tr("Zoom Out"));
+    if (original.isNull()) {
+        ui->image->setText(tr("No Image"));
+    }
+}
+
+void BasicImageView::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void BasicImageView::setPixmap(const QPixmap &pixmap, bool reset)

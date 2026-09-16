@@ -46,17 +46,17 @@ When you launch DevTools, you'll see:
 
 ### QR Code Generation
 
-1. Click **QR Code** in the side menu
+1. Click **QR Code Generation** in the side menu
 2. Select the QR code type (Text, URL, Email, etc.)
 3. Enter your content
 4. Click **Generate**
-5. Save the QR code image
+5. Click **Save Image** to save the QR code
 
 **Example: Create a URL QR Code**
-1. Select **URL** tab
+1. Select **URL** from the QR code type selector
 2. Enter: `https://example.com`
 3. Click **Generate**
-4. Right-click to save the image
+4. Click **Save Image**
 
 ### Image Processing
 
@@ -76,34 +76,33 @@ When you launch DevTools, you'll see:
 
 ### Data Conversion
 
-1. Click **Data Conversion** in the side menu
+1. Click **Data/Format Conversion** in the side menu
 2. Paste or type your data in the input area
-3. Select input format (JSON, YAML, or TOML)
-4. Select output format
-5. Click **Convert**
+3. Select the output format
+4. Select the indentation style
+5. Read the converted result in the output area
 
 **Example: Convert JSON to YAML**
 1. Paste your JSON:
    ```json
    {"name": "DevTools"}
    ```
-2. Set input: **JSON**
-3. Set output: **YAML**
-4. Click **Convert**
-5. Result:
+2. Set output: **YAML (Block style)**
+3. Choose an indentation style
+4. Result:
    ```yaml
    name: DevTools
    ```
 
-### API Testing
+### HTTP Request
 
-1. Click **API** in the side menu
+1. Click **HTTP Request** in the side menu
 2. Enter the URL
 3. Select HTTP method (GET, POST, etc.)
-4. Add headers if needed
-5. Add body for POST/PUT requests
+4. For query parameters or Basic authentication, use the corresponding Options tab
+5. Add a JSON body in the **Body** tab for POST/PUT requests
 6. Click **Send**
-7. View the response
+7. View the read-only response
 
 **Example: GET Request**
 1. Enter: `https://api.github.com`
@@ -111,21 +110,19 @@ When you launch DevTools, you'll see:
 3. Click **Send**
 4. View the JSON response
 
-### Command Execution
+### Command Generation
 
-1. Click **Command** in the side menu
-2. Enter a shell command
-3. Click **Execute**
-4. View the output
+1. Click **Command Generation** in the side menu
+2. Select a command category and command
+3. Select an option and enter a value when requested
+4. Click **Generate command**
+5. Copy the generated command
 
-**Example: List Files**
-1. Enter: `ls -la`
-2. Click **Execute**
-3. View the directory listing
+The tool generates command text; it does not execute shell commands.
 
-### Database Management
+### DB Tool
 
-1. Click **DB** in the side menu
+1. Click **DB Tool** in the side menu
 2. Click **DB Connection Settings** to open connection settings
 3. Create a new connection or select from history
 4. Browse tables in the left panel
@@ -141,10 +138,24 @@ When you launch DevTools, you'll see:
 
 ### Phrase Generation
 
-1. Click **Phrase** in the side menu
-2. Configure generation options
-3. Click **Generate**
-4. Copy the generated text
+1. Click **Phrase Generation** in the side menu
+2. Click **Add** to create a template, or select an existing template
+3. Enter the title and template text
+4. Click **Save**
+5. Click **Copy** to copy the template text
+
+### Markdown Preview
+
+1. Click **Markdown Preview** in the side menu
+2. Type or paste Markdown in the **Editor** pane
+3. Review the rendered result in the **Preview** pane
+
+### Regex Tester
+
+1. Click **Regex Tester** in the side menu
+2. Enter a regular expression and test text
+3. Choose flags or a preset when needed
+4. Review matches and replacement results
 
 ## Keyboard Shortcuts
 

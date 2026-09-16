@@ -11,13 +11,12 @@
 #include <QTableView>
 #include <QVBoxLayout>
 
-QueryPage::QueryPage(QWidget *parent) : QWidget(parent), model(new QSqlQueryModel(this))
+QueryPage::QueryPage(const QSqlDatabase &database, QWidget *parent)
+    : QWidget(parent), db(database), model(new QSqlQueryModel(this))
 {
     buildUi();
 
-    db = QSqlDatabase::database();
-
-    if (!db.open()) {
+    if (!db.isValid() || !db.isOpen()) {
         QMessageBox::critical(this, tr("DB Error"), tr("Could not connect to the database."));
         return;
     }

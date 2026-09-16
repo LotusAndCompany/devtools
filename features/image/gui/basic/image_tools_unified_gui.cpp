@@ -13,6 +13,7 @@
 #include <QComboBox>
 #include <QDir>
 #include <QDoubleSpinBox>
+#include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
@@ -117,10 +118,16 @@ void buildResizeSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLayo
     ui->heightValue = buildPixelSpinBox(ui->resizeSectionBody);
     ui->hScaleValue = buildScaleSpinBox(ui->resizeSectionBody);
     ui->vScaleValue = buildScaleSpinBox(ui->resizeSectionBody);
-    form->addRow(ImageToolsUnifiedGUI::tr("Width:"), ui->widthValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Height:"), ui->heightValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Horizontal Scale:"), ui->hScaleValue);
-    form->addRow(ImageToolsUnifiedGUI::tr("Vertical Scale:"), ui->vScaleValue);
+    ui->widthLabel = new QLabel(ImageToolsUnifiedGUI::tr("Width:"), ui->resizeSectionBody);
+    ui->heightLabel = new QLabel(ImageToolsUnifiedGUI::tr("Height:"), ui->resizeSectionBody);
+    ui->horizontalScaleLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Horizontal Scale:"), ui->resizeSectionBody);
+    ui->verticalScaleLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Vertical Scale:"), ui->resizeSectionBody);
+    form->addRow(ui->widthLabel, ui->widthValue);
+    form->addRow(ui->heightLabel, ui->heightValue);
+    form->addRow(ui->horizontalScaleLabel, ui->hScaleValue);
+    form->addRow(ui->verticalScaleLabel, ui->vScaleValue);
     bodyLayout->addLayout(form);
 
     ui->keepAspectRatio =
@@ -201,10 +208,13 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     ui->colorMode->addItem(QStringLiteral("RGB"), static_cast<int>(QColor::Spec::Rgb));
     ui->colorMode->addItem(QStringLiteral("HSL"), static_cast<int>(QColor::Spec::Hsl));
     ui->colorMode->addItem(QStringLiteral("HSV"), static_cast<int>(QColor::Spec::Hsv));
-    form->addRow(ImageToolsUnifiedGUI::tr("Color mode:"), ui->colorMode);
+    ui->colorModeLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Color mode:"), ui->transparentSectionBody);
+    form->addRow(ui->colorModeLabel, ui->colorMode);
 
     ui->colorSample = new ColorSample(ui->transparentSectionBody);
-    form->addRow(ImageToolsUnifiedGUI::tr("Color:"), ui->colorSample);
+    ui->colorLabel = new QLabel(ImageToolsUnifiedGUI::tr("Color:"), ui->transparentSectionBody);
+    form->addRow(ui->colorLabel, ui->colorSample);
 
     ui->toleranceValue = new QDoubleSpinBox(ui->transparentSectionBody);
     DevTools::Ui::configureFormField(ui->toleranceValue);
@@ -212,7 +222,9 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     ui->toleranceValue->setMaximum(1.0);
     ui->toleranceValue->setSingleStep(0.05);
     ui->toleranceValue->setValue(0.1);
-    form->addRow(ImageToolsUnifiedGUI::tr("Tolerance:"), ui->toleranceValue);
+    ui->toleranceLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Tolerance:"), ui->transparentSectionBody);
+    form->addRow(ui->toleranceLabel, ui->toleranceValue);
 
     ui->transparencyValue = new QDoubleSpinBox(ui->transparentSectionBody);
     DevTools::Ui::configureFormField(ui->transparencyValue);
@@ -220,7 +232,9 @@ void buildTransparentSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBo
     ui->transparencyValue->setMaximum(1.0);
     ui->transparencyValue->setSingleStep(0.05);
     ui->transparencyValue->setValue(1.0);
-    form->addRow(ImageToolsUnifiedGUI::tr("Transparency:"), ui->transparencyValue);
+    ui->transparencyLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Transparency:"), ui->transparentSectionBody);
+    form->addRow(ui->transparencyLabel, ui->transparencyValue);
     bodyLayout->addLayout(form);
 
     ui->contiguousArea =
@@ -249,13 +263,18 @@ void buildDivisionValueGrid(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBox
     ui->cellWidthValue->setEnabled(false);
     ui->cellHeightValue->setEnabled(false);
 
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), parent), 0, 0);
+    ui->horizontalDivisionLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Horizontal division:"), parent);
+    grid->addWidget(ui->horizontalDivisionLabel, 0, 0);
     grid->addWidget(ui->hDivValue, 0, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), parent), 1, 0);
+    ui->verticalDivisionLabel = new QLabel(ImageToolsUnifiedGUI::tr("Vertical division:"), parent);
+    grid->addWidget(ui->verticalDivisionLabel, 1, 0);
     grid->addWidget(ui->vDivValue, 1, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), parent), 2, 0);
+    ui->cellWidthLabel = new QLabel(ImageToolsUnifiedGUI::tr("Cell width:"), parent);
+    grid->addWidget(ui->cellWidthLabel, 2, 0);
     grid->addWidget(ui->cellWidthValue, 2, 1);
-    grid->addWidget(new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), parent), 3, 0);
+    ui->cellHeightLabel = new QLabel(ImageToolsUnifiedGUI::tr("Cell height:"), parent);
+    grid->addWidget(ui->cellHeightLabel, 3, 0);
     grid->addWidget(ui->cellHeightValue, 3, 1);
     layout->addLayout(grid);
 }
@@ -277,8 +296,9 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
 
     auto *sizeRow = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(sizeRow);
-    sizeRow->addWidget(
-        new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), ui->divisionSectionBody));
+    ui->imageSizeLabel =
+        new QLabel(ImageToolsUnifiedGUI::tr("Image size:"), ui->divisionSectionBody);
+    sizeRow->addWidget(ui->imageSizeLabel);
     ui->sizeLabel = new QLabel(ImageToolsUnifiedGUI::tr("0 x 0"), ui->divisionSectionBody);
     sizeRow->addWidget(ui->sizeLabel);
     bodyLayout->addLayout(sizeRow);
@@ -314,6 +334,7 @@ void buildDivisionSection(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QVBoxLa
 void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *rootLayout)
 {
     auto *toolPane = DevTools::Ui::createPane(ImageToolsUnifiedGUI::tr("Operation Panel"), parent);
+    ui->toolPane = toolPane;
     auto *toolPaneLayout = new QVBoxLayout(toolPane);
     DevTools::Ui::applyPanelLayout(toolPaneLayout);
 
@@ -402,6 +423,7 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
     DevTools::Ui::applyPageLayout(rootLayout);
 
     auto *imagePane = DevTools::Ui::createPane(ImageToolsUnifiedGUI::tr("Image"), this);
+    ui->imagePane = imagePane;
     auto *imagePaneLayout = new QVBoxLayout(imagePane);
     DevTools::Ui::applyPanelLayout(imagePaneLayout);
 
@@ -464,6 +486,56 @@ ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
             &ImageToolsUnifiedGUI::onSectionVisibilityChanged);
 
     onSectionVisibilityChanged();
+}
+
+void ImageToolsUnifiedGUI::retranslateUi()
+{
+    setWindowTitle(tr("Image Tools"));
+    ui->imagePane->setTitle(tr("Image"));
+    ui->toolPane->setTitle(tr("Operation Panel"));
+
+    ui->widthLabel->setText(tr("Width:"));
+    ui->heightLabel->setText(tr("Height:"));
+    ui->horizontalScaleLabel->setText(tr("Horizontal Scale:"));
+    ui->verticalScaleLabel->setText(tr("Vertical Scale:"));
+    ui->keepAspectRatio->setText(tr("Keep aspect ratio"));
+    ui->smoothScaling->setText(tr("Smooth scaling"));
+    ui->applyResizeBySizeButton->setText(tr("Apply Size"));
+    ui->applyResizeByScaleButton->setText(tr("Apply Scale"));
+
+    ui->rotateLeftButton->setText(tr("Rotate Anti-clockwise"));
+    ui->rotateRightButton->setText(tr("Rotate Clockwise"));
+    ui->flipHorizontalButton->setText(tr("Flip Horizontal"));
+    ui->flipVerticalButton->setText(tr("Flip Vertical"));
+
+    ui->colorModeLabel->setText(tr("Color mode:"));
+    ui->colorLabel->setText(tr("Color:"));
+    ui->toleranceLabel->setText(tr("Tolerance:"));
+    ui->transparencyLabel->setText(tr("Transparency:"));
+    ui->contiguousArea->setText(tr("Only contiguous area"));
+
+    ui->imageSizeLabel->setText(tr("Image size:"));
+    ui->useDivisionButton->setText(tr("Division"));
+    ui->useSizeButton->setText(tr("Size"));
+    ui->horizontalDivisionLabel->setText(tr("Horizontal division:"));
+    ui->verticalDivisionLabel->setText(tr("Vertical division:"));
+    ui->cellWidthLabel->setText(tr("Cell width:"));
+    ui->cellHeightLabel->setText(tr("Cell height:"));
+    ui->ignoreRemainders->setText(tr("Ignore remainders"));
+    ui->saveDividedButton->setText(tr("Save Divided Images"));
+
+    refreshSizeInputs();
+    onSectionVisibilityChanged();
+}
+
+void ImageToolsUnifiedGUI::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        GuiTool::changeEvent(event);
+    }
 }
 
 ImageToolsUnifiedGUI::~ImageToolsUnifiedGUI()

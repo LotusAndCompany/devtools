@@ -130,7 +130,7 @@ void dbMain::retranslateUi()
 
 void dbMain::handleAddQueryTabButtonClick()
 {
-    auto *page = new QueryPage(this);
+    auto *page = new QueryPage(db, this);
 
     QString const baseName = tr("Query");
     int counter = 1;
@@ -223,10 +223,7 @@ void dbMain::handleTabCloseRequested(int index)
 
 void dbMain::populateTableList()
 {
-    QSqlQuery query("SELECT name FROM sqlite_master WHERE type='table';", db);
-    while (query.next()) {
-        tableListWidget->addItem(query.value(0).toString());
-    }
+    tableListWidget->addItems(db.tables(QSql::Tables));
 }
 
 void dbMain::handleTableClicked(QListWidgetItem *item)

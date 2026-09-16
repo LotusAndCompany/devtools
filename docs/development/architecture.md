@@ -229,6 +229,13 @@ content, panel, toolbar, and inline layout roles, along with standard and
 compact panes, form fields, code editors, status views, item views, table views,
 splitters, and dialog footers.
 
+Display-only text uses `configureDisplayTextControl`: it keeps the normal
+qlementine frame and standard font while disabling focus and hover state.
+Selectable output must explicitly opt into keyboard and mouse text selection.
+Flat collections use list widgets; hierarchical data uses tree widgets. All
+list and table views use the shared item-view configuration so borders, fonts,
+selection behavior, and row treatment do not drift between tools.
+
 All text controls use the standard system font through the design-system
 helpers. Code-specific helpers may add behavior such as tab-stop configuration,
 but must not introduce a separate font or private widget styling.

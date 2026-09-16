@@ -129,7 +129,7 @@ QWidget *AboutDevToolsDialog::createLicenseTab(QWidget *parent)
     auto *layout = new QVBoxLayout(tab);
     DevTools::Ui::applyPanelLayout(layout);
     auto *licenseText = new QPlainTextEdit(tab);
-    DevTools::Ui::configureTextControl(licenseText);
+    DevTools::Ui::configureDisplayTextControl(licenseText);
     licenseText->setReadOnly(true);
 
     QFile licenseFile(QStringLiteral(":/docs/LICENSE"));

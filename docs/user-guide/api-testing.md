@@ -9,17 +9,17 @@ The API Testing tool allows developers to quickly test REST APIs, debug endpoint
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **API** in the side menu
+2. Click **HTTP Request** in the side menu
 
 ## Interface Overview
 
 The API Testing interface consists of:
 
-1. **URL Bar**: Enter the endpoint URL
-2. **Method Selector**: Choose HTTP method
-3. **Headers Section**: Add request headers
-4. **Body Section**: Add request body (for POST, PUT, PATCH)
-5. **Response Area**: View response data
+1. **Request bar**: Choose the HTTP method, enter the endpoint URL, and send
+   the request
+2. **Options**: Configure query parameters, basic authentication, or a request
+   body in the corresponding tabs
+3. **Response area**: View the status, timing, size, and response body
 
 ## Supported HTTP Methods
 
@@ -28,10 +28,7 @@ The API Testing interface consists of:
 | GET | Retrieve data | No |
 | POST | Create new resource | Yes |
 | PUT | Update/replace resource | Yes |
-| PATCH | Partial update | Yes |
 | DELETE | Remove resource | Optional |
-| HEAD | Get headers only | No |
-| OPTIONS | Get supported methods | No |
 
 ## Making Requests
 
@@ -46,62 +43,38 @@ The API Testing interface consists of:
 
 1. Enter the URL: `https://api.example.com/users`
 2. Select **POST** method
-3. Add header:
-   - Key: `Content-Type`
-   - Value: `application/json`
-4. Add body:
+3. Open the **Body** tab and enter:
    ```json
    {
      "name": "John Doe",
      "email": "john@example.com"
    }
    ```
-5. Click **Send**
+4. Click **Send**
 
 ### Request with Authentication
 
-#### Bearer Token
+The **Authentication** tab supports HTTP Basic authentication. Enter both a
+username and password; the tool adds the corresponding `Authorization` header
+when sending the request.
 
-Add header:
-- Key: `Authorization`
-- Value: `Bearer your-token-here`
+## Query Parameters
 
-#### Basic Auth
+Open the **Parameters** tab under **Options** and enter keys, values, and
+descriptions in the table. Query parameters are appended to the URL as they
+are edited.
 
-Add header:
-- Key: `Authorization`
-- Value: `Basic base64-encoded-credentials`
+## Authentication
 
-#### API Key
-
-Add header (varies by API):
-- Key: `X-API-Key`
-- Value: `your-api-key`
-
-## Headers
-
-### Adding Headers
-
-1. Click **Add Header**
-2. Enter key and value
-3. Repeat for additional headers
-
-### Common Headers
-
-| Header | Purpose | Example |
-|--------|---------|---------|
-| Content-Type | Request body format | `application/json` |
-| Accept | Expected response format | `application/json` |
-| Authorization | Authentication | `Bearer token123` |
-| User-Agent | Client identification | `DevTools` |
-
-### Removing Headers
-
-Click the **X** button next to the header to remove it.
+Open the **Authentication** tab and enter a username and password. When both
+fields are set, the request uses HTTP Basic authentication.
 
 ## Request Body
 
 ### JSON Body
+
+Open the **Body** tab and enter the request body. The current tool sends the
+body for `POST` and `PUT` requests with `Content-Type: application/json`.
 
 ```json
 {
@@ -112,12 +85,6 @@ Click the **X** button next to the header to remove it.
 }
 ```
 
-### Form Data
-
-When using form data, set:
-- Content-Type: `application/x-www-form-urlencoded`
-- Body: `key1=value1&key2=value2`
-
 ## Reading Responses
 
 ### Response Information
@@ -127,7 +94,6 @@ When using form data, set:
 | Status Code | HTTP status (200, 404, 500, etc.) |
 | Status Text | Description (OK, Not Found, etc.) |
 | Response Time | Time to receive response |
-| Response Headers | Headers returned by server |
 | Response Body | Response data |
 
 ### Status Codes
@@ -153,9 +119,8 @@ When using form data, set:
 
 ## Response Formatting
 
-- JSON responses are automatically formatted
-- Syntax highlighting for readability
-- Collapsible sections for nested data
+The response body is shown as read-only text. It remains selectable so that
+you can copy response data from the response area.
 
 ## Examples
 
@@ -183,8 +148,7 @@ POST request example:
 
 1. URL: `https://jsonplaceholder.typicode.com/posts`
 2. Method: **POST**
-3. Header: `Content-Type: application/json`
-4. Body:
+3. Body:
    ```json
    {
      "title": "Test Post",
@@ -192,7 +156,7 @@ POST request example:
      "userId": 1
    }
    ```
-5. Click **Send**
+4. Click **Send**
 
 ## Tips and Best Practices
 
@@ -205,10 +169,9 @@ POST request example:
 
 ### Debugging
 
-1. Check response status codes
-2. Inspect response headers
-3. Look for error messages in body
-4. Verify URL is correct
+1. Check the response status and status text
+2. Look for error messages in the response body
+3. Verify the URL is correct
 
 ### Security
 
@@ -235,9 +198,8 @@ For advanced API testing needs, consider dedicated tools like Postman.
 
 ### Authentication Errors (401)
 
-1. **Check credentials**: Verify token/key is correct
-2. **Check header format**: Authorization header must be exact
-3. **Check expiration**: Tokens may have expired
+1. **Check credentials**: Verify the username and password are correct
+2. **Check the request**: Confirm the endpoint requires HTTP Basic authentication
 
 ### Request Timeout
 

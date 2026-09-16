@@ -262,6 +262,7 @@ QGroupBox *createPane(const QString &title, QWidget *parent)
 
 void configurePane(QGroupBox *pane)
 {
+    pane->setFlat(false);
     pane->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
@@ -375,7 +376,23 @@ void configureCodeLineEdit(QLineEdit *field)
 
 void configureItemView(QAbstractItemView *view)
 {
-    view->setFrameShape(QFrame::StyledPanel);
+    view->setFont(standardFont());
+    const int borderWidth = textControlBorderWidth(view);
+    int borderRadius = Metrics::CORNER_RADIUS;
+    QColor borderColor = view->palette().color(QPalette::Mid);
+    if (auto *const qlementineStyle =
+            qobject_cast<oclero::qlementine::QlementineStyle *>(view->style())) {
+        borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
+        borderColor = qlementineStyle->theme().borderColor;
+    }
+    view->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    view->setLineWidth(borderWidth);
+    view->setStyleSheet(
+        QStringLiteral(
+            "QListView, QTreeView, QTableView { border: %1px solid %2; border-radius: %3px; }")
+            .arg(borderWidth)
+            .arg(borderColor.name(QColor::HexArgb))
+            .arg(borderRadius));
     view->setAlternatingRowColors(true);
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
     view->setTextElideMode(Qt::ElideRight);
@@ -398,10 +415,10 @@ void configureMultilineField(QPlainTextEdit *field)
 
 void configureStatusView(QPlainTextEdit *view)
 {
-    configureTextControl(view);
+    configureDisplayTextControl(view);
     view->setReadOnly(true);
+    view->setTextInteractionFlags(Qt::NoTextInteraction);
     view->setMaximumHeight(Metrics::STATUS_VIEW_HEIGHT);
-    view->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
 }
 
 void configureCodeStatusView(QPlainTextEdit *view)
@@ -534,11 +551,37 @@ void configureTextControl(QAbstractScrollArea *control)
 {
     control->setFont(standardFont());
     const int borderWidth = textControlBorderWidth(control);
+    int borderRadius = Metrics::CORNER_RADIUS;
+    QColor borderColor = control->palette().color(QPalette::Mid);
+    if (auto *const qlementineStyle =
+            qobject_cast<oclero::qlementine::QlementineStyle *>(control->style())) {
+        borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
+        borderColor = qlementineStyle->theme().borderColor;
+    }
     control->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     control->setLineWidth(borderWidth);
     setTextControlViewportMargins(control, borderWidth);
+    control->setStyleSheet(
+        QStringLiteral("QPlainTextEdit, QTextEdit { border: %1px solid %2; border-radius: %3px; }")
+            .arg(borderWidth)
+            .arg(borderColor.name(QColor::HexArgb))
+            .arg(borderRadius));
     control->viewport()->setAutoFillBackground(false);
     control->viewport()->setAttribute(Qt::WA_OpaquePaintEvent, false);
+}
+
+void configureDisplayTextControl(QAbstractScrollArea *control)
+{
+    configureTextControl(control);
+    const int borderWidth = textControlBorderWidth(control);
+    control->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    control->setLineWidth(borderWidth);
+    control->setFocusPolicy(Qt::NoFocus);
+    control->setAttribute(Qt::WA_Hover, false);
+    control->setMouseTracking(false);
+    control->viewport()->setFocusPolicy(Qt::NoFocus);
+    control->viewport()->setAttribute(Qt::WA_Hover, false);
+    control->viewport()->setMouseTracking(false);
 }
 
 void refreshStatusColors()

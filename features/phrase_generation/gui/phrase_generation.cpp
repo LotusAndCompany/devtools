@@ -10,18 +10,17 @@
 #include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QHeaderView>
 #include <QIcon>
 #include <QKeySequence>
 #include <QLineEdit>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QShortcut>
 #include <QStyle>
 #include <QTextStream>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -33,10 +32,8 @@ phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
     connect(save_button, &QPushButton::clicked, this, &phraseGeneration::handleSaveButtonClick);
     connect(copy_button, &QPushButton::clicked, this, &phraseGeneration::handleCopyButtonClick);
     connect(delete_button, &QPushButton::clicked, this, &phraseGeneration::handleDeleteButtonClick);
-    connect(title_tree_widget, &QTreeWidget::itemClicked, this,
-            &phraseGeneration::handleTitleTreeWidgetItemClick);
-
-    title_tree_widget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    connect(title_list_widget, &QListWidget::itemClicked, this,
+            &phraseGeneration::handleTitleListWidgetItemClick);
 
     setupShortcuts();
     loadTitles();
@@ -84,11 +81,9 @@ void phraseGeneration::createWidgets()
     tree_separator = new QFrame(this);
     DevTools::Ui::configureDivider(tree_separator);
 
-    title_tree_widget = new QTreeWidget(this);
-    title_tree_widget->setObjectName(QStringLiteral("titleTreeWidget"));
-    title_tree_widget->setHeaderHidden(true);
-    title_tree_widget->setColumnCount(1);
-    DevTools::Ui::configureItemView(title_tree_widget);
+    title_list_widget = new QListWidget(this);
+    title_list_widget->setObjectName(QStringLiteral("titleListWidget"));
+    DevTools::Ui::configureItemView(title_list_widget);
 
     template_title = new QLineEdit(this);
     template_title->setObjectName(QStringLiteral("templateTitle"));
@@ -157,7 +152,7 @@ void phraseGeneration::layoutWidgets()
     DevTools::Ui::applyPanelLayout(tree_panel);
     tree_panel->addWidget(add_button);
     tree_panel->addWidget(tree_separator);
-    tree_panel->addWidget(title_tree_widget, 1);
+    tree_panel->addWidget(title_list_widget, 1);
 
     root_layout->addWidget(editor_group, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
     root_layout->addWidget(tree_group, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
@@ -192,7 +187,7 @@ void phraseGeneration::changeEvent(QEvent *event)
 
 void phraseGeneration::loadTitles()
 {
-    title_tree_widget->clear();
+    title_list_widget->clear();
     QDir const directory("content");
     QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
     // NOLINTNEXTLINE(misc-const-correctness)
@@ -200,9 +195,8 @@ void phraseGeneration::loadTitles()
         QString title;
         QString const content = loadContent(filename, &title);
 
-        auto *item = new QTreeWidgetItem(title_tree_widget);
-        item->setText(0, title);
-        item->setData(0, Qt::UserRole, filename);
+        auto *item = new QListWidgetItem(title, title_list_widget);
+        item->setData(Qt::UserRole, filename);
     }
 }
 
@@ -220,12 +214,12 @@ bool phraseGeneration::hasUnsavedChanges() const
     return current_title != saved_title || current_text != saved_text;
 }
 
-void phraseGeneration::selectTreeItemByFilename(const QString &filename)
+void phraseGeneration::selectListItemByFilename(const QString &filename)
 {
-    for (int i = 0; i < title_tree_widget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *current = title_tree_widget->topLevelItem(i);
-        if (current->data(0, Qt::UserRole).toString() == filename) {
-            title_tree_widget->setCurrentItem(current);
+    for (int i = 0; i < title_list_widget->count(); ++i) {
+        QListWidgetItem *current = title_list_widget->item(i);
+        if (current->data(Qt::UserRole).toString() == filename) {
+            title_list_widget->setCurrentItem(current);
             return;
         }
     }
@@ -295,7 +289,7 @@ void phraseGeneration::handleSaveButtonClick()
 
     QString const saved_filename = saveContent(title, content);
     loadTitles();
-    selectTreeItemByFilename(saved_filename);
+    selectListItemByFilename(saved_filename);
 
     currentFile = saved_filename;
 }
@@ -326,13 +320,13 @@ void phraseGeneration::handleCopyButtonClick()
 
 void phraseGeneration::handleDeleteButtonClick()
 {
-    QTreeWidgetItem const *item = title_tree_widget->currentItem();
+    QListWidgetItem const *item = title_list_widget->currentItem();
     if (item == nullptr) {
         QMessageBox::warning(this, tr("Warning"), tr("No title selected."));
         return;
     }
 
-    QString const itemTitle = item->text(0);
+    QString const itemTitle = item->text();
     auto const result = QMessageBox::question(
         this, tr("Confirm Delete"), tr("Are you sure you want to delete \"%1\"?").arg(itemTitle),
         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -341,7 +335,7 @@ void phraseGeneration::handleDeleteButtonClick()
         return;
     }
 
-    QString const filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item->data(Qt::UserRole).toString();
     deleteContent(filename);
     loadTitles();
     template_title->clear();
@@ -356,14 +350,14 @@ void phraseGeneration::deleteContent(const QString &filename)
     }
 }
 
-void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int /*column*/)
+void phraseGeneration::handleTitleListWidgetItemClick(QListWidgetItem *item)
 {
-    QString const filename = item->data(0, Qt::UserRole).toString();
+    QString const filename = item->data(Qt::UserRole).toString();
     if (!confirmDiscard()) {
         if (!currentFile.isEmpty()) {
-            selectTreeItemByFilename(currentFile);
+            selectListItemByFilename(currentFile);
         } else {
-            title_tree_widget->setCurrentItem(nullptr);
+            title_list_widget->setCurrentItem(nullptr);
         }
         return;
     }
@@ -375,5 +369,5 @@ void phraseGeneration::handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int
 
     currentFile = filename;
 
-    selectTreeItemByFilename(filename);
+    selectListItemByFilename(filename);
 }

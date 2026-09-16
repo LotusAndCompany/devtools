@@ -5,6 +5,7 @@
 
 #include <QClipboard>
 #include <QComboBox>
+#include <QEvent>
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QGuiApplication>
@@ -56,7 +57,8 @@ void DataConversionGUI::buildUi()
 
 QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 {
-    auto *const container = DevTools::Ui::createPane(tr("Input"), parent);
+    inputPane = DevTools::Ui::createPane(tr("Input"), parent);
+    auto *const container = inputPane;
     auto *const layout = new QVBoxLayout(container);
     DevTools::Ui::applyPanelLayout(layout);
 
@@ -99,7 +101,8 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
 QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 {
-    auto *const container = DevTools::Ui::createPane(tr("Output"), parent);
+    outputPane = DevTools::Ui::createPane(tr("Output"), parent);
+    auto *const container = outputPane;
     auto *const layout = new QVBoxLayout(container);
     DevTools::Ui::applyPanelLayout(layout);
 
@@ -137,7 +140,7 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     layout->addLayout(output_action_button_layout);
 
     outputTextView = new QPlainTextEdit(container);
-    DevTools::Ui::configureCodeEditor(outputTextView);
+    DevTools::Ui::configureDisplayTextControl(outputTextView);
     outputTextView->setReadOnly(true);
     outputTextView->setTextInteractionFlags(Qt::TextSelectableByKeyboard |
                                             Qt::TextSelectableByMouse);
@@ -150,6 +153,43 @@ QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
     layout->addWidget(outputMessageTextView);
 
     return container;
+}
+
+void DataConversionGUI::retranslateUi()
+{
+    inputPane->setTitle(tr("Input"));
+    outputPane->setTitle(tr("Output"));
+
+    loadButton->setText(tr("Load"));
+    pasteButton->setText(tr("Paste"));
+    clearButton->setToolTip(tr("Clear"));
+    saveButton->setText(tr("Save"));
+    copyButton->setText(tr("Copy"));
+
+    formatSelector->setItemText(0, QStringLiteral("JSON"));
+    formatSelector->setItemText(1, tr("YAML (Block style)"));
+    formatSelector->setItemText(2, tr("YAML (Flow style)"));
+    formatSelector->setItemText(3, QStringLiteral("TOML"));
+
+    styleSelector->setItemText(0, tr("4 Spaces"));
+    styleSelector->setItemText(1, tr("2 Spaces"));
+    styleSelector->setItemText(2, tr("Tabs"));
+    styleSelector->setItemText(3, tr("Minified"));
+
+    inputTextEdit->setPlaceholderText(tr("Input text"));
+    inputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
+    outputTextView->setPlaceholderText(tr("Output text"));
+    outputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
+}
+
+void DataConversionGUI::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void DataConversionGUI::onInputTextChanged()

@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
+#include <QEvent>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -233,6 +234,7 @@ void RegexTesterGUI::setupUi()
 QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 {
     auto *const leftWidget = DevTools::Ui::createPane(tr("Regex Tester"), parent);
+    m_leftPane = leftWidget;
     auto *const leftLayout = new QVBoxLayout(leftWidget);
     DevTools::Ui::applyPanelLayout(leftLayout);
 
@@ -268,7 +270,8 @@ QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
     leftLayout->addWidget(m_errorLabel);
 
     // Test Text Label
-    leftLayout->addWidget(DevTools::Ui::createPaneHeading(tr("Test Text"), leftWidget));
+    m_testTextHeading = DevTools::Ui::createPaneHeading(tr("Test Text"), leftWidget);
+    leftLayout->addWidget(m_testTextHeading);
 
     // Test Text Edit
     m_testTextEdit = new QPlainTextEdit(leftWidget);
@@ -297,7 +300,8 @@ QComboBox *RegexTesterGUI::createPresetCombo(QWidget *parent)
 
 void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
 {
-    layout->addWidget(DevTools::Ui::createPaneHeading(tr("Substitution / Replace"), parent));
+    m_replaceHeading = DevTools::Ui::createPaneHeading(tr("Substitution / Replace"), parent);
+    layout->addWidget(m_replaceHeading);
 
     auto *const replaceRow = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(replaceRow);
@@ -314,7 +318,7 @@ void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
     m_replaceResultEdit = new QPlainTextEdit(parent);
     m_replaceResultEdit->setReadOnly(true);
     m_replaceResultEdit->setPlaceholderText(tr("Replacement result will appear here..."));
-    DevTools::Ui::configureCodeEditor(m_replaceResultEdit);
+    DevTools::Ui::configureDisplayTextControl(m_replaceResultEdit);
     layout->addWidget(m_replaceResultEdit, 1);
 }
 
@@ -367,6 +371,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
 QWidget *RegexTesterGUI::setupRightPane(QWidget *parent)
 {
     auto *const rightWidget = DevTools::Ui::createPane(tr("Matches"), parent);
+    m_rightPane = rightWidget;
     auto *const rightLayout = new QVBoxLayout(rightWidget);
     DevTools::Ui::applyPanelLayout(rightLayout);
 
@@ -395,6 +400,7 @@ QWidget *RegexTesterGUI::setupRightPane(QWidget *parent)
 
     // Quick Reference Collapsible Section
     auto *const quickReferencePane = DevTools::Ui::createPane(tr("Quick Reference"), rightWidget);
+    m_quickReferencePane = quickReferencePane;
     auto *const quickReferenceLayout = new QVBoxLayout(quickReferencePane);
     DevTools::Ui::applyPanelLayout(quickReferenceLayout);
 
@@ -460,6 +466,62 @@ void RegexTesterGUI::populateQuickReference(QTreeWidget *tree)
     new QTreeWidgetItem(groups, QStringList() << R"(\1)" << tr("Match group #1 reference"));
     new QTreeWidgetItem(groups, QStringList()
                                     << R"(\k<name>)" << tr("Match named group reference"));
+}
+
+void RegexTesterGUI::retranslateUi()
+{
+    const bool quickReferenceVisible = m_quickRefContainer->isVisible();
+
+    m_leftPane->setTitle(tr("Regex Tester"));
+    m_rightPane->setTitle(tr("Matches"));
+    m_quickReferencePane->setTitle(tr("Quick Reference"));
+    m_testTextHeading->setText(tr("Test Text"));
+    m_replaceHeading->setText(tr("Substitution / Replace"));
+
+    m_presetCombo->setItemText(0, tr("Select preset pattern..."));
+    m_presetCombo->setItemText(1, tr("Email Address"));
+    m_presetCombo->setItemText(2, tr("URL (Web Address)"));
+    m_presetCombo->setItemText(3, tr("IPv4 Address"));
+    m_presetCombo->setItemText(4, tr("ISO Date (YYYY-MM-DD)"));
+    m_presetCombo->setItemText(5, tr("Phone Number (E.164)"));
+    m_presetCombo->setItemText(6, tr("UUID v4"));
+
+    m_copyPatternButton->setText(tr("Copy Pattern"));
+    m_patternEdit->setPlaceholderText(tr("Regular Expression Pattern"));
+    m_flagG->setToolTip(tr("Global (match all)"));
+    m_flagI->setToolTip(tr("Case Insensitive"));
+    m_flagM->setToolTip(tr("Multiline"));
+    m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
+    m_flagU->setToolTip(tr("Unicode"));
+    m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
+    m_testTextEdit->setPlaceholderText(tr("Enter text to test against..."));
+    m_replacePatternEdit->setPlaceholderText(tr("Replacement String"));
+    m_copyResultButton->setText(tr("Copy Result"));
+    m_replaceResultEdit->setPlaceholderText(tr("Replacement result will appear here..."));
+    m_copyMatchesButton->setText(tr("Copy Matches"));
+    m_quickRefToggle->setText(quickReferenceVisible ? tr("Hide Quick Reference")
+                                                    : tr("Show Quick Reference"));
+    m_quickRefTree->setToolTip(tr("Double-click to insert token into pattern"));
+
+    m_quickRefTree->clear();
+    populateQuickReference(m_quickRefTree);
+    m_quickRefTree->expandAll();
+    m_quickRefContainer->setVisible(quickReferenceVisible);
+
+    updateMatchResultDisplay(m_lastMatches);
+    m_errorLabel->clear();
+    m_errorLabel->hide();
+    triggerUpdate();
+}
+
+void RegexTesterGUI::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void RegexTesterGUI::setupConnections()

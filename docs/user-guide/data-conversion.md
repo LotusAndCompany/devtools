@@ -9,7 +9,7 @@ The Data Conversion tool helps developers quickly convert configuration files an
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Data Conversion** in the side menu
+2. Click **Data/Format Conversion** in the side menu
 
 ## Supported Formats
 
@@ -24,18 +24,21 @@ The Data Conversion tool helps developers quickly convert configuration files an
 ### Basic Conversion
 
 1. Paste or type your data in the **Input** area
-2. Select the **Input Format** (JSON, YAML, or TOML)
-3. Select the **Output Format**
-4. Click **Convert**
-5. View the result in the **Output** area
-6. Copy or save the result
+2. Select the output format in the **Output** area: JSON, YAML block style,
+   YAML flow style, or TOML
+3. Select the indentation style: 4 spaces, 2 spaces, tabs, or minified
+4. View the result in the **Output** area
+5. Copy or save the result
+
+The input format is detected from the content. Conversion and validation run
+as the input or output options change; there is no separate **Convert** button.
 
 ### Loading from File
 
 1. Click **Open File**
 2. Select a file (.json, .yaml, .yml, or .toml)
 3. The content loads into the Input area
-4. Format is auto-detected based on extension
+4. The input format is detected from the content
 
 ### Saving Results
 

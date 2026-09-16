@@ -4,6 +4,7 @@
 #include "features/framework/gui/design_system.h"
 #include "file_dialogs.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QPushButton>
 
@@ -36,11 +37,30 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
             &BasicImageViewControl::onLoadButtonClicked);
     connect(this, &BasicImageViewControl::loadFileSelected, this,
             &BasicImageViewControl::onLoadFileSelected);
+
+    retranslateUi();
 }
 
 BasicImageViewControl::~BasicImageViewControl()
 {
     delete ui;
+}
+
+void BasicImageViewControl::retranslateUi()
+{
+    ui->loadButton->setText(tr("Load"));
+    ui->resetButton->setText(tr("Reset"));
+    ui->saveButton->setText(tr("Save"));
+}
+
+void BasicImageViewControl::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void BasicImageViewControl::onSaveButtonClicked()

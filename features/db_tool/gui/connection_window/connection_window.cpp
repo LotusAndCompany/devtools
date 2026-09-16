@@ -87,7 +87,10 @@ void ConnectionWindow::buildUi()
 
     dbTypeLabel = new QLabel(this);
     dbTypeComboBox = new QComboBox(this);
-    dbTypeComboBox->addItem(QString());
+    dbTypeComboBox->setObjectName(QStringLiteral("databaseTypeComboBox"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QSQLITE"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QMYSQL"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QPSQL"));
     DevTools::Ui::configureComboBox(dbTypeComboBox);
     formLayout->addRow(dbTypeLabel, dbTypeComboBox);
 
@@ -140,8 +143,9 @@ void ConnectionWindow::retranslateUi()
     setWindowTitle(tr("New Connection"));
     form_group_box->setTitle(tr("New Connection"));
     dbTypeLabel->setText(tr("Database Type"));
-    if (dbTypeComboBox->count() > 0) {
-        dbTypeComboBox->setItemText(0, tr("SQLite"));
+    const QStringList databaseTypeNames = {tr("SQLite"), tr("MySQL"), tr("PostgreSQL")};
+    for (int i = 0; i < databaseTypeNames.size() && i < dbTypeComboBox->count(); ++i) {
+        dbTypeComboBox->setItemText(i, databaseTypeNames[i]);
     }
     hostNameLabel->setText(tr("Host Name"));
     dbNameLabel->setText(tr("Database Name"));
@@ -159,8 +163,7 @@ void ConnectionWindow::init()
 
 void ConnectionWindow::selectedDBType()
 {
-    QString const dbTypeText = dbTypeComboBox->currentText();
-    bool const isSQLite = (dbTypeText == tr("SQLite"));
+    bool const isSQLite = (dbTypeComboBox->currentData().toString() == "QSQLITE");
     bool const display = !isSQLite;
 
     hostNameLabel->setVisible(display);
@@ -194,16 +197,8 @@ void ConnectionWindow::createNewConnect()
     const QString userName = userNameLineEdit->text();
     const QString password = passwordLineEdit->text();
 
-    QString databaseType;
     QString const dbTypeText = dbTypeComboBox->currentText();
-
-    if (dbTypeText == tr("SQLite")) {
-        databaseType = "QSQLITE";
-    } else if (dbTypeText == "MySQL") {
-        databaseType = "QMYSQL";
-    } else if (dbTypeText == "PostgreSQL") {
-        databaseType = "QPSQL";
-    }
+    QString const databaseType = dbTypeComboBox->currentData().toString();
     if (databaseType.isEmpty()) {
         QMessageBox::warning(this, tr("Error"), tr("Database type not supported."));
         return;
@@ -268,7 +263,7 @@ void ConnectionWindow::changeEvent(QEvent *event)
 
 bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched != dbNamelineEdit || dbTypeComboBox->currentText() != tr("SQLite")) {
+    if (watched != dbNamelineEdit || dbTypeComboBox->currentData().toString() != "QSQLITE") {
         return QWidget::eventFilter(watched, event);
     }
 

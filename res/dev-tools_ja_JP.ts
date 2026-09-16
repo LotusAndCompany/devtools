@@ -288,6 +288,10 @@
         <source>Generated Result</source>
         <translation>生成結果</translation>
     </message>
+    <message>
+        <source>Command Generation</source>
+        <translation>コマンド生成</translation>
+    </message>
 </context>
 <context>
     <name>ConnectionSelector</name>
@@ -405,6 +409,14 @@
     <message>
         <source>Database connection established.</source>
         <translation>データベースに接続しました。</translation>
+    </message>
+    <message>
+        <source>MySQL</source>
+        <translation>MySQL</translation>
+    </message>
+    <message>
+        <source>PostgreSQL</source>
+        <translation>PostgreSQL</translation>
     </message>
 </context>
 <context>
@@ -711,6 +723,10 @@
     <message>
         <source>Image</source>
         <translation>画像</translation>
+    </message>
+    <message>
+        <source>Image Tools</source>
+        <translation>画像ツール</translation>
     </message>
 </context>
 <context>
@@ -1354,10 +1370,6 @@ Choose a tool from the side panel</source>
         <translation>GET</translation>
     </message>
     <message>
-        <source>API Tool</source>
-        <translation>APIツール</translation>
-    </message>
-    <message>
         <source>POST</source>
         <translation>POST</translation>
     </message>
@@ -1424,6 +1436,10 @@ Choose a tool from the side panel</source>
     <message>
         <source>Error</source>
         <translation>エラー</translation>
+    </message>
+    <message>
+        <source>HTTP Request</source>
+        <translation>HTTPリクエスト</translation>
     </message>
 </context>
 <context>
