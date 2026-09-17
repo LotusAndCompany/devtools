@@ -84,7 +84,18 @@ void ConnectionWindow::buildUi()
 
     auto *formLayout = new QFormLayout;
     DevTools::Ui::configureInlineFormLayout(formLayout);
+    buildFormFields(formLayout);
+    formGroupLayout->addLayout(formLayout);
+    verticalLayout->addWidget(form_group_box);
+    verticalLayout->addStretch();
 
+    buildActionButtons(verticalLayout);
+
+    retranslateUi();
+}
+
+void ConnectionWindow::buildFormFields(QFormLayout *formLayout)
+{
     dbTypeLabel = new QLabel(this);
     dbTypeComboBox = new QComboBox(this);
     dbTypeComboBox->setObjectName(QStringLiteral("databaseTypeComboBox"));
@@ -120,11 +131,10 @@ void ConnectionWindow::buildUi()
     passwordLineEdit->setEchoMode(QLineEdit::Password);
     DevTools::Ui::configureLineEdit(passwordLineEdit);
     formLayout->addRow(passwordLabel, passwordLineEdit);
+}
 
-    formGroupLayout->addLayout(formLayout);
-    verticalLayout->addWidget(form_group_box);
-    verticalLayout->addStretch();
-
+void ConnectionWindow::buildActionButtons(QVBoxLayout *verticalLayout)
+{
     auto *buttonLayout = new QHBoxLayout();
     ConnectPushButton = new QPushButton(this);
     DevTools::Ui::configureCompactButton(ConnectPushButton);
@@ -134,8 +144,6 @@ void ConnectionWindow::buildUi()
     buttonLayout->addWidget(ClosePushButton);
     DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
     verticalLayout->addLayout(buttonLayout);
-
-    retranslateUi();
 }
 
 void ConnectionWindow::retranslateUi()

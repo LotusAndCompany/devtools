@@ -6,10 +6,12 @@
 #include <QWidget>
 
 class QComboBox;
+class QFormLayout;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QVBoxLayout;
 
 /**
  * @brief データベース接続設定ウィンドウ
@@ -67,6 +69,16 @@ private:
      * @brief UIを構築する
      */
     void buildUi();
+    /**
+     * @brief 接続情報入力欄を構築する
+     * @param formLayout 入力欄を配置するフォームレイアウト
+     */
+    void buildFormFields(QFormLayout *formLayout);
+    /**
+     * @brief アクションボタンを構築する
+     * @param verticalLayout ボタンを追加するレイアウト
+     */
+    void buildActionButtons(QVBoxLayout *verticalLayout);
     /**
      * @brief UIテキストを再翻訳する
      */
