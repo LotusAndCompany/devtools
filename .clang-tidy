@@ -41,7 +41,7 @@ Checks: >
 
 WarningsAsErrors: ''
 
-HeaderFilterRegex: '^.*/devtools/(core|gui|main|tests)/(?!.*qrcodegen).*\.(h|hpp)$'
+HeaderFilterRegex: '^.*/devtools/(features|main|tests)/(?!.*qrcodegen).*\.(h|hpp)$'
 
 FormatStyle: file
 

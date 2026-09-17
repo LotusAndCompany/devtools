@@ -51,11 +51,11 @@ cmake --build . --target lint
 Setup:
 
 ```bash
-pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+pre-commit install --install-hooks -t pre-commit -t pre-push
 ```
 
-Hooks run clang-format, trailing-whitespace, EOF fixer, large file check,
-commit message validation, and pre-push build verification.
+Hooks run clang-format, trailing-whitespace, EOF fixer, large file check, and
+pre-push build verification.
 
 ## Agent Harness
 

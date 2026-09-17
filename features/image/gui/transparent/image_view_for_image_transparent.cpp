@@ -1,5 +1,7 @@
 #include "image_view_for_image_transparent.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QMouseEvent>
 #include <QScrollArea>
 
@@ -10,7 +12,7 @@ ImageViewForImageTransparent::ImageViewForImageTransparent(QWidget *parent) : Ba
     // NOTE: ui->imageを置き換える
     delete ui->image;
     ui->image = new ClickableLabel(this);
-    ui->image->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+    DevTools::Ui::configureImageSurface(ui->image);
     ui->scrollArea->setWidget(ui->image);
     connect(ui_image(), &ClickableLabel::clicked, this,
             &ImageViewForImageTransparent::onLabelClicked);

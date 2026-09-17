@@ -3,6 +3,7 @@
 #include "../connection_selector/connection_selector.h"
 #include "../connection_window/connection_window.h"
 #include "../query_page/query_page.h"
+#include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
@@ -15,8 +16,6 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
@@ -29,12 +28,6 @@
 #include <QWidget>
 
 namespace {
-constexpr int DEFAULT_WIDTH = 943;
-constexpr int DEFAULT_HEIGHT = 349;
-constexpr int CONTENT_STRETCH_TABLES = 1;
-constexpr int CONTENT_STRETCH_QUERY = 3;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
 constexpr int MAX_HISTORY_ENTRIES = 10;
 } // namespace
 
@@ -72,45 +65,53 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent)
 
 void dbMain::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *verticalLayoutMain = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayoutMain);
 
-    toolbarGroupBox = new QGroupBox(this);
+    toolbarGroupBox = DevTools::Ui::createPane(tr("Toolbar"), this);
+    DevTools::Ui::configureToolbarPane(toolbarGroupBox);
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
+    DevTools::Ui::applyPanelLayout(toolbarLayout);
 
     refreshTableButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureIconButton(refreshTableButton, QStringLiteral("refresh"),
+                                      tr("Refresh Tables"));
     refreshTableButton->setIcon(
         IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     toolbarLayout->addWidget(refreshTableButton);
 
-    auto *horizontalSpacer =
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    toolbarLayout->addItem(horizontalSpacer);
+    toolbarLayout->addStretch();
 
     connectionSettingsButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(connectionSettingsButton);
     toolbarLayout->addWidget(connectionSettingsButton);
 
     addQueryTabButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(addQueryTabButton);
     toolbarLayout->addWidget(addQueryTabButton);
 
     verticalLayoutMain->addWidget(toolbarGroupBox);
 
     auto *contentLayout = new QHBoxLayout();
+    DevTools::Ui::applyContentLayout(contentLayout);
 
-    tablesGroupBox = new QGroupBox(this);
+    tablesGroupBox = DevTools::Ui::createPane(QString(), this);
+    tablesGroupBox->setFlat(true);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
+    DevTools::Ui::applyPanelLayout(tablesLayout);
     tableListWidget = new QListWidget(tablesGroupBox);
+    DevTools::Ui::configureItemView(tableListWidget);
     tablesLayout->addWidget(tableListWidget);
-    contentLayout->addWidget(tablesGroupBox, CONTENT_STRETCH_TABLES);
+    contentLayout->addWidget(tablesGroupBox, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
 
-    queryGroupBox = new QGroupBox(this);
+    queryGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *queryLayout = new QVBoxLayout(queryGroupBox);
+    DevTools::Ui::applyPanelLayout(queryLayout);
     queryTabWidget = new QTabWidget(queryGroupBox);
     queryTabWidget->setCurrentIndex(-1);
     queryTabWidget->setTabsClosable(true);
     queryLayout->addWidget(queryTabWidget);
-    contentLayout->addWidget(queryGroupBox, CONTENT_STRETCH_QUERY);
+    contentLayout->addWidget(queryGroupBox, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 
     verticalLayoutMain->addLayout(contentLayout);
 
@@ -130,9 +131,9 @@ void dbMain::retranslateUi()
 
 void dbMain::handleAddQueryTabButtonClick()
 {
-    auto *page = new QueryPage(this);
+    auto *page = new QueryPage(db, this);
 
-    QString const baseName = "Query";
+    QString const baseName = tr("Query");
     int counter = 1;
     QString newTabName;
 
@@ -223,9 +224,11 @@ void dbMain::handleTabCloseRequested(int index)
 
 void dbMain::populateTableList()
 {
-    QSqlQuery query("SELECT name FROM sqlite_master WHERE type='table';", db);
-    while (query.next()) {
-        tableListWidget->addItem(query.value(0).toString());
+    QIcon const tableIcon =
+        IconUtils::themedIcon(QStringLiteral("database"), QStyle::SP_DriveHDIcon);
+    for (const QString &tableName : db.tables(QSql::Tables)) {
+        auto *const item = new QListWidgetItem(tableIcon, tableName, tableListWidget);
+        DevTools::Ui::configureListItem(item);
     }
 }
 
@@ -246,22 +249,30 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     model->select();
 
     auto *tableView = new QTableView;
+    DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);
+    DevTools::Ui::fitTableViewToContents(tableView);
 
     // 更新ボタン
     auto *refreshButton = new QPushButton;
+    DevTools::Ui::configureIconButton(refreshButton, QStringLiteral("refresh"), tr("Refresh"));
     refreshButton->setIcon(
         IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     refreshButton->setToolTip(tr("Refresh"));
-    connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
+    connect(refreshButton, &QPushButton::clicked, this, [model, tableView]() {
+        model->select();
+        DevTools::Ui::fitTableViewToContents(tableView);
+    });
     // 左寄せのレイアウト
     auto *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(refreshButton);
-    buttonLayout->addStretch();
+    buttonLayout->addWidget(refreshButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Leading);
 
     auto *mainLayout = new QVBoxLayout;
+    DevTools::Ui::applyPanelLayout(mainLayout);
     mainLayout->addLayout(buttonLayout); // 更新ボタン
     mainLayout->addWidget(tableView);    // テーブルビュー
+    mainLayout->addStretch();
 
     auto *container = new QWidget;
     container->setLayout(mainLayout);

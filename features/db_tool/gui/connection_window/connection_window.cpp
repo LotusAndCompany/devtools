@@ -1,5 +1,7 @@
 #include "connection_window.h"
 
+#include "features/framework/gui/design_system.h"
+
 #include <QComboBox>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -7,7 +9,8 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QFont>
+#include <QFormLayout>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -20,12 +23,6 @@
 #include <QVBoxLayout>
 
 namespace {
-constexpr int DEFAULT_WIDTH = 621;
-constexpr int DEFAULT_HEIGHT = 600;
-constexpr int FIXED_HEIGHT_FULL = 600;
-constexpr int FIXED_HEIGHT_SQLITE = 300;
-constexpr int LAYOUT_SPACING = 25;
-
 bool isSQLiteFilePath(const QString &filePath)
 {
     QFileInfo const fileInfo(filePath);
@@ -75,68 +72,88 @@ ConnectionWindow::ConnectionWindow(QWidget *parent) : QWidget(parent)
 
 void ConnectionWindow::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    QFont baseFont = font();
-    baseFont.setFamily(".AppleSystemUIFont");
-    setFont(baseFont);
-
-    setAutoFillBackground(false);
+    DevTools::Ui::configureDialog(this);
 
     auto *verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setSpacing(LAYOUT_SPACING);
+    DevTools::Ui::applyPageLayout(verticalLayout);
 
-    dbTypeLabel = new QLabel(this);
-    verticalLayout->addWidget(dbTypeLabel);
+    form_group_box = DevTools::Ui::createPane(QString(), this);
+    DevTools::Ui::configureCompactPane(form_group_box);
+    auto *formGroupLayout = new QVBoxLayout(form_group_box);
+    DevTools::Ui::applyPanelLayout(formGroupLayout);
 
-    dbTypeComboBox = new QComboBox(this);
-    dbTypeComboBox->addItem(QString());
-    verticalLayout->addWidget(dbTypeComboBox);
+    auto *formLayout = new QFormLayout;
+    DevTools::Ui::configureInlineFormLayout(formLayout);
+    buildFormFields(formLayout);
+    formGroupLayout->addLayout(formLayout);
+    verticalLayout->addWidget(form_group_box);
+    verticalLayout->addStretch();
 
-    hostNameLabel = new QLabel(this);
-    verticalLayout->addWidget(hostNameLabel);
-
-    hostNameLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(hostNameLineEdit);
-
-    dbNameLabel = new QLabel(this);
-    verticalLayout->addWidget(dbNameLabel);
-
-    auto *dbNameLayout = new QHBoxLayout();
-    dbNamelineEdit = new QLineEdit(this);
-    dbNameLayout->addWidget(dbNamelineEdit);
-    browseButton = new QPushButton(this);
-    dbNameLayout->addWidget(browseButton);
-    verticalLayout->addLayout(dbNameLayout);
-
-    userNameLabel = new QLabel(this);
-    verticalLayout->addWidget(userNameLabel);
-
-    userNameLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(userNameLineEdit);
-
-    passwordLabel = new QLabel(this);
-    verticalLayout->addWidget(passwordLabel);
-
-    passwordLineEdit = new QLineEdit(this);
-    verticalLayout->addWidget(passwordLineEdit);
-
-    auto *buttonLayout = new QHBoxLayout();
-    ConnectPushButton = new QPushButton(this);
-    buttonLayout->addWidget(ConnectPushButton);
-    ClosePushButton = new QPushButton(this);
-    buttonLayout->addWidget(ClosePushButton);
-    verticalLayout->addLayout(buttonLayout);
+    buildActionButtons(verticalLayout);
 
     retranslateUi();
+}
+
+void ConnectionWindow::buildFormFields(QFormLayout *formLayout)
+{
+    dbTypeLabel = new QLabel(this);
+    dbTypeComboBox = new QComboBox(this);
+    dbTypeComboBox->setObjectName(QStringLiteral("databaseTypeComboBox"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QSQLITE"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QMYSQL"));
+    dbTypeComboBox->addItem(QString(), QStringLiteral("QPSQL"));
+    DevTools::Ui::configureComboBox(dbTypeComboBox);
+    formLayout->addRow(dbTypeLabel, dbTypeComboBox);
+
+    hostNameLabel = new QLabel(this);
+    hostNameLineEdit = new QLineEdit(this);
+    DevTools::Ui::configureLineEdit(hostNameLineEdit);
+    formLayout->addRow(hostNameLabel, hostNameLineEdit);
+
+    dbNameLabel = new QLabel(this);
+    auto *dbNameLayout = new QHBoxLayout();
+    DevTools::Ui::applyInlineLayout(dbNameLayout);
+    dbNamelineEdit = new QLineEdit(this);
+    DevTools::Ui::configureLineEdit(dbNamelineEdit);
+    dbNameLayout->addWidget(dbNamelineEdit);
+    browseButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(browseButton);
+    dbNameLayout->addWidget(browseButton);
+    formLayout->addRow(dbNameLabel, dbNameLayout);
+
+    userNameLabel = new QLabel(this);
+    userNameLineEdit = new QLineEdit(this);
+    DevTools::Ui::configureLineEdit(userNameLineEdit);
+    formLayout->addRow(userNameLabel, userNameLineEdit);
+
+    passwordLabel = new QLabel(this);
+    passwordLineEdit = new QLineEdit(this);
+    passwordLineEdit->setEchoMode(QLineEdit::Password);
+    DevTools::Ui::configureLineEdit(passwordLineEdit);
+    formLayout->addRow(passwordLabel, passwordLineEdit);
+}
+
+void ConnectionWindow::buildActionButtons(QVBoxLayout *verticalLayout)
+{
+    auto *buttonLayout = new QHBoxLayout();
+    ConnectPushButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(ConnectPushButton);
+    buttonLayout->addWidget(ConnectPushButton);
+    ClosePushButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(ClosePushButton);
+    buttonLayout->addWidget(ClosePushButton);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
+    verticalLayout->addLayout(buttonLayout);
 }
 
 void ConnectionWindow::retranslateUi()
 {
     setWindowTitle(tr("New Connection"));
+    form_group_box->setTitle(tr("New Connection"));
     dbTypeLabel->setText(tr("Database Type"));
-    if (dbTypeComboBox->count() > 0) {
-        dbTypeComboBox->setItemText(0, tr("SQLite"));
+    const QStringList databaseTypeNames = {tr("SQLite"), tr("MySQL"), tr("PostgreSQL")};
+    for (int i = 0; i < databaseTypeNames.size() && i < dbTypeComboBox->count(); ++i) {
+        dbTypeComboBox->setItemText(i, databaseTypeNames[i]);
     }
     hostNameLabel->setText(tr("Host Name"));
     dbNameLabel->setText(tr("Database Name"));
@@ -154,15 +171,8 @@ void ConnectionWindow::init()
 
 void ConnectionWindow::selectedDBType()
 {
-    QString const dbTypeText = dbTypeComboBox->currentText();
-    bool const isSQLite = (dbTypeText == tr("SQLite"));
+    bool const isSQLite = (dbTypeComboBox->currentData().toString() == "QSQLITE");
     bool const display = !isSQLite;
-
-    if (display) {
-        this->setFixedHeight(FIXED_HEIGHT_FULL);
-    } else {
-        this->setFixedHeight(FIXED_HEIGHT_SQLITE);
-    }
 
     hostNameLabel->setVisible(display);
     hostNameLineEdit->setVisible(display);
@@ -195,16 +205,8 @@ void ConnectionWindow::createNewConnect()
     const QString userName = userNameLineEdit->text();
     const QString password = passwordLineEdit->text();
 
-    QString databaseType;
     QString const dbTypeText = dbTypeComboBox->currentText();
-
-    if (dbTypeText == tr("SQLite")) {
-        databaseType = "QSQLITE";
-    } else if (dbTypeText == "MySQL") {
-        databaseType = "QMYSQL";
-    } else if (dbTypeText == "PostgreSQL") {
-        databaseType = "QPSQL";
-    }
+    QString const databaseType = dbTypeComboBox->currentData().toString();
     if (databaseType.isEmpty()) {
         QMessageBox::warning(this, tr("Error"), tr("Database type not supported."));
         return;
@@ -269,7 +271,7 @@ void ConnectionWindow::changeEvent(QEvent *event)
 
 bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched != dbNamelineEdit || dbTypeComboBox->currentText() != tr("SQLite")) {
+    if (watched != dbNamelineEdit || dbTypeComboBox->currentData().toString() != "QSQLITE") {
         return QWidget::eventFilter(watched, event);
     }
 

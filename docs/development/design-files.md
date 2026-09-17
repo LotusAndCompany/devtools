@@ -1,27 +1,28 @@
 # Design Files
 
 UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`.
+Some screens are design-only and are not available in the current application yet.
 
 ## File Layout
 
-```
-designs/
-└── screens/
-    ├── welcome-page.pen
-    ├── image-resize.pen
-    ├── image-rotation.pen
-    ├── image-division.pen
-    ├── image-transparent.pen
-    ├── phrase-generation.pen
-    ├── command-generator.pen
-    ├── http-request.pen
-    ├── data-conversion.pen
-    ├── qr-code-generation.pen
-    ├── db-tool.pen
-    ├── markdown-preview.pen
-    ├── regex-tester.pen
-    ├── color-converter.pen
-    └── dialogs.pen        # Settings / DB Connection / About 等のダイアログ群
+```mermaid
+flowchart TD
+    designs["designs/"] --> screens["screens/"]
+    screens --> welcome["welcome-page.pen"]
+    screens --> resize["image-resize.pen"]
+    screens --> rotation["image-rotation.pen"]
+    screens --> division["image-division.pen"]
+    screens --> transparent["image-transparent.pen"]
+    screens --> phrase["phrase-generation.pen"]
+    screens --> command["command-generator.pen"]
+    screens --> http["http-request.pen"]
+    screens --> conversion["data-conversion.pen"]
+    screens --> qr["qr-code-generation.pen"]
+    screens --> db["db-tool.pen"]
+    screens --> markdown["markdown-preview.pen"]
+    screens --> regex["regex-tester.pen"]
+    screens --> color["color-converter.pen"]
+    screens --> dialogs["dialogs.pen<br/>(Settings / DB Connection / About)"]
 ```
 
 One file per screen (or per related dialog group). The sidebar and other shared chrome are intentionally excluded from individual screen files so that an edit to one screen never touches another.

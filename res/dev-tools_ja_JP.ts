@@ -39,6 +39,14 @@
         <source>Failed to load license information.</source>
         <translation>ライセンス情報を読み込めませんでした。</translation>
     </message>
+    <message>
+        <source>Copyright</source>
+        <translation>著作権</translation>
+    </message>
+    <message>
+        <source>2025 © Lotus&amp;Company Inc. All rights reserved.</source>
+        <translation>2025 © Lotus&amp;Company Inc. 無断転載を禁じます。</translation>
+    </message>
 </context>
 <context>
     <name>BasicImageView</name>
@@ -72,10 +80,6 @@
 </context>
 <context>
     <name>Command</name>
-    <message>
-        <source>GroupBox</source>
-        <translation>グループボックス</translation>
-    </message>
     <message>
         <source>Generate command</source>
         <translation>コマンド生成</translation>
@@ -276,6 +280,18 @@
         <source>Container</source>
         <translation>コンテナ</translation>
     </message>
+    <message>
+        <source>Input</source>
+        <translation>入力</translation>
+    </message>
+    <message>
+        <source>Generated Result</source>
+        <translation>生成結果</translation>
+    </message>
+    <message>
+        <source>Command Generation</source>
+        <translation>コマンド生成</translation>
+    </message>
 </context>
 <context>
     <name>ConnectionSelector</name>
@@ -394,6 +410,21 @@
         <source>Database connection established.</source>
         <translation>データベースに接続しました。</translation>
     </message>
+    <message>
+        <source>MySQL</source>
+        <translation>MySQL</translation>
+    </message>
+    <message>
+        <source>PostgreSQL</source>
+        <translation>PostgreSQL</translation>
+    </message>
+</context>
+<context>
+    <name>ContentsArea</name>
+    <message>
+        <source>Under development...</source>
+        <translation>開発中です…</translation>
+    </message>
 </context>
 <context>
     <name>DataConversion</name>
@@ -465,10 +496,6 @@
         <translation>入力文字列</translation>
     </message>
     <message>
-        <source>Error &amp; waning messages</source>
-        <translation>エラー・警告メッセージ</translation>
-    </message>
-    <message>
         <source>YAML (Flow style)</source>
         <translation>YAML (Flowスタイル)</translation>
     </message>
@@ -503,6 +530,26 @@
     <message>
         <source>Save</source>
         <translation>保存</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation>入力</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>出力</translation>
+    </message>
+    <message>
+        <source>Error &amp; warning messages</source>
+        <translation>エラーと警告メッセージ</translation>
+    </message>
+    <message>
+        <source>Plain Text (*.txt *.json *.toml *.yml *.yaml)</source>
+        <translation>プレーンテキスト (*.txt *.json *.toml *.yml *.yaml)</translation>
     </message>
 </context>
 <context>
@@ -669,6 +716,18 @@
         <source>Failed to save divided images.</source>
         <translation>分割画像の保存に失敗しました。</translation>
     </message>
+    <message>
+        <source>Operation Panel</source>
+        <translation>操作パネル</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>画像</translation>
+    </message>
+    <message>
+        <source>Image Tools</source>
+        <translation>画像ツール</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -691,6 +750,14 @@
     <message>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示</translation>
+    </message>
+    <message>
+        <source>Toggle sidebar</source>
+        <translation>サイドバーの表示切替</translation>
+    </message>
+    <message>
+        <source>Always on top</source>
+        <translation>常に最前面に表示</translation>
     </message>
 </context>
 <context>
@@ -754,6 +821,10 @@
     <message>
         <source>Failed to export HTML</source>
         <translation>HTML のエクスポートに失敗しました</translation>
+    </message>
+    <message>
+        <source>Toolbar</source>
+        <translation>ツールバー</translation>
     </message>
 </context>
 <context>
@@ -1299,10 +1370,6 @@ Choose a tool from the side panel</source>
         <translation>GET</translation>
     </message>
     <message>
-        <source>API Tool</source>
-        <translation>APIツール</translation>
-    </message>
-    <message>
         <source>POST</source>
         <translation>POST</translation>
     </message>
@@ -1353,6 +1420,26 @@ Choose a tool from the side panel</source>
     <message>
         <source>Status: %1 %2 Time: %3ms Size: %4</source>
         <translation>ステータス: %1 %2 時間: %3ms サイズ: %4</translation>
+    </message>
+    <message>
+        <source>Request</source>
+        <translation>リクエスト</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation>オプション</translation>
+    </message>
+    <message>
+        <source>Response</source>
+        <translation>レスポンス</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>エラー</translation>
+    </message>
+    <message>
+        <source>HTTP Request</source>
+        <translation>HTTPリクエスト</translation>
     </message>
 </context>
 <context>
@@ -1408,6 +1495,14 @@ Choose a tool from the side panel</source>
     <message>
         <source>Refresh</source>
         <translation>更新</translation>
+    </message>
+    <message>
+        <source>Refresh Tables</source>
+        <translation>テーブルを更新</translation>
+    </message>
+    <message>
+        <source>DB Connection Settings</source>
+        <translation>DB接続設定</translation>
     </message>
 </context>
 <context>
@@ -1672,16 +1767,37 @@ Choose a tool from the side panel</source>
         <source>Generated ID: f47ac10b-58cc-4372-a567-0e02b2c3d479.</source>
         <translation>生成されたID: f47ac10b-58cc-4372-a567-0e02b2c3d479</translation>
     </message>
-</context>
-<context>
-    <name>home</name>
     <message>
-        <source>Refresh Tables</source>
-        <translation>テーブル更新</translation>
+        <source>Matches</source>
+        <translation>マッチ結果</translation>
     </message>
     <message>
-        <source>DB Connection Settings</source>
-        <translation>DB接続設定</translation>
+        <source>Quick Reference</source>
+        <translation>クイックリファレンス</translation>
+    </message>
+    <message>
+        <source>Match %1: [%2, %3]
+&quot;%4&quot;</source>
+        <translation>マッチ %1: [%2, %3]
+&quot;%4&quot;</translation>
+    </message>
+    <message>
+        <source>  Group %1: [%2, %3]
+  &quot;%4&quot;</source>
+        <translation>  グループ %1: [%2, %3]
+  &quot;%4&quot;</translation>
+    </message>
+    <message>
+        <source>Match %1: &quot;%2&quot; [%3, %4]
+</source>
+        <translation>マッチ %1: &quot;%2&quot; [%3, %4]
+</translation>
+    </message>
+    <message>
+        <source>  Group %1: &quot;%2&quot; [%3, %4]
+</source>
+        <translation>  グループ %1: &quot;%2&quot; [%3, %4]
+</translation>
     </message>
 </context>
 <context>

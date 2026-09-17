@@ -5,16 +5,18 @@
 #include <QStringList>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
+class QHBoxLayout;
 class QLabel;
 class QLineEdit;
 class QNetworkAccessManager;
 class QNetworkReply;
 class QPushButton;
-class QSplitter;
 class QStandardItemModel;
-class QStringListModel;
+class QTabWidget;
 class QTableView;
-class QTextEdit;
+class QPlainTextEdit;
 
 /**
  * @brief HTTPリクエストを送信するAPIテストツール
@@ -61,6 +63,7 @@ private slots:
      * @brief レスポンスビューを設定する
      */
     void setupResponseView();
+    void retranslateUi();
 
 private:
     /**
@@ -70,8 +73,12 @@ private:
 
     /// HTTPメソッド選択用のコンボボックス
     QComboBox *method_combo{};
-    /// URL入力用のテキストエディット
-    QTextEdit *url_edit{};
+    QGroupBox *request_container{};
+    QGroupBox *tabs_container{};
+    QGroupBox *response_container{};
+    QTabWidget *tab_widget{};
+    /// URL入力用のラインエディット
+    QLineEdit *url_edit{};
     /// 送信ボタン
     QPushButton *send_button{};
     /// パラメータ入力用のテーブルビュー
@@ -81,9 +88,9 @@ private:
     /// 認証用のパスワード入力
     QLineEdit *password_edit{};
     /// リクエストボディ入力用のテキストエディット
-    QTextEdit *body_edit{};
-    /// メインスプリッター
-    QSplitter *main_splitter{};
+    QPlainTextEdit *body_edit{};
+    /// オプションとレスポンスを中央で等分するレイアウト
+    QHBoxLayout *content_layout{};
 
     /// ネットワークアクセスマネージャ
     QNetworkAccessManager *network_manager;
@@ -91,12 +98,17 @@ private:
     QStringList list;
     /// パラメータテーブルのモデル
     QStandardItemModel *params_model;
-    /// レスポンス表示用のモデル
-    QStringListModel *response_model{};
+    /// レスポンス表示用のテキストビュー
+    QPlainTextEdit *response_edit{};
     /// ステータス表示用のラベル
     QLabel *status_label{};
+    QLabel *username_label{};
+    QLabel *password_label{};
     /// リクエスト開始時刻
     qint64 request_start_time{};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // API_TOOL_H

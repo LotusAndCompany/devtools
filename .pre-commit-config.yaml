@@ -3,7 +3,7 @@
 #
 # Installation:
 #   brew install pre-commit  # or: pip install pre-commit
-#   pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+#   pre-commit install --install-hooks -t pre-commit -t pre-push
 
 default_language_version:
   python: python3
@@ -30,27 +30,6 @@ repos:
           )$
         args:
           - --style=file
-
-  # ===========================================================================
-  # Conventional Commits (commit message validation)
-  # ===========================================================================
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.4.0
-    hooks:
-      - id: conventional-pre-commit
-        name: conventional-commit
-        stages: [commit-msg]
-        args:
-          - feat
-          - fix
-          - docs
-          - style
-          - refactor
-          - test
-          - chore
-          - build
-          - ci
-          - perf
 
   # ===========================================================================
   # Basic file checks
@@ -88,7 +67,6 @@ repos:
         files: |
           (?x)^(
             AGENTS\.md|
-            GEMINI\.md|
             \.agents/README\.md|
             \.agents/rules/.*\.md|
             \.claude/rules/.*\.md|

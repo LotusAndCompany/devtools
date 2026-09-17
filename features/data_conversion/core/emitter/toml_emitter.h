@@ -43,7 +43,7 @@ private:
      * @brief QVaritant型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param value QVaritant型の値
-     * @param style 出力時のインデント(一部非対応あり)
+     * @param indentation 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */
@@ -54,7 +54,7 @@ private:
      * @brief QVariantList型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param list QVariantList型の値
-     * @param style 出力時のインデント(一部非対応あり)
+     * @param indentation 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */
@@ -65,7 +65,7 @@ private:
      * @brief QVariantMap型をtoml::basic_value<toml::type_config>型に変換する
      * @param key このvalueのkey
      * @param map QVariantMap型の値
-     * @param style 出力時のインデント(一部非対応あり)
+     * @param indentation 出力時のインデント(一部非対応あり)
      * @return toml::basic_value<toml::type_config>型の値
      * @exception InvalidArgumentException<int> tomlに変換できない値の場合
      */

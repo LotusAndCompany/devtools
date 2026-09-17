@@ -11,9 +11,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMap>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QStackedWidget>
-#include <QTextEdit>
 #include <QWidget>
 
 /**
@@ -174,7 +174,7 @@ private:
     /// QRコード画像表示用のラベル
     QLabel *qrCodeLabel{nullptr};
     /// コンテンツプレビュー用のテキストエディット
-    QTextEdit *contentPreviewEdit{nullptr};
+    QPlainTextEdit *contentPreviewEdit{nullptr};
 
     /// 現在のQRコードタイプ
     QRCodeType currentType{QRCodeType::Text};

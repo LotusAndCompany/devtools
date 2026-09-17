@@ -4,7 +4,7 @@ This document describes the cross-tool AI agent configuration used in this proje
 
 ## Overview
 
-AI coding tools (Claude Code, Gemini CLI, OpenAI Codex, CodeRabbit, etc.) each have their own configuration format. Rather than maintaining duplicate guidelines in every tool's config, this project uses a layered architecture:
+AI coding tools (Claude Code, OpenAI Codex, CodeRabbit, etc.) each have their own configuration format. Rather than maintaining duplicate guidelines in every tool's config, this project uses a layered architecture:
 
 1. **AGENTS.md** — shared global guidelines that all tools can read
 2. **.agents/rules/** — shared path-scoped rules with a Claude Code-like shape
@@ -14,32 +14,17 @@ This means a global change to AGENTS.md, or a path-scoped change in `.agents/rul
 
 ## Architecture
 
-```text
-AGENTS.md  (global source of truth)
-    │
-    ├── .agents/rules/ ........ shared path-scoped rules
-    │   ├── cmake.md
-    │   ├── cpp-style.md
-    │   ├── design-files.md
-    │   ├── docs.md
-    │   ├── exec-plans.md
-    │   ├── generated-files.md
-    │   ├── git-workflow.md
-    │   ├── i18n.md
-    │   ├── project.md
-    │   └── testing.md
-    │
-    ├── opencode.json ......... loads .agents/rules/*.md via instructions glob
-    │
-    ├── CLAUDE.md .............. @AGENTS.md import + author rules
-    │   └── .claude/rules/ ..... thin adapters importing .agents/rules/
-    │
-    ├── GEMINI.md .............. @AGENTS.md + .agents/rules/ imports + author rules
-    │   └── .gemini/settings.json .. fileName reference to GEMINI.md
-    ├── .codex/config.toml ..... project settings (native AGENTS.md discovery)
-    │   └── .codex/rules/ ...... command execution control (Starlark)
-    │
-    └── .coderabbit.yaml ....... independent config, aligned with shared guidance
+```mermaid
+flowchart TD
+    agents["AGENTS.md<br/>(global source of truth)"]
+    agents --> rules[".agents/rules/<br/>shared path-scoped rules"]
+    rules --> rule_files["cmake.md, cpp-style.md, design-files.md,<br/>docs.md, generated-files.md, git-workflow.md,<br/>i18n.md, project.md, testing.md"]
+    agents --> opencode["opencode.json<br/>loads .agents/rules/*.md"]
+    agents --> claude["CLAUDE.md<br/>@AGENTS.md import + author rules"]
+    claude --> claude_rules[".claude/rules/<br/>thin adapters"]
+    agents --> codex[".codex/config.toml<br/>native AGENTS.md discovery"]
+    codex --> codex_rules[".codex/rules/<br/>command execution control"]
+    coderabbit[".coderabbit.yaml<br/>independent aligned config"]
 ```
 
 ## Bootstrap Guidelines (AGENTS.md)
@@ -82,9 +67,8 @@ Current shared rules:
 | `.agents/rules/cpp-style.md` | C++17, Qt, ownership, and formatting rules |
 | `.agents/rules/design-files.md` | Pencil `.pen` design file handling |
 | `.agents/rules/docs.md` | English/Japanese documentation rules |
-| `.agents/rules/exec-plans.md` | Execution plan and tech-debt tracker rules |
 | `.agents/rules/generated-files.md` | Build outputs and generated file handling |
-| `.agents/rules/git-workflow.md` | Conventional Commits and release-please guardrails |
+| `.agents/rules/git-workflow.md` | PR title and release-please guardrails |
 | `.agents/rules/i18n.md` | Qt translation workflow |
 | `.agents/rules/project.md` | Build, architecture, dependencies, hooks, and harness rules |
 | `.agents/rules/testing.md` | Google Test and CTest rules |
@@ -102,7 +86,6 @@ The script regenerates:
 | Output | Source | Purpose |
 |--------|--------|---------|
 | `.claude/rules/*.md` | `.agents/rules/*.md` | Claude Code path-scoped adapters |
-| `GEMINI.md` generated import block | `.agents/rules/*.md` | Gemini shared rule imports |
 
 OpenCode does not require sync: `opencode.json` uses a glob pattern
 (`".agents/rules/*.md"`) in its `instructions` field, so it is
@@ -117,19 +100,6 @@ scripts/check-agent-harness.sh
 
 The check syncs adapters, compiles the sync script, checks diff whitespace, and
 fails if generated adapters are stale.
-
-## Execution Plans
-
-Complex or long-running agent work should use checked-in execution plans under
-`docs/exec-plans/`. Plans are intentionally lighter than formal specifications;
-they preserve objective, scope, relevant rules, validation commands, decisions,
-and completion notes across tool sessions and context compaction.
-
-Use:
-
-- `docs/exec-plans/active/` for work in progress
-- `docs/exec-plans/completed/` for useful historical plans
-- `docs/exec-plans/tech-debt-tracker.md` for durable follow-up items
 
 ## Tool-Specific Configurations
 
@@ -158,15 +128,6 @@ hint to decide applicability.
 | `.claude/settings.local.json` | Tool permissions (local, not committed) |
 
 **How it works**: Claude Code reads `CLAUDE.md` at startup, which uses `@AGENTS.md` to inline the shared global guidelines. The `.claude/rules/` directory provides path-scoped adapters; each adapter keeps Claude's `paths` front matter and imports the matching shared rule from `.agents/rules/`.
-
-### Gemini CLI
-
-| File | Purpose |
-|------|---------|
-| `GEMINI.md` | Imports AGENTS.md and `.agents/rules/*.md`, adds author attribution rules |
-| `.gemini/settings.json` | Points Gemini to read `GEMINI.md` as context |
-
-**How it works**: Gemini CLI reads `GEMINI.md` at startup. `GEMINI.md` imports `AGENTS.md` and each shared rule file. Gemini does not need its own path-scoped rule directory; it should use the `paths` front matter in shared rules as the applicability hint.
 
 ### OpenAI Codex
 
@@ -197,7 +158,7 @@ should appear in PR review comments.
 
 When adding support for a new AI coding assistant:
 
-1. **Check native AGENTS.md support** — Many tools (Codex, Gemini CLI, etc.) can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
+1. **Check native AGENTS.md support** — Many tools can read AGENTS.md or similar markdown files. If supported, configure the tool to read it.
 2. **Create a thin adapter** — If the tool supports path-scoped rules, adapt `.agents/rules/` rather than writing new guidance.
 3. **Create tool-specific config only for tool behavior** — Permission models, approval modes, author attribution rules, and UI settings belong in tool-specific files.
 4. **Do not duplicate shared content** — The tool-specific config should reference or import shared guidance where possible.
@@ -214,8 +175,6 @@ When adding support for a new AI coding assistant:
 | `CLAUDE.md` | Claude Code | Yes | Imports AGENTS.md + author rules |
 | `.claude/rules/*.md` | Claude Code | Yes | Path-scoped adapters importing shared rules |
 | `.claude/settings.local.json` | Claude Code | No | Local tool permissions |
-| `GEMINI.md` | Gemini CLI | Yes | Imports AGENTS.md, shared rules, and author rules |
-| `.gemini/settings.json` | Gemini CLI | Yes | Context file reference |
 | `.codex/config.toml` | OpenAI Codex | Yes | Project settings |
 | `.codex/rules/*.rules` | OpenAI Codex | Yes | Command execution rules |
 | `.coderabbit.yaml` | CodeRabbit | Yes | PR review configuration |
