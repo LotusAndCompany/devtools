@@ -43,6 +43,10 @@ bool ContentsArea::openSQLiteFileInDbTool(const QString &filePath)
     return cachedDbMain->connectSQLiteFile(filePath);
 }
 
+/**
+ * @brief 選択されたツールの画面に切り替え、DB ツールの状態はキャッシュして保持する
+ * @param id 表示するサイドメニュー項目。未対応の ID には開発中の表示を行う
+ */
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent != nullptr) {

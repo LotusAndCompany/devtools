@@ -16,6 +16,9 @@ private slots:
     static void test_groupSideBySide();
 };
 
+/**
+ * @brief 空入力、改行コード、末尾の改行、途中の空行の分割結果を検証する
+ */
 void TestDiffTool::test_splitLines()
 {
     QCOMPARE(DiffTool::splitLines(QString()), QStringList());
@@ -32,6 +35,9 @@ void TestDiffTool::test_splitLines()
              (QStringList{QStringLiteral("a"), QString(), QStringLiteral("b")}));
 }
 
+/**
+ * @brief 同一入力が一致行と左右の1始まりの行番号を返すことを検証する
+ */
 void TestDiffTool::test_diffLines_equal()
 {
     const QStringList left{QStringLiteral("a"), QStringLiteral("b")};
@@ -47,6 +53,9 @@ void TestDiffTool::test_diffLines_equal()
     QCOMPARE(lines.at(1).right_line_number, 2);
 }
 
+/**
+ * @brief 中間行の追加が内容と左右の行番号に反映されることを検証する
+ */
 void TestDiffTool::test_diffLines_insert()
 {
     const QStringList left{QStringLiteral("a"), QStringLiteral("b")};
@@ -62,6 +71,9 @@ void TestDiffTool::test_diffLines_insert()
     QCOMPARE(lines.at(2).operation, DiffOperation::Equal);
 }
 
+/**
+ * @brief 中間行の削除が内容と左右の行番号に反映されることを検証する
+ */
 void TestDiffTool::test_diffLines_delete()
 {
     const QStringList left{QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")};
@@ -77,6 +89,9 @@ void TestDiffTool::test_diffLines_delete()
     QCOMPARE(lines.at(2).operation, DiffOperation::Equal);
 }
 
+/**
+ * @brief 行の置換が削除に続く追加として返されることを検証する
+ */
 void TestDiffTool::test_diffLines_modify()
 {
     const QStringList left{QStringLiteral("a"), QStringLiteral("b")};
@@ -91,6 +106,9 @@ void TestDiffTool::test_diffLines_modify()
     QCOMPARE(lines.at(2).text, QStringLiteral("c"));
 }
 
+/**
+ * @brief 一致行と単一行の置換が左右のテキストと変更フラグに変換されることを検証する
+ */
 void TestDiffTool::test_groupSideBySide()
 {
     const QStringList left{QStringLiteral("a"), QStringLiteral("b")};
