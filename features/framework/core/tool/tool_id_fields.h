@@ -34,8 +34,10 @@
     QR_CODE_GENERATION,           \
     /** Markdownプレビュー */      \
     MARKDOWN_PREVIEW,             \
+    /** 正規表現テスター */        \
+    REGEX_TESTER,                \
     /** テキスト差分 */             \
-    DIFF_TOOL                     // 末尾のカンマは不要
+    DIFF_TOOL                    // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

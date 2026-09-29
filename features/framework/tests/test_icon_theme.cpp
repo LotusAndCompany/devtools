@@ -37,6 +37,7 @@ private slots:
     void initTestCase();
     static void resolvesMaterialSymbols();
     static void resolvesHttpSidemenuIcon();
+    static void resolvesRegexTesterSidemenuIcon();
     static void fallsBackForMissingGlyph();
     static void followsApplicationPalette();
 };
@@ -66,6 +67,7 @@ void TestIconTheme::resolvesMaterialSymbols()
         QStringLiteral("library_books"),
         QStringLiteral("link"),
         QStringLiteral("qr_code"),
+        QStringLiteral("regular_expression"),
         QStringLiteral("refresh"),
         QStringLiteral("rotate_left"),
         QStringLiteral("rotate_right"),
@@ -97,6 +99,15 @@ void TestIconTheme::resolvesHttpSidemenuIcon()
     const QIcon icon = Sidemenu::icon(Sidemenu::ID::HTTP_REQUEST);
 
     QCOMPARE(icon.name(), QStringLiteral("lan"));
+    QVERIFY(!icon.isNull());
+    QVERIFY(firstOpaqueColor(icon.pixmap(QSize(20, 20))).isValid());
+}
+
+void TestIconTheme::resolvesRegexTesterSidemenuIcon()
+{
+    const QIcon icon = Sidemenu::icon(Sidemenu::ID::REGEX_TESTER);
+
+    QCOMPARE(icon.name(), QStringLiteral("regular_expression"));
     QVERIFY(!icon.isNull());
     QVERIFY(firstOpaqueColor(icon.pixmap(QSize(20, 20))).isValid());
 }

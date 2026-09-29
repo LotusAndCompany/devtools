@@ -63,6 +63,8 @@ Tool::Translatable Tool::translatable(ID id)
         return Translatable{tr("DB Tool"), tr("Provides database-related functionalities")};
     case ID::MARKDOWN_PREVIEW:
         return Translatable{tr("Markdown Preview"), tr("Live preview of Markdown source")};
+    case ID::REGEX_TESTER:
+        return Translatable{tr("Regex Tester"), tr("Test and debug regular expressions")};
     case ID::DIFF_TOOL:
         return Translatable{
             tr("Diff Comparison Tool"),

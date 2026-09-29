@@ -70,6 +70,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DIFF_TOOL);
     registerItem(ID::DB_TOOL);
+    registerItem(ID::REGEX_TESTER);
 
     m_scrollAreaLayout->addStretch();
 
@@ -106,6 +107,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("qr_code"));
     case ID::MARKDOWN_PREVIEW:
         return IconUtils::themedIcon(QStringLiteral("article"));
+    case ID::REGEX_TESTER:
+        return IconUtils::themedIcon(QStringLiteral("regular_expression"));
     case ID::DIFF_TOOL:
         return IconUtils::themedIcon(QStringLiteral("difference"));
 
