@@ -23,6 +23,11 @@ constexpr int DEFAULT_WIDTH = 900;
 constexpr int DEFAULT_HEIGHT = 600;
 } // namespace
 
+/**
+ * @brief 入力エディタと差分表示を構築し、更新用のシグナルを接続する
+ * @param tool 対応するツール。親が未設定ならこのウィジェットの子にする
+ * @param parent 親ウィジェット
+ */
 DiffToolGUI::DiffToolGUI(DiffTool *tool, QWidget *parent) : GuiTool(parent), tool(tool)
 {
     buildUi();
@@ -41,6 +46,9 @@ DiffToolGUI::DiffToolGUI(DiffTool *tool, QWidget *parent) : GuiTool(parent), too
     renderDiff();
 }
 
+/**
+ * @brief 入力・表示ウィジェットと150msの単発更新タイマーを作成する
+ */
 void DiffToolGUI::buildUi()
 {
     resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -98,6 +106,12 @@ void DiffToolGUI::buildUi()
     retranslateUi();
 }
 
+/**
+ * @brief 見出しとエディタを縦に並べるペインを作成する
+ * @param[out] caption 作成した見出しラベルを受け取る参照
+ * @param editor ペインに再配置する入力エディタ
+ * @return このウィジェットを親とする新しいペイン
+ */
 QWidget *DiffToolGUI::buildEditorPane(QLabel *&caption, QPlainTextEdit *editor)
 {
     auto *pane = new QWidget(this);
@@ -113,6 +127,9 @@ QWidget *DiffToolGUI::buildEditorPane(QLabel *&caption, QPlainTextEdit *editor)
     return pane;
 }
 
+/**
+ * @brief タイトル、表示モード、見出し、入力ヒントを現在の言語で更新する
+ */
 void DiffToolGUI::retranslateUi()
 {
     setWindowTitle(tr("Diff Comparison Tool"));
@@ -124,6 +141,10 @@ void DiffToolGUI::retranslateUi()
     rightEditor->setPlaceholderText(tr("Paste modified text here..."));
 }
 
+/**
+ * @brief 言語変更で翻訳を更新し、パレット変更で差分を再描画する
+ * @param event 処理するイベント。その他は QWidget に委譲する
+ */
 void DiffToolGUI::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
@@ -138,23 +159,36 @@ void DiffToolGUI::changeEvent(QEvent *event)
     }
 }
 
+/**
+ * @brief 入力変更のたびに単発タイマーを再開して差分更新を遅延する
+ */
 void DiffToolGUI::onTextChanged()
 {
     // 入力のたびにタイマーを再スタートしてデバウンスする
     renderTimer->start();
 }
 
+/**
+ * @brief 現在選択されている表示モードで差分を即座に再描画する
+ * @param index 通知された選択位置（描画時にコンボボックスを参照するため未使用）
+ */
 void DiffToolGUI::onModeChanged(int index)
 {
     Q_UNUSED(index);
     renderDiff();
 }
 
+/**
+ * @brief 入力変更後の待機時間が経過したら差分を再描画する
+ */
 void DiffToolGUI::onRenderTimeout()
 {
     renderDiff();
 }
 
+/**
+ * @brief 両エディタの現在の内容を比較し、選択中の表示形式で結果を更新する
+ */
 void DiffToolGUI::renderDiff()
 {
     const auto lines = DiffTool::diff(leftEditor->toPlainText(), rightEditor->toPlainText());
@@ -166,6 +200,10 @@ void DiffToolGUI::renderDiff()
     }
 }
 
+/**
+ * @brief 現在の配色テーマに合う差分表示用のスタイルを生成する
+ * @return 文字色と追加・削除の背景色を含む HTML の style 要素
+ */
 QString DiffToolGUI::buildStyleSheet()
 {
     const bool dark = (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
@@ -184,6 +222,11 @@ QString DiffToolGUI::buildStyleSheet()
         .arg(textColor, addBg, delBg);
 }
 
+/**
+ * @brief 差分を1列に並べ、追加・削除の記号と背景色を付ける
+ * @param lines 表示する差分行
+ * @return 行のテキストをエスケープした HTML 文書
+ */
 QString DiffToolGUI::buildInlineHtml(const QVector<DiffLine> &lines)
 {
     QString html = QStringLiteral("<html><head>");
@@ -209,6 +252,11 @@ QString DiffToolGUI::buildInlineHtml(const QVector<DiffLine> &lines)
     return html;
 }
 
+/**
+ * @brief 差分を左右2列の表に変換し、変更セルに背景色を付ける
+ * @param lines 表示する差分行
+ * @return 行のテキストをエスケープした HTML 文書
+ */
 QString DiffToolGUI::buildSideBySideHtml(const QVector<DiffLine> &lines)
 {
     const auto rows = DiffTool::groupSideBySide(lines);

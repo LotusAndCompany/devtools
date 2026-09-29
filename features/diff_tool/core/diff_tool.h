@@ -54,6 +54,7 @@ public:
     DiffTool(DiffTool &&) = delete;
     DiffTool &operator=(const DiffTool &) = delete;
     DiffTool &operator=(DiffTool &&) = delete;
+    /// @brief インスタンスと QObject の親子関係で所有する子オブジェクトを破棄する
     ~DiffTool() override = default;
 
     /**

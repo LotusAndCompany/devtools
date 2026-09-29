@@ -29,6 +29,7 @@ class DiffToolGUI : public GuiTool
 
 public:
     explicit DiffToolGUI(DiffTool *tool, QWidget *parent = nullptr);
+    /// @brief インスタンスと QObject の親子関係で所有する子オブジェクトを破棄する
     ~DiffToolGUI() override = default;
     DiffToolGUI(DiffToolGUI &&) = delete;
     DiffToolGUI &operator=(DiffToolGUI &&) = delete;

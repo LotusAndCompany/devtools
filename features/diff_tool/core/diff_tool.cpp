@@ -2,8 +2,17 @@
 
 #include <vector>
 
+/**
+ * @brief 差分ツールの ID と翻訳情報を初期化する
+ * @param parent 親オブジェクト
+ */
 DiffTool::DiffTool(QObject *parent) : Tool(Tool::ID::DIFF_TOOL, "diff-tool", parent) {}
 
+/**
+ * @brief 改行コードを LF に統一し、末尾の改行による空要素を除いた行リストを返す
+ * @param text 分割するテキスト
+ * @return 空入力なら空リスト、それ以外は空行も保持した行リスト
+ */
 QStringList DiffTool::splitLines(const QString &text)
 {
     QString normalized = text;
@@ -17,6 +26,13 @@ QStringList DiffTool::splitLines(const QString &text)
     return lines;
 }
 
+/**
+ * @brief LCS に基づき、行番号付きの一致・削除・追加の列を返す
+ * @details 同長の候補では削除を優先する。時間・メモリ計算量は O(n*m)。
+ * @param left 変更前の行リスト
+ * @param right 変更後の行リスト
+ * @return 行番号は1始まりで、片側に存在しない行の番号は0
+ */
 QVector<DiffLine> DiffTool::diffLines(const QStringList &left, const QStringList &right)
 {
     const int n = static_cast<int>(left.size());
@@ -71,11 +87,23 @@ QVector<DiffLine> DiffTool::diffLines(const QStringList &left, const QStringList
     return result;
 }
 
+/**
+ * @brief 両テキストの改行を正規化して行単位の差分を返す
+ * @param left_text 変更前のテキスト
+ * @param right_text 変更後のテキスト
+ * @return 一致・削除・追加を表す差分行のリスト
+ */
 QVector<DiffLine> DiffTool::diff(const QString &left_text, const QString &right_text)
 {
     return diffLines(splitLines(left_text), splitLines(right_text));
 }
 
+/**
+ * @brief 差分行を左右の表示行に変換する
+ * @details 直後に追加が続く削除のみを1行にまとめ、片側だけの行には空欄を補う。
+ * @param lines diffLines() が返す順序の差分行
+ * @return 左右のテキストと変更フラグを持つ表示行
+ */
 QVector<SideBySideRow> DiffTool::groupSideBySide(const QVector<DiffLine> &lines)
 {
     QVector<SideBySideRow> rows;

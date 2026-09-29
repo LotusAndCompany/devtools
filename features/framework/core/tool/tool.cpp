@@ -7,6 +7,9 @@
 
 #include <utility>
 
+/**
+ * @brief ツール ID の有効範囲を示す、初回呼び出し時に構築した例外メッセージを返す
+ */
 const QString &Tool::invalidToolIDReason()
 {
     static const QString reason =
@@ -20,6 +23,11 @@ Tool::Tool(Tool::ID id, QString stringID, QObject *parent)
     validateID(id);
 }
 
+/**
+ * @brief ツール ID が境界値を除く有効範囲内であることを確認する
+ * @param id 検証するツール ID
+ * @throws InvalidArgumentException<int> ID が範囲外の場合
+ */
 void Tool::validateID(ID id)
 {
     const int intID = static_cast<int>(id);
@@ -29,6 +37,13 @@ void Tool::validateID(ID id)
     }
 }
 
+/**
+ * @brief 指定ツールの名前と説明を現在の言語で返す
+ * @param id 情報を取得するツール ID
+ * @return 翻訳済みの名前と説明
+ * @throws InvalidArgumentException<int> ID が範囲外の場合
+ * @throws UnderDevelopmentException ID に対応する翻訳情報が未実装の場合
+ */
 Tool::Translatable Tool::translatable(ID id)
 {
     validateID(id);
@@ -75,6 +90,11 @@ Tool::Translatable Tool::translatable(ID id)
     }
 }
 
+/**
+ * @brief 言語変更時にツールの翻訳情報を更新する
+ * @param event 処理するイベント
+ * @return 言語変更なら true、それ以外は QObject の処理結果
+ */
 bool Tool::event(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
