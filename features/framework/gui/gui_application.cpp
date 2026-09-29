@@ -1,5 +1,6 @@
 #include "gui_application.h"
 
+#include "design_system.h"
 #include "icon_utils.h"
 
 #include <QApplicationStateChangeEvent>
@@ -110,8 +111,9 @@ int GuiApplication::start()
     // ウィンドウサイズの復元
     if (settings.value("window/rememberSize", true).toBool()) {
         if (settings.contains("window/width") && settings.contains("window/height")) {
-            int const width = settings.value("window/width", 1280).toInt();
-            int const height = settings.value("window/height", 720).toInt();
+            const QSize defaultSize = DevTools::Ui::mainWindowSize();
+            int const width = settings.value("window/width", defaultSize.width()).toInt();
+            int const height = settings.value("window/height", defaultSize.height()).toInt();
             window->resize(width, height);
         }
     }
@@ -161,6 +163,7 @@ void GuiApplication::applyColorScheme()
             w->setPalette(QPalette());
             w->update();
         }
+        DevTools::Ui::refreshStatusColors();
         return;
     }
 

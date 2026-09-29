@@ -12,5 +12,4 @@ paths:
 - When updating an English document, update the corresponding Japanese document
   only if it already exists.
 - Do not create new Japanese mirror files unless explicitly requested.
-- Commit messages and PR titles for docs-only changes should use
-  `docs: <description>`.
+- PR titles for docs-only changes should use `docs: <description>`.

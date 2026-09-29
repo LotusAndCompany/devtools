@@ -1,19 +1,17 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <QGroupBox>
+#include <QWidget>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
+class QPlainTextEdit;
 class QPushButton;
-class QTextBrowser;
 
-/**
- * @brief コマンド生成ツールのGUIクラス
- * @details コマンドラインコマンドを対話的に生成するためのUIを提供する
- */
-class Command : public QGroupBox
+class Command : public QWidget
 {
     Q_OBJECT
 
@@ -69,14 +67,12 @@ private:
      * @brief 生成されたコマンドをクリップボードにコピーする
      */
     void copy();
-    /**
-     * @brief コマンドボックスの幅を調整する
-     */
-    void adjustCommandBoxWidth();
+    void retranslateUi();
 
     /// カテゴリ選択用のコンボボックス
     QComboBox *category_list{nullptr};
-    /// 機能リストのラベル
+    QGroupBox *input_pane{nullptr};
+    QGroupBox *output_pane{nullptr};
     QLabel *functions_label{nullptr};
     /// 機能選択用のコンボボックス
     QComboBox *functions_list{nullptr};
@@ -92,12 +88,15 @@ private:
     QPushButton *reset_button{nullptr};
     /// 生成ボタン
     QPushButton *generate_button{nullptr};
-    /// 生成されたコマンドを表示するブラウザ
-    QTextBrowser *text_browser{nullptr};
+    /// 生成されたコマンドを表示するテキストエディット
+    QPlainTextEdit *text_browser{nullptr};
     /// コピーボタン
     QPushButton *copy_button{nullptr};
     /// クリアボタン
     QPushButton *clear_button{nullptr};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // COMMAND_H

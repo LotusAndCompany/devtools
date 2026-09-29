@@ -1,121 +1,65 @@
 # Phrase Generation
 
-Generate random phrases, text, and strings for various development purposes.
+Create and reuse named text templates in DevTools.
 
 ## Overview
 
-The Phrase Generation tool creates random text content useful for testing, placeholder content, and generating unique identifiers.
+The Phrase Generation tool stores templates as text files under the
+application's `content/` directory. It is intended for reusable snippets,
+test data, and frequently used messages.
 
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Phrase** in the side menu
+2. Click **Phrase Generation** in the side menu
 
-## Features
+## Interface
 
-### Random Text Generation
-
-Generate random text strings of specified length and character sets.
-
-### Phrase Generation
-
-Create random phrases composed of common words.
+- **Editor**: Enter a template title and its text
+- **Templates**: Select an existing template or create a new one
+- **Add**: Start a new template
+- **Save**: Create or update the selected template
+- **Copy**: Copy the editor text to the clipboard
+- **Delete**: Remove the selected template
 
 ## How to Use
 
-### Generate Random Text
+### Create a Template
 
-1. Select generation type
-2. Configure options (length, character set)
-3. Click **Generate**
-4. Copy the result
+1. Click **Add** (or press `Cmd + N`)
+2. Enter a title
+3. Enter the template text
+4. Click **Save** (or press `Cmd + S`)
 
-### Options
+The saved template appears in the **Templates** list.
 
-| Option | Description |
-|--------|-------------|
-| Length | Number of characters or words |
-| Character Set | Types of characters to include |
-| Case | Uppercase, lowercase, or mixed |
+### Edit a Template
 
-## Character Sets
+1. Select a template from the list
+2. Change its title or text
+3. Click **Save**
 
-| Set | Characters |
-|-----|------------|
-| Alphabetic | a-z, A-Z |
-| Numeric | 0-9 |
-| Alphanumeric | a-z, A-Z, 0-9 |
-| Special | !@#$%^&*()_+-= |
-| All | All printable characters |
+If you select another template while changes are unsaved, DevTools asks
+whether to save or discard them.
 
-## Use Cases
+### Copy or Delete a Template
 
-### Testing
+- Click **Copy** to copy the current editor text
+- Select a template and click **Delete** to remove it
+- Confirm the delete operation when prompted
 
-- Generate test data
-- Fill form fields
-- Create sample content
+## Storage
 
-### Placeholder Text
+- Templates are saved as `.txt` files in `content/`
+- The first line stores the title
+- The remaining text stores the template body
+- The list is rebuilt from the files when the tool is opened
 
-- Lorem ipsum alternatives
-- Mock content for UI development
-- Demo data
+## Limitations
 
-### Unique Identifiers
-
-- Temporary IDs
-- Session tokens
-- Random keys
-
-## Examples
-
-### Random String (16 characters, alphanumeric)
-
-```
-xK7mP2nQ9wR4tY6v
-```
-
-### Random Phrase (4 words)
-
-```
-blue mountain gentle river
-```
-
-### Random Password-style (12 characters, all sets)
-
-```
-aK3#mP9@wR2!
-```
-
-## Best Practices
-
-### For Testing
-
-- Use consistent lengths for reproducible tests
-- Match expected data formats
-
-### For Placeholders
-
-- Use appropriate length for UI elements
-- Consider readability
-
-### For Security
-
-- **Not for production**: Use proper cryptographic methods for real security
-- **Testing only**: Generated values are not cryptographically secure
-
-## Copying Results
-
-1. Generated text appears in output area
-2. Click **Copy** button
-3. Or select text and use `Cmd + C`
-
-## Tips
-
-- Generate multiple times to get variety
-- Use appropriate character sets for your use case
-- Keep generated values if needed; they won't be saved
+- Templates are local to the current application working directory
+- A title and non-empty body are required to save
+- There is no search, tagging, or cloud synchronization
 
 ## Related Documentation
 

@@ -29,7 +29,7 @@ DevTools additionally requires Qt 6.9+ for named-glyph icon support, links qleme
 prefix `:/themes`.
 
 ### Optional
-- **Doxygen**: 1.16+ (API documentation generation)
+- **Doxygen**: 1.18+ (API documentation generation)
 - **GraphViz**: For class diagrams and dependency graphs in documentation (optional)
 - **Qt Creator**: 18.0.1+ (IDE with Qt integration)
 - **Ninja**: 1.12.1+ (Fast build tool)
@@ -152,7 +152,7 @@ ctest
 
 ## Generating Documentation
 
-Doxygen 1.16+ is required to generate API documentation.
+Doxygen 1.18+ is required to generate API documentation.
 
 ### Install Doxygen
 ```bash

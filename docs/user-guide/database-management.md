@@ -9,7 +9,7 @@ The Database Management tool provides a graphical interface for connecting to SQ
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **DB** in the side menu
+2. Click **DB Tool** in the side menu
 
 If there is no connection history and no database connection has been made in the current session, the Connection Selector dialog opens automatically.
 
@@ -84,7 +84,7 @@ Once connected to a database:
 
 1. The **Tables** panel displays all tables in the database
 2. Click a table name to open it in a new tab
-3. The table data is displayed in a sortable table view
+3. The table data is displayed in a tabular view
 4. Use the **Refresh** button within the tab to reload table data
 5. Use the toolbar **Refresh** button to reload the table list
 

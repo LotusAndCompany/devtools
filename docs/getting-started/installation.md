@@ -18,7 +18,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 ### Optional Tools
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Doxygen | - | API documentation generation |
+| Doxygen | 1.18+ | API documentation generation |
 | Qt Creator | 18.0.1+ | IDE with Qt integration |
 | Ninja | 1.12.1+ | Fast build tool |
 | Qt Installer Framework | 4.10 | Application packaging |
@@ -74,7 +74,7 @@ vcpkg version
 
 ### 3. Install Additional Tools
 
-#### Doxygen (Optional, 1.16+)
+#### Doxygen (Optional, 1.18+)
 
 ```bash
 brew install doxygen
@@ -133,15 +133,20 @@ make -j$(sysctl -n hw.ncpu)
 After building, run the application:
 
 ```bash
-# Build and run with colored console output (recommended)
+# Build and run with colored console output (recommended).
+# This replaces older project-local processes before starting.
 cmake --build . --target run
 
 # Or run the binary directly
 ./DevTools.app/Contents/MacOS/DevTools
-
-# Or open the app bundle
-open DevTools.app
 ```
+
+Use the `run` target when iterating on the source tree. It replaces older
+project-local DevTools processes before launching the canonical binary. If a
+DevTools bundle outside the source tree is running, the target stops with an
+explicit error instead of allowing an ambiguous application-name selection.
+Separately packaged builds, such as `build-appstore`, are not used for source
+validation.
 
 ## IDE Setup
 
@@ -198,7 +203,7 @@ ctest --output-on-failure
 
 - [Quick Start Guide](quick-start.md) - Learn the basics
 - [Architecture Overview](../development/architecture.md) - Understand the codebase
-- [Contributing Guide](../../CONTRIBUTING.md) - Start contributing
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Start contributing
 
 ## Troubleshooting
 

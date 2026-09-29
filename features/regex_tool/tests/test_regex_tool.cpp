@@ -1,5 +1,7 @@
 #include "features/regex_tool/core/regex_tool.h"
+#include "features/regex_tool/gui/regex_tester_gui.h"
 
+#include <QGroupBox>
 #include <QtTest>
 
 class TestRegexTool : public QObject
@@ -12,6 +14,7 @@ private slots:
     void testReplace_data();
     void testReplace();
     void testReplaceSingle();
+    void testGuiPaneTitles();
 };
 
 void TestRegexTool::testMatch_data()
@@ -90,6 +93,21 @@ void TestRegexTool::testReplaceSingle()
     const QString result = devtools::RegexTool::replace("abc", "abc abc", "xyz",
                                                         QRegularExpression::NoPatternOption, false);
     QCOMPARE(result, QString("xyz abc"));
+}
+
+void TestRegexTool::testGuiPaneTitles()
+{
+    devtools::RegexTesterGUI gui;
+    const auto panes = gui.findChildren<QGroupBox *>();
+
+    QStringList titles;
+    for (const auto *const pane : panes) {
+        titles.append(pane->title());
+    }
+
+    QVERIFY(titles.contains(QStringLiteral("Regex Tester")));
+    QVERIFY(titles.contains(QStringLiteral("Matches")));
+    QVERIFY(titles.contains(QStringLiteral("Quick Reference")));
 }
 
 QTEST_MAIN(TestRegexTool)

@@ -11,6 +11,8 @@
 #include <QTimer>
 
 class QLineEdit;
+class QGroupBox;
+class QEvent;
 class QToolButton;
 class QPlainTextEdit;
 class QPushButton;
@@ -107,8 +109,14 @@ private:
     void saveSettings();
     QRegularExpression::PatternOptions currentOptions() const;
     void updateMatchResultDisplay(const QVector<MatchResult> &matches);
+    void retranslateUi();
 
     // UI Components
+    QGroupBox *m_leftPane = nullptr;
+    QGroupBox *m_rightPane = nullptr;
+    QGroupBox *m_quickReferencePane = nullptr;
+    QLabel *m_testTextHeading = nullptr;
+    QLabel *m_replaceHeading = nullptr;
     QLineEdit *m_patternEdit = nullptr;
     QPushButton *m_copyPatternButton = nullptr;
     QComboBox *m_presetCombo = nullptr;
@@ -142,6 +150,9 @@ private:
     QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;
     int m_requestId = 0;
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 } // namespace devtools

@@ -5,7 +5,7 @@
 #include <QSqlDatabase>
 #include <QWidget>
 
-class QLabel;
+class QGroupBox;
 class QListWidget;
 class QPushButton;
 
@@ -96,8 +96,8 @@ private:
      */
     void removeHistoryItem(int index);
 
-    /// タイトルラベル
-    QLabel *titleLabel{nullptr};
+    /// 接続履歴ペイン
+    QGroupBox *history_group_box{nullptr};
     /// 履歴リストウィジェット
     QListWidget *historyListWidget{nullptr};
     /// 新規接続ボタン

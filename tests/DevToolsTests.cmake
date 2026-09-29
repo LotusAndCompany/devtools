@@ -55,6 +55,16 @@ DevTools_add_test(test_logging
     SOURCES
     features/framework/tests/test_logging.cpp
 )
+DevTools_add_test(test_design_system
+    SOURCES
+    features/framework/tests/test_design_system.cpp
+    res/application.qrc
+)
+
+DevTools_add_test(test_command
+    SOURCES
+    features/command/tests/test_command.cpp
+)
 
 # core/exception
 DevTools_add_test(test_common_exception
@@ -144,6 +154,12 @@ DevTools_add_test(test_yaml_emitter
 DevTools_add_test(test_data_conversion
     SOURCES
     features/data_conversion/tests/test_data_conversion.cpp
+)
+
+# gui/db_tool
+DevTools_add_test(test_db_connection_window
+    SOURCES
+    features/db_tool/tests/test_connection_window.cpp
 )
 
 # gui/image/basic

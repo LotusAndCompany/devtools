@@ -6,8 +6,8 @@
 #include <QWidget>
 
 class QPushButton;
+class QPlainTextEdit;
 class QTableView;
-class QTextEdit;
 
 /**
  * @brief SQLクエリを実行するページのウィジェット
@@ -20,9 +20,10 @@ class QueryPage : public QWidget
 public:
     /**
      * @brief コンストラクタ
+     * @param database 使用するデータベース接続
      * @param parent 親ウィジェット
      */
-    explicit QueryPage(QWidget *parent = nullptr);
+    explicit QueryPage(const QSqlDatabase &database, QWidget *parent = nullptr);
     /**
      * @brief デストラクタ
      */
@@ -57,7 +58,7 @@ private:
     void retranslateUi();
 
     /// クエリ入力用のテキストエディット
-    QTextEdit *queryTextEdit{nullptr};
+    QPlainTextEdit *queryTextEdit{nullptr};
     /// 実行ボタン
     QPushButton *executeButton{nullptr};
     /// クエリ結果表示用のテーブルビュー

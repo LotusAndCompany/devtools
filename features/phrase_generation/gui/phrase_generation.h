@@ -6,10 +6,10 @@
 class QFrame;
 class QGroupBox;
 class QLineEdit;
+class QListWidget;
+class QListWidgetItem;
 class QPlainTextEdit;
 class QPushButton;
-class QTreeWidget;
-class QTreeWidgetItem;
 
 /**
  * @brief 定型文生成ツールのGUIクラス
@@ -52,11 +52,10 @@ private slots:
      */
     void handleDeleteButtonClick();
     /**
-     * @brief タイトルツリーのアイテムがクリックされたときの処理
+     * @brief タイトルリストのアイテムがクリックされたときの処理
      * @param item クリックされたアイテム
-     * @param column クリックされたカラム
      */
-    void handleTitleTreeWidgetItemClick(QTreeWidgetItem *item, int column);
+    void handleTitleListWidgetItemClick(QListWidgetItem *item);
 
 private:
     /**
@@ -84,10 +83,10 @@ private:
      */
     void loadTitles();
     /**
-     * @brief ファイル名でツリーアイテムを選択する
+     * @brief ファイル名でリストアイテムを選択する
      * @param filename 選択するファイル名
      */
-    void selectTreeItemByFilename(const QString &filename);
+    void selectListItemByFilename(const QString &filename);
     /**
      * @brief 未保存の変更があるかどうかを返す
      * @return 未保存の変更がある場合は `true`
@@ -128,16 +127,16 @@ private:
     QPushButton *add_button{nullptr};
     /// エディタグループボックス
     QGroupBox *editor_group{nullptr};
-    /// ツリーグループボックス
+    /// テンプレート一覧グループボックス
     QGroupBox *tree_group{nullptr};
-    /// ツリーセパレータ
+    /// テンプレート一覧セパレータ
     QFrame *tree_separator{nullptr};
     /// エディタセパレータ
     QFrame *editor_separator{nullptr};
     /// テンプレートテキスト入力
     QPlainTextEdit *template_text{nullptr};
-    /// タイトルツリーウィジェット
-    QTreeWidget *title_tree_widget{nullptr};
+    /// テンプレートタイトル一覧
+    QListWidget *title_list_widget{nullptr};
     /// 保存ボタン
     QPushButton *save_button{nullptr};
 
