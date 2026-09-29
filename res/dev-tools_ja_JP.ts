@@ -1201,6 +1201,69 @@ Please try reducing the amount of data or simplifying the content.</source>
     </message>
 </context>
 <context>
+    <name>TimestampConversionGUI</name>
+    <message>
+        <source>Timestamp Conversion</source>
+        <translation>タイムスタンプ変換</translation>
+    </message>
+    <message>
+        <source>Now</source>
+        <translation>現在時刻</translation>
+    </message>
+    <message>
+        <source>Unix Timestamp (seconds)</source>
+        <translation>UNIXタイムスタンプ (秒)</translation>
+    </message>
+    <message>
+        <source>e.g. 1700000000</source>
+        <translation>例: 1700000000</translation>
+    </message>
+    <message>
+        <source>Convert from this value</source>
+        <translation>この値から変換</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
+    <message>
+        <source>Unix Timestamp (milliseconds)</source>
+        <translation>UNIXタイムスタンプ (ミリ秒)</translation>
+    </message>
+    <message>
+        <source>e.g. 1700000000000</source>
+        <translation>例: 1700000000000</translation>
+    </message>
+    <message>
+        <source>Date &amp;&amp; Time (Local)</source>
+        <translation>日時 (ローカル)</translation>
+    </message>
+    <message>
+        <source>Date &amp;&amp; Time (UTC)</source>
+        <translation>日時 (UTC)</translation>
+    </message>
+    <message>
+        <source>ISO 8601 (UTC)</source>
+        <translation>ISO 8601 (UTC)</translation>
+    </message>
+    <message>
+        <source>e.g. 2026-09-13T20:32:37.497Z</source>
+        <translation>例: 2026-09-13T20:32:37.497Z</translation>
+    </message>
+    <message>
+        <source>ISO 8601 (Local)</source>
+        <translation>ISO 8601 (ローカル)</translation>
+    </message>
+    <message>
+        <source>e.g. 2026-09-14T05:32:37.497+09:00</source>
+        <translation>例: 2026-09-14T05:32:37.497+09:00</translation>
+    </message>
+    <message>
+        <source>Invalid value. Please check the input and try again.</source>
+        <translation>値が不正です。入力内容を確認してください。</translation>
+    </message>
+</context>
+<context>
     <name>Tool</name>
     <message>
         <source>Image Editor</source>
@@ -1265,6 +1328,14 @@ Please try reducing the amount of data or simplifying the content.</source>
     <message>
         <source>Generate command from command list</source>
         <translation>コマンドリストからコマンドを生成</translation>
+    </message>
+    <message>
+        <source>Timestamp Conversion</source>
+        <translation>タイムスタンプ変換</translation>
+    </message>
+    <message>
+        <source>Convert between Unix timestamps and human-readable date/time</source>
+        <translation>UNIXタイムスタンプと日時を相互変換します</translation>
     </message>
     <message>
         <source>Regex Tester</source>
