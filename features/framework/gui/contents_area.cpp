@@ -4,6 +4,8 @@
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/data_conversion/gui/data_conversion_gui.h"
 #include "features/db_tool/gui/db_main/db_main.h"
+#include "features/diff_tool/core/diff_tool.h"
+#include "features/diff_tool/gui/diff_tool_gui.h"
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
 #include "features/image/gui/basic/image_tools_unified_gui.h"
@@ -42,6 +44,10 @@ bool ContentsArea::openSQLiteFileInDbTool(const QString &filePath)
     return cachedDbMain->connectSQLiteFile(filePath);
 }
 
+/**
+ * @brief 選択されたツールの画面に切り替え、DB ツールの状態はキャッシュして保持する
+ * @param id 表示するサイドメニュー項目。未対応の ID には開発中の表示を行う
+ */
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent != nullptr) {
@@ -92,6 +98,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::REGEX_TESTER:
         content = new devtools::RegexTesterGUI(this);
+        break;
+    case Sidemenu::ID::DIFF_TOOL:
+        content = new DiffToolGUI(new DiffTool(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

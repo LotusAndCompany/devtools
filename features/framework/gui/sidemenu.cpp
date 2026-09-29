@@ -16,6 +16,9 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
+/**
+ * @brief メニュー ID の有効範囲を示す、初回呼び出し時に構築した例外メッセージを返す
+ */
 const QString &Sidemenu::invalidSidemenuIDReason()
 {
     static const QString reason = QString("Sidemenu::ID must be in range (%1, %2)")
@@ -24,6 +27,10 @@ const QString &Sidemenu::invalidSidemenuIDReason()
     return reason;
 }
 
+/**
+ * @brief 検索欄とスクロール領域を作成し、各ツールの選択ボタンを登録する
+ * @param parent 親ウィジェット
+ */
 Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGroup(this))
 {
     const QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -68,6 +75,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::DATA_CONVERSION);
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
+    registerItem(ID::DIFF_TOOL);
     registerItem(ID::DB_TOOL);
     registerItem(ID::REGEX_TESTER);
 
@@ -76,6 +84,11 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     retranslateUi();
 }
 
+/**
+ * @brief メニュー ID が境界値を除く有効範囲内であることを確認する
+ * @param id 検証するメニュー ID
+ * @throws InvalidArgumentException<int> ID が範囲外の場合
+ */
 void Sidemenu::validateID(Sidemenu::ID id)
 {
     const int intID = static_cast<int>(id);
@@ -85,6 +98,13 @@ void Sidemenu::validateID(Sidemenu::ID id)
     }
 }
 
+/**
+ * @brief 指定したメニュー項目に対応するテーマ付きアイコンを返す
+ * @param id アイコンを取得するメニュー ID
+ * @return メニュー項目のアイコン
+ * @throws InvalidArgumentException<int> ID が範囲外の場合
+ * @throws UnderDevelopmentException ID に対応するアイコンが未実装の場合
+ */
 QIcon Sidemenu::icon(Sidemenu::ID id)
 {
     validateID(id);
@@ -108,6 +128,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("article"));
     case ID::REGEX_TESTER:
         return IconUtils::themedIcon(QStringLiteral("regular_expression"));
+    case ID::DIFF_TOOL:
+        return IconUtils::themedIcon(QStringLiteral("difference"));
 
     default:
         throw UnderDevelopmentException();
@@ -132,6 +154,10 @@ void Sidemenu::selectItem(ID id)
     }
 }
 
+/**
+ * @brief 言語変更時に検索欄の翻訳を更新し、イベントを受理する
+ * @param event 処理するイベント。その他は QWidget に委譲する
+ */
 void Sidemenu::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
