@@ -80,11 +80,9 @@ protected:
 class RoundedListItemDelegate final : public QStyledItemDelegate
 {
 public:
-    RoundedListItemDelegate(const QColor &normalRowColor, const QColor &alternateRowColor,
+    RoundedListItemDelegate(const oclero::qlementine::QlementineStyle *themeStyle,
                             QObject *parent = nullptr)
-        : QStyledItemDelegate(parent)
-        , normal_row_color(normalRowColor)
-        , alternate_row_color(alternateRowColor)
+        : QStyledItemDelegate(parent), theme_style(themeStyle)
     {}
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -98,9 +96,14 @@ public:
 
         QPainterPath roundedPath;
         roundedPath.addRoundedRect(QRectF(itemRect), radius, radius);
-        const QColor &rowColor = option.features.testFlag(QStyleOptionViewItem::Alternate)
-                                     ? alternate_row_color
-                                     : normal_row_color;
+        const bool alternate = option.features.testFlag(QStyleOptionViewItem::Alternate);
+        const QColor rowColor =
+            theme_style != nullptr
+                ? theme_style->listItemRowBackgroundColor(
+                      oclero::qlementine::MouseState::Normal,
+                      alternate ? oclero::qlementine::AlternateState::Alternate
+                                : oclero::qlementine::AlternateState::NotAlternate)
+                : option.palette.color(alternate ? QPalette::AlternateBase : QPalette::Base);
 
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
@@ -116,8 +119,7 @@ public:
     }
 
 private:
-    QColor normal_row_color;
-    QColor alternate_row_color;
+    const oclero::qlementine::QlementineStyle *theme_style;
 };
 
 class RoundedListStyle final : public oclero::qlementine::QlementineStyle
@@ -466,36 +468,45 @@ void configureItemView(QAbstractItemView *view)
     view->setIconSize(QSize(Metrics::ICON_SIZE, Metrics::ICON_SIZE));
 
     if (auto *const listView = qobject_cast<QListView *>(view)) {
-        const int borderWidth = textControlBorderWidth(listView);
-        int borderRadius = Metrics::CORNER_RADIUS;
-        QColor borderColor = listView->palette().color(QPalette::Mid);
-        QColor normalRowColor = listView->palette().color(QPalette::Base);
-        QColor alternateRowColor = listView->palette().color(QPalette::AlternateBase);
+        listView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        oclero::qlementine::QlementineStyle *listThemeStyle = nullptr;
+
         if (auto *const qlementineStyle =
                 qobject_cast<oclero::qlementine::QlementineStyle *>(listView->style())) {
-            borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
-            borderColor = qlementineStyle->theme().borderColor;
-            normalRowColor = qlementineStyle->listItemRowBackgroundColor(
-                oclero::qlementine::MouseState::Normal,
-                oclero::qlementine::AlternateState::NotAlternate);
-            alternateRowColor = qlementineStyle->listItemRowBackgroundColor(
-                oclero::qlementine::MouseState::Normal,
-                oclero::qlementine::AlternateState::Alternate);
-            listView->setStyle(new RoundedListStyle(*qlementineStyle, listView));
+            auto *const roundedListStyle = new RoundedListStyle(*qlementineStyle, listView);
+            listView->setStyle(roundedListStyle);
+            listThemeStyle = roundedListStyle;
+
+            const auto refreshThemeStyle = [listView, roundedListStyle]() {
+                const auto &theme = roundedListStyle->theme();
+                listView->setLineWidth(theme.borderWidth);
+                listView->setStyleSheet(
+                    QStringLiteral("QListView { border: %1px solid %2; border-radius: "
+                                   "%3px; background: transparent; }")
+                        .arg(theme.borderWidth)
+                        .arg(theme.borderColor.name(QColor::HexArgb))
+                        .arg(static_cast<int>(theme.borderRadius)));
+                listView->viewport()->update();
+            };
+            refreshThemeStyle();
+            QObject::connect(roundedListStyle, &oclero::qlementine::QlementineStyle::themeChanged,
+                             listView, refreshThemeStyle);
+        } else {
+            const int borderWidth = textControlBorderWidth(listView);
+            const QColor borderColor = listView->palette().color(QPalette::Mid);
+            listView->setLineWidth(borderWidth);
+            listView->setStyleSheet(
+                QStringLiteral("QListView { border: %1px solid %2; border-radius: "
+                               "%3px; background: transparent; }")
+                    .arg(borderWidth)
+                    .arg(borderColor.name(QColor::HexArgb))
+                    .arg(Metrics::CORNER_RADIUS));
         }
 
-        listView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-        listView->setLineWidth(borderWidth);
-        listView->setStyleSheet(QStringLiteral("QListView { border: %1px solid %2; border-radius: "
-                                               "%3px; background: transparent; }")
-                                    .arg(borderWidth)
-                                    .arg(borderColor.name(QColor::HexArgb))
-                                    .arg(borderRadius));
         listView->setAutoFillBackground(false);
         listView->viewport()->setAutoFillBackground(false);
         listView->viewport()->setAttribute(Qt::WA_OpaquePaintEvent, false);
-        listView->setItemDelegate(
-            new RoundedListItemDelegate(normalRowColor, alternateRowColor, listView));
+        listView->setItemDelegate(new RoundedListItemDelegate(listThemeStyle, listView));
         listView->setSpacing(Metrics::LIST_ROW_SPACING);
         listView->setUniformItemSizes(true);
     }
