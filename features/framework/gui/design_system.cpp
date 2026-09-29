@@ -160,6 +160,19 @@ void setTextControlViewportMargins(QAbstractScrollArea *control, int borderWidth
     }
 }
 
+void applyTextControlBorder(QAbstractScrollArea *control, int borderWidth, int borderRadius,
+                            const QColor &borderColor)
+{
+    control->setLineWidth(borderWidth);
+    setTextControlViewportMargins(control, borderWidth);
+    control->setStyleSheet(
+        QStringLiteral("QPlainTextEdit, QTextEdit { border: %1px solid %2; border-radius: %3px; }")
+            .arg(borderWidth)
+            .arg(borderColor.name(QColor::HexArgb))
+            .arg(borderRadius));
+    control->viewport()->update();
+}
+
 void drawTextControlBorder(QAbstractScrollArea *control)
 {
     auto *const qlementineStyle =
@@ -692,22 +705,23 @@ void configureCodeLabel(QLabel *label)
 void configureTextControl(QAbstractScrollArea *control)
 {
     control->setFont(standardFont());
-    const int borderWidth = textControlBorderWidth(control);
-    int borderRadius = Metrics::CORNER_RADIUS;
-    QColor borderColor = control->palette().color(QPalette::Mid);
+    control->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+
     if (auto *const qlementineStyle =
             qobject_cast<oclero::qlementine::QlementineStyle *>(control->style())) {
-        borderRadius = static_cast<int>(qlementineStyle->theme().borderRadius);
-        borderColor = qlementineStyle->theme().borderColor;
+        const auto refreshThemeStyle = [control, qlementineStyle]() {
+            const auto &theme = qlementineStyle->theme();
+            applyTextControlBorder(control, theme.borderWidth, static_cast<int>(theme.borderRadius),
+                                   theme.borderColor);
+        };
+        refreshThemeStyle();
+        QObject::connect(qlementineStyle, &oclero::qlementine::QlementineStyle::themeChanged,
+                         control, refreshThemeStyle);
+    } else {
+        const int borderWidth = textControlBorderWidth(control);
+        const QColor borderColor = control->palette().color(QPalette::Mid);
+        applyTextControlBorder(control, borderWidth, Metrics::CORNER_RADIUS, borderColor);
     }
-    control->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    control->setLineWidth(borderWidth);
-    setTextControlViewportMargins(control, borderWidth);
-    control->setStyleSheet(
-        QStringLiteral("QPlainTextEdit, QTextEdit { border: %1px solid %2; border-radius: %3px; }")
-            .arg(borderWidth)
-            .arg(borderColor.name(QColor::HexArgb))
-            .arg(borderRadius));
     control->viewport()->setAutoFillBackground(false);
     control->viewport()->setAttribute(Qt::WA_OpaquePaintEvent, false);
 }
@@ -715,9 +729,7 @@ void configureTextControl(QAbstractScrollArea *control)
 void configureDisplayTextControl(QAbstractScrollArea *control)
 {
     configureTextControl(control);
-    const int borderWidth = textControlBorderWidth(control);
     control->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    control->setLineWidth(borderWidth);
     control->setFocusPolicy(Qt::NoFocus);
     control->setAttribute(Qt::WA_Hover, false);
     control->setMouseTracking(false);
