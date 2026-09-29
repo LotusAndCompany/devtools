@@ -14,38 +14,18 @@ class QPushButton;
 
 /**
  * @brief UNIXタイムスタンプ・日時・ISO8601形式を相互変換するツールのGUI
- * @details 各行が同じ瞬間を異なる表現で表示する。いずれかの行で「Convert」を押すと、
+ * @details 各行が同じ瞬間を異なる表現で表示する。いずれかの行の変換ボタンを押すと、
  *          その値を基準時刻として他の全ての行に反映する。
  */
 class TimestampConversionGUI : public GuiTool
 {
     Q_OBJECT
-    Q_DISABLE_COPY(TimestampConversionGUI)
 
 public:
     explicit TimestampConversionGUI(QWidget *parent = nullptr);
-    ~TimestampConversionGUI() override = default;
-    TimestampConversionGUI(TimestampConversionGUI &&) = delete;
-    TimestampConversionGUI &operator=(TimestampConversionGUI &&) = delete;
 
 protected:
     void changeEvent(QEvent *event) override;
-
-private slots:
-    /// 全ての行に現在時刻を設定する
-    void onNowClicked();
-    /// 秒単位のタイムスタンプ行を基準に他の行を更新する
-    void onConvertFromSecondsClicked();
-    /// ミリ秒単位のタイムスタンプ行を基準に他の行を更新する
-    void onConvertFromMillisecondsClicked();
-    /// ローカル日時行を基準に他の行を更新する
-    void onConvertFromLocalClicked();
-    /// UTC日時行を基準に他の行を更新する
-    void onConvertFromUtcClicked();
-    /// ISO8601(UTC)行を基準に他の行を更新する
-    void onConvertFromIsoUtcClicked();
-    /// ISO8601(Local)行を基準に他の行を更新する
-    void onConvertFromIsoLocalClicked();
 
 private:
     void buildUi();
@@ -64,12 +44,11 @@ private:
                 QPushButton *&convertButton, QPushButton *&copyButton);
 
     /**
-     * @brief 変換に成功した基準時刻(UTC)を、指定した行以外の全ての表示欄に反映する
+     * @brief 基準時刻(UTC)を全ての表示欄に反映する
+     * @details utcInstantが不正な場合はエラーメッセージを表示するのみで、表示欄は更新しない
      * @param utcInstant 反映する基準時刻(UTC)
      */
     void applyCanonical(const QDateTime &utcInstant);
-    /// エラーメッセージを表示する
-    void showInvalidValueError();
 
     QLabel *secondsLabel{nullptr};
     QLineEdit *secondsEdit{nullptr};

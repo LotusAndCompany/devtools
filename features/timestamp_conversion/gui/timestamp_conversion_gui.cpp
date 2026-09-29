@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTimeZone>
 #include <QVBoxLayout>
 
 namespace {
@@ -31,20 +32,25 @@ TimestampConversionGUI::TimestampConversionGUI(QWidget *parent) : GuiTool(parent
 {
     buildUi();
 
-    connect(nowButton, &QPushButton::clicked, this, &TimestampConversionGUI::onNowClicked);
+    connect(nowButton, &QPushButton::clicked, this,
+            [this]() { applyCanonical(QDateTime::currentDateTimeUtc()); });
 
-    connect(secondsConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromSecondsClicked);
-    connect(millisecondsConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromMillisecondsClicked);
+    connect(secondsConvertButton, &QPushButton::clicked, this, [this]() {
+        applyCanonical(TimestampConversion::fromUnixTimestamp(secondsEdit->text(),
+                                                              TimestampConversion::Unit::Seconds));
+    });
+    connect(millisecondsConvertButton, &QPushButton::clicked, this, [this]() {
+        applyCanonical(TimestampConversion::fromUnixTimestamp(
+            millisecondsEdit->text(), TimestampConversion::Unit::Milliseconds));
+    });
     connect(localConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromLocalClicked);
+            [this]() { applyCanonical(localEdit->dateTime().toUTC()); });
     connect(utcConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromUtcClicked);
+            [this]() { applyCanonical(utcEdit->dateTime().toUTC()); });
     connect(isoUtcConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromIsoUtcClicked);
+            [this]() { applyCanonical(TimestampConversion::fromIso8601(isoUtcEdit->text())); });
     connect(isoLocalConvertButton, &QPushButton::clicked, this,
-            &TimestampConversionGUI::onConvertFromIsoLocalClicked);
+            [this]() { applyCanonical(TimestampConversion::fromIso8601(isoLocalEdit->text())); });
 
     connect(secondsCopyButton, &QPushButton::clicked, this,
             [this]() { QApplication::clipboard()->setText(secondsEdit->text()); });
@@ -97,14 +103,18 @@ void TimestampConversionGUI::buildUi()
     addRow(grid, row++, millisecondsLabel, millisecondsEdit, millisecondsConvertButton,
            millisecondsCopyButton);
 
+    // Qt 6.9以降のQDateTimeEdit::setTimeZone()を使い、表示・読み取りのタイムゾーン変換を
+    // ウィジェット自身に任せる（coreは常にUTCの基準時刻だけを扱えばよい）
     localEdit = new QDateTimeEdit(this);
     localEdit->setDisplayFormat(DATE_TIME_DISPLAY_FORMAT);
     localEdit->setCalendarPopup(true);
+    localEdit->setTimeZone(QTimeZone::systemTimeZone());
     addRow(grid, row++, localLabel, localEdit, localConvertButton, localCopyButton);
 
     utcEdit = new QDateTimeEdit(this);
     utcEdit->setDisplayFormat(DATE_TIME_DISPLAY_FORMAT);
     utcEdit->setCalendarPopup(true);
+    utcEdit->setTimeZone(QTimeZone::UTC);
     addRow(grid, row++, utcLabel, utcEdit, utcConvertButton, utcCopyButton);
 
     isoUtcEdit = new QLineEdit(this);
@@ -179,102 +189,19 @@ void TimestampConversionGUI::changeEvent(QEvent *event)
 
 void TimestampConversionGUI::applyCanonical(const QDateTime &utcInstant)
 {
+    if (!utcInstant.isValid()) {
+        statusLabel->setText(tr("Invalid value. Please check the input and try again."));
+        return;
+    }
+
     secondsEdit->setText(
         TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Seconds));
     millisecondsEdit->setText(
         TimestampConversion::toUnixTimestamp(utcInstant, TimestampConversion::Unit::Milliseconds));
-
-    // QDateTimeEditはローカルタイムゾーンの日時として値を表示するため、
-    // UTC欄には見た目上の年月日時分秒だけを渡す（timeSpecはQDateTimeEdit内部で
-    // ローカル扱いされる。読み戻す際はfromUtcDateTime()がUTCとして再解釈する）
-    const QDateTime localWallClock = TimestampConversion::toLocalDateTime(utcInstant);
-    localEdit->setDateTime(QDateTime(localWallClock.date(), localWallClock.time()));
-    utcEdit->setDateTime(QDateTime(utcInstant.date(), utcInstant.time()));
-
+    localEdit->setDateTime(utcInstant);
+    utcEdit->setDateTime(utcInstant);
     isoUtcEdit->setText(TimestampConversion::toIso8601(utcInstant));
     isoLocalEdit->setText(TimestampConversion::toIso8601Local(utcInstant));
 
     statusLabel->clear();
-}
-
-void TimestampConversionGUI::showInvalidValueError()
-{
-    statusLabel->setText(tr("Invalid value. Please check the input and try again."));
-}
-
-void TimestampConversionGUI::onNowClicked()
-{
-    applyCanonical(QDateTime::currentDateTimeUtc());
-}
-
-void TimestampConversionGUI::onConvertFromSecondsClicked()
-{
-    bool ok = false;
-    const QDateTime utcInstant = TimestampConversion::fromUnixTimestamp(
-        secondsEdit->text(), TimestampConversion::Unit::Seconds, &ok);
-
-    if (!ok) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
-}
-
-void TimestampConversionGUI::onConvertFromMillisecondsClicked()
-{
-    bool ok = false;
-    const QDateTime utcInstant = TimestampConversion::fromUnixTimestamp(
-        millisecondsEdit->text(), TimestampConversion::Unit::Milliseconds, &ok);
-
-    if (!ok) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
-}
-
-void TimestampConversionGUI::onConvertFromLocalClicked()
-{
-    const QDateTime utcInstant = TimestampConversion::fromLocalDateTime(localEdit->dateTime());
-
-    if (!utcInstant.isValid()) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
-}
-
-void TimestampConversionGUI::onConvertFromUtcClicked()
-{
-    const QDateTime utcInstant = TimestampConversion::fromUtcDateTime(utcEdit->dateTime());
-
-    if (!utcInstant.isValid()) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
-}
-
-void TimestampConversionGUI::onConvertFromIsoUtcClicked()
-{
-    bool ok = false;
-    const QDateTime utcInstant = TimestampConversion::fromIso8601(isoUtcEdit->text(), &ok);
-
-    if (!ok) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
-}
-
-void TimestampConversionGUI::onConvertFromIsoLocalClicked()
-{
-    bool ok = false;
-    const QDateTime utcInstant = TimestampConversion::fromIso8601(isoLocalEdit->text(), &ok);
-
-    if (!ok) {
-        showInvalidValueError();
-        return;
-    }
-    applyCanonical(utcInstant);
 }
