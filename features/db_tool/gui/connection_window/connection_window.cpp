@@ -116,6 +116,11 @@ bool openDatabase(QSqlDatabase &db, const QString &databaseType, QWidget *parent
             db.setDatabaseName(selectedDatabaseName);
             db.open();
         }
+#else
+        Q_UNUSED(databaseType);
+        Q_UNUSED(databaseNameLineEdit);
+        Q_UNUSED(databaseName);
+        Q_UNUSED(sqliteFileAccess);
 #endif
         if (!db.isOpen()) {
             QMessageBox::critical(parent, connectionFailedTitle, db.lastError().text());
