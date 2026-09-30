@@ -1,6 +1,5 @@
 #include "connection_selector.h"
 
-#include "../../core/sqlite_file_access.h"
 #include "../sqlite_file_picker.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
@@ -20,6 +19,8 @@
 #include <QSqlError>
 #include <QStyle>
 #include <QVBoxLayout>
+
+#include <utility>
 
 namespace {
 std::unique_ptr<SQLiteFileAccess> restoreSQLiteFileAccess(const QJsonObject &connectionInfo,
@@ -233,7 +234,8 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
     }
 
     QMessageBox::information(this, tr("Success"), tr("Database connection established."));
-    emit connectionCreated(db, updatedConnectionInfo);
+    emit connectionCreated(db, updatedConnectionInfo,
+                           std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     return true;
 }
 

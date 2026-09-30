@@ -48,8 +48,10 @@ signals:
      * @brief データベース接続が作成されたときに発行されるシグナル
      * @param db データベース接続
      * @param connectionInfo 接続情報
+     * @param sqliteFileAccess SQLiteファイルへのアクセス権
      */
-    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo);
+    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo,
+                           std::shared_ptr<SQLiteFileAccess> sqliteFileAccess);
 
 protected:
     /**

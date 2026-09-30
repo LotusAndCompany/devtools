@@ -324,7 +324,8 @@ void ConnectionWindow::createNewConnect()
                                              userName, sqliteFileAccess.get());
 
     QMessageBox::information(this, tr("Success"), tr("Database connection established."));
-    emit connectionCreated(db, lastConnectionInfo);
+    emit connectionCreated(db, lastConnectionInfo,
+                           std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     close();
 }
 

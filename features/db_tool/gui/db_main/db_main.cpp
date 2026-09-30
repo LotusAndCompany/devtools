@@ -27,6 +27,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <utility>
+
 namespace {
 constexpr int MAX_HISTORY_ENTRIES = 10;
 } // namespace
@@ -176,6 +178,7 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
 
     // Create a unique temporary connection name to avoid conflicts
     const QString tempConnectionName = QUuid::createUuid().toString();
+    auto sqliteFileAccess = SQLiteFileAccess::fromFilePath(fileInfo.absoluteFilePath());
     QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE", tempConnectionName);
     sqliteDb.setDatabaseName(fileInfo.absoluteFilePath());
 
@@ -201,7 +204,8 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
         {"displayName", QString("SQLite: %1").arg(fileInfo.fileName())},
     };
 
-    setDatabase(sqliteDb, connectionInfo);
+    setDatabase(sqliteDb, connectionInfo,
+                std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     return true;
 }
 
@@ -282,22 +286,13 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     queryTabWidget->setCurrentWidget(container);
 }
 
-void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo)
+void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo,
+                         std::shared_ptr<SQLiteFileAccess> newFileAccess)
 {
     db = database;
     s_hasConnectedThisSession = true;
 
     if (connectionInfo["type"].toString() == "QSQLITE") {
-        std::unique_ptr<SQLiteFileAccess> newFileAccess;
-        const QByteArray bookmarkData =
-            QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
-        if (!bookmarkData.isEmpty()) {
-            newFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
-        }
-        if (!newFileAccess) {
-            newFileAccess = SQLiteFileAccess::fromFilePath(connectionInfo["database"].toString());
-        }
-
         if (newFileAccess && !newFileAccess->bookmarkData().isEmpty()) {
             QJsonObject updatedConnectionInfo = connectionInfo;
             updatedConnectionInfo["database"] = newFileAccess->filePath();
@@ -359,8 +354,9 @@ void dbMain::showConnectionSelector()
             [this]() { connectionSelector = nullptr; });
 
     connect(connectionSelector, &ConnectionSelector::connectionCreated, this,
-            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
-                setDatabase(db, connectionInfo);
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo,
+                   std::shared_ptr<SQLiteFileAccess> sqliteFileAccess) {
+                setDatabase(db, connectionInfo, std::move(sqliteFileAccess));
             });
 
     connect(connectionSelector, &ConnectionSelector::newConnectionRequested, this,
@@ -393,8 +389,9 @@ void dbMain::openNewConnectionWindow()
             [this]() { connectionWindow = nullptr; });
 
     connect(connectionWindow, &ConnectionWindow::connectionCreated, this,
-            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
-                setDatabase(db, connectionInfo);
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo,
+                   std::shared_ptr<SQLiteFileAccess> sqliteFileAccess) {
+                setDatabase(db, connectionInfo, std::move(sqliteFileAccess));
                 // ConnectionSelectorも閉じる
                 if (connectionSelector != nullptr) {
                     connectionSelector->close();
