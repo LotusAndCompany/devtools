@@ -117,7 +117,7 @@ private:
     QLineEdit *dbNamelineEdit{nullptr};
     /// 参照ボタン
     QPushButton *browseButton{nullptr};
-    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess{};
     /// ユーザー名のラベル
     QLabel *userNameLabel{nullptr};
     /// ユーザー名入力用のラインエディット

@@ -21,6 +21,43 @@
 #include <QStyle>
 #include <QVBoxLayout>
 
+namespace {
+std::unique_ptr<SQLiteFileAccess> restoreSQLiteFileAccess(const QJsonObject &connectionInfo,
+                                                          const QString &databaseName)
+{
+    const QByteArray bookmarkData =
+        QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
+    if (!bookmarkData.isEmpty()) {
+        sqliteFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
+    }
+    if (!sqliteFileAccess) {
+        sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
+    }
+    return sqliteFileAccess;
+}
+
+bool openDatabase(QSqlDatabase &db, const QString &dbType, QWidget *parent, QString &databaseName,
+                  std::unique_ptr<SQLiteFileAccess> &sqliteFileAccess,
+                  const QString &connectionFailedTitle)
+{
+    if (!db.open() && dbType == "QSQLITE") {
+        db.close();
+        sqliteFileAccess = selectSQLiteDatabaseFile(parent, databaseName);
+        if (sqliteFileAccess) {
+            databaseName = sqliteFileAccess->filePath();
+            db.setDatabaseName(databaseName);
+            db.open();
+        }
+    }
+    if (!db.isOpen()) {
+        QMessageBox::critical(parent, connectionFailedTitle, db.lastError().text());
+        return false;
+    }
+    return true;
+}
+} // namespace
+
 ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
 {
     buildUi();
@@ -152,14 +189,7 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
 
     std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
     if (dbType == "QSQLITE") {
-        const QByteArray bookmarkData =
-            QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
-        if (!bookmarkData.isEmpty()) {
-            sqliteFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
-        }
-        if (!sqliteFileAccess) {
-            sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
-        }
+        sqliteFileAccess = restoreSQLiteFileAccess(connectionInfo, databaseName);
         if (sqliteFileAccess) {
             databaseName = sqliteFileAccess->filePath();
         }
@@ -190,20 +220,8 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
         db.setDatabaseName(databaseName);
     }
 
-    if (!db.open()) {
-        if (dbType == "QSQLITE") {
-            db.close();
-            sqliteFileAccess = selectSQLiteDatabaseFile(this, databaseName);
-            if (sqliteFileAccess) {
-                databaseName = sqliteFileAccess->filePath();
-                db.setDatabaseName(databaseName);
-                db.open();
-            }
-        }
-        if (!db.isOpen()) {
-            QMessageBox::critical(this, tr("Connection Failed"), db.lastError().text());
-            return false;
-        }
+    if (!openDatabase(db, dbType, this, databaseName, sqliteFileAccess, tr("Connection Failed"))) {
+        return false;
     }
 
     if (dbType == "QSQLITE") {
