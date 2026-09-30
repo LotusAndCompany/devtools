@@ -55,6 +55,16 @@ DevTools_add_test(test_logging
     SOURCES
     features/framework/tests/test_logging.cpp
 )
+DevTools_add_test(test_design_system
+    SOURCES
+    features/framework/tests/test_design_system.cpp
+    res/application.qrc
+)
+
+DevTools_add_test(test_command
+    SOURCES
+    features/command/tests/test_command.cpp
+)
 
 # core/exception
 DevTools_add_test(test_common_exception
@@ -82,6 +92,12 @@ DevTools_add_test(test_out_of_range_exception
 DevTools_add_test(test_tool
     SOURCES
     features/framework/tests/test_tool.cpp
+)
+
+DevTools_add_test(test_icon_theme
+    SOURCES
+    features/framework/tests/test_icon_theme.cpp
+    res/application.qrc
 )
 
 # core/markdown_preview
@@ -140,6 +156,12 @@ DevTools_add_test(test_data_conversion
     features/data_conversion/tests/test_data_conversion.cpp
 )
 
+# gui/db_tool
+DevTools_add_test(test_db_connection_window
+    SOURCES
+    features/db_tool/tests/test_connection_window.cpp
+)
+
 # gui/image/basic
 DevTools_add_test(test_basic_image_view_control
     SOURCES
@@ -158,4 +180,9 @@ DevTools_add_test(test_color_sample
 DevTools_add_test(test_image_view_for_image_transparent
     SOURCES
     features/image/tests/transparent/test_image_view_for_image_transparent.cpp
+)
+# features/regex_tool/core
+DevTools_add_test(test_regex_tool
+    SOURCES
+    features/regex_tool/tests/test_regex_tool.cpp
 )

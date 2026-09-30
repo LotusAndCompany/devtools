@@ -26,10 +26,9 @@ scripts/sync-agent-rules.py
 - `.agents/rules/testing.md`: Google Test and CTest rules
 - `.agents/rules/i18n.md`: Qt translation workflow
 - `.agents/rules/docs.md`: English/Japanese documentation rules
-- `.agents/rules/exec-plans.md`: execution plan and tech-debt tracker rules
 - `.agents/rules/design-files.md`: Pencil `.pen` design file handling
 - `.agents/rules/generated-files.md`: generated artifacts and vendor files
-- `.agents/rules/git-workflow.md`: branches, commits, PRs, release-please
+- `.agents/rules/git-workflow.md`: PRs and release-please
 
 ## Critical Guardrails
 

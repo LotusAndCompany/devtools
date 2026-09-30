@@ -29,15 +29,16 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 
 ### プロジェクト構造
 
-```
-devtools/
-├── features/        # 機能モジュール（各モジュールに core/, gui/, tests/ を内包）
-├── main/            # アプリケーションエントリーポイント
-├── res/             # リソースと翻訳ファイル
-├── tests/           # 共有テストヘルパー
-├── designs/         # UIデザインファイル（.pen）
-├── docs/            # ドキュメント
-└── distribution/    # プラットフォーム固有のパッケージングファイル
+```mermaid
+flowchart TD
+    root["devtools/"]
+    root --> features["features/<br/>機能モジュール<br/>(core/, gui/, tests/)"]
+    root --> main["main/<br/>アプリケーションエントリーポイント"]
+    root --> resources["res/<br/>リソースと翻訳ファイル"]
+    root --> tests["tests/<br/>共有テストヘルパー"]
+    root --> designs["designs/<br/>UIデザインファイル (.pen)"]
+    root --> docs["docs/<br/>ドキュメント"]
+    root --> distribution["distribution/<br/>プラットフォーム固有のパッケージング"]
 ```
 
 ## 貢献の方法
@@ -65,7 +66,7 @@ devtools/
 ### コードの提出
 
 1. リポジトリをフォーク
-2. `main`から機能ブランチを作成（[ブランチ命名規則](#ブランチ命名規則)を参照）
+2. `main`から機能ブランチを作成
 3. 変更を加える
 4. 必要に応じてテストを作成または更新
 5. すべてのテストが通ることを確認
@@ -133,7 +134,7 @@ brew install pre-commit  # macOS
 # または: pip install pre-commit
 
 # フックをセットアップ
-pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+pre-commit install --install-hooks -t pre-commit -t pre-push
 ```
 
 **フック一覧：**
@@ -144,7 +145,6 @@ pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
 | pre-commit | trailing-whitespace | 末尾空白の削除 |
 | pre-commit | end-of-file-fixer | ファイル末尾の改行 |
 | pre-commit | check-added-large-files | 大きなファイルの追加を防止 |
-| commit-msg | conventional-pre-commit | コミットメッセージ形式の検証 |
 | pre-push | cmake-build | ビルド成功の検証 |
 
 **手動実行：**
@@ -198,15 +198,16 @@ pre-commit autoupdate
 ### 新しいモジュールの追加
 
 1. 機能ディレクトリ構造を作成：
-   ```text
-   features/your_module/
-   ├── CMakeLists.txt
-   ├── core/
-   │   └── your_module.h, your_module.cpp
-   ├── gui/
-   │   └── your_module_gui.h, your_module_gui.cpp
-   └── tests/
-       └── test_your_module.cpp
+   ```mermaid
+   flowchart TD
+       module["features/your_module/"]
+       module --> cmake["CMakeLists.txt"]
+       module --> core["core/"]
+       core --> core_files["your_module.h<br/>your_module.cpp"]
+       module --> gui["gui/"]
+       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       module --> tests["tests/"]
+       tests --> test_file["test_your_module.cpp"]
    ```
 
 2. ルートの`CMakeLists.txt`に静的ライブラリターゲットを登録：
@@ -253,88 +254,6 @@ UIデザインファイル（`.pen`、[Pencil](https://pencil.app) 形式）は 
 
 ファイル構成・編集フロー・コンフリクト対応の詳細は [Design Files](../development/design-files.md) を参照してください。
 
-### ブランチ命名規則
-
-以下のブランチ命名規則を使用してください：
-
-| タイプ | パターン | 例 |
-|-------|---------|-----|
-| 機能追加 | `feature/<説明>` | `feature/sms-qr-code` |
-| バグ修正 | `fix/<説明>` | `fix/image-rotation-angle` |
-| ドキュメント | `doc/<説明>` | `doc/update-build-guide` |
-| リファクタリング | `refactor/<説明>` | `refactor/data-conversion` |
-| 緊急修正 | `hotfix/<説明>` | `hotfix/crash-on-startup` |
-
-**ルール：**
-- 常に`main`からブランチを作成
-- 小文字とハイフンを使用（アンダースコアやスペースは使わない）
-- 説明は短く、しかし分かりやすく
-- 該当する場合はIssue番号を含める：`feature/123-sms-qr-code`
-
-```bash
-# 例：機能ブランチの作成
-git checkout main
-git pull origin main
-git checkout -b feature/sms-qr-code
-```
-
-### コミットメッセージ
-
-[Conventional Commits](https://www.conventionalcommits.org/)形式に従ってください：
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-**タイプ一覧：**
-| タイプ | 説明 |
-|-------|------|
-| `feat` | 新機能 |
-| `fix` | バグ修正 |
-| `docs` | ドキュメントの変更 |
-| `style` | コードスタイルの変更（フォーマットなど、ロジック変更なし） |
-| `refactor` | リファクタリング |
-| `test` | テストの追加・更新 |
-| `chore` | メンテナンスタスク |
-| `build` | ビルドシステムの変更 |
-| `ci` | CI設定の変更 |
-| `perf` | パフォーマンス改善 |
-
-**ルール：**
-- 現在形を使用（「機能を追加した」ではなく「機能を追加」）
-- 命令形を使用
-- 件名は簡潔に（50文字以内推奨）
-- 本文は72文字以内で折り返し推奨
-- フッターでIssueやPRを参照
-
-**例：**
-```
-feat(qr): 電話番号用QRコード生成を追加
-
-- tel: URIスキームのサポートを実装
-- 電話番号バリデーションを追加
-- 電話番号入力フィールドでUIを更新
-
-Closes #123
-```
-
-```
-fix(image): 回転角度の計算を修正
-
-特定の画像形式で回転が90度ずれていた問題を修正。
-すべてのサポート形式で一貫した動作を保証。
-
-Fixes #456
-```
-
-```
-docs: macOS用ビルド手順を更新
-```
-
 ## プルリクエストのプロセス
 
 1. 必要に応じて**ドキュメントを更新**
@@ -342,7 +261,7 @@ docs: macOS用ビルド手順を更新
 3. **CIがパス**することを確認（すべてのテストがパス、ビルドエラーなし）
 4. メンテナーに**レビューをリクエスト**
 5. **フィードバックに迅速に対応**
-6. 要求された場合は**コミットをスカッシュ**
+6. **プルリクエストをスカッシュマージ**
 
 ### PRタイトルのフォーマット
 
@@ -372,10 +291,11 @@ docs: macOS用ビルド手順を更新
 
 ### 仕組み
 
-1. **Conventional Commitsによるバージョン決定：**
-   - `fix:` コミット → PATCHバージョン (0.3.0 → 0.3.1)
-   - `feat:` コミット → MINORバージョン (0.3.0 → 0.4.0)
-   - フッターの`BREAKING CHANGE:` → MAJORバージョン (0.3.0 → 1.0.0)
+1. **スカッシュマージしたPRタイトルでバージョンが決まります：**
+   - PRタイトルが`main`上のスカッシュコミットのタイトルになります
+   - `fix:` のPRタイトル → PATCHリリース
+   - `feat:` のPRタイトル → MINORリリース
+   - PRタイトルの`feat!`または`fix!` → MAJORリリース
 
 2. **自動化ワークフロー：**
    - `main`に変更がマージされると、release-pleaseがRelease PRを作成/更新
@@ -394,7 +314,8 @@ docs: macOS用ビルド手順を更新
 
 - リリース準備ができたら、自動生成されたRelease PRをレビューしてマージ
 - バージョン番号やCHANGELOGを手動で編集しないでください（release-pleaseが処理します）
-- 正確なバージョン決定のため、コミットメッセージはConventional Commits形式に従うこと
+- PRタイトルはConventional Commits形式に従ってください。release-pleaseは、
+  `main`上のスカッシュコミットのタイトルからバージョンを決定します
 
 ## 質問がありますか？
 

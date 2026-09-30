@@ -1,20 +1,29 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <QGroupBox>
+#include <QWidget>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
+class QPlainTextEdit;
 class QPushButton;
-class QTextBrowser;
 
-class Command : public QGroupBox
+class Command : public QWidget
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親ウィジェット
+     */
     explicit Command(QWidget *parent = nullptr);
+    /**
+     * @brief デストラクタ
+     */
     ~Command() override = default;
     Command(const Command &) = delete;
     Command &operator=(const Command &) = delete;
@@ -22,29 +31,72 @@ public:
     Command &operator=(Command &&) = delete;
 
 private:
+    /**
+     * @brief UIを構築する
+     */
     void buildUi();
+    /**
+     * @brief 初期化処理を実行する
+     */
     void init();
+    /**
+     * @brief カテゴリが選択されたときの処理
+     */
     void selectedCategory();
+    /**
+     * @brief 機能が選択されたときの処理
+     */
     void selectedFunction();
+    /**
+     * @brief オプションが選択されたときの処理
+     */
     void selectedOption();
+    /**
+     * @brief コマンドを生成する
+     */
     void generate();
+    /**
+     * @brief 入力をリセットする
+     */
     void reset();
+    /**
+     * @brief 出力をクリアする
+     */
     void clear();
+    /**
+     * @brief 生成されたコマンドをクリップボードにコピーする
+     */
     void copy();
-    void adjustCommandBoxWidth();
+    void retranslateUi();
 
+    /// カテゴリ選択用のコンボボックス
     QComboBox *category_list{nullptr};
+    QGroupBox *input_pane{nullptr};
+    QGroupBox *output_pane{nullptr};
     QLabel *functions_label{nullptr};
+    /// 機能選択用のコンボボックス
     QComboBox *functions_list{nullptr};
+    /// オプションリストのラベル
     QLabel *option_label{nullptr};
+    /// オプション選択用のコンボボックス
     QComboBox *option_list{nullptr};
+    /// テキスト入力のラベル
     QLabel *text_label{nullptr};
+    /// テキスト入力用のエディット
     QLineEdit *text_edit{nullptr};
+    /// リセットボタン
     QPushButton *reset_button{nullptr};
+    /// 生成ボタン
     QPushButton *generate_button{nullptr};
-    QTextBrowser *text_browser{nullptr};
+    /// 生成されたコマンドを表示するテキストエディット
+    QPlainTextEdit *text_browser{nullptr};
+    /// コピーボタン
     QPushButton *copy_button{nullptr};
+    /// クリアボタン
     QPushButton *clear_button{nullptr};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // COMMAND_H

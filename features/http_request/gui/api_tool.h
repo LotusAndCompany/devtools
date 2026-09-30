@@ -5,23 +5,36 @@
 #include <QStringList>
 
 class QComboBox;
+class QEvent;
+class QGroupBox;
+class QHBoxLayout;
 class QLabel;
 class QLineEdit;
 class QNetworkAccessManager;
 class QNetworkReply;
 class QPushButton;
-class QSplitter;
 class QStandardItemModel;
-class QStringListModel;
+class QTabWidget;
 class QTableView;
-class QTextEdit;
+class QPlainTextEdit;
 
+/**
+ * @brief HTTPリクエストを送信するAPIテストツール
+ * @details REST APIのテストやデバッグに使用するGUIツール
+ */
 class api_tool : public QFrame
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param parent 親ウィジェット
+     */
     explicit api_tool(QWidget *parent = nullptr);
+    /**
+     * @brief デストラクタ
+     */
     ~api_tool() override;
     api_tool(const api_tool &) = delete;
     api_tool &operator=(const api_tool &) = delete;
@@ -29,30 +42,73 @@ public:
     api_tool &operator=(api_tool &&) = delete;
 
 private slots:
+    /**
+     * @brief パラメータテーブルを設定する
+     */
     void setupParametersTable();
+    /**
+     * @brief 送信ボタンがクリックされたときの処理
+     */
     void handleSendButtonClick();
+    /**
+     * @brief ネットワークリプライが完了したときの処理
+     * @param reply ネットワークリプライ
+     */
     void handleNetworkReplyFinished(QNetworkReply *reply);
+    /**
+     * @brief パラメータからURLを更新する
+     */
     void updateUrlFromParams();
+    /**
+     * @brief レスポンスビューを設定する
+     */
     void setupResponseView();
+    void retranslateUi();
 
 private:
+    /**
+     * @brief UIを構築する
+     */
     void buildUi();
 
+    /// HTTPメソッド選択用のコンボボックス
     QComboBox *method_combo{};
-    QTextEdit *url_edit{};
+    QGroupBox *request_container{};
+    QGroupBox *tabs_container{};
+    QGroupBox *response_container{};
+    QTabWidget *tab_widget{};
+    /// URL入力用のラインエディット
+    QLineEdit *url_edit{};
+    /// 送信ボタン
     QPushButton *send_button{};
+    /// パラメータ入力用のテーブルビュー
     QTableView *params_table{};
+    /// 認証用のユーザー名入力
     QLineEdit *username_edit{};
+    /// 認証用のパスワード入力
     QLineEdit *password_edit{};
-    QTextEdit *body_edit{};
-    QSplitter *main_splitter{};
+    /// リクエストボディ入力用のテキストエディット
+    QPlainTextEdit *body_edit{};
+    /// オプションとレスポンスを中央で等分するレイアウト
+    QHBoxLayout *content_layout{};
 
+    /// ネットワークアクセスマネージャ
     QNetworkAccessManager *network_manager;
+    /// 文字列リスト
     QStringList list;
+    /// パラメータテーブルのモデル
     QStandardItemModel *params_model;
-    QStringListModel *response_model{};
+    /// レスポンス表示用のテキストビュー
+    QPlainTextEdit *response_edit{};
+    /// ステータス表示用のラベル
     QLabel *status_label{};
+    QLabel *username_label{};
+    QLabel *password_label{};
+    /// リクエスト開始時刻
     qint64 request_start_time{};
+
+protected:
+    void changeEvent(QEvent *event) override;
 };
 
 #endif // API_TOOL_H

@@ -1,0 +1,65 @@
+# DevTools Documentation
+
+Welcome to the DevTools documentation. This guide will help you get started, understand the features, and contribute to the project.
+
+## Quick Links
+
+- [Installation Guide](getting-started/installation.md)
+- [Quick Start](getting-started/quick-start.md)
+- [API Reference](https://LotusAndCompany.github.io/devtools/) (Doxygen)
+
+## Documentation Sections
+
+### Getting Started
+
+New to DevTools? Start here:
+
+- [Installation](getting-started/installation.md) - Set up your development environment
+- [Quick Start](getting-started/quick-start.md) - Get up and running in 5 minutes
+
+### User Guide
+
+Learn how to use each feature:
+
+- [Overview](user-guide/overview.md) - Application overview and UI layout
+- [QR Code Generation](user-guide/qr-code-generation.md) - Create QR codes for text, URLs, emails, and more
+- [Image Processing](user-guide/image-processing.md) - Resize, rotate, split, and add transparency
+- [Data Conversion](user-guide/data-conversion.md) - Convert between JSON, YAML, and TOML
+- [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
+- [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
+- [Command Generation](user-guide/command-execution.md) - Build Git and Docker commands from the GUI
+- [Phrase Generation](user-guide/phrase-generation.md) - Create and reuse named text templates
+- [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
+- [Regular Expression Tester](user-guide/regex-tester.md) - Test patterns and replacements
+
+### Development
+
+For contributors and developers:
+
+- [Architecture](development/architecture.md) - System architecture and module structure
+- [Coding Standards](development/coding-standards.md) - Code style and naming conventions
+- [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
+- [Icon Assets](development/icon-assets.md) - Bundled icon font and license records
+- [Testing Guide](development/testing-guide.md) - Write and run tests
+- [Localization](development/localization.md) - Add and update translations
+- [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow
+- [AI Agent Harness](development/ai-agent-harness.md) - Cross-tool AI agent configuration
+
+### API Reference
+
+- [Doxygen API Reference](https://LotusAndCompany.github.io/devtools/)
+
+### Troubleshooting
+
+- [Common Issues](troubleshooting/common-issues.md) - Solutions to frequently encountered problems
+- [FAQ](troubleshooting/faq.md) - Frequently asked questions
+
+## External Resources
+
+- [GitHub Repository](https://github.com/LotusAndCompany/devtools)
+- [Issue Tracker](https://github.com/LotusAndCompany/devtools/issues)
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md)
+
+## License
+
+DevTools is licensed under the [Apache License 2.0](../LICENSE).

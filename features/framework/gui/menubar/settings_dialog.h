@@ -26,6 +26,8 @@ class SettingsDialog : public QDialog
     QWidget *general_tab = nullptr;
     /// Window タブ
     QWidget *window_tab = nullptr;
+    /// General 設定ペイン
+    QGroupBox *general_group_box = nullptr;
     /// 言語ラベル
     QLabel *language_label = nullptr;
     /// 言語コンボボックス

@@ -12,7 +12,7 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9.3（Widgets, LinguistTools, Network, Svgモジュール）
+- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Sql, Network, Svgモジュール）
 - **vcpkg**: 依存関係管理用
 
 ### 依存ライブラリ（vcpkg経由）
@@ -23,11 +23,12 @@
 - qlementine v1.4.2（Qt Widgets向けのモダンな `QStyle`、MITライセンス）
 
 qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
-Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは `DevTools_core` にリンクし、
+Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは名前付きグリフのアイコンのためQt 6.9以上を
+必要とし、`DevTools_core` にリンクし、
 同梱テーマをQtリソースの `:/themes` から読み込みます。
 
 ### オプション
-- **Doxygen**: 1.16以上（APIドキュメント生成用）
+- **Doxygen**: 1.18以上（APIドキュメント生成用）
 - **GraphViz**: クラス図・依存関係グラフの生成用（オプション）
 - **Qt Creator**: 18.0.1以上（Qt統合IDE）
 - **Ninja**: 1.12.1以上（高速ビルドツール）
@@ -43,8 +44,8 @@ brew install qt@6
 ```
 
 #### Qt Online Installerを使用する場合
-[qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.xをインストール：
-- Qt 6.x for macOS
+[qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.9以上をインストール：
+- Qt 6.9以上 for macOS
 - Qt Creator（オプション、推奨）
 
 ### 2. vcpkgのインストール
@@ -150,7 +151,7 @@ ctest
 
 ## ドキュメントの生成
 
-APIドキュメントの生成にはDoxygen 1.16以上が必要です。
+APIドキュメントの生成にはDoxygen 1.18以上が必要です。
 
 ### Doxygenのインストール
 ```bash
@@ -224,7 +225,3 @@ qlementineのダウンロード中にCMake構成が失敗する場合は、以�
    cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。
-
-## 配布
-
-App Store用の配布ビルドの作成については、[docs/distribution/how_to_distribute.md](../distribution/how_to_distribute.md)を参照してください。

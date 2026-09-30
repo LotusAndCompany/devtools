@@ -8,14 +8,13 @@
 class MarkdownPreview;
 
 class QAbstractSlider;
-class QAction;
 class QCheckBox;
 class QEvent;
-class QLabel;
+class QGroupBox;
 class QPlainTextEdit;
+class QPushButton;
 class QTextBrowser;
 class QTimer;
-class QToolBar;
 class QWidget;
 
 /**
@@ -52,17 +51,17 @@ private:
     void retranslateUi();
     void renderPreview();
     void syncScroll(QAbstractSlider *source, QAbstractSlider *target);
-    QWidget *buildPane(QLabel *&sectionLabel, QWidget *content);
+    QGroupBox *buildPane(QWidget *content);
 
     MarkdownPreview *tool;
 
-    QToolBar *toolbar{nullptr};
-    QAction *openAction{nullptr};
-    QAction *saveAction{nullptr};
-    QAction *exportHtmlAction{nullptr};
+    QGroupBox *toolbarGroupBox{nullptr};
+    QPushButton *openButton{nullptr};
+    QPushButton *saveButton{nullptr};
+    QPushButton *exportHtmlButton{nullptr};
     QCheckBox *syncScrollCheck{nullptr};
-    QLabel *editorLabel{nullptr};
-    QLabel *previewLabel{nullptr};
+    QGroupBox *editorPane{nullptr};
+    QGroupBox *previewPane{nullptr};
     QPlainTextEdit *editor{nullptr};
     QTextBrowser *preview{nullptr};
     QTimer *renderTimer{nullptr};

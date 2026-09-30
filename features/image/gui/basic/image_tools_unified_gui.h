@@ -14,7 +14,9 @@ class QButtonGroup;
 class QCheckBox;
 class QComboBox;
 class QDoubleSpinBox;
+class QEvent;
 class QFrame;
+class QGroupBox;
 class QLabel;
 class QPushButton;
 class QRadioButton;
@@ -31,6 +33,8 @@ namespace Ui {
 struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
 {
     ImageViewForImageTransparent *imageView;
+    QGroupBox *imagePane;
+    QGroupBox *toolPane;
     QScrollArea *toolScrollArea;
     BasicImageViewControl *control;
 
@@ -47,6 +51,10 @@ struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
     QWidget *transparentSectionBody;
     QWidget *divisionSectionBody;
 
+    QLabel *widthLabel;
+    QLabel *heightLabel;
+    QLabel *horizontalScaleLabel;
+    QLabel *verticalScaleLabel;
     QSpinBox *widthValue;
     QSpinBox *heightValue;
     QDoubleSpinBox *hScaleValue;
@@ -62,15 +70,24 @@ struct ImageToolsUnifiedGUI // NOLINT(altera-struct-pack-align)
     QPushButton *flipVerticalButton;
 
     QComboBox *colorMode;
+    QLabel *colorModeLabel;
     ColorSample *colorSample;
+    QLabel *colorLabel;
     QDoubleSpinBox *toleranceValue;
+    QLabel *toleranceLabel;
     QDoubleSpinBox *transparencyValue;
+    QLabel *transparencyLabel;
     QCheckBox *contiguousArea;
 
+    QLabel *imageSizeLabel;
     QLabel *sizeLabel;
     QRadioButton *useDivisionButton;
     QRadioButton *useSizeButton;
     QButtonGroup *divisionModeButtonGroup;
+    QLabel *horizontalDivisionLabel;
+    QLabel *verticalDivisionLabel;
+    QLabel *cellWidthLabel;
+    QLabel *cellHeightLabel;
     QSpinBox *hDivValue;
     QSpinBox *vDivValue;
     QSpinBox *cellWidthValue;
@@ -145,7 +162,7 @@ private:
     void refreshPreview(bool resetScale = false);
     void refreshSizeInputs();
     void applyResize(const QSize &targetSize);
-    bool hasImage() const;
+    [[nodiscard]] bool hasImage() const;
 
     static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
     static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
@@ -158,9 +175,12 @@ private:
     void applyTransparentByFloodFill(const QPoint &start);
     void applyTransparencyAt(const QPoint &point, const QColor &color);
 
-    bool saveDividedImages(const QString &folderPath) const;
+    [[nodiscard]] bool saveDividedImages(const QString &folderPath) const;
     static int countByCellSize(int source, int cell, bool ignoreRemainders);
-    QString outputSuffix() const;
+    [[nodiscard]] QString outputSuffix() const;
+
+    void changeEvent(QEvent *event) override;
+    void retranslateUi();
 };
 
 #endif // IMAGE_TOOLS_UNIFIED_GUI_H
