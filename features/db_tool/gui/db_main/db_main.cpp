@@ -248,11 +248,11 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
         }
     }
 
-    auto *model = new QSqlTableModel(this, db);
+    auto *tableView = new QTableView;
+    auto *model = new QSqlTableModel(tableView, db);
     model->setTable(tableName);
     model->select();
 
-    auto *tableView = new QTableView;
     DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);
     DevTools::Ui::fitTableViewToContents(tableView);
@@ -289,6 +289,11 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
 void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo,
                          std::shared_ptr<SQLiteFileAccess> newFileAccess)
 {
+    // 古いDBを参照するモデルやクエリを、アクセス権を置き換える前に破棄する
+    while (queryTabWidget->count() > 0) {
+        handleTabCloseRequested(0);
+    }
+
     db = database;
     s_hasConnectedThisSession = true;
 
