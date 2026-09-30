@@ -1,7 +1,7 @@
 #ifndef CONNECTION_WINDOW_H
 #define CONNECTION_WINDOW_H
 
-#include "../../core/sqlite_file_access.h"
+#include "features/db_tool/core/sqlite_file_access.h"
 
 #include <QJsonObject>
 #include <QSqlDatabase>

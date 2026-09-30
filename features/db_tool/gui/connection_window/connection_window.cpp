@@ -1,6 +1,6 @@
 #include "connection_window.h"
 
-#include "../sqlite_file_picker.h"
+#include "features/db_tool/gui/sqlite_file_picker.h"
 #include "features/framework/gui/design_system.h"
 
 #include <QComboBox>

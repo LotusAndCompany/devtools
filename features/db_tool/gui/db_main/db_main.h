@@ -1,8 +1,8 @@
 #ifndef DB_MAIN_H
 #define DB_MAIN_H
 
-#include "../../core/sqlite_file_access.h"
 #include "QtSql/qsqldatabase.h"
+#include "features/db_tool/core/sqlite_file_access.h"
 
 #include <QJsonObject>
 #include <QListWidgetItem>

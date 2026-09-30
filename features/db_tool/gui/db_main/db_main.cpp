@@ -1,8 +1,8 @@
 #include "db_main.h"
 
-#include "../connection_selector/connection_selector.h"
-#include "../connection_window/connection_window.h"
-#include "../query_page/query_page.h"
+#include "features/db_tool/gui/connection_selector/connection_selector.h"
+#include "features/db_tool/gui/connection_window/connection_window.h"
+#include "features/db_tool/gui/query_page/query_page.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
 

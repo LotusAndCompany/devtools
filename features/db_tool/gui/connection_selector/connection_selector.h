@@ -1,7 +1,7 @@
 #ifndef CONNECTION_SELECTOR_H
 #define CONNECTION_SELECTOR_H
 
-#include "../../core/sqlite_file_access.h"
+#include "features/db_tool/core/sqlite_file_access.h"
 
 #include <QJsonObject>
 #include <QSqlDatabase>

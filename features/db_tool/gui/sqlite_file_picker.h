@@ -1,7 +1,7 @@
 #ifndef SQLITE_FILE_PICKER_H
 #define SQLITE_FILE_PICKER_H
 
-#include "../core/sqlite_file_access.h"
+#include "features/db_tool/core/sqlite_file_access.h"
 
 class QWidget;
 
