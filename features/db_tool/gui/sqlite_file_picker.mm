@@ -4,14 +4,10 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 #include <QFileInfo>
+#include <QMessageBox>
 #include <QWidget>
 
 namespace {
-QString toQString(NSURL *url)
-{
-    return QString::fromUtf8(url.path.UTF8String);
-}
-
 NSData *createBookmark(NSURL *url)
 {
     NSError *error = nil;
@@ -48,17 +44,12 @@ std::unique_ptr<SQLiteFileAccess> selectSQLiteDatabaseFile(QWidget *parent,
         }
     }
 
-    Q_UNUSED(parent);
     if ([panel runModal] != NSModalResponseOK) {
         return nullptr;
     }
 
     NSURL *selectedUrl = [[panel URL] retain];
-    if (selectedUrl == nil) {
-        return nullptr;
-    }
-
-    const BOOL startedAccessing = [selectedUrl startAccessingSecurityScopedResource];
+    BOOL startedAccessing = [selectedUrl startAccessingSecurityScopedResource];
     NSData *bookmark = createBookmark(selectedUrl);
     std::unique_ptr<SQLiteFileAccess> fileAccess;
     if (bookmark != nil) {
@@ -67,9 +58,20 @@ std::unique_ptr<SQLiteFileAccess> selectSQLiteDatabaseFile(QWidget *parent,
         fileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
     }
 
+    if (!fileAccess) {
+        fileAccess = SQLiteFileAccess::fromSecurityScopedUrl(selectedUrl, startedAccessing);
+        if (fileAccess) {
+            startedAccessing = NO; // SQLiteFileAccess now owns the access lifetime.
+        }
+    }
+
     if (startedAccessing) {
         [selectedUrl stopAccessingSecurityScopedResource];
     }
     [selectedUrl release];
+    if (!fileAccess) {
+        QMessageBox::critical(parent, QObject::tr("File Opening Error"),
+                              QObject::tr("Could not access the selected database file."));
+    }
     return fileAccess;
 }

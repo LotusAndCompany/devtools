@@ -341,7 +341,8 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     endif()
 
     get_filename_component(QT_INSTALL_PREFIX "${Qt6_DIR}/../../.." ABSOLUTE)
-    find_program(MACDEPLOYQT_EXECUTABLE NAMES macdeployqt HINTS "${QT_INSTALL_PREFIX}/bin" REQUIRED)
+    find_program(MACDEPLOYQT_EXECUTABLE NAMES macdeployqt HINTS "${QT_INSTALL_PREFIX}/bin"
+        NO_DEFAULT_PATH REQUIRED)
     set(MACDEPLOYQT_OPTIONS -appstore-compliant)
     if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
         list(APPEND MACDEPLOYQT_OPTIONS "-codesign=${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}")

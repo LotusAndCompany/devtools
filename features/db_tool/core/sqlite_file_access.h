@@ -12,6 +12,13 @@ public:
     static std::unique_ptr<SQLiteFileAccess> fromFilePath(const QString &filePath);
     static std::unique_ptr<SQLiteFileAccess> fromBookmark(const QByteArray &bookmarkData);
 
+#ifdef Q_OS_MACOS
+    // Retains the NSURL pointed to by nativeUrl and takes over access on success.
+    // On failure, the caller must stop access. No bookmark is persisted.
+    static std::unique_ptr<SQLiteFileAccess> fromSecurityScopedUrl(void *nativeUrl,
+                                                                   bool isAccessing);
+#endif
+
     ~SQLiteFileAccess();
     SQLiteFileAccess(const SQLiteFileAccess &) = delete;
     SQLiteFileAccess &operator=(const SQLiteFileAccess &) = delete;

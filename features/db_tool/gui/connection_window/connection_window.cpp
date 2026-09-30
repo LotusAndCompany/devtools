@@ -116,6 +116,7 @@ void ConnectionWindow::buildFormFields(QFormLayout *formLayout)
     auto *dbNameLayout = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(dbNameLayout);
     dbNamelineEdit = new QLineEdit(this);
+    dbNamelineEdit->setObjectName(QStringLiteral("databaseNameLineEdit"));
     DevTools::Ui::configureLineEdit(dbNamelineEdit);
     dbNameLayout->addWidget(dbNamelineEdit);
     browseButton = new QPushButton(this);
@@ -221,6 +222,9 @@ void ConnectionWindow::createNewConnect()
 
     if (databaseType == "QSQLITE") {
         if (!sqliteFileAccess || sqliteFileAccess->filePath() != databaseName) {
+            sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
+        }
+        if (!sqliteFileAccess) {
             sqliteFileAccess = selectSQLiteDatabaseFile(this, databaseName);
         }
         if (!sqliteFileAccess) {
@@ -241,8 +245,24 @@ void ConnectionWindow::createNewConnect()
     }
 
     if (!db.open()) {
-        QMessageBox::critical(this, tr("Connection Failed"), db.lastError().text());
-        return;
+#ifdef Q_OS_MACOS
+        if (databaseType == "QSQLITE") {
+            db.close();
+            auto selectedFile = selectSQLiteDatabaseFile(this, databaseName);
+            if (!selectedFile) {
+                return;
+            }
+            sqliteFileAccess = std::move(selectedFile);
+            databaseName = sqliteFileAccess->filePath();
+            dbNamelineEdit->setText(databaseName);
+            db.setDatabaseName(databaseName);
+            db.open();
+        }
+#endif
+        if (!db.isOpen()) {
+            QMessageBox::critical(this, tr("Connection Failed"), db.lastError().text());
+            return;
+        }
     }
 
     // Build connection info for history
@@ -317,7 +337,8 @@ bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
             return true;
         }
 
-        dbNamelineEdit->setText(filePath);
+        sqliteFileAccess = SQLiteFileAccess::fromFilePath(filePath);
+        dbNamelineEdit->setText(sqliteFileAccess ? sqliteFileAccess->filePath() : filePath);
         dropEvent->acceptProposedAction();
         return true;
     }

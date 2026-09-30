@@ -89,10 +89,10 @@ std::unique_ptr<SQLiteFileAccess> SQLiteFileAccess::fromFilePath(const QString &
                                                  relativeToURL:nil
                                            bookmarkDataIsStale:&isStale
                                                          error:&error];
-        if (resolvedUrl != nil) {
+        if (resolvedUrl != nil && [resolvedUrl startAccessingSecurityScopedResource]) {
             impl->url = [resolvedUrl retain];
             impl->bookmarkData = toByteArray(bookmark);
-            impl->isAccessing = [impl->url startAccessingSecurityScopedResource];
+            impl->isAccessing = true;
         }
     }
 
@@ -100,6 +100,26 @@ std::unique_ptr<SQLiteFileAccess> SQLiteFileAccess::fromFilePath(const QString &
         impl->url = [url retain];
     }
     impl->filePath = toQString(impl->url);
+    return std::unique_ptr<SQLiteFileAccess>(new SQLiteFileAccess(std::move(impl)));
+}
+
+std::unique_ptr<SQLiteFileAccess> SQLiteFileAccess::fromSecurityScopedUrl(void *nativeUrl,
+                                                                          bool isAccessing)
+{
+    NSURL *url = static_cast<NSURL *>(nativeUrl);
+    if (url == nil || !url.isFileURL) {
+        return nullptr;
+    }
+
+    const QString filePath = toQString(url);
+    if (filePath.isEmpty()) {
+        return nullptr;
+    }
+
+    auto impl = std::make_unique<SQLiteFileAccess::Impl>();
+    impl->url = [url retain];
+    impl->filePath = filePath;
+    impl->isAccessing = isAccessing;
     return std::unique_ptr<SQLiteFileAccess>(new SQLiteFileAccess(std::move(impl)));
 }
 
