@@ -1,5 +1,6 @@
 #include "connection_window.h"
 
+#include "features/db_tool/gui/sqlite_file_picker.h"
 #include "features/framework/gui/design_system.h"
 
 #include <QComboBox>
@@ -7,7 +8,6 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QEvent>
-#include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QGroupBox>
@@ -21,6 +21,8 @@
 #include <QSqlError>
 #include <QUrl>
 #include <QVBoxLayout>
+
+#include <utility>
 
 namespace {
 bool isSQLiteFilePath(const QString &filePath)
@@ -52,6 +54,80 @@ QString droppedSQLiteFilePath(const QMimeData *mimeData)
     }
 
     return {};
+}
+
+QJsonObject buildConnectionInfo(const QString &databaseType, const QString &dbTypeText,
+                                const QString &hostName, const QString &databaseName,
+                                const QString &userName, const SQLiteFileAccess *sqliteFileAccess)
+{
+    QString displayName;
+    if (databaseType == "QSQLITE") {
+        QFileInfo const fileInfo(databaseName);
+        displayName = QString("SQLite: %1").arg(fileInfo.fileName());
+    } else {
+        displayName =
+            QString("%1: %2@%3/%4").arg(dbTypeText).arg(userName).arg(hostName).arg(databaseName);
+    }
+
+    QJsonObject connectionInfo{{"type", databaseType},
+                               {"host", hostName},
+                               {"database", databaseName},
+                               {"username", userName},
+                               {"displayName", displayName}};
+    if (databaseType == "QSQLITE" && sqliteFileAccess != nullptr &&
+        !sqliteFileAccess->bookmarkData().isEmpty()) {
+        connectionInfo["securityScopedBookmark"] =
+            QString::fromLatin1(sqliteFileAccess->bookmarkData().toBase64());
+    }
+    return connectionInfo;
+}
+
+bool prepareSQLiteFileAccess(QWidget *parent, const QString &databaseName,
+                             std::unique_ptr<SQLiteFileAccess> &sqliteFileAccess)
+{
+    if (!sqliteFileAccess || sqliteFileAccess->filePath() != databaseName) {
+        sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
+    }
+    if (!sqliteFileAccess) {
+        sqliteFileAccess = selectSQLiteDatabaseFile(parent, databaseName);
+    }
+    if (!sqliteFileAccess) {
+        return false;
+    }
+    return true;
+}
+
+bool openDatabase(QSqlDatabase &db, const QString &databaseType, QWidget *parent,
+                  QLineEdit *databaseNameLineEdit, const QString &databaseName,
+                  std::unique_ptr<SQLiteFileAccess> &sqliteFileAccess,
+                  const QString &connectionFailedTitle)
+{
+    if (!db.open()) {
+#ifdef Q_OS_MACOS
+        if (databaseType == "QSQLITE") {
+            db.close();
+            auto selectedFile = selectSQLiteDatabaseFile(parent, databaseName);
+            if (!selectedFile) {
+                return false;
+            }
+            sqliteFileAccess = std::move(selectedFile);
+            const QString selectedDatabaseName = sqliteFileAccess->filePath();
+            databaseNameLineEdit->setText(selectedDatabaseName);
+            db.setDatabaseName(selectedDatabaseName);
+            db.open();
+        }
+#else
+        Q_UNUSED(databaseType);
+        Q_UNUSED(databaseNameLineEdit);
+        Q_UNUSED(databaseName);
+        Q_UNUSED(sqliteFileAccess);
+#endif
+        if (!db.isOpen()) {
+            QMessageBox::critical(parent, connectionFailedTitle, db.lastError().text());
+            return false;
+        }
+    }
+    return true;
 }
 } // namespace
 
@@ -114,6 +190,7 @@ void ConnectionWindow::buildFormFields(QFormLayout *formLayout)
     auto *dbNameLayout = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(dbNameLayout);
     dbNamelineEdit = new QLineEdit(this);
+    dbNamelineEdit->setObjectName(QStringLiteral("databaseNameLineEdit"));
     DevTools::Ui::configureLineEdit(dbNamelineEdit);
     dbNameLayout->addWidget(dbNamelineEdit);
     browseButton = new QPushButton(this);
@@ -188,12 +265,11 @@ void ConnectionWindow::selectedDBType()
 
 void ConnectionWindow::browseForDatabase()
 {
-    QString const filePath = QFileDialog::getOpenFileName(
-        this, tr("Select Database File"), QString(),
-        tr("SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)"));
-
-    if (!filePath.isEmpty()) {
-        dbNamelineEdit->setText(filePath);
+    std::unique_ptr<SQLiteFileAccess> selectedFile =
+        selectSQLiteDatabaseFile(this, dbNamelineEdit->text());
+    if (selectedFile) {
+        dbNamelineEdit->setText(selectedFile->filePath());
+        sqliteFileAccess = std::move(selectedFile);
     }
 }
 
@@ -201,7 +277,7 @@ void ConnectionWindow::createNewConnect()
 {
     // get param from ui input
     const QString hostName = hostNameLineEdit->text();
-    const QString databaseName = dbNamelineEdit->text();
+    QString databaseName = dbNamelineEdit->text();
     const QString userName = userNameLineEdit->text();
     const QString password = passwordLineEdit->text();
 
@@ -218,6 +294,13 @@ void ConnectionWindow::createNewConnect()
         return;
     }
 
+    if (databaseType == "QSQLITE") {
+        if (!prepareSQLiteFileAccess(this, databaseName, sqliteFileAccess)) {
+            return;
+        }
+        databaseName = sqliteFileAccess->filePath();
+    }
+
     QSqlDatabase db = QSqlDatabase::addDatabase(databaseType);
 
     if (databaseType != "QSQLITE") {
@@ -229,29 +312,20 @@ void ConnectionWindow::createNewConnect()
         db.setDatabaseName(databaseName);
     }
 
-    if (!db.open()) {
-        QMessageBox::critical(this, tr("Connection Failed"), db.lastError().text());
+    if (!openDatabase(db, databaseType, this, dbNamelineEdit, databaseName, sqliteFileAccess,
+                      tr("Connection Failed"))) {
         return;
     }
-
-    // Build connection info for history
-    QString displayName;
     if (databaseType == "QSQLITE") {
-        QFileInfo const fileInfo(databaseName);
-        displayName = QString("SQLite: %1").arg(fileInfo.fileName());
-    } else {
-        displayName =
-            QString("%1: %2@%3/%4").arg(dbTypeText).arg(userName).arg(hostName).arg(databaseName);
+        databaseName = sqliteFileAccess->filePath();
     }
 
-    lastConnectionInfo = QJsonObject{{"type", databaseType},
-                                     {"host", hostName},
-                                     {"database", databaseName},
-                                     {"username", userName},
-                                     {"displayName", displayName}};
+    lastConnectionInfo = buildConnectionInfo(databaseType, dbTypeText, hostName, databaseName,
+                                             userName, sqliteFileAccess.get());
 
     QMessageBox::information(this, tr("Success"), tr("Database connection established."));
-    emit connectionCreated(db, lastConnectionInfo);
+    emit connectionCreated(db, lastConnectionInfo,
+                           std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     close();
 }
 
@@ -302,7 +376,8 @@ bool ConnectionWindow::eventFilter(QObject *watched, QEvent *event)
             return true;
         }
 
-        dbNamelineEdit->setText(filePath);
+        sqliteFileAccess = SQLiteFileAccess::fromFilePath(filePath);
+        dbNamelineEdit->setText(sqliteFileAccess ? sqliteFileAccess->filePath() : filePath);
         dropEvent->acceptProposedAction();
         return true;
     }

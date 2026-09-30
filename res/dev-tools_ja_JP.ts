@@ -379,14 +379,6 @@
         <translation>閉じる</translation>
     </message>
     <message>
-        <source>Select Database File</source>
-        <translation>データベースファイルを選択</translation>
-    </message>
-    <message>
-        <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
-        <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
@@ -832,6 +824,25 @@
     <message>
         <source>Images</source>
         <translation>画像</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Select Database File</source>
+        <translation>データベースファイルを選択</translation>
+    </message>
+    <message>
+        <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
+        <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>File Opening Error</source>
+        <translation>ファイルを開く際のエラー</translation>
+    </message>
+    <message>
+        <source>Could not access the selected database file.</source>
+        <translation>選択したデータベースファイルにアクセスできませんでした。</translation>
     </message>
 </context>
 <context>

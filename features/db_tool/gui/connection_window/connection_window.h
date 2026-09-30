@@ -1,6 +1,8 @@
 #ifndef CONNECTION_WINDOW_H
 #define CONNECTION_WINDOW_H
 
+#include "features/db_tool/core/sqlite_file_access.h"
+
 #include <QJsonObject>
 #include <QSqlDatabase>
 #include <QWidget>
@@ -46,8 +48,10 @@ signals:
      * @brief データベース接続が作成されたときに発行されるシグナル
      * @param db データベース接続
      * @param connectionInfo 接続情報
+     * @param sqliteFileAccess SQLiteファイルへのアクセス権
      */
-    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo);
+    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo,
+                           std::shared_ptr<SQLiteFileAccess> sqliteFileAccess);
 
 protected:
     /**
@@ -115,6 +119,7 @@ private:
     QLineEdit *dbNamelineEdit{nullptr};
     /// 参照ボタン
     QPushButton *browseButton{nullptr};
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess{};
     /// ユーザー名のラベル
     QLabel *userNameLabel{nullptr};
     /// ユーザー名入力用のラインエディット
