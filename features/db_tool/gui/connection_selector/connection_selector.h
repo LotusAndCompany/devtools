@@ -41,8 +41,9 @@ signals:
     /**
      * @brief データベース接続が作成されたときに発行されるシグナル
      * @param db データベース接続
+     * @param connectionInfo 接続情報
      */
-    void connectionCreated(QSqlDatabase db);
+    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo);
     /**
      * @brief 新規接続が要求されたときに発行されるシグナル
      */

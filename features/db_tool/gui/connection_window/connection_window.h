@@ -1,6 +1,8 @@
 #ifndef CONNECTION_WINDOW_H
 #define CONNECTION_WINDOW_H
 
+#include "../../core/sqlite_file_access.h"
+
 #include <QJsonObject>
 #include <QSqlDatabase>
 #include <QWidget>
@@ -115,6 +117,7 @@ private:
     QLineEdit *dbNamelineEdit{nullptr};
     /// 参照ボタン
     QPushButton *browseButton{nullptr};
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
     /// ユーザー名のラベル
     QLabel *userNameLabel{nullptr};
     /// ユーザー名入力用のラインエディット

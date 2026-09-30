@@ -287,14 +287,37 @@ void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connec
     db = database;
     s_hasConnectedThisSession = true;
 
+    if (connectionInfo["type"].toString() == "QSQLITE") {
+        std::unique_ptr<SQLiteFileAccess> newFileAccess;
+        const QByteArray bookmarkData =
+            QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
+        if (!bookmarkData.isEmpty()) {
+            newFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
+        }
+        if (!newFileAccess) {
+            newFileAccess = SQLiteFileAccess::fromFilePath(connectionInfo["database"].toString());
+        }
+
+        if (newFileAccess && !newFileAccess->bookmarkData().isEmpty()) {
+            QJsonObject updatedConnectionInfo = connectionInfo;
+            updatedConnectionInfo["database"] = newFileAccess->filePath();
+            updatedConnectionInfo["securityScopedBookmark"] =
+                QString::fromLatin1(newFileAccess->bookmarkData().toBase64());
+            saveConnectionHistory(updatedConnectionInfo);
+        } else if (!connectionInfo.isEmpty()) {
+            saveConnectionHistory(connectionInfo);
+        }
+        sqliteFileAccess = std::move(newFileAccess);
+    } else {
+        sqliteFileAccess.reset();
+        if (!connectionInfo.isEmpty()) {
+            saveConnectionHistory(connectionInfo);
+        }
+    }
+
     // Enable buttons now that DB is connected
     addQueryTabButton->setEnabled(true);
     refreshTableButton->setEnabled(true);
-
-    // Save connection info to history if provided
-    if (!connectionInfo.isEmpty()) {
-        saveConnectionHistory(connectionInfo);
-    }
 
     // Clear existing items before populating
     tableListWidget->clear();
@@ -336,7 +359,9 @@ void dbMain::showConnectionSelector()
             [this]() { connectionSelector = nullptr; });
 
     connect(connectionSelector, &ConnectionSelector::connectionCreated, this,
-            [this](const QSqlDatabase &db) { setDatabase(db); });
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
+                setDatabase(db, connectionInfo);
+            });
 
     connect(connectionSelector, &ConnectionSelector::newConnectionRequested, this,
             [this]() { openNewConnectionWindow(); });

@@ -1,6 +1,7 @@
 #ifndef DB_MAIN_H
 #define DB_MAIN_H
 
+#include "../../core/sqlite_file_access.h"
 #include "QtSql/qsqldatabase.h"
 
 #include <QJsonObject>
@@ -46,6 +47,7 @@ private:
     QListWidget *tableListWidget{nullptr};
     QTabWidget *queryTabWidget{nullptr};
 
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
     QSqlDatabase db;
     ConnectionSelector *connectionSelector = nullptr;
     ConnectionWindow *connectionWindow = nullptr;
