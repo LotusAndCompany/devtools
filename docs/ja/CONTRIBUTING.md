@@ -289,8 +289,6 @@ UIデザインファイル（`.pen`、[Pencil](https://pencil.app) 形式）は 
 
 このプロジェクトでは[release-please](https://github.com/googleapis/release-please)を使用してリリース管理を自動化しています。
 
-Mac App Store向けのArchive作成、署名確認、アップロード手順は[Mac App Store向けリリース手順](APP_STORE_RELEASE.md)を参照してください。
-
 ### 仕組み
 
 1. **スカッシュマージしたPRタイトルでバージョンが決まります：**

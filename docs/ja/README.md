@@ -110,7 +110,6 @@ cmake --build . --target run
 
 - [ビルド手順](BUILD.md)
 - [貢献ガイド](CONTRIBUTING.md)
-- [Mac App Store向けリリース手順](APP_STORE_RELEASE.md)
 - [トラブルシューティング](../troubleshooting/common-issues.md) / [FAQ](../troubleshooting/faq.md)
 
 ## 貢献
