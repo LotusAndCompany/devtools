@@ -26,7 +26,6 @@ context and still respect the path hints.
 
 - Claude Code: `.claude/rules/*.md` should be thin adapters that import the
   matching shared rule.
-- Gemini CLI: `GEMINI.md` imports shared rules directly.
 - Codex: `AGENTS.md` points Codex to this directory; `.codex/rules/` remains
   command-permission policy, not coding guidance.
 - CodeRabbit: `.coderabbit.yaml` path instructions should mirror these rules.
@@ -45,7 +44,6 @@ scripts/sync-agent-rules.py
 The script regenerates:
 
 - `.claude/rules/*.md`
-- the generated import block in `GEMINI.md`
 
 Run the full harness validation with:
 

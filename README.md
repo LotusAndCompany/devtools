@@ -15,7 +15,10 @@ A unified desktop application that combines various development tools into a sin
 - **Email**: Generate mailto: QR codes
 - **Phone**: Create tel: QR codes for phone numbers
 - **SMS**: Generate SMS QR codes
-- **Geo**: Create location-based QR codes
+- **Wi-Fi**: Encode wireless network credentials
+- **Contact**: Generate vCard QR codes
+- **Calendar**: Generate calendar event QR codes
+- **Geo Location**: Create location-based QR codes
 
 ### Image Processing
 - **Resize**: Scale images to specific dimensions
@@ -29,11 +32,14 @@ A unified desktop application that combines various development tools into a sin
 
 ### API Testing
 - Send HTTP requests (GET, POST, PUT, DELETE, etc.)
-- View responses with syntax highlighting
+- View responses as read-only, selectable text
 
-### Command Execution
-- Execute shell commands from the GUI
-- View command output in real-time
+### Markdown Preview
+- Edit Markdown and preview rendered HTML in real time
+
+### Command Generation
+- Build Git, Docker, and Docker Compose commands from the GUI
+- Copy generated commands for use in a terminal
 
 ### Database Management
 - Connect to **SQLite**, **MySQL**, and **PostgreSQL** databases
@@ -41,7 +47,11 @@ A unified desktop application that combines various development tools into a sin
 - Execute SQL queries with tabbed interface
 
 ### Phrase Generation
-- Generate random phrases and text
+- Create and reuse named text templates
+
+### Regular Expression Tester
+- Test regular expressions and replacements
+- Inspect matches and capture groups
 
 ## Requirements
 
@@ -76,7 +86,7 @@ For detailed build instructions, see [BUILD.md](BUILD.md).
 ## Documentation
 
 ### Quick Links
-- [Documentation Index](docs/index.md)
+- [Documentation Index](docs/README.md)
 - [Quick Start Guide](docs/getting-started/quick-start.md)
 - [Installation Guide](docs/getting-started/installation.md)
 

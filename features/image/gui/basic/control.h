@@ -6,6 +6,7 @@
 #include <cstdint>
 
 class QPushButton;
+class QEvent;
 
 namespace Ui {
 /**
@@ -98,6 +99,9 @@ private:
 
     /// 読み込んだファイル名
     QString fileName;
+
+    void changeEvent(QEvent *event) override;
+    void retranslateUi();
 
 #ifdef _TEST_BasicImageViewControl
     friend class Test::TestBasicImageViewControl;

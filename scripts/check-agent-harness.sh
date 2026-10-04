@@ -6,7 +6,6 @@ cd "$REPO_ROOT"
 
 snapshot_generated_adapters() {
   {
-    [ -f GEMINI.md ] && printf '%s\n' GEMINI.md
     [ -d .claude/rules ] && find .claude/rules -type f -name '*.md' -print
   } | sort | while IFS= read -r path; do
     shasum -a 256 "$path"
@@ -37,7 +36,6 @@ git diff --check -- \
   AGENTS.md \
   .agents \
   .claude/rules \
-  GEMINI.md \
   opencode.json \
   docs/development/ai-agent-harness.md \
   scripts/sync-agent-rules.py

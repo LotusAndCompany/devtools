@@ -1,32 +1,21 @@
 #include "data_conversion_gui.h"
 
+#include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
 
 #include <QClipboard>
 #include <QComboBox>
+#include <QEvent>
 #include <QFileDialog>
+#include <QGroupBox>
 #include <QGuiApplication>
 #include <QHBoxLayout>
-#include <QIcon>
+#include <QLabel>
+#include <QPlainTextEdit>
 #include <QPushButton>
-#include <QResizeEvent>
-#include <QSpacerItem>
-#include <QSplitter>
 #include <QStandardPaths>
 #include <QStyle>
-#include <QTextBrowser>
-#include <QTextEdit>
 #include <QVBoxLayout>
-
-namespace {
-constexpr int MESSAGE_VIEW_MAX_HEIGHT = 64;
-constexpr int CLEAR_BUTTON_SIZE = 34;
-constexpr int CLEAR_BUTTON_ICON_SIZE = 16;
-constexpr int ACTION_BAR_MIN_HEIGHT = 38;
-constexpr qreal TAB_STOP_DISTANCE = 20.0;
-constexpr int DEFAULT_WIDTH = 715;
-constexpr int DEFAULT_HEIGHT = 256;
-} // namespace
 
 DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QWidget *parent)
     : GuiTool(parent), dataConversion(dataConversion)
@@ -37,7 +26,8 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
         dataConversion->setParent(this);
     }
 
-    connect(inputTextEdit, &QTextEdit::textChanged, this, &DataConversionGUI::onInputTextChanged);
+    connect(inputTextEdit, &QPlainTextEdit::textChanged, this,
+            &DataConversionGUI::onInputTextChanged);
     connect(loadButton, &QPushButton::pressed, this, &DataConversionGUI::onLoadPressed);
     connect(pasteButton, &QPushButton::pressed, this, &DataConversionGUI::onPastePressed);
     connect(clearButton, &QPushButton::pressed, this, &DataConversionGUI::onClearPressed);
@@ -52,76 +42,52 @@ DataConversionGUI::DataConversionGUI(DataConversionInterface *dataConversion, QW
 
 void DataConversionGUI::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    splitter = new QSplitter(this);
-    splitter->setOrientation(Qt::Horizontal);
-    splitter->setGeometry(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    splitter->addWidget(buildInputSide(splitter));
-    splitter->addWidget(buildOutputSide(splitter));
+    auto *const rootLayout = new QHBoxLayout(this);
+    DevTools::Ui::applyPageLayout(rootLayout);
+    rootLayout->addWidget(buildInputSide(this));
+    rootLayout->addWidget(buildOutputSide(this));
+    DevTools::Ui::configureEqualLayout(rootLayout);
 }
 
 QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 {
-    auto *const container = new QWidget(parent);
+    inputPane = DevTools::Ui::createPane(tr("Input"), parent);
+    auto *const container = inputPane;
     auto *const layout = new QVBoxLayout(container);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(4);
+    DevTools::Ui::applyPanelLayout(layout);
 
-    auto *const actionBar = new QWidget(container);
-    {
-        QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        policy.setHorizontalStretch(0);
-        policy.setVerticalStretch(0);
-        actionBar->setSizePolicy(policy);
-    }
-    actionBar->setMinimumHeight(ACTION_BAR_MIN_HEIGHT);
+    input_action_button_layout = new QHBoxLayout;
+    DevTools::Ui::applyToolbarLayout(input_action_button_layout);
 
-    input_action_button_layout = new QHBoxLayout(actionBar);
-    input_action_button_layout->setContentsMargins(4, 0, 4, 0);
-
-    loadButton = new QPushButton(tr("Load"), actionBar);
+    loadButton = new QPushButton(tr("Load"), container);
+    DevTools::Ui::configureCompactButton(loadButton);
     loadButton->setIcon(
         IconUtils::themedIcon(QStringLiteral("file_open"), QStyle::SP_DialogOpenButton));
     input_action_button_layout->addWidget(loadButton);
 
-    pasteButton = new QPushButton(tr("Paste"), actionBar);
+    pasteButton = new QPushButton(tr("Paste"), container);
+    DevTools::Ui::configureCompactButton(pasteButton);
     pasteButton->setIcon(IconUtils::themedIcon(QStringLiteral("content_paste")));
     input_action_button_layout->addWidget(pasteButton);
 
-    input_action_button_layout->addItem(
-        new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    input_action_button_layout->addStretch();
 
-    clearButton = new QPushButton(actionBar);
-    {
-        QSizePolicy policy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        policy.setHorizontalStretch(0);
-        policy.setVerticalStretch(0);
-        clearButton->setSizePolicy(policy);
-    }
-    clearButton->setMinimumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
-    clearButton->setMaximumSize(CLEAR_BUTTON_SIZE, CLEAR_BUTTON_SIZE);
-    clearButton->setAutoFillBackground(false);
+    clearButton = new QPushButton(container);
+    DevTools::Ui::configureIconButton(clearButton, QStringLiteral("close"), tr("Clear"));
     clearButton->setIcon(
         IconUtils::themedIcon(QStringLiteral("close"), QStyle::SP_DialogCloseButton));
-    clearButton->setIconSize(QSize(CLEAR_BUTTON_ICON_SIZE, CLEAR_BUTTON_ICON_SIZE));
-    clearButton->setFlat(false);
     input_action_button_layout->addWidget(clearButton);
 
-    layout->addWidget(actionBar);
+    layout->addLayout(input_action_button_layout);
 
-    inputTextEdit = new QTextEdit(container);
-    inputTextEdit->setTabStopDistance(TAB_STOP_DISTANCE);
-    inputTextEdit->setAcceptRichText(false);
+    inputTextEdit = new QPlainTextEdit(container);
+    DevTools::Ui::configureCodeEditor(inputTextEdit);
     inputTextEdit->setPlaceholderText(tr("Input text"));
     layout->addWidget(inputTextEdit);
 
-    inputMessageTextView = new QTextBrowser(container);
-    inputMessageTextView->setMaximumHeight(MESSAGE_VIEW_MAX_HEIGHT);
-    inputMessageTextView->setTextInteractionFlags(Qt::TextSelectableByKeyboard |
-                                                  Qt::TextSelectableByMouse);
-    inputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    inputMessageTextView = new QPlainTextEdit(container);
+    DevTools::Ui::configureStatusView(inputMessageTextView);
+    inputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
     layout->addWidget(inputMessageTextView);
 
     return container;
@@ -129,103 +95,120 @@ QWidget *DataConversionGUI::buildInputSide(QWidget *parent)
 
 QWidget *DataConversionGUI::buildOutputSide(QWidget *parent)
 {
-    auto *const container = new QWidget(parent);
+    outputPane = DevTools::Ui::createPane(tr("Output"), parent);
+    auto *const container = outputPane;
     auto *const layout = new QVBoxLayout(container);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(4);
+    DevTools::Ui::applyPanelLayout(layout);
 
-    auto *const actionBar = new QWidget(container);
-    output_action_button_layout = new QHBoxLayout(actionBar);
-    output_action_button_layout->setContentsMargins(4, 0, 4, 0);
+    output_action_button_layout = new QHBoxLayout;
+    DevTools::Ui::applyToolbarLayout(output_action_button_layout);
 
-    formatSelector = new QComboBox(actionBar);
+    formatSelector = new QComboBox(container);
+    DevTools::Ui::configureComboBox(formatSelector);
     formatSelector->addItem(QStringLiteral("JSON"));
     formatSelector->addItem(tr("YAML (Block style)"));
     formatSelector->addItem(tr("YAML (Flow style)"));
     formatSelector->addItem(QStringLiteral("TOML"));
     output_action_button_layout->addWidget(formatSelector);
 
-    styleSelector = new QComboBox(actionBar);
+    styleSelector = new QComboBox(container);
+    DevTools::Ui::configureComboBox(styleSelector);
     styleSelector->addItem(tr("4 Spaces"));
     styleSelector->addItem(tr("2 Spaces"));
     styleSelector->addItem(tr("Tabs"));
     styleSelector->addItem(tr("Minified"));
     output_action_button_layout->addWidget(styleSelector);
 
-    output_action_button_layout->addItem(
-        new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    output_action_button_layout->addStretch();
 
-    saveButton = new QPushButton(tr("Save"), actionBar);
+    saveButton = new QPushButton(tr("Save"), container);
+    DevTools::Ui::configureCompactButton(saveButton);
     saveButton->setIcon(IconUtils::themedIcon(QStringLiteral("save"), QStyle::SP_DialogSaveButton));
     output_action_button_layout->addWidget(saveButton);
 
-    copyButton = new QPushButton(tr("Copy"), actionBar);
+    copyButton = new QPushButton(tr("Copy"), container);
+    DevTools::Ui::configureCompactButton(copyButton);
     copyButton->setIcon(IconUtils::themedIcon(QStringLiteral("content_copy")));
     output_action_button_layout->addWidget(copyButton);
 
-    layout->addWidget(actionBar);
+    layout->addLayout(output_action_button_layout);
 
-    outputTextView = new QTextBrowser(container);
-    outputTextView->setTabStopDistance(TAB_STOP_DISTANCE);
+    outputTextView = new QPlainTextEdit(container);
+    DevTools::Ui::configureDisplayTextControl(outputTextView);
+    outputTextView->setReadOnly(true);
     outputTextView->setTextInteractionFlags(Qt::TextSelectableByKeyboard |
                                             Qt::TextSelectableByMouse);
     outputTextView->setPlaceholderText(tr("Output text"));
-    outputTextView->setOpenLinks(false);
     layout->addWidget(outputTextView);
 
-    outputMessageTextView = new QTextBrowser(container);
-    outputMessageTextView->setMaximumHeight(MESSAGE_VIEW_MAX_HEIGHT);
-    outputMessageTextView->setTextInteractionFlags(Qt::TextSelectableByKeyboard |
-                                                   Qt::TextSelectableByMouse);
-    outputMessageTextView->setPlaceholderText(tr("Error & waning messages"));
+    outputMessageTextView = new QPlainTextEdit(container);
+    DevTools::Ui::configureStatusView(outputMessageTextView);
+    outputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
     layout->addWidget(outputMessageTextView);
 
     return container;
 }
 
-void DataConversionGUI::resizeEvent(QResizeEvent *event)
+void DataConversionGUI::retranslateUi()
 {
-    // NOTE: ここで最小幅を設定する
-    const int width = input_action_button_layout->minimumSize().width() +
-                      output_action_button_layout->minimumSize().width();
-    splitter->setMinimumWidth(width);
-    setMinimumWidth(width);
+    inputPane->setTitle(tr("Input"));
+    outputPane->setTitle(tr("Output"));
 
-    QSize size = event->size();
-    if (size.width() < splitter->minimumSizeHint().width()) {
-        size.setWidth(splitter->minimumSizeHint().width());
-    }
-    if (size.height() < splitter->minimumSizeHint().height()) {
-        size.setHeight(splitter->minimumSizeHint().height());
-    }
+    loadButton->setText(tr("Load"));
+    pasteButton->setText(tr("Paste"));
+    clearButton->setToolTip(tr("Clear"));
+    saveButton->setText(tr("Save"));
+    copyButton->setText(tr("Copy"));
 
-    splitter->resize(size);
-    event->accept();
+    formatSelector->setItemText(0, QStringLiteral("JSON"));
+    formatSelector->setItemText(1, tr("YAML (Block style)"));
+    formatSelector->setItemText(2, tr("YAML (Flow style)"));
+    formatSelector->setItemText(3, QStringLiteral("TOML"));
+
+    styleSelector->setItemText(0, tr("4 Spaces"));
+    styleSelector->setItemText(1, tr("2 Spaces"));
+    styleSelector->setItemText(2, tr("Tabs"));
+    styleSelector->setItemText(3, tr("Minified"));
+
+    inputTextEdit->setPlaceholderText(tr("Input text"));
+    inputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
+    outputTextView->setPlaceholderText(tr("Output text"));
+    outputMessageTextView->setPlaceholderText(tr("Error & warning messages"));
+}
+
+void DataConversionGUI::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void DataConversionGUI::onInputTextChanged()
 {
     // TODO: 処理が重くなるため、呼び出し頻度に制限を設ける
     dataConversion->setInputText(inputTextEdit->toPlainText());
-    inputMessageTextView->setText(dataConversion->messages());
+    inputMessageTextView->setPlainText(dataConversion->messages());
     dataConversion->updateOutputText();
-    outputMessageTextView->setText(dataConversion->messages());
+    outputMessageTextView->setPlainText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
 }
 
 void DataConversionGUI::onPastePressed()
 {
     QClipboard const *const clipboard = QGuiApplication::clipboard();
-    inputTextEdit->setText(clipboard->text()); // onInputTextChanged()
+    inputTextEdit->setPlainText(clipboard->text()); // onInputTextChanged()
 }
 
 void DataConversionGUI::onClearPressed()
 {
-    inputTextEdit->setText("");
+    inputTextEdit->setPlainText("");
     dataConversion->setInputText("");
-    inputMessageTextView->setText("");
+    inputMessageTextView->setPlainText("");
     dataConversion->updateOutputText();
-    outputMessageTextView->setText("");
+    outputMessageTextView->setPlainText("");
     outputTextView->setPlainText("");
 }
 
@@ -235,7 +218,7 @@ void DataConversionGUI::onLoadPressed()
     dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
-    dialog.setNameFilter("Plain Text (*.txt *.json *.toml *.yml *yaml)");
+    dialog.setNameFilter(tr("Plain Text (*.txt *.json *.toml *.yml *.yaml)"));
     connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) {
@@ -267,7 +250,7 @@ void DataConversionGUI::onFormatSelected(int index)
         break;
     }
     dataConversion->updateOutputText();
-    outputMessageTextView->setText(dataConversion->messages());
+    outputMessageTextView->setPlainText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
 }
 
@@ -290,7 +273,7 @@ void DataConversionGUI::onStyleSelected(int index)
         break;
     }
     dataConversion->updateOutputText();
-    outputMessageTextView->setText(dataConversion->messages());
+    outputMessageTextView->setPlainText(dataConversion->messages());
     outputTextView->setPlainText(dataConversion->outputText());
 }
 

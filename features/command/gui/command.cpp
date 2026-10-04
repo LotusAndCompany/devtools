@@ -1,21 +1,25 @@
 #include "command.h"
 
 #include "command_function.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
-#include <QFontMetrics>
+#include <QEvent>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 #include <QPushButton>
-#include <QTextBrowser>
+#include <QVBoxLayout>
 
 #include <algorithm>
 
-Command::Command(QWidget *parent) : QGroupBox(parent)
+Command::Command(QWidget *parent) : QWidget(parent)
 {
     buildUi();
     init();
@@ -29,77 +33,104 @@ Command::Command(QWidget *parent) : QGroupBox(parent)
     connect(copy_button, &QPushButton::clicked, this, &Command::copy);
 }
 
+// NOLINTNEXTLINE(readability-function-size)
 void Command::buildUi()
 {
     setObjectName(QStringLiteral("Command"));
-    setWindowTitle(tr("GroupBox"));
-    resize(699, 711);
 
-    auto *layout = new QGridLayout(this);
-    layout->setObjectName(QStringLiteral("gridLayout"));
+    auto *const layout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(layout);
 
-    category_list = new QComboBox(this);
+    input_pane = DevTools::Ui::createPane(tr("Input"), this);
+    DevTools::Ui::configureCompactPane(input_pane);
+    input_pane->setObjectName(QStringLiteral("inputPane"));
+    auto *const inputLayout = new QGridLayout(input_pane);
+    DevTools::Ui::applyPanelLayout(inputLayout);
+
+    category_list = new QComboBox(input_pane);
+    DevTools::Ui::configureComboBox(category_list);
     category_list->setObjectName(QStringLiteral("categoryList"));
-    layout->addWidget(category_list, 0, 0, 1, 2);
+    inputLayout->addWidget(category_list, 0, 0, 1, 2);
 
-    functions_label = new QLabel(tr("Functions List"), this);
+    functions_label = new QLabel(tr("Functions List"), input_pane);
     functions_label->setObjectName(QStringLiteral("functionsLabel"));
-    layout->addWidget(functions_label, 1, 0);
+    inputLayout->addWidget(functions_label, 1, 0);
 
-    functions_list = new QComboBox(this);
+    functions_list = new QComboBox(input_pane);
+    DevTools::Ui::configureComboBox(functions_list);
     functions_list->setObjectName(QStringLiteral("functionsList"));
     functions_list->setEnabled(false);
-    functions_list->setAutoFillBackground(false);
-    layout->addWidget(functions_list, 2, 0, 1, 2);
+    functions_list->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    inputLayout->addWidget(functions_list, 2, 0, 1, 2);
 
-    option_label = new QLabel(tr("Option List"), this);
+    option_label = new QLabel(tr("Option List"), input_pane);
     option_label->setObjectName(QStringLiteral("optionLabel"));
-    layout->addWidget(option_label, 3, 0);
+    inputLayout->addWidget(option_label, 3, 0);
 
-    option_list = new QComboBox(this);
+    option_list = new QComboBox(input_pane);
+    DevTools::Ui::configureComboBox(option_list);
     option_list->setObjectName(QStringLiteral("optionList"));
     option_list->setEnabled(false);
-    layout->addWidget(option_list, 4, 0, 1, 2);
+    inputLayout->addWidget(option_list, 4, 0, 1, 2);
 
-    text_label = new QLabel(tr("TextLabel"), this);
+    text_label = new QLabel(tr("TextLabel"), input_pane);
     text_label->setObjectName(QStringLiteral("label"));
-    layout->addWidget(text_label, 5, 0);
+    inputLayout->addWidget(text_label, 5, 0);
 
-    text_edit = new QLineEdit(this);
+    text_edit = new QLineEdit(input_pane);
+    DevTools::Ui::configureLineEdit(text_edit);
     text_edit->setObjectName(QStringLiteral("textEdit"));
-    layout->addWidget(text_edit, 6, 0, 1, 2);
+    inputLayout->addWidget(text_edit, 6, 0, 1, 2);
 
-    reset_button = new QPushButton(tr("Reset"), this);
+    reset_button = new QPushButton(tr("Reset"), input_pane);
     reset_button->setObjectName(QStringLiteral("resetButton"));
-    reset_button->setFont(QFont(QStringLiteral(".AppleSystemUIFont")));
-    layout->addWidget(reset_button, 7, 0);
+    DevTools::Ui::configureCompactButton(reset_button);
 
-    generate_button = new QPushButton(tr("Generate command"), this);
+    generate_button = new QPushButton(tr("Generate command"), input_pane);
     generate_button->setObjectName(QStringLiteral("generateButton"));
-    layout->addWidget(generate_button, 7, 1);
+    DevTools::Ui::configureCompactButton(generate_button);
 
-    text_browser = new QTextBrowser(this);
+    auto *actionLayout = new QHBoxLayout;
+    actionLayout->addWidget(reset_button);
+    actionLayout->addWidget(generate_button);
+    DevTools::Ui::configureActionBar(actionLayout, DevTools::Ui::ActionBarAlignment::Trailing);
+    inputLayout->addLayout(actionLayout, 7, 0, 1, 2);
+
+    layout->addWidget(input_pane);
+
+    output_pane = DevTools::Ui::createPane(tr("Generated Result"), this);
+    output_pane->setObjectName(QStringLiteral("outputPane"));
+    auto *const outputLayout = new QGridLayout(output_pane);
+    DevTools::Ui::applyPanelLayout(outputLayout);
+
+    text_browser = new QPlainTextEdit(output_pane);
     text_browser->setObjectName(QStringLiteral("textBrowser"));
-    layout->addWidget(text_browser, 8, 0, 1, 4);
+    DevTools::Ui::configureDisplayTextControl(text_browser);
+    text_browser->setReadOnly(true);
+    outputLayout->addWidget(text_browser, 0, 0, 1, 2);
+    outputLayout->setRowStretch(0, 1);
 
-    copy_button = new QPushButton(tr("Copy"), this);
+    copy_button = new QPushButton(tr("Copy"), output_pane);
     copy_button->setObjectName(QStringLiteral("copyButton"));
-    layout->addWidget(copy_button, 9, 2);
+    DevTools::Ui::configureCompactButton(copy_button);
 
-    clear_button = new QPushButton(tr("Clear"), this);
+    clear_button = new QPushButton(tr("Clear"), output_pane);
     clear_button->setObjectName(QStringLiteral("clearButton"));
-    layout->addWidget(clear_button, 9, 3);
+    DevTools::Ui::configureCompactButton(clear_button);
+
+    auto *outputActionLayout = new QHBoxLayout;
+    outputActionLayout->addWidget(copy_button);
+    outputActionLayout->addWidget(clear_button);
+    DevTools::Ui::configureActionBar(outputActionLayout,
+                                     DevTools::Ui::ActionBarAlignment::Trailing);
+    outputLayout->addLayout(outputActionLayout, 1, 0, 1, 2);
+
+    layout->addWidget(output_pane);
+    layout->setStretch(1, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 }
 
 void Command::init()
 {
-    const QStringList category_items{tr("Categories"), tr("1: Git commands"),
-                                     tr("2: Docker commands"), tr("3: Docker Compose commands")};
-
-    category_list->addItems(category_items);
-
-    adjustCommandBoxWidth();
-
     text_label->setVisible(false);
     text_edit->setVisible(false);
 
@@ -107,6 +138,59 @@ void Command::init()
     functions_list->setVisible(false);
     option_label->setVisible(false);
     option_list->setVisible(false);
+
+    retranslateUi();
+}
+
+void Command::retranslateUi()
+{
+    const int categoryIndex = category_list->currentIndex();
+    const int functionIndex = functions_list->currentIndex();
+    const int optionIndex = option_list->currentIndex();
+    const QString inputValue = text_edit->text();
+    const QString outputValue = text_browser->toPlainText();
+
+    setWindowTitle(tr("Command Generation"));
+    input_pane->setTitle(tr("Input"));
+    output_pane->setTitle(tr("Generated Result"));
+    functions_label->setText(tr("Functions List"));
+    option_label->setText(tr("Option List"));
+    reset_button->setText(tr("Reset"));
+    generate_button->setText(tr("Generate command"));
+    copy_button->setText(tr("Copy"));
+    clear_button->setText(tr("Clear"));
+
+    category_list->clear();
+    category_list->addItems({tr("Categories"), tr("1: Git commands"), tr("2: Docker commands"),
+                             tr("3: Docker Compose commands")});
+    category_list->setCurrentIndex(categoryIndex >= 0 ? categoryIndex : 0);
+
+    if (category_list->currentIndex() > 0) {
+        selectedCategory();
+        if (functionIndex >= 0 && functionIndex < functions_list->count()) {
+            functions_list->setCurrentIndex(functionIndex);
+        }
+        selectedFunction();
+        if (optionIndex >= 0 && optionIndex < option_list->count()) {
+            option_list->setCurrentIndex(optionIndex);
+        }
+        selectedOption();
+    } else {
+        reset();
+    }
+
+    text_edit->setText(inputValue);
+    text_browser->setPlainText(outputValue);
+}
+
+void Command::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 QList<CommandFunction> getGitCommands()
@@ -480,7 +564,7 @@ void Command::generate()
                 command += " " + value1;
             }
         }
-        text_browser->setText(command);
+        text_browser->setPlainText(command);
     }
 }
 
@@ -489,15 +573,4 @@ void Command::copy()
     const QString text = text_browser->toPlainText();
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(text);
-}
-
-void Command::adjustCommandBoxWidth()
-{
-    int maxWidth = 0;
-    QFontMetrics const fontMetrics(functions_list->font());
-    for (int i = 0; i < functions_list->count(); ++i) {
-        int const width = fontMetrics.horizontalAdvance(functions_list->itemText(i));
-        maxWidth = std::max(width, maxWidth);
-    }
-    functions_list->setMinimumWidth(maxWidth + 40);
 }

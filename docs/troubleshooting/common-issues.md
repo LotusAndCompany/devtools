@@ -52,24 +52,6 @@ Could not find a package configuration file provided by "yaml-cpp"
 
 ### Compilation Errors
 
-#### UI File Not Found
-
-**Error:**
-```
-The user interface file "*.ui" could not be found
-```
-
-**Solution:**
-
-Add path to `CMAKE_AUTOUIC_SEARCH_PATHS` in CMakeLists.txt:
-
-```cmake
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    features/image/gui/basic/
-    features/your_module/gui/
-)
-```
-
 #### Linker Errors
 
 **Error:**
@@ -202,18 +184,18 @@ Cannot be opened because the developer cannot be verified
 3. Check firewall settings
 4. Verify the API server is running
 
-#### Command Execution Hangs
+#### Command Generation Does Not Produce a Result
 
 **Symptoms:**
-- Command doesn't return
-- No output
+- The generated command area is empty
+- The **Generate command** button is unavailable
 
 **Solutions:**
 
-1. Command may be interactive (not supported)
-2. Command may need input (not supported)
-3. Try simpler commands first
-4. Use terminal for complex operations
+1. Select a command category and command
+2. Select an option when one is available
+3. Enter the requested value when the input field is shown
+4. The tool generates command text; execute it in a terminal yourself
 
 #### Database Connection Failed
 
@@ -263,7 +245,7 @@ Cannot be opened because the developer cannot be verified
 **Solutions:**
 
 1. Change the macOS appearance and verify DevTools follows the system light/dark mode.
-2. Restart DevTools after a system appearance change if the app was already running.
+2. If the appearance does not update, restart DevTools and try again.
 3. Confirm the theme resources exist in the build: `:/themes/light.json` and
    `:/themes/dark.json` are registered through `res/application.qrc`.
 4. Confirm the Material Symbols font resource `:/fonts/MaterialSymbolsOutlined.ttf` is registered
@@ -278,8 +260,8 @@ Cannot be opened because the developer cannot be verified
 
 **Solutions:**
 
-1. Restart application after language change
-2. Check all windows are closed before restart
+1. Click **Apply** or **OK** after changing the language in **DevTools > Settings**.
+2. If the UI does not update, close and reopen the application.
 
 ## Installation Issues
 
@@ -357,4 +339,4 @@ If your issue is not listed:
 
 - [Installation](../getting-started/installation.md) - Setup guide
 - [FAQ](faq.md) - Frequently asked questions
-- [Build Instructions](../../BUILD.md) - Detailed build guide
+- [Build Instructions](https://github.com/LotusAndCompany/devtools/blob/main/BUILD.md) - Detailed build guide

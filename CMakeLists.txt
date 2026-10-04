@@ -3,10 +3,17 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.7.0 LANGUAGES CXX) # x-release-please-version
+project(DevTools VERSION 0.8.0 LANGUAGES CXX) # x-release-please-version
+
+if(APPLE)
+    enable_language(OBJCXX)
+endif()
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
+set(DevTools_BUILD_NUMBER "${PROJECT_VERSION}" CACHE STRING "App bundle build number")
+set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
+set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING "Apple code-signing identity")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -41,8 +48,8 @@ FetchContent_Declare(qlementine
 set(QLEMENTINE_SANDBOX OFF CACHE BOOL "" FORCE)
 set(QLEMENTINE_SHOWCASE OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(qlementine)
-# Doxygenを探す（1.16以上が必要）
-find_package(Doxygen 1.16)
+# Doxygenを探す（1.18以上が必要）
+find_package(Doxygen 1.18)
 
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ja_JP en)
 
@@ -148,6 +155,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         LRELEASE_TARGET release_devtools_translations
         QM_FILES_OUTPUT_VARIABLE TRANSLATION_QM_FILES
         NO_GLOBAL_TARGET
+    )
+
+    add_custom_target(check_devtools_translations
+        COMMAND ${CMAKE_COMMAND}
+                -DTRANSLATION_TS_FILE=${CMAKE_SOURCE_DIR}/res/dev-tools_ja_JP.ts
+                -P ${CMAKE_SOURCE_DIR}/scripts/check_translations.cmake
+        COMMENT "Checking for incomplete translations"
+        VERBATIM
     )
 
     qt_add_resources(${PROJECT_NAME} "${PROJECT_NAME}_translations"
@@ -294,9 +309,9 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     # https://developer.apple.com/documentation/xcode/build-settings-reference
     set_target_properties(${PROJECT_NAME} PROPERTIES
         ${BUNDLE_ID_OPTION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DevTools_BUILD_NUMBER}
         MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
         # 機能しないので削除
@@ -310,8 +325,36 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
         MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
         #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
         XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME  "AppIcon"
-        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "distribution/${PROJECT_NAME}.entitlements"
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/${PROJECT_NAME}.entitlements"
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/../Frameworks"
+    )
+
+    if(DEVTOOLS_APPLE_DEVELOPMENT_TEAM)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${DEVTOOLS_APPLE_DEVELOPMENT_TEAM}"
+        )
+    endif()
+
+    if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
+            XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}"
+            "XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY[sdk=macosx*]" "${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}"
+        )
+    endif()
+
+    get_filename_component(QT_INSTALL_PREFIX "${Qt6_DIR}/../../.." ABSOLUTE)
+    find_program(MACDEPLOYQT_EXECUTABLE NAMES macdeployqt HINTS "${QT_INSTALL_PREFIX}/bin"
+        NO_DEFAULT_PATH REQUIRED)
+    set(MACDEPLOYQT_OPTIONS -appstore-compliant)
+    if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
+        list(APPEND MACDEPLOYQT_OPTIONS "-codesign=${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}")
+    endif()
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+            "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" ${MACDEPLOYQT_OPTIONS}
+        COMMENT "Deploying App Store-compliant Qt dependencies"
+        VERBATIM
     )
 
     # 上手く動かない...
@@ -322,9 +365,9 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
 else()
     set_target_properties(${PROJECT_NAME} PROPERTIES
         ${BUNDLE_ID_OPTION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DevTools_BUILD_NUMBER}
         MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
     )
@@ -355,6 +398,8 @@ else()
 endif()
 find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-17 clang-tidy-16 clang-tidy-15
     HINTS ${CLANG_TIDY_HINTS})
+find_program(CLANG_TIDY_RUNNER_EXECUTABLE NAMES run-clang-tidy run-clang-tidy.py
+    HINTS ${CLANG_TIDY_HINTS})
 
 file(GLOB_RECURSE ALL_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/features/*.cpp
@@ -376,6 +421,9 @@ list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*/qrcodegen\\.hpp$")
 # Create LINT_SOURCE_FILES excluding tests (format still applies to tests)
 set(LINT_SOURCE_FILES ${ALL_SOURCE_FILES})
 list(FILTER LINT_SOURCE_FILES EXCLUDE REGEX ".*/tests/.*")
+# clang-tidy uses the compilation database, so analyze translation units only.
+# Headers are checked when included by their corresponding source file.
+list(FILTER LINT_SOURCE_FILES INCLUDE REGEX ".*\\.cpp$")
 
 if(CLANG_FORMAT_EXECUTABLE)
     message(STATUS "Found clang-format: ${CLANG_FORMAT_EXECUTABLE}")
@@ -412,6 +460,7 @@ if(CLANG_TIDY_EXECUTABLE)
 
     # Get macOS SDK path for proper system header resolution (macOS only)
     set(CLANG_TIDY_EXTRA_ARGS "")
+    set(CLANG_TIDY_RUNNER_EXTRA_ARGS "")
     if(APPLE)
         find_program(XCRUN_EXECUTABLE xcrun)
         if(XCRUN_EXECUTABLE)
@@ -422,21 +471,38 @@ if(CLANG_TIDY_EXECUTABLE)
             )
             if(MACOS_SDK_PATH)
                 list(APPEND CLANG_TIDY_EXTRA_ARGS "--extra-arg=-isysroot${MACOS_SDK_PATH}")
+                list(APPEND CLANG_TIDY_RUNNER_EXTRA_ARGS "-extra-arg=-isysroot${MACOS_SDK_PATH}")
             endif()
         endif()
     endif()
 
+    if(CLANG_TIDY_RUNNER_EXECUTABLE)
+        message(STATUS "Using parallel clang-tidy runner: ${CLANG_TIDY_RUNNER_EXECUTABLE}")
+        set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_RUNNER_EXECUTABLE})
+        set(CLANG_TIDY_LINT_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE} -j 0)
+        set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_RUNNER_EXTRA_ARGS})
+        set(CLANG_TIDY_FIX_EXECUTABLE ${CLANG_TIDY_RUNNER_EXECUTABLE})
+        set(CLANG_TIDY_FIX_OPTIONS -clang-tidy-binary ${CLANG_TIDY_EXECUTABLE} -j 0 -fix)
+        set(CLANG_TIDY_FIX_EXTRA_ARGS ${CLANG_TIDY_RUNNER_EXTRA_ARGS})
+    else()
+        set(CLANG_TIDY_LINT_EXECUTABLE ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_LINT_EXTRA_ARGS ${CLANG_TIDY_EXTRA_ARGS})
+        set(CLANG_TIDY_FIX_EXECUTABLE ${CLANG_TIDY_EXECUTABLE})
+        set(CLANG_TIDY_FIX_OPTIONS --fix --fix-errors)
+        set(CLANG_TIDY_FIX_EXTRA_ARGS ${CLANG_TIDY_EXTRA_ARGS})
+    endif()
+
     add_custom_target(lint
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR}
-            ${CLANG_TIDY_EXTRA_ARGS}
+        COMMAND ${CLANG_TIDY_LINT_EXECUTABLE} ${CLANG_TIDY_LINT_OPTIONS} -p ${CMAKE_BINARY_DIR}
+            ${CLANG_TIDY_LINT_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy static analysis"
         VERBATIM
     )
 
     add_custom_target(lint-fix
-        COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} --fix --fix-errors
-            ${CLANG_TIDY_EXTRA_ARGS}
+        COMMAND ${CLANG_TIDY_FIX_EXECUTABLE} ${CLANG_TIDY_FIX_OPTIONS} -p ${CMAKE_BINARY_DIR}
+            ${CLANG_TIDY_FIX_EXTRA_ARGS}
             ${LINT_SOURCE_FILES}
         COMMENT "Running clang-tidy with automatic fixes"
         VERBATIM
@@ -456,14 +522,16 @@ else()
 endif()
 
 add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/DevTools.app/Contents/MacOS/DevTools
+    COMMAND ${CMAKE_COMMAND}
+            -DDEVTOOLS_BINARY=${CMAKE_BINARY_DIR}/DevTools.app/Contents/MacOS/DevTools
+            -P ${CMAKE_SOURCE_DIR}/scripts/run_devtools.cmake
     DEPENDS ${PROJECT_NAME}
     COMMENT "Running DevTools with console output"
     VERBATIM
 )
 
 add_custom_target(quality-check
-    DEPENDS format-check lint
+    DEPENDS format-check lint check_devtools_translations
     COMMENT "Running all code quality checks"
 )
 

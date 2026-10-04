@@ -29,15 +29,16 @@ Before contributing, make sure you have:
 
 ### Project Structure
 
-```
-devtools/
-├── features/        # Feature modules (each with core/, gui/, tests/)
-├── main/            # Application entry point
-├── res/             # Resources and translation files
-├── tests/           # Shared test helpers
-├── designs/         # UI design files (.pen)
-├── docs/            # Documentation
-└── distribution/    # Platform-specific packaging files
+```mermaid
+flowchart TD
+    root["devtools/"]
+    root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
+    root --> main["main/<br/>Application entry point"]
+    root --> resources["res/<br/>Resources and translations"]
+    root --> tests["tests/<br/>Shared test helpers"]
+    root --> designs["designs/<br/>UI design files (.pen)"]
+    root --> docs["docs/<br/>Documentation"]
+    root --> distribution["distribution/<br/>Platform packaging"]
 ```
 
 ## How to Contribute
@@ -65,7 +66,7 @@ devtools/
 ### Submitting Code
 
 1. Fork the repository
-2. Create a feature branch from `main` (see [Branch Naming](#branch-naming))
+2. Create a feature branch from `main`
 3. Make your changes
 4. Write or update tests as needed
 5. Ensure all tests pass
@@ -133,7 +134,7 @@ brew install pre-commit  # macOS
 # or: pip install pre-commit
 
 # Install hooks
-pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
+pre-commit install --install-hooks -t pre-commit -t pre-push
 ```
 
 **Hooks:**
@@ -144,7 +145,6 @@ pre-commit install --install-hooks -t pre-commit -t commit-msg -t pre-push
 | pre-commit | trailing-whitespace | Remove trailing whitespace |
 | pre-commit | end-of-file-fixer | Ensure newline at EOF |
 | pre-commit | check-added-large-files | Prevent large file commits |
-| commit-msg | conventional-pre-commit | Validate commit message format |
 | pre-push | cmake-build | Verify build succeeds |
 
 **Manual Execution:**
@@ -198,15 +198,16 @@ Code quality checks run automatically on:
 ### Adding New Modules
 
 1. Create the feature directory structure:
-   ```
-   features/your_module/
-   ├── CMakeLists.txt
-   ├── core/
-   │   └── your_module.h, your_module.cpp
-   ├── gui/
-   │   └── your_module_gui.h, your_module_gui.cpp
-   └── tests/
-       └── test_your_module.cpp
+   ```mermaid
+   flowchart TD
+       module["features/your_module/"]
+       module --> cmake["CMakeLists.txt"]
+       module --> core["core/"]
+       core --> core_files["your_module.h<br/>your_module.cpp"]
+       module --> gui["gui/"]
+       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       module --> tests["tests/"]
+       tests --> test_file["test_your_module.cpp"]
    ```
 
 2. Register the static library target in root `CMakeLists.txt`:
@@ -253,89 +254,6 @@ UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `
 
 See [Design Files](docs/development/design-files.md) for the full layout, editing workflow, and conflict-handling guidance.
 
-### Branch Naming
-
-Use the following branch naming convention:
-
-| Type | Pattern | Example |
-|------|---------|---------|
-| Feature | `feature/<description>` | `feature/sms-qr-code` |
-| Bug fix | `fix/<description>` | `fix/image-rotation-angle` |
-| Documentation | `doc/<description>` | `doc/update-build-guide` |
-| Refactoring | `refactor/<description>` | `refactor/data-conversion` |
-| Hotfix | `hotfix/<description>` | `hotfix/crash-on-startup` |
-
-**Rules:**
-- Always branch from `main`
-- Use lowercase letters and hyphens (no underscores or spaces)
-- Keep descriptions short but descriptive
-- Include issue number if applicable: `feature/123-sms-qr-code`
-
-```bash
-# Example: Creating a feature branch
-git checkout main
-git pull origin main
-git checkout -b feature/sms-qr-code
-```
-
-### Commit Messages
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-**Types:**
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation changes |
-| `style` | Code style changes (formatting, no logic change) |
-| `refactor` | Code refactoring |
-| `test` | Adding or updating tests |
-| `chore` | Maintenance tasks |
-| `build` | Build system changes |
-| `ci` | CI configuration changes |
-| `perf` | Performance improvements |
-
-**Rules:**
-- Use present tense ("Add feature" not "Added feature")
-- Use imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Keep the subject line concise (50 characters recommended)
-- Wrap body lines at 72 characters
-- Reference issues and pull requests in the footer
-
-**Examples:**
-```
-feat(qr): Add QR code generation for phone numbers
-
-- Implement tel: URI scheme support
-- Add phone number validation
-- Update UI with phone number input field
-
-Closes #123
-```
-
-```
-fix(image): Correct rotation angle calculation
-
-The rotation was off by 90 degrees when using certain
-image formats. This fix ensures consistent behavior
-across all supported formats.
-
-Fixes #456
-```
-
-```
-docs: Update build instructions for macOS
-```
-
 ## Pull Request Process
 
 1. **Update documentation** if needed
@@ -343,7 +261,7 @@ docs: Update build instructions for macOS
 3. **Ensure CI passes** (all tests pass, no build errors)
 4. **Request review** from maintainers
 5. **Address feedback** promptly
-6. **Squash commits** if requested
+6. **Squash-merge the pull request**
 
 ### PR Title Format
 
@@ -373,10 +291,11 @@ This project uses [release-please](https://github.com/googleapis/release-please)
 
 ### How It Works
 
-1. **Conventional Commits determine version bumps:**
-   - `fix:` commits → PATCH version (0.3.0 → 0.3.1)
-   - `feat:` commits → MINOR version (0.3.0 → 0.4.0)
-   - `BREAKING CHANGE:` in footer → MAJOR version (0.3.0 → 1.0.0)
+1. **Squash-merged PR titles determine version bumps:**
+   - The PR title becomes the squash commit title on `main`
+   - `fix:` PR titles → PATCH release
+   - `feat:` PR titles → MINOR release
+   - `feat!` or `fix!` in the PR title → MAJOR release
 
 2. **Automated workflow:**
    - When changes are merged to `main`, release-please creates/updates a Release PR
@@ -395,7 +314,8 @@ This project uses [release-please](https://github.com/googleapis/release-please)
 
 - Review and merge the automated Release PR when ready to release
 - Do not manually edit version numbers or CHANGELOG (release-please handles this)
-- Ensure commit messages follow Conventional Commits format for accurate version determination
+- Ensure PR titles follow Conventional Commits; release-please reads the
+  squash commit title on `main` for version determination
 
 ## Questions?
 
