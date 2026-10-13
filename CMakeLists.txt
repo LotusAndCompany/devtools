@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.8.0 LANGUAGES CXX) # x-release-please-version
+project(DevTools VERSION 0.8.1 LANGUAGES CXX) # x-release-please-version
 
 if(APPLE)
     enable_language(OBJCXX)
