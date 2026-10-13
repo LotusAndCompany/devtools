@@ -1,14 +1,19 @@
 #ifndef CONNECTION_WINDOW_H
 #define CONNECTION_WINDOW_H
 
+#include "features/db_tool/core/sqlite_file_access.h"
+
 #include <QJsonObject>
 #include <QSqlDatabase>
 #include <QWidget>
 
 class QComboBox;
+class QFormLayout;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QVBoxLayout;
 
 /**
  * @brief データベース接続設定ウィンドウ
@@ -43,8 +48,10 @@ signals:
      * @brief データベース接続が作成されたときに発行されるシグナル
      * @param db データベース接続
      * @param connectionInfo 接続情報
+     * @param sqliteFileAccess SQLiteファイルへのアクセス権
      */
-    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo);
+    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo,
+                           std::shared_ptr<SQLiteFileAccess> sqliteFileAccess);
 
 protected:
     /**
@@ -67,6 +74,16 @@ private:
      */
     void buildUi();
     /**
+     * @brief 接続情報入力欄を構築する
+     * @param formLayout 入力欄を配置するフォームレイアウト
+     */
+    void buildFormFields(QFormLayout *formLayout);
+    /**
+     * @brief アクションボタンを構築する
+     * @param verticalLayout ボタンを追加するレイアウト
+     */
+    void buildActionButtons(QVBoxLayout *verticalLayout);
+    /**
      * @brief UIテキストを再翻訳する
      */
     void retranslateUi();
@@ -87,6 +104,7 @@ private:
      */
     void browseForDatabase();
 
+    QGroupBox *form_group_box{nullptr};
     /// データベースタイプのラベル
     QLabel *dbTypeLabel{nullptr};
     /// データベースタイプ選択用のコンボボックス
@@ -101,6 +119,7 @@ private:
     QLineEdit *dbNamelineEdit{nullptr};
     /// 参照ボタン
     QPushButton *browseButton{nullptr};
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess{};
     /// ユーザー名のラベル
     QLabel *userNameLabel{nullptr};
     /// ユーザー名入力用のラインエディット

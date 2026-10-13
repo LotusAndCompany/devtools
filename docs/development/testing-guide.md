@@ -11,19 +11,16 @@ DevTools uses Google Test (gtest) for unit testing. Tests are organized by modul
 Test sources live alongside each feature under `features/{feature}/tests/`.
 Shared test helpers and test data live under the top-level `tests/` directory.
 
-```text
-tests/
-├── DevToolsTests.cmake       # Test registration (DevTools_add_test)
-├── test_util.h test_util.cpp # Shared test utilities
-├── random_data.h random_data.cpp
-├── mock_helper.h
-└── core/                     # Test fixtures (images, YAML/JSON/TOML samples)
-    ├── data_conversion/
-    └── image/
-
-features/{feature}/
-└── tests/                    # Per-feature test sources
-    └── test_*.cpp
+```mermaid
+flowchart TD
+    tests["tests/"]
+    tests --> registration["DevToolsTests.cmake<br/>Test registration"]
+    tests --> helpers["test_util.h/.cpp<br/>random_data.h/.cpp<br/>mock_helper.h"]
+    tests --> fixtures["core/<br/>Test fixtures"]
+    fixtures --> conversion["data_conversion/"]
+    fixtures --> image["image/"]
+    feature["features/{feature}/"] --> feature_tests["tests/<br/>Per-feature test sources"]
+    feature_tests --> test_file["test_*.cpp"]
 ```
 
 ## Enabling Tests
@@ -82,6 +79,33 @@ TEST(MyClassSimpleTest, BasicFunctionality) {
 
 }  // namespace devtools
 ```
+
+### UI Consistency Tests
+
+Shared UI behavior is tested in
+`features/framework/tests/test_design_system.cpp`. When a design-system helper
+changes, test the observable contract rather than implementation details: size
+policies, margins, spacing roles, frame configuration, item-view selection,
+table headers, splitter configuration, and dialog-footer alignment are suitable
+examples.
+
+GUI tests should cover both the default widget state and the state that matters
+to the user, such as disabled controls, empty results, validation errors, and
+read-only output. Keep feature-specific workflow tests in that feature's test
+directory and keep reusable widget rules in the framework test.
+
+For a UI-wide change, perform a manual smoke pass with the application running:
+
+1. Open every registered tool from the side menu.
+2. Check the default, empty, error, and result states relevant to each tool.
+3. Resize the main window through the supported range and check splitter and
+   scroll behavior.
+4. Verify both light and dark themes and both English and Japanese text.
+5. Open Settings, About, and DB connection windows and confirm the same pane,
+   field, action-bar, and footer rules.
+
+Record any visual regression with the affected screen and state before changing
+the shared helper or adding a screen-specific exception.
 
 ### Test Macros
 
@@ -211,7 +235,7 @@ macro(DevTools_add_test test_name)
     target_link_libraries(${test_name} PRIVATE
         GTest::gtest
         GTest::gtest_main
-        ${MODULE_LIST}
+        ${APPLICATION_LINK_MODULES}
         ${TEST_LIBRARIES}
     )
     add_test(NAME ${test_name} COMMAND ${test_name})

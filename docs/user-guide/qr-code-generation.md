@@ -9,7 +9,7 @@ The QR Code Generator creates scannable QR codes that can encode different types
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **QR Code** in the side menu
+2. Click **QR Code Generation** in the side menu
 
 ## QR Code Types
 
@@ -18,7 +18,7 @@ The QR Code Generator creates scannable QR codes that can encode different types
 Generate QR codes containing plain text.
 
 **How to use:**
-1. Select the **Text** tab
+1. Select **Text** from the **QR Code Type** selector
 2. Enter your text in the input field
 3. Click **Generate**
 
@@ -32,7 +32,7 @@ Generate QR codes containing plain text.
 Create QR codes that open websites when scanned.
 
 **How to use:**
-1. Select the **URL** tab
+1. Select **URL** from the **QR Code Type** selector
 2. Enter the full URL (including `https://`)
 3. Click **Generate**
 
@@ -48,29 +48,26 @@ https://github.com/LotusAndCompany/devtools
 Generate QR codes that compose emails when scanned.
 
 **How to use:**
-1. Select the **Email** tab
+1. Select **Email** from the **QR Code Type** selector
 2. Enter the recipient email address
-3. Optionally add subject and body
-4. Click **Generate**
+3. Click **Generate**
 
 **Generated format:**
 ```
-mailto:email@example.com?subject=Subject&body=Body
+mailto:email@example.com
 ```
 
 **Fields:**
 | Field | Required | Description |
 |-------|----------|-------------|
-| To | Yes | Recipient email address |
-| Subject | No | Email subject line |
-| Body | No | Email body text |
+| Email | Yes | Recipient email address |
 
 ### Phone
 
 Create QR codes that initiate phone calls when scanned.
 
 **How to use:**
-1. Select the **Phone** tab
+1. Select **Phone** from the **QR Code Type** selector
 2. Enter the phone number
 3. Click **Generate**
 
@@ -88,28 +85,45 @@ tel:+1234567890
 Generate QR codes that compose SMS messages when scanned.
 
 **How to use:**
-1. Select the **SMS** tab
+1. Select **SMS** from the **QR Code Type** selector
 2. Enter the phone number
-3. Optionally add a message body
+3. Enter the message body
 4. Click **Generate**
 
 **Generated format:**
 ```
-sms:+1234567890?body=Your message here
+SMSTO:+1234567890:Your message here
 ```
 
 **Fields:**
 | Field | Required | Description |
 |-------|----------|-------------|
 | Phone Number | Yes | Recipient phone number |
-| Message | No | Pre-filled SMS text |
+| Message | Yes | Pre-filled SMS text |
+
+### Wi-Fi
+
+Create a QR code containing a Wi-Fi network name, password, and security
+type. Select **WiFi**, enter the SSID and password, choose **WPA**, **WEP**,
+or **nopass**, and click **Generate**.
+
+### Contact
+
+Create a vCard QR code. Select **Contact**, enter a name, and enter at least a
+phone number or an email address before clicking **Generate**.
+
+### Calendar
+
+Create a calendar event QR code. Select **Calendar**, enter an event title and
+start and end times, then click **Generate**. The end time must be later than
+the start time.
 
 ### Geo (Location)
 
 Create QR codes that open map applications with a specific location.
 
 **How to use:**
-1. Select the **Geo** tab
+1. Select **Geo Location** from the **QR Code Type** selector
 2. Enter latitude and longitude
 3. Click **Generate**
 
@@ -133,20 +147,16 @@ geo:35.6762,139.6503
 
 After generating a QR code:
 
-1. **Right-click** on the QR code image
-2. Select **Save Image**
-3. Choose a location and filename
-4. The image is saved as PNG
+1. Click **Save Image** below the QR code
+2. Choose a location and filename
+3. The image is saved as PNG
 
-**Alternative:**
-1. Click the **Save** button (if available)
-2. Choose save location
+Use **Copy Image** to copy the generated QR code to the clipboard.
 
 ## QR Code Size and Quality
 
-- Generated QR codes are high-resolution
-- Default size is suitable for most uses
-- For printing, use higher resolution settings if available
+- Generated QR codes use a fixed scale suitable for normal use
+- The tool does not provide a separate size or quality control
 
 ## Best Practices
 

@@ -3,6 +3,7 @@
 #include "features/framework/core/enum_cast.h"
 #include "features/framework/core/exception/invalid_argument_exception.h"
 #include "features/framework/core/tool/tool.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -12,10 +13,8 @@ const QString SidemenuItem::notConfigurableReason = "Sidemenu::ID::HOME is not c
 
 SidemenuItem::SidemenuItem(Sidemenu::ID id, QWidget *parent) : QPushButton(parent), id(id)
 {
-    setFlat(true);
+    DevTools::Ui::configureSidebarItem(this);
     setCheckable(true);
-    setStyleSheet("QPushButton { text-align:left; }");
-    setIconSize(QSize(20, 20));
     setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
     Sidemenu::validateID(id);

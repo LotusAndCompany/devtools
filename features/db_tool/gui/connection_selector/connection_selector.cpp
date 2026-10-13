@@ -1,9 +1,11 @@
 #include "connection_selector.h"
 
+#include "features/db_tool/gui/sqlite_file_picker.h"
+#include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
-#include <QFont>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
@@ -14,20 +16,47 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QSqlError>
 #include <QStyle>
 #include <QVBoxLayout>
 
+#include <utility>
+
 namespace {
-constexpr int DEFAULT_WIDTH = 400;
-constexpr int DEFAULT_HEIGHT = 300;
-constexpr int DELETE_BUTTON_SIZE = 24;
-constexpr int ITEM_MARGIN_HORIZONTAL = 5;
-constexpr int ITEM_MARGIN_VERTICAL = 2;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
+std::unique_ptr<SQLiteFileAccess> restoreSQLiteFileAccess(const QJsonObject &connectionInfo,
+                                                          const QString &databaseName)
+{
+    const QByteArray bookmarkData =
+        QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
+    if (!bookmarkData.isEmpty()) {
+        sqliteFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
+    }
+    if (!sqliteFileAccess) {
+        sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
+    }
+    return sqliteFileAccess;
+}
+
+bool openDatabase(QSqlDatabase &db, const QString &dbType, QWidget *parent, QString &databaseName,
+                  std::unique_ptr<SQLiteFileAccess> &sqliteFileAccess,
+                  const QString &connectionFailedTitle)
+{
+    if (!db.open() && dbType == "QSQLITE") {
+        db.close();
+        sqliteFileAccess = selectSQLiteDatabaseFile(parent, databaseName);
+        if (sqliteFileAccess) {
+            databaseName = sqliteFileAccess->filePath();
+            db.setDatabaseName(databaseName);
+            db.open();
+        }
+    }
+    if (!db.isOpen()) {
+        QMessageBox::critical(parent, connectionFailedTitle, db.lastError().text());
+        return false;
+    }
+    return true;
+}
 } // namespace
 
 ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
@@ -48,30 +77,30 @@ ConnectionSelector::ConnectionSelector(QWidget *parent) : QWidget(parent)
 
 void ConnectionSelector::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    DevTools::Ui::configureDialog(this);
 
     auto *verticalLayout = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayout);
 
-    titleLabel = new QLabel(this);
-    QFont titleFont = titleLabel->font();
-    titleFont.setBold(true);
-    titleLabel->setFont(titleFont);
-    verticalLayout->addWidget(titleLabel);
-
-    historyListWidget = new QListWidget(this);
-    historyListWidget->setAlternatingRowColors(true);
-    verticalLayout->addWidget(historyListWidget);
+    history_group_box = DevTools::Ui::createPane(QString(), this);
+    history_group_box->setFlat(true);
+    auto *historyLayout = new QVBoxLayout(history_group_box);
+    DevTools::Ui::applyPanelLayout(historyLayout);
+    historyListWidget = new QListWidget(history_group_box);
+    DevTools::Ui::configureItemView(historyListWidget);
+    historyLayout->addWidget(historyListWidget);
+    verticalLayout->addWidget(history_group_box, 1);
 
     auto *buttonLayout = new QHBoxLayout();
-    auto *horizontalSpacer =
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    buttonLayout->addItem(horizontalSpacer);
 
     newConnectionButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(newConnectionButton);
     buttonLayout->addWidget(newConnectionButton);
 
     closeButton = new QPushButton(this);
+    DevTools::Ui::configureCompactButton(closeButton);
     buttonLayout->addWidget(closeButton);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Trailing);
 
     verticalLayout->addLayout(buttonLayout);
 
@@ -81,7 +110,7 @@ void ConnectionSelector::buildUi()
 void ConnectionSelector::retranslateUi()
 {
     setWindowTitle(tr("DB Connection"));
-    titleLabel->setText(tr("Connection History"));
+    history_group_box->setTitle(tr("Connection History"));
     newConnectionButton->setText(tr("New Connection"));
     closeButton->setText(tr("Close"));
 }
@@ -111,27 +140,29 @@ void ConnectionSelector::refreshHistoryList()
         QString const displayName = conn["displayName"].toString();
 
         auto *itemWidget = new QWidget();
+        itemWidget->setFont(DevTools::Ui::standardFont());
         auto *layout = new QHBoxLayout(itemWidget);
-        layout->setContentsMargins(ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL,
-                                   ITEM_MARGIN_HORIZONTAL, ITEM_MARGIN_VERTICAL);
+        layout->setContentsMargins(2 * DevTools::Ui::Metrics::LIST_ROW_HORIZONTAL_INSET, 0,
+                                   2 * DevTools::Ui::Metrics::LIST_ROW_HORIZONTAL_INSET, 0);
+        layout->setSpacing(DevTools::Ui::Metrics::COMPACT_SPACING);
 
         auto *label = new QLabel(displayName);
-        label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
+        label->setFont(DevTools::Ui::standardFont());
+        label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         auto *deleteButton = new QPushButton();
+        DevTools::Ui::configureListActionButton(deleteButton, QStringLiteral("delete"),
+                                                tr("Delete"));
         deleteButton->setIcon(
             IconUtils::themedIcon(QStringLiteral("delete"), QStyle::SP_TrashIcon));
-        deleteButton->setFixedSize(DELETE_BUTTON_SIZE, DELETE_BUTTON_SIZE);
-        deleteButton->setToolTip(tr("Delete"));
         deleteButton->setProperty("historyIndex", i);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, i]() { removeHistoryItem(i); });
 
-        layout->addWidget(label);
+        layout->addWidget(label, 1);
         layout->addWidget(deleteButton);
 
         auto *item = new QListWidgetItem();
-        item->setSizeHint(itemWidget->sizeHint());
+        DevTools::Ui::configureListItem(item);
         historyListWidget->addItem(item);
         historyListWidget->setItemWidget(item, itemWidget);
     }
@@ -153,8 +184,17 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
 {
     QString const dbType = connectionInfo["type"].toString();
     QString const hostName = connectionInfo["host"].toString();
-    QString const databaseName = connectionInfo["database"].toString();
+    QString databaseName = connectionInfo["database"].toString();
     QString const userName = connectionInfo["username"].toString();
+    QJsonObject updatedConnectionInfo = connectionInfo;
+
+    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
+    if (dbType == "QSQLITE") {
+        sqliteFileAccess = restoreSQLiteFileAccess(connectionInfo, databaseName);
+        if (sqliteFileAccess) {
+            databaseName = sqliteFileAccess->filePath();
+        }
+    }
 
     QString password;
 
@@ -181,13 +221,21 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
         db.setDatabaseName(databaseName);
     }
 
-    if (!db.open()) {
-        QMessageBox::critical(this, tr("Connection Failed"), db.lastError().text());
+    if (!openDatabase(db, dbType, this, databaseName, sqliteFileAccess, tr("Connection Failed"))) {
         return false;
     }
 
+    if (dbType == "QSQLITE") {
+        updatedConnectionInfo["database"] = databaseName;
+        if (sqliteFileAccess && !sqliteFileAccess->bookmarkData().isEmpty()) {
+            updatedConnectionInfo["securityScopedBookmark"] =
+                QString::fromLatin1(sqliteFileAccess->bookmarkData().toBase64());
+        }
+    }
+
     QMessageBox::information(this, tr("Success"), tr("Database connection established."));
-    emit connectionCreated(db);
+    emit connectionCreated(db, updatedConnectionInfo,
+                           std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     return true;
 }
 

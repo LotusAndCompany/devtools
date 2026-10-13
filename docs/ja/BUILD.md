@@ -28,7 +28,7 @@ Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは名前付きグ�
 同梱テーマをQtリソースの `:/themes` から読み込みます。
 
 ### オプション
-- **Doxygen**: 1.16以上（APIドキュメント生成用）
+- **Doxygen**: 1.18以上（APIドキュメント生成用）
 - **GraphViz**: クラス図・依存関係グラフの生成用（オプション）
 - **Qt Creator**: 18.0.1以上（Qt統合IDE）
 - **Ninja**: 1.12.1以上（高速ビルドツール）
@@ -151,7 +151,7 @@ ctest
 
 ## ドキュメントの生成
 
-APIドキュメントの生成にはDoxygen 1.16以上が必要です。
+APIドキュメントの生成にはDoxygen 1.18以上が必要です。
 
 ### Doxygenのインストール
 ```bash
@@ -225,7 +225,3 @@ qlementineのダウンロード中にCMake構成が失敗する場合は、以�
    cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。
-
-## 配布
-
-App Store用の配布ビルドの作成については、[docs/distribution/how_to_distribute.md](../distribution/how_to_distribute.md)を参照してください。

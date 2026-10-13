@@ -1,8 +1,10 @@
 #include "control.h"
 
 #include "features/framework/core/exception/invalid_state_exception.h"
+#include "features/framework/gui/design_system.h"
 #include "file_dialogs.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QPushButton>
 
@@ -15,13 +17,17 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
     : QWidget(parent), ui(new Ui::BasicImageViewControl)
 {
     ui->loadButton = new QPushButton(tr("Load"), this);
+    DevTools::Ui::configureCompactButton(ui->loadButton);
     ui->resetButton = new QPushButton(tr("Reset"), this);
+    DevTools::Ui::configureCompactButton(ui->resetButton);
     ui->saveButton = new QPushButton(tr("Save"), this);
+    DevTools::Ui::configureCompactButton(ui->saveButton);
 
     auto *layout = new QHBoxLayout(this);
     layout->addWidget(ui->loadButton);
     layout->addWidget(ui->resetButton);
     layout->addWidget(ui->saveButton);
+    DevTools::Ui::configureActionBar(layout, DevTools::Ui::ActionBarAlignment::Trailing);
 
     connect(ui->resetButton, &QPushButton::clicked, this,
             &BasicImageViewControl::resetButtonClicked);
@@ -31,11 +37,30 @@ BasicImageViewControl::BasicImageViewControl(QWidget *parent)
             &BasicImageViewControl::onLoadButtonClicked);
     connect(this, &BasicImageViewControl::loadFileSelected, this,
             &BasicImageViewControl::onLoadFileSelected);
+
+    retranslateUi();
 }
 
 BasicImageViewControl::~BasicImageViewControl()
 {
     delete ui;
+}
+
+void BasicImageViewControl::retranslateUi()
+{
+    ui->loadButton->setText(tr("Load"));
+    ui->resetButton->setText(tr("Reset"));
+    ui->saveButton->setText(tr("Save"));
+}
+
+void BasicImageViewControl::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+        event->accept();
+    } else {
+        QWidget::changeEvent(event);
+    }
 }
 
 void BasicImageViewControl::onSaveButtonClicked()

@@ -12,12 +12,13 @@ supported languages:
 
 ## How It Works
 
-```
-Source Code        Qt Tools           Runtime
-    │                 │                  │
-    ▼                 ▼                  ▼
-tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ──► Application
-                         (tracked)        (generated)
+```mermaid
+flowchart LR
+    source["Source Code<br/>tr(text)"] --> lupdate["lupdate"]
+    lupdate --> ts[".ts<br/>(tracked)"]
+    ts --> lrelease["lrelease"]
+    lrelease --> qm[".qm<br/>(generated)"]
+    qm --> app["Application<br/>(runtime)"]
 ```
 
 1. **Source Code**: English strings marked with `tr()`
@@ -28,10 +29,12 @@ tr("text") ──► lupdate ──► .ts ──► lrelease ──► .qm ─�
 
 ## Translation Files
 
-```
-res/
-├── dev-tools_ja_JP.ts    # Japanese translations
-└── dev-tools_ja_JP.qm    # Compiled Japanese (generated)
+```mermaid
+flowchart TD
+    res["res/"]
+    res --> ts["dev-tools_ja_JP.ts<br/>Japanese translations"]
+    build["build/"]
+    build --> qm["dev-tools_ja_JP.qm<br/>Compiled Japanese (generated)"]
 ```
 
 ## Marking Strings for Translation
@@ -51,19 +54,6 @@ QString greeting = tr("Hello, %1!").arg(userName);
 
 // Plural forms
 QString items = tr("%n item(s)", "", count);
-```
-
-### In .ui Files
-
-If a `.ui` file is still used, Qt Designer automatically marks visible text for translation.
-Just use the Properties panel to set text.
-
-### In QML (if used)
-
-```qml
-Text {
-    text: qsTr("Hello, World!")
-}
 ```
 
 ## Updating Translations
@@ -188,19 +178,22 @@ QString date = locale.toString(QDate::currentDate());
 
 ### Switch Language at Runtime
 
-For testing, you can switch language in preferences:
+For testing, you can switch language in settings:
 
-1. DevTools > Preferences
+1. DevTools > Settings
 2. Select Language
-3. Restart application
+3. Click Apply or OK; the UI changes immediately
 
 ### Check for Untranslated Strings
 
 ```bash
-# Find untranslated strings
-lconvert -i res/dev-tools_ja_JP.ts -o report.txt -of csv
-grep "type=\"unfinished\"" res/dev-tools_ja_JP.ts
+# Refresh the source inventory and then verify that every entry is translated
+cmake --build build --target update_devtools_translations
+cmake --build build --target check_devtools_translations
 ```
+
+The check target fails when the Japanese `.ts` file contains an unfinished or
+empty translation. Run it after adding or changing any user-visible string.
 
 ### Visual Testing
 
@@ -211,6 +204,29 @@ grep "type=\"unfinished\"" res/dev-tools_ja_JP.ts
    - Layout issues
    - Missing translations
    - Wrong context translations
+
+### Shared UI and Localization
+
+Use the shared UI contract in `features/framework/gui/design_system.*` when
+adding or changing translatable controls. Shared field, pane, action-bar, and
+dialog-footer helpers provide the size policies and spacing that allow English
+and Japanese text to fit consistently across screens.
+
+Do not compensate for a translation with a screen-specific fixed width, font,
+or stylesheet. Prefer layouts and size hints; if a reusable role cannot fit a
+translation, update the shared helper and add a focused UI regression test.
+
+### Runtime Language Changes
+
+Every screen that keeps user-visible labels, pane titles, button text,
+placeholders, combo-box items, or table headers must provide a `retranslateUi()`
+method and handle `QEvent::LanguageChange`. Text created only in a constructor
+will remain in the old language when the user changes the language while the
+screen is open. Preserve user data and selection state while refreshing the
+labels and translated item text.
+
+Use `tr()` at the point where runtime messages are shown as well, so dialogs,
+errors, and status messages use the language active at the time of the action.
 
 ## Common Issues
 

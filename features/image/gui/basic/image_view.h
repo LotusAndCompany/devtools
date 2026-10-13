@@ -5,6 +5,7 @@
 #include <QWidget>
 
 class QLabel;
+class QEvent;
 class QScrollArea;
 class QToolButton;
 
@@ -109,12 +110,12 @@ private:
     /// 一回の zoomIn() zoomOut() で変化する拡大率(対数スケール)
     static constexpr const double zoomStep = 0.2;
 
-    void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void changeEvent(QEvent *event) override;
 
     /**
      * @brief 拡大率を@f$ scaleBase^{zoomStep} @f$だけ上げる。 scale が maxScale
@@ -126,6 +127,8 @@ private:
      * と等しければ何もしない。
      */
     void zoomOut();
+
+    void retranslateUi();
 
 #ifdef _TEST_BasicImageView
     friend class Test::TestBasicImageView;
