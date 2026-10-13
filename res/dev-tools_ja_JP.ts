@@ -574,6 +574,10 @@
         <source>Paste modified text here...</source>
         <translation>変更後のテキストを貼り付け...</translation>
     </message>
+    <message>
+        <source>Diff</source>
+        <translation>差分</translation>
+    </message>
 </context>
 <context>
     <name>ImageOpenDialog</name>
@@ -859,14 +863,6 @@
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Select Database File</source>
-        <translation>データベースファイルを選択</translation>
-    </message>
-    <message>
-        <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
-        <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
-    </message>
     <message>
         <source>File Opening Error</source>
         <translation>ファイルを開く際のエラー</translation>

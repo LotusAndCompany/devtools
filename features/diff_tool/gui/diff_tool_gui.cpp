@@ -1,13 +1,13 @@
 #include "diff_tool_gui.h"
 
 #include "features/diff_tool/core/diff_tool.h"
+#include "features/framework/gui/design_system.h"
 
 #include <QComboBox>
 #include <QEvent>
-#include <QFontDatabase>
+#include <QGroupBox>
 #include <QGuiApplication>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPalette>
 #include <QPlainTextEdit>
 #include <QSplitter>
@@ -54,50 +54,43 @@ void DiffToolGUI::buildUi()
     resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     auto *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(16, 16, 16, 16);
-    mainLayout->setSpacing(12);
-
-    // 表示モード切り替え
-    auto *headerRow = new QHBoxLayout();
-    headerRow->setSpacing(8);
-
-    modeCombo = new QComboBox(this);
-    modeCombo->addItem(QString()); // Inline
-    modeCombo->addItem(QString()); // Side-by-side
-    headerRow->addWidget(modeCombo);
-    headerRow->addStretch();
-
-    mainLayout->addLayout(headerRow);
+    DevTools::Ui::applyPageLayout(mainLayout);
 
     // 入力エディタ（左 = 変更前 / 右 = 変更後）
-    const QFont monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-
     auto *splitter = new QSplitter(Qt::Horizontal, this);
 
-    leftEditor = new QPlainTextEdit(splitter);
-    leftEditor->setFont(monoFont);
-    leftEditor->setLineWrapMode(QPlainTextEdit::NoWrap);
-
-    rightEditor = new QPlainTextEdit(splitter);
-    rightEditor->setFont(monoFont);
-    rightEditor->setLineWrapMode(QPlainTextEdit::NoWrap);
-
-    auto *leftPane = buildEditorPane(leftLabel, leftEditor);
-    auto *rightPane = buildEditorPane(rightLabel, rightEditor);
+    leftPane = buildEditorPane(tr("Original"), leftEditor, splitter);
+    rightPane = buildEditorPane(tr("Modified"), rightEditor, splitter);
 
     splitter->addWidget(leftPane);
     splitter->addWidget(rightPane);
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 1);
+    DevTools::Ui::configureEqualSplitter(splitter);
 
     mainLayout->addWidget(splitter, 1);
 
-    // 差分表示
-    resultView = new QTextBrowser(this);
-    resultView->setOpenExternalLinks(false);
-    resultView->setFont(monoFont);
+    // 差分表示（表示モード切り替え + 結果）
+    resultPane = DevTools::Ui::createPane(tr("Diff"), this);
 
-    mainLayout->addWidget(resultView, 1);
+    auto *resultLayout = new QVBoxLayout(resultPane);
+    DevTools::Ui::applyPanelLayout(resultLayout);
+
+    auto *modeRow = new QHBoxLayout();
+    DevTools::Ui::applyInlineLayout(modeRow);
+
+    modeCombo = new QComboBox(resultPane);
+    modeCombo->addItem(QString()); // Inline
+    modeCombo->addItem(QString()); // Side-by-side
+    DevTools::Ui::configureComboBox(modeCombo);
+
+    modeRow->addWidget(modeCombo);
+    modeRow->addStretch();
+    resultLayout->addLayout(modeRow);
+
+    resultView = DevTools::Ui::createTextBrowser(resultPane);
+    DevTools::Ui::configureDisplayTextControl(resultView);
+    resultLayout->addWidget(resultView, 1);
+
+    mainLayout->addWidget(resultPane, 1);
 
     renderTimer = new QTimer(this);
     renderTimer->setSingleShot(true);
@@ -107,21 +100,24 @@ void DiffToolGUI::buildUi()
 }
 
 /**
- * @brief 見出しとエディタを縦に並べるペインを作成する
- * @param[out] caption 作成した見出しラベルを受け取る参照
- * @param editor ペインに再配置する入力エディタ
- * @return このウィジェットを親とする新しいペイン
+ * @brief タイトル付きペインを作成し、コードエディタを配置する
+ * @param title ペインのタイトル
+ * @param[out] editor 作成した入力エディタを受け取る参照
+ * @param parent 親ウィジェット
+ * @return 新しいペイン
  */
-QWidget *DiffToolGUI::buildEditorPane(QLabel *&caption, QPlainTextEdit *editor)
+QGroupBox *DiffToolGUI::buildEditorPane(const QString &title, QPlainTextEdit *&editor,
+                                        QWidget *parent)
 {
-    auto *pane = new QWidget(this);
+    auto *pane = DevTools::Ui::createPane(title, parent);
 
     auto *layout = new QVBoxLayout(pane);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    DevTools::Ui::applyPanelLayout(layout);
 
-    caption = new QLabel(pane);
-    layout->addWidget(caption);
+    editor = new QPlainTextEdit(pane);
+    editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+    DevTools::Ui::configureCodeEditor(editor);
+
     layout->addWidget(editor);
 
     return pane;
@@ -133,10 +129,11 @@ QWidget *DiffToolGUI::buildEditorPane(QLabel *&caption, QPlainTextEdit *editor)
 void DiffToolGUI::retranslateUi()
 {
     setWindowTitle(tr("Diff Comparison Tool"));
+    leftPane->setTitle(tr("Original"));
+    rightPane->setTitle(tr("Modified"));
+    resultPane->setTitle(tr("Diff"));
     modeCombo->setItemText(0, tr("Inline"));
     modeCombo->setItemText(1, tr("Side-by-side"));
-    leftLabel->setText(tr("Original"));
-    rightLabel->setText(tr("Modified"));
     leftEditor->setPlaceholderText(tr("Paste original text here..."));
     rightEditor->setPlaceholderText(tr("Paste modified text here..."));
 }
@@ -213,11 +210,11 @@ QString DiffToolGUI::buildStyleSheet()
 
     return QStringLiteral(
                "<style>"
-               "body{font-family:monospace;color:%1;}"
+               "body{white-space:pre-wrap;color:%1;}"
                ".add{background-color:%2;}"
                ".del{background-color:%3;}"
                "table{border-collapse:collapse;}"
-               "td{padding:0 8px;vertical-align:top;}"
+               "td{white-space:pre-wrap;padding:0 8px;vertical-align:top;}"
                "</style>")
         .arg(textColor, addBg, delBg);
 }

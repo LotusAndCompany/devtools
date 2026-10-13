@@ -11,7 +11,7 @@ class DiffTool;
 
 class QComboBox;
 class QEvent;
-class QLabel;
+class QGroupBox;
 class QPlainTextEdit;
 class QTextBrowser;
 class QTimer;
@@ -49,13 +49,15 @@ private:
     static QString buildStyleSheet();
     static QString buildInlineHtml(const QVector<DiffLine> &lines);
     static QString buildSideBySideHtml(const QVector<DiffLine> &lines);
-    QWidget *buildEditorPane(QLabel *&caption, QPlainTextEdit *editor);
+    static QGroupBox *buildEditorPane(const QString &title, QPlainTextEdit *&editor,
+                                      QWidget *parent);
 
     DiffTool *tool;
 
+    QGroupBox *leftPane{nullptr};
+    QGroupBox *rightPane{nullptr};
+    QGroupBox *resultPane{nullptr};
     QComboBox *modeCombo{nullptr};
-    QLabel *leftLabel{nullptr};
-    QLabel *rightLabel{nullptr};
     QPlainTextEdit *leftEditor{nullptr};
     QPlainTextEdit *rightEditor{nullptr};
     QTextBrowser *resultView{nullptr};
