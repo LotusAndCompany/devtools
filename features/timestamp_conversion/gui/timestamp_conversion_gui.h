@@ -8,6 +8,7 @@
 
 class QDateTimeEdit;
 class QGridLayout;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -43,6 +44,13 @@ private:
     void addRow(QGridLayout *grid, int row, QLabel *&label, QWidget *editor,
                 QPushButton *&convertButton, QPushButton *&copyButton);
 
+    /// 「Unix Timestamp」グループ(秒・ミリ秒)を構築する
+    QGroupBox *buildUnixTimestampGroup();
+    /// 「Date & Time」グループ(ローカル・UTC)を構築する
+    QGroupBox *buildDateTimeGroup();
+    /// 「ISO 8601」グループ(UTC・ローカル)を構築する
+    QGroupBox *buildIso8601Group();
+
     /**
      * @brief 基準時刻(UTC)を全ての表示欄に反映する
      * @details utcInstantが不正な場合はエラーメッセージを表示するのみで、表示欄は更新しない
@@ -50,6 +58,8 @@ private:
      */
     void applyCanonical(const QDateTime &utcInstant);
 
+    /// UNIXタイムスタンプ(秒・ミリ秒)をまとめるグループ
+    QGroupBox *unixGroupBox{nullptr};
     QLabel *secondsLabel{nullptr};
     QLineEdit *secondsEdit{nullptr};
     QPushButton *secondsConvertButton{nullptr};
@@ -60,6 +70,8 @@ private:
     QPushButton *millisecondsConvertButton{nullptr};
     QPushButton *millisecondsCopyButton{nullptr};
 
+    /// 日時(ローカル・UTC)をまとめるグループ
+    QGroupBox *dateTimeGroupBox{nullptr};
     QLabel *localLabel{nullptr};
     QDateTimeEdit *localEdit{nullptr};
     QPushButton *localConvertButton{nullptr};
@@ -70,6 +82,8 @@ private:
     QPushButton *utcConvertButton{nullptr};
     QPushButton *utcCopyButton{nullptr};
 
+    /// ISO8601(UTC・ローカル)をまとめるグループ
+    QGroupBox *isoGroupBox{nullptr};
     QLabel *isoUtcLabel{nullptr};
     QLineEdit *isoUtcEdit{nullptr};
     QPushButton *isoUtcConvertButton{nullptr};
@@ -80,6 +94,8 @@ private:
     QPushButton *isoLocalConvertButton{nullptr};
     QPushButton *isoLocalCopyButton{nullptr};
 
+    /// 使い方を説明するヒントラベル
+    QLabel *hintLabel{nullptr};
     /// 現在時刻を全行に設定するボタン
     QPushButton *nowButton{nullptr};
     /// エラーメッセージ表示用ラベル

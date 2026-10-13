@@ -1207,16 +1207,48 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>タイムスタンプ変換</translation>
     </message>
     <message>
+        <source>Enter a value in any row below, then press Convert to apply it to every other row.</source>
+        <translation>いずれかの行に値を入力し、「変換」を押すと他の全ての行に反映されます。</translation>
+    </message>
+    <message>
         <source>Now</source>
         <translation>現在時刻</translation>
     </message>
     <message>
-        <source>Unix Timestamp (seconds)</source>
-        <translation>UNIXタイムスタンプ (秒)</translation>
+        <source>Unix Timestamp</source>
+        <translation>UNIXタイムスタンプ</translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <source>Milliseconds</source>
+        <translation>ミリ秒</translation>
+    </message>
+    <message>
+        <source>Date &amp;&amp; Time</source>
+        <translation>日時</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation>ローカル</translation>
+    </message>
+    <message>
+        <source>UTC</source>
+        <translation>UTC</translation>
+    </message>
+    <message>
+        <source>ISO 8601</source>
+        <translation>ISO 8601</translation>
     </message>
     <message>
         <source>e.g. 1700000000</source>
         <translation>例: 1700000000</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation>変換</translation>
     </message>
     <message>
         <source>Convert from this value</source>
@@ -1227,32 +1259,12 @@ Please try reducing the amount of data or simplifying the content.</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <source>Unix Timestamp (milliseconds)</source>
-        <translation>UNIXタイムスタンプ (ミリ秒)</translation>
-    </message>
-    <message>
         <source>e.g. 1700000000000</source>
         <translation>例: 1700000000000</translation>
     </message>
     <message>
-        <source>Date &amp;&amp; Time (Local)</source>
-        <translation>日時 (ローカル)</translation>
-    </message>
-    <message>
-        <source>Date &amp;&amp; Time (UTC)</source>
-        <translation>日時 (UTC)</translation>
-    </message>
-    <message>
-        <source>ISO 8601 (UTC)</source>
-        <translation>ISO 8601 (UTC)</translation>
-    </message>
-    <message>
         <source>e.g. 2026-09-13T20:32:37.497Z</source>
         <translation>例: 2026-09-13T20:32:37.497Z</translation>
-    </message>
-    <message>
-        <source>ISO 8601 (Local)</source>
-        <translation>ISO 8601 (ローカル)</translation>
     </message>
     <message>
         <source>e.g. 2026-09-14T05:32:37.497+09:00</source>
@@ -1435,6 +1447,14 @@ Choose a tool from the side panel</source>
     <message>
         <source>Toolbar</source>
         <translation>ツールバー</translation>
+    </message>
+    <message>
+        <source>Refresh Tables</source>
+        <translation type="unfinished">テーブル更新</translation>
+    </message>
+    <message>
+        <source>DB Connection Settings</source>
+        <translation type="unfinished">DB接続設定</translation>
     </message>
     <message>
         <source>SQL</source>
@@ -1742,17 +1762,6 @@ Choose a tool from the side panel</source>
     <message>
         <source>Generated ID: f47ac10b-58cc-4372-a567-0e02b2c3d479.</source>
         <translation>生成されたID: f47ac10b-58cc-4372-a567-0e02b2c3d479</translation>
-    </message>
-</context>
-<context>
-    <name>home</name>
-    <message>
-        <source>Refresh Tables</source>
-        <translation>テーブル更新</translation>
-    </message>
-    <message>
-        <source>DB Connection Settings</source>
-        <translation>DB接続設定</translation>
     </message>
 </context>
 <context>

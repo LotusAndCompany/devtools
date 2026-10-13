@@ -6,6 +6,7 @@
 #include <QClipboard>
 #include <QDateTimeEdit>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLabel>
@@ -16,16 +17,10 @@
 
 namespace {
 constexpr int DEFAULT_WIDTH = 720;
-constexpr int DEFAULT_HEIGHT = 280;
+constexpr int DEFAULT_HEIGHT = 360;
 const char *const STATUS_LABEL_STYLE = "color: red;";
+const char *const HINT_LABEL_STYLE = "color: gray;";
 const char *const DATE_TIME_DISPLAY_FORMAT = "yyyy-MM-dd hh:mm:ss";
-
-QPushButton *createIconButton(const QString &iconName, QWidget *parent)
-{
-    auto *const button = new QPushButton(parent);
-    button->setIcon(QIcon::fromTheme(iconName));
-    return button;
-}
 } // namespace
 
 TimestampConversionGUI::TimestampConversionGUI(QWidget *parent) : GuiTool(parent)
@@ -70,28 +65,23 @@ void TimestampConversionGUI::addRow(QGridLayout *grid, int row, QLabel *&label, 
                                     QPushButton *&convertButton, QPushButton *&copyButton)
 {
     label = new QLabel(this);
-    convertButton = createIconButton(QStringLiteral("view-refresh"), this);
-    copyButton = createIconButton(QStringLiteral("edit-copy"), this);
+
+    convertButton = new QPushButton(this);
+    convertButton->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
+
+    copyButton = new QPushButton(this);
+    copyButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+
     grid->addWidget(label, row, 0);
     grid->addWidget(editor, row, 1);
     grid->addWidget(convertButton, row, 2);
     grid->addWidget(copyButton, row, 3);
 }
 
-void TimestampConversionGUI::buildUi()
+QGroupBox *TimestampConversionGUI::buildUnixTimestampGroup()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    auto *const mainLayout = new QVBoxLayout(this);
-
-    auto *const topBarLayout = new QHBoxLayout();
-    topBarLayout->addStretch();
-    nowButton = new QPushButton(this);
-    nowButton->setIcon(QIcon::fromTheme(QStringLiteral("clock")));
-    topBarLayout->addWidget(nowButton);
-    mainLayout->addLayout(topBarLayout);
-
-    auto *const grid = new QGridLayout();
+    unixGroupBox = new QGroupBox(this);
+    auto *const grid = new QGridLayout(unixGroupBox);
     grid->setColumnStretch(1, 1);
 
     int row = 0;
@@ -102,6 +92,17 @@ void TimestampConversionGUI::buildUi()
     millisecondsEdit = new QLineEdit(this);
     addRow(grid, row++, millisecondsLabel, millisecondsEdit, millisecondsConvertButton,
            millisecondsCopyButton);
+
+    return unixGroupBox;
+}
+
+QGroupBox *TimestampConversionGUI::buildDateTimeGroup()
+{
+    dateTimeGroupBox = new QGroupBox(this);
+    auto *const grid = new QGridLayout(dateTimeGroupBox);
+    grid->setColumnStretch(1, 1);
+
+    int row = 0;
 
     // Qt 6.9以降のQDateTimeEdit::setTimeZone()を使い、表示・読み取りのタイムゾーン変換を
     // ウィジェット自身に任せる（coreは常にUTCの基準時刻だけを扱えばよい）
@@ -117,13 +118,45 @@ void TimestampConversionGUI::buildUi()
     utcEdit->setTimeZone(QTimeZone::UTC);
     addRow(grid, row++, utcLabel, utcEdit, utcConvertButton, utcCopyButton);
 
+    return dateTimeGroupBox;
+}
+
+QGroupBox *TimestampConversionGUI::buildIso8601Group()
+{
+    isoGroupBox = new QGroupBox(this);
+    auto *const grid = new QGridLayout(isoGroupBox);
+    grid->setColumnStretch(1, 1);
+
+    int row = 0;
+
     isoUtcEdit = new QLineEdit(this);
     addRow(grid, row++, isoUtcLabel, isoUtcEdit, isoUtcConvertButton, isoUtcCopyButton);
 
     isoLocalEdit = new QLineEdit(this);
     addRow(grid, row++, isoLocalLabel, isoLocalEdit, isoLocalConvertButton, isoLocalCopyButton);
 
-    mainLayout->addLayout(grid);
+    return isoGroupBox;
+}
+
+void TimestampConversionGUI::buildUi()
+{
+    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    auto *const mainLayout = new QVBoxLayout(this);
+
+    auto *const topBarLayout = new QHBoxLayout();
+    hintLabel = new QLabel(this);
+    hintLabel->setWordWrap(true);
+    hintLabel->setStyleSheet(HINT_LABEL_STYLE);
+    topBarLayout->addWidget(hintLabel, 1);
+    nowButton = new QPushButton(this);
+    nowButton->setIcon(QIcon::fromTheme(QStringLiteral("clock")));
+    topBarLayout->addWidget(nowButton);
+    mainLayout->addLayout(topBarLayout);
+
+    mainLayout->addWidget(buildUnixTimestampGroup());
+    mainLayout->addWidget(buildDateTimeGroup());
+    mainLayout->addWidget(buildIso8601Group());
     mainLayout->addStretch();
 
     statusLabel = new QLabel(this);
@@ -141,34 +174,51 @@ void TimestampConversionGUI::retranslateUi()
 {
     setWindowTitle(tr("Timestamp Conversion"));
 
+    hintLabel->setText(
+        tr("Enter a value in any row below, then press Convert to apply it to every other row."));
     nowButton->setText(tr("Now"));
 
-    secondsLabel->setText(tr("Unix Timestamp (seconds)"));
+    unixGroupBox->setTitle(tr("Unix Timestamp"));
+    secondsLabel->setText(tr("Seconds"));
     secondsEdit->setPlaceholderText(tr("e.g. 1700000000"));
+    secondsConvertButton->setText(tr("Convert"));
     secondsConvertButton->setToolTip(tr("Convert from this value"));
+    secondsCopyButton->setText(tr("Copy"));
     secondsCopyButton->setToolTip(tr("Copy"));
 
-    millisecondsLabel->setText(tr("Unix Timestamp (milliseconds)"));
+    millisecondsLabel->setText(tr("Milliseconds"));
     millisecondsEdit->setPlaceholderText(tr("e.g. 1700000000000"));
+    millisecondsConvertButton->setText(tr("Convert"));
     millisecondsConvertButton->setToolTip(tr("Convert from this value"));
+    millisecondsCopyButton->setText(tr("Copy"));
     millisecondsCopyButton->setToolTip(tr("Copy"));
 
-    localLabel->setText(tr("Date && Time (Local)"));
+    dateTimeGroupBox->setTitle(tr("Date && Time"));
+    localLabel->setText(tr("Local"));
+    localConvertButton->setText(tr("Convert"));
     localConvertButton->setToolTip(tr("Convert from this value"));
+    localCopyButton->setText(tr("Copy"));
     localCopyButton->setToolTip(tr("Copy"));
 
-    utcLabel->setText(tr("Date && Time (UTC)"));
+    utcLabel->setText(tr("UTC"));
+    utcConvertButton->setText(tr("Convert"));
     utcConvertButton->setToolTip(tr("Convert from this value"));
+    utcCopyButton->setText(tr("Copy"));
     utcCopyButton->setToolTip(tr("Copy"));
 
-    isoUtcLabel->setText(tr("ISO 8601 (UTC)"));
+    isoGroupBox->setTitle(tr("ISO 8601"));
+    isoUtcLabel->setText(tr("UTC"));
     isoUtcEdit->setPlaceholderText(tr("e.g. 2026-09-13T20:32:37.497Z"));
+    isoUtcConvertButton->setText(tr("Convert"));
     isoUtcConvertButton->setToolTip(tr("Convert from this value"));
+    isoUtcCopyButton->setText(tr("Copy"));
     isoUtcCopyButton->setToolTip(tr("Copy"));
 
-    isoLocalLabel->setText(tr("ISO 8601 (Local)"));
+    isoLocalLabel->setText(tr("Local"));
     isoLocalEdit->setPlaceholderText(tr("e.g. 2026-09-14T05:32:37.497+09:00"));
+    isoLocalConvertButton->setText(tr("Convert"));
     isoLocalConvertButton->setToolTip(tr("Convert from this value"));
+    isoLocalCopyButton->setText(tr("Copy"));
     isoLocalCopyButton->setToolTip(tr("Copy"));
 
     statusLabel->clear();
