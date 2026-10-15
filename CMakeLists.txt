@@ -5,8 +5,15 @@ set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
 project(DevTools VERSION 0.8.0 LANGUAGES CXX) # x-release-please-version
 
+if(APPLE)
+    enable_language(OBJCXX)
+endif()
+
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
+set(DevTools_BUILD_NUMBER "${PROJECT_VERSION}" CACHE STRING "App bundle build number")
+set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
+set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING "Apple code-signing identity")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -299,9 +306,9 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     # https://developer.apple.com/documentation/xcode/build-settings-reference
     set_target_properties(${PROJECT_NAME} PROPERTIES
         ${BUNDLE_ID_OPTION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DevTools_BUILD_NUMBER}
         MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
         # 機能しないので削除
@@ -315,8 +322,36 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
         MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
         #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
         XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME  "AppIcon"
-        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "distribution/${PROJECT_NAME}.entitlements"
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/${PROJECT_NAME}.entitlements"
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/../Frameworks"
+    )
+
+    if(DEVTOOLS_APPLE_DEVELOPMENT_TEAM)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${DEVTOOLS_APPLE_DEVELOPMENT_TEAM}"
+        )
+    endif()
+
+    if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
+            XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}"
+            "XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY[sdk=macosx*]" "${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}"
+        )
+    endif()
+
+    get_filename_component(QT_INSTALL_PREFIX "${Qt6_DIR}/../../.." ABSOLUTE)
+    find_program(MACDEPLOYQT_EXECUTABLE NAMES macdeployqt HINTS "${QT_INSTALL_PREFIX}/bin"
+        NO_DEFAULT_PATH REQUIRED)
+    set(MACDEPLOYQT_OPTIONS -appstore-compliant)
+    if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
+        list(APPEND MACDEPLOYQT_OPTIONS "-codesign=${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}")
+    endif()
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+            "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" ${MACDEPLOYQT_OPTIONS}
+        COMMENT "Deploying App Store-compliant Qt dependencies"
+        VERBATIM
     )
 
     # 上手く動かない...
@@ -327,9 +362,9 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
 else()
     set_target_properties(${PROJECT_NAME} PROPERTIES
         ${BUNDLE_ID_OPTION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DevTools_BUILD_NUMBER}
         MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION}${DevTools_VERSION_SUFFIX}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
     )

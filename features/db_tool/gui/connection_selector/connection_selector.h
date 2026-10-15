@@ -1,6 +1,8 @@
 #ifndef CONNECTION_SELECTOR_H
 #define CONNECTION_SELECTOR_H
 
+#include "features/db_tool/core/sqlite_file_access.h"
+
 #include <QJsonObject>
 #include <QSqlDatabase>
 #include <QWidget>
@@ -41,8 +43,11 @@ signals:
     /**
      * @brief データベース接続が作成されたときに発行されるシグナル
      * @param db データベース接続
+     * @param connectionInfo 接続情報
+     * @param sqliteFileAccess SQLiteファイルへのアクセス権
      */
-    void connectionCreated(QSqlDatabase db);
+    void connectionCreated(QSqlDatabase db, QJsonObject connectionInfo,
+                           std::shared_ptr<SQLiteFileAccess> sqliteFileAccess);
     /**
      * @brief 新規接続が要求されたときに発行されるシグナル
      */
