@@ -53,6 +53,10 @@ repos:
       - id: check-merge-conflict
         name: check-merge-conflict
 
+      - id: no-commit-to-branch
+        name: no-commit-to-branch
+        args: [--branch, main, --branch, master]
+
   # ===========================================================================
   # Local project hooks
   # ===========================================================================
