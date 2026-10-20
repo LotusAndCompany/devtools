@@ -157,6 +157,13 @@ The tool generates command text; it does not execute shell commands.
 3. Choose flags or a preset when needed
 4. Review matches and replacement results
 
+### Diff Comparison Tool
+
+1. Click **Diff Comparison Tool** in the side menu
+2. Paste the original text in the **Original** pane
+3. Paste the modified text in the **Modified** pane
+4. Choose **Inline** or **Side-by-side** to review the differences
+
 ## Keyboard Shortcuts
 
 | Shortcut | Action |
