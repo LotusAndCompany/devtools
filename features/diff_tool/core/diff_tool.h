@@ -11,9 +11,12 @@
  * @brief 差分の1行に対する操作種別
  */
 enum class DiffOperation {
-    Equal,  ///< 両方のテキストに存在する行
-    Delete, ///< 左テキストにのみ存在する行（削除）
-    Insert, ///< 右テキストにのみ存在する行（追加）
+    /// 両方のテキストに存在する行
+    Equal,
+    /// 左テキストにのみ存在する行（削除）
+    Delete,
+    /// 右テキストにのみ存在する行（追加）
+    Insert,
 };
 
 /**
@@ -21,10 +24,14 @@ enum class DiffOperation {
  */
 struct DiffLine
 {
-    DiffOperation operation; ///< 行の操作種別
-    int left_line_number; ///< 左テキストの1始まりの行番号（左に行が無い場合は0）
-    int right_line_number; ///< 右テキストの1始まりの行番号（右に行が無い場合は0）
-    QString text;          ///< 行の内容
+    /// 行の操作種別
+    DiffOperation operation;
+    /// 左テキストの1始まりの行番号（左に行が無い場合は0）
+    int left_line_number;
+    /// 右テキストの1始まりの行番号（右に行が無い場合は0）
+    int right_line_number;
+    /// 行の内容
+    QString text;
 };
 
 /**
@@ -32,10 +39,14 @@ struct DiffLine
  */
 struct SideBySideRow
 {
-    QString left_text;  ///< 左側に表示する行（無い場合は空文字列）
-    QString right_text; ///< 右側に表示する行（無い場合は空文字列）
-    bool left_changed;  ///< 左側が削除行かどうか
-    bool right_changed; ///< 右側が追加行かどうか
+    /// 左側に表示する行（無い場合は空文字列）
+    QString left_text;
+    /// 右側に表示する行（無い場合は空文字列）
+    QString right_text;
+    /// 左側が削除行かどうか
+    bool left_changed;
+    /// 右側が追加行かどうか
+    bool right_changed;
 };
 
 /**
