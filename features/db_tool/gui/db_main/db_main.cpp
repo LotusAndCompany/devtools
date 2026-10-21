@@ -1,8 +1,10 @@
 #include "db_main.h"
 
-#include "../connection_selector/connection_selector.h"
-#include "../connection_window/connection_window.h"
-#include "../query_page/query_page.h"
+#include "features/db_tool/gui/connection_selector/connection_selector.h"
+#include "features/db_tool/gui/connection_window/connection_window.h"
+#include "features/db_tool/gui/query_page/query_page.h"
+#include "features/framework/gui/design_system.h"
+#include "features/framework/gui/icon_utils.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -14,11 +16,10 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
-#include <QSizePolicy>
-#include <QSpacerItem>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QStyle>
 #include <QTabWidget>
 #include <QTableView>
 #include <QTimer>
@@ -26,13 +27,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <utility>
+
 namespace {
-constexpr int DEFAULT_WIDTH = 943;
-constexpr int DEFAULT_HEIGHT = 349;
-constexpr int CONTENT_STRETCH_TABLES = 1;
-constexpr int CONTENT_STRETCH_QUERY = 3;
-constexpr int SPACER_WIDTH = 40;
-constexpr int SPACER_HEIGHT = 20;
 constexpr int MAX_HISTORY_ENTRIES = 10;
 } // namespace
 
@@ -70,44 +67,53 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent)
 
 void dbMain::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *verticalLayoutMain = new QVBoxLayout(this);
+    DevTools::Ui::applyPageLayout(verticalLayoutMain);
 
-    toolbarGroupBox = new QGroupBox(this);
+    toolbarGroupBox = DevTools::Ui::createPane(tr("Toolbar"), this);
+    DevTools::Ui::configureToolbarPane(toolbarGroupBox);
     auto *toolbarLayout = new QHBoxLayout(toolbarGroupBox);
+    DevTools::Ui::applyPanelLayout(toolbarLayout);
 
     refreshTableButton = new QPushButton(toolbarGroupBox);
-    refreshTableButton->setIcon(QIcon::fromTheme("refresh"));
+    DevTools::Ui::configureIconButton(refreshTableButton, QStringLiteral("refresh"),
+                                      tr("Refresh Tables"));
+    refreshTableButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     toolbarLayout->addWidget(refreshTableButton);
 
-    auto *horizontalSpacer =
-        new QSpacerItem(SPACER_WIDTH, SPACER_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    toolbarLayout->addItem(horizontalSpacer);
+    toolbarLayout->addStretch();
 
     connectionSettingsButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(connectionSettingsButton);
     toolbarLayout->addWidget(connectionSettingsButton);
 
     addQueryTabButton = new QPushButton(toolbarGroupBox);
+    DevTools::Ui::configureCompactButton(addQueryTabButton);
     toolbarLayout->addWidget(addQueryTabButton);
 
     verticalLayoutMain->addWidget(toolbarGroupBox);
 
     auto *contentLayout = new QHBoxLayout();
+    DevTools::Ui::applyContentLayout(contentLayout);
 
-    tablesGroupBox = new QGroupBox(this);
+    tablesGroupBox = DevTools::Ui::createPane(QString(), this);
+    tablesGroupBox->setFlat(true);
     auto *tablesLayout = new QVBoxLayout(tablesGroupBox);
+    DevTools::Ui::applyPanelLayout(tablesLayout);
     tableListWidget = new QListWidget(tablesGroupBox);
+    DevTools::Ui::configureItemView(tableListWidget);
     tablesLayout->addWidget(tableListWidget);
-    contentLayout->addWidget(tablesGroupBox, CONTENT_STRETCH_TABLES);
+    contentLayout->addWidget(tablesGroupBox, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
 
-    queryGroupBox = new QGroupBox(this);
+    queryGroupBox = DevTools::Ui::createPane(QString(), this);
     auto *queryLayout = new QVBoxLayout(queryGroupBox);
+    DevTools::Ui::applyPanelLayout(queryLayout);
     queryTabWidget = new QTabWidget(queryGroupBox);
     queryTabWidget->setCurrentIndex(-1);
     queryTabWidget->setTabsClosable(true);
     queryLayout->addWidget(queryTabWidget);
-    contentLayout->addWidget(queryGroupBox, CONTENT_STRETCH_QUERY);
+    contentLayout->addWidget(queryGroupBox, DevTools::Ui::Metrics::MAIN_PANEL_STRETCH);
 
     verticalLayoutMain->addLayout(contentLayout);
 
@@ -127,9 +133,9 @@ void dbMain::retranslateUi()
 
 void dbMain::handleAddQueryTabButtonClick()
 {
-    auto *page = new QueryPage(this);
+    auto *page = new QueryPage(db, this);
 
-    QString const baseName = "Query";
+    QString const baseName = tr("Query");
     int counter = 1;
     QString newTabName;
 
@@ -172,6 +178,7 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
 
     // Create a unique temporary connection name to avoid conflicts
     const QString tempConnectionName = QUuid::createUuid().toString();
+    auto sqliteFileAccess = SQLiteFileAccess::fromFilePath(fileInfo.absoluteFilePath());
     QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE", tempConnectionName);
     sqliteDb.setDatabaseName(fileInfo.absoluteFilePath());
 
@@ -197,7 +204,8 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
         {"displayName", QString("SQLite: %1").arg(fileInfo.fileName())},
     };
 
-    setDatabase(sqliteDb, connectionInfo);
+    setDatabase(sqliteDb, connectionInfo,
+                std::shared_ptr<SQLiteFileAccess>(std::move(sqliteFileAccess)));
     return true;
 }
 
@@ -220,9 +228,11 @@ void dbMain::handleTabCloseRequested(int index)
 
 void dbMain::populateTableList()
 {
-    QSqlQuery query("SELECT name FROM sqlite_master WHERE type='table';", db);
-    while (query.next()) {
-        tableListWidget->addItem(query.value(0).toString());
+    QIcon const tableIcon =
+        IconUtils::themedIcon(QStringLiteral("database"), QStyle::SP_DriveHDIcon);
+    for (const QString &tableName : db.tables(QSql::Tables)) {
+        auto *const item = new QListWidgetItem(tableIcon, tableName, tableListWidget);
+        DevTools::Ui::configureListItem(item);
     }
 }
 
@@ -238,26 +248,35 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
         }
     }
 
-    auto *model = new QSqlTableModel(this, db);
+    auto *tableView = new QTableView;
+    auto *model = new QSqlTableModel(tableView, db);
     model->setTable(tableName);
     model->select();
 
-    auto *tableView = new QTableView;
+    DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);
+    DevTools::Ui::fitTableViewToContents(tableView);
 
     // 更新ボタン
     auto *refreshButton = new QPushButton;
-    refreshButton->setIcon(QIcon::fromTheme("refresh"));
+    DevTools::Ui::configureIconButton(refreshButton, QStringLiteral("refresh"), tr("Refresh"));
+    refreshButton->setIcon(
+        IconUtils::themedIcon(QStringLiteral("refresh"), QStyle::SP_BrowserReload));
     refreshButton->setToolTip(tr("Refresh"));
-    connect(refreshButton, &QPushButton::clicked, this, [model]() { model->select(); });
+    connect(refreshButton, &QPushButton::clicked, this, [model, tableView]() {
+        model->select();
+        DevTools::Ui::fitTableViewToContents(tableView);
+    });
     // 左寄せのレイアウト
     auto *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(refreshButton);
-    buttonLayout->addStretch();
+    buttonLayout->addWidget(refreshButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    DevTools::Ui::configureActionBar(buttonLayout, DevTools::Ui::ActionBarAlignment::Leading);
 
     auto *mainLayout = new QVBoxLayout;
+    DevTools::Ui::applyPanelLayout(mainLayout);
     mainLayout->addLayout(buttonLayout); // 更新ボタン
     mainLayout->addWidget(tableView);    // テーブルビュー
+    mainLayout->addStretch();
 
     auto *container = new QWidget;
     container->setLayout(mainLayout);
@@ -267,19 +286,38 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     queryTabWidget->setCurrentWidget(container);
 }
 
-void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo)
+void dbMain::setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo,
+                         std::shared_ptr<SQLiteFileAccess> newFileAccess)
 {
+    // 古いDBを参照するモデルやクエリを、アクセス権を置き換える前に破棄する
+    while (queryTabWidget->count() > 0) {
+        handleTabCloseRequested(0);
+    }
+
     db = database;
     s_hasConnectedThisSession = true;
+
+    if (connectionInfo["type"].toString() == "QSQLITE") {
+        if (newFileAccess && !newFileAccess->bookmarkData().isEmpty()) {
+            QJsonObject updatedConnectionInfo = connectionInfo;
+            updatedConnectionInfo["database"] = newFileAccess->filePath();
+            updatedConnectionInfo["securityScopedBookmark"] =
+                QString::fromLatin1(newFileAccess->bookmarkData().toBase64());
+            saveConnectionHistory(updatedConnectionInfo);
+        } else if (!connectionInfo.isEmpty()) {
+            saveConnectionHistory(connectionInfo);
+        }
+        sqliteFileAccess = std::move(newFileAccess);
+    } else {
+        sqliteFileAccess.reset();
+        if (!connectionInfo.isEmpty()) {
+            saveConnectionHistory(connectionInfo);
+        }
+    }
 
     // Enable buttons now that DB is connected
     addQueryTabButton->setEnabled(true);
     refreshTableButton->setEnabled(true);
-
-    // Save connection info to history if provided
-    if (!connectionInfo.isEmpty()) {
-        saveConnectionHistory(connectionInfo);
-    }
 
     // Clear existing items before populating
     tableListWidget->clear();
@@ -321,7 +359,10 @@ void dbMain::showConnectionSelector()
             [this]() { connectionSelector = nullptr; });
 
     connect(connectionSelector, &ConnectionSelector::connectionCreated, this,
-            [this](const QSqlDatabase &db) { setDatabase(db); });
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo,
+                   std::shared_ptr<SQLiteFileAccess> sqliteFileAccess) {
+                setDatabase(db, connectionInfo, std::move(sqliteFileAccess));
+            });
 
     connect(connectionSelector, &ConnectionSelector::newConnectionRequested, this,
             [this]() { openNewConnectionWindow(); });
@@ -353,8 +394,9 @@ void dbMain::openNewConnectionWindow()
             [this]() { connectionWindow = nullptr; });
 
     connect(connectionWindow, &ConnectionWindow::connectionCreated, this,
-            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo) {
-                setDatabase(db, connectionInfo);
+            [this](const QSqlDatabase &db, const QJsonObject &connectionInfo,
+                   std::shared_ptr<SQLiteFileAccess> sqliteFileAccess) {
+                setDatabase(db, connectionInfo, std::move(sqliteFileAccess));
                 // ConnectionSelectorも閉じる
                 if (connectionSelector != nullptr) {
                     connectionSelector->close();

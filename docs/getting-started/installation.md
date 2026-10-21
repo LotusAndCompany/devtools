@@ -12,13 +12,13 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9.3 | GUI framework; Qt 6.8+ is required by qlementine |
+| Qt | 6.9+ | GUI framework; 6.9.3 is tested; 6.9+ is required for named-glyph QIcon support |
 | vcpkg | Latest | Package management |
 
 ### Optional Tools
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Doxygen | - | API documentation generation |
+| Doxygen | 1.18+ | API documentation generation |
 | Qt Creator | 18.0.1+ | IDE with Qt integration |
 | Ninja | 1.12.1+ | Fast build tool |
 | Qt Installer Framework | 4.10 | Application packaging |
@@ -46,7 +46,7 @@ export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
 
 1. Download the installer from [qt.io](https://www.qt.io/download)
 2. Run the installer
-3. Select Qt 6.x for macOS
+3. Select Qt 6.9 or later for macOS
 4. Optionally install Qt Creator
 
 ### 2. Install vcpkg
@@ -74,7 +74,7 @@ vcpkg version
 
 ### 3. Install Additional Tools
 
-#### Doxygen (Optional, 1.16+)
+#### Doxygen (Optional, 1.18+)
 
 ```bash
 brew install doxygen
@@ -133,15 +133,20 @@ make -j$(sysctl -n hw.ncpu)
 After building, run the application:
 
 ```bash
-# Build and run with colored console output (recommended)
+# Build and run with colored console output (recommended).
+# This replaces older project-local processes before starting.
 cmake --build . --target run
 
 # Or run the binary directly
 ./DevTools.app/Contents/MacOS/DevTools
-
-# Or open the app bundle
-open DevTools.app
 ```
+
+Use the `run` target when iterating on the source tree. It replaces older
+project-local DevTools processes before launching the canonical binary. If a
+DevTools bundle outside the source tree is running, the target stops with an
+explicit error instead of allowing an ambiguous application-name selection.
+Separately packaged builds, such as `build-appstore`, are not used for source
+validation.
 
 ## IDE Setup
 
@@ -149,7 +154,7 @@ open DevTools.app
 
 1. Open Qt Creator
 2. Go to **Preferences > Kits**
-3. Ensure a Qt 6.x kit is configured
+3. Ensure a Qt 6.9 or later kit is configured
 4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
 5. Open `CMakeLists.txt` from the project root
 6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
@@ -198,7 +203,7 @@ ctest --output-on-failure
 
 - [Quick Start Guide](quick-start.md) - Learn the basics
 - [Architecture Overview](../development/architecture.md) - Understand the codebase
-- [Contributing Guide](../../CONTRIBUTING.md) - Start contributing
+- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Start contributing
 
 ## Troubleshooting
 

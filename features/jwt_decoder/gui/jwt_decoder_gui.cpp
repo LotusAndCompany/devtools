@@ -1,5 +1,6 @@
 #include "jwt_decoder_gui.h"
 
+#include "features/framework/gui/design_system.h"
 #include "features/jwt_decoder/gui/jwt_highlighters.h"
 #include "features/jwt_decoder/gui/jwt_palette.h"
 
@@ -8,6 +9,7 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QFrame>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QSizePolicy>
@@ -22,8 +24,6 @@
 
 namespace {
 constexpr int DECODE_DEBOUNCE_MS = 180;
-constexpr int DEFAULT_WIDTH = 1000;
-constexpr int DEFAULT_HEIGHT = 700;
 /// .pen の Input Edit の高さ (下限として使い、レイアウトに合わせて伸びられるようにする)
 constexpr int INPUT_HEIGHT = 132;
 /// .pen の Header / Signature ペインの高さ (QSplitter の初期値)
@@ -32,8 +32,6 @@ constexpr int PAYLOAD_PANE_HEIGHT = 300;
 constexpr int SIGNATURE_PANE_HEIGHT = 100;
 /// ペインタイトルのセグメント色ドット
 constexpr int DOT_SIZE = 8;
-/// .pen の gap に合わせた QSplitter のハンドル幅
-constexpr int SPLITTER_HANDLE_WIDTH = 10;
 
 QLabel *captionLabel(QWidget *parent)
 {
@@ -60,8 +58,9 @@ QString coloredHtml(const QString &text, const QColor &color)
 /// バナーの背景色を設定する
 void setBannerStyle(QWidget *banner, const QColor &background)
 {
-    banner->setStyleSheet(QStringLiteral("background-color: %1; border-radius: 6px;")
-                              .arg(background.name(QColor::HexRgb)));
+    banner->setStyleSheet(QStringLiteral("background-color: %1; border-radius: %2px;")
+                              .arg(background.name(QColor::HexRgb))
+                              .arg(DevTools::Ui::Metrics::CORNER_RADIUS));
 }
 
 /// バナー内ラベルの文字色を設定する (背景はバナー側に描かせる)
@@ -96,12 +95,8 @@ JwtDecoderGUI::JwtDecoderGUI(JwtDecoder *decoder, QWidget *parent)
 
 void JwtDecoderGUI::buildUi()
 {
-    resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     auto *mainLayout = new QVBoxLayout(this);
-    // ContentsArea が既に 6px の余白を持つため、markdown_preview と同じ 16 / 12 に揃える
-    mainLayout->setContentsMargins(16, 16, 16, 16);
-    mainLayout->setSpacing(12);
+    DevTools::Ui::applyPageLayout(mainLayout);
 
     mainLayout->addWidget(buildNotice());
     mainLayout->addWidget(buildInputArea());
@@ -121,8 +116,8 @@ void JwtDecoderGUI::buildUi()
     // .pen のペイン高さを初期値にする (ペイロードのみ伸縮させる)
     splitter->setSizes({HEADER_PANE_HEIGHT, PAYLOAD_PANE_HEIGHT, SIGNATURE_PANE_HEIGHT});
     splitter->setStretchFactor(1, 1);
-    splitter->setHandleWidth(SPLITTER_HANDLE_WIDTH);
-    mainLayout->addWidget(splitter);
+    splitter->setHandleWidth(DevTools::Ui::Metrics::SPLITTER_HANDLE_WIDTH);
+    mainLayout->addWidget(splitter, 1);
 
     decodeTimer = new QTimer(this);
     decodeTimer->setSingleShot(true);
@@ -139,7 +134,7 @@ QWidget *JwtDecoderGUI::buildNotice()
     notice = new QFrame(this);
 
     auto *layout = new QHBoxLayout(notice);
-    layout->setContentsMargins(12, 10, 12, 10);
+    DevTools::Ui::applyPanelLayout(layout);
 
     noticeLabel = new QLabel(notice);
     noticeLabel->setWordWrap(true);
@@ -152,13 +147,14 @@ QWidget *JwtDecoderGUI::buildNotice()
 
 QWidget *JwtDecoderGUI::buildInputArea()
 {
-    auto *area = new QWidget(this);
+    auto *area = DevTools::Ui::createPane(QString(), this);
+    DevTools::Ui::configureCompactPane(area);
 
     auto *layout = new QVBoxLayout(area);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    DevTools::Ui::applyPanelLayout(layout);
 
     auto *labelRow = new QHBoxLayout;
+    DevTools::Ui::applyInlineLayout(labelRow);
     inputLabel = captionLabel(area);
     inputHint = captionLabel(area);
     labelRow->addWidget(inputLabel);
@@ -167,6 +163,7 @@ QWidget *JwtDecoderGUI::buildInputArea()
     layout->addLayout(labelRow);
 
     inputEdit = new QTextEdit(area);
+    DevTools::Ui::configureTextControl(inputEdit);
     inputEdit->setAcceptRichText(false);
     // 高さは固定せず、長いトークンでレイアウトに余裕があれば広がるようにする
     inputEdit->setMinimumHeight(INPUT_HEIGHT);
@@ -186,7 +183,7 @@ QWidget *JwtDecoderGUI::buildStructureError()
     structureError->hide();
 
     auto *layout = new QHBoxLayout(structureError);
-    layout->setContentsMargins(12, 8, 12, 8);
+    DevTools::Ui::applyPanelLayout(layout);
 
     structureErrorLabel = new QLabel(structureError);
     structureErrorLabel->setWordWrap(true);
@@ -200,14 +197,14 @@ QWidget *JwtDecoderGUI::buildStructureError()
 JwtDecoderGUI::Pane JwtDecoderGUI::buildPane()
 {
     Pane pane;
-    pane.widget = new QWidget(this);
+    pane.widget = DevTools::Ui::createPane(QString(), this);
 
     auto *layout = new QVBoxLayout(pane.widget);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    DevTools::Ui::applyPanelLayout(layout);
 
     auto *titleRow = new QHBoxLayout;
-    titleRow->setSpacing(8);
+    DevTools::Ui::applyInlineLayout(titleRow);
+    titleRow->setSpacing(DevTools::Ui::Metrics::CONTROL_SPACING);
 
     // ドットの色は applyPalette() でセグメントごとに設定する
     pane.dot = new QLabel(pane.widget);
@@ -222,7 +219,8 @@ JwtDecoderGUI::Pane JwtDecoderGUI::buildPane()
     titleRow->addWidget(pane.note);
     layout->addLayout(titleRow);
 
-    pane.view = new QTextBrowser(pane.widget);
+    pane.view = DevTools::Ui::createTextBrowser(pane.widget);
+    DevTools::Ui::configureTextControl(pane.view);
     pane.view->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     // 出力ビューは選択・コピーのみ (data_conversion と同じ扱い)
     pane.view->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
@@ -240,7 +238,8 @@ void JwtDecoderGUI::retranslateUi()
     inputLabel->setText(tr("Encoded JWT"));
     inputHint->setText(tr("Auto-decodes as you type (180 ms debounce)"));
     inputEdit->setPlaceholderText(tr("Paste a JWT here..."));
-    structureErrorLabel->setText(tr("Invalid JWT structure — expected header.payload.signature"));
+    structureErrorLabel->setText(
+        tr("Invalid JWT structure — expected header.payload or header.payload.signature"));
     headerPane.label->setText(tr("Header"));
     payloadPane.label->setText(tr("Payload"));
     signaturePane.label->setText(tr("Signature"));

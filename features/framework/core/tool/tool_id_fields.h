@@ -33,7 +33,9 @@
     /** QRコード生成 */           \
     QR_CODE_GENERATION,           \
     /** Markdownプレビュー */      \
-    MARKDOWN_PREVIEW,             \
+    MARKDOWN_PREVIEW  ,          \
+    /** 正規表現テスター */        \
+    REGEX_TESTER,                 \
     /** JWTデコーダー */          \
     JWT_DECODER                   // 末尾のカンマは不要
 // clang-format on

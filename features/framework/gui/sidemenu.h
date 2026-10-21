@@ -89,7 +89,7 @@ signals:
 
 private:
     /// 例外に設定するメッセージ
-    static const QString invalidSidemenuIDReason;
+    static const QString &invalidSidemenuIDReason();
 
     /// 検索ボックス
     QLineEdit *m_searchBoxEdit{nullptr};

@@ -59,7 +59,7 @@ Each part is decoded on its own. If the payload is malformed, the header and sig
 
 ### Two-Part Tokens
 
-A token without a signature (`header.payload`) is accepted. The signature pane shows a dash.
+A token without a signature (`header.payload`) is accepted. The signature pane shows **No data**.
 
 ## Error Handling
 

@@ -2,6 +2,7 @@
 #define DB_MAIN_H
 
 #include "QtSql/qsqldatabase.h"
+#include "features/db_tool/core/sqlite_file_access.h"
 
 #include <QJsonObject>
 #include <QListWidgetItem>
@@ -36,6 +37,8 @@ public:
 private:
     void buildUi();
     void retranslateUi();
+    void setDatabase(const QSqlDatabase &database, const QJsonObject &connectionInfo,
+                     std::shared_ptr<SQLiteFileAccess> newFileAccess);
 
     QPushButton *refreshTableButton{nullptr};
     QPushButton *connectionSettingsButton{nullptr};
@@ -46,6 +49,7 @@ private:
     QListWidget *tableListWidget{nullptr};
     QTabWidget *queryTabWidget{nullptr};
 
+    std::shared_ptr<SQLiteFileAccess> sqliteFileAccess;
     QSqlDatabase db;
     ConnectionSelector *connectionSelector = nullptr;
     ConnectionWindow *connectionWindow = nullptr;
@@ -65,8 +69,6 @@ protected:
 private slots:
     void handleTabCloseRequested(int index);
     void handleTableClicked(QListWidgetItem *item);
-    void setDatabase(const QSqlDatabase &database,
-                     const QJsonObject &connectionInfo = QJsonObject());
 };
 
 #endif // DB_MAIN_H

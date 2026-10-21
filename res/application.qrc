@@ -7,6 +7,9 @@
     <qresource prefix="/docs">
         <file alias="LICENSE">../LICENSE</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file alias="MaterialSymbolsOutlined.ttf">fonts/MaterialSymbolsOutlined.ttf</file>
+    </qresource>
     <qresource prefix="/themes">
         <file alias="light.json">themes/light.json</file>
         <file alias="dark.json">themes/dark.json</file>
