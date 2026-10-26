@@ -108,8 +108,8 @@ check passed. CTest passed 26 of 29 targets; three targets failed:
    unhandled YAML::InvalidNode was reported.
 2. test_data_conversion: YAML format detection expected enum value 3 and
    returned value 6.
-3. test_db_connection_window: two path assertions expected /var/folders/...,
-   while canonicalization returned /private/var/folders/....
+3. test_db_connection_window: two path assertions failed because the
+   expected temporary-directory spelling differed from its canonical form.
 
 The local build resolved Homebrew packages directly because the pinned
 vcpkg toolchain root was not available. The YAML failures therefore need
@@ -134,9 +134,9 @@ This is a source and local-build snapshot, not an exhaustive behavioral
 specification. Limited UI smoke checks covered all nine registered screens
 on an ad-hoc-signed temporary app copy. One ordinary-profile launch, one idle
 main/helper memory sample, and one small JSON conversion were also measured.
-Repeated warm launches, a true OS-cold launch, peak memory, representative SQL
-and Markdown timings, large JSON responsiveness, developer iteration, other
-macOS releases, clean-machine install/update/uninstall, signature,
-notarization, and App Store submission remain unverified. The 1 MiB JSON UI
-run stalled without an accessible result. The protocol and initial gates are
-in [performance-baseline.md](performance-baseline.md).
+Repeated warm launches, a true OS-cold launch, peak memory, repeatable SQL and
+Markdown performance distributions, large JSON responsiveness, developer
+iteration, other macOS releases, clean-machine install/update/uninstall,
+signature, notarization, and App Store submission remain unverified. The 1
+MiB JSON UI run stalled without an accessible result. The protocol and initial
+gates are in [performance-baseline.md](performance-baseline.md).
