@@ -40,6 +40,13 @@ absence of a test target for an operation is not evidence that the behavior
 does not exist. No React, bridge, end-to-end, OS integration, or distribution
 tests exist at M0.
 
+Manual UI smoke opened all nine registered tool screens in an ad-hoc-signed
+temporary app copy; the DB connection dialog was opened without connecting to
+a database. A small JSON conversion produced formatted output in both the copy
+and the ordinary-profile app. The 1 MiB JSON UI run stalled before producing
+an accessible result. These observations are limited smoke evidence, not
+automated coverage or full feature parity.
+
 For each feature, capture representative success output and error output
 before extracting its logic. Add empty, malformed, boundary, large, Unicode,
 Japanese-path, permission, cancellation, and shutdown cases where applicable.
