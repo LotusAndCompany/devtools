@@ -53,6 +53,10 @@ directory; a Qt probe resolved the settings file under
 launch of the temporary app bundle from the execution sandbox exited with
 status 137 before a window could be observed. The app was not launched from
 the user's normal profile, and no interactive smoke check was performed.
+Opening a copied bundle through Launch Services also timed out after 2,173
+seconds; a subsequent app inventory showed it was not running. An offscreen
+launch attempt was killed by the sandbox with signal 9 after about 0.01
+seconds. These attempts produced no usable launch or memory sample.
 The following M0 values therefore remain unknown:
 
 - cold and warm launch time;
