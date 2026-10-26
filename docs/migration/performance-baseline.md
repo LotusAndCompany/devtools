@@ -49,10 +49,11 @@ keep .app, signed archive, installer, and post-install footprint separate.
 
 The QSettings profile was safely isolated by setting HOME to a temporary
 directory; a Qt probe resolved the settings file under
-/private/tmp/devtools-issue131-home/Library/Preferences. A direct foreground
-launch of the temporary app bundle from the execution sandbox exited with
-status 137 before a window could be observed. The app was not launched from
-the user's normal profile, and no interactive smoke check was performed.
+/private/tmp/devtools-issue131-home/Library/Preferences. Direct foreground
+launches of the temporary app bundle returned status 137 both in the default
+and escalated execution paths before a window could be observed. The app was
+not launched from the user's normal profile, and no interactive smoke check
+was performed.
 Opening a copied bundle through Launch Services also timed out after 2,173
 seconds; a subsequent app inventory showed it was not running. An offscreen
 launch attempt was killed by the sandbox with signal 9 after about 0.01
