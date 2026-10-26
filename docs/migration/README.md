@@ -18,9 +18,9 @@ directory docs/ja/articles/ and does not modify it.
   current tests, edge cases to preserve, and milestone progress.
 - [data-migration.md](data-migration.md): persisted settings, connection
   history, phrase templates, user files, and migration constraints.
-- [performance-baseline.md](performance-baseline.md): measured build/test/
-  package facts, missing runtime measurements, repeatable protocol, and
-  initial migration gates.
+- [performance-baseline.md](performance-baseline.md): measured build, test,
+  package, launch, memory, and small-input facts; remaining runtime gaps,
+  repeatable protocol, and initial migration gates.
 - [pr-intake.md](pr-intake.md): open and merged PRs and the M0 base.
 - [execution-log.md](execution-log.md): commands and outcomes for this audit,
   historic estimates clearly separated from measurements, and follow-up work.
@@ -35,7 +35,7 @@ must be used with evidence, and out-of-scope entries need a reason.
 | Milestone | Status | Evidence / next condition |
 |---|---|---|
 | M-1: intake and base SHA | Verified for this snapshot | [pr-intake.md](pr-intake.md); original Issue #130 artifact was absent |
-| M0: current-state audit | Verified with explicit gaps | This document set; runtime performance and interactive smoke checks remain unmeasured |
+| M0: current-state audit | Verified with explicit gaps | This document set; limited runtime and UI smoke evidence is recorded, with large-workload, OS-cold/warm launch, operation, and distribution gaps remaining |
 | M1: separate C++ UI and processing | Not started | Keep C++ / Qt / CMake as the working application stack until M1 is complete |
 | M2: React / Qt WebEngine foundation | Not started | Define and test a real NativeBridge contract and deployable host |
 | M3: move all UI to React | Not started | Preserve every registered tool and shared interaction |
