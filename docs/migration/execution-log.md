@@ -7,7 +7,8 @@
 - Scope: source, build, tests, registered tools, settings/data, CI,
   distribution, and current PR intake.
 - Working tree: pre-existing untracked docs/ja/articles/ was preserved.
-- Result: M0 inventory and baseline records added under docs/migration/.
+- Result: M0 inventory and baseline records added under docs/migration/;
+  draft PR #138 created from feature/issue-131-m0-audit.
 - Not performed: no C++ changes, merge, release, interactive app launch,
   signed package, or issue close.
 
@@ -23,6 +24,7 @@
 | Manual macdeployqt deployment with explicit /opt/homebrew/lib | Completed; Qt dependencies resolved; unsigned .app measured 107,516 KiB; not a signed release artifact |
 | QSettings location probe and isolated app launch | HOME redirected the settings location into /private/tmp; direct foreground app launch exited 137, copied-bundle Launch Services open timed out, and offscreen launch was killed by the sandbox before UI observation |
 | GitHub issue/PR inspection | Read Issues #129–#131 and the current PR snapshot; no issue comments on #131 |
+| Review PR | Created draft PR #138 from the M0 base; initial title, C++, and GitHub Actions checks were in progress, with CodeRabbit skipped for draft |
 
 Exact reproducible CMake configuration:
 
@@ -35,8 +37,8 @@ described in [codebase-audit.md](codebase-audit.md).
 
 ### Time and intervention record
 
-At 2026-10-26 08:54:27 UTC, the Codex goal runtime was 3,909 seconds
-(65 minutes 9 seconds) of elapsed wall time, including a long Launch Services
+At 2026-10-26 08:55:48 UTC, the Codex goal runtime was 3,983 seconds
+(66 minutes 23 seconds) of elapsed wall time, including a long Launch Services
 timeout. This is not model execution time per command. Individual command
 timings are recorded only where the shell/build output captured them. Human
 review/decision time and per-command Codex time were not independently
