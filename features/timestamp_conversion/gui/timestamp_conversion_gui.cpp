@@ -1,5 +1,6 @@
 #include "timestamp_conversion_gui.h"
 
+#include "features/framework/gui/icon_utils.h"
 #include "features/timestamp_conversion/core/timestamp_conversion.h"
 
 #include <QApplication>
@@ -67,10 +68,10 @@ void TimestampConversionGUI::addRow(QGridLayout *grid, int row, QLabel *&label, 
     label = new QLabel(this);
 
     convertButton = new QPushButton(this);
-    convertButton->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
+    convertButton->setIcon(IconUtils::themedIcon(QStringLiteral("refresh")));
 
     copyButton = new QPushButton(this);
-    copyButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+    copyButton->setIcon(IconUtils::themedIcon(QStringLiteral("content_copy")));
 
     grid->addWidget(label, row, 0);
     grid->addWidget(editor, row, 1);
@@ -150,7 +151,7 @@ void TimestampConversionGUI::buildUi()
     hintLabel->setStyleSheet(HINT_LABEL_STYLE);
     topBarLayout->addWidget(hintLabel, 1);
     nowButton = new QPushButton(this);
-    nowButton->setIcon(QIcon::fromTheme(QStringLiteral("clock")));
+    nowButton->setIcon(IconUtils::themedIcon(QStringLiteral("schedule")));
     topBarLayout->addWidget(nowButton);
     mainLayout->addLayout(topBarLayout);
 
