@@ -2,8 +2,9 @@
 
 This inventory describes the M0 base at
 5638bb64c67a4a2329d1e57e36f255eef92fce9e. It distinguishes application
-settings from user-owned files and external databases. Exact native QSettings
-file locations and the data recovery path have not been established.
+settings from user-owned files and external databases. The native
+QSettings domain for a clean supported install and the data recovery path
+have not been established.
 
 ## Application identity and settings
 
@@ -11,7 +12,8 @@ The app sets its QCoreApplication name to DevTools and its bundle identifier
 to com.lotusandcompanyinc.dev-tools. No explicit organization name, domain,
 QSettings path, or settings format is configured in source. QSettings uses
 the platform default backend; do not hard-code a presumed plist location into
-a migration until it has been verified on a clean supported macOS account.
+a migration until the domain mapping has been verified on a clean supported
+macOS account.
 
 The settings keys found in source are:
 
@@ -99,7 +101,8 @@ For any storage move:
 
 ## Open questions
 
-- What exact native QSettings file and domain are used for existing installs?
+- What native QSettings domain should a migration target on a clean supported
+  install, and how should existing profile settings be found and recovered?
 - Are phrase templates modified by users, and where are their installed and
   writable copies located?
 - How long should database history persist, and should users be able to clear
