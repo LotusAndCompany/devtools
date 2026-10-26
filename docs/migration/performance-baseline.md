@@ -30,7 +30,7 @@ under the pinned toolchain.
 | CTest | 26/29 targets passed; elapsed 16.30 s | Three failures described below; CI does not run CTest |
 | Format check | Passed | format-check target |
 | Pre-deployment .app bundle | 18,084 KiB | Local Xcode output |
-| Manually deployed .app bundle | 107,516 KiB (about 105.0 MiB) | Unsigned; macdeployqt with explicit /opt/homebrew/lib; contained 16 framework directories |
+| Manually deployed .app bundle | 107,516 KiB (about 105.0 MiB) | Unsigned; macdeployqt with an explicit Homebrew library path; contained 16 framework directories |
 | Signed installer / archive | Not available | No signed .dmg, .ipa, or installer artifact was produced |
 
 The project's automatic macdeployqt -appstore-compliant post-build step
@@ -45,30 +45,21 @@ The 107,516 KiB value is a local .app bundle measurement, not a compressed
 download or installed footprint. Compare like artifact with like artifact;
 keep .app, signed archive, installer, and post-install footprint separate.
 
-## Runtime baseline still unmeasured
+## Runtime measurements
 
-The QSettings profile was safely isolated by setting HOME to a temporary
-directory; a Qt probe resolved the settings file under
-/private/tmp/devtools-issue131-home/Library/Preferences. Direct foreground
-launches of the temporary app bundle returned status 137 both in the default
-and escalated execution paths before a window could be observed. The app was
-not launched from the user's normal profile, and no interactive smoke check
-was performed.
-Opening a copied bundle through Launch Services also timed out after 2,173
-seconds; a subsequent app inventory showed it was not running. An offscreen
-launch attempt was killed by the sandbox with signal 9 after about 0.01
-seconds. These attempts produced no usable launch or memory sample.
-The following M0 values therefore remain unknown:
+The audit copy used a temporary Xcode app bundle with an audit-specific identifier and an ad-hoc signature. These are process-cold / OS-cache-warm measurements, not clean-machine or post-reboot cold-start results.
 
-- cold and warm launch time;
-- idle, peak, and helper-process memory;
-- JSON, SQL, Markdown, and UI interaction latency under fixed input;
-- application responsiveness and cancellation during large operations;
-- developer edit-to-review cycle time.
+| Metric | M0 observation | Conditions / limitation |
+|---|---|---|
+| Launch to accessibility tree | 1.044, 1.014, 1.010, 1.039, 1.031 s; median 1.031 s, p95 1.044 s | Five process starts through CUA getApp; includes Launch Services and accessibility response; app copy with modified identifier |
+| Ordinary-profile launch to accessibility tree | 2.870 s | One launch through CUA getApp; includes Launch Services and accessibility response; not a repeatable startup distribution |
+| Idle app and helper memory | DevTools 89.2 MB; ThemeWidgetControlViewService helper 9.4 MB | One Activity Monitor sample while the small JSON remained in the Data Conversion screen; memory column, not RSS or peak |
+| Small JSON conversion | A small JSON value produced formatted output | The synchronous setValue call took 25.2 ms; accessibility observation confirmed the result afterward. This is not UI paint latency or a statistical sample |
+| 1 MiB JSON conversion | No accessible result; the UI became unresponsive before the app was stopped | The UI path did not establish whether conversion or editor/accessibility rendering caused the stall; no output parity result |
 
-Do not substitute PR body claims or measurements from another commit for
-these values. Collect them on the same supported OS, device, build type, and
-fixed fixture before claiming a runtime improvement or regression.
+A 1 MiB JSON input did not produce accessible output. Do not claim large JSON performance parity from this run. Larger JSON sizes were not tested.
+
+Still unknown: a true OS-cold launch, repeatable ordinary-profile cold and warm launch distributions, peak memory, repeatable SQL and Markdown performance distributions or larger workloads, cancellation behavior, Text Diff (not in base), developer edit-to-review time, and signed release or installed distribution. Collect remaining metrics with fixed workloads before claiming a general runtime comparison.
 
 ## Repeatable protocol and initial gates
 
@@ -76,15 +67,18 @@ Use this protocol for M0 follow-up and every migration comparison:
 
 1. Record commit, device, macOS version, architecture, compiler, Qt version,
    build type, signing state, and exact command.
-2. Use a release build. Run at least 5 cold launches and 10 warm launches;
-   report median and p95. Define how the app process is fully quit between
-   cold samples.
+2. Use a release build. Run at least 5 process-cold launches and 10 warm
+   launches; report median and p95. Define how the app process is fully quit
+   between samples. Report OS-cold results separately; do not describe
+   process restarts with cached files as OS-cold.
 3. Record the app and helper process memory at idle after 60 seconds and peak
    memory during each fixed workload. State whether values are resident or
    peak resident memory and which processes are included.
 4. Use the same checked-in/generated fixtures for each build: JSON at 1 MiB,
-   10 MiB, and 50 MiB; a fixed SQL dataset and query; representative Markdown;
-   and a large-diff workload only after Text Diff is merged into the base.
+   10 MiB, and 50 MiB; stop and record if 1 MiB makes the UI unresponsive
+   before proceeding to larger inputs. Use a fixed SQL dataset and query;
+   representative Markdown; and a large-diff workload only after Text Diff
+   is merged into the base.
    Record operation median/p95, UI responsiveness, cancellation, and output
    parity.
 5. Record the same artifact classes separately: .app bundle, signed release
@@ -118,6 +112,6 @@ structure.
 
 The local run failed in test_yaml_parser (YAML::InvalidNode / parser result),
 test_data_conversion (YAML format enum mismatch), and two
-test_db_connection_window path assertions (/var/folders versus
-/private/var/folders). Full details and likely environment boundaries are in
+test_db_connection_window path assertions caused by temporary-directory
+canonicalization differences. Full details and likely environment boundaries are in
 [codebase-audit.md](codebase-audit.md).
