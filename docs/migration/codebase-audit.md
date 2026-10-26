@@ -131,8 +131,12 @@ the signed release pipeline.
 ## Audit limits
 
 This is a source and local-build snapshot, not an exhaustive behavioral
-specification. Startup, memory, large-input timings, interactive UI smoke
-checks, other macOS releases, clean-machine install/update/uninstall,
-signature, notarization, and App Store submission remain unverified. The
-reproducible protocol and initial gates are in
-[performance-baseline.md](performance-baseline.md).
+specification. Limited UI smoke checks covered all nine registered screens
+on an ad-hoc-signed temporary app copy. One ordinary-profile launch, one idle
+main/helper memory sample, and one small JSON conversion were also measured.
+Repeated warm launches, a true OS-cold launch, peak memory, representative SQL
+and Markdown timings, large JSON responsiveness, developer iteration, other
+macOS releases, clean-machine install/update/uninstall, signature,
+notarization, and App Store submission remain unverified. The 1 MiB JSON UI
+run stalled without an accessible result. The protocol and initial gates are
+in [performance-baseline.md](performance-baseline.md).
