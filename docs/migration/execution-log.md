@@ -2,15 +2,14 @@
 
 ## M0 / audit snapshot
 
-- Date: 2026-10-26 (UTC execution window began at 07:49 UTC).
+- Date: 2026-10-26.
 - Base: main / origin/main at 5638bb64c67a4a2329d1e57e36f255eef92fce9e.
 - Scope: source, build, tests, registered tools, settings/data, CI,
   distribution, and current PR intake.
-- Working tree: pre-existing untracked docs/ja/articles/ was preserved.
 - Result: M0 inventory and baseline records added under docs/migration/;
-  draft PR #138 created from feature/issue-131-m0-audit.
-- Not performed: no C++ changes, merge, release, interactive app launch,
-  signed package, or issue close.
+  draft PR #138 created from the M0 base.
+- Not performed: no C++ changes, merge, release, signed package, or issue
+  close.
 
 ### Commands and outcomes
 
@@ -20,15 +19,19 @@
 | Full Ninja build, parallelism 8 | Passed; elapsed build time was not captured |
 | CTest with output on failure | 26/29 passed in 16.30 s; YAML parser, data conversion YAML detection, and DB connection path assertions failed |
 | format-check target | Passed |
+| Runtime and UI observations | See [performance-baseline.md](performance-baseline.md) for approved measurements, scope, and limitations; these are limited smoke observations, not a complete comparison |
 | Xcode generator configure and build | Passed after using isolated DerivedData and disabling signing; automatic post-build macdeployqt emitted unresolved-rpath diagnostics |
-| Manual macdeployqt deployment with explicit /opt/homebrew/lib | Completed; Qt dependencies resolved; unsigned .app measured 107,516 KiB; not a signed release artifact |
-| QSettings location probe and isolated app launch | HOME redirected the settings location into /private/tmp; default and escalated direct foreground launches exited 137, copied-bundle Launch Services open timed out, and offscreen launch was killed by the sandbox before UI observation |
+| Manual macdeployqt deployment | Completed; Qt dependencies resolved; unsigned .app measured 107,516 KiB; not a signed release artifact |
 | GitHub issue/PR inspection | Read Issues #129–#131 and the current PR snapshot; no issue comments on #131 |
-| Review PR | Created draft PR #138 from the M0 base; initial title, C++, and GitHub Actions checks were in progress, with CodeRabbit skipped for draft |
+| Review PR | Created draft PR #138 from the M0 base |
 
-Exact reproducible CMake configuration:
 
-    cmake -S . -B /private/tmp/devtools-issue131-ninja -G Ninja -DCMAKE_BUILD_TYPE=Release -DENABLE_UNIT_TEST=ON -DFETCHCONTENT_SOURCE_DIR_QLEMENTINE=/Users/mitani/work/devtools/build/_deps/qlementine-src
+
+The Ninja configure used Release, ENABLE_UNIT_TEST=ON, and the existing
+qlementine FetchContent source. From an out-of-tree build directory, configure
+with:
+
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DENABLE_UNIT_TEST=ON ..
 
 Baseline build warnings: two nodiscard warnings in
 features/data_conversion/tests/emitter/test_basic_emitter.cpp at lines 33
@@ -37,12 +40,11 @@ described in [codebase-audit.md](codebase-audit.md).
 
 ### Time and intervention record
 
-At 2026-10-26 08:59:28 UTC, the Codex goal runtime was 4,206 seconds
-(70 minutes 6 seconds) of elapsed wall time, including a long Launch Services
-timeout. This is not model execution time per command. Individual command
-timings are recorded only where the shell/build output captured them. Human
-review/decision time and per-command Codex time were not independently
-instrumented. No API usage cost or quota estimate is claimed.
+At 2026-10-26 10:53:15 UTC, the Codex goal elapsed-time counter was 10,835
+seconds (180 minutes 35 seconds). This is wall-clock elapsed time and includes
+pauses, waiting, and approval; it is not model inference or per-command
+execution time. Human review/decision time and per-command model time were not
+independently instrumented. No API usage cost or quota estimate is claimed.
 
 ### Historic estimates (not measurements)
 
@@ -98,12 +100,13 @@ later withdrawn. The M0 counting definition and baseline are in
 
 1. Reproduce the two YAML failures using CI's pinned vcpkg commit and record
    whether they persist.
-2. Run the app in an execution environment that supports GUI launch with the
-   verified temporary HOME; collect launch, memory, and interactive smoke
-   measurements without changing the user's profile.
-3. Create deterministic performance fixtures and record JSON, SQL, and
-   developer-iteration measurements before M2 parity claims.
-4. Validate signed distribution on a clean supported macOS installation.
-5. Update this log with actual Codex elapsed time, human intervention,
+2. Repeat ordinary-profile process-cold and warm launch measurements, and
+   record peak memory with app and helper processes.
+3. Repeat SQL and Markdown measurements with larger fixed workloads, and
+   investigate the 1 MiB JSON UI stall and cancellation behavior before
+   testing larger JSON sizes.
+4. Measure at least five equivalent edit-to-visible-review iterations.
+5. Validate signed distribution on a clean supported macOS installation.
+6. Update this log with actual Codex elapsed time, human intervention,
    repetitions, commits, and PR when available; keep those separate from
    historic estimates.
