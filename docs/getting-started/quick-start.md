@@ -169,6 +169,13 @@ The tool generates command text; it does not execute shell commands.
 2. Click **Convert** next to that row
 3. Read the local date/time, UTC date/time, and ISO 8601 values
 
+### Diff Comparison Tool
+
+1. Click **Diff Comparison Tool** in the side menu
+2. Paste the original text in the **Original** pane
+3. Paste the modified text in the **Modified** pane
+4. Choose **Inline** or **Side-by-side** to review the differences
+
 ## Keyboard Shortcuts
 
 | Shortcut | Action |

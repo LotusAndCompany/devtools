@@ -59,6 +59,10 @@ A unified desktop application that combines various development tools into a sin
 - Edit any row and press **Convert** to apply it to every other row
 - **Now** fills all rows with the current time; **Copy** copies a row's value
 
+### Diff Comparison Tool
+- Compare two texts line by line
+- View differences inline or side by side
+
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)

@@ -43,6 +43,8 @@ It is not an exhaustive list of glyphs used in examples or tests.
 | QR code tool | `qr_code` |
 | Markdown preview | `article` |
 | Timestamp conversion | `schedule` |
+| Regular expression tester | `regular_expression` |
+| Diff tool | `difference` |
 | Open file | `file_open` |
 | Save | `save` |
 | Copy | `content_copy` |

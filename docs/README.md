@@ -32,6 +32,7 @@ Learn how to use each feature:
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
 - [Regular Expression Tester](user-guide/regex-tester.md) - Test patterns and replacements
 - [Timestamp Conversion](user-guide/timestamp-conversion.md) - Convert between Unix timestamps, date/time, and ISO 8601
+- [Diff Comparison Tool](user-guide/diff-tool.md) - Compare two texts inline or side by side
 
 ### Development
 

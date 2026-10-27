@@ -20,6 +20,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [Database Management](database-management.md) | Connect to databases and execute SQL queries |
 | [Regular Expression Tester](regex-tester.md) | Test regular expressions and replacements |
 | [Timestamp Conversion](timestamp-conversion.md) | Convert between Unix timestamps, date/time, and ISO 8601 |
+| [Diff Comparison Tool](diff-tool.md) | Compare two texts inline or side by side |
 
 ## User Interface
 
@@ -27,7 +28,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 
 ```mermaid
 flowchart LR
-    side["Side Menu<br/>• Image Editor<br/>• Phrase Generation<br/>• Command Generation<br/>• HTTP Request<br/>• Data/Format Conversion<br/>• QR Code Generation<br/>• Markdown Preview<br/>• DB Tool<br/>• Timestamp Conversion<br/>• Regex Tester"]
+    side["Side Menu<br/>• Image Editor<br/>• Phrase Generation<br/>• Command Generation<br/>• HTTP Request<br/>• Data/Format Conversion<br/>• QR Code Generation<br/>• Markdown Preview<br/>• DB Tool<br/>• Timestamp Conversion<br/>• Regex Tester<br/>• Diff Tool"]
     side --> content["Main Content Area<br/>(Selected tool interface)"]
 ```
 

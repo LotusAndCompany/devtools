@@ -114,6 +114,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC)
     qt_add_library(${PROJECT_NAME}_markdown_preview STATIC)
     qt_add_library(${PROJECT_NAME}_timestamp_conversion STATIC)
+    qt_add_library(${PROJECT_NAME}_diff_tool STATIC)
 
     # 画像関係の依存関係
     add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
@@ -218,6 +219,7 @@ set(MODULE_LIST
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_markdown_preview
+    ${PROJECT_NAME}_diff_tool
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_timestamp_conversion
 )
@@ -231,6 +233,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_data_conversion
     ${PROJECT_NAME}_qr_code_generation
     ${PROJECT_NAME}_markdown_preview
+    ${PROJECT_NAME}_diff_tool
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_timestamp_conversion
 )
