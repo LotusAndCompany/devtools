@@ -157,6 +157,25 @@ The tool generates command text; it does not execute shell commands.
 3. Choose flags or a preset when needed
 4. Review matches and replacement results
 
+### Timestamp Conversion
+
+1. Click **Timestamp Conversion** in the side menu
+2. Enter a value in any row (Unix Timestamp, Date & Time, or ISO 8601)
+3. Click that row's **Convert** button
+4. Read the converted value in the other rows
+
+**Example: Convert a Unix timestamp**
+1. Enter `1700000000` in **Unix Timestamp > Seconds**
+2. Click **Convert** next to that row
+3. Read the local date/time, UTC date/time, and ISO 8601 values
+
+### Diff Comparison Tool
+
+1. Click **Diff Comparison Tool** in the side menu
+2. Paste the original text in the **Original** pane
+3. Paste the modified text in the **Modified** pane
+4. Choose **Inline** or **Side-by-side** to review the differences
+
 ## Keyboard Shortcuts
 
 | Shortcut | Action |

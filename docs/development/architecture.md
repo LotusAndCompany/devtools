@@ -36,6 +36,7 @@ flowchart TD
     features --> command["command/<br/>Shell command execution"]
     features --> phrase["phrase_generation/<br/>Random phrase generation"]
     features --> regex["regex_tool/<br/>Regular expression testing"]
+    features --> timestamp["timestamp_conversion/<br/>Unix/date-time/ISO 8601 conversion"]
     root --> main["main/<br/>Application entry point"]
     root --> resources["res/"]
     resources --> qrc["*.qrc<br/>Qt resource files"]
@@ -85,6 +86,7 @@ Other feature modules (`DevTools_http_request`, `DevTools_command`,
 | `DevTools_phrase_generation` | Random phrase generation | DevTools_core |
 | `DevTools_db_tool` | Database tool | DevTools_core |
 | `DevTools_regex_tool` | Regular expression matching and replacement | DevTools_core |
+| `DevTools_timestamp_conversion` | Unix timestamp, date/time, and ISO 8601 conversion | DevTools_core |
 
 ### Core Module Structure
 

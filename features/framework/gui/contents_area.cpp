@@ -4,6 +4,8 @@
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/data_conversion/gui/data_conversion_gui.h"
 #include "features/db_tool/gui/db_main/db_main.h"
+#include "features/diff_tool/core/diff_tool.h"
+#include "features/diff_tool/gui/diff_tool_gui.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
@@ -13,6 +15,7 @@
 #include "features/phrase_generation/gui/phrase_generation.h"
 #include "features/qr_code/gui/qr_code_generation_gui.h"
 #include "features/regex_tool/gui/regex_tester_gui.h"
+#include "features/timestamp_conversion/gui/timestamp_conversion_gui.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -42,6 +45,10 @@ bool ContentsArea::openSQLiteFileInDbTool(const QString &filePath)
     return cachedDbMain->connectSQLiteFile(filePath);
 }
 
+/**
+ * @brief 選択されたツールの画面に切り替え、DB ツールの状態はキャッシュして保持する
+ * @param id 表示するサイドメニュー項目。未対応の ID には開発中の表示を行う
+ */
 void ContentsArea::changeContent(Sidemenu::ID id)
 {
     if (currentContent != nullptr) {
@@ -90,8 +97,14 @@ void ContentsArea::changeContent(Sidemenu::ID id)
     case Sidemenu::ID::MARKDOWN_PREVIEW:
         content = new MarkdownPreviewGUI(new MarkdownPreview(), this);
         break;
+    case Sidemenu::ID::TIMESTAMP_CONVERSION:
+        content = new TimestampConversionGUI(this);
+        break;
     case Sidemenu::ID::REGEX_TESTER:
         content = new devtools::RegexTesterGUI(this);
+        break;
+    case Sidemenu::ID::DIFF_TOOL:
+        content = new DiffToolGUI(new DiffTool(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
