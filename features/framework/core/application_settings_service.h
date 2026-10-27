@@ -33,7 +33,7 @@ public:
     ~ApplicationSettingsService();
 
     [[nodiscard]] ApplicationSettings read();
-    void savePreferences(const ApplicationSettings &settings);
+    void savePreferences(const ApplicationSettings &values);
     void saveWindowGeometry(int width, int height, int x, int y);
     void saveAlwaysOnTop(bool alwaysOnTop);
     void saveLastUsedTool(int toolId);

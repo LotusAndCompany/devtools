@@ -27,6 +27,55 @@ void validateCoordinate(QList<QRValidationError> &errors, const QString &field,
         errors.append({field, invalid});
     }
 }
+
+void validateContact(QList<QRValidationError> &errors, const QVariantMap &parameters)
+{
+    if (parameters.value("contact_name").toString().trimmed().isEmpty()) {
+        errors.append({"contact_name_error", QRValidationCode::NameEmpty});
+    }
+    const QString phone = parameters.value("contact_phone").toString();
+    const QString email = parameters.value("contact_email").toString();
+    const bool has_phone = !phone.trimmed().isEmpty();
+    const bool has_email = !email.trimmed().isEmpty();
+    if (!has_phone && !has_email) {
+        errors.append({"contact_phone_error", QRValidationCode::ContactEmpty});
+    }
+    if (has_phone && !QRValidation::isValidPhoneNumber(phone)) {
+        errors.append({"contact_phone_error", QRValidationCode::PhoneInvalid});
+    }
+    if (has_email && !email.contains('@')) {
+        errors.append({"contact_email_error", QRValidationCode::EmailInvalid});
+    }
+}
+
+void validateCalendar(QList<QRValidationError> &errors, const QVariantMap &parameters)
+{
+    if (parameters.value("cal_summary").toString().trimmed().isEmpty()) {
+        errors.append({"cal_summary_error", QRValidationCode::SummaryEmpty});
+    }
+    if (!parameters.contains("cal_start")) {
+        errors.append({"cal_start_error", QRValidationCode::StartMissing});
+    }
+    if (!parameters.contains("cal_end")) {
+        errors.append({"cal_end_error", QRValidationCode::EndMissing});
+    }
+    if (parameters.contains("cal_start") && parameters.contains("cal_end") &&
+        parameters.value("cal_start").toDateTime() >= parameters.value("cal_end").toDateTime()) {
+        errors.append({"cal_end_error", QRValidationCode::EndBeforeStart});
+    }
+}
+
+void validateWifi(QList<QRValidationError> &errors, const QVariantMap &parameters)
+{
+    if (parameters.value("wifi_ssid").toString().trimmed().isEmpty()) {
+        errors.append({"wifi_ssid_error", QRValidationCode::SsidEmpty});
+    }
+    const QString security = parameters.value("wifi_security").toString();
+    if ((security == "WPA" || security == "WEP") &&
+        parameters.value("wifi_password").toString().trimmed().isEmpty()) {
+        errors.append({"wifi_password_error", QRValidationCode::PasswordEmpty});
+    }
+}
 } // namespace
 
 bool QRValidation::isValidPhoneNumber(const QString &phone)
@@ -87,52 +136,17 @@ QList<QRValidationError> QRValidation::validate(QRCodeType type, const QVariantM
             errors.append({"sms_message_error", QRValidationCode::MessageEmpty});
         }
         break;
-    case QRCodeType::Wifi: {
-        if (value("wifi_ssid").trimmed().isEmpty()) {
-            errors.append({"wifi_ssid_error", QRValidationCode::SsidEmpty});
-        }
-        const QString security = value("wifi_security");
-        if ((security == "WPA" || security == "WEP") &&
-            value("wifi_password").trimmed().isEmpty()) {
-            errors.append({"wifi_password_error", QRValidationCode::PasswordEmpty});
-        }
+    case QRCodeType::Wifi:
+        validateWifi(errors, parameters);
         break;
-    }
     case QRCodeType::Contact: {
-        if (value("contact_name").trimmed().isEmpty()) {
-            errors.append({"contact_name_error", QRValidationCode::NameEmpty});
-        }
-        const QString phone = value("contact_phone");
-        const QString email = value("contact_email");
-        const bool has_phone = !phone.trimmed().isEmpty();
-        const bool has_email = !email.trimmed().isEmpty();
-        if (!has_phone && !has_email) {
-            errors.append({"contact_phone_error", QRValidationCode::ContactEmpty});
-        }
-        if (has_phone && !isValidPhoneNumber(phone)) {
-            errors.append({"contact_phone_error", QRValidationCode::PhoneInvalid});
-        }
-        if (has_email && !email.contains('@')) {
-            errors.append({"contact_email_error", QRValidationCode::EmailInvalid});
-        }
+        validateContact(errors, parameters);
         break;
     }
-    case QRCodeType::Calendar:
-        if (value("cal_summary").trimmed().isEmpty()) {
-            errors.append({"cal_summary_error", QRValidationCode::SummaryEmpty});
-        }
-        if (!parameters.contains("cal_start")) {
-            errors.append({"cal_start_error", QRValidationCode::StartMissing});
-        }
-        if (!parameters.contains("cal_end")) {
-            errors.append({"cal_end_error", QRValidationCode::EndMissing});
-        }
-        if (parameters.contains("cal_start") && parameters.contains("cal_end") &&
-            parameters.value("cal_start").toDateTime() >=
-                parameters.value("cal_end").toDateTime()) {
-            errors.append({"cal_end_error", QRValidationCode::EndBeforeStart});
-        }
+    case QRCodeType::Calendar: {
+        validateCalendar(errors, parameters);
         break;
+    }
     case QRCodeType::Geo:
         validateCoordinate(errors, "geo_lat_error", value("geo_lat"), 90.0,
                            QRValidationCode::LatitudeEmpty, QRValidationCode::LatitudeInvalid);

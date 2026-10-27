@@ -91,21 +91,21 @@ double colorDiffSquaredRgb(const QColor &a, const QColor &b)
 QVector3D hsvVector(const QColor &color)
 {
     if (color.hsvHueF() < 0) {
-        return {0, 0, static_cast<float>(color.valueF())};
+        return {0, 0, color.valueF()};
     }
     return {static_cast<float>(color.hsvSaturationF() * std::cos(M_TAU * color.hsvHueF())),
             static_cast<float>(color.hsvSaturationF() * std::sin(M_TAU * color.hsvHueF())),
-            static_cast<float>(color.valueF())};
+            color.valueF()};
 }
 
 QVector3D hslVector(const QColor &color)
 {
     if (color.hslHueF() < 0) {
-        return {0, 0, static_cast<float>(color.lightnessF())};
+        return {0, 0, color.lightnessF()};
     }
     return {static_cast<float>(color.hslSaturationF() * std::cos(M_TAU * color.hslHueF())),
             static_cast<float>(color.hslSaturationF() * std::sin(M_TAU * color.hslHueF())),
-            static_cast<float>(color.lightnessF())};
+            color.lightnessF()};
 }
 
 double colorDiffSquaredHsv(const QColor &a, const QColor &b)

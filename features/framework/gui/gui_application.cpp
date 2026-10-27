@@ -110,7 +110,6 @@ int GuiApplication::start()
     // ウィンドウサイズの復元
     if (settings.rememberWindowSize) {
         if (settings.hasWindowSize) {
-            const QSize defaultSize = DevTools::Ui::mainWindowSize();
             int const width = settings.windowWidth;
             int const height = settings.windowHeight;
             window->resize(width, height);

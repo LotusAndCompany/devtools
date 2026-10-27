@@ -2,6 +2,8 @@
 
 #include <QCoreApplication>
 
+#include <algorithm>
+
 namespace {
 QString translate(const char *source)
 {
@@ -147,10 +149,6 @@ CommandGenerationResult CommandService::generate(CommandCategory category, int f
 bool CommandService::containsNoQuotes(const QString &value)
 {
     static const QString quotes = "\"'`";
-    for (const QChar &quote : quotes) {
-        if (value.contains(quote)) {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(quotes.cbegin(), quotes.cend(),
+                       [&value](const QChar &quote) { return !value.contains(quote); });
 }

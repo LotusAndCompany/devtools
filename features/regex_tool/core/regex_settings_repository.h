@@ -30,7 +30,7 @@ public:
     ~RegexSettingsRepository();
 
     [[nodiscard]] RegexSettings read() const;
-    void save(const RegexSettings &settings);
+    void save(const RegexSettings &values);
 
 private:
     std::unique_ptr<QSettings> ownedSettings;

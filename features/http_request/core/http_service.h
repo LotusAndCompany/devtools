@@ -38,7 +38,7 @@ class HttpService : public QObject
 
 public:
     explicit HttpService(QObject *parent = nullptr);
-    quint64 send(const HttpRequest &request);
+    quint64 send(const HttpRequest &input);
     void cancel(quint64 request_id);
     static QString urlWithParameters(const QString &url,
                                      const QList<QPair<QString, QString>> &parameters);

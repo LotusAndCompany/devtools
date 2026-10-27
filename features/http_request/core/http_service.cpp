@@ -88,7 +88,7 @@ void HttpService::handleFinished(QNetworkReply *reply)
     reply->deleteLater();
     try {
         const qint64 elapsed_ms = QDateTime::currentMSecsSinceEpoch() - request_start_time;
-        HttpResponse response{
+        const HttpResponse response{
             reply->property("devtoolsRequestId").toULongLong(),
             reply->isOpen() ? reply->readAll() : QByteArray{},
             reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt(),
