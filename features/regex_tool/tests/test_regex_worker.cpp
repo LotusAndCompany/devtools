@@ -10,6 +10,7 @@ class TestRegexWorker : public QObject
 private slots:
     void results_data();
     void results();
+    void formatsMatchesForClipboard();
 };
 
 void TestRegexWorker::results_data()
@@ -66,6 +67,21 @@ void TestRegexWorker::results()
         QCOMPARE(matches[0].groups[1].name, QStringLiteral("letter"));
         QCOMPARE(matches[0].groups[1].value, QStringLiteral("あ"));
     }
+}
+
+void TestRegexWorker::formatsMatchesForClipboard()
+{
+    const QVector<devtools::MatchResult> matches = devtools::RegexTool::match(
+        QStringLiteral("(a)(?<bee>b)"), QStringLiteral("ab"), QRegularExpression::NoPatternOption);
+    const QString result = devtools::RegexTool::formatMatchesForClipboard(
+        matches, QStringLiteral("ab"), QStringLiteral("Match Results (Count: %1)"),
+        QStringLiteral("Match %1: \"%2\" [%3, %4]\n"),
+        QStringLiteral("  Group %1: \"%2\" [%3, %4]\n"));
+
+    QCOMPARE(result, QStringLiteral("Match Results (Count: 1)\n\n"
+                                    "Match 1: \"ab\" [0, 2]\n"
+                                    "  Group 1: \"a\" [0, 1]\n"
+                                    "  Group 2 (bee): \"b\" [1, 2]\n\n"));
 }
 
 QTEST_GUILESS_MAIN(TestRegexWorker)

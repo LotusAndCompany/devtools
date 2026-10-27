@@ -124,4 +124,31 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
     return result;
 }
 
+QString RegexTool::formatMatchesForClipboard(const QVector<MatchResult> &matches,
+                                             const QString &text, const QString &headerFormat,
+                                             const QString &matchFormat, const QString &groupFormat)
+{
+    QString result = headerFormat.arg(matches.size()) + QStringLiteral("\n\n");
+    for (const MatchResult &match : matches) {
+        const QString matchText = text.mid(match.offset, match.length);
+        result += matchFormat.arg(match.index + 1)
+                      .arg(matchText)
+                      .arg(match.offset)
+                      .arg(match.offset + match.length);
+
+        for (int i = 1; i < match.groups.size(); ++i) {
+            const CaptureGroup &group = match.groups.at(i);
+            const QString groupIdentifier =
+                group.name.isEmpty() ? QString::number(group.index)
+                                     : QStringLiteral("%1 (%2)").arg(group.index).arg(group.name);
+            result += groupFormat.arg(groupIdentifier)
+                          .arg(group.value)
+                          .arg(group.offset)
+                          .arg(group.offset + group.length);
+        }
+        result += QLatin1Char('\n');
+    }
+    return result;
+}
+
 } // namespace devtools

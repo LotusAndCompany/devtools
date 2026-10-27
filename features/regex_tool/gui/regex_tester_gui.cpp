@@ -1,6 +1,7 @@
 #include "features/regex_tool/gui/regex_tester_gui.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/regex_tool/core/regex_settings_repository.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -15,9 +16,7 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QSettings>
 #include <QSplitter>
-#include <QTextStream>
 #include <QToolButton>
 #include <QTreeWidget>
 #include <QVBoxLayout>
@@ -126,6 +125,7 @@ QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 
     // Pattern Edit
     m_patternEdit = new QLineEdit(leftWidget);
+    m_patternEdit->setObjectName(QStringLiteral("regexPattern"));
     m_patternEdit->setPlaceholderText(tr("Regular Expression Pattern"));
     DevTools::Ui::configureCodeLineEdit(m_patternEdit);
     leftLayout->addWidget(m_patternEdit);
@@ -149,6 +149,7 @@ QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 
     // Test Text Edit
     m_testTextEdit = new QPlainTextEdit(leftWidget);
+    m_testTextEdit->setObjectName(QStringLiteral("regexTestText"));
     m_testTextEdit->setPlaceholderText(tr("Enter text to test against..."));
     DevTools::Ui::configureCodeEditor(m_testTextEdit);
     leftLayout->addWidget(m_testTextEdit, 2);
@@ -180,6 +181,7 @@ void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
     auto *const replaceRow = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(replaceRow);
     m_replacePatternEdit = new QLineEdit(parent);
+    m_replacePatternEdit->setObjectName(QStringLiteral("regexReplacement"));
     m_replacePatternEdit->setPlaceholderText(tr("Replacement String"));
     DevTools::Ui::configureCodeLineEdit(m_replacePatternEdit);
     replaceRow->addWidget(m_replacePatternEdit, 1);
@@ -199,6 +201,7 @@ void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
 void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
 {
     m_flagG = new QToolButton(parent);
+    m_flagG->setObjectName(QStringLiteral("regexFlagGlobal"));
     m_flagG->setText("g");
     m_flagG->setCheckable(true);
     m_flagG->setChecked(true);
@@ -207,6 +210,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagG);
 
     m_flagI = new QToolButton(parent);
+    m_flagI->setObjectName(QStringLiteral("regexFlagCaseInsensitive"));
     m_flagI->setText("i");
     m_flagI->setCheckable(true);
     m_flagI->setToolTip(tr("Case Insensitive"));
@@ -214,6 +218,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagI);
 
     m_flagM = new QToolButton(parent);
+    m_flagM->setObjectName(QStringLiteral("regexFlagMultiline"));
     m_flagM->setText("m");
     m_flagM->setCheckable(true);
     m_flagM->setToolTip(tr("Multiline"));
@@ -221,6 +226,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagM);
 
     m_flagS = new QToolButton(parent);
+    m_flagS->setObjectName(QStringLiteral("regexFlagDotMatchesEverything"));
     m_flagS->setText("s");
     m_flagS->setCheckable(true);
     m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
@@ -228,6 +234,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagS);
 
     m_flagU = new QToolButton(parent);
+    m_flagU->setObjectName(QStringLiteral("regexFlagUnicodeProperties"));
     m_flagU->setText("u");
     m_flagU->setCheckable(true);
     m_flagU->setToolTip(tr("Unicode"));
@@ -235,6 +242,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagU);
 
     m_flagX = new QToolButton(parent);
+    m_flagX->setObjectName(QStringLiteral("regexFlagExtendedSyntax"));
     m_flagX->setText("x");
     m_flagX->setCheckable(true);
     m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
@@ -429,32 +437,31 @@ void RegexTesterGUI::setupConnections()
 
 void RegexTesterGUI::loadSettings()
 {
-    const QSettings settings;
-    m_patternEdit->setText(settings.value("RegexTester/pattern", "").toString());
-    m_testTextEdit->setPlainText(settings.value("RegexTester/testText", "").toString());
-    m_replacePatternEdit->setText(settings.value("RegexTester/replacePattern", "").toString());
-
-    m_flagG->setChecked(settings.value("RegexTester/flagG", true).toBool());
-    m_flagI->setChecked(settings.value("RegexTester/flagI", false).toBool());
-    m_flagM->setChecked(settings.value("RegexTester/flagM", false).toBool());
-    m_flagS->setChecked(settings.value("RegexTester/flagS", false).toBool());
-    m_flagU->setChecked(settings.value("RegexTester/flagU", false).toBool());
-    m_flagX->setChecked(settings.value("RegexTester/flagX", false).toBool());
+    const RegexSettings settings = RegexSettingsRepository().read();
+    m_patternEdit->setText(settings.pattern);
+    m_testTextEdit->setPlainText(settings.testText);
+    m_replacePatternEdit->setText(settings.replacePattern);
+    m_flagG->setChecked(settings.global);
+    m_flagI->setChecked(settings.caseInsensitive);
+    m_flagM->setChecked(settings.multiline);
+    m_flagS->setChecked(settings.dotMatchesEverything);
+    m_flagU->setChecked(settings.useUnicodeProperties);
+    m_flagX->setChecked(settings.extendedPatternSyntax);
 }
 
 void RegexTesterGUI::saveSettings()
 {
-    QSettings settings;
-    settings.setValue("RegexTester/pattern", m_patternEdit->text());
-    settings.setValue("RegexTester/testText", m_testTextEdit->toPlainText());
-    settings.setValue("RegexTester/replacePattern", m_replacePatternEdit->text());
-
-    settings.setValue("RegexTester/flagG", m_flagG->isChecked());
-    settings.setValue("RegexTester/flagI", m_flagI->isChecked());
-    settings.setValue("RegexTester/flagM", m_flagM->isChecked());
-    settings.setValue("RegexTester/flagS", m_flagS->isChecked());
-    settings.setValue("RegexTester/flagU", m_flagU->isChecked());
-    settings.setValue("RegexTester/flagX", m_flagX->isChecked());
+    RegexSettings settings;
+    settings.pattern = m_patternEdit->text();
+    settings.testText = m_testTextEdit->toPlainText();
+    settings.replacePattern = m_replacePatternEdit->text();
+    settings.global = m_flagG->isChecked();
+    settings.caseInsensitive = m_flagI->isChecked();
+    settings.multiline = m_flagM->isChecked();
+    settings.dotMatchesEverything = m_flagS->isChecked();
+    settings.useUnicodeProperties = m_flagU->isChecked();
+    settings.extendedPatternSyntax = m_flagX->isChecked();
+    RegexSettingsRepository().save(settings);
 }
 
 QRegularExpression::PatternOptions RegexTesterGUI::currentOptions() const
@@ -636,31 +643,9 @@ void RegexTesterGUI::copyMatches()
         return;
     }
 
-    QString result;
-    QTextStream stream(&result);
-    stream << tr("Match Results (Count: %1)").arg(m_lastMatches.size()) << "\n\n";
-
-    for (const auto &match : m_lastMatches) {
-        QString const matchStr = m_testTextEdit->toPlainText().mid(match.offset, match.length);
-        stream << tr("Match %1: \"%2\" [%3, %4]\n")
-                      .arg(match.index + 1)
-                      .arg(matchStr)
-                      .arg(match.offset)
-                      .arg(match.offset + match.length);
-        for (int i = 1; i < match.groups.size(); ++i) {
-            const auto &group = match.groups.at(i);
-            const QString groupIdentifier =
-                group.name.isEmpty() ? QString::number(group.index)
-                                     : QString("%1 (%2)").arg(group.index).arg(group.name);
-            stream << tr("  Group %1: \"%2\" [%3, %4]\n")
-                          .arg(groupIdentifier)
-                          .arg(group.value)
-                          .arg(group.offset)
-                          .arg(group.offset + group.length);
-        }
-        stream << "\n";
-    }
-
+    const QString result = RegexTool::formatMatchesForClipboard(
+        m_lastMatches, m_testTextEdit->toPlainText(), tr("Match Results (Count: %1)"),
+        tr("Match %1: \"%2\" [%3, %4]\n"), tr("  Group %1: \"%2\" [%3, %4]\n"));
     QApplication::clipboard()->setText(result);
 }
 

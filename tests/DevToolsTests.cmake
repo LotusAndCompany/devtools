@@ -234,6 +234,11 @@ DevTools_add_test(test_regex_worker CORE_ONLY
     features/regex_tool/core/regex_worker.cpp
     features/regex_tool/core/regex_worker.h
 )
+DevTools_add_test(test_regex_settings_repository CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_settings_repository.cpp
+    features/regex_tool/core/regex_settings_repository.cpp
+)
 
 DevTools_add_test(test_template_reader CORE_ONLY
     SOURCES

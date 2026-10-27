@@ -1,7 +1,13 @@
 #include "features/regex_tool/core/regex_tool.h"
 #include "features/regex_tool/gui/regex_tester_gui.h"
 
+#include <QCoreApplication>
 #include <QGroupBox>
+#include <QLineEdit>
+#include <QPlainTextEdit>
+#include <QSettings>
+#include <QTemporaryDir>
+#include <QToolButton>
 #include <QtTest>
 
 class TestRegexTool : public QObject
@@ -9,13 +15,28 @@ class TestRegexTool : public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
     void testMatch_data();
     void testMatch();
     void testReplace_data();
     void testReplace();
     void testReplaceSingle();
     void testGuiPaneTitles();
+    void testGuiSettingsRestoredAndSaved();
+
+private:
+    QTemporaryDir settingsDirectory;
 };
+
+void TestRegexTool::initTestCase()
+{
+    QVERIFY(settingsDirectory.isValid());
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, settingsDirectory.path());
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, settingsDirectory.path());
+    QCoreApplication::setOrganizationName(QStringLiteral("DevToolsRegexTest"));
+    QCoreApplication::setApplicationName(QStringLiteral("test_regex_tool"));
+}
 
 void TestRegexTool::testMatch_data()
 {
@@ -108,6 +129,80 @@ void TestRegexTool::testGuiPaneTitles()
     QVERIFY(titles.contains(QStringLiteral("Regex Tester")));
     QVERIFY(titles.contains(QStringLiteral("Matches")));
     QVERIFY(titles.contains(QStringLiteral("Quick Reference")));
+}
+
+void TestRegexTool::testGuiSettingsRestoredAndSaved()
+{
+    {
+        QSettings settings;
+        settings.clear();
+        settings.setValue(QStringLiteral("RegexTester/pattern"), QStringLiteral("seed-pattern"));
+        settings.setValue(QStringLiteral("RegexTester/testText"), QStringLiteral("seed-text"));
+        settings.setValue(QStringLiteral("RegexTester/replacePattern"),
+                          QStringLiteral("seed-replace"));
+        settings.setValue(QStringLiteral("RegexTester/flagG"), true);
+        settings.setValue(QStringLiteral("RegexTester/flagI"), false);
+        settings.setValue(QStringLiteral("RegexTester/flagM"), false);
+        settings.setValue(QStringLiteral("RegexTester/flagS"), false);
+        settings.setValue(QStringLiteral("RegexTester/flagU"), false);
+        settings.setValue(QStringLiteral("RegexTester/flagX"), false);
+        settings.sync();
+    }
+
+    {
+        devtools::RegexTesterGUI gui;
+        auto *const pattern = gui.findChild<QLineEdit *>(QStringLiteral("regexPattern"));
+        auto *const testText = gui.findChild<QPlainTextEdit *>(QStringLiteral("regexTestText"));
+        auto *const replacement = gui.findChild<QLineEdit *>(QStringLiteral("regexReplacement"));
+        auto *const global = gui.findChild<QToolButton *>(QStringLiteral("regexFlagGlobal"));
+        auto *const insensitive =
+            gui.findChild<QToolButton *>(QStringLiteral("regexFlagCaseInsensitive"));
+        auto *const multiline = gui.findChild<QToolButton *>(QStringLiteral("regexFlagMultiline"));
+        auto *const dotMatches =
+            gui.findChild<QToolButton *>(QStringLiteral("regexFlagDotMatchesEverything"));
+        auto *const unicode =
+            gui.findChild<QToolButton *>(QStringLiteral("regexFlagUnicodeProperties"));
+        auto *const extended =
+            gui.findChild<QToolButton *>(QStringLiteral("regexFlagExtendedSyntax"));
+        QVERIFY(pattern != nullptr);
+        QVERIFY(testText != nullptr);
+        QVERIFY(replacement != nullptr);
+        QVERIFY(global != nullptr);
+        QVERIFY(insensitive != nullptr);
+        QVERIFY(multiline != nullptr);
+        QVERIFY(dotMatches != nullptr);
+        QVERIFY(unicode != nullptr);
+        QVERIFY(extended != nullptr);
+        QCOMPARE(pattern->text(), QStringLiteral("seed-pattern"));
+        QCOMPARE(testText->toPlainText(), QStringLiteral("seed-text"));
+        QCOMPARE(replacement->text(), QStringLiteral("seed-replace"));
+        QVERIFY(global->isChecked());
+        QVERIFY(!insensitive->isChecked());
+
+        pattern->setText(QStringLiteral("(a)"));
+        testText->setPlainText(QStringLiteral("a"));
+        replacement->setText(QStringLiteral("$1!"));
+        global->setChecked(false);
+        insensitive->setChecked(true);
+        multiline->setChecked(true);
+        dotMatches->setChecked(true);
+        unicode->setChecked(true);
+        extended->setChecked(true);
+    }
+
+    QSettings settings;
+    QCOMPARE(settings.value(QStringLiteral("RegexTester/pattern")).toString(),
+             QStringLiteral("(a)"));
+    QCOMPARE(settings.value(QStringLiteral("RegexTester/testText")).toString(),
+             QStringLiteral("a"));
+    QCOMPARE(settings.value(QStringLiteral("RegexTester/replacePattern")).toString(),
+             QStringLiteral("$1!"));
+    QVERIFY(!settings.value(QStringLiteral("RegexTester/flagG")).toBool());
+    QVERIFY(settings.value(QStringLiteral("RegexTester/flagI")).toBool());
+    QVERIFY(settings.value(QStringLiteral("RegexTester/flagM")).toBool());
+    QVERIFY(settings.value(QStringLiteral("RegexTester/flagS")).toBool());
+    QVERIFY(settings.value(QStringLiteral("RegexTester/flagU")).toBool());
+    QVERIFY(settings.value(QStringLiteral("RegexTester/flagX")).toBool());
 }
 
 QTEST_MAIN(TestRegexTool)
