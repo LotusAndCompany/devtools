@@ -1,5 +1,6 @@
 #include "connection_selector.h"
 
+#include "features/db_tool/core/connection_history.h"
 #include "features/db_tool/gui/sqlite_file_picker.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
@@ -9,7 +10,6 @@
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QLabel>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -118,15 +118,7 @@ void ConnectionSelector::retranslateUi()
 void ConnectionSelector::loadHistory()
 {
     QSettings const settings;
-    QStringList const historyList = settings.value("db_tool/connectionHistory").toStringList();
-
-    connectionHistory.clear();
-    for (const QString &jsonStr : historyList) {
-        QJsonDocument const doc = QJsonDocument::fromJson(jsonStr.toUtf8());
-        if (!doc.isNull() && doc.isObject()) {
-            connectionHistory.append(doc.object());
-        }
-    }
+    connectionHistory = ConnectionHistory::read(settings);
 
     refreshHistoryList();
 }
@@ -249,12 +241,7 @@ void ConnectionSelector::removeHistoryItem(int index)
 
     // Save updated history to settings
     QSettings settings;
-    QStringList historyList;
-    for (const QJsonObject &conn : connectionHistory) {
-        QJsonDocument const doc(conn);
-        historyList.append(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
-    }
-    settings.setValue("db_tool/connectionHistory", historyList);
+    ConnectionHistory::write(settings, connectionHistory);
 
     refreshHistoryList();
 }

@@ -219,3 +219,21 @@ DevTools_add_test(test_api_tool
     SOURCES
     features/http_request/tests/test_api_tool.cpp
 )
+
+DevTools_add_test(test_query_service CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_query_service.cpp
+    features/db_tool/core/query_service.cpp
+)
+target_link_libraries(test_query_service PRIVATE Qt6::Sql)
+
+DevTools_add_test(test_connection_history CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_connection_history.cpp
+    features/db_tool/core/connection_history.cpp
+)
+
+DevTools_add_test(test_query_page
+    SOURCES
+    features/db_tool/tests/test_query_page.cpp
+)

@@ -8,6 +8,8 @@ target_sources(DevTools_db_tool PRIVATE
     gui/query_page/query_page.h gui/query_page/query_page.cpp
     gui/sqlite_file_picker.h
     core/sqlite_file_access.h
+    core/query_service.h core/query_service.cpp
+    core/connection_history.h core/connection_history.cpp
 )
 
 if(APPLE)

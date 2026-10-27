@@ -1,5 +1,6 @@
 #include "query_page.h"
 
+#include "features/db_tool/core/query_service.h"
 #include "features/framework/gui/design_system.h"
 
 #include <QEvent>
@@ -59,14 +60,14 @@ void QueryPage::retranslateUi()
 void QueryPage::executeQuery()
 {
     QString const queryText = queryTextEdit->toPlainText();
-    QSqlQuery query(db);
+    QueryExecution result = QueryService::execute(db, queryText);
 
-    if (!query.exec(queryText)) {
-        QMessageBox::warning(this, tr("Execution Error"), query.lastError().text());
+    if (!result.success) {
+        QMessageBox::warning(this, tr("Execution Error"), result.error.text());
         return;
     }
 
-    model->setQuery(std::move(query));
+    model->setQuery(std::move(result.query));
     DevTools::Ui::fitTableViewToContents(queryResultView);
 
     if (model->lastError().isValid()) {

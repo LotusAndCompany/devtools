@@ -1,5 +1,6 @@
 #include "db_main.h"
 
+#include "features/db_tool/core/connection_history.h"
 #include "features/db_tool/gui/connection_selector/connection_selector.h"
 #include "features/db_tool/gui/connection_window/connection_window.h"
 #include "features/db_tool/gui/query_page/query_page.h"
@@ -10,7 +11,6 @@
 #include <QFileInfo>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QJsonDocument>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMessageBox>
@@ -28,10 +28,6 @@
 #include <QWidget>
 
 #include <utility>
-
-namespace {
-constexpr int MAX_HISTORY_ENTRIES = 10;
-} // namespace
 
 // Static variable to track if connection was made during this app session
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
@@ -56,10 +52,8 @@ dbMain::dbMain(QWidget *parent) : QWidget(parent)
     // Check if we should show connection dialog on startup
     QTimer::singleShot(0, this, [this]() {
         QSettings const settings;
-        QStringList const history = settings.value("db_tool/connectionHistory").toStringList();
-
         // Show dialog if no history and not connected in this session
-        if (history.isEmpty() && !s_hasConnectedThisSession) {
+        if (ConnectionHistory::isEmpty(settings) && !s_hasConnectedThisSession) {
             showConnectionSelector();
         }
     });
@@ -416,37 +410,5 @@ void dbMain::changeEvent(QEvent *event)
 void dbMain::saveConnectionHistory(const QJsonObject &connectionInfo)
 {
     QSettings settings;
-    QStringList historyList = settings.value("db_tool/connectionHistory").toStringList();
-
-    // Convert to JSON string
-    QJsonDocument const doc(connectionInfo);
-    QString const jsonStr = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
-
-    // Check for duplicates (same database path/name)
-    QString const newDatabase = connectionInfo["database"].toString();
-    QString const newType = connectionInfo["type"].toString();
-    QString const newHost = connectionInfo["host"].toString();
-
-    for (int i = 0; i < historyList.size(); ++i) {
-        QJsonDocument const existingDoc = QJsonDocument::fromJson(historyList[i].toUtf8());
-        if (!existingDoc.isNull() && existingDoc.isObject()) {
-            QJsonObject existing = existingDoc.object();
-            if (existing["database"].toString() == newDatabase &&
-                existing["type"].toString() == newType && existing["host"].toString() == newHost) {
-                // Remove existing entry (will be added at front)
-                historyList.removeAt(i);
-                break;
-            }
-        }
-    }
-
-    // Add new entry at front
-    historyList.prepend(jsonStr);
-
-    // Limit to MAX_HISTORY_ENTRIES entries
-    while (historyList.size() > MAX_HISTORY_ENTRIES) {
-        historyList.removeLast();
-    }
-
-    settings.setValue("db_tool/connectionHistory", historyList);
+    ConnectionHistory::add(settings, connectionInfo);
 }
