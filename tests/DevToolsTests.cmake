@@ -206,3 +206,16 @@ DevTools_add_test(test_template_reader CORE_ONLY
     features/phrase_generation/tests/test_template_reader.cpp
     features/phrase_generation/core/template_reader.cpp
 )
+
+DevTools_add_test(test_http_service CORE_ONLY
+    SOURCES
+    features/http_request/tests/test_http_service.cpp
+    features/http_request/core/http_service.cpp
+    features/http_request/core/http_service.h
+)
+target_link_libraries(test_http_service PRIVATE Qt6::Network)
+
+DevTools_add_test(test_api_tool
+    SOURCES
+    features/http_request/tests/test_api_tool.cpp
+)
