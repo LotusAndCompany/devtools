@@ -137,10 +137,12 @@ DevTools_add_test(test_markdown_preview_gui
 )
 
 # core/diff_tool
-DevTools_add_test(test_diff_tool
+DevTools_add_test(test_diff_tool CORE_ONLY
     SOURCES
     features/diff_tool/tests/test_diff_tool.cpp
+    features/diff_tool/core/diff_tool.cpp
 )
+target_link_libraries(test_diff_tool PRIVATE DevTools_core)
 
 # core/iamge
 DevTools_add_test(test_basic_image_io
@@ -223,9 +225,10 @@ DevTools_add_test(test_data_conversion_gui
 )
 
 # core/timestamp_conversion
-DevTools_add_test(test_timestamp_conversion
+DevTools_add_test(test_timestamp_conversion CORE_ONLY
     SOURCES
     features/timestamp_conversion/tests/test_timestamp_conversion.cpp
+    features/timestamp_conversion/core/timestamp_conversion.cpp
 )
 
 # gui/db_tool

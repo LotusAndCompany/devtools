@@ -2,12 +2,12 @@
 
 ## Scope and outcome
 
-This inventory covers the shared application shell and all nine product
-features: command generation, data conversion, database tools, HTTP requests,
-image tools, Markdown preview, phrase generation, QR generation, and regex
-testing. Processing is called through non-Widget services or domain classes;
-the UI owns input collection, presentation, localization, native dialogs,
-clipboard access, and view state.
+This inventory covers the shared application shell and all eleven product
+features: command generation, data conversion, database tools, diff comparison,
+HTTP requests, image tools, Markdown preview, phrase generation, QR generation,
+regex testing, and timestamp conversion. Processing is called through
+non-Widget services or domain classes; the UI owns input collection,
+presentation, localization, native dialogs, clipboard access, and view state.
 
 The source audit found no `QWidget`, `QDialog`, `QMessageBox`, or feature GUI
 include in `features/**/core`. `DevTools_core` now contains shared non-UI code
@@ -53,21 +53,24 @@ the verification record for the inspected targets.
 | Command | Category/function/option selection, error dialog, clipboard | `CommandService` returns command text and stable selection/value error codes | `test_command_service`, `test_command` |
 | Data conversion | Format and indentation controls, editor, file dialogs, clipboard and messages | `DataConversion` owns detection, parse/emit, file load/save and conversion results | parser/emitter tests, `test_data_conversion`, `test_data_conversion_gui` |
 | Database | Connection dialogs and password prompt, table/query views, translated SQL errors | `DatabaseConnection`, `SQLitePaths`, `SQLiteFileAccess`, `SQLiteAccessRestore`, `ConnectionHistory`, `QueryService`, and `DatabaseBrowseService` own connection/path/history/query/table operations | `test_database_connection`, `test_connection_history`, `test_query_service`, `test_database_browse_service`, database Widget regressions |
+| Diff | Text editors, debounce, display-mode selection, HTML rendering and changed-line styling | `DiffTool` splits line endings, computes LCS-based line changes and groups side-by-side rows | `test_diff_tool` |
 | HTTP | Request form, response/status/error rendering | `HttpService` owns request construction, transport, IDs, cancellation and response DTOs | `test_http_service`, `test_api_tool` |
 | Image | Image selection, controls, preview, scaling, status dialogs | `ImageProcessingService` owns load/save, transformations, transparency, split output and image-file validation; `ImageIO` and `BasicImageEditInterface` retain their existing image-domain roles | `test_image_processing_service`, image Widget regressions |
 | Markdown | Editor/browser, file dialogs, debounce, scroll synchronization | `MarkdownService` owns UTF-8 file I/O, GitHub-dialect rendering and HTML export | `test_markdown_preview`, `test_markdown_preview_gui` |
 | Phrase generation | Template list/editor, confirmation, validation message, clipboard | `TemplateReader` and `TemplateRepository` own list/load/validate/save/delete and dirty comparison | `test_template_reader`, `test_template_repository`, `test_phrase_generation_gui` |
 | QR | Field widgets, validation message translation, preview, clipboard and save dialog | `QRValidation`, `ContentGenerator`, and `QRImage` own field validation, payload construction, image generation and PNG writing | `test_qr_service`, `test_qr_gui` |
 | Regex | Input controls, 100 ms debounce, highlighting, display, clipboard and localized timeout/error text | `RegexSettingsRepository`, `RegexTool`, `RegexWorker`, and `RegexEvaluationService` own settings, option mapping, match/replace, request lifecycle and timeout | `test_regex_settings_repository`, `test_regex_worker`, `test_regex_evaluation_service`, `test_regex_tool` |
+| Timestamp conversion | Input fields, local/UTC date-time editors, convert/copy buttons, current-time action and localized validation message | `TimestampConversion` converts Unix seconds/milliseconds and ISO 8601 text through a UTC `QDateTime` instant | `test_timestamp_conversion` |
 
 The per-feature records contain detailed input/output compatibility notes and
-known limits: [command](m1-command-service.md),
+known limits: [command](m1-command-service.md), [diff](m1-diff-tool.md),
 [data conversion](m1-data-conversion.md), [database connection](m1-db-connection.md),
 [database query/history](m1-db-query-history.md), [database browsing](m1-database-browse.md),
 [HTTP](m1-http-service.md), [image](m1-image-processing.md),
 [Markdown](m1-markdown-service.md), [phrase templates](m1-template-repository.md),
 [QR](m1-qr.md), [regex settings](m1-regex-settings.md), and
-[regex evaluation](m1-regex-evaluation-service.md).
+[regex evaluation](m1-regex-evaluation-service.md), and
+[timestamp conversion](m1-timestamp-conversion.md).
 
 ## Custom UI class inventory
 
@@ -81,12 +84,14 @@ or presentation bases in production source. Test fixtures are excluded.
 | Command | `Command` |
 | Data conversion | `DataConversionGUI` |
 | Database | `ConnectionSelector`, `ConnectionWindow`, `dbMain`, `QueryPage` |
+| Diff | `DiffToolGUI` |
 | HTTP | `api_tool` |
 | Image | `ImageToolsUnifiedGUI`, `BasicImageView`, `BasicImageViewControl`, `ImageOpenDialog`, `ImageSaveDialog`, `ColorSample`, `ImageViewForImageTransparent`, `ClickableLabel` |
 | Markdown | `MarkdownPreviewGUI` |
 | Phrase generation | `phraseGeneration` |
 | QR | `QRCodeGenerationGUI` |
 | Regex | `RegexTesterGUI`, `RegexHighlighter` |
+| Timestamp conversion | `TimestampConversionGUI` |
 
 ## Async lifecycle audit
 
@@ -112,12 +117,14 @@ WebEngine, Tauri, or Rust integration is part of M1.
 | Command generation | `{category, functionIndex, optionIndex, value}` | `{command, errorCode}`; keep localized descriptive labels at the host boundary. |
 | Data conversion | `{input, outputFormat, indentation}` and path-based load/save requests | `{output, messages, success, error}`; preserve parser detection order, encoding, overwrite behavior and stable formats. |
 | Database | `{connectionId, parameters}`, `{connectionId, sql}`, `{connectionId, tableName, page, pageSize}` | `{connectionId, status/error}`, `{columns, rows, error}`, `{tables, error}`; never serialize a live `QSqlDatabase`, `QSqlQuery`, or model. Define NULL/binary/type and row-order semantics. |
+| Diff | `{leftText, rightText}` | `{lines:[{operation, leftLine, rightLine, text}], sideBySideRows}`; define newline normalization, trailing-newline handling, tie-breaking, and input-size limits before treating the output as a stable protocol. |
 | HTTP | `{requestId, method, url, headers, credentials, body, timeoutMs?}` | `{requestId, status, reason, headers, body, errorCode, error, elapsedMs}`; define host timeout, cancellation acknowledgement, body limits and credential redaction before exposing it. |
 | Image | `{imageHandle, operation, options}` or a host-approved path | `{imageHandle, width, height, success, error}`; use handles or binary transfer for large images rather than JSON/base64 copies. |
 | Markdown | `{source}` or `{path, source}` | `{html}`, `{source, error}`, or `{success, error}`; native path picking and external-link opening stay in the host. |
 | Phrase templates | `{id?, title, content}` and `{id}` for load/delete | `{templates}`, `{id, title, content}`, `{success, errorCode}`; host confirms destructive actions and constrains template IDs to the content directory. |
 | QR | `{type, parameters}` | `{payload, imageHandle, validationErrors:[{field, code}], error}`; translate stable validation codes in the host. |
 | Regex | `{requestId, pattern, text, replacement, flags, global, timeoutMs}` | `{requestId, matches, captures, replacedText, valid, error, timedOut}`; `cancel({requestId})` invalidates older results. Bound input size and explicitly document that interruption cannot stop an in-progress Qt regex call. |
+| Timestamp conversion | `{unixTimestamp, unit}` or `{iso8601}`; optionally accept an explicit time zone for local formatting | `{unixSeconds, unixMilliseconds, iso8601Utc, iso8601Local, valid}`; define supported range and parse/error rules. Local output must use a host-supplied time zone for deterministic Bridge behavior. |
 
 The current C++ service interfaces use Qt value types (`QString`, `QImage`,
 `QSqlError`, `QJsonObject`, and Qt containers). A Bridge must define explicit
@@ -132,8 +139,12 @@ Good candidates for isolated Rust implementations after contracts exist:
 - Stable DTO validation, mapping and serialization for settings, regex results,
   database rows and QR validation codes.
 - Template input validation and dirty comparison.
+- Diff line alignment and stable row DTO construction, after newline normalization,
+  tie-breaking and input-size limits are part of the contract.
 - Data-conversion workflow coordination, if parser/emitter output and error
   parity are defined for each format.
+- Unix integer timestamp parsing and unit mapping, after the supported range,
+  ISO parsing behavior and time-zone policy are defined and matched to Qt.
 
 Keep these behind Qt/native adapters unless compatibility is established:
 
@@ -145,6 +156,12 @@ Keep these behind Qt/native adapters unless compatibility is established:
 - Existing QSettings persistence, native file dialogs, clipboard and Qt
   resource display.
 - YAML/TOML/JSON parser behavior and Qt Core file/text stream encoding.
+- Timestamp ISO 8601 parsing, `QDateTime` validity/range behavior, and
+  `QTimeZone::systemTimeZone()` output depend on Qt Core and the host's time-zone
+  database. The timestamp UI also uses Qt Widgets' time-zone-aware editor.
+- Diff processing uses Qt Core value containers and inherits `Tool`/`QObject`
+  for tool identity; its LCS table takes O(n*m) time and memory for n and m
+  input lines.
 
 ## Residual dependencies and limits
 
@@ -166,6 +183,8 @@ Keep these behind Qt/native adapters unless compatibility is established:
   models are active need platform/integration verification.
 - Template replacement preserves existing delete-before-write behavior.
   Changing that persistence contract is a separate data-safety change.
+- Diff output is deterministic for a given input and the current deletion-first
+  tie-break, but its quadratic table can be costly for large texts.
 - No manual visual regression, non-macOS run, WebEngine/Tauri port, or Rust
   port was performed for M1.
 
