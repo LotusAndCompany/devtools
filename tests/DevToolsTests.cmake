@@ -26,7 +26,7 @@ target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
         DEVTOOLS_TEST
-        "" # options
+        "CORE_ONLY" # options
         ""  # one value keywords
         "SOURCES"   # multi value keywords
         ${ARGN}
@@ -36,12 +36,17 @@ function(DevTools_add_test TEST_NAME)
         ${DEVTOOLS_TEST_SOURCES}
     )
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
-    add_dependencies(${TEST_NAME}
-        ${PROJECT_NAME}_test_lib
-    )
-    target_link_libraries(${TEST_NAME} PRIVATE
-        ${PROJECT_NAME}_test_lib
-    )
+    if(DEVTOOLS_TEST_CORE_ONLY)
+        target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+        target_link_libraries(${TEST_NAME} PRIVATE Qt6::Core Qt6::Test)
+    else()
+        add_dependencies(${TEST_NAME}
+            ${PROJECT_NAME}_test_lib
+        )
+        target_link_libraries(${TEST_NAME} PRIVATE
+            ${PROJECT_NAME}_test_lib
+        )
+    endif()
 endfunction()
 
 # core
@@ -185,4 +190,13 @@ DevTools_add_test(test_image_view_for_image_transparent
 DevTools_add_test(test_regex_tool
     SOURCES
     features/regex_tool/tests/test_regex_tool.cpp
+)
+
+# Exercise the regex worker without linking or constructing Widgets.
+DevTools_add_test(test_regex_worker CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_worker.cpp
+    features/regex_tool/core/regex_tool.cpp
+    features/regex_tool/core/regex_worker.cpp
+    features/regex_tool/core/regex_worker.h
 )
