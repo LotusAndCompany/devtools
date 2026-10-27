@@ -545,6 +545,41 @@
     </message>
 </context>
 <context>
+    <name>DiffToolGUI</name>
+    <message>
+        <source>Diff Comparison Tool</source>
+        <translation>差分比較ツール</translation>
+    </message>
+    <message>
+        <source>Inline</source>
+        <translation>統合表示</translation>
+    </message>
+    <message>
+        <source>Side-by-side</source>
+        <translation>並列表示</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>変更前</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation>変更後</translation>
+    </message>
+    <message>
+        <source>Paste original text here...</source>
+        <translation>変更前のテキストを貼り付け...</translation>
+    </message>
+    <message>
+        <source>Paste modified text here...</source>
+        <translation>変更後のテキストを貼り付け...</translation>
+    </message>
+    <message>
+        <source>Diff</source>
+        <translation>差分</translation>
+    </message>
+</context>
+<context>
     <name>ImageOpenDialog</name>
     <message>
         <source>Open Image</source>
@@ -828,14 +863,6 @@
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Select Database File</source>
-        <translation>データベースファイルを選択</translation>
-    </message>
-    <message>
-        <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
-        <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
-    </message>
     <message>
         <source>File Opening Error</source>
         <translation>ファイルを開く際のエラー</translation>
@@ -1355,6 +1382,14 @@ Please try reducing the amount of data or simplifying the content.</source>
     <message>
         <source>Test and debug regular expressions</source>
         <translation>正規表現のテストとデバッグを行います</translation>
+    </message>
+    <message>
+        <source>Diff Comparison Tool</source>
+        <translation>差分比較ツール</translation>
+    </message>
+    <message>
+        <source>Compare two texts and show the differences</source>
+        <translation>2つのテキストを比較して差分を表示します</translation>
     </message>
 </context>
 <context>

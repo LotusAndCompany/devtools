@@ -53,6 +53,10 @@ A unified desktop application that combines various development tools into a sin
 - Test regular expressions and replacements
 - Inspect matches and capture groups
 
+### Diff Comparison Tool
+- Compare two texts line by line
+- View differences inline or side by side
+
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
