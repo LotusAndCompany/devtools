@@ -60,7 +60,7 @@ Do not infer support from tsconfig.json.
 - CI runs formatting on macos-14 and Linux builds, static analysis, CodeQL,
   documentation, and GitHub Actions analysis on ubuntu-latest.
 - CI does not run CTest, and there is no macOS application test job.
-- No workflow was found to publish a signed .dmg, .ipa, or installer archive.
+- No workflow was found to publish a signed macOS .dmg, release archive, or installer.
   Release Please opens version PRs; documentation is deployed to GitHub Pages.
 - The source includes App Store entitlements and uses macdeployqt with
   App-Store-compliant packaging options, but this audit did not verify a
