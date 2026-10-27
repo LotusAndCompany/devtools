@@ -2,5 +2,6 @@
 
 target_sources(DevTools_markdown_preview PRIVATE
     core/markdown_preview.h core/markdown_preview.cpp
+    core/markdown_service.h core/markdown_service.cpp
     gui/markdown_preview_gui.h gui/markdown_preview_gui.cpp
 )

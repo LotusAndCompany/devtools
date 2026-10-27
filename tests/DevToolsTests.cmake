@@ -111,9 +111,15 @@ DevTools_add_test(test_icon_theme
 )
 
 # core/markdown_preview
-DevTools_add_test(test_markdown_preview
+DevTools_add_test(test_markdown_preview CORE_ONLY
     SOURCES
     features/markdown_preview/tests/test_markdown_preview.cpp
+    features/markdown_preview/core/markdown_service.cpp
+)
+target_link_libraries(test_markdown_preview PRIVATE Qt6::Gui)
+DevTools_add_test(test_markdown_preview_gui
+    SOURCES
+    features/markdown_preview/tests/test_markdown_preview_gui.cpp
 )
 
 # core/iamge
