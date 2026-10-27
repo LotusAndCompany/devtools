@@ -2,6 +2,7 @@
 
 #include "contents_area.h"
 #include "design_system.h"
+#include "features/db_tool/core/sqlite_paths.h"
 #include "features/framework/core/application_settings_service.h"
 #include "gui_application.h"
 #include "icon_utils.h"
@@ -13,7 +14,6 @@
 #include <QCloseEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QKeySequence>
@@ -23,7 +23,6 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QTranslator>
-#include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -252,35 +251,12 @@ void MainWindow::setSidemenuHidden(bool hide)
     }
 }
 
-bool MainWindow::isSQLiteFilePath(const QString &filePath)
-{
-    QFileInfo const fileInfo(filePath);
-    if (!fileInfo.exists() || !fileInfo.isFile()) {
-        return false;
-    }
-
-    const QString suffix = fileInfo.suffix().toLower();
-    return suffix == "db" || suffix == "sqlite" || suffix == "sqlite3";
-}
-
 QString MainWindow::droppedSQLiteFilePath(const QMimeData *mimeData)
 {
     if (mimeData == nullptr || !mimeData->hasUrls()) {
         return {};
     }
-
-    for (const QUrl &url : mimeData->urls()) {
-        if (!url.isLocalFile()) {
-            continue;
-        }
-
-        const QString filePath = url.toLocalFile();
-        if (isSQLiteFilePath(filePath)) {
-            return filePath;
-        }
-    }
-
-    return {};
+    return SQLitePaths::firstValidFilePath(mimeData->urls());
 }
 
 void MainWindow::onSidemenuVisibilityButtonClicked()

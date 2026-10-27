@@ -24,6 +24,7 @@ struct ImageSplitOptions
 class ImageProcessingService
 {
 public:
+    static bool isReadableImageFile(const QString &path);
     static QImage load(const QString &path);
     static bool save(const QImage &image, const QString &path);
     static QImage resizeBySize(const QImage &image, int width, int height, bool keepAspectRatio,

@@ -11,6 +11,7 @@ class SQLitePaths
 {
 public:
     static SQLitePathStatus status(const QString &path);
+    static QString firstValidFilePath(const QList<QUrl> &urls);
     static QString firstValidLocalFile(const QList<QUrl> &urls);
 };
 

@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QImageReader>
 #include <QQueue>
 #include <QTransform>
 #include <QVector3D>
@@ -219,6 +220,11 @@ QImage makeContiguousTransparent(const QImage &source, const QPoint &start, QCol
     return image;
 }
 } // namespace
+
+bool ImageProcessingService::isReadableImageFile(const QString &path)
+{
+    return QFileInfo(path).isFile() && !QImageReader::imageFormat(path).isEmpty();
+}
 
 QImage ImageProcessingService::load(const QString &path)
 {

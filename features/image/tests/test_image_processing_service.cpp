@@ -1,6 +1,7 @@
 #include "features/image/core/image_processing_service.h"
 
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QTemporaryDir>
 #include <QtTest>
@@ -11,6 +12,7 @@ class TestImageProcessingService : public QObject
 
 private slots:
     void loadAndSave();
+    void validatesReadableImageFiles();
     void resizeAndTransform();
     void transparency();
     void saveDividedImages();
@@ -41,6 +43,26 @@ void TestImageProcessingService::loadAndSave()
     QVERIFY(ImageProcessingService::load(directory.filePath("missing.png")).isNull());
     QVERIFY(!ImageProcessingService::save(QImage(), savedPath));
     QVERIFY(!ImageProcessingService::save(loaded, directory.filePath("missing/out.png")));
+}
+
+void TestImageProcessingService::validatesReadableImageFiles()
+{
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    QImage image(2, 1, QImage::Format_RGB32);
+    image.fill(Qt::red);
+    const QString imagePath = directory.filePath(QStringLiteral("image.png"));
+    QVERIFY(image.save(imagePath));
+    const QString invalidPath = directory.filePath(QStringLiteral("not-an-image.png"));
+    QFile invalidFile(invalidPath);
+    QVERIFY(invalidFile.open(QIODevice::WriteOnly));
+    invalidFile.write("not an image");
+    invalidFile.close();
+
+    QVERIFY(ImageProcessingService::isReadableImageFile(imagePath));
+    QVERIFY(!ImageProcessingService::isReadableImageFile(invalidPath));
+    QVERIFY(!ImageProcessingService::isReadableImageFile(directory.path()));
+    QVERIFY(!ImageProcessingService::isReadableImageFile(directory.filePath("missing.png")));
 }
 
 void TestImageProcessingService::resizeAndTransform()

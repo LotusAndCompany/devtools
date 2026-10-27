@@ -16,9 +16,15 @@ SQLitePathStatus SQLitePaths::status(const QString &path)
 
 QString SQLitePaths::firstValidLocalFile(const QList<QUrl> &urls)
 {
+    const QString path = firstValidFilePath(urls);
+    return path.isEmpty() ? QString() : QFileInfo(path).absoluteFilePath();
+}
+
+QString SQLitePaths::firstValidFilePath(const QList<QUrl> &urls)
+{
     for (const QUrl &url : urls) {
         if (url.isLocalFile() && status(url.toLocalFile()) == SQLitePathStatus::Valid) {
-            return QFileInfo(url.toLocalFile()).absoluteFilePath();
+            return url.toLocalFile();
         }
     }
     return {};

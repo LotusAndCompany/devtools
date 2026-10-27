@@ -88,6 +88,10 @@ void TestDatabaseConnection::pathsAndAccess()
                                                QUrl::fromLocalFile(bad_suffix),
                                                QUrl::fromLocalFile(path)}),
              QFileInfo(path).absoluteFilePath());
+    QCOMPARE(SQLitePaths::firstValidFilePath({QUrl("https://example.test/a.db"),
+                                              QUrl::fromLocalFile(bad_suffix),
+                                              QUrl::fromLocalFile(path)}),
+             path);
     QVERIFY(SQLitePaths::firstValidLocalFile({QUrl::fromLocalFile(bad_suffix)}).isEmpty());
     const auto access = SQLiteFileAccess::restore("invalid bookmark", path);
     QVERIFY(access != nullptr);
