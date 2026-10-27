@@ -1,6 +1,7 @@
 #include "db_main.h"
 
 #include "features/db_tool/core/connection_history.h"
+#include "features/db_tool/core/database_browse_service.h"
 #include "features/db_tool/core/database_connection.h"
 #include "features/db_tool/core/sqlite_paths.h"
 #include "features/db_tool/gui/connection_selector/connection_selector.h"
@@ -19,7 +20,6 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QSqlError>
-#include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QStyle>
 #include <QTabWidget>
@@ -184,9 +184,9 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
         return false;
     }
 
-    QSqlQuery validationQuery(sqliteDb);
-    if (!validationQuery.exec("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1;")) {
-        QMessageBox::critical(this, tr("Connection Failed"), validationQuery.lastError().text());
+    const QSqlError validationError = DatabaseBrowseService::validateSQLiteDatabase(sqliteDb);
+    if (validationError.isValid()) {
+        QMessageBox::critical(this, tr("Connection Failed"), validationError.text());
         sqliteDb.close();
         QSqlDatabase::removeDatabase(tempConnectionName);
         return false;
@@ -226,7 +226,7 @@ void dbMain::populateTableList()
 {
     QIcon const tableIcon =
         IconUtils::themedIcon(QStringLiteral("database"), QStyle::SP_DriveHDIcon);
-    for (const QString &tableName : db.tables(QSql::Tables)) {
+    for (const QString &tableName : DatabaseBrowseService::tableNames(db)) {
         auto *const item = new QListWidgetItem(tableIcon, tableName, tableListWidget);
         DevTools::Ui::configureListItem(item);
     }
@@ -245,9 +245,7 @@ void dbMain::handleTableClicked(QListWidgetItem *item)
     }
 
     auto *tableView = new QTableView;
-    auto *model = new QSqlTableModel(tableView, db);
-    model->setTable(tableName);
-    model->select();
+    auto *model = DatabaseBrowseService::tableModel(db, tableName, tableView);
 
     DevTools::Ui::configureTableView(tableView);
     tableView->setModel(model);

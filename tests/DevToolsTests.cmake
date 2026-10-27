@@ -261,6 +261,12 @@ DevTools_add_test(test_query_service CORE_ONLY
     features/db_tool/core/query_service.cpp
 )
 target_link_libraries(test_query_service PRIVATE Qt6::Sql)
+DevTools_add_test(test_database_browse_service CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_database_browse_service.cpp
+    features/db_tool/core/database_browse_service.cpp
+)
+target_link_libraries(test_database_browse_service PRIVATE Qt6::Sql)
 
 DevTools_add_test(test_connection_history CORE_ONLY
     SOURCES

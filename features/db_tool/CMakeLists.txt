@@ -9,6 +9,7 @@ target_sources(DevTools_db_tool PRIVATE
     gui/sqlite_file_picker.h
     core/sqlite_file_access.h core/sqlite_access_restore.cpp
     core/query_service.h core/query_service.cpp
+    core/database_browse_service.h core/database_browse_service.cpp
     core/database_connection.h core/database_connection.cpp
     core/sqlite_paths.h core/sqlite_paths.cpp
     core/connection_history.h core/connection_history.cpp
