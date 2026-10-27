@@ -50,8 +50,9 @@ can include:
 - securityScopedBookmark: base64-encoded macOS security-scoped bookmark for
   sandboxed SQLite file access, where applicable
 
-New connection creation prompts for passwords and applies them to the active
-database connection, but does not add them to the new history object. The
+For QMYSQL and QPSQL connections, connection creation prompts for a password
+and applies it to the active database connection, but does not add the password
+to the new history object. The
 history loader accepts unknown keys, and reconnect and delete paths serialize
 the loaded objects without an allowlist. A legacy or externally supplied
 history entry containing a password or other unrecognized key may therefore
