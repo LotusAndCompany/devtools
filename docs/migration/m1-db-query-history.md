@@ -34,9 +34,10 @@ SQLite; MySQL, PostgreSQL, driver errors, locking, long-running requests and
 shutdown behavior remain unverified.
 
 Connection creation, driver configuration, SQLite bookmark restoration and
-file-picker fallback, dropped-file validation, table listing and table models
-remain in Widgets. Moving them requires preserving macOS security-scoped file
-access and existing error/cancellation behavior. History entries may contain
+file-path validation were subsequently extracted; see
+[m1-db-connection.md](m1-db-connection.md). File-picker fallback, table
+listing and table models remain in Widgets. Moving them requires preserving
+macOS security-scoped file access and existing error/cancellation behavior. History entries may contain
 legacy unknown fields, including secrets; preserve them for compatibility but
 never log them or automatically expose them through a bridge.
 

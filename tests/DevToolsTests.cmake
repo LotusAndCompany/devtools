@@ -237,3 +237,28 @@ DevTools_add_test(test_query_page
     SOURCES
     features/db_tool/tests/test_query_page.cpp
 )
+
+DevTools_add_test(test_database_connection CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_database_connection.cpp
+    features/db_tool/core/database_connection.cpp
+    features/db_tool/core/sqlite_paths.cpp
+    features/db_tool/core/sqlite_access_restore.cpp
+)
+target_link_libraries(test_database_connection PRIVATE Qt6::Sql)
+if(APPLE)
+    target_sources(test_database_connection PRIVATE features/db_tool/core/sqlite_file_access.mm)
+    target_link_libraries(test_database_connection PRIVATE ${FOUNDATION_FRAMEWORK})
+else()
+    target_sources(test_database_connection PRIVATE features/db_tool/core/sqlite_file_access.cpp)
+endif()
+
+DevTools_add_test(test_db_main_connection
+    SOURCES
+    features/db_tool/tests/test_db_main_connection.cpp
+)
+
+DevTools_add_test(test_connection_selector
+    SOURCES
+    features/db_tool/tests/test_connection_selector.cpp
+)

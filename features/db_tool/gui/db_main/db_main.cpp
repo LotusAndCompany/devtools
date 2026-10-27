@@ -1,6 +1,8 @@
 #include "db_main.h"
 
 #include "features/db_tool/core/connection_history.h"
+#include "features/db_tool/core/database_connection.h"
+#include "features/db_tool/core/sqlite_paths.h"
 #include "features/db_tool/gui/connection_selector/connection_selector.h"
 #include "features/db_tool/gui/connection_window/connection_window.h"
 #include "features/db_tool/gui/query_page/query_page.h"
@@ -158,13 +160,13 @@ void dbMain::handleRefreshTableButtonClick()
 bool dbMain::connectSQLiteFile(const QString &filePath)
 {
     QFileInfo const fileInfo(filePath);
-    if (!fileInfo.exists() || !fileInfo.isFile()) {
+    const SQLitePathStatus path_status = SQLitePaths::status(filePath);
+    if (path_status == SQLitePathStatus::Missing) {
         QMessageBox::warning(this, tr("Invalid File"), tr("The selected file does not exist."));
         return false;
     }
 
-    const QString suffix = fileInfo.suffix().toLower();
-    if (suffix != "db" && suffix != "sqlite" && suffix != "sqlite3") {
+    if (path_status == SQLitePathStatus::Unsupported) {
         QMessageBox::warning(this, tr("Unsupported File"),
                              tr("Please select a SQLite database file."));
         return false;
@@ -173,10 +175,10 @@ bool dbMain::connectSQLiteFile(const QString &filePath)
     // Create a unique temporary connection name to avoid conflicts
     const QString tempConnectionName = QUuid::createUuid().toString();
     auto sqliteFileAccess = SQLiteFileAccess::fromFilePath(fileInfo.absoluteFilePath());
-    QSqlDatabase sqliteDb = QSqlDatabase::addDatabase("QSQLITE", tempConnectionName);
-    sqliteDb.setDatabaseName(fileInfo.absoluteFilePath());
+    QSqlDatabase sqliteDb = DatabaseConnection::open(
+        {"QSQLITE", {}, fileInfo.absoluteFilePath(), {}, {}}, tempConnectionName);
 
-    if (!sqliteDb.open()) {
+    if (!sqliteDb.isOpen()) {
         QMessageBox::critical(this, tr("Connection Failed"), sqliteDb.lastError().text());
         QSqlDatabase::removeDatabase(tempConnectionName);
         return false;
