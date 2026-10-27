@@ -31,10 +31,12 @@ watchdog, stale-result or shutdown behavior was changed or proven by this
 slice.
 
 The remaining M1 scope includes the rest of the feature/UI audit, extraction,
-service contracts, integration and existing-UI regression checks. In
-particular, QR validation, database and template persistence still have
-processing in their GUI code. HTTP transport was subsequently extracted; see
-[m1-http-service.md](m1-http-service.md). This slice alone does not complete issue #132.
+service contracts, integration and existing-UI regression checks. QR
+validation and image processing have since moved to services; PNG file writing
+was also extracted in [m1-qr.md](m1-qr.md). Database table operations,
+template persistence and other feature processing remain to be audited. HTTP
+transport was subsequently extracted; see [m1-http-service.md](m1-http-service.md).
+This slice alone does not complete issue #132.
 
 ## Verification
 

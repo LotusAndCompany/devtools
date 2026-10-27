@@ -262,3 +262,18 @@ DevTools_add_test(test_connection_selector
     SOURCES
     features/db_tool/tests/test_connection_selector.cpp
 )
+
+DevTools_add_test(test_qr_service CORE_ONLY
+    SOURCES
+    features/qr_code/tests/test_qr_service.cpp
+    features/qr_code/core/content_generator.cpp
+    features/qr_code/core/qr_validation.cpp
+    features/qr_code/core/qr_image.cpp
+    features/qr_code/core/qrcodegen.cpp
+)
+target_link_libraries(test_qr_service PRIVATE Qt6::Gui)
+
+DevTools_add_test(test_qr_gui
+    SOURCES
+    features/qr_code/tests/test_qr_gui.cpp
+)
