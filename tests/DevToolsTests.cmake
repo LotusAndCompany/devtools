@@ -125,6 +125,16 @@ DevTools_add_test(test_basic_image_edit_interface
     SOURCES
     features/image/tests/test_basic_image_edit_interface.cpp
 )
+DevTools_add_test(test_image_processing_service CORE_ONLY
+    SOURCES
+    features/image/tests/test_image_processing_service.cpp
+    features/image/core/image_processing_service.cpp
+)
+target_link_libraries(test_image_processing_service PRIVATE Qt6::Gui)
+DevTools_add_test(test_image_processing_gui
+    SOURCES
+    features/image/tests/test_image_processing_gui.cpp
+)
 
 # core/data_conversion/parser
 DevTools_add_test(test_basic_parser
