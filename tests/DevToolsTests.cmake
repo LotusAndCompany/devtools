@@ -60,6 +60,15 @@ DevTools_add_test(test_logging
     SOURCES
     features/framework/tests/test_logging.cpp
 )
+DevTools_add_test(test_application_settings_service CORE_ONLY
+    SOURCES
+    features/framework/tests/test_application_settings_service.cpp
+    features/framework/core/application_settings_service.cpp
+)
+DevTools_add_test(test_settings_dialog
+    SOURCES
+    features/framework/tests/test_settings_dialog.cpp
+)
 DevTools_add_test(test_design_system
     SOURCES
     features/framework/tests/test_design_system.cpp

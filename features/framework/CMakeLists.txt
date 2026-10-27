@@ -3,6 +3,7 @@
 
 target_sources(DevTools_core PRIVATE
     # Core
+    core/application_settings_service.h core/application_settings_service.cpp
     core/application_mixin.h core/application_mixin.cpp
     core/enum_cast.h
     core/tool/tool.h core/tool/tool.cpp

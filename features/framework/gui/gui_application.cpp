@@ -1,10 +1,10 @@
 #include "gui_application.h"
 
 #include "design_system.h"
+#include "features/framework/core/application_settings_service.h"
 #include "icon_utils.h"
 
 #include <QApplicationStateChangeEvent>
-#include <QSettings>
 #include <QStyleHints>
 #include <QTranslator>
 #include <QWidget>
@@ -29,16 +29,15 @@ GuiApplication::GuiApplication(int argc, char **argv)
 void GuiApplication::setup()
 {
     // 設定ファイル等を読み込む
-    QSettings const settings;
+    const ApplicationSettings settings = ApplicationSettingsService().read();
 
     // ApplicationMixinのsetupApplicationが翻訳を初期化する
     setupApplication(this);
 
     // 保存された言語設定があれば、メインウィンドウ生成前に適用しておく
-    const QString savedLanguage = settings.value("language", "").toString();
-    if (!savedLanguage.isEmpty()) {
-        if (applyLanguage(savedLanguage)) {
-            qDebug() << "Applied saved language setting:" << savedLanguage;
+    if (settings.hasSavedLanguage && !settings.language.isEmpty()) {
+        if (applyLanguage(settings.language)) {
+            qDebug() << "Applied saved language setting:" << settings.language;
         }
     }
 
@@ -106,29 +105,27 @@ void GuiApplication::applySystemColorScheme()
 
 int GuiApplication::start()
 {
-    QSettings const settings;
+    const ApplicationSettings settings = ApplicationSettingsService().read();
 
     // ウィンドウサイズの復元
-    if (settings.value("window/rememberSize", true).toBool()) {
-        if (settings.contains("window/width") && settings.contains("window/height")) {
+    if (settings.rememberWindowSize) {
+        if (settings.hasWindowSize) {
             const QSize defaultSize = DevTools::Ui::mainWindowSize();
-            int const width = settings.value("window/width", defaultSize.width()).toInt();
-            int const height = settings.value("window/height", defaultSize.height()).toInt();
+            int const width = settings.windowWidth;
+            int const height = settings.windowHeight;
             window->resize(width, height);
         }
     }
 
     // ウィンドウ位置の復元
-    if (settings.value("window/rememberPosition", true).toBool()) {
-        if (settings.contains("window/x") && settings.contains("window/y")) {
-            int const x = settings.value("window/x", 100).toInt();
-            int const y = settings.value("window/y", 100).toInt();
-            window->move(x, y);
+    if (settings.rememberWindowPosition) {
+        if (settings.hasWindowPosition) {
+            window->move(settings.windowX, settings.windowY);
         }
     }
 
     // Always on top設定の適用
-    if (settings.value("window/alwaysOnTop", false).toBool()) {
+    if (settings.alwaysOnTop) {
         window->setWindowFlag(Qt::WindowStaysOnTopHint, true);
     }
 
