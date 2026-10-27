@@ -10,6 +10,7 @@ class TestRegexWorker : public QObject
 private slots:
     void results_data();
     void results();
+    void buildsOptionsFromFlags();
     void formatsMatchesForClipboard();
 };
 
@@ -82,6 +83,19 @@ void TestRegexWorker::formatsMatchesForClipboard()
                                     "Match 1: \"ab\" [0, 2]\n"
                                     "  Group 1: \"a\" [0, 1]\n"
                                     "  Group 2 (bee): \"b\" [1, 2]\n\n"));
+}
+
+void TestRegexWorker::buildsOptionsFromFlags()
+{
+    const auto options = devtools::RegexTool::patternOptions(true, true, true, true, true);
+    const auto expected = QRegularExpression::CaseInsensitiveOption |
+                          QRegularExpression::MultilineOption |
+                          QRegularExpression::DotMatchesEverythingOption |
+                          QRegularExpression::UseUnicodePropertiesOption |
+                          QRegularExpression::ExtendedPatternSyntaxOption;
+    QCOMPARE(options, expected);
+    QCOMPARE(devtools::RegexTool::patternOptions(false, false, false, false, false),
+             QRegularExpression::NoPatternOption);
 }
 
 QTEST_GUILESS_MAIN(TestRegexWorker)

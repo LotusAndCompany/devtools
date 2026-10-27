@@ -4,10 +4,12 @@
 
 Image drag acceptance now calls `ImageProcessingService::isReadableImageFile`
 for the file and image-format check. SQLite URL selection now uses
-`SQLitePaths::firstValidFilePath`, which shares the existing database path
-policy while preserving the original local path string used by the main
-window. `SQLitePaths::firstValidLocalFile` continues to return an absolute path
-for the connection window's security-scoped file flow.
+`LocalFileSelectionService` through `SQLitePaths`, sharing the existing
+database path policy while preserving the original local path string used by
+the main window. The shared service also validates dropped SQLite paths in
+`MainWindow` without a dependency on the database feature.
+`SQLitePaths::firstValidLocalFile` continues to return an absolute path for
+the connection window's security-scoped file flow.
 
 The Widgets still own drag events, local URL selection from `QMimeData`, and
 loading the chosen file. The validation rules themselves are UI-independent.
@@ -35,23 +37,27 @@ services until format and permission compatibility is specified.
 Environment: macOS 26.6.2 arm64, Homebrew Qt 6.9.2, existing `build` directory
 with `ENABLE_UNIT_TEST=ON`.
 
-- `cmake --build build --target test_image_processing_service
-  test_basic_image_view test_database_connection DevTools`: passed.
+- `cmake --build build --target test_local_file_selection_service
+  test_image_processing_service test_basic_image_view test_database_connection
+  DevTools`: passed.
 - `QT_QPA_PLATFORM=offscreen ctest --test-dir build -R
-  '^test_(image_processing_service|basic_image_view|database_connection)$
-  --output-on-failure`: 3/3 passed. Headless coverage checks recognized and
-  unrecognized image files, missing paths, directories, SQLite suffix and
-  file validity, URL filtering, and both original-path and absolute-path
-  results. The image Widget regression exercises accepted and rejected drops.
+  '^test_(local_file_selection_service|image_processing_service|basic_image_view|database_connection)$
+  --output-on-failure`: 4/4 passed. Headless coverage checks case-insensitive
+  suffixes, local URL selection, recognized and unrecognized image files,
+  missing paths, directories, SQLite file validity, and original-path versus
+  absolute-path results. The image Widget regression exercises accepted and
+  rejected drops.
 - `otool -L build/test_image_processing_service`: Qt Core, Gui and Test; no Qt
   Widgets.
 - `cmake --build build --target format-check` and `git diff --check`: passed.
 - The main-window drag-to-open flow was not manually exercised, and no
   non-macOS platform was tested.
 
-The duplicate path checks are now in their feature services. Remaining work
-includes regex worker lifecycle coordination, the complete class/dependency
-inventory, and the final all-target/all-test verification for Issue #132.
+The path selection and suffix policy live in `LocalFileSelectionService` and
+the image readability check lives in `ImageProcessingService`. The final
+class/dependency inventory and full verification are recorded in
+[m1-architecture-inventory.md](m1-architecture-inventory.md) and
+[m1-final-verification.md](m1-final-verification.md).
 
 ## Execution record
 

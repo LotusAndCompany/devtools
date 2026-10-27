@@ -49,6 +49,30 @@ QString substituteReplacement(const QString &replacement, const QRegularExpressi
 
 namespace devtools {
 
+QRegularExpression::PatternOptions RegexTool::patternOptions(bool caseInsensitive, bool multiline,
+                                                             bool dotMatchesEverything,
+                                                             bool useUnicodeProperties,
+                                                             bool extendedPatternSyntax)
+{
+    QRegularExpression::PatternOptions options = QRegularExpression::NoPatternOption;
+    if (caseInsensitive) {
+        options |= QRegularExpression::CaseInsensitiveOption;
+    }
+    if (multiline) {
+        options |= QRegularExpression::MultilineOption;
+    }
+    if (dotMatchesEverything) {
+        options |= QRegularExpression::DotMatchesEverythingOption;
+    }
+    if (useUnicodeProperties) {
+        options |= QRegularExpression::UseUnicodePropertiesOption;
+    }
+    if (extendedPatternSyntax) {
+        options |= QRegularExpression::ExtendedPatternSyntaxOption;
+    }
+    return options;
+}
+
 QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &text,
                                       QRegularExpression::PatternOptions options)
 {

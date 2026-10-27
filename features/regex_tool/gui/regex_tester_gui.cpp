@@ -1,6 +1,7 @@
 #include "features/regex_tool/gui/regex_tester_gui.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/regex_tool/core/regex_evaluation_service.h"
 #include "features/regex_tool/core/regex_settings_repository.h"
 
 #include <QApplication>
@@ -68,8 +69,7 @@ RegexTesterGUI::RegexTesterGUI(QWidget *parent) : GuiTool(parent)
 {
     m_debounceTimer = new QTimer(this);
     m_debounceTimer->setSingleShot(true);
-    m_watchdogTimer = new QTimer(this);
-    m_watchdogTimer->setSingleShot(true);
+    m_evaluationService = new RegexEvaluationService(this);
 
     setupUi();
     m_highlighter = new RegexHighlighter(m_testTextEdit->document());
@@ -82,13 +82,6 @@ RegexTesterGUI::RegexTesterGUI(QWidget *parent) : GuiTool(parent)
 RegexTesterGUI::~RegexTesterGUI()
 {
     saveSettings();
-    if (m_worker != nullptr) {
-        m_worker->disconnect(this);
-        m_worker->requestInterruption();
-        m_worker->wait();
-        delete m_worker;
-        m_worker = nullptr;
-    }
 }
 
 void RegexTesterGUI::setupUi()
@@ -432,7 +425,10 @@ void RegexTesterGUI::setupConnections()
 
     // Timer connections
     connect(m_debounceTimer, &QTimer::timeout, this, &RegexTesterGUI::updateResults);
-    connect(m_watchdogTimer, &QTimer::timeout, this, &RegexTesterGUI::onWatchdogTimeout);
+    connect(m_evaluationService, &RegexEvaluationService::matchingFinished, this,
+            &RegexTesterGUI::onMatchingFinished);
+    connect(m_evaluationService, &RegexEvaluationService::evaluationTimedOut, this,
+            &RegexTesterGUI::onWatchdogTimeout);
 }
 
 void RegexTesterGUI::loadSettings()
@@ -466,23 +462,9 @@ void RegexTesterGUI::saveSettings()
 
 QRegularExpression::PatternOptions RegexTesterGUI::currentOptions() const
 {
-    QRegularExpression::PatternOptions options = QRegularExpression::NoPatternOption;
-    if (m_flagI->isChecked()) {
-        options |= QRegularExpression::CaseInsensitiveOption;
-    }
-    if (m_flagM->isChecked()) {
-        options |= QRegularExpression::MultilineOption;
-    }
-    if (m_flagS->isChecked()) {
-        options |= QRegularExpression::DotMatchesEverythingOption;
-    }
-    if (m_flagU->isChecked()) {
-        options |= QRegularExpression::UseUnicodePropertiesOption;
-    }
-    if (m_flagX->isChecked()) {
-        options |= QRegularExpression::ExtendedPatternSyntaxOption;
-    }
-    return options;
+    return RegexTool::patternOptions(m_flagI->isChecked(), m_flagM->isChecked(),
+                                     m_flagS->isChecked(), m_flagU->isChecked(),
+                                     m_flagX->isChecked());
 }
 
 void RegexTesterGUI::triggerUpdate()
@@ -493,47 +475,20 @@ void RegexTesterGUI::triggerUpdate()
 void RegexTesterGUI::updateResults()
 {
     m_debounceTimer->stop();
-    m_watchdogTimer->stop();
-
-    // Abandon the previous worker without blocking the GUI thread. It stops
-    // cooperatively at its next interruption check and is deleted via the
-    // finished signal once it completes.
-    if (m_worker != nullptr) {
-        m_worker->requestInterruption();
-        m_worker = nullptr;
-    }
 
     const QString pattern = m_patternEdit->text();
     const QString text = m_testTextEdit->toPlainText();
     const QString replacePattern = m_replacePatternEdit->text();
     const auto options = currentOptions();
     bool const global = m_flagG->isChecked();
-    const int requestId = ++m_requestId;
-
-    auto *const worker = new RegexWorker;
-    m_worker = worker;
-    connect(worker, &RegexWorker::finishedMatching, this, &RegexTesterGUI::onMatchingFinished);
-    connect(worker, &QThread::finished, this, [this, worker] {
-        if (m_worker == worker) {
-            m_worker = nullptr;
-        }
-        worker->deleteLater();
-    });
-    worker->setParams(requestId, pattern, text, replacePattern, options, global);
-    worker->start();
-    m_watchdogTimer->start(500); // 500ms limit
+    m_evaluationService->evaluate(pattern, text, replacePattern, options, global);
 }
 
 void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
                                         const QString &replacedText, bool isValid,
                                         const QString &errorStr)
 {
-    // Discard stale notifications from abandoned workers.
-    if (requestId != m_requestId) {
-        return;
-    }
-
-    m_watchdogTimer->stop();
+    Q_UNUSED(requestId)
 
     if (!isValid) {
         m_errorLabel->setText(tr("Syntax Error: %1").arg(errorStr));
@@ -554,15 +509,9 @@ void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult
     }
 }
 
-void RegexTesterGUI::onWatchdogTimeout()
+void RegexTesterGUI::onWatchdogTimeout(int requestId)
 {
-    m_watchdogTimer->stop();
-
-    // Invalidate queued results even if the worker stopped before this slot ran.
-    ++m_requestId;
-    if (m_worker != nullptr && m_worker->isRunning()) {
-        m_worker->requestInterruption();
-    }
+    Q_UNUSED(requestId)
 
     m_errorLabel->setText(tr("Error: Evaluation timed out (catastrophic backtracking detected)"));
     m_errorLabel->show();

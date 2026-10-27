@@ -65,6 +65,11 @@ DevTools_add_test(test_application_settings_service CORE_ONLY
     features/framework/tests/test_application_settings_service.cpp
     features/framework/core/application_settings_service.cpp
 )
+DevTools_add_test(test_local_file_selection_service CORE_ONLY
+    SOURCES
+    features/framework/tests/test_local_file_selection_service.cpp
+    features/framework/core/local_file_selection_service.cpp
+)
 DevTools_add_test(test_settings_dialog
     SOURCES
     features/framework/tests/test_settings_dialog.cpp
@@ -186,10 +191,26 @@ DevTools_add_test(test_yaml_emitter
     features/data_conversion/tests/emitter/test_yaml_emitter.cpp
 )
 # core/data_conversion
-DevTools_add_test(test_data_conversion
+DevTools_add_test(test_data_conversion CORE_ONLY
     SOURCES
     features/data_conversion/tests/test_data_conversion.cpp
+    tests/test_util.cpp
+    tests/random_data.cpp
+    features/data_conversion/core/data_conversion.cpp
+    features/data_conversion/core/parser/json_parser.cpp
+    features/data_conversion/core/parser/toml_parser.cpp
+    features/data_conversion/core/parser/yaml_parser.cpp
+    features/data_conversion/core/emitter/basic_emitter.cpp
+    features/data_conversion/core/emitter/json_emitter.cpp
+    features/data_conversion/core/emitter/toml_emitter.cpp
+    features/data_conversion/core/emitter/yaml_emitter.cpp
 )
+target_include_directories(test_data_conversion PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/tests
+    ${TOML11_INCLUDE_DIR}
+    ${YAML_CPP_INCLUDE_DIR}
+)
+target_link_libraries(test_data_conversion PRIVATE DevTools_core yaml-cpp::yaml-cpp)
 DevTools_add_test(test_data_conversion_gui
     SOURCES
     features/data_conversion/tests/test_data_conversion_gui.cpp
@@ -238,6 +259,13 @@ DevTools_add_test(test_regex_settings_repository CORE_ONLY
     SOURCES
     features/regex_tool/tests/test_regex_settings_repository.cpp
     features/regex_tool/core/regex_settings_repository.cpp
+)
+DevTools_add_test(test_regex_evaluation_service CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_evaluation_service.cpp
+    features/regex_tool/core/regex_evaluation_service.cpp
+    features/regex_tool/core/regex_worker.cpp
+    features/regex_tool/core/regex_tool.cpp
 )
 
 DevTools_add_test(test_template_reader CORE_ONLY
@@ -299,6 +327,7 @@ DevTools_add_test(test_database_connection CORE_ONLY
     features/db_tool/core/database_connection.cpp
     features/db_tool/core/sqlite_paths.cpp
     features/db_tool/core/sqlite_access_restore.cpp
+    features/framework/core/local_file_selection_service.cpp
 )
 target_link_libraries(test_database_connection PRIVATE Qt6::Sql)
 if(APPLE)

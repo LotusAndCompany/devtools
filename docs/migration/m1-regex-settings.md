@@ -20,7 +20,9 @@ flowchart LR
 The repository and formatter use Qt Core only and have no Widget dependency.
 Copy text remains localized because the UI supplies the existing translated
 format strings. The worker's thread placement, interruption, request IDs,
-watchdog timeout, and stale-result handling are unchanged.
+watchdog timeout, and stale-result handling remain compatible. A subsequent
+slice moved the coordination out of Widgets; see
+[m1-regex-evaluation-service.md](m1-regex-evaluation-service.md).
 
 ## Compatibility and Bridge proposal
 
@@ -60,9 +62,9 @@ with `ENABLE_UNIT_TEST=ON`.
 - The tests do not measure worst-case regular-expression performance or
   clipboard behavior in other desktop environments.
 
-Regex settings and match-copy formatting now use non-Widget code. The
-application-wide class/dependency inventory and remaining file/OS boundaries
-still need a final audit for Issue #132.
+Regex settings, match-copy formatting, and asynchronous evaluation now use
+non-Widget code. The application-wide class/dependency inventory and remaining
+file/OS boundaries still need a final audit for Issue #132.
 
 ## Execution record
 

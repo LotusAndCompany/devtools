@@ -2,7 +2,7 @@
 #define REGEX_TESTER_GUI_H
 
 #include "features/framework/gui/gui_tool.h"
-#include "features/regex_tool/core/regex_worker.h"
+#include "features/regex_tool/core/regex_tool.h"
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
@@ -22,6 +22,8 @@ class QTreeWidget;
 class QTreeWidgetItem;
 
 namespace devtools {
+
+class RegexEvaluationService;
 
 /**
  * @brief 正規表現のハイライトを行うクラス
@@ -57,7 +59,7 @@ private slots:
     void updateResults();
     void onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
                             const QString &replacedText, bool isValid, const QString &errorStr);
-    void onWatchdogTimeout();
+    void onWatchdogTimeout(int requestId);
     void copyPattern();
     void copyMatches();
     void copyToClipboard();
@@ -114,11 +116,9 @@ private:
     QTreeWidget *m_quickRefTree = nullptr;
 
     RegexHighlighter *m_highlighter = nullptr;
-    RegexWorker *m_worker = nullptr;
+    RegexEvaluationService *m_evaluationService = nullptr;
     QTimer *m_debounceTimer = nullptr;
-    QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;
-    int m_requestId = 0;
 
 protected:
     void changeEvent(QEvent *event) override;

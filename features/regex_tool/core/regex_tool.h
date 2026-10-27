@@ -45,6 +45,11 @@ struct MatchResult
 class RegexTool
 {
 public:
+    static QRegularExpression::PatternOptions patternOptions(bool caseInsensitive, bool multiline,
+                                                             bool dotMatchesEverything,
+                                                             bool useUnicodeProperties,
+                                                             bool extendedPatternSyntax);
+
     /**
      * @brief 正規表現にマッチするか確認し、結果を返す
      * @param pattern 正規表現パターン

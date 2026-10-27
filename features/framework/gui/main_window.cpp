@@ -2,8 +2,8 @@
 
 #include "contents_area.h"
 #include "design_system.h"
-#include "features/db_tool/core/sqlite_paths.h"
 #include "features/framework/core/application_settings_service.h"
+#include "features/framework/core/local_file_selection_service.h"
 #include "gui_application.h"
 #include "icon_utils.h"
 #include "menubar/about_devtools_dialog.h"
@@ -256,7 +256,9 @@ QString MainWindow::droppedSQLiteFilePath(const QMimeData *mimeData)
     if (mimeData == nullptr || !mimeData->hasUrls()) {
         return {};
     }
-    return SQLitePaths::firstValidFilePath(mimeData->urls());
+    return LocalFileSelectionService::firstExistingLocalFile(
+        mimeData->urls(),
+        {QStringLiteral("db"), QStringLiteral("sqlite"), QStringLiteral("sqlite3")});
 }
 
 void MainWindow::onSidemenuVisibilityButtonClicked()

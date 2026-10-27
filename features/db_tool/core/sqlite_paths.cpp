@@ -1,6 +1,17 @@
 #include "sqlite_paths.h"
 
+#include "features/framework/core/local_file_selection_service.h"
+
 #include <QFileInfo>
+
+namespace {
+const QStringList &sqliteSuffixes()
+{
+    static const QStringList suffixes{QStringLiteral("db"), QStringLiteral("sqlite"),
+                                      QStringLiteral("sqlite3")};
+    return suffixes;
+}
+} // namespace
 
 SQLitePathStatus SQLitePaths::status(const QString &path)
 {
@@ -8,8 +19,7 @@ SQLitePathStatus SQLitePaths::status(const QString &path)
     if (!file_info.exists() || !file_info.isFile()) {
         return SQLitePathStatus::Missing;
     }
-    const QString suffix = file_info.suffix().toLower();
-    return suffix == "db" || suffix == "sqlite" || suffix == "sqlite3"
+    return LocalFileSelectionService::hasSuffix(path, sqliteSuffixes())
                ? SQLitePathStatus::Valid
                : SQLitePathStatus::Unsupported;
 }
@@ -22,10 +32,5 @@ QString SQLitePaths::firstValidLocalFile(const QList<QUrl> &urls)
 
 QString SQLitePaths::firstValidFilePath(const QList<QUrl> &urls)
 {
-    for (const QUrl &url : urls) {
-        if (url.isLocalFile() && status(url.toLocalFile()) == SQLitePathStatus::Valid) {
-            return url.toLocalFile();
-        }
-    }
-    return {};
+    return LocalFileSelectionService::firstExistingLocalFile(urls, sqliteSuffixes());
 }
