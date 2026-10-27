@@ -38,7 +38,9 @@ pattern and test text may themselves contain user-sensitive content.
 
 ## Database connection history
 
-db_tool/connectionHistory stores a JSON list. Each entry can include:
+db_tool/connectionHistory is stored as a QSettings QStringList. Each
+element is a compact JSON object string. A newly created connection record
+can include:
 
 - type: database driver/type
 - host
@@ -48,11 +50,17 @@ db_tool/connectionHistory stores a JSON list. Each entry can include:
 - securityScopedBookmark: base64-encoded macOS security-scoped bookmark for
   sandboxed SQLite file access, where applicable
 
-At most 10 history entries are retained. Passwords are not stored; reconnects
-to non-SQLite databases prompt for a password. Connection history is not a
-credential vault. A future bridge or Tauri implementation must preserve the
-bookmark/security-scope lifecycle on macOS and must not silently migrate
-credentials into plain settings.
+New connection creation prompts for passwords and applies them to the active
+database connection, but does not add them to the new history object. The
+history loader accepts unknown keys, and reconnect and delete paths serialize
+the loaded objects without an allowlist. A legacy or externally supplied
+history entry containing a password or other unrecognized key may therefore
+be written back. New connection saves trim the list to 10 entries; the loader
+does not discard older excess entries. Treat existing history as potentially
+sensitive and sanitize it before migration. A future bridge or Tauri
+implementation must copy only approved metadata into new records, discard
+unknown keys and passwords, and preserve the bookmark/security-scope
+lifecycle on macOS.
 
 ## Phrase templates
 
