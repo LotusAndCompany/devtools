@@ -7,8 +7,9 @@
 class TemplateReader
 {
 public:
-    static QStringList filenames();
-    static QString load(const QString &filename, QString *title);
+    static QStringList filenames(const QString &directoryPath = QStringLiteral("content"));
+    static QString load(const QString &filename, QString *title,
+                        const QString &directoryPath = QStringLiteral("content"));
 };
 
 #endif // TEMPLATE_READER_H

@@ -97,19 +97,6 @@ private:
      * @return 破棄が確認された場合は `true`
      */
     bool confirmDiscard();
-    /**
-     * @brief コンテンツを保存する
-     * @param title タイトル
-     * @param content コンテンツ
-     * @return 保存されたファイル名
-     */
-    static QString saveContent(const QString &title, const QString &content);
-    /**
-     * @brief コンテンツを削除する
-     * @param filename 削除するファイル名
-     */
-    void deleteContent(const QString &filename);
-
     /// テンプレートタイトル入力
     QLineEdit *template_title{nullptr};
     /// 削除ボタン

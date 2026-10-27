@@ -25,6 +25,13 @@ read-only storage, duplicate titles, malformed files, UI regression and
 working-directory changes need further coverage. No user template files were
 used by the new test.
 
+### Follow-up
+
+The later [template repository extraction](m1-template-repository.md) moved
+validation, dirty comparison, save and delete operations out of the Widget and
+added core and Widget tests. The write-failure behavior described above remains
+unchanged and is still tracked as a compatibility issue.
+
 ## Verification
 
 Environment: macOS 26.6.2 arm64, Homebrew Qt 6.9.2, existing `build` directory

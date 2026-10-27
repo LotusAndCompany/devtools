@@ -225,6 +225,16 @@ DevTools_add_test(test_template_reader CORE_ONLY
     features/phrase_generation/tests/test_template_reader.cpp
     features/phrase_generation/core/template_reader.cpp
 )
+DevTools_add_test(test_template_repository CORE_ONLY
+    SOURCES
+    features/phrase_generation/tests/test_template_repository.cpp
+    features/phrase_generation/core/template_repository.cpp
+    features/phrase_generation/core/template_reader.cpp
+)
+DevTools_add_test(test_phrase_generation_gui
+    SOURCES
+    features/phrase_generation/tests/test_phrase_generation_gui.cpp
+)
 
 DevTools_add_test(test_http_service CORE_ONLY
     SOURCES
