@@ -70,6 +70,11 @@ DevTools_add_test(test_command
     SOURCES
     features/command/tests/test_command.cpp
 )
+DevTools_add_test(test_command_service CORE_ONLY
+    SOURCES
+    features/command/tests/test_command_service.cpp
+    features/command/core/command_service.cpp
+)
 
 # core/exception
 DevTools_add_test(test_common_exception
