@@ -34,6 +34,8 @@
     QR_CODE_GENERATION,           \
     /** Markdownプレビュー */      \
     MARKDOWN_PREVIEW,             \
+    /** タイムスタンプ変換 */       \
+    TIMESTAMP_CONVERSION,          \
     /** 正規表現テスター */        \
     REGEX_TESTER,                \
     /** テキスト差分 */             \
