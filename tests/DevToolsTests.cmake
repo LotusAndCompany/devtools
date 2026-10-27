@@ -175,6 +175,10 @@ DevTools_add_test(test_data_conversion
     SOURCES
     features/data_conversion/tests/test_data_conversion.cpp
 )
+DevTools_add_test(test_data_conversion_gui
+    SOURCES
+    features/data_conversion/tests/test_data_conversion_gui.cpp
+)
 
 # gui/db_tool
 DevTools_add_test(test_db_connection_window

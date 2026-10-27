@@ -219,16 +219,16 @@ void DataConversionGUI::onLoadPressed()
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter(tr("Plain Text (*.txt *.json *.toml *.yml *.yaml)"));
-    connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
-        QFile file(fileName);
-        if (file.open(QIODevice::ReadOnly)) {
-            QTextStream stream(&file);
-            const QString text = stream.readAll();
-
-            inputTextEdit->setPlainText(text);
-        }
-    });
+    connect(&dialog, &QFileDialog::fileSelected, this, &DataConversionGUI::loadFileSelected);
     dialog.exec();
+}
+
+void DataConversionGUI::loadFileSelected(const QString &fileName)
+{
+    if (!dataConversion->load(fileName)) {
+        return;
+    }
+    inputTextEdit->setPlainText(dataConversion->inputText());
 }
 
 void DataConversionGUI::onFormatSelected(int index)
@@ -282,14 +282,13 @@ void DataConversionGUI::onSavePressed()
     QFileDialog dialog(this);
     dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    connect(&dialog, &QFileDialog::fileSelected, this, [this](const QString &fileName) {
-        QFile file(fileName);
-        if (file.open(QIODevice::WriteOnly)) {
-            QTextStream stream(&file);
-            stream << outputTextView->toPlainText();
-        }
-    });
+    connect(&dialog, &QFileDialog::fileSelected, this, &DataConversionGUI::saveFileSelected);
     dialog.exec();
+}
+
+void DataConversionGUI::saveFileSelected(const QString &fileName)
+{
+    static_cast<void>(dataConversion->save(fileName, true));
 }
 
 void DataConversionGUI::onCopyPressed()
