@@ -35,7 +35,9 @@
     /** Markdownプレビュー */      \
     MARKDOWN_PREVIEW  ,          \
     /** 正規表現テスター */        \
-    REGEX_TESTER                  // 末尾のカンマは不要
+    REGEX_TESTER,                 \
+    /** JWTデコーダー */          \
+    JWT_DECODER                   // 末尾のカンマは不要
 // clang-format on
 
 #endif // TOOL_ID_FIELDS_H

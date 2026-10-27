@@ -27,6 +27,7 @@ Learn how to use each feature:
 - [Data Conversion](user-guide/data-conversion.md) - Convert between JSON, YAML, and TOML
 - [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
 - [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
+- [JWT Decoder](user-guide/jwt-decoder.md) - Decode JSON Web Tokens and inspect their claims
 - [Command Generation](user-guide/command-execution.md) - Build Git and Docker commands from the GUI
 - [Phrase Generation](user-guide/phrase-generation.md) - Create and reuse named text templates
 - [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries

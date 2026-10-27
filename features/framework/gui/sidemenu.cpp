@@ -64,6 +64,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::DATA_CONVERSION);
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
+    registerItem(ID::JWT_DECODER);
     registerItem(ID::DB_TOOL);
     registerItem(ID::REGEX_TESTER);
 
@@ -104,6 +105,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("article"));
     case ID::REGEX_TESTER:
         return IconUtils::themedIcon(QStringLiteral("regular_expression"));
+    case ID::JWT_DECODER:
+        return IconUtils::themedIcon(QStringLiteral("key"));
 
     default:
         throw UnderDevelopmentException();

@@ -38,6 +38,7 @@ private slots:
     static void resolvesMaterialSymbols();
     static void resolvesHttpSidemenuIcon();
     static void resolvesRegexTesterSidemenuIcon();
+    static void resolvesJwtDecoderSidemenuIcon();
     static void fallsBackForMissingGlyph();
     static void followsApplicationPalette();
 };
@@ -61,6 +62,7 @@ void TestIconTheme::resolvesMaterialSymbols()
         QStringLiteral("file_open"),
         QStringLiteral("flip_to_front"),
         QStringLiteral("image"),
+        QStringLiteral("key"),
         QStringLiteral("lan"),
         QStringLiteral("left_panel_close"),
         QStringLiteral("left_panel_open"),
@@ -108,6 +110,15 @@ void TestIconTheme::resolvesRegexTesterSidemenuIcon()
     const QIcon icon = Sidemenu::icon(Sidemenu::ID::REGEX_TESTER);
 
     QCOMPARE(icon.name(), QStringLiteral("regular_expression"));
+    QVERIFY(!icon.isNull());
+    QVERIFY(firstOpaqueColor(icon.pixmap(QSize(20, 20))).isValid());
+}
+
+void TestIconTheme::resolvesJwtDecoderSidemenuIcon()
+{
+    const QIcon icon = Sidemenu::icon(Sidemenu::ID::JWT_DECODER);
+
+    QCOMPARE(icon.name(), QStringLiteral("key"));
     QVERIFY(!icon.isNull());
     QVERIFY(firstOpaqueColor(icon.pixmap(QSize(20, 20))).isValid());
 }

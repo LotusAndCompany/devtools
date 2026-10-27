@@ -42,6 +42,7 @@ It is not an exhaustive list of glyphs used in examples or tests.
 | Database tool | `database` |
 | QR code tool | `qr_code` |
 | Markdown preview | `article` |
+| JWT decoder | `key` |
 | Open file | `file_open` |
 | Save | `save` |
 | Copy | `content_copy` |
