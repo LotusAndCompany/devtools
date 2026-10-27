@@ -27,11 +27,11 @@ under the pinned toolchain.
 | Full Ninja build | Succeeded | Wall time was not captured; one dependency warning context is documented in the audit |
 | Xcode configure | Configure 28.2 s; generate 2.3 s | Isolated out-of-tree build |
 | Xcode application build | Succeeded | Used isolated DerivedData and disabled code signing |
-| CTest | 26/29 targets passed; elapsed 16.30 s | Three failures described below; CI does not run CTest |
+| CTest | 26/29 tests passed; elapsed 16.30 s | Three failures described below; CI does not run CTest |
 | Format check | Passed | format-check target |
 | Pre-deployment .app bundle | 18,084 KiB | Local Xcode output |
 | Manually deployed .app bundle | 107,516 KiB (about 105.0 MiB) | Unsigned; macdeployqt with an explicit Homebrew library path; contained 16 framework directories |
-| Signed installer / archive | Not available | No signed .dmg, .ipa, or installer artifact was produced |
+| Signed installer / archive | Not available | No signed macOS .dmg, release archive, or installer was produced |
 
 The project's automatic macdeployqt -appstore-compliant post-build step
 reported unresolved-rpath diagnostics in the local Xcode build. A manual
