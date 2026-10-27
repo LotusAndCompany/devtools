@@ -98,13 +98,6 @@ private:
      */
     bool confirmDiscard();
     /**
-     * @brief コンテンツを読み込む
-     * @param filename ファイル名
-     * @param title タイトルを格納するポインタ（オプション）
-     * @return 読み込まれたコンテンツ
-     */
-    static QString loadContent(const QString &filename, QString *title = nullptr);
-    /**
      * @brief コンテンツを保存する
      * @param title タイトル
      * @param content コンテンツ

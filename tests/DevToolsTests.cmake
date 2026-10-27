@@ -200,3 +200,9 @@ DevTools_add_test(test_regex_worker CORE_ONLY
     features/regex_tool/core/regex_worker.cpp
     features/regex_tool/core/regex_worker.h
 )
+
+DevTools_add_test(test_template_reader CORE_ONLY
+    SOURCES
+    features/phrase_generation/tests/test_template_reader.cpp
+    features/phrase_generation/core/template_reader.cpp
+)

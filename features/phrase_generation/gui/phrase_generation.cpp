@@ -2,6 +2,7 @@
 
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
+#include "features/phrase_generation/core/template_reader.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -189,14 +190,13 @@ void phraseGeneration::changeEvent(QEvent *event)
 void phraseGeneration::loadTitles()
 {
     title_list_widget->clear();
-    QDir const directory("content");
-    QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    QStringList const files = TemplateReader::filenames();
     QIcon const templateIcon =
         IconUtils::themedIcon(QStringLiteral("article"), QStyle::SP_FileIcon);
     // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
-        QString const content = loadContent(filename, &title);
+        QString const content = TemplateReader::load(filename, &title);
 
         auto *item = new QListWidgetItem(templateIcon, title, title_list_widget);
         DevTools::Ui::configureListItem(item);
@@ -214,7 +214,7 @@ bool phraseGeneration::hasUnsavedChanges() const
     }
 
     QString saved_title;
-    QString const saved_text = loadContent(currentFile, &saved_title);
+    QString const saved_text = TemplateReader::load(currentFile, &saved_title);
     return current_title != saved_title || current_text != saved_text;
 }
 
@@ -240,19 +240,6 @@ bool phraseGeneration::confirmDiscard()
         QMessageBox::Save | QMessageBox::Discard, QMessageBox::Save);
 
     return result == QMessageBox::Save ? (handleSaveButtonClick(), !hasUnsavedChanges()) : true;
-}
-
-QString phraseGeneration::loadContent(const QString &filename, QString *title)
-{
-    QFile file("content/" + filename);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-        if (title != nullptr) {
-            *title = in.readLine();
-        }
-        return in.readAll();
-    }
-    return "";
 }
 
 void phraseGeneration::handleAddButtonClick()
@@ -366,7 +353,7 @@ void phraseGeneration::handleTitleListWidgetItemClick(QListWidgetItem *item)
         return;
     }
     QString title;
-    QString const content = loadContent(filename, &title);
+    QString const content = TemplateReader::load(filename, &title);
 
     template_title->setText(title);
     template_text->setPlainText(content);
