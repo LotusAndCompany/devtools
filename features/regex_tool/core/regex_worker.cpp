@@ -13,6 +13,27 @@ QString boundedPattern(const QString &pattern)
     return QStringLiteral("(*LIMIT_MATCH=%1)").arg(REGEX_MATCH_LIMIT) + pattern;
 }
 
+MatchResult makeMatchResult(const QRegularExpressionMatch &match, int index,
+                            const QStringList &capture_group_names)
+{
+    MatchResult result;
+    result.index = index;
+    result.offset = match.capturedStart();
+    result.length = match.capturedLength();
+
+    for (int group_index = 0; group_index <= match.lastCapturedIndex(); ++group_index) {
+        CaptureGroup group;
+        group.index = group_index;
+        group.name = capture_group_names.value(group_index);
+        group.value = match.captured(group_index);
+        group.offset = match.capturedStart(group_index);
+        group.length = match.capturedLength(group_index);
+        result.groups.append(group);
+    }
+
+    return result;
+}
+
 /**
  * @brief 正規表現のマッチを収集する（中断要求を随時確認する）
  */
@@ -27,22 +48,7 @@ QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString 
         QRegularExpressionMatchIterator i = re.globalMatch(text);
         int match_index = 0;
         while (!QThread::currentThread()->isInterruptionRequested() && i.hasNext()) {
-            const QRegularExpressionMatch match = i.next();
-            MatchResult res;
-            res.index = match_index++;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
-
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.name = capture_group_names.value(j);
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
+            matches.append(makeMatchResult(i.next(), match_index++, capture_group_names));
         }
         is_valid = i.isValid();
     } else {
@@ -52,21 +58,7 @@ QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString 
         const QRegularExpressionMatch match = re.match(text);
         is_valid = match.isValid();
         if (match.hasMatch()) {
-            MatchResult res;
-            res.index = 0;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
-
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.name = capture_group_names.value(j);
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
+            matches.append(makeMatchResult(match, 0, capture_group_names));
         }
     }
 
