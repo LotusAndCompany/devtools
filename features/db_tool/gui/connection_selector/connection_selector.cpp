@@ -1,5 +1,7 @@
 #include "connection_selector.h"
 
+#include "features/db_tool/core/connection_history.h"
+#include "features/db_tool/core/database_connection.h"
 #include "features/db_tool/gui/sqlite_file_picker.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
@@ -9,7 +11,6 @@
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QLabel>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -23,32 +24,16 @@
 #include <utility>
 
 namespace {
-std::unique_ptr<SQLiteFileAccess> restoreSQLiteFileAccess(const QJsonObject &connectionInfo,
-                                                          const QString &databaseName)
-{
-    const QByteArray bookmarkData =
-        QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
-    std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
-    if (!bookmarkData.isEmpty()) {
-        sqliteFileAccess = SQLiteFileAccess::fromBookmark(bookmarkData);
-    }
-    if (!sqliteFileAccess) {
-        sqliteFileAccess = SQLiteFileAccess::fromFilePath(databaseName);
-    }
-    return sqliteFileAccess;
-}
-
 bool openDatabase(QSqlDatabase &db, const QString &dbType, QWidget *parent, QString &databaseName,
                   std::unique_ptr<SQLiteFileAccess> &sqliteFileAccess,
                   const QString &connectionFailedTitle)
 {
-    if (!db.open() && dbType == "QSQLITE") {
+    if (!db.isOpen() && dbType == "QSQLITE") {
         db.close();
         sqliteFileAccess = selectSQLiteDatabaseFile(parent, databaseName);
         if (sqliteFileAccess) {
             databaseName = sqliteFileAccess->filePath();
-            db.setDatabaseName(databaseName);
-            db.open();
+            DatabaseConnection::reopen(db, databaseName);
         }
     }
     if (!db.isOpen()) {
@@ -118,15 +103,7 @@ void ConnectionSelector::retranslateUi()
 void ConnectionSelector::loadHistory()
 {
     QSettings const settings;
-    QStringList const historyList = settings.value("db_tool/connectionHistory").toStringList();
-
-    connectionHistory.clear();
-    for (const QString &jsonStr : historyList) {
-        QJsonDocument const doc = QJsonDocument::fromJson(jsonStr.toUtf8());
-        if (!doc.isNull() && doc.isObject()) {
-            connectionHistory.append(doc.object());
-        }
-    }
+    connectionHistory = ConnectionHistory::read(settings);
 
     refreshHistoryList();
 }
@@ -190,7 +167,9 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
 
     std::unique_ptr<SQLiteFileAccess> sqliteFileAccess;
     if (dbType == "QSQLITE") {
-        sqliteFileAccess = restoreSQLiteFileAccess(connectionInfo, databaseName);
+        const QByteArray bookmark =
+            QByteArray::fromBase64(connectionInfo["securityScopedBookmark"].toString().toLatin1());
+        sqliteFileAccess = SQLiteFileAccess::restore(bookmark, databaseName);
         if (sqliteFileAccess) {
             databaseName = sqliteFileAccess->filePath();
         }
@@ -210,16 +189,8 @@ bool ConnectionSelector::connectWithPassword(const QJsonObject &connectionInfo)
         }
     }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase(dbType);
-
-    if (dbType != "QSQLITE") {
-        db.setHostName(hostName);
-        db.setDatabaseName(databaseName);
-        db.setUserName(userName);
-        db.setPassword(password);
-    } else {
-        db.setDatabaseName(databaseName);
-    }
+    QSqlDatabase db =
+        DatabaseConnection::open({dbType, hostName, databaseName, userName, password});
 
     if (!openDatabase(db, dbType, this, databaseName, sqliteFileAccess, tr("Connection Failed"))) {
         return false;
@@ -249,12 +220,7 @@ void ConnectionSelector::removeHistoryItem(int index)
 
     // Save updated history to settings
     QSettings settings;
-    QStringList historyList;
-    for (const QJsonObject &conn : connectionHistory) {
-        QJsonDocument const doc(conn);
-        historyList.append(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
-    }
-    settings.setValue("db_tool/connectionHistory", historyList);
+    ConnectionHistory::write(settings, connectionHistory);
 
     refreshHistoryList();
 }

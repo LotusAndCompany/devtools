@@ -2,11 +2,11 @@
 
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
+#include "features/phrase_generation/core/template_reader.h"
+#include "features/phrase_generation/core/template_repository.h"
 
 #include <QApplication>
 #include <QClipboard>
-#include <QDir>
-#include <QFile>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -20,8 +20,6 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QStyle>
-#include <QTextStream>
-#include <QUuid>
 #include <QVBoxLayout>
 
 phraseGeneration::phraseGeneration(QWidget *parent) : QWidget(parent)
@@ -189,14 +187,13 @@ void phraseGeneration::changeEvent(QEvent *event)
 void phraseGeneration::loadTitles()
 {
     title_list_widget->clear();
-    QDir const directory("content");
-    QStringList const files = directory.entryList(QStringList() << "*.txt", QDir::Files);
+    QStringList const files = TemplateReader::filenames();
     QIcon const templateIcon =
         IconUtils::themedIcon(QStringLiteral("article"), QStyle::SP_FileIcon);
     // NOLINTNEXTLINE(misc-const-correctness)
     foreach (QString filename, files) {
         QString title;
-        QString const content = loadContent(filename, &title);
+        QString const content = TemplateReader::load(filename, &title);
 
         auto *item = new QListWidgetItem(templateIcon, title, title_list_widget);
         DevTools::Ui::configureListItem(item);
@@ -206,16 +203,8 @@ void phraseGeneration::loadTitles()
 
 bool phraseGeneration::hasUnsavedChanges() const
 {
-    QString const current_title = template_title->text();
-    QString const current_text = template_text->toPlainText();
-
-    if (currentFile.isEmpty()) {
-        return !current_title.isEmpty() || !current_text.isEmpty();
-    }
-
-    QString saved_title;
-    QString const saved_text = loadContent(currentFile, &saved_title);
-    return current_title != saved_title || current_text != saved_text;
+    return TemplateRepository::hasUnsavedChanges(currentFile, template_title->text(),
+                                                 template_text->toPlainText());
 }
 
 void phraseGeneration::selectListItemByFilename(const QString &filename)
@@ -242,19 +231,6 @@ bool phraseGeneration::confirmDiscard()
     return result == QMessageBox::Save ? (handleSaveButtonClick(), !hasUnsavedChanges()) : true;
 }
 
-QString phraseGeneration::loadContent(const QString &filename, QString *title)
-{
-    QFile file("content/" + filename);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-        if (title != nullptr) {
-            *title = in.readLine();
-        }
-        return in.readAll();
-    }
-    return "";
-}
-
 void phraseGeneration::handleAddButtonClick()
 {
     if (!confirmDiscard()) {
@@ -273,45 +249,20 @@ void phraseGeneration::handleSaveButtonClick()
 {
     QString const title = template_title->text();
     QString const content = template_text->toPlainText();
-
-    if (title.isEmpty()) {
+    const TemplateSaveResult result = TemplateRepository::save(title, content, currentFile);
+    if (result.error == TemplateValidationError::EmptyTitle) {
         QMessageBox::warning(this, tr("Warning"), tr("Title cannot be empty."));
         return;
     }
-
-    if (content.isEmpty()) {
+    if (result.error == TemplateValidationError::EmptyContent) {
         QMessageBox::warning(this, tr("Warning"), tr("Text cannot be empty."));
         return;
     }
 
-    if (!currentFile.isEmpty()) {
-        QFile file("content/" + currentFile);
-        if (file.exists()) {
-            file.remove();
-        }
-    }
-
-    QString const saved_filename = saveContent(title, content);
     loadTitles();
-    selectListItemByFilename(saved_filename);
+    selectListItemByFilename(result.filename);
 
-    currentFile = saved_filename;
-}
-
-QString phraseGeneration::saveContent(const QString &title, const QString &content)
-{
-    QDir().mkpath("content");
-
-    QString const uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    QString const filename = uuid + ".txt";
-    QFile file("content/" + filename);
-
-    if (file.open(QIODevice::WriteOnly)) {
-        QTextStream out(&file);
-        out << title << "\n" << content;
-        file.close();
-    }
-    return filename;
+    currentFile = result.filename;
 }
 
 void phraseGeneration::handleCopyButtonClick()
@@ -340,18 +291,12 @@ void phraseGeneration::handleDeleteButtonClick()
     }
 
     QString const filename = item->data(Qt::UserRole).toString();
-    deleteContent(filename);
+    if (!TemplateRepository::remove(filename)) {
+        QMessageBox::warning(this, tr("Error"), tr("Failed to delete the file."));
+    }
     loadTitles();
     template_title->clear();
     template_text->clear();
-}
-
-void phraseGeneration::deleteContent(const QString &filename)
-{
-    QFile file("content/" + filename);
-    if (!file.remove()) {
-        QMessageBox::warning(this, tr("Error"), tr("Failed to delete the file."));
-    }
 }
 
 void phraseGeneration::handleTitleListWidgetItemClick(QListWidgetItem *item)
@@ -366,7 +311,7 @@ void phraseGeneration::handleTitleListWidgetItemClick(QListWidgetItem *item)
         return;
     }
     QString title;
-    QString const content = loadContent(filename, &title);
+    QString const content = TemplateReader::load(filename, &title);
 
     template_title->setText(title);
     template_text->setPlainText(content);

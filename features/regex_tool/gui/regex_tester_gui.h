@@ -4,10 +4,8 @@
 #include "features/framework/gui/gui_tool.h"
 #include "features/regex_tool/core/regex_tool.h"
 
-#include <QMutex>
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
-#include <QThread>
 #include <QTimer>
 
 class QLineEdit;
@@ -25,34 +23,7 @@ class QTreeWidgetItem;
 
 namespace devtools {
 
-/**
- * @brief Background worker to evaluate regular expressions asynchronously
- */
-class RegexWorker : public QThread
-{
-    Q_OBJECT
-public:
-    explicit RegexWorker(QObject *parent = nullptr);
-    void setParams(int requestId, const QString &pattern, const QString &text,
-                   const QString &replacePattern, QRegularExpression::PatternOptions options,
-                   bool global);
-
-signals:
-    void finishedMatching(int requestId, const QVector<MatchResult> &matches,
-                          const QString &replacedText, bool isValid, const QString &errorStr);
-
-protected:
-    void run() override;
-
-private:
-    QMutex m_mutex;
-    int m_requestId;
-    QString m_pattern;
-    QString m_text;
-    QString m_replacePattern;
-    QRegularExpression::PatternOptions m_options;
-    bool m_global;
-};
+class RegexEvaluationService;
 
 /**
  * @brief 正規表現のハイライトを行うクラス
@@ -88,7 +59,7 @@ private slots:
     void updateResults();
     void onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
                             const QString &replacedText, bool isValid, const QString &errorStr);
-    void onWatchdogTimeout();
+    void onWatchdogTimeout(int requestId);
     void copyPattern();
     void copyMatches();
     void copyToClipboard();
@@ -145,11 +116,9 @@ private:
     QTreeWidget *m_quickRefTree = nullptr;
 
     RegexHighlighter *m_highlighter = nullptr;
-    RegexWorker *m_worker = nullptr;
+    RegexEvaluationService *m_evaluationService = nullptr;
     QTimer *m_debounceTimer = nullptr;
-    QTimer *m_watchdogTimer = nullptr;
     QVector<MatchResult> m_lastMatches;
-    int m_requestId = 0;
 
 protected:
     void changeEvent(QEvent *event) override;

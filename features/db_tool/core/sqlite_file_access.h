@@ -11,6 +11,8 @@ class SQLiteFileAccess final
 public:
     static std::unique_ptr<SQLiteFileAccess> fromFilePath(const QString &filePath);
     static std::unique_ptr<SQLiteFileAccess> fromBookmark(const QByteArray &bookmarkData);
+    static std::unique_ptr<SQLiteFileAccess> restore(const QByteArray &bookmarkData,
+                                                     const QString &filePath);
 
 #ifdef Q_OS_MACOS
     // Retains the NSURL pointed to by nativeUrl and takes over access on success.

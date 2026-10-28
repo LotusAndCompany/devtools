@@ -3,6 +3,7 @@
 # DevTools_image_tools_unified: unified image tools including transparency
 
 target_sources(DevTools_image_core PRIVATE
+    core/image_processing_service.h core/image_processing_service.cpp
     core/basic_image_io.h core/basic_image_io.cpp
     core/basic_image_edit_interface.h core/basic_image_edit_interface.cpp
     gui/basic/image_view.h gui/basic/image_view.cpp

@@ -2,7 +2,7 @@
 
 #include "features/framework/gui/design_system.h"
 #include "features/qr_code/core/content_generator.h"
-#include "features/qr_code/core/qrcodegen.hpp"
+#include "features/qr_code/core/qr_image.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -18,16 +18,12 @@
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
-#include <QRegularExpression>
 #include <QResizeEvent>
 #include <QVBoxLayout>
 #include <QVariantMap>
 
-using qrcodegen::QrCode;
-
 namespace {
 constexpr int CATEGORY_ITEM_COUNT = 9;
-constexpr int QR_SCALE = 8;
 } // namespace
 
 QRCodeGenerationGUI::QRCodeGenerationGUI(QWidget *parent) : GuiTool(parent)
@@ -565,192 +561,94 @@ void QRCodeGenerationGUI::clearAllParameters()
     clearValidationErrors();
 }
 
-// NOLINTNEXTLINE(readability-function-size)
+QVariantMap QRCodeGenerationGUI::parameterValues() const
+{
+    QVariantMap parameters;
+    for (auto it = parameterWidgets.cbegin(); it != parameterWidgets.cend(); ++it) {
+        if (const auto *edit = qobject_cast<QPlainTextEdit *>(it.value())) {
+            parameters.insert(it.key(), edit->toPlainText());
+        } else if (const auto *edit = qobject_cast<QLineEdit *>(it.value())) {
+            parameters.insert(it.key(), edit->text());
+        } else if (const auto *combo = qobject_cast<QComboBox *>(it.value())) {
+            parameters.insert(it.key(), combo->currentText());
+        } else if (const auto *date = qobject_cast<QDateTimeEdit *>(it.value())) {
+            parameters.insert(it.key(), date->dateTime());
+        }
+    }
+    return parameters;
+}
+
 bool QRCodeGenerationGUI::validateCurrentType()
 {
     clearValidationErrors();
-    bool isValid = true;
-
-    switch (currentType) {
-    case QRCodeType::Text: {
-        auto const *edit = qobject_cast<QPlainTextEdit *>(parameterWidgets["text_content"]);
-        if ((edit == nullptr) || edit->toPlainText().trimmed().isEmpty()) {
-            showValidationError("text_content_error", tr("Text cannot be empty"));
-            isValid = false;
+    const auto errors = QRValidation::validate(currentType, parameterValues());
+    for (const QRValidationError &error : errors) {
+        QString message;
+        switch (error.code) {
+        case QRValidationCode::TextEmpty:
+            message = tr("Text cannot be empty");
+            break;
+        case QRValidationCode::UrlEmpty:
+            message = tr("URL cannot be empty");
+            break;
+        case QRValidationCode::UrlScheme:
+            message = tr("URL must start with http:// or https://");
+            break;
+        case QRValidationCode::EmailEmpty:
+            message = tr("Email cannot be empty");
+            break;
+        case QRValidationCode::EmailInvalid:
+            message = tr("Invalid email format");
+            break;
+        case QRValidationCode::PhoneEmpty:
+            message = tr("Phone number cannot be empty");
+            break;
+        case QRValidationCode::PhoneInvalid:
+            message = tr("Invalid phone number format");
+            break;
+        case QRValidationCode::MessageEmpty:
+            message = tr("Message cannot be empty");
+            break;
+        case QRValidationCode::SsidEmpty:
+            message = tr("SSID cannot be empty");
+            break;
+        case QRValidationCode::PasswordEmpty:
+            message = tr("Password is required for WPA/WEP security");
+            break;
+        case QRValidationCode::NameEmpty:
+            message = tr("Name cannot be empty");
+            break;
+        case QRValidationCode::ContactEmpty:
+            message = tr("At least phone or email is required");
+            break;
+        case QRValidationCode::SummaryEmpty:
+            message = tr("Event title cannot be empty");
+            break;
+        case QRValidationCode::StartMissing:
+            message = tr("Start date/time cannot be empty");
+            break;
+        case QRValidationCode::EndMissing:
+            message = tr("End date/time cannot be empty");
+            break;
+        case QRValidationCode::EndBeforeStart:
+            message = tr("End time must be after start time");
+            break;
+        case QRValidationCode::LatitudeEmpty:
+            message = tr("Latitude cannot be empty");
+            break;
+        case QRValidationCode::LatitudeInvalid:
+            message = tr("Latitude must be between -90 and 90");
+            break;
+        case QRValidationCode::LongitudeEmpty:
+            message = tr("Longitude cannot be empty");
+            break;
+        case QRValidationCode::LongitudeInvalid:
+            message = tr("Longitude must be between -180 and 180");
+            break;
         }
-        break;
+        showValidationError(error.field, message);
     }
-
-    case QRCodeType::Url: {
-        auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["url_content"]);
-        if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
-            showValidationError("url_content_error", tr("URL cannot be empty"));
-            isValid = false;
-        } else if (!edit->text().startsWith("http://") && !edit->text().startsWith("https://")) {
-            showValidationError("url_content_error", tr("URL must start with http:// or https://"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Email: {
-        auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["email_address"]);
-        if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
-            showValidationError("email_address_error", tr("Email cannot be empty"));
-            isValid = false;
-        } else if (!edit->text().contains("@")) {
-            showValidationError("email_address_error", tr("Invalid email format"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Phone: {
-        auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["phone_number"]);
-        if ((edit == nullptr) || edit->text().trimmed().isEmpty()) {
-            showValidationError("phone_number_error", tr("Phone number cannot be empty"));
-            isValid = false;
-        } else if (!isValidPhoneNumber(edit->text())) {
-            showValidationError("phone_number_error", tr("Invalid phone number format"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Sms: {
-        auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
-        auto const *messageEdit = qobject_cast<QPlainTextEdit *>(parameterWidgets["sms_message"]);
-
-        if ((phoneEdit == nullptr) || phoneEdit->text().trimmed().isEmpty()) {
-            showValidationError("sms_phone_error", tr("Phone number cannot be empty"));
-            isValid = false;
-        } else if (!isValidPhoneNumber(phoneEdit->text())) {
-            showValidationError("sms_phone_error", tr("Invalid phone number format"));
-            isValid = false;
-        }
-        if ((messageEdit == nullptr) || messageEdit->toPlainText().trimmed().isEmpty()) {
-            showValidationError("sms_message_error", tr("Message cannot be empty"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Wifi: {
-        auto const *ssidEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_ssid"]);
-        auto const *passwordEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_password"]);
-        auto const *securityCombo = qobject_cast<QComboBox *>(parameterWidgets["wifi_security"]);
-
-        if ((ssidEdit == nullptr) || ssidEdit->text().trimmed().isEmpty()) {
-            showValidationError("wifi_ssid_error", tr("SSID cannot be empty"));
-            isValid = false;
-        }
-
-        // WPAまたはWEPが選択されている場合、パスワードが必須
-        if ((securityCombo != nullptr) &&
-            (securityCombo->currentText() == "WPA" || securityCombo->currentText() == "WEP")) {
-            if ((passwordEdit == nullptr) || passwordEdit->text().trimmed().isEmpty()) {
-                showValidationError("wifi_password_error",
-                                    tr("Password is required for WPA/WEP security"));
-                isValid = false;
-            }
-        }
-        break;
-    }
-
-    case QRCodeType::Contact: {
-        auto const *nameEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_name"]);
-        auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_phone"]);
-        auto const *emailEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_email"]);
-
-        if ((nameEdit == nullptr) || nameEdit->text().trimmed().isEmpty()) {
-            showValidationError("contact_name_error", tr("Name cannot be empty"));
-            isValid = false;
-        }
-
-        // 少なくとも電話番号かメールアドレスのどちらかは必須
-        bool const hasPhone = (phoneEdit != nullptr) && !phoneEdit->text().trimmed().isEmpty();
-        bool const hasEmail = (emailEdit != nullptr) && !emailEdit->text().trimmed().isEmpty();
-
-        if (!hasPhone && !hasEmail) {
-            showValidationError("contact_phone_error", tr("At least phone or email is required"));
-            isValid = false;
-        }
-
-        // 電話番号が入力されている場合のフォーマットチェック
-        if (hasPhone && !isValidPhoneNumber(phoneEdit->text())) {
-            showValidationError("contact_phone_error", tr("Invalid phone number format"));
-            isValid = false;
-        }
-
-        // メールアドレスが入力されている場合のフォーマットチェック
-        if (hasEmail && !emailEdit->text().contains("@")) {
-            showValidationError("contact_email_error", tr("Invalid email format"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Calendar: {
-        auto const *summaryEdit = qobject_cast<QLineEdit *>(parameterWidgets["cal_summary"]);
-        auto const *startEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_start"]);
-        auto const *endEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_end"]);
-
-        if ((summaryEdit == nullptr) || summaryEdit->text().trimmed().isEmpty()) {
-            showValidationError("cal_summary_error", tr("Event title cannot be empty"));
-            isValid = false;
-        }
-
-        if (startEdit == nullptr) {
-            showValidationError("cal_start_error", tr("Start date/time cannot be empty"));
-            isValid = false;
-        }
-
-        if (endEdit == nullptr) {
-            showValidationError("cal_end_error", tr("End date/time cannot be empty"));
-            isValid = false;
-        }
-
-        // 開始時間が終了時間より後でないかチェック
-        if ((startEdit != nullptr) && (endEdit != nullptr) &&
-            startEdit->dateTime() >= endEdit->dateTime()) {
-            showValidationError("cal_end_error", tr("End time must be after start time"));
-            isValid = false;
-        }
-        break;
-    }
-
-    case QRCodeType::Geo: {
-        auto const *latEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lat"]);
-        auto const *lngEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lng"]);
-
-        if ((latEdit == nullptr) || latEdit->text().trimmed().isEmpty()) {
-            showValidationError("geo_lat_error", tr("Latitude cannot be empty"));
-            isValid = false;
-        } else {
-            bool ok;
-            double const lat = latEdit->text().toDouble(&ok);
-            if (!ok || lat < -90.0 || lat > 90.0) {
-                showValidationError("geo_lat_error", tr("Latitude must be between -90 and 90"));
-                isValid = false;
-            }
-        }
-
-        if ((lngEdit == nullptr) || lngEdit->text().trimmed().isEmpty()) {
-            showValidationError("geo_lng_error", tr("Longitude cannot be empty"));
-            isValid = false;
-        } else {
-            bool ok;
-            double const lng = lngEdit->text().toDouble(&ok);
-            if (!ok || lng < -180.0 || lng > 180.0) {
-                showValidationError("geo_lng_error", tr("Longitude must be between -180 and 180"));
-                isValid = false;
-            }
-        }
-        break;
-    }
-    }
-
-    return isValid;
+    return errors.isEmpty();
 }
 
 void QRCodeGenerationGUI::showValidationError(const QString &fieldKey, const QString &message)
@@ -767,32 +665,6 @@ void QRCodeGenerationGUI::clearValidationErrors()
         label->setVisible(false);
         label->clear();
     }
-}
-
-bool QRCodeGenerationGUI::isValidPhoneNumber(const QString &phone)
-{
-    if (phone.trimmed().isEmpty()) {
-        return false;
-    }
-
-    QString const cleanPhone = phone.trimmed();
-
-    // 国際番号形式（+81-xxx-xxxx-xxxx, +81xxxxxxxxxx）
-    QRegularExpression const internationalPattern(
-        R"(^\+\d{1,3}[-\s]?\d{1,4}[-\s]?\d{4}[-\s]?\d{4}$)");
-    if (internationalPattern.match(cleanPhone).hasMatch()) {
-        return true;
-    }
-
-    // 日本の国内番号形式（0xx-xxxx-xxxx, 0xxxxxxxxxx）
-    QRegularExpression const domesticPattern(R"(^0\d{1,4}[-\s]?\d{2,4}[-\s]?\d{4}$)");
-    if (domesticPattern.match(cleanPhone).hasMatch()) {
-        return true;
-    }
-
-    // 数字のみ（10-11桁）
-    QRegularExpression const digitOnlyPattern(R"(^\d{10,11}$)");
-    return digitOnlyPattern.match(cleanPhone).hasMatch();
 }
 
 // NOLINTNEXTLINE(readability-function-size)
@@ -914,108 +786,9 @@ QString QRCodeGenerationGUI::generateQRCodeContent()
     return ContentGenerator::generate(type, params);
 }
 
-// NOLINTNEXTLINE(readability-function-size)
 void QRCodeGenerationGUI::updateGenerateButtonState()
 {
-    bool enabled = false;
-
-    switch (currentType) {
-    case QRCodeType::Text: {
-        if (auto const *edit = qobject_cast<QPlainTextEdit *>(parameterWidgets["text_content"])) {
-            enabled = !edit->toPlainText().trimmed().isEmpty();
-        }
-        break;
-    }
-
-    case QRCodeType::Url: {
-        if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["url_content"])) {
-            enabled = !edit->text().trimmed().isEmpty();
-        }
-        break;
-    }
-
-    case QRCodeType::Email: {
-        if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["email_address"])) {
-            enabled = !edit->text().trimmed().isEmpty();
-        }
-        break;
-    }
-
-    case QRCodeType::Phone: {
-        if (auto const *edit = qobject_cast<QLineEdit *>(parameterWidgets["phone_number"])) {
-            enabled = !edit->text().trimmed().isEmpty();
-        }
-        break;
-    }
-
-    case QRCodeType::Sms: {
-        auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["sms_phone"]);
-        auto const *messageEdit = qobject_cast<QPlainTextEdit *>(parameterWidgets["sms_message"]);
-        enabled = (phoneEdit != nullptr) && (messageEdit != nullptr) &&
-                  !phoneEdit->text().trimmed().isEmpty() &&
-                  !messageEdit->toPlainText().trimmed().isEmpty();
-        break;
-    }
-
-    case QRCodeType::Wifi: {
-        auto const *ssidEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_ssid"]);
-        auto const *securityCombo = qobject_cast<QComboBox *>(parameterWidgets["wifi_security"]);
-        auto const *passwordEdit = qobject_cast<QLineEdit *>(parameterWidgets["wifi_password"]);
-
-        if ((ssidEdit != nullptr) && (securityCombo != nullptr)) {
-            enabled = !ssidEdit->text().trimmed().isEmpty();
-
-            // WPA or WEP選択時はパスワード必須
-            QString const security = securityCombo->currentText();
-            if ((security == "WPA" || security == "WEP") && (passwordEdit != nullptr)) {
-                enabled = enabled && !passwordEdit->text().trimmed().isEmpty();
-            }
-        }
-        break;
-    }
-
-    case QRCodeType::Contact: {
-        auto const *nameEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_name"]);
-        auto const *phoneEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_phone"]);
-        auto const *emailEdit = qobject_cast<QLineEdit *>(parameterWidgets["contact_email"]);
-
-        if (nameEdit != nullptr) {
-            bool const hasName = !nameEdit->text().trimmed().isEmpty();
-            bool hasPhoneOrEmail = false;
-
-            if ((phoneEdit != nullptr) && !phoneEdit->text().trimmed().isEmpty()) {
-                hasPhoneOrEmail = true;
-            }
-            if ((emailEdit != nullptr) && !emailEdit->text().trimmed().isEmpty()) {
-                hasPhoneOrEmail = true;
-            }
-
-            enabled = hasName && hasPhoneOrEmail;
-        }
-        break;
-    }
-
-    case QRCodeType::Calendar: {
-        auto const *summaryEdit = qobject_cast<QLineEdit *>(parameterWidgets["cal_summary"]);
-        auto const *startEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_start"]);
-        auto const *endEdit = qobject_cast<QDateTimeEdit *>(parameterWidgets["cal_end"]);
-
-        enabled = (summaryEdit != nullptr) && (startEdit != nullptr) && (endEdit != nullptr) &&
-                  !summaryEdit->text().trimmed().isEmpty();
-        break;
-    }
-
-    case QRCodeType::Geo: {
-        auto const *latEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lat"]);
-        auto const *lngEdit = qobject_cast<QLineEdit *>(parameterWidgets["geo_lng"]);
-
-        enabled = (latEdit != nullptr) && (lngEdit != nullptr) &&
-                  !latEdit->text().trimmed().isEmpty() && !lngEdit->text().trimmed().isEmpty();
-        break;
-    }
-    }
-
-    generateButton->setEnabled(enabled);
+    generateButton->setEnabled(QRValidation::canGenerate(currentType, parameterValues()));
 }
 
 void QRCodeGenerationGUI::onGenerateClicked()
@@ -1034,25 +807,7 @@ void QRCodeGenerationGUI::onGenerateClicked()
     contentPreviewEdit->setPlainText(content);
 
     try {
-        // QRコード生成
-        const QrCode qr = QrCode::encodeText(content.toUtf8().constData(), QrCode::Ecc::LOW);
-
-        int const size = qr.getSize();
-        QImage image(size * QR_SCALE, size * QR_SCALE, QImage::Format_RGB32);
-        image.fill(Qt::white);
-
-        // QRコード描画
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                if (qr.getModule(x, y)) {
-                    for (int dy = 0; dy < QR_SCALE; dy++) {
-                        for (int dx = 0; dx < QR_SCALE; dx++) {
-                            image.setPixel((x * QR_SCALE) + dx, (y * QR_SCALE) + dy, qRgb(0, 0, 0));
-                        }
-                    }
-                }
-            }
-        }
+        const QImage image = QRImage::generate(content);
 
         // 生成されたQRコード画像をメンバ変数に保存
         currentQRImage = image;
@@ -1129,7 +884,7 @@ void QRCodeGenerationGUI::onSaveClicked()
         }
 
         // 実際にファイル保存
-        if (currentQRImage.save(fileName, "PNG")) {
+        if (QRImage::savePng(currentQRImage, fileName)) {
             QMessageBox::information(this, tr("Saved"),
                                      tr("Saved the QR code image: %1").arg(fileName));
         } else {

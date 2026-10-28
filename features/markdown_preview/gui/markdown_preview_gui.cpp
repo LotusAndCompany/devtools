@@ -2,6 +2,7 @@
 
 #include "features/framework/gui/design_system.h"
 #include "features/markdown_preview/core/markdown_preview.h"
+#include "features/markdown_preview/core/markdown_service.h"
 
 #include <QAbstractSlider>
 #include <QCheckBox>
@@ -16,13 +17,13 @@
 #include <QScrollBar>
 #include <QSizePolicy>
 #include <QTextBrowser>
-#include <QTextDocument>
 #include <QTimer>
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QWidget>
 
 #include <cmath>
+#include <optional>
 
 namespace {
 constexpr int RENDER_DEBOUNCE_MS = 180;
@@ -80,10 +81,12 @@ void MarkdownPreviewGUI::buildUi()
     DevTools::Ui::applyInlineLayout(contentLayout);
 
     editor = new QPlainTextEdit(this);
+    editor->setObjectName(QStringLiteral("markdownEditor"));
     editor->setLineWrapMode(QPlainTextEdit::NoWrap);
     DevTools::Ui::configureCodeEditor(editor);
 
     preview = DevTools::Ui::createTextBrowser();
+    preview->setObjectName(QStringLiteral("markdownPreview"));
     preview->setOpenExternalLinks(true);
     DevTools::Ui::configureDisplayTextControl(preview);
     preview->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
@@ -148,7 +151,7 @@ void MarkdownPreviewGUI::onOpenClicked()
         return;
     }
 
-    const std::optional<QString> content = MarkdownPreview::readFile(path);
+    const std::optional<QString> content = MarkdownService::readFile(path);
     if (!content.has_value()) {
         QMessageBox::warning(this, tr("Markdown Preview"), tr("Failed to open file"));
         return;
@@ -171,7 +174,7 @@ void MarkdownPreviewGUI::onSaveClicked()
         path += ".md";
     }
 
-    if (!MarkdownPreview::writeFile(path, editor->toPlainText())) {
+    if (!MarkdownService::writeFile(path, editor->toPlainText())) {
         QMessageBox::warning(this, tr("Markdown Preview"), tr("Failed to save file"));
         return;
     }
@@ -191,7 +194,7 @@ void MarkdownPreviewGUI::onExportHtmlClicked()
         path += ".html";
     }
 
-    if (!MarkdownPreview::exportHtml(path, editor->toPlainText())) {
+    if (!MarkdownService::exportHtml(path, editor->toPlainText())) {
         QMessageBox::warning(this, tr("Markdown Preview"), tr("Failed to export HTML"));
     }
 }
@@ -214,7 +217,7 @@ void MarkdownPreviewGUI::onRenderTimeout()
 
 void MarkdownPreviewGUI::renderPreview()
 {
-    preview->document()->setMarkdown(editor->toPlainText(), QTextDocument::MarkdownDialectGitHub);
+    preview->setHtml(MarkdownService::renderHtml(editor->toPlainText()));
 }
 
 void MarkdownPreviewGUI::onEditorScrolled()

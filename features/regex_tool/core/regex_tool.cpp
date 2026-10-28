@@ -1,5 +1,7 @@
 #include "features/regex_tool/core/regex_tool.h"
 
+#include <QThread>
+
 namespace {
 
 /**
@@ -48,6 +50,30 @@ QString substituteReplacement(const QString &replacement, const QRegularExpressi
 } // namespace
 
 namespace devtools {
+
+QRegularExpression::PatternOptions RegexTool::patternOptions(bool caseInsensitive, bool multiline,
+                                                             bool dotMatchesEverything,
+                                                             bool useUnicodeProperties,
+                                                             bool extendedPatternSyntax)
+{
+    QRegularExpression::PatternOptions options = QRegularExpression::NoPatternOption;
+    if (caseInsensitive) {
+        options |= QRegularExpression::CaseInsensitiveOption;
+    }
+    if (multiline) {
+        options |= QRegularExpression::MultilineOption;
+    }
+    if (dotMatchesEverything) {
+        options |= QRegularExpression::DotMatchesEverythingOption;
+    }
+    if (useUnicodeProperties) {
+        options |= QRegularExpression::UseUnicodePropertiesOption;
+    }
+    if (extendedPatternSyntax) {
+        options |= QRegularExpression::ExtendedPatternSyntaxOption;
+    }
+    return options;
+}
 
 QVector<MatchResult> RegexTool::match(const QString &pattern, const QString &text,
                                       QRegularExpression::PatternOptions options)
@@ -104,7 +130,7 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
 
     if (global) {
         QRegularExpressionMatchIterator i = re.globalMatch(text);
-        while (i.hasNext()) {
+        while (!QThread::currentThread()->isInterruptionRequested() && i.hasNext()) {
             const QRegularExpressionMatch match = i.next();
             result.append(text.mid(lastPos, match.capturedStart() - lastPos));
             result.append(substituteReplacement(replacement, match));
@@ -121,6 +147,33 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
 
     // Append the remaining text
     result.append(text.mid(lastPos));
+    return result;
+}
+
+QString RegexTool::formatMatchesForClipboard(const QVector<MatchResult> &matches,
+                                             const QString &text, const QString &headerFormat,
+                                             const QString &matchFormat, const QString &groupFormat)
+{
+    QString result = headerFormat.arg(matches.size()) + QStringLiteral("\n\n");
+    for (const MatchResult &match : matches) {
+        const QString matchText = text.mid(match.offset, match.length);
+        result += matchFormat.arg(match.index + 1)
+                      .arg(matchText)
+                      .arg(match.offset)
+                      .arg(match.offset + match.length);
+
+        for (int i = 1; i < match.groups.size(); ++i) {
+            const CaptureGroup &group = match.groups.at(i);
+            const QString groupIdentifier =
+                group.name.isEmpty() ? QString::number(group.index)
+                                     : QStringLiteral("%1 (%2)").arg(group.index).arg(group.name);
+            result += groupFormat.arg(groupIdentifier)
+                          .arg(group.value)
+                          .arg(group.offset)
+                          .arg(group.offset + group.length);
+        }
+        result += QLatin1Char('\n');
+    }
     return result;
 }
 

@@ -114,12 +114,6 @@ private:
      */
     void setSidemenuHidden(bool hide);
     /**
-     * @brief SQLiteファイルとして扱えるパスか判定する
-     * @param filePath 対象ファイルパス
-     * @return 対応するSQLiteファイルならtrue
-     */
-    static bool isSQLiteFilePath(const QString &filePath);
-    /**
      * @brief ドロップされたURL一覧から最初のSQLiteファイルを返す
      * @param mimeData ドロップされたデータ
      * @return SQLiteファイルパス。見つからない場合は空文字列

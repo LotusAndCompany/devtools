@@ -103,6 +103,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     # Target definitions only. Source files are listed in features/*/CMakeLists.txt
     # via target_sources().
     qt_add_library(${PROJECT_NAME}_core STATIC)
+    qt_add_library(${PROJECT_NAME}_framework_gui STATIC)
     qt_add_library(${PROJECT_NAME}_http_request STATIC)
     qt_add_library(${PROJECT_NAME}_command STATIC)
     qt_add_library(${PROJECT_NAME}_regex_tester STATIC)
@@ -189,11 +190,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
 target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}_image_core)
 
-# qlementineはgui_application.cppで使用するためDevTools_coreにリンク
-target_link_libraries(${PROJECT_NAME}_core PUBLIC qlementine)
-
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
+add_dependencies(${PROJECT_NAME}_framework_gui ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_app_info)
 
 # vcpkgのパッケージを探す
@@ -210,6 +209,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 # [モジュール一覧]
 set(MODULE_LIST
     ${PROJECT_NAME}_core
+    ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_image_core
     ${PROJECT_NAME}_image_tools_unified
     ${PROJECT_NAME}_phrase_generation
@@ -235,38 +235,54 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_markdown_preview
     ${PROJECT_NAME}_diff_tool
     ${PROJECT_NAME}_db_tool
+    ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_timestamp_conversion
 )
 set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
 
 foreach (MODULE ${MODULE_LIST})
     add_dependencies(${PROJECT_NAME} ${MODULE})
-    if(NOT ${MODULE} STREQUAL ${PROJECT_NAME}_core
-        AND NOT ${MODULE} STREQUAL ${PROJECT_NAME}_image_tools_unified)
-        # target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
-        target_link_libraries(${MODULE} PUBLIC ${PROJECT_NAME}_core)
+    if(MODULE STREQUAL "${PROJECT_NAME}_core")
+        target_include_directories(${MODULE} PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${Qt6Core_INCLUDE_DIRS}
+        )
+        target_link_libraries(${MODULE} PUBLIC Qt6::Core)
+    elseif(MODULE STREQUAL "${PROJECT_NAME}_framework_gui")
+        target_include_directories(${MODULE} PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${Qt6Core_INCLUDE_DIRS}
+            ${Qt6Gui_INCLUDE_DIRS}
+            ${Qt6Widgets_INCLUDE_DIRS}
+        )
+        target_link_libraries(${MODULE} PUBLIC
+            ${PROJECT_NAME}_core
+            qlementine
+            Qt6::Core
+            Qt6::Gui
+            Qt6::Widgets
+        )
+    else()
+        target_include_directories(${MODULE} PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${Qt6Core_INCLUDE_DIRS}
+            ${Qt6Bus_INCLUDE_DIRS}
+            ${Qt6Gui_INCLUDE_DIRS}
+            ${Qt6Widgets_INCLUDE_DIRS}
+            ${Qt6Network_INCLUDE_DIRS}
+            ${Qt6Sql_INCLUDE_DIRS}
+        )
+        target_link_libraries(${MODULE} PUBLIC
+            ${PROJECT_NAME}_core
+            ${PROJECT_NAME}_framework_gui
+            Qt6::Core
+            Qt6::DBus
+            Qt6::Gui
+            Qt6::Widgets
+            Qt6::Network
+            Qt6::Sql
+        )
     endif()
-
-    # インクルードディレクトリとしてプロジェクトフォルダと依存ライブラリのインクルードディレクトリを追加
-    target_include_directories(${MODULE} PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${Qt6Core_INCLUDE_DIRS}
-        ${Qt6Bus_INCLUDE_DIRS}
-        ${Qt6Gui_INCLUDE_DIRS}
-        ${Qt6Widgets_INCLUDE_DIRS}
-        ${Qt6Network_INCLUDE_DIRS}
-        ${Qt6Sql_INCLUDE_DIRS}
-    )
-
-    # ライブラリをリンクする
-    target_link_libraries(${MODULE} PUBLIC
-        Qt6::Core
-        Qt6::DBus
-        Qt6::Gui
-        Qt6::Widgets
-        Qt6::Network
-        Qt6::Sql
-    )
 endforeach()
 
 # Tests

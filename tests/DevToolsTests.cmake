@@ -26,7 +26,7 @@ target_include_directories(${PROJECT_NAME}_test_lib PUBLIC
 function(DevTools_add_test TEST_NAME)
     cmake_parse_arguments(
         DEVTOOLS_TEST
-        "" # options
+        "CORE_ONLY" # options
         ""  # one value keywords
         "SOURCES"   # multi value keywords
         ${ARGN}
@@ -36,12 +36,17 @@ function(DevTools_add_test TEST_NAME)
         ${DEVTOOLS_TEST_SOURCES}
     )
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
-    add_dependencies(${TEST_NAME}
-        ${PROJECT_NAME}_test_lib
-    )
-    target_link_libraries(${TEST_NAME} PRIVATE
-        ${PROJECT_NAME}_test_lib
-    )
+    if(DEVTOOLS_TEST_CORE_ONLY)
+        target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+        target_link_libraries(${TEST_NAME} PRIVATE Qt6::Core Qt6::Test)
+    else()
+        add_dependencies(${TEST_NAME}
+            ${PROJECT_NAME}_test_lib
+        )
+        target_link_libraries(${TEST_NAME} PRIVATE
+            ${PROJECT_NAME}_test_lib
+        )
+    endif()
 endfunction()
 
 # core
@@ -55,6 +60,20 @@ DevTools_add_test(test_logging
     SOURCES
     features/framework/tests/test_logging.cpp
 )
+DevTools_add_test(test_application_settings_service CORE_ONLY
+    SOURCES
+    features/framework/tests/test_application_settings_service.cpp
+    features/framework/core/application_settings_service.cpp
+)
+DevTools_add_test(test_local_file_selection_service CORE_ONLY
+    SOURCES
+    features/framework/tests/test_local_file_selection_service.cpp
+    features/framework/core/local_file_selection_service.cpp
+)
+DevTools_add_test(test_settings_dialog
+    SOURCES
+    features/framework/tests/test_settings_dialog.cpp
+)
 DevTools_add_test(test_design_system
     SOURCES
     features/framework/tests/test_design_system.cpp
@@ -64,6 +83,11 @@ DevTools_add_test(test_design_system
 DevTools_add_test(test_command
     SOURCES
     features/command/tests/test_command.cpp
+)
+DevTools_add_test(test_command_service CORE_ONLY
+    SOURCES
+    features/command/tests/test_command_service.cpp
+    features/command/core/command_service.cpp
 )
 
 # core/exception
@@ -101,16 +125,24 @@ DevTools_add_test(test_icon_theme
 )
 
 # core/markdown_preview
-DevTools_add_test(test_markdown_preview
+DevTools_add_test(test_markdown_preview CORE_ONLY
     SOURCES
     features/markdown_preview/tests/test_markdown_preview.cpp
+    features/markdown_preview/core/markdown_service.cpp
+)
+target_link_libraries(test_markdown_preview PRIVATE Qt6::Gui)
+DevTools_add_test(test_markdown_preview_gui
+    SOURCES
+    features/markdown_preview/tests/test_markdown_preview_gui.cpp
 )
 
 # core/diff_tool
-DevTools_add_test(test_diff_tool
+DevTools_add_test(test_diff_tool CORE_ONLY
     SOURCES
     features/diff_tool/tests/test_diff_tool.cpp
+    features/diff_tool/core/diff_tool.cpp
 )
+target_link_libraries(test_diff_tool PRIVATE DevTools_core)
 
 # core/iamge
 DevTools_add_test(test_basic_image_io
@@ -120,6 +152,16 @@ DevTools_add_test(test_basic_image_io
 DevTools_add_test(test_basic_image_edit_interface
     SOURCES
     features/image/tests/test_basic_image_edit_interface.cpp
+)
+DevTools_add_test(test_image_processing_service CORE_ONLY
+    SOURCES
+    features/image/tests/test_image_processing_service.cpp
+    features/image/core/image_processing_service.cpp
+)
+target_link_libraries(test_image_processing_service PRIVATE Qt6::Gui)
+DevTools_add_test(test_image_processing_gui
+    SOURCES
+    features/image/tests/test_image_processing_gui.cpp
 )
 
 # core/data_conversion/parser
@@ -157,15 +199,36 @@ DevTools_add_test(test_yaml_emitter
     features/data_conversion/tests/emitter/test_yaml_emitter.cpp
 )
 # core/data_conversion
-DevTools_add_test(test_data_conversion
+DevTools_add_test(test_data_conversion CORE_ONLY
     SOURCES
     features/data_conversion/tests/test_data_conversion.cpp
+    tests/test_util.cpp
+    tests/random_data.cpp
+    features/data_conversion/core/data_conversion.cpp
+    features/data_conversion/core/parser/json_parser.cpp
+    features/data_conversion/core/parser/toml_parser.cpp
+    features/data_conversion/core/parser/yaml_parser.cpp
+    features/data_conversion/core/emitter/basic_emitter.cpp
+    features/data_conversion/core/emitter/json_emitter.cpp
+    features/data_conversion/core/emitter/toml_emitter.cpp
+    features/data_conversion/core/emitter/yaml_emitter.cpp
+)
+target_include_directories(test_data_conversion PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/tests
+    ${TOML11_INCLUDE_DIR}
+    ${YAML_CPP_INCLUDE_DIR}
+)
+target_link_libraries(test_data_conversion PRIVATE DevTools_core yaml-cpp::yaml-cpp)
+DevTools_add_test(test_data_conversion_gui
+    SOURCES
+    features/data_conversion/tests/test_data_conversion_gui.cpp
 )
 
 # core/timestamp_conversion
-DevTools_add_test(test_timestamp_conversion
+DevTools_add_test(test_timestamp_conversion CORE_ONLY
     SOURCES
     features/timestamp_conversion/tests/test_timestamp_conversion.cpp
+    features/timestamp_conversion/core/timestamp_conversion.cpp
 )
 
 # gui/db_tool
@@ -197,4 +260,119 @@ DevTools_add_test(test_image_view_for_image_transparent
 DevTools_add_test(test_regex_tool
     SOURCES
     features/regex_tool/tests/test_regex_tool.cpp
+)
+
+# Exercise the regex worker without linking or constructing Widgets.
+DevTools_add_test(test_regex_worker CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_worker.cpp
+    features/regex_tool/core/regex_tool.cpp
+    features/regex_tool/core/regex_worker.cpp
+    features/regex_tool/core/regex_worker.h
+)
+DevTools_add_test(test_regex_settings_repository CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_settings_repository.cpp
+    features/regex_tool/core/regex_settings_repository.cpp
+)
+DevTools_add_test(test_regex_evaluation_service CORE_ONLY
+    SOURCES
+    features/regex_tool/tests/test_regex_evaluation_service.cpp
+    features/regex_tool/core/regex_evaluation_service.cpp
+    features/regex_tool/core/regex_worker.cpp
+    features/regex_tool/core/regex_tool.cpp
+)
+
+DevTools_add_test(test_template_reader CORE_ONLY
+    SOURCES
+    features/phrase_generation/tests/test_template_reader.cpp
+    features/phrase_generation/core/template_reader.cpp
+)
+DevTools_add_test(test_template_repository CORE_ONLY
+    SOURCES
+    features/phrase_generation/tests/test_template_repository.cpp
+    features/phrase_generation/core/template_repository.cpp
+    features/phrase_generation/core/template_reader.cpp
+)
+DevTools_add_test(test_phrase_generation_gui
+    SOURCES
+    features/phrase_generation/tests/test_phrase_generation_gui.cpp
+)
+
+DevTools_add_test(test_http_service CORE_ONLY
+    SOURCES
+    features/http_request/tests/test_http_service.cpp
+    features/http_request/core/http_service.cpp
+    features/http_request/core/http_service.h
+)
+target_link_libraries(test_http_service PRIVATE Qt6::Network)
+
+DevTools_add_test(test_api_tool
+    SOURCES
+    features/http_request/tests/test_api_tool.cpp
+)
+
+DevTools_add_test(test_query_service CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_query_service.cpp
+    features/db_tool/core/query_service.cpp
+)
+target_link_libraries(test_query_service PRIVATE Qt6::Sql)
+DevTools_add_test(test_database_browse_service CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_database_browse_service.cpp
+    features/db_tool/core/database_browse_service.cpp
+)
+target_link_libraries(test_database_browse_service PRIVATE Qt6::Sql)
+
+DevTools_add_test(test_connection_history CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_connection_history.cpp
+    features/db_tool/core/connection_history.cpp
+)
+
+DevTools_add_test(test_query_page
+    SOURCES
+    features/db_tool/tests/test_query_page.cpp
+)
+
+DevTools_add_test(test_database_connection CORE_ONLY
+    SOURCES
+    features/db_tool/tests/test_database_connection.cpp
+    features/db_tool/core/database_connection.cpp
+    features/db_tool/core/sqlite_paths.cpp
+    features/db_tool/core/sqlite_access_restore.cpp
+    features/framework/core/local_file_selection_service.cpp
+)
+target_link_libraries(test_database_connection PRIVATE Qt6::Sql)
+if(APPLE)
+    target_sources(test_database_connection PRIVATE features/db_tool/core/sqlite_file_access.mm)
+    target_link_libraries(test_database_connection PRIVATE ${FOUNDATION_FRAMEWORK})
+else()
+    target_sources(test_database_connection PRIVATE features/db_tool/core/sqlite_file_access.cpp)
+endif()
+
+DevTools_add_test(test_db_main_connection
+    SOURCES
+    features/db_tool/tests/test_db_main_connection.cpp
+)
+
+DevTools_add_test(test_connection_selector
+    SOURCES
+    features/db_tool/tests/test_connection_selector.cpp
+)
+
+DevTools_add_test(test_qr_service CORE_ONLY
+    SOURCES
+    features/qr_code/tests/test_qr_service.cpp
+    features/qr_code/core/content_generator.cpp
+    features/qr_code/core/qr_validation.cpp
+    features/qr_code/core/qr_image.cpp
+    features/qr_code/core/qrcodegen.cpp
+)
+target_link_libraries(test_qr_service PRIVATE Qt6::Gui)
+
+DevTools_add_test(test_qr_gui
+    SOURCES
+    features/qr_code/tests/test_qr_gui.cpp
 )

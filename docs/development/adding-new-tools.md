@@ -5,13 +5,17 @@ This guide explains how to add new tool modules to DevTools.
 ## Overview
 
 DevTools organizes each feature under `features/{your_tool}/` with `core/`,
-`gui/`, and `tests/` subdirectories. The application framework shared by all
-tools lives under `features/framework/` and is compiled as `DevTools_core`.
+`gui/`, and `tests/` subdirectories. Shared non-Widget framework code lives in
+`features/framework/core/` and is compiled as `DevTools_core`. The application
+shell and shared widgets mostly live in `features/framework/gui/` and are
+compiled as `DevTools_framework_gui`; `ContentsArea` remains in the application
+executable. Feature libraries currently list both core and GUI sources in one
+target; keep their source dependencies one-way, from GUI to core.
 
 Adding a new tool involves:
 
 1. Creating the feature directory structure under `features/{your_tool}/`
-2. Implementing core logic (no Qt Widgets dependencies)
+2. Implementing core services and processing without Qt Widgets dependencies
 3. Creating GUI components (Qt Widgets)
 4. Registering the module in CMake (target declaration + `target_sources` + `add_subdirectory`)
 5. Adding a tool ID in the framework
@@ -44,7 +48,11 @@ touch features/your_tool/CMakeLists.txt
 
 ### 3. Implement Core Logic
 
-Create the business logic without any Qt GUI dependencies.
+Put processing and reusable feature behavior in `core/`. Core code must not
+include Qt Widgets, shared GUI framework headers, feature GUI headers, or dialog
+objects. It may use other Qt modules and value types required by the processing
+it performs. Return values or error codes to the GUI; let the GUI display
+localized messages and dialogs.
 
 #### features/your_tool/core/your_tool.h
 
@@ -347,23 +355,38 @@ Create test files under `features/your_tool/tests/`:
 #### features/your_tool/tests/test_your_tool.cpp
 
 ```cpp
-#include <gtest/gtest.h>
 #include "features/your_tool/core/your_tool.h"
 
-namespace devtools {
+#include <QtTest>
 
-TEST(YourToolTest, ProcessConvertsToUppercase) {
+class TestYourTool : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void convertsToUppercase();
+    void handlesEmptyInput();
+};
+
+void TestYourTool::convertsToUppercase()
+{
     YourTool tool;
-    EXPECT_EQ(tool.process("hello"), "HELLO");
+    QCOMPARE(tool.process("hello"), QString("HELLO"));
 }
 
-TEST(YourToolTest, ProcessHandlesEmptyInput) {
+void TestYourTool::handlesEmptyInput()
+{
     YourTool tool;
-    EXPECT_EQ(tool.process(""), "");
+    QCOMPARE(tool.process(""), QString());
 }
 
-}  // namespace devtools
+QTEST_GUILESS_MAIN(TestYourTool)
+#include "test_your_tool.moc"
 ```
+
+Use Qt Test for feature tests. `QTEST_GUILESS_MAIN` is suitable for tests that
+do not create widgets; widget tests use `QTEST_MAIN`. See the [Testing
+Guide](testing-guide.md) for registration and `CORE_ONLY` service tests.
 
 #### Register Tests in CMake
 
@@ -375,6 +398,11 @@ DevTools_add_test(test_your_tool
     features/your_tool/tests/test_your_tool.cpp
 )
 ```
+
+For a service test that compiles without the shared GUI test library, register
+it with `CORE_ONLY`, list the service implementation in `SOURCES`, and link any
+additional Qt or project libraries with `target_link_libraries()`. See the
+[Testing Guide](testing-guide.md) for an example.
 
 ### 12. Build and Test
 
