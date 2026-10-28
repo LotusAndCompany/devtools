@@ -7,7 +7,7 @@ import {
   type NativeBridge,
   type OperationName,
 } from "@/bridge";
-import { ToolPage, type Locale, type OperationRunner } from "@/tool-pages";
+import { ToolPage, type DroppedImage, type Locale, type OperationRunner } from "@/tool-pages";
 
 type PageId = "welcome" | "image" | "phrase" | "command" | "http" | "data" | "db" | "qr" | "markdown" | "timestamp" | "regex" | "diff" | "settings" | "about";
 type ToolInfo = { id: PageId; en: string; ja: string; detailEn: string; detailJa: string };
@@ -48,6 +48,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
+  const [droppedImage, setDroppedImage] = useState<DroppedImage | null>(null);
   const [pendingCount, setPendingCount] = useState(0);
   const pending = useRef(new Map<string, PendingRequest>());
   const searchRef = useRef<HTMLInputElement>(null);
@@ -55,6 +56,20 @@ function App() {
   const openPage = useCallback((page: PageId) => {
     setOpenPages((current) => current.includes(page) ? current : [...current, page]);
     setActivePage(page);
+  }, []);
+  const acceptDroppedImage = useCallback((result: Record<string, unknown>) => {
+    if (typeof result.imageDataUrl !== "string" || !result.imageDataUrl) return;
+    openPage("image");
+    setDroppedImage({
+      id: crypto.randomUUID(),
+      imageDataUrl: result.imageDataUrl,
+      fileName: String(result.fileName ?? ""),
+      width: Number(result.width ?? 0),
+      height: Number(result.height ?? 0),
+    });
+  }, [openPage]);
+  const clearDroppedImage = useCallback((id: string) => {
+    setDroppedImage((current) => current?.id === id ? null : current);
   }, []);
 
   useEffect(() => { document.documentElement.lang = locale === "ja" ? "ja" : "en"; }, [locale]);
@@ -78,7 +93,14 @@ function App() {
   useEffect(() => {
     let mounted = true;
     let unsubscribe: (() => void) | undefined;
+    let nativeBridge: NativeBridge | null = null;
     const onEvent = (event: BridgeEvent) => {
+      if (event.type === "imageDropAvailable") {
+        if (nativeBridge) {
+          void runWithBridge(nativeBridge, "imageTakeDropped", {}).then(acceptDroppedImage).catch(() => {});
+        }
+        return;
+      }
       if (event.type === "navigate") {
         if (["settings", "about", "welcome", ...tools.map((item) => item.id)].includes(event.route)) openPage(event.route as PageId);
         return;
@@ -101,9 +123,13 @@ function App() {
     };
     void connectNativeBridge().then((native) => {
       if (!mounted) return;
+      nativeBridge = native;
       unsubscribe = native.subscribe(onEvent);
       setBridge(native);
       setConnectionError("");
+      void runWithBridge(native, "imageTakeDropped", {}).then((result) => {
+        if (mounted && result.found === true) acceptDroppedImage(result);
+      }).catch(() => {});
       void runWithBridge(native, "getSettings", {}).then((settings) => {
         if (mounted && settings.language === "ja_JP") setLocale("ja");
         else if (mounted && settings.language === "en") setLocale("en");
@@ -120,7 +146,7 @@ function App() {
     return () => { mounted = false; unsubscribe?.(); };
     // WebChannel subscription and native connection are app-scoped.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [acceptDroppedImage]);
 
   const runOperation: OperationRunner = useCallback((operation, payload) => {
     if (!bridge) return Promise.reject(new Error(locale === "ja" ? "ネイティブ連携に接続していません。" : "Native services are not connected."));
@@ -191,7 +217,7 @@ function App() {
         <div className="page-stack">{openPages.map((page) => <section key={page} className="page-host" hidden={activePage !== page} aria-label={titleFor(page, locale)}>
           {page === "welcome" ? <WelcomePage locale={locale} onOpen={openPage} /> :
             page === "settings" ? <SettingsPage locale={locale} run={runOperation} onLocaleChange={setLocale} onThemeChange={setTheme} /> :
-              page === "about" ? <AboutPage locale={locale} /> : <ToolPage id={page} locale={locale} run={runOperation} active={activePage === page} />}
+              page === "about" ? <AboutPage locale={locale} /> : <ToolPage id={page} locale={locale} run={runOperation} active={activePage === page} droppedImage={droppedImage} onDroppedImageConsumed={clearDroppedImage} />}
         </section>)}</div>
       </main>
     </div>

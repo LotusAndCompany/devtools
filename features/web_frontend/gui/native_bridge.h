@@ -37,6 +37,7 @@ public:
     Q_INVOKABLE void cancelOperation(const QString &requestId);
     Q_INVOKABLE void navigateTo(const QString &route);
     void openDroppedSQLiteFile(const QString &path);
+    void openDroppedImageFile(const QString &path);
 
 Q_SIGNALS:
     void operationStarted(const QString &requestId, const QString &operation);
@@ -46,6 +47,7 @@ Q_SIGNALS:
     void operationCancelled(const QString &requestId);
     void navigationRequested(const QString &route);
     void languageChangeRequested(const QString &languageCode);
+    void imageDropAvailable();
 
 private:
     friend class TestNativeBridge;
@@ -77,6 +79,7 @@ private:
     QImage original_image_;
     QImage current_image_;
     QString current_image_path_;
+    QString dropped_image_path_;
     QVariantMap database_connection_;
     QString selected_sqlite_path_;
     std::shared_ptr<SQLiteFileAccess> sqlite_file_access_;
@@ -110,6 +113,9 @@ private:
     [[nodiscard]] static OperationResult saveTextFile(const QString &path, const QString &text,
                                                       const CancellationToken &cancellation,
                                                       const ProgressCallback &progress);
+    [[nodiscard]] static OperationResult readImageFile(const QString &path,
+                                                       const CancellationToken &cancellation,
+                                                       const ProgressCallback &progress);
     [[nodiscard]] static bool isValidRequestId(const QString &requestId);
     [[nodiscard]] static QString safeSuggestedName(const QString &name);
 };

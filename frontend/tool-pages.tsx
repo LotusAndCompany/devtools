@@ -4,7 +4,21 @@ import type { OperationName } from "@/bridge";
 
 export type Locale = "en" | "ja";
 export type OperationRunner = (operation: OperationName, payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
-type ToolPageProps = { id: string; locale: Locale; run: OperationRunner; active?: boolean };
+export type DroppedImage = {
+  id: string;
+  imageDataUrl: string;
+  fileName: string;
+  width: number;
+  height: number;
+};
+type ToolPageProps = {
+  id: string;
+  locale: Locale;
+  run: OperationRunner;
+  active?: boolean;
+  droppedImage?: DroppedImage | null;
+  onDroppedImageConsumed?: (id: string) => void;
+};
 type RegexOptions = { global: boolean; caseInsensitive: boolean; multiline: boolean; dotMatchesEverything: boolean; useUnicodeProperties: boolean; extendedPatternSyntax: boolean };
 
 const text = (locale: Locale, en: string, ja: string) => locale === "ja" ? ja : en;
@@ -39,8 +53,8 @@ function OutputMessage({ error, message }: { error: string; message?: string }) 
   return <p className={`operation-message ${error ? "error" : "success"}`} role="status">{error || message}</p>;
 }
 
-export function ToolPage({ id, locale, run, active }: ToolPageProps) {
-  if (id === "image") return <ImagePage locale={locale} run={run} />;
+export function ToolPage({ id, locale, run, active, droppedImage, onDroppedImageConsumed }: ToolPageProps) {
+  if (id === "image") return <ImagePage locale={locale} run={run} active={active ?? false} droppedImage={droppedImage} onDroppedImageConsumed={onDroppedImageConsumed} />;
   if (id === "phrase") return <PhrasePage locale={locale} run={run} active={active ?? false} />;
   if (id === "http") return <HttpPage locale={locale} run={run} />;
   if (id === "data") return <DataPage locale={locale} run={run} />;
@@ -54,7 +68,7 @@ export function ToolPage({ id, locale, run, active }: ToolPageProps) {
   return <div className="empty-state">{text(locale, "This tool is not available.", "このツールは利用できません。")}</div>;
 }
 
-function ImagePage({ locale, run }: Omit<ToolPageProps, "id">) {
+function ImagePage({ locale, run, active, droppedImage, onDroppedImageConsumed }: Omit<ToolPageProps, "id">) {
   const { busy, error, execute } = useOperation(run);
   const [image, setImage] = useState("");
   const [fileName, setFileName] = useState("");
@@ -83,6 +97,14 @@ function ImagePage({ locale, run }: Omit<ToolPageProps, "id">) {
     setHeight(Number(result.height ?? 0));
     if (result.fileName) setFileName(String(result.fileName));
   };
+  useEffect(() => {
+    if (!active || !droppedImage) return;
+    setImage(droppedImage.imageDataUrl);
+    setFileName(droppedImage.fileName);
+    setWidth(droppedImage.width);
+    setHeight(droppedImage.height);
+    onDroppedImageConsumed?.(droppedImage.id);
+  }, [active, droppedImage, onDroppedImageConsumed]);
   const performEdit = async (action: string, extra: Record<string, unknown> = {}) => {
     const result = await execute("imageEdit", { action, ...extra });
     if (result) updateImage(result);

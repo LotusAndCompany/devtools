@@ -4,6 +4,7 @@
 #include "features/framework/core/local_file_selection_service.h"
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/gui_application.h"
+#include "features/image/core/image_processing_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
 #include "features/web_frontend/gui/qt_webengine_adapter.h"
 
@@ -129,7 +130,8 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (!droppedSQLiteFilePath(event->mimeData()).isEmpty()) {
+    if (!droppedSQLiteFilePath(event->mimeData()).isEmpty() ||
+        !droppedImageFilePath(event->mimeData()).isEmpty()) {
         event->acceptProposedAction();
         return;
     }
@@ -138,12 +140,19 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void MainWindow::dropEvent(QDropEvent *event)
 {
-    const QString filePath = droppedSQLiteFilePath(event->mimeData());
-    if (filePath.isEmpty()) {
+    const QMimeData *const mimeData = event->mimeData();
+    const QString databasePath = droppedSQLiteFilePath(mimeData);
+    if (!databasePath.isEmpty()) {
+        web_frontend_->nativeBridge()->openDroppedSQLiteFile(databasePath);
+        event->acceptProposedAction();
+        return;
+    }
+    const QString imagePath = droppedImageFilePath(mimeData);
+    if (imagePath.isEmpty()) {
         QMainWindow::dropEvent(event);
         return;
     }
-    web_frontend_->nativeBridge()->openDroppedSQLiteFile(filePath);
+    web_frontend_->nativeBridge()->openDroppedImageFile(imagePath);
     event->acceptProposedAction();
 }
 
@@ -155,6 +164,19 @@ QString MainWindow::droppedSQLiteFilePath(const QMimeData *mimeData)
     return LocalFileSelectionService::firstExistingLocalFile(
         mimeData->urls(),
         {QStringLiteral("db"), QStringLiteral("sqlite"), QStringLiteral("sqlite3")});
+}
+
+QString MainWindow::droppedImageFilePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+    for (const QUrl &url : mimeData->urls()) {
+        if (url.isLocalFile() && ImageProcessingService::isReadableImageFile(url.toLocalFile())) {
+            return url.toLocalFile();
+        }
+    }
+    return {};
 }
 
 void MainWindow::onLanguageChanged(const QString &languageCode)

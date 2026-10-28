@@ -50,6 +50,7 @@ private:
     void setupMenuBar();
     void retranslateUi();
     static QString droppedSQLiteFilePath(const QMimeData *mimeData);
+    static QString droppedImageFilePath(const QMimeData *mimeData);
 
 private slots:
     void onActionTriggered(QAction *action);

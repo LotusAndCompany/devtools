@@ -1,6 +1,8 @@
 #include "features/web_frontend/gui/native_bridge.h"
 
+#include <QImage>
 #include <QSignalSpy>
+#include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QtTest>
 
@@ -27,6 +29,7 @@ private Q_SLOTS:
     void enforcesInputAndVersionLimits();
     void cancelsBeforeTheWorkerStarts();
     void generatesQrThroughTheVersionedBridge();
+    void readsDroppedImagesWithoutExposingTheirPaths();
 };
 
 void TestNativeBridge::formatsJsonUsingTheNativeParserAndEmitter()
@@ -187,6 +190,45 @@ void TestNativeBridge::generatesQrThroughTheVersionedBridge()
                     .toString()
                     .startsWith(QStringLiteral("data:image/png;base64,")));
     }
+}
+
+void TestNativeBridge::readsDroppedImagesWithoutExposingTheirPaths()
+{
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    const QString imagePath = directory.filePath(QStringLiteral("dropped.png"));
+    QImage image(2, 3, QImage::Format_ARGB32);
+    image.fill(Qt::red);
+    QVERIFY(image.save(imagePath, "PNG"));
+
+    NativeBridge bridge(nullptr);
+    QSignalSpy available(&bridge, &NativeBridge::imageDropAvailable);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QVERIFY(available.isValid());
+    QVERIFY(completed.isValid());
+    QVERIFY(failed.isValid());
+
+    bridge.openDroppedImageFile(imagePath);
+    QCOMPARE(available.count(), 1);
+    bridge.startOperation({{QStringLiteral("contractVersion"), QStringLiteral("1")},
+                           {QStringLiteral("requestId"), QStringLiteral("image-drop-1")},
+                           {QStringLiteral("operation"), QStringLiteral("imageTakeDropped")},
+                           {QStringLiteral("payload"), QVariantMap{}}});
+
+    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
+    QCOMPARE(failed.count(), 0);
+    const QVariantMap result = completed.constFirst().at(1).toMap();
+    QVERIFY(result.value(QStringLiteral("found")).toBool());
+    QVERIFY(result.value(QStringLiteral("imageDataUrl"))
+                .toString()
+                .startsWith(QStringLiteral("data:image/png;base64,")));
+    QCOMPARE(result.value(QStringLiteral("fileName")).toString(), QStringLiteral("dropped.png"));
+    QCOMPARE(result.value(QStringLiteral("width")).toInt(), 2);
+    QCOMPARE(result.value(QStringLiteral("height")).toInt(), 3);
+    QVERIFY(!result.contains(QStringLiteral("path")));
+    QVERIFY(!result.contains(QStringLiteral("filePath")));
+    QCOMPARE(bridge.current_image_path_, imagePath);
 }
 
 QTEST_GUILESS_MAIN(TestNativeBridge)

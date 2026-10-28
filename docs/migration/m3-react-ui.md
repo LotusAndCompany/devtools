@@ -13,7 +13,7 @@ Color Converter from the separate, unmerged PR #122 is not part of this set.
 
 | Screen | React controls and retained behavior | Native operation / data source |
 |---|---|---|
-| Image Editor | Open, reset, save, resize by dimensions or scale, aspect ratio, smoothing, rotation, flip, click-to-select color transparency, and split by count or cell size | `imageOpen`, `imageEdit`, `imageReset`, `imageSave`, `imageSplit`; `ImageProcessingService`; native image and folder dialogs |
+| Image Editor | Open or drop an image, reset, save, resize by dimensions or scale, aspect ratio, smoothing, rotation, flip, click-to-select color transparency, and split by count or cell size | `imageOpen`, `imageTakeDropped`, `imageEdit`, `imageReset`, `imageSave`, `imageSplit`; `ImageProcessingService`; native image and folder dialogs. Dropped paths stay in C++. |
 | Phrase Generation | List, select, create, save, delete, copy; Ctrl/Cmd+S, Ctrl/Cmd+N, Ctrl/Cmd+Shift+C, and Delete outside text editors | `phraseData`; existing `TemplateReader` / `TemplateRepository`; clipboard bridge |
 | Command Generation | Git, Docker, and Docker Compose catalog, option selection, validation, generated command, and copy | `commandData`; existing `CommandService` |
 | HTTP Request | GET/POST/PUT/DELETE, 10 query rows, custom headers, Basic Auth, request body, response status/body/timing; GET and DELETE do not send the body; invalid headers are reported | `sendHttpRequest`; Qt Network; existing `HttpService::urlWithParameters` encoding |

@@ -25,6 +25,7 @@ export type OperationName =
   | "imageReset"
   | "imageSave"
   | "imageSplit"
+  | "imageTakeDropped"
   | "databaseHistory"
   | "databaseSelectFile"
   | "databaseConnect"
@@ -47,6 +48,7 @@ export type BridgeEvent =
   | { type: "completed"; requestId: string; result: Record<string, unknown> }
   | { type: "failed"; requestId: string; error: BridgeError }
   | { type: "cancelled"; requestId: string }
+  | { type: "imageDropAvailable" }
   | { type: "navigate"; route: string };
 
 type QtSignal<Args extends unknown[]> = {
@@ -63,6 +65,7 @@ type RawNativeBridge = {
   operationCompleted: QtSignal<[string, Record<string, unknown>]>;
   operationFailed: QtSignal<[string, BridgeError]>;
   operationCancelled: QtSignal<[string]>;
+  imageDropAvailable: QtSignal<[]>;
   navigationRequested: QtSignal<[string]>;
 };
 
@@ -146,6 +149,7 @@ export async function connectNativeBridge(): Promise<NativeBridge> {
       const failed = (requestId: string, error: BridgeError) =>
         handler({ type: "failed", requestId, error });
       const cancelled = (requestId: string) => handler({ type: "cancelled", requestId });
+      const imageDropAvailable = () => handler({ type: "imageDropAvailable" });
       const navigate = (route: string) => handler({ type: "navigate", route });
 
       native.operationStarted.connect(started);
@@ -153,6 +157,7 @@ export async function connectNativeBridge(): Promise<NativeBridge> {
       native.operationCompleted.connect(completed);
       native.operationFailed.connect(failed);
       native.operationCancelled.connect(cancelled);
+      native.imageDropAvailable.connect(imageDropAvailable);
       native.navigationRequested.connect(navigate);
 
       return () => {
@@ -161,6 +166,7 @@ export async function connectNativeBridge(): Promise<NativeBridge> {
         native.operationCompleted.disconnect(completed);
         native.operationFailed.disconnect(failed);
         native.operationCancelled.disconnect(cancelled);
+        native.imageDropAvailable.disconnect(imageDropAvailable);
         native.navigationRequested.disconnect(navigate);
       };
     },

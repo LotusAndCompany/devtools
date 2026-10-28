@@ -89,6 +89,15 @@ NativeBridge::~NativeBridge()
     }
 }
 
+void NativeBridge::openDroppedImageFile(const QString &path)
+{
+    if (!ImageProcessingService::isReadableImageFile(path)) {
+        return;
+    }
+    dropped_image_path_ = path;
+    emit imageDropAvailable();
+}
+
 bool NativeBridge::validateRequest(const QString &requestId, const QVariantMap &request)
 {
     if (!isValidRequestId(requestId)) {
@@ -127,21 +136,21 @@ bool NativeBridge::validateRequest(const QString &requestId, const QVariantMap &
 
     const QString operation = request.value(QStringLiteral("operation")).toString();
     static const QStringList allowedOperations = {
-        QStringLiteral("formatJson"),         QStringLiteral("openTextFile"),
-        QStringLiteral("saveTextFile"),       QStringLiteral("convertData"),
-        QStringLiteral("convertTimestamp"),   QStringLiteral("compareText"),
-        QStringLiteral("renderMarkdown"),     QStringLiteral("generateQr"),
-        QStringLiteral("saveQrImage"),        QStringLiteral("commandData"),
-        QStringLiteral("phraseData"),         QStringLiteral("evaluateRegex"),
-        QStringLiteral("sendHttpRequest"),    QStringLiteral("regexSettings"),
-        QStringLiteral("imageOpen"),          QStringLiteral("imageEdit"),
-        QStringLiteral("imageReset"),         QStringLiteral("imageSave"),
-        QStringLiteral("imageSplit"),         QStringLiteral("databaseHistory"),
-        QStringLiteral("databaseSelectFile"), QStringLiteral("databaseConnect"),
-        QStringLiteral("databaseDisconnect"), QStringLiteral("databaseQuery"),
-        QStringLiteral("databaseTables"),     QStringLiteral("getSettings"),
-        QStringLiteral("saveSettings"),       QStringLiteral("saveLastUsedTool"),
-        QStringLiteral("copyToClipboard"),
+        QStringLiteral("formatJson"),       QStringLiteral("openTextFile"),
+        QStringLiteral("saveTextFile"),     QStringLiteral("convertData"),
+        QStringLiteral("convertTimestamp"), QStringLiteral("compareText"),
+        QStringLiteral("renderMarkdown"),   QStringLiteral("generateQr"),
+        QStringLiteral("saveQrImage"),      QStringLiteral("commandData"),
+        QStringLiteral("phraseData"),       QStringLiteral("evaluateRegex"),
+        QStringLiteral("sendHttpRequest"),  QStringLiteral("regexSettings"),
+        QStringLiteral("imageOpen"),        QStringLiteral("imageEdit"),
+        QStringLiteral("imageReset"),       QStringLiteral("imageSave"),
+        QStringLiteral("imageSplit"),       QStringLiteral("imageTakeDropped"),
+        QStringLiteral("databaseHistory"),  QStringLiteral("databaseSelectFile"),
+        QStringLiteral("databaseConnect"),  QStringLiteral("databaseDisconnect"),
+        QStringLiteral("databaseQuery"),    QStringLiteral("databaseTables"),
+        QStringLiteral("getSettings"),      QStringLiteral("saveSettings"),
+        QStringLiteral("saveLastUsedTool"), QStringLiteral("copyToClipboard"),
     };
     if (!allowedOperations.contains(operation)) {
         fail(requestId, QStringLiteral("INVALID_INPUT"),
@@ -607,6 +616,50 @@ void NativeBridge::startToolOperation(const QString &requestId, const QString &o
                 });
 }
 
+NativeBridge::OperationResult NativeBridge::readImageFile(const QString &path,
+                                                          const CancellationToken &cancellation,
+                                                          const ProgressCallback &progress)
+{
+    if (cancellation->load(std::memory_order_relaxed)) {
+        return OperationResult{{}, {}, {}, true};
+    }
+    progress(15, QStringLiteral("Reading image"));
+    QImageReader reader(path);
+    const QSize dimensions = reader.size();
+    if (!dimensions.isValid() ||
+        static_cast<qint64>(dimensions.width()) * dimensions.height() > MAX_IMAGE_PIXELS) {
+        return OperationResult{{},
+                               QStringLiteral("SIZE_LIMIT_EXCEEDED"),
+                               QStringLiteral("The selected image exceeds the pixel limit."),
+                               false};
+    }
+    const QImage loaded = reader.read();
+    if (!isSupportedImage(loaded)) {
+        return OperationResult{{},
+                               QStringLiteral("INVALID_INPUT"),
+                               QStringLiteral("The selected file is not a supported image or "
+                                              "exceeds the pixel limit."),
+                               false};
+    }
+    const QString preview = imagePreviewDataUrl(loaded);
+    if (preview.isEmpty()) {
+        return OperationResult{{},
+                               QStringLiteral("INTERNAL_ERROR"),
+                               QStringLiteral("Could not create an image preview."),
+                               false};
+    }
+    return OperationResult{{{QStringLiteral("__image"), QVariant::fromValue(loaded)},
+                            {QStringLiteral("__originalImage"), QVariant::fromValue(loaded)},
+                            {QStringLiteral("__imagePath"), path},
+                            {QStringLiteral("imageDataUrl"), preview},
+                            {QStringLiteral("fileName"), QFileInfo(path).fileName()},
+                            {QStringLiteral("width"), loaded.width()},
+                            {QStringLiteral("height"), loaded.height()}},
+                           {},
+                           {},
+                           false};
+}
+
 void NativeBridge::startImageOperation(const QString &requestId, const QString &operation,
                                        const QVariantMap &payload)
 {
@@ -617,6 +670,23 @@ void NativeBridge::startImageOperation(const QString &requestId, const QString &
             operations_.remove(requestId);
             return;
         }
+    }
+
+    if (operation == QStringLiteral("imageTakeDropped")) {
+        const QString path = std::exchange(dropped_image_path_, QString());
+        if (path.isEmpty()) {
+            completeOnUiThread(requestId, {{QStringLiteral("found"), false}});
+            return;
+        }
+        startWorker(requestId, operation,
+                    [path](const CancellationToken &token, const ProgressCallback &progress) {
+                        OperationResult result = NativeBridge::readImageFile(path, token, progress);
+                        if (result.errorCode.isEmpty() && !result.cancelled) {
+                            result.value.insert(QStringLiteral("found"), true);
+                        }
+                        return result;
+                    });
+        return;
     }
 
     if (operation == QStringLiteral("imageOpen") || operation == QStringLiteral("imageSave") ||
@@ -671,54 +741,16 @@ void NativeBridge::startImageOperation(const QString &requestId, const QString &
                 if (path.isEmpty() || current->cancellation->load(std::memory_order_relaxed)) {
                     operations_.erase(current);
                     emit operationCancelled(requestId);
+                    if (!dropped_image_path_.isEmpty()) {
+                        emit imageDropAvailable();
+                    }
                     return;
                 }
                 if (operation == QStringLiteral("imageOpen")) {
                     startWorker(
                         requestId, operation,
                         [path](const CancellationToken &token, const ProgressCallback &progress) {
-                            if (token->load(std::memory_order_relaxed)) {
-                                return OperationResult{{}, {}, {}, true};
-                            }
-                            progress(15, QStringLiteral("Reading image"));
-                            QImageReader reader(path);
-                            const QSize dimensions = reader.size();
-                            if (!dimensions.isValid() ||
-                                static_cast<qint64>(dimensions.width()) * dimensions.height() >
-                                    MAX_IMAGE_PIXELS) {
-                                return OperationResult{
-                                    {},
-                                    QStringLiteral("SIZE_LIMIT_EXCEEDED"),
-                                    QStringLiteral("The selected image exceeds the pixel limit."),
-                                    false};
-                            }
-                            const QImage loaded = reader.read();
-                            if (!isSupportedImage(loaded)) {
-                                return OperationResult{
-                                    {},
-                                    QStringLiteral("INVALID_INPUT"),
-                                    QStringLiteral("The selected file is not a supported image or "
-                                                   "exceeds the pixel limit."),
-                                    false};
-                            }
-                            const QString preview = imagePreviewDataUrl(loaded);
-                            if (preview.isEmpty()) {
-                                return OperationResult{
-                                    {},
-                                    QStringLiteral("INTERNAL_ERROR"),
-                                    QStringLiteral("Could not create an image preview."),
-                                    false};
-                            }
-                            return OperationResult{
-                                {{QStringLiteral("__image"), QVariant::fromValue(loaded)},
-                                 {QStringLiteral("__originalImage"), QVariant::fromValue(loaded)},
-                                 {QStringLiteral("__imagePath"), path},
-                                 {QStringLiteral("imageDataUrl"), preview},
-                                 {QStringLiteral("width"), loaded.width()},
-                                 {QStringLiteral("height"), loaded.height()}},
-                                {},
-                                {},
-                                false};
+                            return NativeBridge::readImageFile(path, token, progress);
                         });
                     return;
                 }
@@ -1284,6 +1316,9 @@ void NativeBridge::startWorker(const QString &requestId, const QString &operatio
                     }
                     emit operationProgress(requestId, 100, QStringLiteral("Complete"));
                     emit operationCompleted(requestId, publicResult);
+                }
+                if (!dropped_image_path_.isEmpty()) {
+                    emit imageDropAvailable();
                 }
             });
 
