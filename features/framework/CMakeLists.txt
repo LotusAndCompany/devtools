@@ -19,7 +19,7 @@ target_sources(DevTools_core PRIVATE
 target_sources(DevTools_framework_gui PRIVATE
     # GUI
     gui/icon_utils.h gui/icon_utils.cpp
-    gui/main_window.h gui/main_window.cpp
+    gui/main_window.h
     gui/gui_application.h gui/gui_application.cpp
     gui/design_system.h gui/design_system.cpp
     gui/gui_tool.h gui/gui_tool.cpp

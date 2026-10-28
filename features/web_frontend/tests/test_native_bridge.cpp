@@ -26,6 +26,7 @@ private Q_SLOTS:
     void rejectsInvalidUtf8Files();
     void enforcesInputAndVersionLimits();
     void cancelsBeforeTheWorkerStarts();
+    void generatesQrThroughTheVersionedBridge();
 };
 
 void TestNativeBridge::formatsJsonUsingTheNativeParserAndEmitter()
@@ -110,6 +111,82 @@ void TestNativeBridge::cancelsBeforeTheWorkerStarts()
 
     QCOMPARE(cancelled.count(), 1);
     QCOMPARE(cancelled.constFirst().constFirst().toString(), QStringLiteral("cancel-1"));
+}
+
+void TestNativeBridge::generatesQrThroughTheVersionedBridge()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QVERIFY(completed.isValid());
+    QVERIFY(failed.isValid());
+
+    const QList<QPair<QString, QVariantMap>> samples = {
+        {QStringLiteral("text"), {{QStringLiteral("text_content"), QStringLiteral("bridge test")}}},
+        {QStringLiteral("url"),
+         {{QStringLiteral("url_content"), QStringLiteral("https://example.com")}}},
+        {QStringLiteral("email"),
+         {{QStringLiteral("email_address"), QStringLiteral("a@example.com")}}},
+        {QStringLiteral("phone"),
+         {{QStringLiteral("phone_number"), QStringLiteral("09012345678")}}},
+        {QStringLiteral("sms"),
+         {{QStringLiteral("sms_phone"), QStringLiteral("09012345678")},
+          {QStringLiteral("sms_message"), QStringLiteral("Hello")}}},
+        {QStringLiteral("wifi"),
+         {{QStringLiteral("wifi_ssid"), QStringLiteral("DevTools")},
+          {QStringLiteral("wifi_password"), QStringLiteral("secret")},
+          {QStringLiteral("wifi_security"), QStringLiteral("WPA")},
+          {QStringLiteral("wifi_hidden"), QStringLiteral("false")}}},
+        {QStringLiteral("contact"),
+         {{QStringLiteral("contact_name"), QStringLiteral("Alice")},
+          {QStringLiteral("contact_phone"), QStringLiteral("09012345678")},
+          {QStringLiteral("contact_email"), QStringLiteral("alice@example.com")}}},
+        {QStringLiteral("calendar"),
+         {{QStringLiteral("cal_summary"), QStringLiteral("Review")},
+          {QStringLiteral("cal_start"), QStringLiteral("2026-10-29T10:00")},
+          {QStringLiteral("cal_end"), QStringLiteral("2026-10-29T11:00")}}},
+        {QStringLiteral("geo"),
+         {{QStringLiteral("geo_lat"), QStringLiteral("35.681236")},
+          {QStringLiteral("geo_lng"), QStringLiteral("139.767125")}}},
+    };
+    const QStringList expectedContents = {
+        QStringLiteral("bridge test"),
+        QStringLiteral("https://example.com"),
+        QStringLiteral("mailto:a@example.com"),
+        QStringLiteral("tel:09012345678"),
+        QStringLiteral("SMSTO:09012345678:Hello"),
+        QStringLiteral("WIFI:T:WPA;S:DevTools;P:secret;;"),
+        QStringLiteral("BEGIN:VCARD\nVERSION:3.0\nFN:Alice\nTEL:09012345678\n"
+                       "EMAIL:alice@example.com\nEND:VCARD"),
+        QStringLiteral("BEGIN:VEVENT\nSUMMARY:Review\nDTSTART:20261029T100000\n"
+                       "DTEND:20261029T110000\nEND:VEVENT"),
+        QStringLiteral("geo:35.681236,139.767125"),
+    };
+
+    for (qsizetype index = 0; index < samples.size(); ++index) {
+        const int completedBefore = completed.count();
+        const int failedBefore = failed.count();
+        const QString requestId = QStringLiteral("qr-%1").arg(index);
+        bridge.startOperation(
+            {{QStringLiteral("contractVersion"), QStringLiteral("1")},
+             {QStringLiteral("requestId"), requestId},
+             {QStringLiteral("operation"), QStringLiteral("generateQr")},
+             {QStringLiteral("payload"),
+              QVariantMap{{QStringLiteral("type"), samples.at(index).first},
+                          {QStringLiteral("parameters"), samples.at(index).second}}}});
+        QTRY_VERIFY_WITH_TIMEOUT(
+            completed.count() > completedBefore || failed.count() > failedBefore, 3000);
+        if (failed.count() != failedBefore) {
+            QFAIL(qPrintable(
+                failed.constLast().at(1).toMap().value(QStringLiteral("message")).toString()));
+        }
+
+        const QVariantMap result = completed.constLast().at(1).toMap();
+        QCOMPARE(result.value(QStringLiteral("content")).toString(), expectedContents.at(index));
+        QVERIFY(result.value(QStringLiteral("imageDataUrl"))
+                    .toString()
+                    .startsWith(QStringLiteral("data:image/png;base64,")));
+    }
 }
 
 QTEST_GUILESS_MAIN(TestNativeBridge)

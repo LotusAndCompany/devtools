@@ -26,6 +26,8 @@ add_custom_target(DevTools_frontend_assets
 )
 
 target_sources(DevTools_web_frontend PRIVATE
+    gui/main_window.cpp
+    gui/frontend_operation_service.h gui/frontend_operation_service.cpp
     gui/native_bridge.h gui/native_bridge.cpp
     gui/qt_webengine_adapter.h gui/qt_webengine_adapter.cpp
     gui/react_bridge_demo_widget.h gui/react_bridge_demo_widget.cpp
@@ -33,7 +35,19 @@ target_sources(DevTools_web_frontend PRIVATE
 )
 add_dependencies(DevTools_web_frontend DevTools_frontend_assets)
 target_link_libraries(DevTools_web_frontend PUBLIC
+    DevTools_command
+    DevTools_core
     DevTools_data_conversion
+    DevTools_diff_tool
+    DevTools_http_request
+    DevTools_image_core
+    DevTools_image_tools_unified
+    DevTools_markdown_preview
+    DevTools_phrase_generation
+    DevTools_qr_code_generation
+    DevTools_regex_tester
+    DevTools_timestamp_conversion
+    DevTools_db_tool
     Qt6::Concurrent
     Qt6::WebChannel
     Qt6::WebEngineWidgets

@@ -200,15 +200,10 @@ DevTools_add_test(test_yaml_emitter
 )
 
 # features/web_frontend
-DevTools_add_test(test_native_bridge CORE_ONLY
+DevTools_add_test(test_native_bridge
     SOURCES
     features/web_frontend/tests/test_native_bridge.cpp
-    features/web_frontend/gui/native_bridge.cpp
-    features/data_conversion/core/parser/json_parser.cpp
-    features/data_conversion/core/emitter/basic_emitter.cpp
-    features/data_conversion/core/emitter/json_emitter.cpp
 )
-target_link_libraries(test_native_bridge PRIVATE Qt6::Concurrent Qt6::Widgets)
 # core/data_conversion
 DevTools_add_test(test_data_conversion CORE_ONLY
     SOURCES

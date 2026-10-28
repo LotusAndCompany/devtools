@@ -868,6 +868,54 @@
         <source>Text files (*.txt *.json);;All files (*)</source>
         <translation>テキストファイル (*.txt *.json);;すべてのファイル (*)</translation>
     </message>
+    <message>
+        <source>Open image</source>
+        <translation>画像を開く</translation>
+    </message>
+    <message>
+        <source>Save image</source>
+        <translation>画像を保存</translation>
+    </message>
+    <message>
+        <source>Select save folder</source>
+        <translation>保存先フォルダを選択</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.gif *.webp);;All files (*)</source>
+        <translation>画像 (*.png *.jpg *.jpeg *.bmp *.gif *.webp);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>Select Database File</source>
+        <translation>データベースファイルを選択</translation>
+    </message>
+    <message>
+        <source>SQLite Database (*.db *.sqlite *.sqlite3);;All Files (*)</source>
+        <translation>SQLiteデータベース (*.db *.sqlite *.sqlite3);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>Save QR Code</source>
+        <translation>QRコードを保存</translation>
+    </message>
+    <message>
+        <source>PNG files (*.png)</source>
+        <translation>PNGファイル (*.png)</translation>
+    </message>
+    <message>
+        <source>Text files (*.txt);;All files (*)</source>
+        <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>Data files (*.json *.yaml *.yml *.toml);;All files (*)</source>
+        <translation>データファイル (*.json *.yaml *.yml *.toml);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>Markdown files (*.md *.markdown);;All files (*)</source>
+        <translation>Markdownファイル (*.md *.markdown);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>HTML files (*.html *.htm);;All files (*)</source>
+        <translation>HTMLファイル (*.html *.htm);;すべてのファイル (*)</translation>
+    </message>
 </context>
 <context>
     <name>QCoreApplication</name>

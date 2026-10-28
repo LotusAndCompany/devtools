@@ -2,7 +2,36 @@ import { prepareBridgeValue } from "@/contract";
 
 export const BRIDGE_CONTRACT_VERSION = "1" as const;
 
-export type OperationName = "formatJson" | "openTextFile" | "saveTextFile";
+export type OperationName =
+  | "formatJson"
+  | "openTextFile"
+  | "saveTextFile"
+  | "convertData"
+  | "convertTimestamp"
+  | "compareText"
+  | "renderMarkdown"
+  | "generateQr"
+  | "saveQrImage"
+  | "commandData"
+  | "getSettings"
+  | "saveSettings"
+  | "copyToClipboard"
+  | "phraseData"
+  | "evaluateRegex"
+  | "regexSettings"
+  | "sendHttpRequest"
+  | "imageOpen"
+  | "imageEdit"
+  | "imageReset"
+  | "imageSave"
+  | "imageSplit"
+  | "databaseHistory"
+  | "databaseSelectFile"
+  | "databaseConnect"
+  | "databaseDisconnect"
+  | "databaseQuery"
+  | "databaseTables"
+  | "saveLastUsedTool";
 export type BridgeError = { code: string; message: string };
 
 export type OperationRequest = {
@@ -17,7 +46,8 @@ export type BridgeEvent =
   | { type: "progress"; requestId: string; percent: number; message: string }
   | { type: "completed"; requestId: string; result: Record<string, unknown> }
   | { type: "failed"; requestId: string; error: BridgeError }
-  | { type: "cancelled"; requestId: string };
+  | { type: "cancelled"; requestId: string }
+  | { type: "navigate"; route: string };
 
 type QtSignal<Args extends unknown[]> = {
   connect: (handler: (...args: Args) => void) => void;
@@ -33,6 +63,7 @@ type RawNativeBridge = {
   operationCompleted: QtSignal<[string, Record<string, unknown>]>;
   operationFailed: QtSignal<[string, BridgeError]>;
   operationCancelled: QtSignal<[string]>;
+  navigationRequested: QtSignal<[string]>;
 };
 
 type QWebChannelInstance = {
@@ -115,12 +146,14 @@ export async function connectNativeBridge(): Promise<NativeBridge> {
       const failed = (requestId: string, error: BridgeError) =>
         handler({ type: "failed", requestId, error });
       const cancelled = (requestId: string) => handler({ type: "cancelled", requestId });
+      const navigate = (route: string) => handler({ type: "navigate", route });
 
       native.operationStarted.connect(started);
       native.operationProgress.connect(progress);
       native.operationCompleted.connect(completed);
       native.operationFailed.connect(failed);
       native.operationCancelled.connect(cancelled);
+      native.navigationRequested.connect(navigate);
 
       return () => {
         native.operationStarted.disconnect(started);
@@ -128,6 +161,7 @@ export async function connectNativeBridge(): Promise<NativeBridge> {
         native.operationCompleted.disconnect(completed);
         native.operationFailed.disconnect(failed);
         native.operationCancelled.disconnect(cancelled);
+        native.navigationRequested.disconnect(navigate);
       };
     },
   };

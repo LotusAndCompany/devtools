@@ -26,10 +26,12 @@ configuration] and [Base UI's React setup].
 
 ## NativeBridge contract v1
 
-The only object registered in `QWebChannel` is `nativeBridge`. Its supported
-operations are deliberately narrow: `formatJson`, `openTextFile`, and
-`saveTextFile`. React does not receive a general file path, process command,
-Qt object, or arbitrary native method.
+The only object registered in `QWebChannel` is `nativeBridge`. The M2
+foundation initially exposed `formatJson`, `openTextFile`, and `saveTextFile`.
+M3 expands the allowlisted operations to cover the migrated tools; see the
+[M3 screen and behavior mapping](m3-react-ui.md#screen-and-behavior-mapping).
+React does not receive a general file path, process command, Qt object, or
+arbitrary native method.
 
 Every request has this envelope:
 

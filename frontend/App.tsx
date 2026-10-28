@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   BRIDGE_CONTRACT_VERSION,
@@ -6,326 +6,218 @@ import {
   type BridgeEvent,
   type NativeBridge,
   type OperationName,
-  type OperationRequest,
 } from "@/bridge";
+import { ToolPage, type Locale, type OperationRunner } from "@/tool-pages";
 
-const MAX_INPUT_BYTES = 1024 * 1024;
-const isJapanese = navigator.language.toLowerCase().startsWith("ja");
+type PageId = "welcome" | "image" | "phrase" | "command" | "http" | "data" | "db" | "qr" | "markdown" | "timestamp" | "regex" | "diff" | "settings" | "about";
+type ToolInfo = { id: PageId; en: string; ja: string; detailEn: string; detailJa: string };
 
-const copy = {
-  en: {
-    eyebrow: "NATIVE INTEGRATION",
-    title: "React, backed by C++",
-    intro: "A real Qt WebChannel bridge formats JSON and opens or saves local text files.",
-    connected: "Native bridge connected",
-    connecting: "Connecting to native services…",
-    disconnected: "Open this screen inside DevTools to use native services.",
-    contract: "Contract",
-    input: "Input JSON",
-    output: "Formatted output",
-    inputHint: "UTF-8 input is limited to 1 MiB per operation.",
-    outputHint: "Output is returned as plain text. No user content is rendered as HTML.",
-    placeholder: '{\n  "name": "DevTools",\n  "native": true\n}',
-    outputPlaceholder: "Formatted JSON will appear here",
-    indentation: "Indent",
-    format: "Format JSON",
-    open: "Open file",
-    save: "Save output",
-    cancel: "Cancel operation",
-    ready: "Ready for a native operation",
-    working: "Working with native C++…",
-    complete: "Operation completed",
-    cancelled: "Operation cancelled",
-    invalidInput: "Check the JSON and try again.",
-    sizeLimit: "This operation exceeds the 1 MiB input or 4 MiB output limit.",
-    invalidEncoding: "The selected file is not valid UTF-8.",
-    permission: "DevTools could not access that file.",
-    bridgeError: "The native operation failed.",
-    bytes: "bytes",
-    formatError: "Enter JSON to format.",
-    indent2: "2 spaces",
-    indent4: "4 spaces",
-    indentTab: "Tab",
-    indentMinified: "Minified",
-  },
-  ja: {
-    eyebrow: "ネイティブ連携",
-    title: "ReactからC++を実行",
-    intro: "Qt WebChannel経由でJSONを整形し、ローカルファイルを開いたり保存したりします。",
-    connected: "ネイティブブリッジに接続済み",
-    connecting: "ネイティブサービスに接続中…",
-    disconnected: "ネイティブ機能を使うにはDevTools内で開いてください。",
-    contract: "契約バージョン",
-    input: "入力JSON",
-    output: "整形結果",
-    inputHint: "入力はUTF-8で1操作あたり1 MiBまでです。",
-    outputHint: "結果はテキストとして表示します。入力内容をHTMLとして描画しません。",
-    placeholder: '{\n  "name": "DevTools",\n  "native": true\n}',
-    outputPlaceholder: "整形したJSONをここに表示します",
-    indentation: "インデント",
-    format: "JSONを整形",
-    open: "ファイルを開く",
-    save: "結果を保存",
-    cancel: "処理をキャンセル",
-    ready: "ネイティブ処理を実行できます",
-    working: "C++で処理中…",
-    complete: "処理が完了しました",
-    cancelled: "処理をキャンセルしました",
-    invalidInput: "JSONを確認して、もう一度実行してください。",
-    sizeLimit: "入力1 MiBまたは出力4 MiBの上限を超えています。",
-    invalidEncoding: "選択したファイルは有効なUTF-8形式ではありません。",
-    permission: "DevToolsからファイルにアクセスできませんでした。",
-    bridgeError: "ネイティブ処理に失敗しました。",
-    bytes: "バイト",
-    formatError: "整形するJSONを入力してください。",
-    indent2: "2スペース",
-    indent4: "4スペース",
-    indentTab: "タブ",
-    indentMinified: "最小出力",
-  },
-}[isJapanese ? "ja" : "en"];
+const tools: ToolInfo[] = [
+  { id: "image", en: "Image Editor", ja: "画像編集", detailEn: "Resize, transform and split images", detailJa: "画像のサイズ変更、変形、分割" },
+  { id: "phrase", en: "Phrase Generation", ja: "定型文生成", detailEn: "Create and manage text templates", detailJa: "定型文を作成、管理" },
+  { id: "command", en: "Command Generation", ja: "コマンド生成", detailEn: "Build Git and Docker commands", detailJa: "GitやDockerのコマンドを作成" },
+  { id: "http", en: "HTTP Request", ja: "HTTPリクエスト", detailEn: "Send and inspect API requests", detailJa: "APIリクエストを送信、確認" },
+  { id: "data", en: "Data Conversion", ja: "データ変換", detailEn: "Convert JSON, YAML and TOML", detailJa: "JSON、YAML、TOMLを変換" },
+  { id: "db", en: "Database", ja: "データベース", detailEn: "Connect and run SQL queries", detailJa: "データベースに接続してSQLを実行" },
+  { id: "qr", en: "QR Code", ja: "QRコード", detailEn: "Create QR codes from common data", detailJa: "各種データからQRコードを作成" },
+  { id: "markdown", en: "Markdown Preview", ja: "Markdownプレビュー", detailEn: "Edit Markdown and preview safely", detailJa: "Markdownを編集、安全にプレビュー" },
+  { id: "timestamp", en: "Timestamp Conversion", ja: "タイムスタンプ変換", detailEn: "Convert Unix and ISO-8601 values", detailJa: "Unix時刻とISO-8601形式を変換" },
+  { id: "regex", en: "Regex Tester", ja: "正規表現テスター", detailEn: "Test patterns, matches and replacement", detailJa: "パターン、マッチ、置換を確認" },
+  { id: "diff", en: "Text Diff", ja: "テキスト差分", detailEn: "Compare two text versions", detailJa: "2つのテキストを比較" },
+];
 
-type Status = { phase: "idle" | "running" | "done" | "failed" | "cancelled"; percent: number; text: string };
+const toolIds: Record<string, number> = { http: 1, command: 2, image: 3, phrase: 6, data: 7, db: 8, qr: 9, markdown: 10, timestamp: 11, regex: 12, diff: 13 };
+const pageForToolId = (id: number): PageId | undefined => Object.entries(toolIds).find(([, value]) => value === id)?.[0] as PageId | undefined;
 
-function errorMessage(code: string, fallback: string) {
-  if (code === "SIZE_LIMIT_EXCEEDED") return copy.sizeLimit;
-  if (code === "INVALID_ENCODING") return copy.invalidEncoding;
-  if (code === "PERMISSION_DENIED") return copy.permission;
-  if (code === "INVALID_INPUT") return fallback || copy.invalidInput;
-  return fallback || copy.bridgeError;
-}
+const titleFor = (id: PageId, locale: Locale) => {
+  if (id === "welcome") return locale === "ja" ? "ホーム" : "Home";
+  if (id === "settings") return locale === "ja" ? "設定" : "Settings";
+  if (id === "about") return locale === "ja" ? "DevToolsについて" : "About DevTools";
+  const item = tools.find((tool) => tool.id === id);
+  return item ? (locale === "ja" ? item.ja : item.en) : id;
+};
 
-function makeRequestId() {
-  return crypto.randomUUID().replaceAll("-", "");
-}
+type PendingRequest = { resolve: (value: Record<string, unknown>) => void; reject: (error: Error) => void };
 
 function App() {
+  const [locale, setLocale] = useState<Locale>(navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en");
   const [bridge, setBridge] = useState<NativeBridge | null>(null);
   const [connectionError, setConnectionError] = useState("");
-  const [input, setInput] = useState(copy.placeholder);
-  const [output, setOutput] = useState("");
-  const [indentation, setIndentation] = useState("2");
-  const [status, setStatus] = useState<Status>({ phase: "idle", percent: 0, text: copy.ready });
-  const [error, setError] = useState("");
-  const activeRequestId = useRef("");
-  const operations = useRef(new Map<string, OperationName>());
-  const inputBytes = new TextEncoder().encode(input).length;
+  const [openPages, setOpenPages] = useState<PageId[]>(["welcome"]);
+  const [activePage, setActivePage] = useState<PageId>("welcome");
+  const [search, setSearch] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
+  const [pendingCount, setPendingCount] = useState(0);
+  const pending = useRef(new Map<string, PendingRequest>());
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const openPage = useCallback((page: PageId) => {
+    setOpenPages((current) => current.includes(page) ? current : [...current, page]);
+    setActivePage(page);
+  }, []);
+
+  useEffect(() => { document.documentElement.lang = locale === "ja" ? "ja" : "en"; }, [locale]);
+  useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
+
+  function runWithBridge(native: NativeBridge, operation: OperationName, payload: Record<string, unknown>) {
+    const requestId = crypto.randomUUID().replaceAll("-", "");
+    return new Promise<Record<string, unknown>>((resolve, reject) => {
+      pending.current.set(requestId, { resolve, reject });
+      setPendingCount(pending.current.size);
+      try {
+        native.startOperation({ contractVersion: BRIDGE_CONTRACT_VERSION, requestId, operation, payload });
+      } catch (error) {
+        pending.current.delete(requestId);
+        setPendingCount(pending.current.size);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      }
+    });
+  }
 
   useEffect(() => {
-    document.documentElement.lang = isJapanese ? "ja" : "en";
     let mounted = true;
     let unsubscribe: (() => void) | undefined;
-
-    void connectNativeBridge()
-      .then((connectedBridge) => {
-        if (!mounted) return;
-        unsubscribe = connectedBridge.subscribe((event: BridgeEvent) => handleBridgeEvent(event));
-        setBridge(connectedBridge);
-        setConnectionError("");
-      })
-      .catch((connectError: unknown) => {
-        if (mounted) {
-          setConnectionError(connectError instanceof Error ? connectError.message : String(connectError));
-        }
-      });
-
-    return () => {
-      mounted = false;
-      unsubscribe?.();
+    const onEvent = (event: BridgeEvent) => {
+      if (event.type === "navigate") {
+        if (["settings", "about", "welcome", ...tools.map((item) => item.id)].includes(event.route)) openPage(event.route as PageId);
+        return;
+      }
+      const request = pending.current.get(event.requestId);
+      if (!request) return;
+      if (event.type === "completed") {
+        pending.current.delete(event.requestId);
+        setPendingCount(pending.current.size);
+        request.resolve(event.result);
+      } else if (event.type === "failed") {
+        pending.current.delete(event.requestId);
+        setPendingCount(pending.current.size);
+        request.reject(new Error(event.error.message || event.error.code));
+      } else if (event.type === "cancelled") {
+        pending.current.delete(event.requestId);
+        setPendingCount(pending.current.size);
+        request.reject(new Error(locale === "ja" ? "処理をキャンセルしました。" : "Operation cancelled."));
+      }
     };
-    // Bridge subscriptions live for this screen's lifetime.
+    void connectNativeBridge().then((native) => {
+      if (!mounted) return;
+      unsubscribe = native.subscribe(onEvent);
+      setBridge(native);
+      setConnectionError("");
+      void runWithBridge(native, "getSettings", {}).then((settings) => {
+        if (mounted && settings.language === "ja_JP") setLocale("ja");
+        else if (mounted && settings.language === "en") setLocale("en");
+        if (mounted && (settings.theme === "light" || settings.theme === "dark" || settings.theme === "system")) setTheme(settings.theme);
+        if (mounted && typeof settings.showSidebarOnStartup === "boolean") setSidebarOpen(settings.showSidebarOnStartup);
+        if (mounted && settings.showLastToolOnStartup && typeof settings.lastUsedTool === "number") {
+          const page = pageForToolId(settings.lastUsedTool);
+          if (page) { setOpenPages(["welcome", page]); setActivePage(page); }
+        }
+      }).catch(() => {});
+    }).catch((error: unknown) => {
+      if (mounted) setConnectionError(error instanceof Error ? error.message : String(error));
+    });
+    return () => { mounted = false; unsubscribe?.(); };
+    // WebChannel subscription and native connection are app-scoped.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleBridgeEvent(event: BridgeEvent) {
-    if (event.requestId !== activeRequestId.current) {
-      if (event.type === "completed" || event.type === "failed" || event.type === "cancelled") {
-        operations.current.delete(event.requestId);
-      }
-      return;
-    }
+  const runOperation: OperationRunner = useCallback((operation, payload) => {
+    if (!bridge) return Promise.reject(new Error(locale === "ja" ? "ネイティブ連携に接続していません。" : "Native services are not connected."));
+    return runWithBridge(bridge, operation, payload);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bridge, locale]);
 
-    if (event.type === "started") {
-      setStatus({ phase: "running", percent: 0, text: copy.working });
-    } else if (event.type === "progress") {
-      setStatus({ phase: "running", percent: event.percent, text: copy.working });
-    } else if (event.type === "completed") {
-      const operation = operations.current.get(event.requestId);
-      const resultText = typeof event.result.text === "string" ? event.result.text : "";
-      if (operation === "formatJson") setOutput(resultText);
-      if (operation === "openTextFile") setInput(resultText);
-      const fileName = typeof event.result.fileName === "string" ? event.result.fileName : "";
-      setStatus({
-        phase: "done",
-        percent: 100,
-        text: fileName ? `${copy.complete}: ${fileName}` : copy.complete,
-      });
-      operations.current.delete(event.requestId);
-      activeRequestId.current = "";
-    } else if (event.type === "failed") {
-      setError(errorMessage(event.error.code, event.error.message));
-      setStatus({ phase: "failed", percent: 0, text: copy.bridgeError });
-      operations.current.delete(event.requestId);
-      activeRequestId.current = "";
-    } else if (event.type === "cancelled") {
-      setStatus({ phase: "cancelled", percent: 0, text: copy.cancelled });
-      operations.current.delete(event.requestId);
-      activeRequestId.current = "";
-    }
-  }
+  useEffect(() => {
+    const toolId = toolIds[activePage];
+    if (bridge && toolId) void runWithBridge(bridge, "saveLastUsedTool", { toolId }).catch(() => {});
+    // Persist only tool pages; welcome and preferences are not tool selections.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePage, bridge]);
 
-  function startOperation(operation: OperationName, payload: Record<string, string>) {
-    if (!bridge) return;
-    const requestId = makeRequestId();
-    const request: OperationRequest = {
-      contractVersion: BRIDGE_CONTRACT_VERSION,
-      requestId,
-      operation,
-      payload,
+  const closePage = (page: PageId) => {
+    if (page === "welcome") return;
+    const next = openPages.filter((id) => id !== page);
+    setOpenPages(next.length ? next : ["welcome"]);
+    if (activePage === page) setActivePage(next.at(-1) ?? "welcome");
+  };
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const command = event.metaKey || event.ctrlKey;
+      const target = event.target as HTMLElement | null;
+      const editing = target?.matches("input, textarea, select, [contenteditable='true']") ?? false;
+      if (command && event.key.toLowerCase() === "k") { event.preventDefault(); searchRef.current?.focus(); }
+      else if (command && event.key.toLowerCase() === "w") { event.preventDefault(); closePage(activePage); }
+      else if (command && /^[1-9]$/.test(event.key)) {
+        const page = openPages[Number(event.key) - 1];
+        if (page) { event.preventDefault(); setActivePage(page); }
+      } else if (!editing && event.key === "Escape") { setSearch(""); searchRef.current?.blur(); }
     };
-    activeRequestId.current = requestId;
-    operations.current.set(requestId, operation);
-    setError("");
-    setStatus({ phase: "running", percent: 0, text: copy.working });
-    try {
-      bridge.startOperation(request);
-    } catch (operationError) {
-      operations.current.delete(requestId);
-      activeRequestId.current = "";
-      setStatus({ phase: "failed", percent: 0, text: copy.bridgeError });
-      setError(operationError instanceof Error ? operationError.message : String(operationError));
-    }
-  }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activePage, openPages]);
 
-  function formatJson() {
-    if (!input.trim()) {
-      setError(copy.formatError);
-      return;
-    }
-    if (inputBytes > MAX_INPUT_BYTES) {
-      setError(copy.sizeLimit);
-      return;
-    }
-    startOperation("formatJson", { text: input, indentation });
-  }
-
-  function openFile() {
-    startOperation("openTextFile", {});
-  }
-
-  function saveFile() {
-    const text = output || input;
-    if (new TextEncoder().encode(text).length > MAX_INPUT_BYTES) {
-      setError(copy.sizeLimit);
-      return;
-    }
-    startOperation("saveTextFile", { text, suggestedName: "formatted.json" });
-  }
-
-  function cancelOperation() {
-    if (bridge && activeRequestId.current) bridge.cancelOperation(activeRequestId.current);
-  }
+  const filteredTools = tools.filter((tool) => {
+    const query = search.trim().toLowerCase();
+    return !query || `${tool.en} ${tool.ja} ${tool.detailEn} ${tool.detailJa}`.toLowerCase().includes(query);
+  });
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-8 md:px-10 md:py-12">
-        <header className="flex flex-col gap-6 border-b border-border pb-7 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold tracking-[0.18em] text-primary">{copy.eyebrow}</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{copy.title}</h1>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{copy.intro}</p>
-          </div>
-          <div className="flex min-w-64 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3 shadow-sm">
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <span className={`size-2 rounded-full ${bridge ? "bg-emerald-500" : "bg-amber-500"}`} />
-              {bridge ? copy.connected : connectionError ? copy.disconnected : copy.connecting}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {copy.contract} {bridge?.contractVersion ?? BRIDGE_CONTRACT_VERSION}
-            </p>
-          </div>
+    <div className={`app-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+      {sidebarOpen && <aside className="app-sidebar" aria-label={locale === "ja" ? "ツール" : "Tools"}>
+        <div className="brand-row"><div className="brand-mark" aria-hidden="true">D</div><div><strong>DevTools</strong><span>{locale === "ja" ? "デスクトップツール" : "Desktop toolkit"}</span></div></div>
+        <label className="search-wrap"><span aria-hidden="true">⌕</span><input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder={locale === "ja" ? "ツールを検索" : "Search tools"} aria-label={locale === "ja" ? "ツールを検索" : "Search tools"} /><kbd>⌘K</kbd></label>
+        <button className={`nav-item ${activePage === "welcome" ? "active" : ""}`} onClick={() => openPage("welcome")}><span className="nav-icon">⌂</span>{locale === "ja" ? "ホーム" : "Home"}</button>
+        <div className="sidebar-section-title">{locale === "ja" ? "ツール" : "WORKSPACE"}</div>
+        <nav className="tool-nav">{filteredTools.map((tool) => <button key={tool.id} className={`nav-item ${activePage === tool.id ? "active" : ""}`} onClick={() => openPage(tool.id)} title={locale === "ja" ? tool.detailJa : tool.detailEn}><span className="nav-icon" aria-hidden="true">{tool.en.slice(0, 1)}</span><span>{locale === "ja" ? tool.ja : tool.en}</span></button>)}</nav>
+        <div className="sidebar-bottom">
+          <button className={`nav-item ${activePage === "settings" ? "active" : ""}`} onClick={() => openPage("settings")}><span className="nav-icon">⚙</span>{locale === "ja" ? "設定" : "Settings"}</button>
+          <button className={`nav-item ${activePage === "about" ? "active" : ""}`} onClick={() => openPage("about")}><span className="nav-icon">ⓘ</span>{locale === "ja" ? "このアプリについて" : "About"}</button>
+        </div>
+      </aside>}
+      <main className="app-main">
+        <header className="app-topbar">
+          <Button variant="ghost" aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"} onClick={() => setSidebarOpen((open) => !open)}>☰</Button>
+          <div className="topbar-title">{titleFor(activePage, locale)}</div>
+          <div className="topbar-status" title={connectionError || undefined}><span className={`status-dot ${bridge ? "connected" : "disconnected"}`} />{bridge ? (locale === "ja" ? "接続済み" : "Connected") : (locale === "ja" ? "未接続" : "Disconnected")}</div>
+          <Button variant="outline" onClick={() => setLocale((value) => value === "ja" ? "en" : "ja")}>{locale === "ja" ? "EN" : "日本語"}</Button>
+          {pendingCount > 0 && <Button variant="outline" onClick={() => { for (const id of pending.current.keys()) bridge?.cancelOperation(id); }}>{locale === "ja" ? "キャンセル" : "Cancel"} ({pendingCount})</Button>}
         </header>
-
-        <section className="grid gap-5 lg:grid-cols-2" aria-label={copy.title}>
-          <div className="flex min-w-0 flex-col gap-3">
-            <div className="flex items-baseline justify-between gap-4">
-              <label htmlFor="json-input" className="text-sm font-semibold">{copy.input}</label>
-              <span className={`text-xs tabular-nums ${inputBytes > MAX_INPUT_BYTES ? "text-destructive" : "text-muted-foreground"}`}>
-                {inputBytes.toLocaleString()} / 1 MiB {copy.bytes}
-              </span>
-            </div>
-            <textarea
-              id="json-input"
-              className="min-h-[27rem] resize-y rounded-lg border border-border bg-card p-4 font-mono text-[13px] leading-6 text-foreground shadow-sm outline-none transition focus-visible:ring-2 focus-visible:ring-ring"
-              spellCheck={false}
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder={copy.placeholder}
-              aria-describedby="input-hint"
-            />
-            <p id="input-hint" className="text-xs text-muted-foreground">{copy.inputHint}</p>
-          </div>
-
-          <div className="flex min-w-0 flex-col gap-3">
-            <label htmlFor="json-output" className="text-sm font-semibold">{copy.output}</label>
-            <textarea
-              id="json-output"
-              className="min-h-[27rem] resize-y rounded-lg border border-border bg-muted/35 p-4 font-mono text-[13px] leading-6 text-foreground outline-none"
-              spellCheck={false}
-              readOnly
-              value={output}
-              placeholder={copy.outputPlaceholder}
-              aria-describedby="output-hint"
-            />
-            <p id="output-hint" className="text-xs text-muted-foreground">{copy.outputHint}</p>
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-between md:px-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <label htmlFor="indentation" className="text-sm font-medium">{copy.indentation}</label>
-            <select
-              id="indentation"
-              className="h-10 rounded-md border border-border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              value={indentation}
-              onChange={(event) => setIndentation(event.target.value)}
-            >
-              <option value="2">{copy.indent2}</option>
-              <option value="4">{copy.indent4}</option>
-              <option value="tab">{copy.indentTab}</option>
-              <option value="minified">{copy.indentMinified}</option>
-            </select>
-            <span className="hidden h-6 border-l border-border md:block" />
-            <Button onClick={openFile} variant="outline" disabled={!bridge}>{copy.open}</Button>
-            <Button onClick={saveFile} variant="outline" disabled={!bridge}>{copy.save}</Button>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {status.phase === "running" && (
-              <Button onClick={cancelOperation} variant="ghost" size="sm">{copy.cancel}</Button>
-            )}
-            <Button onClick={formatJson} disabled={!bridge || inputBytes > MAX_INPUT_BYTES}>
-              {copy.format}
-            </Button>
-          </div>
-        </section>
-
-        <footer className="flex flex-col gap-2 text-sm" aria-live="polite">
-          <div className="flex items-center gap-3">
-            <p className={status.phase === "failed" ? "text-destructive" : "text-muted-foreground"}>
-              {status.text}
-            </p>
-            {status.phase === "running" && (
-              <div className="h-1.5 w-40 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={status.percent} aria-valuemin={0} aria-valuemax={100}>
-                <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${status.percent}%` }} />
-              </div>
-            )}
-          </div>
-          {error && <p className="text-destructive">{error}</p>}
-          {connectionError && !bridge && <p className="sr-only">{connectionError}</p>}
-        </footer>
-      </div>
-    </main>
+        <div className="tabs-bar" role="tablist" aria-label={locale === "ja" ? "開いている画面" : "Open pages"}>
+          {openPages.map((page, index) => <div key={page} className={`page-tab ${activePage === page ? "active" : ""}`} role="presentation"><button role="tab" aria-selected={activePage === page} onClick={() => setActivePage(page)}>{titleFor(page, locale)}{index < 9 && <kbd>⌘{index + 1}</kbd>}</button>{page !== "welcome" && <button className="tab-close" aria-label={`${locale === "ja" ? "閉じる" : "Close"} ${titleFor(page, locale)}`} onClick={() => closePage(page)}>×</button>}</div>)}
+          <span className="contract-label">Bridge {bridge?.contractVersion ?? BRIDGE_CONTRACT_VERSION}</span>
+        </div>
+        <div className="page-stack">{openPages.map((page) => <section key={page} className="page-host" hidden={activePage !== page} aria-label={titleFor(page, locale)}>
+          {page === "welcome" ? <WelcomePage locale={locale} onOpen={openPage} /> :
+            page === "settings" ? <SettingsPage locale={locale} run={runOperation} onLocaleChange={setLocale} onThemeChange={setTheme} /> :
+              page === "about" ? <AboutPage locale={locale} /> : <ToolPage id={page} locale={locale} run={runOperation} active={activePage === page} />}
+        </section>)}</div>
+      </main>
+    </div>
   );
 }
+
+function WelcomePage({ locale, onOpen }: { locale: Locale; onOpen: (page: PageId) => void }) {
+  return <div className="welcome-page"><div className="welcome-copy"><div className="eyebrow">DEVELOPER TOOLKIT</div><h1>{locale === "ja" ? "必要なツールを、ひとつの場所に。" : "Your everyday tools, in one place."}</h1><p>{locale === "ja" ? "DevToolsはC++の処理を保ちながら、ReactとTypeScriptで画面を提供します。左のメニューからツールを選んでください。" : "DevTools keeps its native C++ services and presents them through a shared React and TypeScript interface. Choose a tool from the sidebar."}</p></div><div className="tool-card-grid">{tools.map((tool) => <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}><span className="tool-card-icon">{tool.en.slice(0, 1)}</span><strong>{locale === "ja" ? tool.ja : tool.en}</strong><span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span></button>)}</div></div>;
+}
+
+type AppSettings = { language: "en" | "ja_JP"; theme: "system" | "light" | "dark"; showSidebarOnStartup: boolean; showLastToolOnStartup: boolean; alwaysOnTop: boolean; rememberWindowSize: boolean; rememberWindowPosition: boolean };
+const defaultSettings = (locale: Locale): AppSettings => ({ language: locale === "ja" ? "ja_JP" : "en", theme: "system", showSidebarOnStartup: true, showLastToolOnStartup: false, alwaysOnTop: false, rememberWindowSize: true, rememberWindowPosition: true });
+
+function SettingsPage({ locale, run, onLocaleChange, onThemeChange }: { locale: Locale; run: OperationRunner; onLocaleChange: (locale: Locale) => void; onThemeChange: (theme: "system" | "light" | "dark") => void }) {
+  const [settings, setSettings] = useState(defaultSettings(locale));
+  const [message, setMessage] = useState("");
+  useEffect(() => { void run("getSettings", {}).then((result) => setSettings((current) => ({ ...current, ...result } as AppSettings))).catch(() => {}); }, [run]);
+  const labels: Record<keyof AppSettings, string> = { language: locale === "ja" ? "言語" : "Language", theme: locale === "ja" ? "テーマ" : "Theme", showSidebarOnStartup: locale === "ja" ? "起動時にサイドバーを表示" : "Show sidebar on startup", showLastToolOnStartup: locale === "ja" ? "前回のツールを開く" : "Open last used tool on startup", alwaysOnTop: locale === "ja" ? "ウィンドウを常に手前に表示" : "Keep window on top", rememberWindowSize: locale === "ja" ? "ウィンドウサイズを記憶" : "Remember window size", rememberWindowPosition: locale === "ja" ? "ウィンドウ位置を記憶" : "Remember window position" };
+  const save = async () => { setMessage(""); try { await run("saveSettings", settings); onLocaleChange(settings.language === "ja_JP" ? "ja" : "en"); onThemeChange(settings.theme); setMessage(locale === "ja" ? "設定を保存しました。" : "Settings saved."); } catch (error) { setMessage(error instanceof Error ? error.message : String(error)); } };
+  return <div className="settings-page"><PageHeading title={locale === "ja" ? "設定" : "Settings"} description={locale === "ja" ? "DevToolsの起動と表示を設定します。" : "Choose how DevTools starts and appears."} /><div className="settings-card"><label className="field-label" htmlFor="app-language">{labels.language}</label><select id="app-language" className="form-control" value={settings.language} onChange={(event) => setSettings((value) => ({ ...value, language: event.target.value as AppSettings["language"] }))}><option value="en">English</option><option value="ja_JP">日本語</option></select><label className="field-label" htmlFor="app-theme">{labels.theme}</label><select id="app-theme" className="form-control" value={settings.theme} onChange={(event) => setSettings((value) => ({ ...value, theme: event.target.value as AppSettings["theme"] }))}><option value="system">{locale === "ja" ? "システム設定に合わせる" : "Follow system"}</option><option value="light">{locale === "ja" ? "ライト" : "Light"}</option><option value="dark">{locale === "ja" ? "ダーク" : "Dark"}</option></select>{(Object.keys(labels) as Array<keyof AppSettings>).filter((key) => key !== "language" && key !== "theme").map((key) => <label key={key} className="settings-toggle"><span>{labels[key]}</span><input type="checkbox" checked={settings[key] as boolean} onChange={() => setSettings((value) => ({ ...value, [key]: !value[key] }))} /></label>)}<div className="settings-actions"><span role="status">{message}</span><Button onClick={() => void save()}>{locale === "ja" ? "保存" : "Save"}</Button></div></div></div>;
+}
+
+function AboutPage({ locale }: { locale: Locale }) {
+  return <div className="about-page"><PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} description={locale === "ja" ? "日々の開発作業に使うデスクトップツールです。" : "A desktop toolkit for everyday development work."} /><div className="about-card"><div className="brand-mark large">D</div><div><strong>DevTools</strong><p>{locale === "ja" ? "C++のネイティブ処理とReactのユーザーインターフェースを組み合わせています。" : "Combines native C++ services with a React user interface."}</p></div></div></div>;
+}
+
+function PageHeading({ title, description }: { title: string; description: string }) { return <header className="page-heading"><h1>{title}</h1><p>{description}</p></header>; }
 
 export default App;

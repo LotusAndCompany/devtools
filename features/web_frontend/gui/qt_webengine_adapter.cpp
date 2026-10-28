@@ -137,8 +137,8 @@ QtWebEngineAdapter::QtWebEngineAdapter(QWidget *parent) : QWebEngineView(parent)
     setPage(page);
 
     auto *channel = new QWebChannel(page);
-    auto *bridge = new NativeBridge(this, channel);
-    channel->registerObject(QStringLiteral("nativeBridge"), bridge);
+    native_bridge_ = new NativeBridge(this, channel);
+    channel->registerObject(QStringLiteral("nativeBridge"), native_bridge_);
     page->setWebChannel(channel);
 
     setUrl(initialFrontendUrl(developmentEnabled));
