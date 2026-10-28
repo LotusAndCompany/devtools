@@ -16,6 +16,7 @@
 #include "features/qr_code/gui/qr_code_generation_gui.h"
 #include "features/regex_tool/gui/regex_tester_gui.h"
 #include "features/timestamp_conversion/gui/timestamp_conversion_gui.h"
+#include "features/web_frontend/gui/react_bridge_demo_widget.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -105,6 +106,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::DIFF_TOOL:
         content = new DiffToolGUI(new DiffTool(), this);
+        break;
+    case Sidemenu::ID::WEB_ENGINE_DEMO:
+        content = new ReactBridgeDemoWidget(this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない
