@@ -3,8 +3,8 @@
 M3 replaces the normal tool and settings screens with React while keeping
 feature processing in the existing C++ services. The Qt application remains
 the host for WebEngine, window lifecycle, native dialogs, clipboard, and
-SQLite file drag-and-drop. The app's regular navigation no longer opens a Qt
-Widgets tool screen.
+SQLite or image file drag-and-drop. The app's regular navigation no longer
+opens a Qt Widgets tool screen.
 
 ## Screen and behavior mapping
 
