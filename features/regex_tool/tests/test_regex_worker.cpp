@@ -10,6 +10,7 @@ class TestRegexWorker : public QObject
 private slots:
     void results_data();
     void results();
+    void runawayPatternReportsMatchLimit();
     void buildsOptionsFromFlags();
     void formatsMatchesForClipboard();
 };
@@ -83,6 +84,26 @@ void TestRegexWorker::formatsMatchesForClipboard()
                                     "Match 1: \"ab\" [0, 2]\n"
                                     "  Group 1: \"a\" [0, 1]\n"
                                     "  Group 2 (bee): \"b\" [1, 2]\n\n"));
+}
+
+void TestRegexWorker::runawayPatternReportsMatchLimit()
+{
+    qRegisterMetaType<QVector<devtools::MatchResult>>();
+    devtools::RegexWorker worker;
+    QSignalSpy spy(&worker, &devtools::RegexWorker::finishedMatching);
+    worker.setParams(43, QStringLiteral("(a+)+$"),
+                     QString(1000, QLatin1Char('a')) + QLatin1Char('!'), QString(),
+                     QRegularExpression::NoPatternOption, true);
+
+    worker.start();
+
+    QVERIFY(spy.wait(5000));
+    QVERIFY(worker.wait(5000));
+    QCOMPARE(spy.size(), 1);
+    const auto result = spy.takeFirst();
+    QCOMPARE(result[0].toInt(), 43);
+    QVERIFY(!result[3].toBool());
+    QCOMPARE(result[4].toString(), QStringLiteral("Regular expression match limit exceeded."));
 }
 
 void TestRegexWorker::buildsOptionsFromFlags()

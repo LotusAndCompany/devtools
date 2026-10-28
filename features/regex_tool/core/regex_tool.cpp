@@ -1,5 +1,7 @@
 #include "features/regex_tool/core/regex_tool.h"
 
+#include <QThread>
+
 namespace {
 
 /**
@@ -128,7 +130,7 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
 
     if (global) {
         QRegularExpressionMatchIterator i = re.globalMatch(text);
-        while (i.hasNext()) {
+        while (!QThread::currentThread()->isInterruptionRequested() && i.hasNext()) {
             const QRegularExpressionMatch match = i.next();
             result.append(text.mid(lastPos, match.capturedStart() - lastPos));
             result.append(substituteReplacement(replacement, match));
