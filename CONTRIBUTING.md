@@ -89,6 +89,25 @@ flowchart TD
 - Update `.ts` files only when translatable strings change:
   `cmake --build build --target update_devtools_translations`
 
+### React / Qt WebEngine UI with HMR
+
+Start Vite in one terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+From the repository root, launch the Debug app in another terminal:
+
+```bash
+DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
+```
+
+Hot reload is available only in Debug builds and the app accepts only this
+loopback URL. Release builds use the embedded frontend assets. See the
+[React migration notes](docs/migration/m3-react-ui.md) for details.
+
 ### Code Formatting
 
 This project uses `clang-format` for automatic code formatting and `clang-tidy` for static analysis.

@@ -5,6 +5,7 @@
 #include <QDropEvent>
 #include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMimeData>
@@ -58,6 +59,7 @@ void TestConnectionWindow::connectsToAccessibleSQLiteFileWithoutPicker()
     ConnectionWindow window;
     auto *databaseField = window.findChild<QLineEdit *>(QStringLiteral("databaseNameLineEdit"));
     QVERIFY(databaseField != nullptr);
+    const QString expectedPath = dropFile ? QFileInfo(path).canonicalFilePath() : path;
     if (dropFile) {
         QMimeData mimeData;
         mimeData.setUrls({QUrl::fromLocalFile(path)});
@@ -71,7 +73,7 @@ void TestConnectionWindow::connectsToAccessibleSQLiteFileWithoutPicker()
     } else {
         databaseField->setText(path);
     }
-    QCOMPARE(databaseField->text(), path);
+    QCOMPARE(databaseField->text(), expectedPath);
 
     bool connected = false;
     QString connectedPath;
@@ -106,7 +108,7 @@ void TestConnectionWindow::connectsToAccessibleSQLiteFileWithoutPicker()
     QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
     QVERIFY(!pickerShown);
     QVERIFY(connected);
-    QCOMPARE(connectedPath, path);
+    QCOMPARE(connectedPath, QFileInfo(path).canonicalFilePath());
 }
 
 } // namespace Test

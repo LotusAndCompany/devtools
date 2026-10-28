@@ -89,6 +89,23 @@ flowchart TD
 - 翻訳対象文字列を変更した場合のみ `.ts` を更新する：
   `cmake --build build --target update_devtools_translations`
 
+### React / Qt WebEngine UI のHMR
+
+1つ目のターミナルでViteを起動します。
+
+```bash
+cd frontend
+npm run dev
+```
+
+リポジトリルートから、2つ目のターミナルでDebugアプリを起動します。
+
+```bash
+DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
+```
+
+HMRはDebugビルドでのみ利用でき、アプリが受け付けるURLはこのループバックURLに限られます。Releaseビルドでは埋め込み済みのフロントエンドを使います。詳しくは[React移行メモ](../migration/m3-react-ui.md)を参照してください。
+
 ### コードフォーマット
 
 このプロジェクトでは、自動コードフォーマットに`clang-format`、静的解析に`clang-tidy`を使用しています。
