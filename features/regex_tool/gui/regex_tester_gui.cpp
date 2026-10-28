@@ -490,6 +490,11 @@ void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult
 {
     Q_UNUSED(requestId)
 
+    if (!isValid && errorStr == QStringLiteral("Regular expression match limit exceeded.")) {
+        onWatchdogTimeout(requestId);
+        return;
+    }
+
     if (!isValid) {
         m_errorLabel->setText(tr("Syntax Error: %1").arg(errorStr));
         m_errorLabel->show();
