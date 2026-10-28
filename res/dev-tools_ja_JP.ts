@@ -1583,11 +1583,11 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <source>Refresh Tables</source>
-        <translation type="unfinished">テーブル更新</translation>
+        <translation>テーブルを更新</translation>
     </message>
     <message>
         <source>DB Connection Settings</source>
-        <translation type="unfinished">DB接続設定</translation>
+        <translation>DB接続設定</translation>
     </message>
     <message>
         <source>SQL</source>
@@ -1633,14 +1633,8 @@ Choose a tool from the side panel</source>
         <source>Refresh</source>
         <translation>更新</translation>
     </message>
-    <message>
-        <source>Refresh Tables</source>
-        <translation>テーブルを更新</translation>
-    </message>
-    <message>
-        <source>DB Connection Settings</source>
-        <translation>DB接続設定</translation>
-    </message>
+
+
 </context>
 <context>
     <name>devtools::RegexTesterGUI</name>
