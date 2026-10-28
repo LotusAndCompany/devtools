@@ -75,6 +75,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::DB_TOOL);
     registerItem(ID::TIMESTAMP_CONVERSION);
     registerItem(ID::REGEX_TESTER);
+    registerItem(ID::WEB_ENGINE_DEMO);
 
     m_scrollAreaLayout->addStretch();
 
@@ -129,6 +130,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("regular_expression"));
     case ID::DIFF_TOOL:
         return IconUtils::themedIcon(QStringLiteral("difference"));
+    case ID::WEB_ENGINE_DEMO:
+        return IconUtils::themedIcon(QStringLiteral("web"));
 
     default:
         throw UnderDevelopmentException();

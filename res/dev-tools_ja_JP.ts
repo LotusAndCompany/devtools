@@ -855,6 +855,21 @@
     </message>
 </context>
 <context>
+    <name>NativeBridge</name>
+    <message>
+        <source>Save text file</source>
+        <translation>テキストファイルを保存</translation>
+    </message>
+    <message>
+        <source>Open text file</source>
+        <translation>テキストファイルを開く</translation>
+    </message>
+    <message>
+        <source>Text files (*.txt *.json);;All files (*)</source>
+        <translation>テキストファイル (*.txt *.json);;すべてのファイル (*)</translation>
+    </message>
+</context>
+<context>
     <name>QCoreApplication</name>
     <message>
         <source>Images</source>
@@ -1474,6 +1489,14 @@ Please try reducing the amount of data or simplifying the content.</source>
         <source>Compare two texts and show the differences</source>
         <translation>2つのテキストを比較して差分を表示します</translation>
     </message>
+    <message>
+        <source>React Bridge Demo</source>
+        <translation>React連携デモ</translation>
+    </message>
+    <message>
+        <source>Try the React screen connected to native C++ services</source>
+        <translation>React画面からC++の機能を試せます</translation>
+    </message>
 </context>
 <context>
     <name>WelcomePage</name>
@@ -1583,11 +1606,11 @@ Choose a tool from the side panel</source>
     </message>
     <message>
         <source>Refresh Tables</source>
-        <translation type="unfinished">テーブル更新</translation>
+        <translation>テーブルを更新</translation>
     </message>
     <message>
         <source>DB Connection Settings</source>
-        <translation type="unfinished">DB接続設定</translation>
+        <translation>DB接続設定</translation>
     </message>
     <message>
         <source>SQL</source>
@@ -1632,14 +1655,6 @@ Choose a tool from the side panel</source>
     <message>
         <source>Refresh</source>
         <translation>更新</translation>
-    </message>
-    <message>
-        <source>Refresh Tables</source>
-        <translation>テーブルを更新</translation>
-    </message>
-    <message>
-        <source>DB Connection Settings</source>
-        <translation>DB接続設定</translation>
     </message>
 </context>
 <context>
