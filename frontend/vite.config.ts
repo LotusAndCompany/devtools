@@ -17,8 +17,9 @@ const developmentCsp = [
   "connect-src 'self' ws://127.0.0.1:5173 qrc:",
   "object-src 'none'",
   "frame-src 'none'",
-  "frame-ancestors 'none'",
 ].join("; ");
+
+const developmentCspHeader = `${developmentCsp}; frame-ancestors 'none'`;
 
 const productionCsp = [
   "default-src 'none'",
@@ -31,7 +32,6 @@ const productionCsp = [
   "connect-src 'self' qrc:",
   "object-src 'none'",
   "frame-src 'none'",
-  "frame-ancestors 'none'",
 ].join("; ");
 
 export default defineConfig(({ mode }) => {
@@ -45,6 +45,15 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       {
         name: "devtools-content-security-policy",
+        configureServer(server) {
+          server.middlewares.use((request, response, next) => {
+            const path = request.url?.split("?")[0];
+            if (path === "/" || path === "/index.html") {
+              response.setHeader("Content-Security-Policy", developmentCspHeader);
+            }
+            next();
+          });
+        },
         transformIndexHtml(html: string) {
           return html.replace("__CONTENT_SECURITY_POLICY__", csp);
         },
