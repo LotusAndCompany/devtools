@@ -31,6 +31,9 @@ private slots:
                                 const QString &replacedText, bool isValid, const QString &errorStr);
     void handleWatchdogTimeout();
 
+protected:
+    virtual RegexWorker *createWorker();
+
 private:
     QTimer watchdogTimer;
     QSet<RegexWorker *> workers;

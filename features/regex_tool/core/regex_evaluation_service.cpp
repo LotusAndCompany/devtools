@@ -18,8 +18,6 @@ RegexEvaluationService::~RegexEvaluationService()
     for (RegexWorker *worker : workers) {
         worker->disconnect(this);
         worker->requestInterruption();
-        worker->wait();
-        delete worker;
     }
     workers.clear();
 }
@@ -34,7 +32,7 @@ void RegexEvaluationService::evaluate(const QString &pattern, const QString &tex
     }
 
     const int requestId = ++currentRequestId;
-    auto *const worker = new RegexWorker(this);
+    auto *const worker = createWorker();
     workers.insert(worker);
     activeWorker = worker;
     connect(worker, &RegexWorker::finishedMatching, this,
@@ -44,12 +42,17 @@ void RegexEvaluationService::evaluate(const QString &pattern, const QString &tex
         if (activeWorker == worker) {
             activeWorker = nullptr;
         }
-        worker->deleteLater();
     });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
 
     worker->setParams(requestId, pattern, text, replacePattern, options, global);
     worker->start();
     watchdogTimer.start(watchdogTimeoutMs);
+}
+
+RegexWorker *RegexEvaluationService::createWorker()
+{
+    return new RegexWorker();
 }
 
 void RegexEvaluationService::cancel()

@@ -23,12 +23,11 @@
 
 Interruption remains cooperative: collection checks between matches and the
 worker checks again before replacement. A running individual regex operation
-or replacement is not forcibly interrupted. The GUI invalidates timed-out and
-superseded results. Older superseded workers are not tracked by the GUI's
-current-worker pointer; shutdown and deferred deletion need separate lifecycle
-verification before claiming full asynchronous parity. No cancellation,
-watchdog, stale-result or shutdown behavior was changed or proven by this
-slice.
+is not forcibly interrupted. The evaluation service tracks timed-out and
+superseded workers, disconnects and interrupts them during destruction, and
+does not wait for an in-progress regex call. Workers have no service parent and
+schedule their own deletion when they finish. The service's shutdown path is
+covered by `destroyingServiceDoesNotWaitForActiveWorker`.
 
 The remaining M1 scope includes the rest of the feature/UI audit, extraction,
 service contracts, integration and existing-UI regression checks. QR

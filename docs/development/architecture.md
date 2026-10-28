@@ -19,15 +19,22 @@ DevTools is a Qt6-based desktop application built with C++17. The architecture u
 
 ## Directory Structure
 
-Each feature is a self-contained module under `features/{feature}/` with
-`core/`, `gui/`, and `tests/` subdirectories. Shared application infrastructure
-lives in `features/framework/` and is compiled as the `DevTools_core` library.
+Each feature lives under `features/{feature}/` with `core/`, `gui/`, and
+`tests/` subdirectories. Shared framework code lives in `features/framework/`:
+non-Widget classes are compiled as `DevTools_core`, while most shared GUI classes
+are compiled as `DevTools_framework_gui`. `ContentsArea` remains part of the
+application executable. Feature libraries still list their `core/` and `gui/`
+sources in the same target. The separation is at the source dependency level:
+feature `core/` code does not include Qt Widgets, the shared GUI framework, or
+feature GUI headers.
 
 ```mermaid
 flowchart TD
     root["devtools/"]
     root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
-    features --> framework["framework/<br/>Core framework<br/>DevTools_core"]
+    features --> framework["framework/<br/>Shared framework"]
+    framework --> framework_core["DevTools_core<br/>Non-Widget framework"]
+    framework --> framework_gui["DevTools_framework_gui<br/>Application shell and shared widgets"]
     features --> conversion["data_conversion/<br/>JSON/YAML/TOML conversion"]
     features --> qr["qr_code/<br/>QR code generation"]
     features --> image["image/<br/>Resize, rotation, division, transparency"]
@@ -53,72 +60,71 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    app["DevTools<br/>(executable)"]
+    app["DevTools executable"]
+    features["Feature libraries"]
     image["DevTools_image_tools_unified"]
-    conversion["DevTools_data_conversion"]
-    qr["DevTools_qr_code_generation"]
     image_core["DevTools_image_core"]
-    core["DevTools_core<br/>(main framework,<br/>features/framework)"]
-    app --> image
-    app --> conversion
-    app --> qr
+    gui["DevTools_framework_gui<br/>Qt Widgets"]
+    core["DevTools_core<br/>Qt Core"]
+    app --> features
+    app --> gui
+    features --> image
+    features --> gui
+    features --> core
     image --> image_core
-    image_core --> core
-    conversion --> core
-    qr --> core
+    gui --> core
 ```
 
-Other feature modules (`DevTools_http_request`, `DevTools_command`,
-`DevTools_phrase_generation`, `DevTools_db_tool`) depend directly on
-`DevTools_core` without intermediate shared modules.
+The root CMake file links feature libraries to both shared framework targets.
+Their `core/` sources still have no source-level dependency on the GUI target.
+`DevTools_image_tools_unified` also depends on `DevTools_image_core`.
 
-### Module List
+### Shared Framework Targets
 
 | Module | Description | Dependencies |
 |--------|-------------|--------------|
-| `DevTools_core` | Main framework (application, main window, side menu, tool base, exceptions). Sources live under `features/framework/`. | Qt6, qlementine |
-| `DevTools_image_core` | Image I/O and editing base classes | DevTools_core |
-| `DevTools_image_tools_unified` | Unified image processing tools (resize, rotation, division, transparency) | DevTools_image_core |
-| `DevTools_data_conversion` | JSON/YAML/TOML conversion | DevTools_core, yaml-cpp, toml11 |
-| `DevTools_qr_code_generation` | QR code generation | DevTools_core |
-| `DevTools_http_request` | HTTP API testing | DevTools_core |
-| `DevTools_command` | Shell command execution | DevTools_core |
-| `DevTools_phrase_generation` | Random phrase generation | DevTools_core |
-| `DevTools_db_tool` | Database tool | DevTools_core |
-| `DevTools_regex_tool` | Regular expression matching and replacement | DevTools_core |
-| `DevTools_timestamp_conversion` | Unix timestamp, date/time, and ISO 8601 conversion | DevTools_core |
+| `DevTools_core` | Non-Widget framework services, tool base, and exceptions | Qt6::Core |
+| `DevTools_framework_gui` | Shared application GUI, widgets, dialogs, and design system | DevTools_core, Qt6::Core, Qt6::Gui, Qt6::Widgets, qlementine |
 
-### Core Module Structure
+Feature targets are declared in the root `CMakeLists.txt` and list their sources
+in `features/{feature}/CMakeLists.txt`. The root currently links them to both
+shared framework targets and the application Qt modules. Data conversion also
+links yaml-cpp and toml11; `DevTools_image_tools_unified` links
+`DevTools_image_core`. The registered target names are listed in `MODULE_LIST`
+in the root CMake file.
 
-`DevTools_core` encapsulates application infrastructure and is implemented in
-`features/framework/`. Its sources are listed via `target_sources()` in
-`features/framework/CMakeLists.txt`. Key components:
+### Shared Framework Structure
 
-- **Application Framework**: `features/framework/gui/gui_application.cpp`, `features/framework/core/application_mixin.cpp`
-- **Main Window**: `features/framework/gui/main_window.cpp`
-- **Navigation**: `features/framework/gui/sidemenu.cpp`, `features/framework/gui/contents_area.cpp`
-- **Dialogs**: `features/framework/gui/menubar/about_devtools_dialog.cpp`, `settings_dialog.cpp`
-- **Shared UI Design System**: `features/framework/gui/design_system.h`, `design_system.cpp`
-- **Tool Base**: `features/framework/gui/gui_tool.cpp`, `features/framework/core/tool/tool.cpp`
-- **Exceptions**: `features/framework/core/exception/` (custom exception classes)
+Both targets are implemented in `features/framework/`; their sources are listed
+with `target_sources()` in `features/framework/CMakeLists.txt`:
+
+- **`DevTools_core`**: `application_settings_service`, `local_file_selection_service`, `application_mixin`, `Tool`, and exception classes under `features/framework/core/`
+- **`DevTools_framework_gui`**: `GuiApplication`, `MainWindow`, navigation, dialogs, the shared UI design system, and `GuiTool` under `features/framework/gui/`
+
+The detailed feature service boundaries and remaining Qt dependencies are
+recorded in the [M1 architecture inventory](../migration/m1-architecture-inventory.md).
 
 ## Design Patterns
 
-### MVC-like Architecture
+### Core and GUI Source Boundary
 
 Each tool follows a similar pattern:
 
 ```mermaid
 flowchart LR
-    subgraph module["Tool Module"]
-        core_layer["core/<br/>Logic"]
-        gui_layer["gui/<br/>Interface<br/>(Widgets + .cpp)"]
+    subgraph module["Feature source tree"]
+        core_layer["core/<br/>Services and processing"]
+        gui_layer["gui/<br/>Qt Widgets interface"]
     end
     gui_layer --> core_layer
 ```
 
-- **core/**: Business logic, algorithms, no UI dependencies
-- **gui/**: User interface, uses Qt Widgets
+- **core/**: Services and feature processing. Do not include Qt Widgets, shared GUI framework headers, or feature GUI headers. Other Qt modules and value types may be used when the processing requires them.
+- **gui/**: Collects input, presents localized errors and results, and calls the feature's core services.
+
+This is a source dependency rule; it does not mean every feature has a separate
+core library. Most feature targets still compile both source directories into
+one static library.
 
 ### Static Library Pattern
 
@@ -162,11 +168,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    user["User loads image"] --> gui["GUI Layer<br/>(image_gui.h)"]
+    user["User loads image"] --> gui["ImageToolsUnifiedGUI"]
     gui <-->|"open/save"| dialog["File Dialog<br/>(Qt native)"]
-    gui --> view["ImageView<br/>(image_view.h)<br/>displays image"]
-    view -->|"user configures options"| core["Core Layer<br/>(image_*.cpp)<br/>processes image"]
-    core --> output["Output<br/>save dialog"]
+    gui -->|"options and image"| core["ImageProcessingService<br/>(image/core)"]
+    core -->|"processed image"| gui
+    gui --> output["Output<br/>save dialog"]
 ```
 
 ## External Dependencies
@@ -203,7 +209,7 @@ flowchart TD
 
 qlementine is fetched by CMake instead of vcpkg because it is built against the active
 system Qt6 installation. The project disables qlementine's sandbox and showcase targets and
-links the style library into `DevTools_core`.
+links the style library into `DevTools_framework_gui`.
 
 ## Application Styling and Themes
 
