@@ -124,7 +124,6 @@ kbd { padding: 2px 4px; border: 1px solid var(--border); border-radius: 4px; col
 .eyebrow { color: var(--primary); font-size: 10px; font-weight: 750; letter-spacing: .14em; }
 .welcome-copy { max-width: 680px; margin: 18px auto 26px; text-align: center; }
 .welcome-copy h1 { margin: 10px 0; font-size: clamp(26px, 4vw, 38px); line-height: 1.15; letter-spacing: -.04em; }
-.welcome-copy p { color: var(--muted-foreground); font-size: 13px; line-height: 1.6; }
 .tool-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 11px; }
 .tool-card { display: flex; min-height: 104px; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--card); text-align: left; cursor: pointer; transition: border-color .15s, transform .15s; }
 .tool-card:hover { transform: translateY(-1px); border-color: color-mix(in oklab, var(--primary) 40%, var(--border)); }

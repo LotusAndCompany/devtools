@@ -229,7 +229,7 @@ function App() {
 }
 
 function WelcomePage({ locale, onOpen }: { locale: Locale; onOpen: (page: PageId) => void }) {
-  return <div className="welcome-page"><div className="welcome-copy"><div className="eyebrow">DEVELOPER TOOLKIT</div><h1>{locale === "ja" ? "必要なツールを、ひとつの場所に。" : "Your everyday tools, in one place."}</h1><p>{locale === "ja" ? "DevToolsはC++の処理を保ちながら、ReactとTypeScriptで画面を提供します。左のメニューからツールを選んでください。" : "DevTools keeps its native C++ services and presents them through a shared React and TypeScript interface. Choose a tool from the sidebar."}</p></div><div className="tool-card-grid">{tools.map((tool) => <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}><span className="tool-card-icon">{tool.en.slice(0, 1)}</span><strong>{locale === "ja" ? tool.ja : tool.en}</strong><span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span></button>)}</div></div>;
+  return <div className="welcome-page"><div className="welcome-copy"><div className="eyebrow">DEVELOPER TOOLKIT</div><h1>{locale === "ja" ? "必要なツールを、ひとつの場所に。" : "Your everyday tools, in one place."}</h1></div><div className="tool-card-grid">{tools.map((tool) => <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}><span className="tool-card-icon">{tool.en.slice(0, 1)}</span><strong>{locale === "ja" ? tool.ja : tool.en}</strong><span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span></button>)}</div></div>;
 }
 
 type AppSettings = { language: "en" | "ja_JP"; theme: "system" | "light" | "dark"; showSidebarOnStartup: boolean; showLastToolOnStartup: boolean; alwaysOnTop: boolean; rememberWindowSize: boolean; rememberWindowPosition: boolean };
@@ -245,7 +245,7 @@ function SettingsPage({ locale, run, onLocaleChange, onThemeChange }: { locale: 
 }
 
 function AboutPage({ locale }: { locale: Locale }) {
-  return <div className="about-page"><PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} description={locale === "ja" ? "日々の開発作業に使うデスクトップツールです。" : "A desktop toolkit for everyday development work."} /><div className="about-card"><div className="brand-mark large">D</div><div><strong>DevTools</strong><p>{locale === "ja" ? "C++のネイティブ処理とReactのユーザーインターフェースを組み合わせています。" : "Combines native C++ services with a React user interface."}</p></div></div></div>;
+  return <div className="about-page"><PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} description={locale === "ja" ? "日々の開発作業に使うデスクトップツールです。" : "A desktop toolkit for everyday development work."} /><div className="about-card"><div className="brand-mark large">D</div><div><strong>DevTools</strong></div></div></div>;
 }
 
 function PageHeading({ title, description }: { title: string; description: string }) { return <header className="page-heading"><h1>{title}</h1><p>{description}</p></header>; }
