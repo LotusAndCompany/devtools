@@ -43,7 +43,6 @@ type PendingRequest = { resolve: (value: Record<string, unknown>) => void; rejec
 function App() {
   const [locale, setLocale] = useState<Locale>(navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en");
   const [bridge, setBridge] = useState<NativeBridge | null>(null);
-  const [connectionError, setConnectionError] = useState("");
   const [openPages, setOpenPages] = useState<PageId[]>(["welcome"]);
   const [activePage, setActivePage] = useState<PageId>("welcome");
   const [databaseNavigationKey, setDatabaseNavigationKey] = useState(0);
@@ -131,7 +130,6 @@ function App() {
       nativeBridge = native;
       unsubscribe = native.subscribe(onEvent);
       setBridge(native);
-      setConnectionError("");
       void runWithBridge(native, "imageTakeDropped", {}).then((result) => {
         if (mounted && result.found === true) acceptDroppedImage(result);
       }).catch(() => {});
@@ -145,9 +143,7 @@ function App() {
           if (page) { setOpenPages(["welcome", page]); setActivePage(page); }
         }
       }).catch(() => {});
-    }).catch((error: unknown) => {
-      if (mounted) setConnectionError(error instanceof Error ? error.message : String(error));
-    });
+    }).catch(() => {});
     return () => { mounted = false; unsubscribe?.(); };
     // WebChannel subscription and native connection are app-scoped.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,7 +207,6 @@ function App() {
         <header className="app-topbar">
           <Button variant="ghost" aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"} onClick={() => setSidebarOpen((open) => !open)}>☰</Button>
           <div className="topbar-title">{titleFor(activePage, locale)}</div>
-          {!bridge && connectionError && <div className="topbar-status" title={connectionError}><span className="status-dot disconnected" />{locale === "ja" ? "未接続" : "Disconnected"}</div>}
           <Button variant="outline" onClick={() => setLocale((value) => value === "ja" ? "en" : "ja")}>{locale === "ja" ? "EN" : "日本語"}</Button>
           {pendingCount > 0 && <Button variant="outline" onClick={() => { for (const id of pending.current.keys()) bridge?.cancelOperation(id); }}>{locale === "ja" ? "キャンセル" : "Cancel"} ({pendingCount})</Button>}
         </header>
