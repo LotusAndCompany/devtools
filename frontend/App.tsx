@@ -45,6 +45,7 @@ function App() {
   const [connectionError, setConnectionError] = useState("");
   const [openPages, setOpenPages] = useState<PageId[]>(["welcome"]);
   const [activePage, setActivePage] = useState<PageId>("welcome");
+  const [databaseNavigationKey, setDatabaseNavigationKey] = useState(0);
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
@@ -102,7 +103,10 @@ function App() {
         return;
       }
       if (event.type === "navigate") {
-        if (["settings", "about", "welcome", ...tools.map((item) => item.id)].includes(event.route)) openPage(event.route as PageId);
+        if (["settings", "about", "welcome", ...tools.map((item) => item.id)].includes(event.route)) {
+          if (event.route === "db") setDatabaseNavigationKey((key) => key + 1);
+          openPage(event.route as PageId);
+        }
         return;
       }
       const request = pending.current.get(event.requestId);
@@ -217,7 +221,7 @@ function App() {
         <div className="page-stack">{openPages.map((page) => <section key={page} className="page-host" hidden={activePage !== page} aria-label={titleFor(page, locale)}>
           {page === "welcome" ? <WelcomePage locale={locale} onOpen={openPage} /> :
             page === "settings" ? <SettingsPage locale={locale} run={runOperation} onLocaleChange={setLocale} onThemeChange={setTheme} /> :
-              page === "about" ? <AboutPage locale={locale} /> : <ToolPage id={page} locale={locale} run={runOperation} active={activePage === page} droppedImage={droppedImage} onDroppedImageConsumed={clearDroppedImage} />}
+              page === "about" ? <AboutPage locale={locale} /> : <ToolPage key={page === "db" ? databaseNavigationKey : page} id={page} locale={locale} run={runOperation} active={activePage === page} droppedImage={droppedImage} onDroppedImageConsumed={clearDroppedImage} />}
         </section>)}</div>
       </main>
     </div>

@@ -4,6 +4,9 @@
 #include <QWebEngineView>
 
 class NativeBridge;
+class QEvent;
+class QMimeData;
+class QObject;
 
 /**
  * @brief Hosts the bundled frontend or the exact loopback development origin.
@@ -14,7 +17,14 @@ public:
     explicit QtWebEngineAdapter(QWidget *parent = nullptr);
     [[nodiscard]] NativeBridge *nativeBridge() const { return native_bridge_; }
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
+    void installDropEventFilters(QObject *object);
+    static QString droppedSQLiteFilePath(const QMimeData *mimeData);
+    static QString droppedImageFilePath(const QMimeData *mimeData);
+
     NativeBridge *native_bridge_{nullptr};
 };
 

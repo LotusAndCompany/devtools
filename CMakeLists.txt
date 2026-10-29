@@ -395,6 +395,30 @@ else()
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
     )
+
+    if(APPLE)
+        get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION_RELEASE)
+        if(NOT DEVTOOLS_QT_WEBENGINE_CORE)
+            get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION)
+        endif()
+        get_filename_component(DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR
+            "${DEVTOOLS_QT_WEBENGINE_CORE}" DIRECTORY)
+        set(DEVTOOLS_QT_WEBENGINE_PROCESS_APP
+            "${DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR}/Helpers/QtWebEngineProcess.app")
+        if(NOT EXISTS "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}/Contents/MacOS/QtWebEngineProcess")
+            message(WARNING
+                "QtWebEngineProcess was not found beside QtWebEngineCore: "
+                "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}")
+        else()
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND "${CMAKE_COMMAND}" -E copy_directory
+                    "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}"
+                    "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Helpers/QtWebEngineProcess.app"
+                COMMENT "Copying Qt WebEngine process into the application bundle"
+                VERBATIM
+            )
+        endif()
+    endif()
 endif()
 
 include(GNUInstallDirs)

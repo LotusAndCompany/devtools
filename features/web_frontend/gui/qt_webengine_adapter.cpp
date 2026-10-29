@@ -1,13 +1,23 @@
 #include "qt_webengine_adapter.h"
 
+#include "features/framework/core/local_file_selection_service.h"
+#include "features/image/core/image_processing_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
+#include <QChildEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QPointer>
+#include <QTimer>
+#include <QUrl>
 #include <QWebChannel>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
 #include <QWebEngineUrlRequestInfo>
 #include <QWebEngineUrlRequestInterceptor>
+#include <QWidget>
 
 #ifndef NDEBUG
 #include <QProcessEnvironment>
@@ -70,7 +80,7 @@ protected:
     {
         Q_UNUSED(navigationType);
         if (!isMainFrame) {
-            return false;
+            return url == QUrl(QStringLiteral("about:srcdoc"));
         }
         if (url.scheme() == QStringLiteral("qrc") && url.host().isEmpty()) {
             return url.path() == QStringLiteral("/frontend/index.html");
@@ -141,5 +151,86 @@ QtWebEngineAdapter::QtWebEngineAdapter(QWidget *parent) : QWebEngineView(parent)
     channel->registerObject(QStringLiteral("nativeBridge"), native_bridge_);
     page->setWebChannel(channel);
 
+    installDropEventFilters(this);
     setUrl(initialFrontendUrl(developmentEnabled));
+}
+
+void QtWebEngineAdapter::installDropEventFilters(QObject *object)
+{
+    if (object == nullptr) {
+        return;
+    }
+    auto *widget = qobject_cast<QWidget *>(object);
+    if (widget != nullptr && widget != this && widget->isWindow()) {
+        return;
+    }
+    object->installEventFilter(this);
+    if (widget != nullptr) {
+        widget->setAcceptDrops(true);
+    }
+    for (QObject *child : object->children()) {
+        installDropEventFilters(child);
+    }
+}
+
+bool QtWebEngineAdapter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::ChildAdded) {
+        const auto *childEvent = static_cast<QChildEvent *>(event);
+        const QPointer<QObject> child = childEvent->child();
+        QTimer::singleShot(0, this, [this, child]() {
+            if (child) {
+                installDropEventFilters(child);
+            }
+        });
+        return QWebEngineView::eventFilter(watched, event);
+    }
+
+    if (event->type() == QEvent::DragEnter) {
+        auto *dragEvent = static_cast<QDragEnterEvent *>(event);
+        if (!droppedSQLiteFilePath(dragEvent->mimeData()).isEmpty() ||
+            !droppedImageFilePath(dragEvent->mimeData()).isEmpty()) {
+            dragEvent->acceptProposedAction();
+            return true;
+        }
+    } else if (event->type() == QEvent::Drop) {
+        auto *dropEvent = static_cast<QDropEvent *>(event);
+        const QMimeData *const mimeData = dropEvent->mimeData();
+        const QString databasePath = droppedSQLiteFilePath(mimeData);
+        if (!databasePath.isEmpty()) {
+            native_bridge_->openDroppedSQLiteFile(databasePath);
+            dropEvent->acceptProposedAction();
+            return true;
+        }
+        const QString imagePath = droppedImageFilePath(mimeData);
+        if (!imagePath.isEmpty()) {
+            native_bridge_->openDroppedImageFile(imagePath);
+            dropEvent->acceptProposedAction();
+            return true;
+        }
+    }
+    return QWebEngineView::eventFilter(watched, event);
+}
+
+QString QtWebEngineAdapter::droppedSQLiteFilePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+    return LocalFileSelectionService::firstExistingLocalFile(
+        mimeData->urls(),
+        {QStringLiteral("db"), QStringLiteral("sqlite"), QStringLiteral("sqlite3")});
+}
+
+QString QtWebEngineAdapter::droppedImageFilePath(const QMimeData *mimeData)
+{
+    if (mimeData == nullptr || !mimeData->hasUrls()) {
+        return {};
+    }
+    for (const QUrl &url : mimeData->urls()) {
+        if (url.isLocalFile() && ImageProcessingService::isReadableImageFile(url.toLocalFile())) {
+            return url.toLocalFile();
+        }
+    }
+    return {};
 }

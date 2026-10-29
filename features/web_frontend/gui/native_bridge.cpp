@@ -840,6 +840,9 @@ void NativeBridge::startImageOperation(const QString &requestId, const QString &
             if (current != operations_.end()) {
                 operations_.erase(current);
                 emit operationCancelled(requestId);
+                if (!dropped_image_path_.isEmpty()) {
+                    emit imageDropAvailable();
+                }
             }
         });
         dialog->open();

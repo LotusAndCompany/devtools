@@ -59,15 +59,18 @@ Local checks for this M3 source snapshot (2026-10-29):
   passed, including all nine QR formats through the versioned bridge.
 - `ctest --test-dir build -R '^test_db_connection_window$' --output-on-failure`
   passed after canonicalizing macOS `/var` and `/private/var` paths in the test.
+- `ctest --test-dir build -R '^(test_native_bridge|test_qt_webengine_frontend)$'`
+  passed after adding the native file-drop, pending-image retry, database
+  re-drop, and bundled-route integration checks.
 - `cmake --build build --target quality-check` passed after the final source
   changes, including clang-tidy, lint, translation completeness, and
   `format-check`.
-- `ctest --test-dir build --output-on-failure` passed 56 of 57 tests. The sole
-  failure is `test_icon_theme::resolvesMaterialSymbols`, which could not render
-  the `link` glyph; this failure also reproduces when that test runs alone.
-- Interactive Qt WebEngine smoke testing was not completed because the Mac
-  session was locked. The application build does not verify UI behavior at
-  runtime.
+- `ctest --test-dir build --output-on-failure` passed all 58 tests.
+- `cmake --build build --target run` built the app and staged
+  `QtWebEngineProcess.app`, but the standalone app aborted in this automation
+  session with Qt's `Argument list is empty` WebEngine startup error. No
+  interactive screenshot was captured; the Qt WebEngine integration test
+  loaded the bundled UI, connected the bridge, and rendered all 11 tool routes.
 
 The project acceptance checklist also requires interactive Qt WebEngine
 coverage for all tools, keyboard and accessibility checks, data/edge-case

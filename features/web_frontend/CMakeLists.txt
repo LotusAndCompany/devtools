@@ -2,10 +2,24 @@ find_program(NPM_EXECUTABLE npm REQUIRED)
 
 set(FRONTEND_DIR "${CMAKE_SOURCE_DIR}/frontend")
 set(FRONTEND_DIST_DIR "${FRONTEND_DIR}/dist")
-file(GLOB_RECURSE FRONTEND_INPUTS CONFIGURE_DEPENDS
-    "${FRONTEND_DIR}/*"
-)
-list(FILTER FRONTEND_INPUTS EXCLUDE REGEX "/(node_modules|dist)/")
+set(FRONTEND_INPUTS)
+foreach(FRONTEND_PATTERN IN ITEMS
+        "${FRONTEND_DIR}/*.html"
+        "${FRONTEND_DIR}/*.json"
+        "${FRONTEND_DIR}/*.ts"
+        "${FRONTEND_DIR}/*.tsx"
+        "${FRONTEND_DIR}/*.css"
+        "${FRONTEND_DIR}/components/*.ts"
+        "${FRONTEND_DIR}/components/*.tsx"
+        "${FRONTEND_DIR}/components/ui/*.ts"
+        "${FRONTEND_DIR}/components/ui/*.tsx"
+        "${FRONTEND_DIR}/lib/*.ts"
+        "${FRONTEND_DIR}/lib/*.tsx"
+        "${FRONTEND_DIR}/tests/*.ts"
+        "${FRONTEND_DIR}/tests/*.tsx")
+    file(GLOB FRONTEND_FILES CONFIGURE_DEPENDS "${FRONTEND_PATTERN}")
+    list(APPEND FRONTEND_INPUTS ${FRONTEND_FILES})
+endforeach()
 
 add_custom_command(
     OUTPUT "${FRONTEND_DIST_DIR}/index.html"
