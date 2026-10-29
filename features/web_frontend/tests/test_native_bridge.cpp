@@ -10,7 +10,7 @@ namespace {
 QVariantMap formatRequest(const QString &requestId, const QString &text,
                           const QString &indentation = QStringLiteral("2"))
 {
-    return {{QStringLiteral("contractVersion"), QStringLiteral("1")},
+    return {{QStringLiteral("contractVersion"), QStringLiteral("2")},
             {QStringLiteral("requestId"), requestId},
             {QStringLiteral("operation"), QStringLiteral("formatJson")},
             {QStringLiteral("payload"), QVariantMap{{QStringLiteral("text"), text},
@@ -30,6 +30,7 @@ private Q_SLOTS:
     void cancelsBeforeTheWorkerStarts();
     void generatesQrThroughTheVersionedBridge();
     void readsDroppedImagesWithoutExposingTheirPaths();
+    void readsAboutMetadataAndLicenseResource();
 };
 
 void TestNativeBridge::formatsJsonUsingTheNativeParserAndEmitter()
@@ -91,7 +92,7 @@ void TestNativeBridge::enforcesInputAndVersionLimits()
     QCOMPARE(started.count(), 1);
 
     QVariantMap unsupported = formatRequest(QStringLiteral("version-1"), QStringLiteral("{}"));
-    unsupported.insert(QStringLiteral("contractVersion"), QStringLiteral("2"));
+    unsupported.insert(QStringLiteral("contractVersion"), QStringLiteral("3"));
     bridge.startOperation(unsupported);
     QCOMPARE(failed.count(), 2);
     QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
@@ -171,7 +172,7 @@ void TestNativeBridge::generatesQrThroughTheVersionedBridge()
         const int failedBefore = failed.count();
         const QString requestId = QStringLiteral("qr-%1").arg(index);
         bridge.startOperation(
-            {{QStringLiteral("contractVersion"), QStringLiteral("1")},
+            {{QStringLiteral("contractVersion"), QStringLiteral("2")},
              {QStringLiteral("requestId"), requestId},
              {QStringLiteral("operation"), QStringLiteral("generateQr")},
              {QStringLiteral("payload"),
@@ -211,7 +212,7 @@ void TestNativeBridge::readsDroppedImagesWithoutExposingTheirPaths()
 
     bridge.openDroppedImageFile(imagePath);
     QCOMPARE(available.count(), 1);
-    bridge.startOperation({{QStringLiteral("contractVersion"), QStringLiteral("1")},
+    bridge.startOperation({{QStringLiteral("contractVersion"), QStringLiteral("2")},
                            {QStringLiteral("requestId"), QStringLiteral("image-drop-1")},
                            {QStringLiteral("operation"), QStringLiteral("imageTakeDropped")},
                            {QStringLiteral("payload"), QVariantMap{}}});
@@ -229,6 +230,33 @@ void TestNativeBridge::readsDroppedImagesWithoutExposingTheirPaths()
     QVERIFY(!result.contains(QStringLiteral("path")));
     QVERIFY(!result.contains(QStringLiteral("filePath")));
     QCOMPARE(bridge.current_image_path_, imagePath);
+}
+
+void TestNativeBridge::readsAboutMetadataAndLicenseResource()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QVERIFY(completed.isValid());
+    QVERIFY(failed.isValid());
+
+    bridge.startOperation({{QStringLiteral("contractVersion"), QStringLiteral("2")},
+                           {QStringLiteral("requestId"), QStringLiteral("about-1")},
+                           {QStringLiteral("operation"), QStringLiteral("getAboutInfo")},
+                           {QStringLiteral("payload"), QVariantMap{}}});
+
+    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
+    QCOMPARE(failed.count(), 0);
+    const QVariantMap result = completed.constFirst().at(1).toMap();
+    QVERIFY(result.contains(QStringLiteral("appVersion")));
+    QVERIFY(result.contains(QStringLiteral("revision")));
+    QVERIFY(result.contains(QStringLiteral("buildEnvironment")));
+    QVERIFY(result.contains(QStringLiteral("qtVersion")));
+    QVERIFY(result.value(QStringLiteral("copyright"))
+                .toString()
+                .contains(QStringLiteral("Lotus&Company")));
+    QVERIFY(result.contains(QStringLiteral("licenseText")));
+    QVERIFY(!result.value(QStringLiteral("licenseText")).toString().trimmed().isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestNativeBridge)

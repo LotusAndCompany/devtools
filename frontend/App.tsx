@@ -1,18 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import { Field } from "@/components/ui/field";
+import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { SelectBox } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Tabs } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import {
     BRIDGE_CONTRACT_VERSION,
     connectNativeBridge,
     NativeOperationError,
     runNativeOperation,
+    type AboutInfo,
     type BridgeEvent,
     type NativeBridge,
     type OperationName,
 } from "@/bridge";
 import { ToolPage, type DroppedImage, type Locale, type OperationRunner } from "@/tool-pages";
 import { forkUiEffect, runUiEffect } from "@/effect";
+import { licenseTextOrFallback } from "@/about";
 
 type PageId =
     | "welcome"
@@ -27,8 +36,7 @@ type PageId =
     | "timestamp"
     | "regex"
     | "diff"
-    | "settings"
-    | "about";
+    | "settings";
 type ToolInfo = { id: PageId; en: string; ja: string; detailEn: string; detailJa: string };
 
 const tools: ToolInfo[] = [
@@ -127,10 +135,28 @@ const toolIds: Record<string, number> = {
 const pageForToolId = (id: number): PageId | undefined =>
     Object.entries(toolIds).find(([, value]) => value === id)?.[0] as PageId | undefined;
 
+const iconFor = (id: PageId) => {
+    const icons: Record<PageId, string> = {
+        welcome: "home",
+        image: "image",
+        phrase: "library_books",
+        command: "terminal",
+        http: "lan",
+        data: "transform",
+        db: "database",
+        qr: "qr_code",
+        markdown: "article",
+        timestamp: "schedule",
+        regex: "regular_expression",
+        diff: "difference",
+        settings: "settings",
+    };
+    return icons[id];
+};
+
 const titleFor = (id: PageId, locale: Locale) => {
     if (id === "welcome") return locale === "ja" ? "ホーム" : "Home";
     if (id === "settings") return locale === "ja" ? "設定" : "Settings";
-    if (id === "about") return locale === "ja" ? "DevToolsについて" : "About DevTools";
     const item = tools.find((tool) => tool.id === id);
     return item ? (locale === "ja" ? item.ja : item.en) : id;
 };
@@ -140,9 +166,9 @@ function App() {
         navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en",
     );
     const [bridge, setBridge] = useState<NativeBridge | null>(null);
-    const [openPages, setOpenPages] = useState<PageId[]>(["welcome"]);
     const [activePage, setActivePage] = useState<PageId>("welcome");
-    const [databaseNavigationKey, setDatabaseNavigationKey] = useState(0);
+    const [aboutOpen, setAboutOpen] = useState(false);
+    const [databaseNavigationVersion, setDatabaseNavigationVersion] = useState(0);
     const [search, setSearch] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
@@ -154,7 +180,6 @@ function App() {
     const searchRef = useRef<HTMLInputElement>(null);
 
     const openPage = useCallback((page: PageId) => {
-        setOpenPages((current) => (current.includes(page) ? current : [...current, page]));
         setActivePage(page);
     }, []);
     const acceptDroppedImage = useCallback(
@@ -217,12 +242,16 @@ function App() {
                 return;
             }
             if (event.type === "navigate") {
+                if (event.route === "about") {
+                    setAboutOpen(true);
+                    return;
+                }
                 if (
-                    ["settings", "about", "welcome", ...tools.map((item) => item.id)].includes(
-                        event.route,
-                    )
+                    ["settings", "welcome", ...tools.map((item) => item.id)].includes(event.route)
                 ) {
-                    if (event.route === "db") setDatabaseNavigationKey((key) => key + 1);
+                    if (event.route === "db") {
+                        setDatabaseNavigationVersion((version) => version + 1);
+                    }
                     openPage(event.route as PageId);
                 }
             }
@@ -267,7 +296,6 @@ function App() {
                 ) {
                     const page = pageForToolId(settings.lastUsedTool);
                     if (page) {
-                        setOpenPages(["welcome", page]);
                         setActivePage(page);
                     }
                 }
@@ -314,16 +342,6 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activePage, bridge]);
 
-    const closePage = useCallback(
-        (page: PageId) => {
-            if (page === "welcome") return;
-            const next = openPages.filter((id) => id !== page);
-            setOpenPages(next.length ? next : ["welcome"]);
-            if (activePage === page) setActivePage(next.at(-1) ?? "welcome");
-        },
-        [activePage, openPages],
-    );
-
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
             const command = event.metaKey || event.ctrlKey;
@@ -333,15 +351,6 @@ function App() {
             if (command && event.key.toLowerCase() === "k") {
                 event.preventDefault();
                 searchRef.current?.focus();
-            } else if (command && event.key.toLowerCase() === "w") {
-                event.preventDefault();
-                closePage(activePage);
-            } else if (command && /^[1-9]$/.test(event.key)) {
-                const page = openPages[Number(event.key) - 1];
-                if (page) {
-                    event.preventDefault();
-                    setActivePage(page);
-                }
             } else if (!editing && event.key === "Escape") {
                 setSearch("");
                 searchRef.current?.blur();
@@ -349,7 +358,7 @@ function App() {
         };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [activePage, closePage, openPages]);
+    }, []);
 
     const filteredTools = tools.filter((tool) => {
         const query = search.trim().toLowerCase();
@@ -364,14 +373,13 @@ function App() {
             {sidebarOpen && (
                 <aside className="app-sidebar" aria-label={locale === "ja" ? "ツール" : "Tools"}>
                     <div className="brand-row">
-                        <div className="brand-mark" aria-hidden="true">
-                            D
-                        </div>
+                        <img className="brand-logo" src="qrc:/logo/dev-tools_logo.png" alt="" />
                         <strong>DevTools</strong>
                     </div>
                     <label className="search-wrap">
                         <span aria-hidden="true">⌕</span>
-                        <input
+                        <Input
+                            className="search-control"
                             ref={searchRef}
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
@@ -380,46 +388,51 @@ function App() {
                         />
                         <kbd>⌘K</kbd>
                     </label>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         className={`nav-item ${activePage === "welcome" ? "active" : ""}`}
                         onClick={() => openPage("welcome")}
                     >
-                        <span className="nav-icon">⌂</span>
+                        <Icon className="nav-icon">{iconFor("welcome")}</Icon>
                         {locale === "ja" ? "ホーム" : "Home"}
-                    </button>
+                    </Button>
                     <div className="sidebar-section-title">
                         {locale === "ja" ? "ツール" : "WORKSPACE"}
                     </div>
                     <nav className="tool-nav">
                         {filteredTools.map((tool) => (
-                            <button
+                            <Button
                                 key={tool.id}
+                                variant="ghost"
+                                size="sm"
                                 className={`nav-item ${activePage === tool.id ? "active" : ""}`}
                                 onClick={() => openPage(tool.id)}
-                                title={locale === "ja" ? tool.detailJa : tool.detailEn}
                             >
-                                <span className="nav-icon" aria-hidden="true">
-                                    {tool.en.slice(0, 1)}
-                                </span>
+                                <Icon className="nav-icon">{iconFor(tool.id)}</Icon>
                                 <span>{locale === "ja" ? tool.ja : tool.en}</span>
-                            </button>
+                            </Button>
                         ))}
                     </nav>
                     <div className="sidebar-bottom">
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             className={`nav-item ${activePage === "settings" ? "active" : ""}`}
                             onClick={() => openPage("settings")}
                         >
-                            <span className="nav-icon">⚙</span>
+                            <Icon className="nav-icon">{iconFor("settings")}</Icon>
                             {locale === "ja" ? "設定" : "Settings"}
-                        </button>
-                        <button
-                            className={`nav-item ${activePage === "about" ? "active" : ""}`}
-                            onClick={() => openPage("about")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="nav-item"
+                            onClick={() => setAboutOpen(true)}
                         >
-                            <span className="nav-icon">ⓘ</span>
+                            <Icon className="nav-icon">info</Icon>
                             {locale === "ja" ? "このアプリについて" : "About"}
-                        </button>
+                        </Button>
                     </div>
                 </aside>
             )}
@@ -430,15 +443,9 @@ function App() {
                         aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"}
                         onClick={() => setSidebarOpen((open) => !open)}
                     >
-                        ☰
+                        <Icon>menu</Icon>
                     </Button>
                     <div className="topbar-title">{titleFor(activePage, locale)}</div>
-                    <Button
-                        variant="outline"
-                        onClick={() => setLocale((value) => (value === "ja" ? "en" : "ja"))}
-                    >
-                        {locale === "ja" ? "EN" : "日本語"}
-                    </Button>
                     {pendingCount > 0 && (
                         <Button
                             variant="outline"
@@ -450,71 +457,58 @@ function App() {
                         </Button>
                     )}
                 </header>
-                <div
-                    className="tabs-bar"
-                    role="tablist"
-                    aria-label={locale === "ja" ? "開いている画面" : "Open pages"}
-                >
-                    {openPages.map((page, index) => (
-                        <div
-                            key={page}
-                            className={`page-tab ${activePage === page ? "active" : ""}`}
-                            role="presentation"
-                        >
-                            <button
-                                role="tab"
-                                aria-selected={activePage === page}
-                                onClick={() => setActivePage(page)}
-                            >
-                                {titleFor(page, locale)}
-                                {index < 9 && <kbd>⌘{index + 1}</kbd>}
-                            </button>
-                            {page !== "welcome" && (
-                                <button
-                                    className="tab-close"
-                                    aria-label={`${locale === "ja" ? "閉じる" : "Close"} ${titleFor(page, locale)}`}
-                                    onClick={() => closePage(page)}
-                                >
-                                    ×
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
                 <div className="page-stack">
-                    {openPages.map((page) => (
+                    {activePage !== "db" && (
                         <section
-                            key={page}
-                            className="page-host"
-                            hidden={activePage !== page}
-                            aria-label={titleFor(page, locale)}
+                            className="page-host active-page"
+                            data-page={activePage}
+                            aria-label={titleFor(activePage, locale)}
                         >
-                            {page === "welcome" ? (
+                            {activePage === "welcome" ? (
                                 <WelcomePage locale={locale} onOpen={openPage} />
-                            ) : page === "settings" ? (
+                            ) : activePage === "settings" ? (
                                 <SettingsPage
                                     locale={locale}
                                     run={runOperation}
                                     onLocaleChange={setLocale}
                                     onThemeChange={setTheme}
                                 />
-                            ) : page === "about" ? (
-                                <AboutPage locale={locale} />
                             ) : (
                                 <ToolPage
-                                    key={page === "db" ? databaseNavigationKey : page}
-                                    id={page}
+                                    key={activePage}
+                                    id={activePage}
                                     locale={locale}
                                     run={runOperation}
-                                    active={activePage === page}
+                                    active
+                                    databaseNavigationVersion={databaseNavigationVersion}
                                     droppedImage={droppedImage}
                                     onDroppedImageConsumed={clearDroppedImage}
                                 />
                             )}
                         </section>
-                    ))}
+                    )}
+                    <section
+                        className="page-host database-cache"
+                        data-page="db"
+                        aria-label={titleFor("db", locale)}
+                        hidden={activePage !== "db"}
+                    >
+                        <ToolPage
+                            id="db"
+                            locale={locale}
+                            run={runOperation}
+                            active={activePage === "db"}
+                            databaseNavigationVersion={databaseNavigationVersion}
+                        />
+                    </section>
                 </div>
             </main>
+            <AboutDialog
+                open={aboutOpen}
+                onOpenChange={setAboutOpen}
+                locale={locale}
+                run={runOperation}
+            />
         </div>
     );
 }
@@ -524,11 +518,15 @@ function WelcomePage({ locale, onOpen }: { locale: Locale; onOpen: (page: PageId
         <div className="welcome-page">
             <div className="tool-card-grid">
                 {tools.map((tool) => (
-                    <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}>
-                        <span className="tool-card-icon">{tool.en.slice(0, 1)}</span>
+                    <Button
+                        key={tool.id}
+                        variant="ghost"
+                        className="tool-card h-auto"
+                        onClick={() => onOpen(tool.id)}
+                    >
+                        <Icon className="tool-card-icon">{iconFor(tool.id)}</Icon>
                         <strong>{locale === "ja" ? tool.ja : tool.en}</strong>
-                        <span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span>
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>
@@ -596,9 +594,10 @@ function SettingsPage({
             Effect.gen(function* () {
                 yield* run("saveSettings", settings);
                 yield* Effect.sync(() => {
-                    onLocaleChange(settings.language === "ja_JP" ? "ja" : "en");
+                    const nextLocale = settings.language === "ja_JP" ? "ja" : "en";
+                    onLocaleChange(nextLocale);
                     onThemeChange(settings.theme);
-                    setMessage(locale === "ja" ? "設定を保存しました。" : "Settings saved.");
+                    setMessage(nextLocale === "ja" ? "設定を保存しました。" : "Settings saved.");
                 });
             }).pipe(
                 Effect.catch((error) =>
@@ -613,51 +612,50 @@ function SettingsPage({
         <div className="settings-page">
             <PageHeading title={locale === "ja" ? "設定" : "Settings"} />
             <div className="settings-card">
-                <label className="field-label" htmlFor="app-language">
-                    {labels.language}
-                </label>
-                <SelectBox
-                    id="app-language"
-                    value={settings.language}
-                    onValueChange={(language) =>
-                        setSettings((value) => ({
-                            ...value,
-                            language: language as AppSettings["language"],
-                        }))
-                    }
-                    options={[
-                        { value: "en", label: "English" },
-                        { value: "ja_JP", label: "日本語" },
-                    ]}
-                />
-                <label className="field-label" htmlFor="app-theme">
-                    {labels.theme}
-                </label>
-                <SelectBox
-                    id="app-theme"
-                    value={settings.theme}
-                    onValueChange={(theme) =>
-                        setSettings((value) => ({ ...value, theme: theme as AppSettings["theme"] }))
-                    }
-                    options={[
-                        {
-                            value: "system",
-                            label: locale === "ja" ? "システム設定に合わせる" : "Follow system",
-                        },
-                        { value: "light", label: locale === "ja" ? "ライト" : "Light" },
-                        { value: "dark", label: locale === "ja" ? "ダーク" : "Dark" },
-                    ]}
-                />
+                <Field label={labels.language}>
+                    <SelectBox
+                        value={settings.language}
+                        onValueChange={(language) =>
+                            setSettings((value) => ({
+                                ...value,
+                                language: language as AppSettings["language"],
+                            }))
+                        }
+                        options={[
+                            { value: "en", label: "English" },
+                            { value: "ja_JP", label: "日本語" },
+                        ]}
+                    />
+                </Field>
+                <Field label={labels.theme}>
+                    <SelectBox
+                        value={settings.theme}
+                        onValueChange={(theme) =>
+                            setSettings((value) => ({
+                                ...value,
+                                theme: theme as AppSettings["theme"],
+                            }))
+                        }
+                        options={[
+                            {
+                                value: "system",
+                                label: locale === "ja" ? "システム設定に合わせる" : "Follow system",
+                            },
+                            { value: "light", label: locale === "ja" ? "ライト" : "Light" },
+                            { value: "dark", label: locale === "ja" ? "ダーク" : "Dark" },
+                        ]}
+                    />
+                </Field>
                 {(Object.keys(labels) as Array<keyof AppSettings>)
                     .filter((key) => key !== "language" && key !== "theme")
                     .map((key) => (
                         <label key={key} className="settings-toggle">
                             <span>{labels[key]}</span>
-                            <input
-                                type="checkbox"
+                            <Switch
+                                id={`settings-${key}`}
                                 checked={settings[key] as boolean}
-                                onChange={() =>
-                                    setSettings((value) => ({ ...value, [key]: !value[key] }))
+                                onCheckedChange={(checked) =>
+                                    setSettings((value) => ({ ...value, [key]: checked }))
                                 }
                             />
                         </label>
@@ -671,25 +669,141 @@ function SettingsPage({
     );
 }
 
-function AboutPage({ locale }: { locale: Locale }) {
+function PageHeading({ title }: { title: string }) {
     return (
-        <div className="about-page">
-            <PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} />
-            <div className="about-card">
-                <div className="brand-mark large">D</div>
-                <div>
-                    <strong>DevTools</strong>
-                </div>
-            </div>
-        </div>
+        <header className="page-heading sr-only">
+            <h1>{title}</h1>
+        </header>
     );
 }
 
-function PageHeading({ title }: { title: string }) {
+function AboutDialog({
+    open,
+    onOpenChange,
+    locale,
+    run,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    locale: Locale;
+    run: OperationRunner;
+}) {
+    const [info, setInfo] = useState<AboutInfo | null>(null);
+    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        if (!open) return;
+        const load = run("getAboutInfo", {}).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    setInfo(result as AboutInfo);
+                    setError("");
+                }),
+            ),
+            Effect.catch((reason) =>
+                Effect.sync(() => {
+                    setError(reason instanceof Error ? reason.message : String(reason));
+                }),
+            ),
+        );
+        return forkUiEffect(load);
+    }, [open, run]);
+
+    const copy = () => {
+        if (!info) return;
+        const summary = [
+            `DevTools ${info.appVersion}`,
+            `Revision: ${info.revision}`,
+            `Build Environment: ${info.buildEnvironment}`,
+            `Qt Version: ${info.qtVersion}`,
+            info.copyright,
+        ].join("\n");
+        runUiEffect(
+            run("copyToClipboard", { text: summary }).pipe(
+                Effect.tap(() =>
+                    Effect.sync(() => setMessage(locale === "ja" ? "コピーしました。" : "Copied.")),
+                ),
+                Effect.catch((reason) =>
+                    Effect.sync(() =>
+                        setMessage(reason instanceof Error ? reason.message : String(reason)),
+                    ),
+                ),
+            ),
+        );
+    };
+    const metadata: Array<[string, string]> = info
+        ? [
+              [locale === "ja" ? "バージョン" : "Application Version", info.appVersion],
+              [locale === "ja" ? "リビジョン" : "Revision", info.revision],
+              [locale === "ja" ? "ビルド環境" : "Build Environment", info.buildEnvironment],
+              [locale === "ja" ? "Qtバージョン" : "Qt Version", info.qtVersion],
+              [locale === "ja" ? "著作権" : "Copyright", info.copyright],
+          ]
+        : [];
+
     return (
-        <header className="page-heading">
-            <h1>{title}</h1>
-        </header>
+        <Dialog.Root open={open} onOpenChange={onOpenChange}>
+            <Dialog.Portal>
+                <Dialog.Backdrop className="dialog-backdrop" />
+                <Dialog.Viewport className="dialog-viewport">
+                    <Dialog.Popup className="about-dialog">
+                        <Dialog.Title className="dialog-title">
+                            {locale === "ja" ? "DevToolsについて" : "About DevTools"}
+                        </Dialog.Title>
+                        <Dialog.Description className="sr-only">
+                            {locale === "ja"
+                                ? "DevToolsのアプリケーション情報とライセンス"
+                                : "DevTools application information and license"}
+                        </Dialog.Description>
+                        <Tabs.Root defaultValue="about" className="about-tabs">
+                            <Tabs.List className="feature-tabs-list">
+                                <Tabs.Tab value="about" className="feature-tab">
+                                    {locale === "ja" ? "概要" : "About"}
+                                </Tabs.Tab>
+                                <Tabs.Tab value="license" className="feature-tab">
+                                    {locale === "ja" ? "ライセンス" : "License"}
+                                </Tabs.Tab>
+                            </Tabs.List>
+                            <Tabs.Panel value="about" className="about-panel">
+                                <div className="about-brand">
+                                    <img src="qrc:/logo/dev-tools_logo.png" alt="" />
+                                    <strong>DevTools</strong>
+                                </div>
+                                {error && <p className="operation-message error">{error}</p>}
+                                <dl className="about-metadata">
+                                    {metadata.map(([label, value]) => (
+                                        <div key={label}>
+                                            <dt>{label}</dt>
+                                            <dd>{value}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                                <div className="about-actions">
+                                    <span role="status">{message}</span>
+                                    <Button variant="outline" onClick={copy} disabled={!info}>
+                                        {locale === "ja" ? "コピー" : "Copy"}
+                                    </Button>
+                                </div>
+                            </Tabs.Panel>
+                            <Tabs.Panel value="license" className="about-panel">
+                                <Textarea
+                                    className="license-text"
+                                    value={licenseTextOrFallback(info?.licenseText, locale)}
+                                    readOnly
+                                    spellCheck={false}
+                                />
+                            </Tabs.Panel>
+                        </Tabs.Root>
+                        <div className="dialog-footer">
+                            <Dialog.Close render={<Button variant="outline" />}>
+                                {locale === "ja" ? "OK" : "OK"}
+                            </Dialog.Close>
+                        </div>
+                    </Dialog.Popup>
+                </Dialog.Viewport>
+            </Dialog.Portal>
+        </Dialog.Root>
     );
 }
 

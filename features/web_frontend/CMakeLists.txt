@@ -47,6 +47,8 @@ target_sources(DevTools_web_frontend PRIVATE
     gui/react_bridge_demo_widget.h gui/react_bridge_demo_widget.cpp
     resources/frontend.qrc
 )
+target_include_directories(DevTools_web_frontend PRIVATE ${CMAKE_BINARY_DIR})
+add_dependencies(DevTools_web_frontend DevTools_app_info)
 add_dependencies(DevTools_web_frontend DevTools_frontend_assets)
 target_link_libraries(DevTools_web_frontend PUBLIC
     DevTools_command

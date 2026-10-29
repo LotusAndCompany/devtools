@@ -75,7 +75,7 @@ private:
 
     QWidget *dialog_parent_;
     QHash<QString, RunningOperation> operations_;
-    QString contract_version_ = QStringLiteral("1");
+    QString contract_version_ = QStringLiteral("2");
     QImage original_image_;
     QImage current_image_;
     QString current_image_path_;

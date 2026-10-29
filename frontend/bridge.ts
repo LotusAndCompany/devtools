@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import { prepareBridgeValue } from "@/contract";
 
-export const BRIDGE_CONTRACT_VERSION = "1" as const;
+export const BRIDGE_CONTRACT_VERSION = "2" as const;
 
 export type OperationName =
   | "formatJson"
@@ -17,6 +17,7 @@ export type OperationName =
   | "getSettings"
   | "saveSettings"
   | "copyToClipboard"
+  | "getAboutInfo"
   | "phraseData"
   | "evaluateRegex"
   | "regexSettings"
@@ -34,6 +35,15 @@ export type OperationName =
   | "databaseQuery"
   | "databaseTables"
   | "saveLastUsedTool";
+
+export type AboutInfo = {
+  appVersion: string;
+  revision: string;
+  buildEnvironment: string;
+  qtVersion: string;
+  copyright: string;
+  licenseText: string;
+};
 export type BridgeError = { code: string; message: string };
 
 export class BridgeConnectionError extends Error {

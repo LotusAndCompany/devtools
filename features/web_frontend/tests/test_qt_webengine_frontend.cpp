@@ -100,6 +100,20 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
     QVERIFY(snapshot.value(QStringLiteral("mounted")).toBool());
 
     QVariant result;
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(
+            view.page(), QStringLiteral("document.querySelector('.brand-logo')?.naturalWidth > 0"),
+            &result) &&
+            result.toBool(),
+        5000);
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral("document.fonts.check('20px \"Material Symbols Outlined\"', 'menu')"),
+            &result) &&
+            result.toBool(),
+        5000);
+
     for (int index = 0; index < 11; ++index) {
         const QString clickScript =
             QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[%1].click(); true")
@@ -136,6 +150,36 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         QVERIFY(evaluateJavaScript(
             view.page(), QStringLiteral("document.querySelector('%1').click(); true").arg(selector),
             &result));
+        if (selector == QStringLiteral(".sidebar-bottom .nav-item:nth-child(2)")) {
+            bool aboutDialogOpened = false;
+            for (int attempt = 0; attempt < 50; ++attempt) {
+                QVERIFY(evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral("Boolean(document.querySelector('.about-dialog[role=dialog]'))"),
+                    &result));
+                aboutDialogOpened = result.toBool();
+                if (aboutDialogOpened)
+                    break;
+                QTest::qWait(100);
+            }
+            QVERIFY(aboutDialogOpened);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelectorAll('.about-dialog [role=tab]')[1]?.click(); true"),
+                &result));
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("Boolean(document.querySelector('.about-dialog textarea')?.value)"),
+                &result));
+            QVERIFY(result.toBool());
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.about-dialog .dialog-footer button').click(); true"),
+                &result));
+            continue;
+        }
         bool pageRendered = false;
         for (int attempt = 0; attempt < 50; ++attempt) {
             QVERIFY(evaluateJavaScript(
@@ -164,18 +208,20 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         view.page(),
         QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[5].click(); true"),
         &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.database-toolbar .connection-name')?.textContent ?? ''"),
+        &result));
+    QVERIFY(result.toString().isEmpty());
     view.nativeBridge()->openDroppedSQLiteFile(firstDatabasePath);
-    const QString selectedFileScript =
-        QStringLiteral("document.querySelector('.db-sidebar .selected-file')?.textContent ?? ''");
-    QTRY_VERIFY_WITH_TIMEOUT(evaluateJavaScript(view.page(), selectedFileScript, &result) &&
-                                 result.toString() == QFileInfo(firstDatabasePath).fileName(),
-                             5000);
+    const QString selectedFileScript = QStringLiteral(
+        "document.querySelector('.database-toolbar .connection-name')?.textContent ?? ''");
     QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(view.page(),
-                           QStringLiteral("Boolean(document.querySelector('.connected-card'))"),
-                           &result) &&
-            result.toBool(),
-        10000);
+        evaluateJavaScript(view.page(), selectedFileScript, &result) &&
+            result.toString() ==
+                QStringLiteral("SQLite: %1").arg(QFileInfo(firstDatabasePath).fileName()),
+        5000);
 
     QVERIFY(evaluateJavaScript(
         view.page(),
@@ -193,17 +239,17 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
     QVERIFY(secondDatabase.open(QIODevice::WriteOnly));
     secondDatabase.close();
     view.nativeBridge()->openDroppedSQLiteFile(secondDatabasePath);
-    QTRY_VERIFY_WITH_TIMEOUT(evaluateJavaScript(view.page(), selectedFileScript, &result) &&
-                                 result.toString() == QFileInfo(secondDatabasePath).fileName(),
-                             5000);
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(), selectedFileScript, &result) &&
+            result.toString() ==
+                QStringLiteral("SQLite: %1").arg(QFileInfo(secondDatabasePath).fileName()),
+        5000);
     QTRY_VERIFY_WITH_TIMEOUT(
         evaluateJavaScript(
             view.page(),
             QStringLiteral("document.querySelector('.db-workspace textarea')?.value ?? ''"),
             &result) &&
-            result.toString() ==
-                QStringLiteral(
-                    "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;"),
+            result.toString() == QStringLiteral("SELECT 123;"),
         5000);
 }
 
@@ -265,7 +311,7 @@ void TestQtWebEngineFrontend::reannouncesDroppedImageAfterCancellingImageDialog(
     QVERIFY(available.isValid());
     QVERIFY(cancelled.isValid());
 
-    bridge->startOperation({{QStringLiteral("contractVersion"), QStringLiteral("1")},
+    bridge->startOperation({{QStringLiteral("contractVersion"), QStringLiteral("2")},
                             {QStringLiteral("requestId"), QStringLiteral("image-open-cancel")},
                             {QStringLiteral("operation"), QStringLiteral("imageOpen")},
                             {QStringLiteral("payload"), QVariantMap{}}});

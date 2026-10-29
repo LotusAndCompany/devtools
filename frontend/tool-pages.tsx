@@ -1,14 +1,22 @@
 import {
+    useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
     type KeyboardEvent,
     type MouseEvent,
-    type ReactNode,
 } from "react";
 import { Effect } from "effect";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog } from "@/components/ui/dialog";
+import { Field } from "@/components/ui/field";
+import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { SelectBox } from "@/components/ui/select";
+import { Tabs } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { NativeOperationError, OperationCancelledError, type OperationName } from "@/bridge";
 import { forkUiEffect, runUiEffect } from "@/effect";
 
@@ -29,6 +37,7 @@ type ToolPageProps = {
     locale: Locale;
     run: OperationRunner;
     active?: boolean;
+    databaseNavigationVersion?: number;
     droppedImage?: DroppedImage | null;
     onDroppedImageConsumed?: (id: string) => void;
 };
@@ -65,21 +74,11 @@ function useOperation(run: OperationRunner) {
     return { busy, error, execute, setError };
 }
 
-function Heading({ title, detail }: { title: string; detail: string }) {
+function Heading({ title }: { title: string }) {
     return (
-        <header className="page-heading">
+        <header className="page-heading sr-only">
             <h1>{title}</h1>
-            <p>{detail}</p>
         </header>
-    );
-}
-
-function Field({ label, children }: { label: string; children: ReactNode }) {
-    return (
-        <label className="field">
-            <span className="field-label">{label}</span>
-            {children}
-        </label>
     );
 }
 
@@ -100,7 +99,7 @@ function Area({
 }) {
     return (
         <Field label={label}>
-            <textarea
+            <Textarea
                 className="form-control code-area"
                 rows={rows}
                 value={value}
@@ -127,6 +126,7 @@ export function ToolPage({
     locale,
     run,
     active,
+    databaseNavigationVersion,
     droppedImage,
     onDroppedImageConsumed,
 }: ToolPageProps) {
@@ -143,7 +143,15 @@ export function ToolPage({
     if (id === "phrase") return <PhrasePage locale={locale} run={run} active={active ?? false} />;
     if (id === "http") return <HttpPage locale={locale} run={run} />;
     if (id === "data") return <DataPage locale={locale} run={run} />;
-    if (id === "db") return <DatabasePage locale={locale} run={run} />;
+    if (id === "db")
+        return (
+            <DatabasePage
+                locale={locale}
+                run={run}
+                active={active ?? false}
+                databaseNavigationVersion={databaseNavigationVersion ?? 0}
+            />
+        );
     if (id === "timestamp") return <TimestampPage locale={locale} run={run} />;
     if (id === "diff") return <DiffPage locale={locale} run={run} />;
     if (id === "markdown") return <MarkdownPage locale={locale} run={run} />;
@@ -249,14 +257,7 @@ function ImagePage({
 
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Image Editor", "画像編集")}
-                detail={text(
-                    locale,
-                    "Resize, transform, make a selected color transparent and split images.",
-                    "サイズ変更、回転・反転、透明化、画像分割ができます。",
-                )}
-            />
+            <Heading title={text(locale, "Image Editor", "画像編集")} />
             <div className="toolbar-row">
                 <Button variant="outline" onClick={() => runUiEffect(open())} disabled={busy}>
                     {text(locale, "Open image", "画像を開く")}
@@ -314,7 +315,7 @@ function ImagePage({
                         <h2>{text(locale, "Resize", "サイズ変更")}</h2>
                         <div className="form-grid two">
                             <Field label={text(locale, "Width (px)", "幅 (px)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="1"
@@ -324,7 +325,7 @@ function ImagePage({
                                 />
                             </Field>
                             <Field label={text(locale, "Height (px)", "高さ (px)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="1"
@@ -334,7 +335,7 @@ function ImagePage({
                                 />
                             </Field>
                             <Field label={text(locale, "Horizontal scale (%)", "横倍率 (%)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="0.1"
@@ -345,7 +346,7 @@ function ImagePage({
                                 />
                             </Field>
                             <Field label={text(locale, "Vertical scale (%)", "縦倍率 (%)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="0.1"
@@ -357,19 +358,11 @@ function ImagePage({
                             </Field>
                         </div>
                         <label className="inline-check">
-                            <input
-                                type="checkbox"
-                                checked={keepAspect}
-                                onChange={(event) => setKeepAspect(event.target.checked)}
-                            />
+                            <Checkbox checked={keepAspect} onCheckedChange={setKeepAspect} />
                             {text(locale, "Keep aspect ratio", "縦横比を維持")}
                         </label>
                         <label className="inline-check">
-                            <input
-                                type="checkbox"
-                                checked={smooth}
-                                onChange={(event) => setSmooth(event.target.checked)}
-                            />
+                            <Checkbox checked={smooth} onCheckedChange={setSmooth} />
                             {text(locale, "Smooth scaling", "滑らかに拡大縮小")}
                         </label>
                         <div className="button-row">
@@ -462,7 +455,7 @@ function ImagePage({
                                 />
                             </Field>
                             <Field label={text(locale, "Tolerance (0–1)", "許容範囲 (0–1)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="0"
@@ -473,7 +466,7 @@ function ImagePage({
                                 />
                             </Field>
                             <Field label={text(locale, "Transparency (0–1)", "透明度 (0–1)")}>
-                                <input
+                                <Input
                                     className="form-control"
                                     type="number"
                                     min="0"
@@ -485,10 +478,9 @@ function ImagePage({
                             </Field>
                         </div>
                         <label className="inline-check">
-                            <input
-                                type="checkbox"
+                            <Checkbox
                                 checked={contiguousOnly}
-                                onChange={(event) => setContiguousOnly(event.target.checked)}
+                                onCheckedChange={setContiguousOnly}
                             />
                             {text(locale, "Only connected pixels", "隣接する領域のみ")}
                         </label>
@@ -514,7 +506,7 @@ function ImagePage({
                         {splitMode === "division" ? (
                             <div className="form-grid two">
                                 <Field label={text(locale, "Columns", "横の分割数")}>
-                                    <input
+                                    <Input
                                         className="form-control"
                                         type="number"
                                         min="1"
@@ -525,7 +517,7 @@ function ImagePage({
                                     />
                                 </Field>
                                 <Field label={text(locale, "Rows", "縦の分割数")}>
-                                    <input
+                                    <Input
                                         className="form-control"
                                         type="number"
                                         min="1"
@@ -539,7 +531,7 @@ function ImagePage({
                         ) : (
                             <div className="form-grid two">
                                 <Field label={text(locale, "Cell width", "セル幅")}>
-                                    <input
+                                    <Input
                                         className="form-control"
                                         type="number"
                                         min="1"
@@ -548,7 +540,7 @@ function ImagePage({
                                     />
                                 </Field>
                                 <Field label={text(locale, "Cell height", "セル高さ")}>
-                                    <input
+                                    <Input
                                         className="form-control"
                                         type="number"
                                         min="1"
@@ -559,10 +551,9 @@ function ImagePage({
                             </div>
                         )}
                         <label className="inline-check">
-                            <input
-                                type="checkbox"
+                            <Checkbox
                                 checked={ignoreRemainders}
-                                onChange={(event) => setIgnoreRemainders(event.target.checked)}
+                                onCheckedChange={setIgnoreRemainders}
                             />
                             {text(locale, "Ignore remainder pixels", "余りのピクセルを無視")}
                         </label>
@@ -695,14 +686,7 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                 onDeleteKey(event);
             }}
         >
-            <Heading
-                title={text(locale, "Phrase Generation", "定型文生成")}
-                detail={text(
-                    locale,
-                    "Create reusable text templates and keep them in the local template library.",
-                    "再利用できる文章を作成し、ローカルのテンプレート一覧に保存します。",
-                )}
-            />
+            <Heading title={text(locale, "Phrase Generation", "定型文生成")} />
             <div className="phrase-layout">
                 <aside className="input-card template-list">
                     <div className="toolbar-row">
@@ -725,19 +709,20 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                         </p>
                     )}
                     {templates.map((item) => (
-                        <button
+                        <Button
                             key={String(item.filename)}
+                            variant="ghost"
                             className={`template-item ${filename === item.filename ? "active" : ""}`}
                             onClick={() => select(item)}
                         >
                             <strong>{String(item.title)}</strong>
                             <span>{String(item.content).slice(0, 72)}</span>
-                        </button>
+                        </Button>
                     ))}
                 </aside>
                 <div className="input-card">
                     <Field label={text(locale, "Title", "タイトル")}>
-                        <input
+                        <Input
                             className="form-control"
                             value={title}
                             onChange={(event) => setTitle(event.target.value)}
@@ -788,6 +773,7 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
         Array<{ key: string; value: string; description: string }>
     >(Array.from({ length: 10 }, () => ({ key: "", value: "", description: "" })));
     const [response, setResponse] = useState<Record<string, unknown> | null>(null);
+    const [httpTab, setHttpTab] = useState("parameters");
     const send = () =>
         Effect.gen(function* () {
             const parsedHeaders: Record<string, string> = {};
@@ -821,14 +807,7 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
         });
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "HTTP Request", "HTTPリクエスト")}
-                detail={text(
-                    locale,
-                    "Send HTTP requests with query parameters, headers, authentication and a body.",
-                    "クエリパラメーター、ヘッダー、認証、本文を設定してHTTPリクエストを送信します。",
-                )}
-            />
+            <Heading title={text(locale, "HTTP Request", "HTTPリクエスト")} />
             <section className="input-card">
                 <div className="http-request-row">
                     <Field label={text(locale, "Method", "メソッド")}>
@@ -844,8 +823,7 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
                         />
                     </Field>
                     <Field label="URL">
-                        <input
-                            className="form-control"
+                        <Input
                             value={url}
                             onChange={(event) => setUrl(event.target.value)}
                             placeholder="https://api.example.com/v1/items"
@@ -855,100 +833,146 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
                         {busy ? text(locale, "Sending…", "送信中…") : text(locale, "Send", "送信")}
                     </Button>
                 </div>
-                <section className="input-card">
-                    <h2>{text(locale, "Parameters", "パラメーター")}</h2>
-                    <div className="http-parameter-grid">
-                        <strong>{text(locale, "Key", "キー")}</strong>
-                        <strong>{text(locale, "Value", "値")}</strong>
-                        <strong>{text(locale, "Description", "説明")}</strong>
-                        {parameters.map((parameter, index) => (
-                            <div className="http-parameter-row" key={index}>
-                                <input
-                                    className="form-control"
-                                    aria-label={`${text(locale, "Parameter key", "パラメーターキー")} ${index + 1}`}
-                                    value={parameter.key}
-                                    onChange={(event) =>
-                                        setParameters((current) =>
-                                            current.map((item, itemIndex) =>
-                                                itemIndex === index
-                                                    ? { ...item, key: event.target.value }
-                                                    : item,
-                                            ),
-                                        )
-                                    }
-                                />
-                                <input
-                                    className="form-control"
-                                    aria-label={`${text(locale, "Parameter value", "パラメーター値")} ${index + 1}`}
-                                    value={parameter.value}
-                                    onChange={(event) =>
-                                        setParameters((current) =>
-                                            current.map((item, itemIndex) =>
-                                                itemIndex === index
-                                                    ? { ...item, value: event.target.value }
-                                                    : item,
-                                            ),
-                                        )
-                                    }
-                                />
-                                <input
-                                    className="form-control"
-                                    aria-label={`${text(locale, "Parameter description", "パラメーター説明")} ${index + 1}`}
-                                    value={parameter.description}
-                                    onChange={(event) =>
-                                        setParameters((current) =>
-                                            current.map((item, itemIndex) =>
-                                                itemIndex === index
-                                                    ? { ...item, description: event.target.value }
-                                                    : item,
-                                            ),
-                                        )
-                                    }
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </section>
-                <div className="two-column http-options">
-                    <Area
-                        label={text(
-                            locale,
-                            "Headers (one name: value per line)",
-                            "ヘッダー (1行に1つ name: value)",
-                        )}
-                        value={headers}
-                        onChange={setHeaders}
-                        rows={8}
-                        placeholder="Accept: application/json"
-                    />
-                    <div className="input-card auth-card">
-                        <h2>{text(locale, "Basic authentication", "Basic認証")}</h2>
-                        <Field label={text(locale, "Username", "ユーザー名")}>
-                            <input
-                                className="form-control"
-                                autoComplete="username"
-                                value={username}
-                                onChange={(event) => setUsername(event.target.value)}
-                            />
-                        </Field>
-                        <Field label={text(locale, "Password", "パスワード")}>
-                            <input
-                                className="form-control"
-                                type="password"
-                                autoComplete="current-password"
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                            />
-                        </Field>
-                    </div>
-                </div>
-                <Area
-                    label={text(locale, "Request body", "リクエスト本文")}
-                    value={body}
-                    onChange={setBody}
-                    rows={8}
-                />
             </section>
+            <div className="http-workspace">
+                <Tabs.Root
+                    className="input-card"
+                    value={httpTab}
+                    onValueChange={(value) => setHttpTab(String(value))}
+                >
+                    <Tabs.List className="feature-tabs-list">
+                        <Tabs.Tab className="feature-tab" value="parameters">
+                            {text(locale, "Parameters", "パラメーター")}
+                        </Tabs.Tab>
+                        <Tabs.Tab className="feature-tab" value="authentication">
+                            {text(locale, "Authentication", "認証")}
+                        </Tabs.Tab>
+                        <Tabs.Tab className="feature-tab" value="headers">
+                            {text(locale, "Headers", "ヘッダー")}
+                        </Tabs.Tab>
+                        <Tabs.Tab className="feature-tab" value="body">
+                            {text(locale, "Body", "本文")}
+                        </Tabs.Tab>
+                    </Tabs.List>
+                    <Tabs.Panel className="http-tab-panel" value="parameters">
+                        <div className="http-parameter-grid">
+                            <strong>{text(locale, "Key", "キー")}</strong>
+                            <strong>{text(locale, "Value", "値")}</strong>
+                            <strong>{text(locale, "Description", "説明")}</strong>
+                            {parameters.map((parameter, index) => (
+                                <div className="http-parameter-row" key={index}>
+                                    <Input
+                                        aria-label={`${text(locale, "Parameter key", "パラメーターキー")} ${index + 1}`}
+                                        value={parameter.key}
+                                        onChange={(event) =>
+                                            setParameters((current) =>
+                                                current.map((item, itemIndex) =>
+                                                    itemIndex === index
+                                                        ? { ...item, key: event.target.value }
+                                                        : item,
+                                                ),
+                                            )
+                                        }
+                                    />
+                                    <Input
+                                        aria-label={`${text(locale, "Parameter value", "パラメーター値")} ${index + 1}`}
+                                        value={parameter.value}
+                                        onChange={(event) =>
+                                            setParameters((current) =>
+                                                current.map((item, itemIndex) =>
+                                                    itemIndex === index
+                                                        ? { ...item, value: event.target.value }
+                                                        : item,
+                                                ),
+                                            )
+                                        }
+                                    />
+                                    <Input
+                                        aria-label={`${text(locale, "Parameter description", "パラメーター説明")} ${index + 1}`}
+                                        value={parameter.description}
+                                        onChange={(event) =>
+                                            setParameters((current) =>
+                                                current.map((item, itemIndex) =>
+                                                    itemIndex === index
+                                                        ? {
+                                                              ...item,
+                                                              description: event.target.value,
+                                                          }
+                                                        : item,
+                                                ),
+                                            )
+                                        }
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </Tabs.Panel>
+                    <Tabs.Panel className="http-tab-panel" value="authentication">
+                        <div className="auth-card">
+                            <Field label={text(locale, "Username", "ユーザー名")}>
+                                <Input
+                                    autoComplete="username"
+                                    value={username}
+                                    onChange={(event) => setUsername(event.target.value)}
+                                />
+                            </Field>
+                            <Field label={text(locale, "Password", "パスワード")}>
+                                <Input
+                                    type="password"
+                                    autoComplete="current-password"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                />
+                            </Field>
+                        </div>
+                    </Tabs.Panel>
+                    <Tabs.Panel className="http-tab-panel" value="headers">
+                        <Area
+                            label={text(
+                                locale,
+                                "Headers (one name: value per line)",
+                                "ヘッダー (1行に1つ name: value)",
+                            )}
+                            value={headers}
+                            onChange={setHeaders}
+                            rows={12}
+                            placeholder="Accept: application/json"
+                        />
+                    </Tabs.Panel>
+                    <Tabs.Panel className="http-tab-panel" value="body">
+                        <Area
+                            label={text(locale, "Request body", "リクエスト本文")}
+                            value={body}
+                            onChange={setBody}
+                            rows={12}
+                        />
+                    </Tabs.Panel>
+                </Tabs.Root>
+                <section className="input-card http-response-panel">
+                    <div className="toolbar-row">
+                        <h2>{text(locale, "Response", "レスポンス")}</h2>
+                        {response && (
+                            <span className="muted-text">
+                                {String(response.status ?? "")} {String(response.reason ?? "")} ·{" "}
+                                {String(response.elapsedMs ?? "")} ms ·{" "}
+                                {String(response.bytes ?? "")} B
+                            </span>
+                        )}
+                    </div>
+                    {response ? (
+                        <Area
+                            label={text(locale, "Response body", "レスポンス本文")}
+                            value={String(response.body ?? "")}
+                            readOnly
+                            rows={16}
+                        />
+                    ) : (
+                        <div className="empty-state">
+                            {text(locale, "No response yet.", "レスポンスはありません。")}
+                        </div>
+                    )}
+                </section>
+            </div>
             <OutputMessage error={error} />
             {response && (
                 <section className="input-card response-card">
@@ -995,14 +1019,7 @@ function DataPage({ locale, run }: Omit<ToolPageProps, "id">) {
         });
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Data Conversion", "データ変換")}
-                detail={text(
-                    locale,
-                    "Parse JSON, YAML or TOML and emit the selected format.",
-                    "JSON、YAML、TOMLを解析し、指定した形式に変換します。",
-                )}
-            />
+            <Heading title={text(locale, "Data Conversion", "データ変換")} />
             <div className="toolbar-row">
                 <Button variant="outline" onClick={() => runUiEffect(open())} disabled={busy}>
                     {text(locale, "Open file", "ファイルを開く")}
@@ -1065,176 +1082,274 @@ function DataPage({ locale, run }: Omit<ToolPageProps, "id">) {
     );
 }
 
-function TimestampPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
-    const [value, setValue] = useState("");
-    const [source, setSource] = useState("seconds");
-    const [result, setResult] = useState<Record<string, unknown> | null>(null);
-    const convert = () =>
-        Effect.gen(function* () {
-            const next = yield* execute("convertTimestamp", { value, source });
-            if (next) yield* Effect.sync(() => setResult(next));
-        });
-    return (
-        <div className="tool-page">
-            <Heading
-                title={text(locale, "Timestamp Conversion", "タイムスタンプ変換")}
-                detail={text(
-                    locale,
-                    "Convert seconds, milliseconds and ISO-8601 timestamps.",
-                    "秒、ミリ秒、ISO-8601形式の時刻を変換します。",
-                )}
-            />
-            <div className="input-card">
-                <div className="toolbar-row">
-                    <Field label={text(locale, "Input format", "入力形式")}>
-                        <SelectBox
-                            className="compact"
-                            value={source}
-                            onValueChange={setSource}
-                            options={[
-                                { value: "seconds", label: "Unix seconds" },
-                                { value: "milliseconds", label: "Unix milliseconds" },
-                                { value: "iso", label: "ISO-8601" },
-                            ]}
-                        />
-                    </Field>
-                    <Field label={text(locale, "Value", "値")}>
-                        <input
-                            className="form-control"
-                            value={value}
-                            onChange={(event) => setValue(event.target.value)}
-                            placeholder="1726259557"
-                        />
-                    </Field>
-                    <Button onClick={() => runUiEffect(convert())} disabled={busy}>
-                        {text(locale, "Convert", "変換")}
-                    </Button>
-                </div>
-            </div>
-            <OutputMessage error={error} />
-            {result && (
-                <div className="result-grid">
-                    {[
-                        ["seconds", "Unix seconds"],
-                        ["milliseconds", "Unix milliseconds"],
-                        ["utc", "ISO-8601 UTC"],
-                        ["local", text(locale, "Local time", "ローカル時刻")],
-                    ].map(([key, label]) => (
-                        <ResultField
-                            key={key}
-                            label={label}
-                            value={String(result[key] ?? "")}
-                            run={run}
-                            locale={locale}
-                        />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
+type TimestampValues = {
+    seconds: string;
+    milliseconds: string;
+    local: string;
+    utc: string;
+    isoUtc: string;
+    isoLocal: string;
+};
+
+const padDatePart = (value: number) => String(value).padStart(2, "0");
+
+function toLocalInput(date: Date, utc = false) {
+    const year = utc ? date.getUTCFullYear() : date.getFullYear();
+    const month = padDatePart((utc ? date.getUTCMonth() : date.getMonth()) + 1);
+    const day = padDatePart(utc ? date.getUTCDate() : date.getDate());
+    const hour = padDatePart(utc ? date.getUTCHours() : date.getHours());
+    const minute = padDatePart(utc ? date.getUTCMinutes() : date.getMinutes());
+    return `${year}-${month}-${day}T${hour}:${minute}`;
 }
 
-function ResultField({
-    label,
-    value,
-    run,
-    locale,
-}: {
-    label: string;
-    value: string;
-    run: OperationRunner;
-    locale: Locale;
-}) {
-    const [copied, setCopied] = useState(false);
-    const copy = () =>
-        run("copyToClipboard", { text: value }).pipe(
-            Effect.tap(() =>
-                Effect.sync(() => {
-                    setCopied(true);
-                    window.setTimeout(() => setCopied(false), 1500);
+function toLocalIso(date: Date) {
+    const offset = -date.getTimezoneOffset();
+    const sign = offset >= 0 ? "+" : "-";
+    const absoluteOffset = Math.abs(offset);
+    const seconds = padDatePart(date.getSeconds());
+    const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+    return `${toLocalInput(date)}:${seconds}.${milliseconds}${sign}${padDatePart(Math.floor(absoluteOffset / 60))}:${padDatePart(absoluteOffset % 60)}`;
+}
+
+function timestampValues(date: Date): TimestampValues {
+    return {
+        seconds: String(Math.floor(date.getTime() / 1000)),
+        milliseconds: String(date.getTime()),
+        local: toLocalInput(date),
+        utc: toLocalInput(date, true),
+        isoUtc: date.toISOString(),
+        isoLocal: toLocalIso(date),
+    };
+}
+
+function TimestampPage({ locale, run }: Omit<ToolPageProps, "id">) {
+    const { busy, error, execute } = useOperation(run);
+    const [values, setValues] = useState<TimestampValues>(() => timestampValues(new Date()));
+    const convert = (key: keyof TimestampValues) =>
+        Effect.gen(function* () {
+            const source =
+                key === "seconds" ? "seconds" : key === "milliseconds" ? "milliseconds" : "iso";
+            const localDate = new Date(values.local);
+            const value =
+                key === "local"
+                    ? Number.isNaN(localDate.getTime())
+                        ? values.local
+                        : localDate.toISOString()
+                    : key === "utc"
+                      ? `${values.utc}:00Z`
+                      : key === "isoUtc"
+                        ? values.isoUtc
+                        : key === "isoLocal"
+                          ? values.isoLocal
+                          : values[key];
+            const result = yield* execute("convertTimestamp", { value, source });
+            if (!result) return;
+            const instant = new Date(String(result.utc));
+            yield* Effect.sync(() =>
+                setValues({
+                    seconds: String(result.seconds ?? ""),
+                    milliseconds: String(result.milliseconds ?? ""),
+                    local: toLocalInput(instant),
+                    utc: toLocalInput(instant, true),
+                    isoUtc: String(result.utc ?? ""),
+                    isoLocal: String(result.local ?? ""),
                 }),
-            ),
-        );
+            );
+        });
+    const copy = (value: string) => run("copyToClipboard", { text: value });
+    const row = (
+        key: keyof TimestampValues,
+        label: string,
+        type: "text" | "datetime-local" = "text",
+    ) => (
+        <div className="timestamp-row" key={key}>
+            <Field label={label}>
+                <Input
+                    type={type}
+                    value={values[key]}
+                    onChange={(event) =>
+                        setValues((current) => ({ ...current, [key]: event.target.value }))
+                    }
+                />
+            </Field>
+            <Button
+                variant="outline"
+                size="sm"
+                disabled={busy}
+                onClick={() => runUiEffect(convert(key))}
+            >
+                {text(locale, "Convert", "変換")}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => runUiEffect(copy(values[key]))}>
+                {text(locale, "Copy", "コピー")}
+            </Button>
+        </div>
+    );
     return (
-        <div className="result-card">
-            <div className="result-heading">
-                <span>{label}</span>
-                <Button variant="ghost" onClick={() => runUiEffect(copy())}>
-                    {copied ? "✓" : text(locale, "Copy", "コピー")}
+        <div className="tool-page">
+            <Heading title={text(locale, "Timestamp Conversion", "タイムスタンプ変換")} />
+            <div className="timestamp-toolbar">
+                <Button variant="outline" onClick={() => setValues(timestampValues(new Date()))}>
+                    {text(locale, "Now", "現在時刻")}
                 </Button>
             </div>
-            <code>{value}</code>
+            <div className="timestamp-groups">
+                <section className="input-card timestamp-group">
+                    <h2>{text(locale, "Unix Timestamp", "Unixタイムスタンプ")}</h2>
+                    {row("seconds", text(locale, "Seconds", "秒"))}
+                    {row("milliseconds", text(locale, "Milliseconds", "ミリ秒"))}
+                </section>
+                <section className="input-card timestamp-group">
+                    <h2>{text(locale, "Date & Time", "日時")}</h2>
+                    {row("local", text(locale, "Local", "ローカル"), "datetime-local")}
+                    {row("utc", text(locale, "UTC", "UTC"), "datetime-local")}
+                </section>
+                <section className="input-card timestamp-group">
+                    <h2>ISO 8601</h2>
+                    {row("isoUtc", text(locale, "UTC", "UTC"))}
+                    {row("isoLocal", text(locale, "Local", "ローカル"))}
+                </section>
+            </div>
+            <OutputMessage error={error} />
         </div>
     );
 }
 
 function DiffPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { error, setError } = useOperation(run);
     const [left, setLeft] = useState("");
     const [right, setRight] = useState("");
     const [rows, setRows] = useState<Array<Record<string, unknown>>>([]);
-    const compare = () =>
-        Effect.gen(function* () {
-            const result = yield* execute("compareText", { left, right });
-            if (result) {
-                yield* Effect.sync(() =>
-                    setRows((result.rows as Array<Record<string, unknown>>) ?? []),
-                );
-            }
-        });
+    const [mode, setMode] = useState("inline");
+    useEffect(() => {
+        const timer = window.setTimeout(() => {
+            runUiEffect(
+                run("compareText", { left, right }).pipe(
+                    Effect.tap((result) =>
+                        Effect.sync(() => {
+                            setRows((result.rows as Array<Record<string, unknown>>) ?? []);
+                            setError("");
+                        }),
+                    ),
+                    Effect.catch((reason) =>
+                        Effect.sync(() =>
+                            setError(reason instanceof Error ? reason.message : String(reason)),
+                        ),
+                    ),
+                ),
+            );
+        }, 150);
+        return () => window.clearTimeout(timer);
+    }, [left, right, run, setError]);
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Text Diff", "テキスト差分")}
-                detail={text(locale, "Compare two text versions.", "2つのテキストを比較します。")}
-            />
-            <div className="two-column">
-                <Area label={text(locale, "Original", "変更前")} value={left} onChange={setLeft} />
-                <Area
-                    label={text(locale, "Modified", "変更後")}
-                    value={right}
-                    onChange={setRight}
-                />
-            </div>
-            <div className="action-row">
-                <Button onClick={() => runUiEffect(compare())} disabled={busy}>
-                    {text(locale, "Compare", "比較")}
-                </Button>
+            <Heading title={text(locale, "Text Diff", "テキスト差分")} />
+            <div className="diff-layout">
+                <div className="diff-editors">
+                    <Area
+                        label={text(locale, "Original", "変更前")}
+                        value={left}
+                        onChange={setLeft}
+                    />
+                    <Area
+                        label={text(locale, "Modified", "変更後")}
+                        value={right}
+                        onChange={setRight}
+                    />
+                </div>
+                <section className="input-card">
+                    <div className="diff-result-heading">
+                        <h2>{text(locale, "Diff", "差分")}</h2>
+                        <SelectBox
+                            className="compact"
+                            value={mode}
+                            onValueChange={setMode}
+                            options={[
+                                { value: "inline", label: text(locale, "Inline", "インライン") },
+                                {
+                                    value: "side-by-side",
+                                    label: text(locale, "Side-by-side", "左右に並べる"),
+                                },
+                            ]}
+                        />
+                    </div>
+                    {mode === "inline" ? (
+                        <div className="diff-table diff-inline">
+                            {rows.map((row, index) => {
+                                const leftText = String(row.left ?? "");
+                                const rightText = String(row.right ?? "");
+                                if (row.leftChanged && row.rightChanged) {
+                                    return (
+                                        <div className="diff-row" key={index}>
+                                            <code className="removed">− {leftText}</code>
+                                            <code className="added">+ {rightText}</code>
+                                        </div>
+                                    );
+                                }
+                                const changed = Boolean(row.leftChanged || row.rightChanged);
+                                return (
+                                    <div className="diff-row" key={index}>
+                                        <code className={changed ? "added" : ""}>
+                                            {changed ? "+ " : "  "}
+                                            {rightText || leftText}
+                                        </code>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div
+                            className="diff-table"
+                            role="table"
+                            aria-label={text(locale, "Diff result", "差分結果")}
+                        >
+                            {rows.map((row, index) => (
+                                <div key={index} className="diff-row">
+                                    <code className={row.leftChanged ? "removed" : ""}>
+                                        {String(row.left ?? "")}
+                                    </code>
+                                    <code className={row.rightChanged ? "added" : ""}>
+                                        {String(row.right ?? "")}
+                                    </code>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
             </div>
             <OutputMessage error={error} />
-            {rows.length > 0 && (
-                <div
-                    className="diff-table"
-                    role="table"
-                    aria-label={text(locale, "Diff result", "差分結果")}
-                >
-                    {rows.map((row, index) => (
-                        <div key={index} className="diff-row">
-                            <code className={row.leftChanged ? "removed" : ""}>
-                                {String(row.left ?? "")}
-                            </code>
-                            <code className={row.rightChanged ? "added" : ""}>
-                                {String(row.right ?? "")}
-                            </code>
-                        </div>
-                    ))}
-                </div>
-            )}
         </div>
     );
 }
 
 function MarkdownPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [markdown, setMarkdown] = useState("# Markdown\n\nWrite here to preview.");
     const [preview, setPreview] = useState("");
-    const [previewTheme, setPreviewTheme] = useState("system");
-    const update = () =>
-        Effect.gen(function* () {
-            const result = yield* execute("renderMarkdown", { markdown });
-            if (result) yield* Effect.sync(() => setPreview(String(result.html ?? "")));
-        });
+    const [syncScroll, setSyncScroll] = useState(true);
+    const editorRef = useRef<HTMLTextAreaElement>(null);
+    const previewRef = useRef<HTMLIFrameElement>(null);
+    const previewScrollCleanup = useRef<(() => void) | null>(null);
+    useEffect(() => {
+        const timer = window.setTimeout(() => {
+            runUiEffect(
+                run("renderMarkdown", { markdown }).pipe(
+                    Effect.tap((result) =>
+                        Effect.sync(() => {
+                            setPreview(String(result.html ?? ""));
+                            setError("");
+                        }),
+                    ),
+                    Effect.catch((reason) =>
+                        Effect.sync(() =>
+                            setError(reason instanceof Error ? reason.message : String(reason)),
+                        ),
+                    ),
+                ),
+            );
+        }, 180);
+        return () => window.clearTimeout(timer);
+    }, [markdown, run, setError]);
     const open = () =>
         Effect.gen(function* () {
             const result = yield* execute("openTextFile", { fileType: "markdown" });
@@ -1251,25 +1366,48 @@ function MarkdownPage({ locale, run }: Omit<ToolPageProps, "id">) {
         const policy = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'">`;
         return preview.replace("<head>", `<head>${policy}`);
     }, [preview]);
+    const syncEditorToPreview = useCallback(() => {
+        if (!syncScroll) return;
+        const editor = editorRef.current;
+        const scroller = previewRef.current?.contentDocument?.scrollingElement;
+        if (!editor || !scroller) return;
+        const editorRange = editor.scrollHeight - editor.clientHeight;
+        const previewRange = scroller.scrollHeight - scroller.clientHeight;
+        if (editorRange > 0 && previewRange > 0) {
+            scroller.scrollTop = (editor.scrollTop / editorRange) * previewRange;
+        }
+    }, [syncScroll]);
+    const attachPreviewScroll = useCallback(() => {
+        previewScrollCleanup.current?.();
+        previewScrollCleanup.current = null;
+        if (!syncScroll) return;
+        const iframeDocument = previewRef.current?.contentDocument;
+        const editor = editorRef.current;
+        const scroller = iframeDocument?.scrollingElement;
+        if (!iframeDocument || !editor || !scroller) return;
+        const onScroll = () => {
+            const editorRange = editor.scrollHeight - editor.clientHeight;
+            const previewRange = scroller.scrollHeight - scroller.clientHeight;
+            if (editorRange > 0 && previewRange > 0) {
+                editor.scrollTop = (scroller.scrollTop / previewRange) * editorRange;
+            }
+        };
+        iframeDocument.addEventListener("scroll", onScroll, { passive: true });
+        previewScrollCleanup.current = () => iframeDocument.removeEventListener("scroll", onScroll);
+    }, [syncScroll]);
+    useEffect(() => {
+        attachPreviewScroll();
+        return () => previewScrollCleanup.current?.();
+    }, [attachPreviewScroll]);
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Markdown Preview", "Markdownプレビュー")}
-                detail={text(
-                    locale,
-                    "Edit Markdown and preview it.",
-                    "Markdownを編集してプレビューします。",
-                )}
-            />
+            <Heading title={text(locale, "Markdown Preview", "Markdownプレビュー")} />
             <div className="toolbar-row">
                 <Button variant="outline" onClick={() => runUiEffect(open())} disabled={busy}>
                     {text(locale, "Open", "開く")}
                 </Button>
-                <Button onClick={() => runUiEffect(update())} disabled={busy}>
-                    {text(locale, "Preview", "プレビュー")}
-                </Button>
                 <Button variant="outline" onClick={() => runUiEffect(save())} disabled={busy}>
-                    {text(locale, "Save Markdown", "Markdownを保存")}
+                    {text(locale, "Save", "保存")}
                 </Button>
                 <Button
                     variant="outline"
@@ -1278,33 +1416,32 @@ function MarkdownPage({ locale, run }: Omit<ToolPageProps, "id">) {
                 >
                     {text(locale, "Export HTML", "HTMLを出力")}
                 </Button>
-                <Field label={text(locale, "Preview theme", "プレビューのテーマ")}>
-                    <SelectBox
-                        className="compact"
-                        value={previewTheme}
-                        onValueChange={setPreviewTheme}
-                        options={[
-                            { value: "system", label: text(locale, "System", "システム") },
-                            { value: "light", label: text(locale, "Light", "ライト") },
-                            { value: "dark", label: text(locale, "Dark", "ダーク") },
-                        ]}
-                    />
-                </Field>
+                <label className="markdown-sync">
+                    <Checkbox checked={syncScroll} onCheckedChange={setSyncScroll} />
+                    {text(locale, "Sync scroll", "スクロールを同期")}
+                </label>
             </div>
             <div className="two-column markdown-columns">
-                <Area
-                    label={text(locale, "Markdown source", "Markdownソース")}
-                    value={markdown}
-                    onChange={setMarkdown}
-                    rows={20}
-                />
-                <div className={`preview-panel markdown-${previewTheme}`}>
+                <Field label={text(locale, "Editor", "エディター")}>
+                    <Textarea
+                        ref={editorRef}
+                        className="code-area markdown-editor"
+                        value={markdown}
+                        onChange={(event) => setMarkdown(event.target.value)}
+                        onScroll={syncEditorToPreview}
+                        rows={20}
+                        spellCheck={false}
+                    />
+                </Field>
+                <div className="preview-panel">
                     <span className="field-label">{text(locale, "Preview", "プレビュー")}</span>
                     <iframe
+                        ref={previewRef}
                         title={text(locale, "Markdown preview", "Markdownプレビュー")}
-                        sandbox=""
+                        sandbox="allow-same-origin"
                         referrerPolicy="no-referrer"
                         srcDoc={previewDocument}
+                        onLoad={attachPreviewScroll}
                     />
                 </div>
             </div>
@@ -1345,14 +1482,7 @@ function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
         );
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Command Generation", "コマンド生成")}
-                detail={text(
-                    locale,
-                    "Create Git and Docker commands.",
-                    "GitやDockerのコマンドを作成します。",
-                )}
-            />
+            <Heading title={text(locale, "Command Generation", "コマンド生成")} />
             <div className="input-card">
                 <div className="form-grid">
                     <Field label={text(locale, "Category", "カテゴリ")}>
@@ -1399,7 +1529,7 @@ function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
                                 options[optionIndex]?.title || text(locale, "Value", "値"),
                             )}
                         >
-                            <input
+                            <Input
                                 className="form-control"
                                 value={value}
                                 onChange={(event) => setValue(event.target.value)}
@@ -1409,6 +1539,18 @@ function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
                 </div>
                 <div className="action-row">
                     <Button
+                        variant="outline"
+                        onClick={() => {
+                            setCategory("git");
+                            setFunctionIndex(0);
+                            setOptionIndex(0);
+                            setValue("");
+                        }}
+                        disabled={busy}
+                    >
+                        {text(locale, "Reset", "リセット")}
+                    </Button>
+                    <Button
                         onClick={() => runUiEffect(generate())}
                         disabled={busy || !functions.length}
                     >
@@ -1417,14 +1559,22 @@ function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
                 </div>
             </div>
             <OutputMessage error={error} />
-            {command && (
-                <ResultField
-                    label={text(locale, "Generated command", "生成したコマンド")}
-                    value={command}
-                    run={run}
-                    locale={locale}
-                />
-            )}
+            <section className="input-card command-output">
+                <div className="toolbar-row">
+                    <h2>{text(locale, "Generated Result", "生成結果")}</h2>
+                    <Button
+                        variant="outline"
+                        disabled={!command}
+                        onClick={() => runUiEffect(run("copyToClipboard", { text: command }))}
+                    >
+                        {text(locale, "Copy", "コピー")}
+                    </Button>
+                    <Button variant="ghost" onClick={() => setCommand("")} disabled={!command}>
+                        {text(locale, "Clear", "クリア")}
+                    </Button>
+                </div>
+                <Textarea value={command} readOnly rows={5} />
+            </section>
         </div>
     );
 }
@@ -1515,14 +1665,7 @@ function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
         );
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "QR Code Generation", "QRコード生成")}
-                detail={text(
-                    locale,
-                    "Generate QR codes from text, links, and more.",
-                    "テキストやURLなどからQRコードを生成します。",
-                )}
-            />
+            <Heading title={text(locale, "QR Code Generation", "QRコード生成")} />
             <div className="qr-layout">
                 <div className="input-card">
                     <Field label={text(locale, "QR type", "QRの種類")}>
@@ -1556,7 +1699,7 @@ function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     </Field>
                     {fields.map(([key, label, required]) => (
                         <Field key={key} label={`${label}${required ? " *" : ""}`}>
-                            <input
+                            <Input
                                 className="form-control"
                                 type={
                                     key === "wifi_password"
@@ -1594,13 +1737,12 @@ function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
                                 />
                             </Field>
                             <label className="inline-check">
-                                <input
-                                    type="checkbox"
+                                <Checkbox
                                     checked={parameters.wifi_hidden === "true"}
-                                    onChange={(event) =>
+                                    onCheckedChange={(checked) =>
                                         setParameters((current) => ({
                                             ...current,
-                                            wifi_hidden: String(event.target.checked),
+                                            wifi_hidden: String(checked),
                                         }))
                                     }
                                 />
@@ -1654,7 +1796,12 @@ function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
     );
 }
 
-function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
+function DatabasePage({
+    locale,
+    run,
+    active,
+    databaseNavigationVersion,
+}: Omit<ToolPageProps, "id">) {
     const { busy, error, execute } = useOperation(run);
     const [type, setType] = useState("QSQLITE");
     const [host, setHost] = useState("localhost");
@@ -1666,12 +1813,47 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
     const [connected, setConnected] = useState(false);
     const [displayName, setDisplayName] = useState("");
     const [tables, setTables] = useState<string[]>([]);
-    const [sql, setSql] = useState(
-        "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;",
-    );
-    const [columns, setColumns] = useState<string[]>([]);
-    const [rows, setRows] = useState<Array<Array<unknown>>>([]);
-    const [truncated, setTruncated] = useState(false);
+    const [connectionDialogOpen, setConnectionDialogOpen] = useState(false);
+    const [queryTabs, setQueryTabs] = useState([
+        {
+            id: "query-1",
+            title: "SQL",
+            sql: "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;",
+            columns: [] as string[],
+            rows: [] as Array<Array<unknown>>,
+            truncated: false,
+        },
+    ]);
+    const [activeQueryId, setActiveQueryId] = useState("query-1");
+    const activeQuery = queryTabs.find((tab) => tab.id === activeQueryId) ?? queryTabs[0];
+    const updateActiveQuery = (
+        update: (query: (typeof queryTabs)[number]) => (typeof queryTabs)[number],
+    ) =>
+        setQueryTabs((current) =>
+            current.map((query) => (query.id === activeQueryId ? update(query) : query)),
+        );
+    const addQueryTab = () => {
+        const id = `query-${crypto.randomUUID()}`;
+        setQueryTabs((current) => [
+            ...current,
+            {
+                id,
+                title: `SQL ${current.length + 1}`,
+                sql: "",
+                columns: [],
+                rows: [],
+                truncated: false,
+            },
+        ]);
+        setActiveQueryId(id);
+    };
+    const closeQueryTab = (id: string) => {
+        if (queryTabs.length < 2) return;
+        const index = queryTabs.findIndex((query) => query.id === id);
+        const next = queryTabs.filter((query) => query.id !== id);
+        setQueryTabs(next);
+        if (activeQueryId === id) setActiveQueryId(next[Math.max(0, index - 1)].id);
+    };
     const refreshHistory = () =>
         run("databaseHistory", {}).pipe(
             Effect.tap((result) =>
@@ -1683,10 +1865,11 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
             ),
         );
     useEffect(() => {
-        let active = true;
+        if (!active) return;
+        let mounted = true;
         const initialize = Effect.gen(function* () {
             const result = yield* run("databaseHistory", {});
-            if (!active) return;
+            if (!mounted) return;
             const selected = String(result.selectedFileName ?? "");
             yield* Effect.sync(() => {
                 setHistory((result.history as Array<Record<string, unknown>>) ?? []);
@@ -1695,7 +1878,7 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
             });
             if (selected && !result.connected) {
                 const connectedResult = yield* run("databaseConnect", { type: "QSQLITE" });
-                if (active && connectedResult.connected) {
+                if (mounted && connectedResult.connected) {
                     yield* Effect.sync(() => {
                         setConnected(true);
                         setDisplayName(
@@ -1708,11 +1891,12 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
         }).pipe(Effect.catch(() => Effect.void));
         const interrupt = forkUiEffect(initialize);
         return () => {
-            active = false;
+            mounted = false;
             interrupt();
         };
-        // oxlint-disable-next-line react/exhaustive-effect-dependencies -- restart database hydration if the bridge runner changes
-    }, [run]);
+        // The bridge runner changes when Qt WebChannel attaches, so refresh this cache then.
+        // oxlint-disable-next-line react/exhaustive-effect-dependencies
+    }, [active, databaseNavigationVersion, run]);
     const selectFile = () =>
         execute("databaseSelectFile", {}).pipe(
             Effect.tap((result) =>
@@ -1742,17 +1926,21 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
                     ),
                 );
                 setTables((result.tables as string[]) ?? []);
+                setConnectionDialogOpen(false);
             });
             yield* refreshHistory();
         });
     const query = () =>
-        execute("databaseQuery", { sql }).pipe(
+        execute("databaseQuery", { sql: activeQuery.sql }).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => {
                     if (!result) return;
-                    setColumns((result.columns as string[]) ?? []);
-                    setRows((result.rows as Array<Array<unknown>>) ?? []);
-                    setTruncated(Boolean(result.truncated));
+                    updateActiveQuery((current) => ({
+                        ...current,
+                        columns: (result.columns as string[]) ?? [],
+                        rows: (result.rows as Array<Array<unknown>>) ?? [],
+                        truncated: Boolean(result.truncated),
+                    }));
                 }),
             ),
         );
@@ -1771,214 +1959,329 @@ function DatabasePage({ locale, run }: Omit<ToolPageProps, "id">) {
                     setConnected(false);
                     setDisplayName("");
                     setTables([]);
-                    setRows([]);
-                    setColumns([]);
                     setSelectedFileName("");
                 }),
             ),
         );
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Database", "データベース")}
-                detail={text(
-                    locale,
-                    "Connect to SQLite, MySQL or PostgreSQL, browse tables and run SQL.",
-                    "SQLite、MySQL、PostgreSQLに接続し、テーブルの確認とSQL実行ができます。",
+            <Heading title={text(locale, "Database", "データベース")} />
+            <div className="database-toolbar">
+                {connected && <span className="connection-name">{displayName}</span>}
+                {connected && (
+                    <Button variant="ghost" size="sm" onClick={() => runUiEffect(disconnect())}>
+                        {text(locale, "Disconnect", "切断")}
+                    </Button>
                 )}
-            />
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => runUiEffect(loadTables())}
+                    disabled={!connected || busy}
+                >
+                    {text(locale, "Refresh", "更新")}
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                        setConnectionDialogOpen(true);
+                        runUiEffect(refreshHistory());
+                    }}
+                >
+                    {text(locale, "Connection settings", "接続設定")}
+                </Button>
+                <Button size="sm" onClick={addQueryTab}>
+                    {text(locale, "New SQL", "SQLを追加")}
+                </Button>
+            </div>
             <div className="db-layout">
                 <aside className="input-card db-sidebar">
-                    <div className="toolbar-row">
-                        <h2>{text(locale, "Connections", "接続")}</h2>
-                        <Button
-                            variant="ghost"
-                            onClick={() => runUiEffect(refreshHistory())}
-                            aria-label={text(locale, "Refresh connections", "接続を更新")}
-                        >
-                            ↻
-                        </Button>
-                    </div>
-                    {connected && (
-                        <div className="connected-card">
-                            <strong>{displayName}</strong>
-                            <Button variant="outline" onClick={() => runUiEffect(disconnect())}>
-                                {text(locale, "Disconnect", "切断")}
-                            </Button>
-                        </div>
-                    )}
-                    {history.map((item) => (
-                        <div key={String(item.index)} className="history-item">
-                            <div>
-                                <strong>{String(item.displayName)}</strong>
-                                <span>{String(item.host || item.database)}</span>
-                            </div>
+                    <h2>{text(locale, "Tables", "テーブル")}</h2>
+                    <div className="db-table-list">
+                        {tables.map((table) => (
                             <Button
-                                variant="outline"
-                                disabled={busy}
-                                onClick={() => runUiEffect(connect(Number(item.index)))}
+                                key={table}
+                                variant="ghost"
+                                size="sm"
+                                className="db-table-item"
+                                onClick={() =>
+                                    updateActiveQuery((current) => ({
+                                        ...current,
+                                        sql: `SELECT * FROM "${table.replaceAll('"', '""')}" LIMIT 1000;`,
+                                    }))
+                                }
                             >
-                                {text(locale, "Connect", "接続")}
+                                <Icon>table_chart</Icon>
+                                {table}
                             </Button>
-                        </div>
-                    ))}
-                    <div className="db-connect-form">
-                        <h3>{text(locale, "New connection", "新しい接続")}</h3>
-                        <Field label={text(locale, "Database type", "データベースの種類")}>
-                            <SelectBox
-                                value={type}
-                                onValueChange={setType}
-                                options={[
-                                    { value: "QSQLITE", label: "SQLite" },
-                                    { value: "QMYSQL", label: "MySQL" },
-                                    { value: "QPSQL", label: "PostgreSQL" },
-                                ]}
-                            />
-                        </Field>
-                        {type === "QSQLITE" ? (
-                            <>
-                                <div className="selected-file">
-                                    {selectedFileName ||
-                                        text(locale, "No file selected", "ファイル未選択")}
-                                </div>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => runUiEffect(selectFile())}
-                                    disabled={busy}
-                                >
-                                    {text(locale, "Choose SQLite file", "SQLiteファイルを選択")}
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Field label={text(locale, "Host", "ホスト")}>
-                                    <input
-                                        className="form-control"
-                                        value={host}
-                                        onChange={(event) => setHost(event.target.value)}
-                                    />
-                                </Field>
-                                <Field label={text(locale, "Database", "データベース")}>
-                                    <input
-                                        className="form-control"
-                                        value={database}
-                                        onChange={(event) => setDatabase(event.target.value)}
-                                    />
-                                </Field>
-                                <Field label={text(locale, "Username", "ユーザー名")}>
-                                    <input
-                                        className="form-control"
-                                        value={username}
-                                        onChange={(event) => setUsername(event.target.value)}
-                                    />
-                                </Field>
-                                <Field label={text(locale, "Password", "パスワード")}>
-                                    <input
-                                        className="form-control"
-                                        type="password"
-                                        value={password}
-                                        onChange={(event) => setPassword(event.target.value)}
-                                    />
-                                </Field>
-                            </>
+                        ))}
+                        {tables.length === 0 && (
+                            <span className="muted-text">
+                                {connected
+                                    ? text(locale, "No tables found.", "テーブルがありません。")
+                                    : text(
+                                          locale,
+                                          "Connect to a database to view tables.",
+                                          "接続するとテーブルを表示します。",
+                                      )}
+                            </span>
                         )}
-                        <Button
-                            onClick={() => runUiEffect(connect())}
-                            disabled={
-                                busy ||
-                                (type === "QSQLITE"
-                                    ? !selectedFileName
-                                    : !host || !database || !username)
-                            }
-                        >
-                            {text(locale, "Connect", "接続")}
-                        </Button>
                     </div>
                 </aside>
                 <div className="db-workspace">
-                    <div className="input-card">
-                        <div className="toolbar-row">
-                            <h2>{text(locale, "Tables", "テーブル")}</h2>
-                            <Button
-                                variant="outline"
-                                onClick={() => runUiEffect(loadTables())}
-                                disabled={!connected || busy}
+                    <Tabs.Root
+                        className="db-query-tabs input-card"
+                        value={activeQueryId}
+                        onValueChange={(value) => setActiveQueryId(String(value))}
+                    >
+                        <Tabs.List className="feature-tabs-list">
+                            {queryTabs.map((queryTab) => (
+                                <Tabs.Tab
+                                    key={queryTab.id}
+                                    className="feature-tab db-query-tab"
+                                    value={queryTab.id}
+                                >
+                                    <span>{queryTab.title}</span>
+                                    {queryTabs.length > 1 && (
+                                        <span
+                                            className="db-query-tab-close"
+                                            role="button"
+                                            tabIndex={0}
+                                            aria-label={text(
+                                                locale,
+                                                "Close query",
+                                                "クエリを閉じる",
+                                            )}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                closeQueryTab(queryTab.id);
+                                            }}
+                                            onKeyDown={(event) => {
+                                                if (event.key === "Enter" || event.key === " ") {
+                                                    event.preventDefault();
+                                                    event.stopPropagation();
+                                                    closeQueryTab(queryTab.id);
+                                                }
+                                            }}
+                                        >
+                                            ×
+                                        </span>
+                                    )}
+                                </Tabs.Tab>
+                            ))}
+                        </Tabs.List>
+                        {queryTabs.map((queryTab) => (
+                            <Tabs.Panel
+                                key={queryTab.id}
+                                className="db-query-panel"
+                                value={queryTab.id}
                             >
-                                {text(locale, "Refresh", "更新")}
-                            </Button>
-                        </div>
-                        <div className="table-chips">
-                            {tables.map((table) => (
-                                <button
-                                    key={table}
-                                    onClick={() =>
-                                        setSql(
-                                            `SELECT * FROM "${table.replaceAll('"', '""')}" LIMIT 1000;`,
+                                <Area
+                                    label="SQL"
+                                    value={queryTab.sql}
+                                    onChange={(sql) =>
+                                        setQueryTabs((current) =>
+                                            current.map((item) =>
+                                                item.id === queryTab.id ? { ...item, sql } : item,
+                                            ),
                                         )
                                     }
-                                >
-                                    {table}
-                                </button>
-                            ))}
-                            {tables.length === 0 && (
-                                <span className="muted-text">
-                                    {connected
-                                        ? text(locale, "No tables found.", "テーブルがありません。")
-                                        : text(
-                                              locale,
-                                              "Connect to a database to view tables.",
-                                              "データベースに接続するとテーブルを表示します。",
-                                          )}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    <div className="input-card">
-                        <Area label="SQL" value={sql} onChange={setSql} rows={9} />
-                        <div className="action-row">
-                            <Button
-                                onClick={() => runUiEffect(query())}
-                                disabled={!connected || busy}
-                            >
-                                {text(locale, "Execute", "実行")}
-                            </Button>
-                        </div>
-                    </div>
-                    {columns.length > 0 && (
-                        <div className="table-wrap">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        {columns.map((column) => (
-                                            <th key={column}>{column}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {rows.map((row, rowIndex) => (
-                                        <tr key={rowIndex}>
-                                            {row.map((value, columnIndex) => (
-                                                <td key={columnIndex}>
-                                                    {value === null ? <em>NULL</em> : String(value)}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {truncated && (
-                                <p className="muted-text">
-                                    {text(
-                                        locale,
-                                        "Showing the first 1,000 rows.",
-                                        "先頭の1,000行を表示しています。",
-                                    )}
-                                </p>
-                            )}
-                        </div>
-                    )}
+                                    rows={9}
+                                />
+                                <div className="action-row">
+                                    <Button
+                                        onClick={() => runUiEffect(query())}
+                                        disabled={!connected || busy}
+                                    >
+                                        {text(locale, "Execute", "実行")}
+                                    </Button>
+                                </div>
+                                {queryTab.columns.length > 0 && (
+                                    <div className="table-wrap">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    {queryTab.columns.map((column) => (
+                                                        <th key={column}>{column}</th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {queryTab.rows.map((row, rowIndex) => (
+                                                    <tr key={rowIndex}>
+                                                        {row.map((value, columnIndex) => (
+                                                            <td key={columnIndex}>
+                                                                {value === null ? (
+                                                                    <em>NULL</em>
+                                                                ) : (
+                                                                    String(value)
+                                                                )}
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        {queryTab.truncated && (
+                                            <p className="muted-text">
+                                                {text(
+                                                    locale,
+                                                    "Showing the first 1,000 rows.",
+                                                    "先頭の1,000行を表示しています。",
+                                                )}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            </Tabs.Panel>
+                        ))}
+                    </Tabs.Root>
                 </div>
             </div>
+            <Dialog.Root open={connectionDialogOpen} onOpenChange={setConnectionDialogOpen}>
+                <Dialog.Portal>
+                    <Dialog.Backdrop className="dialog-backdrop" />
+                    <Dialog.Viewport className="dialog-viewport">
+                        <Dialog.Popup className="db-connection-dialog">
+                            <Dialog.Title className="dialog-title">
+                                {text(
+                                    locale,
+                                    "Database Connection Settings",
+                                    "データベース接続設定",
+                                )}
+                            </Dialog.Title>
+                            <div className="db-connection-content">
+                                {history.length > 0 && (
+                                    <section className="db-history-section">
+                                        <h2>{text(locale, "Recent connections", "最近の接続")}</h2>
+                                        {history.map((item) => (
+                                            <div key={String(item.index)} className="history-item">
+                                                <div>
+                                                    <strong>{String(item.displayName)}</strong>
+                                                    <span>
+                                                        {String(item.host || item.database)}
+                                                    </span>
+                                                </div>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    disabled={busy}
+                                                    onClick={() =>
+                                                        runUiEffect(connect(Number(item.index)))
+                                                    }
+                                                >
+                                                    {text(locale, "Connect", "接続")}
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </section>
+                                )}
+                                <div className="db-connect-form">
+                                    <h2>{text(locale, "New connection", "新しい接続")}</h2>
+                                    <Field
+                                        label={text(locale, "Database type", "データベースの種類")}
+                                    >
+                                        <SelectBox
+                                            value={type}
+                                            onValueChange={setType}
+                                            options={[
+                                                { value: "QSQLITE", label: "SQLite" },
+                                                { value: "QMYSQL", label: "MySQL" },
+                                                { value: "QPSQL", label: "PostgreSQL" },
+                                            ]}
+                                        />
+                                    </Field>
+                                    {type === "QSQLITE" ? (
+                                        <>
+                                            <div className="selected-file">
+                                                {selectedFileName ||
+                                                    text(
+                                                        locale,
+                                                        "No file selected",
+                                                        "ファイル未選択",
+                                                    )}
+                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => runUiEffect(selectFile())}
+                                                disabled={busy}
+                                            >
+                                                {text(
+                                                    locale,
+                                                    "Choose SQLite file",
+                                                    "SQLiteファイルを選択",
+                                                )}
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Field label={text(locale, "Host", "ホスト")}>
+                                                <Input
+                                                    value={host}
+                                                    onChange={(event) =>
+                                                        setHost(event.target.value)
+                                                    }
+                                                />
+                                            </Field>
+                                            <Field label={text(locale, "Database", "データベース")}>
+                                                <Input
+                                                    value={database}
+                                                    onChange={(event) =>
+                                                        setDatabase(event.target.value)
+                                                    }
+                                                />
+                                            </Field>
+                                            <Field label={text(locale, "Username", "ユーザー名")}>
+                                                <Input
+                                                    value={username}
+                                                    onChange={(event) =>
+                                                        setUsername(event.target.value)
+                                                    }
+                                                />
+                                            </Field>
+                                            <Field label={text(locale, "Password", "パスワード")}>
+                                                <Input
+                                                    type="password"
+                                                    value={password}
+                                                    onChange={(event) =>
+                                                        setPassword(event.target.value)
+                                                    }
+                                                />
+                                            </Field>
+                                        </>
+                                    )}
+                                    <div className="button-row">
+                                        <Button
+                                            onClick={() => runUiEffect(connect())}
+                                            disabled={
+                                                busy ||
+                                                (type === "QSQLITE"
+                                                    ? !selectedFileName
+                                                    : !host || !database || !username)
+                                            }
+                                        >
+                                            {text(locale, "Connect", "接続")}
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => runUiEffect(disconnect())}
+                                            disabled={!connected || busy}
+                                        >
+                                            {text(locale, "Disconnect", "切断")}
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="dialog-footer">
+                                <Dialog.Close render={<Button variant="outline" />}>
+                                    {text(locale, "Close", "閉じる")}
+                                </Dialog.Close>
+                            </div>
+                        </Dialog.Popup>
+                    </Dialog.Viewport>
+                </Dialog.Portal>
+            </Dialog.Root>
             <OutputMessage error={error} />
         </div>
     );
@@ -2082,14 +2385,7 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
     const insert = (value: string) => setPattern((current) => current + value);
     return (
         <div className="tool-page">
-            <Heading
-                title={text(locale, "Regex Tester", "正規表現テスター")}
-                detail={text(
-                    locale,
-                    "Test regular expressions, inspect captures and preview replacements.",
-                    "正規表現を試し、キャプチャと置換結果を確認します。",
-                )}
-            />
+            <Heading title={text(locale, "Regex Tester", "正規表現テスター")} />
             <div className="regex-layout">
                 <div className="input-card">
                     <div className="toolbar-row">
@@ -2125,7 +2421,7 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
                         </Button>
                     </div>
                     <Field label={text(locale, "Pattern", "パターン")}>
-                        <input
+                        <Input
                             className="form-control code-input"
                             value={pattern}
                             onChange={(event) => setPattern(event.target.value)}
@@ -2135,10 +2431,9 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     <div className="flag-grid">
                         {flags.map(([key, en, ja]) => (
                             <label key={key} className="inline-check">
-                                <input
-                                    type="checkbox"
+                                <Checkbox
                                     checked={options[key]}
-                                    onChange={() => setOption(key)}
+                                    onCheckedChange={() => setOption(key)}
                                 />
                                 {text(locale, en, ja)}
                             </label>
@@ -2199,7 +2494,7 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     <section className="input-card">
                         <h2>{text(locale, "Replacement", "置換")}</h2>
                         <Field label={text(locale, "Replacement pattern", "置換文字列")}>
-                            <input
+                            <Input
                                 className="form-control code-input"
                                 value={replacement}
                                 onChange={(event) => setReplacement(event.target.value)}
@@ -2250,10 +2545,15 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
                                         text(locale, "Named capture", "名前付きキャプチャ"),
                                     ],
                                 ].map(([token, description]) => (
-                                    <button key={token} onClick={() => insert(token)}>
+                                    <Button
+                                        key={token}
+                                        variant="ghost"
+                                        className="quick-reference-item h-auto"
+                                        onClick={() => insert(token)}
+                                    >
                                         <code>{token}</code>
                                         <span>{description}</span>
-                                    </button>
+                                    </Button>
                                 ))}
                             </div>
                         )}

@@ -11,6 +11,9 @@
 #include "features/regex_tool/core/regex_settings_repository.h"
 #include "frontend_operation_service.h"
 
+// NOLINTNEXTLINE(bugprone-suspicious-include)
+#include "app_info.autogen.cpp"
+
 #include <QApplication>
 #include <QBuffer>
 #include <QClipboard>
@@ -151,6 +154,7 @@ bool NativeBridge::validateRequest(const QString &requestId, const QVariantMap &
         QStringLiteral("databaseQuery"),    QStringLiteral("databaseTables"),
         QStringLiteral("getSettings"),      QStringLiteral("saveSettings"),
         QStringLiteral("saveLastUsedTool"), QStringLiteral("copyToClipboard"),
+        QStringLiteral("getAboutInfo"),
     };
     if (!allowedOperations.contains(operation)) {
         fail(requestId, QStringLiteral("INVALID_INPUT"),
@@ -339,6 +343,26 @@ void NativeBridge::startOperation(const QVariantMap &request)
              {QStringLiteral("alwaysOnTop"), settings.alwaysOnTop},
              {QStringLiteral("rememberWindowSize"), settings.rememberWindowSize},
              {QStringLiteral("rememberWindowPosition"), settings.rememberWindowPosition}});
+        return;
+    }
+    if (operation == QStringLiteral("getAboutInfo")) {
+        QString buildEnvironment = QString::fromUtf8(DevTools::OS_NAME) + QLatin1Char(' ') +
+                                   QString::fromUtf8(DevTools::OS_VERSION) + QStringLiteral(", ") +
+                                   QString::fromUtf8(DevTools::COMPILER_NAME) + QLatin1Char(' ') +
+                                   QString::fromUtf8(DevTools::COMPILER_VERSION);
+        QFile licenseFile(QStringLiteral(":/docs/LICENSE"));
+        QString licenseText;
+        if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            licenseText = QString::fromUtf8(licenseFile.readAll());
+        }
+        completeOnUiThread(
+            requestId, {{QStringLiteral("appVersion"), QString::fromUtf8(DevTools::APP_VERSION)},
+                        {QStringLiteral("revision"), QString::fromUtf8(DevTools::GIT_REVISION)},
+                        {QStringLiteral("buildEnvironment"), buildEnvironment},
+                        {QStringLiteral("qtVersion"), QString::fromUtf8(qVersion())},
+                        {QStringLiteral("copyright"),
+                         QStringLiteral("2025 © Lotus&Company Inc. All rights reserved.")},
+                        {QStringLiteral("licenseText"), licenseText}});
         return;
     }
     if (operation == QStringLiteral("saveSettings")) {

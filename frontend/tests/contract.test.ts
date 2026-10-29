@@ -26,7 +26,7 @@ function QWebChannelWithWrongContract(
   _transport: unknown,
   initialized: (channel: { objects: Record<string, unknown> }) => void,
 ) {
-  initialized({ objects: { nativeBridge: { contractVersion: "2" } } });
+  initialized({ objects: { nativeBridge: { contractVersion: "3" } } });
 }
 
 describe("bridge value serialization", () => {
@@ -111,7 +111,7 @@ describe("native bridge initialization", () => {
     } as unknown as Window);
 
     await expect(Effect.runPromise(connectNativeBridge())).rejects.toThrow(
-      `Bridge contract mismatch: frontend ${BRIDGE_CONTRACT_VERSION}, native 2.`,
+      `Bridge contract mismatch: frontend ${BRIDGE_CONTRACT_VERSION}, native 3.`,
     );
   });
 });
