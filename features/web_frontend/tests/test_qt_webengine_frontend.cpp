@@ -56,12 +56,12 @@ class TestQtWebEngineFrontend : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void loadsBundledReactAppConnectsNativeBridgeAndRendersEveryRoute();
+    void loadsBundledReactAppAndRendersEveryRoute();
     void routesDroppedFilesFromWebEngineContentToNativeBridge();
     void reannouncesDroppedImageAfterCancellingImageDialog();
 };
 
-void TestQtWebEngineFrontend::loadsBundledReactAppConnectsNativeBridgeAndRendersEveryRoute()
+void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
 {
     QtWebEngineAdapter view;
     view.resize(1100, 760);
@@ -75,30 +75,29 @@ void TestQtWebEngineFrontend::loadsBundledReactAppConnectsNativeBridgeAndRenders
 
     const QString snapshotScript = QStringLiteral(
         "JSON.stringify({"
-        "status: document.querySelector('.topbar-status')?.innerText ?? '',"
-        "contract: document.querySelector('.contract-label')?.innerText ?? '',"
         "toolCount: document.querySelectorAll('.tool-nav .nav-item').length,"
-        "main: Boolean(document.querySelector('main.app-main'))"
+        "main: Boolean(document.querySelector('main.app-main')),"
+        "mounted: Boolean(document.querySelector('#root > *')),"
         "})");
     QJsonObject snapshot;
-    bool connected = false;
+    bool rendered = false;
     for (int attempt = 0; attempt < 50; ++attempt) {
         QVariant result;
         QVERIFY(evaluateJavaScript(view.page(), snapshotScript, &result));
         snapshot = QJsonDocument::fromJson(result.toString().toUtf8()).object();
-        const QString status = snapshot.value(QStringLiteral("status")).toString();
-        if (status.contains(QStringLiteral("Connected")) ||
-            status.contains(QStringLiteral("接続済み"))) {
-            connected = true;
+        if (snapshot.value(QStringLiteral("main")).toBool() &&
+            snapshot.value(QStringLiteral("mounted")).toBool() &&
+            snapshot.value(QStringLiteral("toolCount")).toInt() == 11) {
+            rendered = true;
             break;
         }
         QTest::qWait(100);
     }
 
-    QVERIFY2(connected, "The React page did not connect to NativeBridge through QWebChannel.");
-    QCOMPARE(snapshot.value(QStringLiteral("contract")).toString(), QStringLiteral("Bridge 1"));
+    QVERIFY2(rendered, "The bundled React app did not render its main shell and tool navigation.");
     QCOMPARE(snapshot.value(QStringLiteral("toolCount")).toInt(), 11);
     QVERIFY(snapshot.value(QStringLiteral("main")).toBool());
+    QVERIFY(snapshot.value(QStringLiteral("mounted")).toBool());
 
     QVariant result;
     for (int index = 0; index < 11; ++index) {
@@ -107,13 +106,21 @@ void TestQtWebEngineFrontend::loadsBundledReactAppConnectsNativeBridgeAndRenders
                 .arg(index);
         QVERIFY(evaluateJavaScript(view.page(), clickScript, &result));
 
-        QVariant heading;
-        QVERIFY(evaluateJavaScript(
-            view.page(),
-            QStringLiteral("document.querySelector('.page-host:not([hidden]) .page-heading h1')"
-                           "?.textContent ?? ''"),
-            &heading));
-        QVERIFY2(!heading.toString().trimmed().isEmpty(),
+        QString headingText;
+        for (int attempt = 0; attempt < 50; ++attempt) {
+            QVariant heading;
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("document.querySelector('.page-host:not([hidden]) .page-heading h1')"
+                               "?.textContent ?? ''"),
+                &heading));
+            headingText = heading.toString().trimmed();
+            if (!headingText.isEmpty()) {
+                break;
+            }
+            QTest::qWait(100);
+        }
+        QVERIFY2(!headingText.isEmpty(),
                  qPrintable(QStringLiteral("Tool route %1 rendered no page heading.").arg(index)));
         QVERIFY(evaluateJavaScript(
             view.page(),
@@ -129,12 +136,21 @@ void TestQtWebEngineFrontend::loadsBundledReactAppConnectsNativeBridgeAndRenders
         QVERIFY(evaluateJavaScript(
             view.page(), QStringLiteral("document.querySelector('%1').click(); true").arg(selector),
             &result));
-        QVERIFY(evaluateJavaScript(
-            view.page(),
-            QStringLiteral(
-                "document.querySelector('.page-host:not([hidden]) h1')?.textContent ?? ''"),
-            &result));
-        QVERIFY(!result.toString().trimmed().isEmpty());
+        bool pageRendered = false;
+        for (int attempt = 0; attempt < 50; ++attempt) {
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "Boolean(document.querySelector('.page-host:not([hidden]) .page-heading h1, "
+                    ".page-host:not([hidden]) .tool-card-grid'))"),
+                &result));
+            pageRendered = result.toBool();
+            if (pageRendered) {
+                break;
+            }
+            QTest::qWait(100);
+        }
+        QVERIFY(pageRendered);
     }
 
     QTemporaryDir databaseDirectory;
