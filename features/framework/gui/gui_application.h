@@ -30,7 +30,7 @@ public:
      * @param argc `int main(int argc, char *argv[])`で受け取った `argc`
      * @param argv `int main(int argc, char *argv[])`で受け取った `argv`
      */
-    GuiApplication(int argc, char **argv);
+    GuiApplication(int &argc, char **argv);
     GuiApplication() = delete;
 
     /**
@@ -95,7 +95,7 @@ private:
     /**
      * @brief カラースキームが変更された時に呼ばれる
      * @details MainWindow::colorSchemeChanged() と接続されている
-     * @sa GuiApplication::GuiApplication(int argc, char *argv)
+     * @sa GuiApplication::GuiApplication(int &argc, char **argv)
      */
     void onWindowColorSchemeChanged();
 

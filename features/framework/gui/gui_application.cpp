@@ -11,7 +11,7 @@
 
 #include <oclero/qlementine.hpp>
 
-GuiApplication::GuiApplication(int argc, char **argv)
+GuiApplication::GuiApplication(int &argc, char **argv)
     : QApplication(argc, argv), ApplicationMixin(AppType::GUI, argc, argv)
 {
     QCoreApplication::setApplicationName("DevTools");
