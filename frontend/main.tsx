@@ -4,7 +4,7 @@ import "@/ui.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
-  throw new Error("Missing app root element.");
+    throw new Error("Missing app root element.");
 }
 
 createRoot(rootElement).render(<App />);

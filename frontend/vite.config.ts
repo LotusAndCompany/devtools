@@ -47,8 +47,8 @@ export default defineConfig(({ mode }) => {
         name: "devtools-content-security-policy",
         configureServer(server) {
           server.middlewares.use((request, response, next) => {
-            const path = request.url?.split("?")[0];
-            if (path === "/" || path === "/index.html") {
+            const requestPath = request.url?.split("?")[0];
+            if (requestPath === "/" || requestPath === "/index.html") {
               response.setHeader("Content-Security-Policy", developmentCspHeader);
             }
             next();

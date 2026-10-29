@@ -39,7 +39,8 @@ export function normalizeBridgeValue(value: unknown): BridgeValue {
   }
   if (typeof value === "bigint") return value.toString(10);
   if (value instanceof Date) {
-    if (Number.isNaN(value.getTime())) throw new TypeError("Invalid dates cannot cross the bridge.");
+    if (Number.isNaN(value.getTime()))
+      throw new TypeError("Invalid dates cannot cross the bridge.");
     return value.toISOString();
   }
   if (value instanceof Uint8Array) {
@@ -54,7 +55,10 @@ export function normalizeBridgeValue(value: unknown): BridgeValue {
     if (prototype !== Object.prototype && prototype !== null) {
       throw new TypeError("Only plain objects can cross the bridge.");
     }
-    const normalized: Record<string, BridgeValue> = Object.create(null) as Record<string, BridgeValue>;
+    const normalized: Record<string, BridgeValue> = Object.create(null) as Record<
+      string,
+      BridgeValue
+    >;
     for (const [key, entry] of Object.entries(value)) {
       normalized[key] = normalizeBridgeValue(entry);
     }
