@@ -196,7 +196,7 @@ function App() {
   return (
     <div className={`app-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
       {sidebarOpen && <aside className="app-sidebar" aria-label={locale === "ja" ? "ツール" : "Tools"}>
-        <div className="brand-row"><div className="brand-mark" aria-hidden="true">D</div><div><strong>DevTools</strong><span>{locale === "ja" ? "デスクトップツール" : "Desktop toolkit"}</span></div></div>
+        <div className="brand-row"><div className="brand-mark" aria-hidden="true">D</div><strong>DevTools</strong></div>
         <label className="search-wrap"><span aria-hidden="true">⌕</span><input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder={locale === "ja" ? "ツールを検索" : "Search tools"} aria-label={locale === "ja" ? "ツールを検索" : "Search tools"} /><kbd>⌘K</kbd></label>
         <button className={`nav-item ${activePage === "welcome" ? "active" : ""}`} onClick={() => openPage("welcome")}><span className="nav-icon">⌂</span>{locale === "ja" ? "ホーム" : "Home"}</button>
         <div className="sidebar-section-title">{locale === "ja" ? "ツール" : "WORKSPACE"}</div>
@@ -210,13 +210,12 @@ function App() {
         <header className="app-topbar">
           <Button variant="ghost" aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"} onClick={() => setSidebarOpen((open) => !open)}>☰</Button>
           <div className="topbar-title">{titleFor(activePage, locale)}</div>
-          <div className="topbar-status" title={connectionError || undefined}><span className={`status-dot ${bridge ? "connected" : "disconnected"}`} />{bridge ? (locale === "ja" ? "接続済み" : "Connected") : (locale === "ja" ? "未接続" : "Disconnected")}</div>
+          {!bridge && connectionError && <div className="topbar-status" title={connectionError}><span className="status-dot disconnected" />{locale === "ja" ? "未接続" : "Disconnected"}</div>}
           <Button variant="outline" onClick={() => setLocale((value) => value === "ja" ? "en" : "ja")}>{locale === "ja" ? "EN" : "日本語"}</Button>
           {pendingCount > 0 && <Button variant="outline" onClick={() => { for (const id of pending.current.keys()) bridge?.cancelOperation(id); }}>{locale === "ja" ? "キャンセル" : "Cancel"} ({pendingCount})</Button>}
         </header>
         <div className="tabs-bar" role="tablist" aria-label={locale === "ja" ? "開いている画面" : "Open pages"}>
           {openPages.map((page, index) => <div key={page} className={`page-tab ${activePage === page ? "active" : ""}`} role="presentation"><button role="tab" aria-selected={activePage === page} onClick={() => setActivePage(page)}>{titleFor(page, locale)}{index < 9 && <kbd>⌘{index + 1}</kbd>}</button>{page !== "welcome" && <button className="tab-close" aria-label={`${locale === "ja" ? "閉じる" : "Close"} ${titleFor(page, locale)}`} onClick={() => closePage(page)}>×</button>}</div>)}
-          <span className="contract-label">Bridge {bridge?.contractVersion ?? BRIDGE_CONTRACT_VERSION}</span>
         </div>
         <div className="page-stack">{openPages.map((page) => <section key={page} className="page-host" hidden={activePage !== page} aria-label={titleFor(page, locale)}>
           {page === "welcome" ? <WelcomePage locale={locale} onOpen={openPage} /> :
@@ -229,7 +228,7 @@ function App() {
 }
 
 function WelcomePage({ locale, onOpen }: { locale: Locale; onOpen: (page: PageId) => void }) {
-  return <div className="welcome-page"><div className="welcome-copy"><div className="eyebrow">DEVELOPER TOOLKIT</div><h1>{locale === "ja" ? "必要なツールを、ひとつの場所に。" : "Your everyday tools, in one place."}</h1></div><div className="tool-card-grid">{tools.map((tool) => <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}><span className="tool-card-icon">{tool.en.slice(0, 1)}</span><strong>{locale === "ja" ? tool.ja : tool.en}</strong><span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span></button>)}</div></div>;
+  return <div className="welcome-page"><div className="tool-card-grid">{tools.map((tool) => <button key={tool.id} className="tool-card" onClick={() => onOpen(tool.id)}><span className="tool-card-icon">{tool.en.slice(0, 1)}</span><strong>{locale === "ja" ? tool.ja : tool.en}</strong><span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span></button>)}</div></div>;
 }
 
 type AppSettings = { language: "en" | "ja_JP"; theme: "system" | "light" | "dark"; showSidebarOnStartup: boolean; showLastToolOnStartup: boolean; alwaysOnTop: boolean; rememberWindowSize: boolean; rememberWindowPosition: boolean };
@@ -241,13 +240,13 @@ function SettingsPage({ locale, run, onLocaleChange, onThemeChange }: { locale: 
   useEffect(() => { void run("getSettings", {}).then((result) => setSettings((current) => ({ ...current, ...result } as AppSettings))).catch(() => {}); }, [run]);
   const labels: Record<keyof AppSettings, string> = { language: locale === "ja" ? "言語" : "Language", theme: locale === "ja" ? "テーマ" : "Theme", showSidebarOnStartup: locale === "ja" ? "起動時にサイドバーを表示" : "Show sidebar on startup", showLastToolOnStartup: locale === "ja" ? "前回のツールを開く" : "Open last used tool on startup", alwaysOnTop: locale === "ja" ? "ウィンドウを常に手前に表示" : "Keep window on top", rememberWindowSize: locale === "ja" ? "ウィンドウサイズを記憶" : "Remember window size", rememberWindowPosition: locale === "ja" ? "ウィンドウ位置を記憶" : "Remember window position" };
   const save = async () => { setMessage(""); try { await run("saveSettings", settings); onLocaleChange(settings.language === "ja_JP" ? "ja" : "en"); onThemeChange(settings.theme); setMessage(locale === "ja" ? "設定を保存しました。" : "Settings saved."); } catch (error) { setMessage(error instanceof Error ? error.message : String(error)); } };
-  return <div className="settings-page"><PageHeading title={locale === "ja" ? "設定" : "Settings"} description={locale === "ja" ? "DevToolsの起動と表示を設定します。" : "Choose how DevTools starts and appears."} /><div className="settings-card"><label className="field-label" htmlFor="app-language">{labels.language}</label><select id="app-language" className="form-control" value={settings.language} onChange={(event) => setSettings((value) => ({ ...value, language: event.target.value as AppSettings["language"] }))}><option value="en">English</option><option value="ja_JP">日本語</option></select><label className="field-label" htmlFor="app-theme">{labels.theme}</label><select id="app-theme" className="form-control" value={settings.theme} onChange={(event) => setSettings((value) => ({ ...value, theme: event.target.value as AppSettings["theme"] }))}><option value="system">{locale === "ja" ? "システム設定に合わせる" : "Follow system"}</option><option value="light">{locale === "ja" ? "ライト" : "Light"}</option><option value="dark">{locale === "ja" ? "ダーク" : "Dark"}</option></select>{(Object.keys(labels) as Array<keyof AppSettings>).filter((key) => key !== "language" && key !== "theme").map((key) => <label key={key} className="settings-toggle"><span>{labels[key]}</span><input type="checkbox" checked={settings[key] as boolean} onChange={() => setSettings((value) => ({ ...value, [key]: !value[key] }))} /></label>)}<div className="settings-actions"><span role="status">{message}</span><Button onClick={() => void save()}>{locale === "ja" ? "保存" : "Save"}</Button></div></div></div>;
+  return <div className="settings-page"><PageHeading title={locale === "ja" ? "設定" : "Settings"} /><div className="settings-card"><label className="field-label" htmlFor="app-language">{labels.language}</label><select id="app-language" className="form-control" value={settings.language} onChange={(event) => setSettings((value) => ({ ...value, language: event.target.value as AppSettings["language"] }))}><option value="en">English</option><option value="ja_JP">日本語</option></select><label className="field-label" htmlFor="app-theme">{labels.theme}</label><select id="app-theme" className="form-control" value={settings.theme} onChange={(event) => setSettings((value) => ({ ...value, theme: event.target.value as AppSettings["theme"] }))}><option value="system">{locale === "ja" ? "システム設定に合わせる" : "Follow system"}</option><option value="light">{locale === "ja" ? "ライト" : "Light"}</option><option value="dark">{locale === "ja" ? "ダーク" : "Dark"}</option></select>{(Object.keys(labels) as Array<keyof AppSettings>).filter((key) => key !== "language" && key !== "theme").map((key) => <label key={key} className="settings-toggle"><span>{labels[key]}</span><input type="checkbox" checked={settings[key] as boolean} onChange={() => setSettings((value) => ({ ...value, [key]: !value[key] }))} /></label>)}<div className="settings-actions"><span role="status">{message}</span><Button onClick={() => void save()}>{locale === "ja" ? "保存" : "Save"}</Button></div></div></div>;
 }
 
 function AboutPage({ locale }: { locale: Locale }) {
-  return <div className="about-page"><PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} description={locale === "ja" ? "日々の開発作業に使うデスクトップツールです。" : "A desktop toolkit for everyday development work."} /><div className="about-card"><div className="brand-mark large">D</div><div><strong>DevTools</strong></div></div></div>;
+  return <div className="about-page"><PageHeading title={locale === "ja" ? "DevToolsについて" : "About DevTools"} /><div className="about-card"><div className="brand-mark large">D</div><div><strong>DevTools</strong></div></div></div>;
 }
 
-function PageHeading({ title, description }: { title: string; description: string }) { return <header className="page-heading"><h1>{title}</h1><p>{description}</p></header>; }
+function PageHeading({ title }: { title: string }) { return <header className="page-heading"><h1>{title}</h1></header>; }
 
 export default App;
