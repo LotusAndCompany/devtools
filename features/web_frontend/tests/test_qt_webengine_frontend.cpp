@@ -144,6 +144,102 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         QVERIFY(!result.toBool());
     }
 
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[1].click(); true"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "(() => { const title = document.querySelector('.phrase-layout input'); "
+            "const body = document.querySelector('.phrase-layout textarea'); "
+            "Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')"
+            ".set.call(title, 'Unsaved draft'); "
+            "title.dispatchEvent(new Event('input', { bubbles: true })); "
+            "Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')"
+            ".set.call(body, 'Draft content'); "
+            "body.dispatchEvent(new Event('input', { bubbles: true })); "
+            "document.querySelector('.template-list .toolbar-row button').click(); true; })()"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Boolean(document.querySelector('.confirm-dialog'))"),
+                           &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.confirm-dialog .dialog-footer button:first-of-type')"
+            ".click(); true"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(), QStringLiteral("document.querySelector('.phrase-layout input')?.value ?? ''"),
+        &result));
+    QCOMPARE(result.toString(), QStringLiteral("Unsaved draft"));
+
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.template-list .toolbar-row button').click(); true"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Boolean(document.querySelector('.confirm-dialog "
+                                          ".dialog-footer button:nth-of-type(2)'))"),
+                           &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.confirm-dialog .dialog-footer button:nth-of-type(2)')"
+            ".click(); true"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(), QStringLiteral("document.querySelector('.phrase-layout input')?.value ?? ''"),
+        &result));
+    QVERIFY(result.toString().isEmpty());
+
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[4].click(); true"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "(() => { const field = document.querySelector('.page-host:not([hidden]) textarea'); "
+            "Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')"
+            ".set.call(field, '{'); "
+            "field.dispatchEvent(new Event('input', { bubbles: true })); "
+            "document.querySelector('.page-host:not([hidden]) .toolbar-row > button:last-of-type')"
+            ".click(); true; })()"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral("document.querySelector('.page-host:not([hidden]) textarea')?.value ?? ''"),
+        &result));
+    QCOMPARE(result.toString(), QStringLiteral("{"));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral("Boolean(document.querySelector('.message-dialog[role=alertdialog]'))"),
+            &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.message-dialog .dialog-title')?.textContent ?? ''"),
+        &result));
+    QVERIFY(result.toString() == QStringLiteral("Error") ||
+            result.toString() == QStringLiteral("エラー"));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.message-dialog .dialog-footer button').click(); true"),
+        &result));
+
     for (const QString &selector : {QStringLiteral(".sidebar-bottom .nav-item:nth-child(1)"),
                                     QStringLiteral(".sidebar-bottom .nav-item:nth-child(2)"),
                                     QStringLiteral("aside .nav-item")}) {

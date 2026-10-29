@@ -9,11 +9,13 @@ import {
 } from "react";
 import { Effect } from "effect";
 import { Button } from "@/components/ui/button";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { MessageDialog } from "@/components/ui/message-dialog";
 import { SelectBox } from "@/components/ui/select";
 import { Tabs } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,6 +67,7 @@ function useOperation(run: OperationRunner) {
         }).pipe(
             Effect.catch((reason) =>
                 Effect.sync(() => {
+                    if (reason instanceof OperationCancelledError) return null;
                     setError(reason instanceof Error ? reason.message : String(reason));
                     return null;
                 }),
@@ -112,12 +115,34 @@ function Area({
     );
 }
 
-function OutputMessage({ error, message }: { error: string; message?: string }) {
-    if (!error && !message) return null;
+function OutputMessage({
+    locale,
+    error,
+    message,
+    onDismiss,
+}: {
+    locale: Locale;
+    error: string;
+    message?: string;
+    onDismiss: () => void;
+}) {
     return (
-        <p className={`operation-message ${error ? "error" : "success"}`} role="status">
-            {error || message}
-        </p>
+        <>
+            {message && !error && (
+                <p className="operation-message success" role="status">
+                    {message}
+                </p>
+            )}
+            <MessageDialog
+                open={Boolean(error)}
+                onOpenChange={(open) => {
+                    if (!open) onDismiss();
+                }}
+                title={text(locale, "Error", "エラー")}
+                description={error}
+                closeLabel={text(locale, "OK", "閉じる")}
+            />
+        </>
     );
 }
 
@@ -172,7 +197,7 @@ function ImagePage({
     droppedImage,
     onDroppedImageConsumed,
 }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [image, setImage] = useState("");
     const [fileName, setFileName] = useState("");
     const [width, setWidth] = useState(0);
@@ -287,7 +312,7 @@ function ImagePage({
                     {image ? ` · ${width} × ${height}` : ""}
                 </span>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
             <div className="image-editor-layout">
                 <div className="image-preview-panel">
                     {image ? (
@@ -572,12 +597,21 @@ function ImagePage({
 }
 
 function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    type PhraseDraft = { title: string; content: string };
+    type PendingAction = { type: "new" } | { type: "select"; item: Record<string, unknown> };
+    const { busy, error, execute, setError } = useOperation(run);
     const [templates, setTemplates] = useState<Array<Record<string, unknown>>>([]);
     const [filename, setFilename] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [savedDraft, setSavedDraft] = useState<PhraseDraft | null>(null);
     const [message, setMessage] = useState("");
+    const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+    const [unsavedDialogOpen, setUnsavedDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const hasUnsavedChanges = savedDraft
+        ? title !== savedDraft.title || content !== savedDraft.content
+        : Boolean(title || content);
     const refresh = () =>
         Effect.gen(function* () {
             const result = yield* execute("phraseData", { action: "list" });
@@ -599,11 +633,33 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
             ),
         );
     }, [run]);
-    const select = (item: Record<string, unknown>) => {
-        setFilename(String(item.filename ?? ""));
-        setTitle(String(item.title ?? ""));
-        setContent(String(item.content ?? ""));
+    const applyAction = (action: PendingAction) => {
+        if (action.type === "new") {
+            setFilename("");
+            setTitle("");
+            setContent("");
+            setSavedDraft(null);
+        } else {
+            const nextFilename = String(action.item.filename ?? "");
+            const nextDraft = {
+                title: String(action.item.title ?? ""),
+                content: String(action.item.content ?? ""),
+            };
+            setFilename(nextFilename);
+            setTitle(nextDraft.title);
+            setContent(nextDraft.content);
+            setSavedDraft(nextDraft);
+        }
         setMessage("");
+    };
+    const requestAction = (action: PendingAction) => {
+        if (action.type === "select" && String(action.item.filename ?? "") === filename) return;
+        if (hasUnsavedChanges) {
+            setPendingAction(action);
+            setUnsavedDialogOpen(true);
+            return;
+        }
+        applyAction(action);
     };
     const save = () =>
         Effect.gen(function* () {
@@ -613,13 +669,15 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                 title,
                 content,
             });
-            if (result) {
-                yield* Effect.sync(() => {
-                    setFilename(String(result.filename));
-                    setMessage(text(locale, "Template saved.", "定型文を保存しました。"));
-                });
-                yield* refresh();
-            }
+            if (!result) return false;
+            const nextDraft = { title, content };
+            yield* Effect.sync(() => {
+                setFilename(String(result.filename));
+                setSavedDraft(nextDraft);
+                setMessage(text(locale, "Template saved.", "定型文を保存しました。"));
+            });
+            yield* refresh();
+            return true;
         });
     const remove = () =>
         Effect.gen(function* () {
@@ -630,17 +688,18 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                     setFilename("");
                     setTitle("");
                     setContent("");
+                    setSavedDraft(null);
                     setMessage(text(locale, "Template deleted.", "定型文を削除しました。"));
                 });
                 yield* refresh();
             }
         });
     const copy = () =>
-        run("copyToClipboard", { text: content }).pipe(
+        execute("copyToClipboard", { text: content }).pipe(
             Effect.tap((result) =>
                 Effect.sync(() =>
                     setMessage(
-                        result.copied
+                        result?.copied
                             ? text(
                                   locale,
                                   "Copied to clipboard.",
@@ -651,6 +710,28 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                 ),
             ),
         );
+    const continueWithoutSaving = () => {
+        if (pendingAction) applyAction(pendingAction);
+        setPendingAction(null);
+        setUnsavedDialogOpen(false);
+    };
+    const saveAndContinue = () => {
+        const action = pendingAction;
+        setPendingAction(null);
+        setUnsavedDialogOpen(false);
+        runUiEffect(
+            save().pipe(
+                Effect.tap((saved) => Effect.sync(() => saved && action && applyAction(action))),
+            ),
+        );
+    };
+    const requestDelete = () => {
+        if (filename) setDeleteDialogOpen(true);
+    };
+    const confirmDelete = () => {
+        setDeleteDialogOpen(false);
+        runUiEffect(remove());
+    };
     const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
         if (!active || !(event.metaKey || event.ctrlKey)) return;
         const key = event.key.toLowerCase();
@@ -659,10 +740,7 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
             if (!busy) runUiEffect(save());
         } else if (key === "n") {
             event.preventDefault();
-            setFilename("");
-            setTitle("");
-            setContent("");
-            setMessage("");
+            requestAction({ type: "new" });
         } else if (key === "c" && event.shiftKey) {
             event.preventDefault();
             if (content) runUiEffect(copy());
@@ -676,7 +754,7 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
         if (!active || isEditor || !["Backspace", "Delete"].includes(event.key) || !filename)
             return;
         event.preventDefault();
-        if (!busy) runUiEffect(remove());
+        if (!busy) requestDelete();
     };
     return (
         <div
@@ -691,15 +769,7 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                 <aside className="input-card template-list">
                     <div className="toolbar-row">
                         <h2>{text(locale, "Templates", "定型文一覧")}</h2>
-                        <Button
-                            variant="outline"
-                            onClick={() => {
-                                setFilename("");
-                                setTitle("");
-                                setContent("");
-                                setMessage("");
-                            }}
-                        >
+                        <Button variant="outline" onClick={() => requestAction({ type: "new" })}>
                             {text(locale, "New", "新規")} <kbd>⌘N</kbd>
                         </Button>
                     </div>
@@ -713,7 +783,7 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                             key={String(item.filename)}
                             variant="ghost"
                             className={`template-item ${filename === item.filename ? "active" : ""}`}
-                            onClick={() => select(item)}
+                            onClick={() => requestAction({ type: "select", item })}
                         >
                             <strong>{String(item.title)}</strong>
                             <span>{String(item.content).slice(0, 72)}</span>
@@ -748,15 +818,83 @@ function PhrasePage({ locale, run, active }: Omit<ToolPageProps, "id">) {
                         <Button
                             variant="outline"
                             className="danger-button"
-                            onClick={() => runUiEffect(remove())}
+                            onClick={requestDelete}
                             disabled={busy || !filename}
                         >
                             {text(locale, "Delete", "削除")}
                         </Button>
                     </div>
-                    <OutputMessage error={error} message={message} />
+                    <OutputMessage
+                        locale={locale}
+                        error={error}
+                        message={message}
+                        onDismiss={() => setError("")}
+                    />
                 </div>
             </div>
+            <AlertDialog.Root
+                open={unsavedDialogOpen}
+                onOpenChange={(open) => {
+                    setUnsavedDialogOpen(open);
+                    if (!open) setPendingAction(null);
+                }}
+            >
+                <AlertDialog.Portal>
+                    <AlertDialog.Backdrop className="dialog-backdrop" />
+                    <AlertDialog.Viewport className="dialog-viewport">
+                        <AlertDialog.Popup className="confirm-dialog">
+                            <AlertDialog.Title className="dialog-title">
+                                {text(locale, "Unsaved Changes", "未保存の変更")}
+                            </AlertDialog.Title>
+                            <AlertDialog.Description className="dialog-description">
+                                {text(
+                                    locale,
+                                    "Save your changes before continuing?",
+                                    "変更を保存して続行しますか？",
+                                )}
+                            </AlertDialog.Description>
+                            <div className="dialog-footer">
+                                <AlertDialog.Close render={<Button variant="outline" />}>
+                                    {text(locale, "Cancel", "キャンセル")}
+                                </AlertDialog.Close>
+                                <Button variant="outline" onClick={continueWithoutSaving}>
+                                    {text(locale, "Discard", "破棄")}
+                                </Button>
+                                <Button onClick={saveAndContinue} disabled={busy}>
+                                    {text(locale, "Save", "保存")}
+                                </Button>
+                            </div>
+                        </AlertDialog.Popup>
+                    </AlertDialog.Viewport>
+                </AlertDialog.Portal>
+            </AlertDialog.Root>
+            <AlertDialog.Root open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialog.Portal>
+                    <AlertDialog.Backdrop className="dialog-backdrop" />
+                    <AlertDialog.Viewport className="dialog-viewport">
+                        <AlertDialog.Popup className="confirm-dialog">
+                            <AlertDialog.Title className="dialog-title">
+                                {text(locale, "Confirm Delete", "削除の確認")}
+                            </AlertDialog.Title>
+                            <AlertDialog.Description className="dialog-description">
+                                {text(
+                                    locale,
+                                    `Are you sure you want to delete "${title}"?`,
+                                    `「${title}」を削除しますか？`,
+                                )}
+                            </AlertDialog.Description>
+                            <div className="dialog-footer">
+                                <AlertDialog.Close render={<Button variant="outline" />}>
+                                    {text(locale, "Cancel", "キャンセル")}
+                                </AlertDialog.Close>
+                                <Button className="danger-button" onClick={confirmDelete}>
+                                    {text(locale, "Delete", "削除")}
+                                </Button>
+                            </div>
+                        </AlertDialog.Popup>
+                    </AlertDialog.Viewport>
+                </AlertDialog.Portal>
+            </AlertDialog.Root>
         </div>
     );
 }
@@ -973,7 +1111,7 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     )}
                 </section>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
             {response && (
                 <section className="input-card response-card">
                     <div className="toolbar-row">
@@ -996,7 +1134,7 @@ function HttpPage({ locale, run }: Omit<ToolPageProps, "id">) {
 }
 
 function DataPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
     const [format, setFormat] = useState("json");
@@ -1077,7 +1215,7 @@ function DataPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     {text(locale, "Save output", "出力を保存")}
                 </Button>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
@@ -1123,7 +1261,7 @@ function timestampValues(date: Date): TimestampValues {
 }
 
 function TimestampPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [values, setValues] = useState<TimestampValues>(() => timestampValues(new Date()));
     const convert = (key: keyof TimestampValues) =>
         Effect.gen(function* () {
@@ -1210,7 +1348,7 @@ function TimestampPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     {row("isoLocal", text(locale, "Local", "ローカル"))}
                 </section>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
@@ -1317,7 +1455,7 @@ function DiffPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     )}
                 </section>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
@@ -1445,13 +1583,13 @@ function MarkdownPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     />
                 </div>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
 
 function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [category, setCategory] = useState("git");
     const [functions, setFunctions] = useState<Array<Record<string, unknown>>>([]);
     const [functionIndex, setFunctionIndex] = useState(0);
@@ -1558,7 +1696,7 @@ function CommandPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     </Button>
                 </div>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
             <section className="input-card command-output">
                 <div className="toolbar-row">
                     <h2>{text(locale, "Generated Result", "生成結果")}</h2>
@@ -1609,7 +1747,7 @@ const qrFields: Record<string, Array<[string, string, boolean?]>> = {
 };
 
 function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [type, setType] = useState("text");
     const [parameters, setParameters] = useState<Record<string, string>>({ text_content: "" });
     const [content, setContent] = useState("");
@@ -1791,7 +1929,12 @@ function QrPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     )}
                 </div>
             </div>
-            <OutputMessage error={error} message={message} />
+            <OutputMessage
+                locale={locale}
+                error={error}
+                message={message}
+                onDismiss={() => setError("")}
+            />
         </div>
     );
 }
@@ -1802,7 +1945,7 @@ function DatabasePage({
     active,
     databaseNavigationVersion,
 }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [type, setType] = useState("QSQLITE");
     const [host, setHost] = useState("localhost");
     const [database, setDatabase] = useState("");
@@ -2282,13 +2425,13 @@ function DatabasePage({
                     </Dialog.Viewport>
                 </Dialog.Portal>
             </Dialog.Root>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
 
 function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
-    const { busy, error, execute } = useOperation(run);
+    const { busy, error, execute, setError } = useOperation(run);
     const [pattern, setPattern] = useState("");
     const [input, setInput] = useState("");
     const [replacement, setReplacement] = useState("");
@@ -2560,7 +2703,7 @@ function RegexPage({ locale, run }: Omit<ToolPageProps, "id">) {
                     </section>
                 </div>
             </div>
-            <OutputMessage error={error} />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }
