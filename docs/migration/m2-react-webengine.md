@@ -10,12 +10,15 @@ runtime.
 - React and TypeScript are bundled by Vite.
 - The UI uses shadcn/ui component conventions with Base UI primitives and
   Tailwind CSS. The Button component is stored in `frontend/components/ui/`.
-- `frontend/package-lock.json` pins the resolved JavaScript dependency tree.
-- CMake runs `npm ci` and `npm run build`, then embeds the generated HTML, JS,
-  and CSS in the `DevTools_web_frontend` Qt resource collection.
-- A production app opens `qrc:/frontend/index.html`; it does not need Node,
-  npm, or a development server at runtime.
-- For HMR, start `npm run dev` in `frontend/` and launch a Debug app with
+- `frontend/bun.lock` pins the resolved JavaScript dependency tree.
+- CMake runs `bun install --frozen-lockfile` and `bun run --bun build`, then
+  embeds the generated HTML, JavaScript, and CSS in the
+  `DevTools_web_frontend` Qt resource collection.
+- Bun 1.3.14 is pinned in `frontend/package.json`.
+- A production app opens `qrc:/frontend/index.html`; it does not need Bun or a
+  development server at runtime.
+- For HMR, run `bun install` and `bun run --bun dev` in `frontend/`, then launch
+  a Debug app with
   `DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173`. The adapter accepts
   only that exact loopback origin. Release builds ignore the environment
   variable.
@@ -110,10 +113,10 @@ The standalone frontend commands are:
 
 ```bash
 cd frontend
-npm ci
-npm run typecheck
-npm test
-npm run build
+bun install --frozen-lockfile
+bun run --bun typecheck
+bun run --bun test
+bun run --bun build
 ```
 
 The C++ bridge test is registered as `test_native_bridge`. Configure with unit

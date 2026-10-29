@@ -91,11 +91,15 @@ flowchart TD
 
 ### React / Qt WebEngine UI のHMR
 
+Bun 1.3.14が必要です。バージョンは`frontend/package.json`で固定しています。
+インストール方法は[Bun公式ガイド](https://bun.sh/docs/installation)を参照してください。
+
 1つ目のターミナルでViteを起動します。
 
 ```bash
 cd frontend
-npm run dev
+bun install
+bun run --bun dev
 ```
 
 リポジトリルートから、2つ目のターミナルでDebugアプリを起動します。

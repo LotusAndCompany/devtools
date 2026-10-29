@@ -1,4 +1,4 @@
-find_program(NPM_EXECUTABLE npm REQUIRED)
+find_program(BUN_EXECUTABLE bun REQUIRED)
 
 set(FRONTEND_DIR "${CMAKE_SOURCE_DIR}/frontend")
 set(FRONTEND_DIST_DIR "${FRONTEND_DIR}/dist")
@@ -25,10 +25,10 @@ add_custom_command(
     OUTPUT "${FRONTEND_DIST_DIR}/index.html"
            "${FRONTEND_DIST_DIR}/assets/app.js"
            "${FRONTEND_DIST_DIR}/assets/style.css"
-    COMMAND "${NPM_EXECUTABLE}" ci --no-audit --no-fund
-    COMMAND "${NPM_EXECUTABLE}" run build
+    COMMAND "${BUN_EXECUTABLE}" install --frozen-lockfile
+    COMMAND "${BUN_EXECUTABLE}" run --bun build
     WORKING_DIRECTORY "${FRONTEND_DIR}"
-    DEPENDS ${FRONTEND_INPUTS}
+    DEPENDS ${FRONTEND_INPUTS} "${FRONTEND_DIR}/bun.lock"
     COMMENT "Building embedded React frontend"
     VERBATIM
 )

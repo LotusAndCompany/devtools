@@ -85,7 +85,8 @@ From the repository root, run the Vite server in one terminal:
 
 ```bash
 cd frontend
-npm run dev
+bun install
+bun run --bun dev
 ```
 
 In another terminal, launch a Debug build with the loopback URL:

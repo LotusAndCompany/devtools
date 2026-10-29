@@ -91,11 +91,15 @@ flowchart TD
 
 ### React / Qt WebEngine UI with HMR
 
+Install Bun 1.3.14, pinned in `frontend/package.json`, before using the frontend
+commands. See the [Bun installation guide](https://bun.sh/docs/installation).
+
 Start Vite in one terminal:
 
 ```bash
 cd frontend
-npm run dev
+bun install
+bun run --bun dev
 ```
 
 From the repository root, launch the Debug app in another terminal:
