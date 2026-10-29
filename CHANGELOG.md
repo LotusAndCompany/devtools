@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0](https://github.com/LotusAndCompany/devtools/compare/v0.8.0...v0.9.0) (2026-10-29)
+
+
+### Features
+
+* add react and qt webengine bridge ([df657ba](https://github.com/LotusAndCompany/devtools/commit/df657baf5a3f00c83956afaa624b42a6f645f57a))
+* **diff-tool:** add text diff comparison tool ([#121](https://github.com/LotusAndCompany/devtools/issues/121)) ([15893de](https://github.com/LotusAndCompany/devtools/commit/15893def9deda6ac3ed9cda9ce3ca3fc25d1b81a))
+* **timestamp-conversion:** add timestamp conversion tool ([#123](https://github.com/LotusAndCompany/devtools/issues/123)) ([855f9d3](https://github.com/LotusAndCompany/devtools/commit/855f9d3586a62a8cfafc560d03d0e2dbcb092f14))
+
+
+### Bug Fixes
+
+* **db:** restore access to external sqlite files in app sandbox ([#126](https://github.com/LotusAndCompany/devtools/issues/126)) ([7a872e8](https://github.com/LotusAndCompany/devtools/commit/7a872e8e46976481ac08281045267dc95958ddd2))
+
+
+### Documentation
+
+* add m0 migration audit and baseline ([c6a4705](https://github.com/LotusAndCompany/devtools/commit/c6a47059889039fe64b5af0b526315fceb639be6))
+
 ## [0.8.0](https://github.com/LotusAndCompany/devtools/compare/v0.7.0...v0.8.0) (2026-09-29)
 
 
