@@ -90,11 +90,6 @@ Tool::Translatable Tool::translatable(ID id)
             tr("Diff Comparison Tool"),
             tr("Compare two texts and show the differences"),
         };
-    case ID::WEB_ENGINE_DEMO:
-        return Translatable{
-            tr("React Bridge Demo"),
-            tr("Try the React screen connected to native C++ services"),
-        };
     default:
         throw UnderDevelopmentException();
     }

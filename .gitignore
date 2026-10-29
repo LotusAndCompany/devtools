@@ -36,8 +36,6 @@ Thumbs.db
 /.qmake.stash
 .qtc_clangd/*
 build/*
-/frontend/node_modules/
-/frontend/dist/
 
 # Tracked AI agent harness files
 !.claude/
