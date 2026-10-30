@@ -36,16 +36,20 @@ export function DiffPage({ locale, run }: ToolPageProps) {
             <Heading title={text(locale, "Text Diff", "テキスト差分")} />
             <div className="diff-layout">
                 <div className="diff-editors">
-                    <Area
-                        label={text(locale, "Original", "変更前")}
-                        value={left}
-                        onChange={setLeft}
-                    />
-                    <Area
-                        label={text(locale, "Modified", "変更後")}
-                        value={right}
-                        onChange={setRight}
-                    />
+                    <section className="input-card">
+                        <Area
+                            label={text(locale, "Original", "変更前")}
+                            value={left}
+                            onChange={setLeft}
+                        />
+                    </section>
+                    <section className="input-card">
+                        <Area
+                            label={text(locale, "Modified", "変更後")}
+                            value={right}
+                            onChange={setRight}
+                        />
+                    </section>
                 </div>
                 <section className="input-card">
                     <div className="diff-result-heading">

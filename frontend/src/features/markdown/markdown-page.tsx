@@ -108,18 +108,20 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                 </label>
             </div>
             <div className="two-column markdown-columns">
-                <Field label={text(locale, "Editor", "エディター")}>
-                    <Textarea
-                        ref={editorRef}
-                        className="code-area markdown-editor"
-                        value={markdown}
-                        onChange={(event) => setMarkdown(event.target.value)}
-                        onScroll={syncEditorToPreview}
-                        rows={20}
-                        spellCheck={false}
-                    />
-                </Field>
-                <div className="preview-panel">
+                <section className="input-card markdown-editor-card">
+                    <Field label={text(locale, "Editor", "エディター")}>
+                        <Textarea
+                            ref={editorRef}
+                            className="code-area markdown-editor"
+                            value={markdown}
+                            onChange={(event) => setMarkdown(event.target.value)}
+                            onScroll={syncEditorToPreview}
+                            rows={20}
+                            spellCheck={false}
+                        />
+                    </Field>
+                </section>
+                <section className="input-card preview-panel">
                     <span className="field-label">{text(locale, "Preview", "プレビュー")}</span>
                     <iframe
                         ref={previewRef}
@@ -129,7 +131,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                         srcDoc={previewDocument}
                         onLoad={attachPreviewScroll}
                     />
-                </div>
+                </section>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

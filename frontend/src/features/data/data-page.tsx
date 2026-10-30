@@ -29,65 +29,80 @@ export function DataPage({ locale, run }: ToolPageProps) {
             suggestedName: "converted." + (format.startsWith("yaml") ? "yaml" : format),
             fileType: "data",
         });
+    const clear = () => {
+        setInput("");
+        setOutput("");
+    };
     return (
         <div className="tool-page">
             <Heading title={text(locale, "Data Conversion", "データ変換")} />
-            <div className="toolbar-row data-toolbar">
-                <Button variant="outline" onClick={() => runUiEffect(open())} disabled={busy}>
-                    {text(locale, "Open file", "ファイルを開く")}
-                </Button>
-                <Field label={text(locale, "Output format", "出力形式")}>
-                    <SelectBox
-                        className="compact"
-                        value={format}
-                        onValueChange={setFormat}
-                        options={[
-                            { value: "json", label: "JSON" },
-                            { value: "yaml-block", label: "YAML (block)" },
-                            { value: "yaml-flow", label: "YAML (flow)" },
-                            { value: "toml", label: "TOML" },
-                        ]}
+            <div className="two-column data-panels">
+                <section className="input-card data-panel">
+                    <div className="toolbar-row data-panel-toolbar">
+                        <Button
+                            variant="outline"
+                            onClick={() => runUiEffect(open())}
+                            disabled={busy}
+                        >
+                            {text(locale, "Open file", "ファイルを開く")}
+                        </Button>
+                        <Button variant="ghost" onClick={clear} disabled={!input && !output}>
+                            {text(locale, "Clear", "クリア")}
+                        </Button>
+                    </div>
+                    <Area
+                        label={text(locale, "Input", "入力")}
+                        value={input}
+                        onChange={setInput}
+                        placeholder={'{"name":"DevTools"}'}
                     />
-                </Field>
-                <Field label={text(locale, "Indentation", "インデント")}>
-                    <SelectBox
-                        className="compact"
-                        value={indentation}
-                        onValueChange={setIndentation}
-                        options={[
-                            { value: "2", label: "2" },
-                            { value: "4", label: "4" },
-                            { value: "tab", label: "Tab" },
-                            { value: "minified", label: "Minified" },
-                        ]}
+                </section>
+                <section className="input-card data-panel">
+                    <div className="toolbar-row data-panel-toolbar data-output-toolbar">
+                        <Field label={text(locale, "Output format", "出力形式")}>
+                            <SelectBox
+                                className="compact"
+                                value={format}
+                                onValueChange={setFormat}
+                                options={[
+                                    { value: "json", label: "JSON" },
+                                    { value: "yaml-block", label: "YAML (block)" },
+                                    { value: "yaml-flow", label: "YAML (flow)" },
+                                    { value: "toml", label: "TOML" },
+                                ]}
+                            />
+                        </Field>
+                        <Field label={text(locale, "Indentation", "インデント")}>
+                            <SelectBox
+                                className="compact"
+                                value={indentation}
+                                onValueChange={setIndentation}
+                                options={[
+                                    { value: "2", label: "2" },
+                                    { value: "4", label: "4" },
+                                    { value: "tab", label: "Tab" },
+                                    { value: "minified", label: "Minified" },
+                                ]}
+                            />
+                        </Field>
+                        <Button onClick={() => runUiEffect(convert())} disabled={busy}>
+                            {text(locale, "Convert", "変換")}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => runUiEffect(save())}
+                            disabled={!output || busy}
+                        >
+                            {text(locale, "Save output", "出力を保存")}
+                        </Button>
+                    </div>
+                    <Area
+                        label={text(locale, "Output", "出力")}
+                        value={output}
+                        onChange={setOutput}
+                        readOnly={false}
                     />
-                </Field>
-                <Button onClick={() => runUiEffect(convert())} disabled={busy}>
-                    {text(locale, "Convert", "変換")}
-                </Button>
-            </div>
-            <div className="two-column">
-                <Area
-                    label={text(locale, "Input", "入力")}
-                    value={input}
-                    onChange={setInput}
-                    placeholder={'{"name":"DevTools"}'}
-                />
-                <Area
-                    label={text(locale, "Output", "出力")}
-                    value={output}
-                    onChange={setOutput}
-                    readOnly={false}
-                />
-            </div>
-            <div className="action-row">
-                <Button
-                    variant="outline"
-                    onClick={() => runUiEffect(save())}
-                    disabled={!output || busy}
-                >
-                    {text(locale, "Save output", "出力を保存")}
-                </Button>
+                </section>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

@@ -10,7 +10,7 @@ interface ImagePreviewProps {
 
 export function ImagePreview({ locale, image, onChooseTransparentPoint }: ImagePreviewProps) {
     return (
-        <div className="image-preview-panel">
+        <div className="image-preview-panel input-card">
             {image ? (
                 <img
                     src={image}

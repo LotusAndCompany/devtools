@@ -138,6 +138,13 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                  qPrintable(QStringLiteral("Tool route %1 rendered no page heading.").arg(index)));
         QVERIFY(evaluateJavaScript(
             view.page(),
+            QStringLiteral("document.querySelectorAll('.page-host:not([hidden]) .input-card, "
+                           ".page-host:not([hidden]) .result-card').length > 0"),
+            &result));
+        QVERIFY2(result.toBool(),
+                 qPrintable(QStringLiteral("Tool route %1 has no cards.").arg(index)));
+        QVERIFY(evaluateJavaScript(
+            view.page(),
             QStringLiteral(
                 "Boolean(document.querySelector('.page-host:not([hidden]) > .empty-state'))"),
             &result));
@@ -168,8 +175,19 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         if (index == 4) {
             QVERIFY(evaluateJavaScript(
                 view.page(),
+                QStringLiteral(
+                    "(() => { const cards = [...document.querySelectorAll("
+                    "'.page-host.active-page .data-panel')]; "
+                    "const first = cards[0]?.getBoundingClientRect(); "
+                    "const second = cards[1]?.getBoundingClientRect(); "
+                    "return cards.length === 2 && Math.abs(first.top - second.top) < 1 && "
+                    "second.left > first.right; })()"),
+                &result));
+            QVERIFY2(result.toBool(), "Data conversion panels are not side by side.");
+            QVERIFY(evaluateJavaScript(
+                view.page(),
                 QStringLiteral("(() => { const row = document.querySelector("
-                               "'.page-host.active-page .data-toolbar'); "
+                               "'.page-host.active-page .data-output-toolbar'); "
                                "const controls = [...row.querySelectorAll(':scope > button'), "
                                "...row.querySelectorAll('.select-trigger')]; "
                                "const bottoms = controls.map((control) => "
@@ -321,7 +339,7 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             "Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')"
             ".set.call(field, '{'); "
             "field.dispatchEvent(new Event('input', { bubbles: true })); "
-            "document.querySelector('.page-host:not([hidden]) .toolbar-row > button:last-of-type')"
+            "document.querySelector('.page-host:not([hidden]) .data-output-toolbar > button')"
             ".click(); true; })()"),
         &result));
     QVERIFY(evaluateJavaScript(

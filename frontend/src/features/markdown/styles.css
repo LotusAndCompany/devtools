@@ -1,6 +1,18 @@
 :where([data-page="markdown"]) .two-column > .preview-panel {
     min-width: 0;
 }
+:where([data-page="markdown"]) .markdown-editor-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+:where([data-page="markdown"]) .markdown-editor-card .field {
+    flex: 1;
+}
+:where([data-page="markdown"]) .markdown-editor-card .code-area {
+    flex: 1;
+    min-height: 330px;
+}
 :where([data-page="markdown"]) .markdown-columns {
     min-height: 420px;
 }
