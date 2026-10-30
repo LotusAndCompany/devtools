@@ -1,0 +1,118 @@
+:where([data-page="db"]) .database-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    margin-bottom: 10px;
+}
+
+:where([data-page="db"]) .database-toolbar .connection-name {
+    flex: 1;
+    overflow: hidden;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+:where([data-page="db"]) .database-cache[hidden] {
+    display: none !important;
+}
+
+:where([data-page="db"]) .db-layout {
+    min-height: 0;
+}
+
+:where([data-page="db"]) .db-sidebar {
+    max-height: 100%;
+    overflow: auto;
+}
+
+:where([data-page="db"]) .db-table-item {
+    width: 100%;
+    justify-content: flex-start;
+    font-family: ui-monospace, monospace;
+}
+
+:where([data-page="db"]) .db-query-tabs {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+:where([data-page="db"]) .db-query-tabs .feature-tabs-list {
+    overflow-x: auto;
+}
+
+:where([data-page="db"]) .db-query-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+:where([data-page="db"]) .db-query-tab-close {
+    display: inline-grid;
+    width: 16px;
+    height: 16px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+:where([data-page="db"]) .db-query-panel {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 12px;
+}
+
+:where([data-page="db"]) .db-query-panel .code-area {
+    min-height: 180px;
+}
+
+.db-connection-dialog {
+    width: min(600px, calc(100vw - 32px));
+}
+
+.db-connection-dialog {
+    width: min(650px, calc(100vw - 32px));
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: auto;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--foreground);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+}
+
+:where([data-page="db"]) .db-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.65fr) minmax(0, 1.35fr);
+    gap: 14px;
+    align-items: start;
+}
+:where([data-page="db"]) .db-sidebar,
+:where([data-page="db"]) .db-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+:where([data-page="db"]) .db-connect-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+    :where([data-page="db"]) .db-layout {
+        grid-template-columns: 1fr;
+    }
+}

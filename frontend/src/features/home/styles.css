@@ -1,0 +1,64 @@
+:where([data-page="welcome"]) .welcome-page {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 24px 28px 40px;
+}
+:where([data-page="welcome"]) .tool-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+    gap: 11px;
+}
+:where([data-page="welcome"]) .tool-card {
+    display: flex;
+    min-height: 104px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        transform 0.15s;
+}
+:where([data-page="welcome"]) .tool-card:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+}
+:where([data-page="welcome"]) .tool-card strong {
+    font-size: 12px;
+}
+:where([data-page="welcome"]) .tool-card > span:last-child {
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 1.4;
+}
+:where([data-page="welcome"]) .tool-card-icon {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    place-items: center;
+    border-radius: 7px;
+    background: var(--muted);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+:where([data-page="welcome"]) .tool-card {
+    height: auto;
+    justify-content: flex-start;
+}
+
+:where([data-page="welcome"]) .tool-card-icon {
+    font-size: 19px;
+}
+
+@media (max-width: 900px) {
+    :where([data-page="welcome"]) .welcome-page {
+        padding: 18px 16px 30px;
+    }
+}

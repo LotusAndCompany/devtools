@@ -332,6 +332,56 @@ flowchart TD
 Tests are registered in `tests/DevToolsTests.cmake` via `DevTools_add_test()`.
 See [Testing Guide](testing-guide.md) for details.
 
+## React Web Frontend
+
+The React frontend lives in `frontend/src/` and is organized by responsibility:
+
+```text
+frontend/src/
+├── app/          # Startup, shell, navigation, and tool registry
+├── features/     # One folder per tool or application screen
+├── shared/       # UI primitives, contracts, shared types, and Effect helpers
+└── platform/qt/  # Qt WebChannel adapter and Qt-specific connection code
+```
+
+The dependency direction is `app -> features`, `app -> platform`, and
+`features/platform -> shared`. Features do not import one another. The tool
+registry is the single source for tool labels, icons, native IDs, screen
+components, and screen lifetime policy. The database screen is kept mounted to
+preserve its query tabs and connection UI state.
+
+Each feature exports its public screen and types from `index.ts`. Keep screen
+state, operation hooks, and feature-only components in that feature's folder;
+move code to `shared/` only when multiple independent features use it. Qt
+WebChannel access belongs in `platform/qt/`; screens use the shared operation
+runner and contract types instead of importing Qt APIs.
+
+The frontend build embeds Vite output into the Qt resource collection. CMake
+tracks `frontend/src/` TypeScript, TSX, and CSS recursively so edits in nested
+feature folders trigger an asset rebuild. Keep the embedded entry points and
+resource URLs stable when reorganizing frontend files.
+
+## React Bridge and Native Operations
+
+`NativeBridge` remains the public QObject boundary: it validates versioned
+requests, manages worker and dialog lifetimes, and emits operation events. The
+operation registry in `features/web_frontend/gui/bridge/` is used for both
+request allowlisting and handler selection. Image and database state is owned
+by focused handlers under `gui/handlers/`; worker completion receives a
+feature-specific callback so the generic runtime does not inspect image or
+database payload fields.
+
+Qt-independent frontend operations live in
+`features/web_frontend/core/operations/`, grouped by tool. Each operation
+module validates its own payload and calls existing core services. Keep Qt
+Widgets, dialogs, and WebChannel types out of this directory. Register new C++
+sources explicitly with `target_sources()` in
+`features/web_frontend/CMakeLists.txt`.
+
+The WebChannel contract remains versioned independently from the UI. Preserve
+operation names, payload keys, error codes, limits, and the embedded resource
+URLs when moving code across these boundaries.
+
 ## Related Documentation
 
 - [Adding New Tools](adding-new-tools.md) - How to add new tool modules

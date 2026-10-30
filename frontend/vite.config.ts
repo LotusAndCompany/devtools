@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
+const sourceRoot = path.resolve(frontendRoot, "src");
 
 const developmentCsp = [
   "default-src 'none'",
@@ -61,7 +62,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        "@": frontendRoot,
+        "@": sourceRoot,
       },
     },
     server: {

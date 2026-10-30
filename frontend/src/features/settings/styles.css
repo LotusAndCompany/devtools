@@ -1,0 +1,88 @@
+.settings-page {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 24px 28px 40px;
+}
+
+.settings-card {
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+.settings-card h2 {
+    margin: 0;
+    font-size: 13px;
+}
+.settings-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.settings-card {
+    max-width: 620px;
+}
+.settings-card > .field {
+    margin: 7px 0 16px;
+}
+.settings-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 39px;
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground);
+    font-size: 12px;
+}
+.settings-toggle input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+}
+.settings-actions {
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+.settings-actions [role="status"] {
+    flex: 1;
+    color: var(--muted-foreground);
+    font-size: 11px;
+}
+
+.settings-dialog {
+    width: min(650px, calc(100vw - 32px));
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: auto;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--foreground);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+}
+
+.settings-dialog {
+    width: min(620px, calc(100vw - 32px));
+}
+
+.settings-dialog .settings-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.settings-dialog .settings-card {
+    max-width: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+@media (max-width: 900px) {
+    .settings-page {
+        padding: 18px 16px 30px;
+    }
+}

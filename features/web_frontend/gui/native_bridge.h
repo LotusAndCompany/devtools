@@ -3,7 +3,6 @@
 
 #include <QFutureWatcher>
 #include <QHash>
-#include <QImage>
 #include <QObject>
 #include <QString>
 #include <QVariantMap>
@@ -12,9 +11,10 @@
 #include <functional>
 #include <memory>
 
+class DatabaseStateHandler;
 class QFileDialog;
-class SQLiteFileAccess;
 class QWidget;
+class ImageStateHandler;
 
 /**
  * @brief Versioned, bounded WebChannel API for the React frontend.
@@ -75,14 +75,9 @@ private:
 
     QWidget *dialog_parent_;
     QHash<QString, RunningOperation> operations_;
+    std::unique_ptr<ImageStateHandler> image_state_;
+    std::unique_ptr<DatabaseStateHandler> database_state_;
     QString contract_version_ = QStringLiteral("2");
-    QImage original_image_;
-    QImage current_image_;
-    QString current_image_path_;
-    QString dropped_image_path_;
-    QVariantMap database_connection_;
-    QString selected_sqlite_path_;
-    std::shared_ptr<SQLiteFileAccess> sqlite_file_access_;
 
     [[nodiscard]] bool validateRequest(const QString &requestId, const QVariantMap &request);
     [[nodiscard]] bool textPayload(const QString &requestId, const QVariantMap &payload,
@@ -97,10 +92,16 @@ private:
     void startQrImageSaveOperation(const QString &requestId, const QVariantMap &payload);
     void startDatabaseOperation(const QString &requestId, const QString &operation,
                                 const QVariantMap &payload);
+    void startRegexSettings(const QString &requestId, const QVariantMap &payload);
+    void startSettingsRead(const QString &requestId);
+    void startAboutInfo(const QString &requestId);
+    void startSaveLastUsedTool(const QString &requestId, const QVariantMap &payload);
+    void startClipboard(const QString &requestId, const QVariantMap &payload);
     void completeOnUiThread(const QString &requestId, const QVariantMap &result);
     void startSaveSettings(const QString &requestId, const QVariantMap &payload);
     void fail(const QString &requestId, const QString &code, const QString &message);
-    void startWorker(const QString &requestId, const QString &operation, Worker worker);
+    void startWorker(const QString &requestId, const QString &operation, Worker worker,
+                     std::function<void(QVariantMap &)> onSuccess = {});
     void reportProgress(const QString &requestId, int percent, const QString &message);
     void startFileDialog(const QString &requestId, const QString &operation,
                          const QVariantMap &payload);

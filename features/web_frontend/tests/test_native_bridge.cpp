@@ -27,7 +27,9 @@ private Q_SLOTS:
     void reportsInvalidJson();
     void rejectsInvalidUtf8Files();
     void enforcesInputAndVersionLimits();
+    void rejectsOperationsOutsideTheRegistry();
     void cancelsBeforeTheWorkerStarts();
+    void emitsOnlyOneTerminalEvent();
     void generatesQrThroughTheVersionedBridge();
     void readsDroppedImagesWithoutExposingTheirPaths();
     void readsAboutMetadataAndLicenseResource();
@@ -101,6 +103,24 @@ void TestNativeBridge::enforcesInputAndVersionLimits()
     QCOMPARE(progress.count(), 0);
 }
 
+void TestNativeBridge::rejectsOperationsOutsideTheRegistry()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QSignalSpy started(&bridge, &NativeBridge::operationStarted);
+    QVERIFY(failed.isValid());
+    QVERIFY(started.isValid());
+
+    QVariantMap request = formatRequest(QStringLiteral("unknown-1"), QStringLiteral("{}"));
+    request.insert(QStringLiteral("operation"), QStringLiteral("databaseUnknown"));
+    bridge.startOperation(request);
+
+    QCOMPARE(failed.count(), 1);
+    QCOMPARE(failed.constFirst().at(1).toMap().value(QStringLiteral("code")).toString(),
+             QStringLiteral("INVALID_INPUT"));
+    QCOMPARE(started.count(), 0);
+}
+
 void TestNativeBridge::cancelsBeforeTheWorkerStarts()
 {
     NativeBridge bridge(nullptr);
@@ -115,6 +135,25 @@ void TestNativeBridge::cancelsBeforeTheWorkerStarts()
 
     QCOMPARE(cancelled.count(), 1);
     QCOMPARE(cancelled.constFirst().constFirst().toString(), QStringLiteral("cancel-1"));
+}
+
+void TestNativeBridge::emitsOnlyOneTerminalEvent()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QSignalSpy cancelled(&bridge, &NativeBridge::operationCancelled);
+    QVERIFY(completed.isValid());
+    QVERIFY(failed.isValid());
+    QVERIFY(cancelled.isValid());
+
+    bridge.startOperation(formatRequest(QStringLiteral("terminal-1"), QStringLiteral("{}")));
+
+    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
+    QTest::qWait(20);
+    QCOMPARE(failed.count(), 0);
+    QCOMPARE(cancelled.count(), 0);
+    QCOMPARE(completed.count(), 1);
 }
 
 void TestNativeBridge::generatesQrThroughTheVersionedBridge()
@@ -229,7 +268,6 @@ void TestNativeBridge::readsDroppedImagesWithoutExposingTheirPaths()
     QCOMPARE(result.value(QStringLiteral("height")).toInt(), 3);
     QVERIFY(!result.contains(QStringLiteral("path")));
     QVERIFY(!result.contains(QStringLiteral("filePath")));
-    QCOMPARE(bridge.current_image_path_, imagePath);
 }
 
 void TestNativeBridge::readsAboutMetadataAndLicenseResource()

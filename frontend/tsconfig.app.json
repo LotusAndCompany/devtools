@@ -19,8 +19,8 @@
     "composite": true,
     "types": ["vite/client", "vitest/globals"],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["*.ts", "*.tsx", "components/**/*.tsx", "lib/**/*.ts", "tests"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

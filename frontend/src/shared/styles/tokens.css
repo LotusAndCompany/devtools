@@ -1,0 +1,90 @@
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-ring: var(--ring);
+    --color-destructive: var(--destructive);
+}
+
+:root {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: light;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    --background: #f5f6f8;
+    --foreground: #20242c;
+    --card: #ffffff;
+    --primary: #bf3b31;
+    --primary-foreground: #ffffff;
+    --secondary: #eceef2;
+    --secondary-foreground: #303743;
+    --muted: #f0f1f4;
+    --muted-foreground: #69717e;
+    --border: #dfe2e7;
+    --ring: #6574cd;
+    --destructive: #be3131;
+    --sidebar: #eef0f3;
+    --shadow: 0 8px 28px rgb(28 37 54 / 7%);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #17191e;
+    --foreground: #e4e7ed;
+    --card: #20232a;
+    --primary: #ed776a;
+    --primary-foreground: #201716;
+    --secondary: #2b2f38;
+    --secondary-foreground: #e4e7ed;
+    --muted: #292d35;
+    --muted-foreground: #a3aab7;
+    --border: #3a3f49;
+    --ring: #9ba7ff;
+    --destructive: #ff7777;
+    --sidebar: #1c1f25;
+    --shadow: 0 8px 28px rgb(0 0 0 / 20%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+        color-scheme: dark;
+        --background: #17191e;
+        --foreground: #e4e7ed;
+        --card: #20232a;
+        --primary: #ed776a;
+        --primary-foreground: #201716;
+        --secondary: #2b2f38;
+        --secondary-foreground: #e4e7ed;
+        --muted: #292d35;
+        --muted-foreground: #a3aab7;
+        --border: #3a3f49;
+        --ring: #9ba7ff;
+        --destructive: #ff7777;
+        --sidebar: #1c1f25;
+        --shadow: 0 8px 28px rgb(0 0 0 / 20%);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+html,
+body,
+#root {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+}
+body {
+    color: var(--foreground);
+    background: var(--background);
+}

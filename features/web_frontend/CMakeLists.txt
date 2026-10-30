@@ -9,17 +9,18 @@ foreach(FRONTEND_PATTERN IN ITEMS
         "${FRONTEND_DIR}/*.ts"
         "${FRONTEND_DIR}/*.tsx"
         "${FRONTEND_DIR}/*.css"
-        "${FRONTEND_DIR}/components/*.ts"
-        "${FRONTEND_DIR}/components/*.tsx"
-        "${FRONTEND_DIR}/components/ui/*.ts"
-        "${FRONTEND_DIR}/components/ui/*.tsx"
-        "${FRONTEND_DIR}/lib/*.ts"
-        "${FRONTEND_DIR}/lib/*.tsx"
-        "${FRONTEND_DIR}/tests/*.ts"
-        "${FRONTEND_DIR}/tests/*.tsx")
+        "${FRONTEND_DIR}/src/*.ts"
+        "${FRONTEND_DIR}/src/*.tsx"
+        "${FRONTEND_DIR}/src/*.css")
     file(GLOB FRONTEND_FILES CONFIGURE_DEPENDS "${FRONTEND_PATTERN}")
     list(APPEND FRONTEND_INPUTS ${FRONTEND_FILES})
 endforeach()
+file(GLOB_RECURSE FRONTEND_SOURCE_FILES CONFIGURE_DEPENDS
+    "${FRONTEND_DIR}/src/*.ts"
+    "${FRONTEND_DIR}/src/*.tsx"
+    "${FRONTEND_DIR}/src/*.css"
+)
+list(APPEND FRONTEND_INPUTS ${FRONTEND_SOURCE_FILES})
 
 add_custom_command(
     OUTPUT "${FRONTEND_DIST_DIR}/index.html"
@@ -41,10 +42,31 @@ add_custom_target(DevTools_frontend_assets
 
 target_sources(DevTools_web_frontend PRIVATE
     gui/main_window.cpp
-    gui/frontend_operation_service.h gui/frontend_operation_service.cpp
     gui/native_bridge.h gui/native_bridge.cpp
+    gui/bridge/operation_registry.h gui/bridge/operation_registry.cpp
+    gui/bridge/bridge_io.h
+    gui/bridge/operation_runtime.cpp
+    gui/bridge/request_validation.cpp
+    gui/bridge/tool_operation_handler.cpp
+    gui/handlers/database_state_handler.h gui/handlers/database_state_handler.cpp
+    gui/handlers/database_operation_handler.cpp
+    gui/handlers/image_state_handler.h gui/handlers/image_state_handler.cpp
+    gui/handlers/image_operation_handler.cpp
+    gui/handlers/native_settings_handler.cpp
+    gui/handlers/text_file_handler.cpp
     gui/qt_webengine_adapter.h gui/qt_webengine_adapter.cpp
     gui/react_bridge_demo_widget.h gui/react_bridge_demo_widget.cpp
+    core/operations/command_operations.h core/operations/command_operations.cpp
+    core/operations/data_operations.h core/operations/data_operations.cpp
+    core/operations/database_operations.h core/operations/database_operations.cpp
+    core/operations/diff_operations.h core/operations/diff_operations.cpp
+    core/operations/frontend_operation_service.h core/operations/frontend_operation_service.cpp
+    core/operations/http_operations.h core/operations/http_operations.cpp
+    core/operations/markdown_operations.h core/operations/markdown_operations.cpp
+    core/operations/operation_support.h
+    core/operations/phrase_operations.h core/operations/phrase_operations.cpp
+    core/operations/qr_operations.h core/operations/qr_operations.cpp
+    core/operations/regex_operations.h core/operations/regex_operations.cpp
     resources/frontend.qrc
 )
 target_include_directories(DevTools_web_frontend PRIVATE ${CMAKE_BINARY_DIR})

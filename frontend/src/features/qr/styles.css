@@ -1,0 +1,37 @@
+:where([data-page="qr"]) .qr-layout {
+    display: grid;
+    grid-template-columns: minmax(270px, 1fr) minmax(260px, 0.8fr);
+    gap: 14px;
+    align-items: start;
+}
+:where([data-page="qr"]) .qr-layout .input-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+:where([data-page="qr"]) .qr-preview {
+    display: flex;
+    min-height: 300px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    color: var(--muted-foreground);
+}
+:where([data-page="qr"]) .qr-preview img {
+    width: min(100%, 280px);
+    image-rendering: pixelated;
+}
+:where([data-page="qr"]) .qr-preview code {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
+    font:
+        10px ui-monospace,
+        monospace;
+}
+@media (max-width: 650px) {
+    :where([data-page="qr"]) .qr-layout {
+        grid-template-columns: 1fr;
+    }
+}

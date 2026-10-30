@@ -1,0 +1,115 @@
+.about-page {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 24px 28px 40px;
+}
+
+.about-card {
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+.about-card {
+    display: flex;
+    max-width: 650px;
+    align-items: center;
+    gap: 18px;
+}
+.about-card strong {
+    font-size: 16px;
+}
+.about-card p {
+    color: var(--muted-foreground);
+    font-size: 12px;
+}
+
+.about-dialog {
+    width: min(650px, calc(100vw - 32px));
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: auto;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--foreground);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+}
+
+.about-tabs {
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.about-panel {
+    min-height: 250px;
+    padding: 14px;
+}
+
+.about-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 4px 0 18px;
+    font-size: 16px;
+}
+
+.about-brand img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.about-metadata {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px 14px;
+    margin: 0;
+    font-size: 11px;
+}
+
+.about-metadata > div {
+    display: contents;
+}
+
+.about-metadata dt {
+    color: var(--muted-foreground);
+    text-align: right;
+}
+
+.about-metadata dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.about-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.about-actions span {
+    flex: 1;
+    color: var(--muted-foreground);
+    font-size: 11px;
+}
+
+.license-text {
+    width: 100%;
+    min-height: 340px;
+    resize: vertical;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+}
+
+@media (max-width: 900px) {
+    .about-page {
+        padding: 18px 16px 30px;
+    }
+}

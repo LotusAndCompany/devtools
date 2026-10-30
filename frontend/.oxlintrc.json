@@ -9,6 +9,56 @@
     "react/react-in-jsx-scope": "off",
     "eslint/no-underscore-dangle": "off"
   },
+  "overrides": [
+    {
+      "files": ["src/features/**/*.ts", "src/features/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**", "@/features/**", "@/platform/**"],
+                "message": "Features use shared contracts and their own modules."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/platform/**/*.ts", "src/platform/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**", "@/features/**"],
+                "message": "Platform adapters depend on shared contracts, not app or features."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/**/*.ts", "src/shared/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/app/**", "@/features/**", "@/platform/**"],
+                "message": "Shared modules cannot depend on app, features, or platform."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
   "env": {
     "browser": true,
     "vitest": true

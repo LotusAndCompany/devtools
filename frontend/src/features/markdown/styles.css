@@ -1,0 +1,34 @@
+:where([data-page="markdown"]) .two-column > .preview-panel {
+    min-width: 0;
+}
+:where([data-page="markdown"]) .markdown-columns {
+    min-height: 420px;
+}
+:where([data-page="markdown"]) .preview-panel {
+    display: flex;
+    min-height: 350px;
+    flex-direction: column;
+    gap: 7px;
+}
+:where([data-page="markdown"]) .preview-panel iframe {
+    width: 100%;
+    flex: 1;
+    min-height: 330px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: white;
+}
+:where([data-page="markdown"]) .markdown-dark iframe {
+    filter: invert(0.88) hue-rotate(180deg);
+}
+:where([data-page="markdown"]) .markdown-light iframe {
+    filter: none;
+}
+
+:where([data-page="markdown"]) .markdown-sync {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted-foreground);
+    font-size: 11px;
+}
