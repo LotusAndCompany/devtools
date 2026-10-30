@@ -28,15 +28,8 @@
     min-height: 330px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: white;
+    background: var(--card);
 }
-:where([data-page="markdown"]) .markdown-dark iframe {
-    filter: invert(0.88) hue-rotate(180deg);
-}
-:where([data-page="markdown"]) .markdown-light iframe {
-    filter: none;
-}
-
 :where([data-page="markdown"]) .markdown-sync {
     display: inline-flex;
     align-items: center;

@@ -15,7 +15,8 @@ select:focus-visible {
     outline-offset: 2px;
 }
 ::selection {
-    background: color-mix(in oklab, var(--primary) 22%, transparent);
+    background: var(--primary);
+    color: var(--primary-foreground);
 }
 kbd {
     padding: 2px 4px;
@@ -33,7 +34,7 @@ kbd {
     min-height: 38px;
     overflow: auto hidden;
     border-bottom: 1px solid var(--border);
-    background: var(--card);
+    background: var(--tab-bar);
 }
 .tab-close {
     width: 25px;
@@ -127,7 +128,7 @@ kbd {
     padding: 7px 9px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: var(--background);
+    background: var(--card);
     color: var(--foreground);
     font-size: 12px;
 }
@@ -146,7 +147,7 @@ kbd {
     padding: 7px 9px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: var(--background);
+    background: var(--card);
     color: var(--foreground);
     font: inherit;
     font-size: 12px;
@@ -196,7 +197,8 @@ kbd {
     outline: none;
 }
 .select-item[data-highlighted] {
-    background: var(--muted);
+    background: var(--primary);
+    color: var(--primary-foreground);
 }
 .select-item[data-disabled] {
     opacity: 0.45;
@@ -257,8 +259,8 @@ textarea.form-control {
     margin: 10px 0;
     padding: 9px 11px;
     border-radius: 6px;
-    background: color-mix(in oklab, #29975e 12%, var(--card));
-    color: #218653;
+    background: color-mix(in srgb, var(--success) 12%, var(--card));
+    color: var(--success);
     font-size: 11px;
 }
 .operation-message.error {
@@ -301,6 +303,9 @@ textarea.form-control {
 }
 .danger-button {
     color: var(--destructive);
+}
+.danger-button:disabled {
+    color: var(--destructive-disabled);
 }
 
 .date-time-input {
@@ -419,7 +424,7 @@ textarea.form-control {
     padding: 0;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: var(--background);
+    background: var(--card);
     color: var(--primary-foreground);
     cursor: pointer;
 }
@@ -458,8 +463,8 @@ textarea.form-control {
     width: 16px;
     height: 16px;
     border-radius: 999px;
-    background: white;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+    background: var(--primary-foreground);
+    box-shadow: 0 1px 2px var(--palette-shadow-1);
     transition: transform 0.15s ease;
 }
 
@@ -472,7 +477,7 @@ textarea.form-control {
     gap: 3px;
     padding: 3px;
     border-bottom: 1px solid var(--border);
-    background: var(--muted);
+    background: var(--tab-bar);
 }
 
 .feature-tab {
@@ -489,14 +494,14 @@ textarea.form-control {
 .feature-tab[data-selected] {
     background: var(--card);
     color: var(--foreground);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+    box-shadow: 0 1px 2px var(--palette-shadow-1);
 }
 
 .dialog-backdrop {
     position: fixed;
     z-index: 100;
     inset: 0;
-    background: rgb(0 0 0 / 44%);
+    background: var(--overlay);
 }
 
 .dialog-viewport {
@@ -519,7 +524,7 @@ textarea.form-control {
     border-radius: 10px;
     background: var(--card);
     color: var(--foreground);
-    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+    box-shadow: var(--dialog-shadow);
 }
 
 .message-dialog,

@@ -24,10 +24,10 @@
     border-left: 1px solid var(--border);
 }
 :where([data-page="diff"]) .diff-row .removed {
-    background: color-mix(in oklab, #dc4c4c 14%, var(--card));
+    background: var(--diff-removed);
 }
 :where([data-page="diff"]) .diff-row .added {
-    background: color-mix(in oklab, #32a36a 14%, var(--card));
+    background: var(--diff-added);
 }
 
 :where([data-page="diff"]) .diff-editors {

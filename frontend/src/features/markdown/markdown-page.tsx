@@ -63,9 +63,34 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
             scroller.scrollTop = (editor.scrollTop / editorRange) * previewRange;
         }
     }, [syncScroll]);
+    const applyPreviewTheme = useCallback(() => {
+        const iframeDocument = previewRef.current?.contentDocument;
+        if (!iframeDocument?.head) return;
+
+        const rootStyles = getComputedStyle(document.documentElement);
+        const color = (name: string) => rootStyles.getPropertyValue(name).trim();
+        const style =
+            iframeDocument.getElementById("devtools-preview-theme") ??
+            iframeDocument.createElement("style");
+        style.id = "devtools-preview-theme";
+        style.textContent = `
+            :root { color-scheme: ${rootStyles.colorScheme}; }
+            body {
+                margin: 8px;
+                background: ${color("--card")};
+                color: ${color("--foreground")};
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            }
+            a { color: ${color("--primary-hover")}; }
+            pre, code { background: ${color("--muted")}; }
+            blockquote, hr { border-color: ${color("--border")}; }
+        `;
+        if (!style.parentElement) iframeDocument.head.appendChild(style);
+    }, []);
     const attachPreviewScroll = useCallback(() => {
         previewScrollCleanup.current?.();
         previewScrollCleanup.current = null;
+        applyPreviewTheme();
         if (!syncScroll) return;
         const iframeDocument = previewRef.current?.contentDocument;
         const editor = editorRef.current;
@@ -80,11 +105,25 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
         };
         iframeDocument.addEventListener("scroll", onScroll, { passive: true });
         previewScrollCleanup.current = () => iframeDocument.removeEventListener("scroll", onScroll);
-    }, [syncScroll]);
+    }, [applyPreviewTheme, syncScroll]);
     useEffect(() => {
         attachPreviewScroll();
         return () => previewScrollCleanup.current?.();
     }, [attachPreviewScroll]);
+    useEffect(() => {
+        const observer = new MutationObserver(applyPreviewTheme);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+        });
+        const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        colorScheme.addEventListener("change", applyPreviewTheme);
+        applyPreviewTheme();
+        return () => {
+            observer.disconnect();
+            colorScheme.removeEventListener("change", applyPreviewTheme);
+        };
+    }, [applyPreviewTheme]);
     return (
         <div className="tool-page">
             <Heading title={text(locale, "Markdown Preview", "Markdownプレビュー")} />

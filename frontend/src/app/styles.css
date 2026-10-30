@@ -93,13 +93,19 @@
     cursor: pointer;
     font-size: 12px;
 }
-.nav-item:hover,
-.nav-item.active {
-    background: var(--secondary);
+.nav-item:hover:not(.active) {
+    background: var(--secondary-hover);
 }
 .nav-item.active {
-    color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
     font-weight: 650;
+}
+.nav-item.active:hover {
+    background: var(--primary-hover);
+}
+.nav-item.active:active {
+    background: var(--primary-pressed);
 }
 .nav-icon {
     display: grid;
@@ -109,6 +115,9 @@
     color: var(--muted-foreground);
     font-size: 12px;
     font-weight: 700;
+}
+.nav-item.active .nav-icon {
+    color: inherit;
 }
 .sidebar-bottom {
     display: flex;
@@ -131,7 +140,7 @@
     min-height: 50px;
     padding: 7px 16px;
     border-bottom: 1px solid var(--border);
-    background: var(--card);
+    background: var(--tab-bar);
 }
 .topbar-title {
     flex: 1;
