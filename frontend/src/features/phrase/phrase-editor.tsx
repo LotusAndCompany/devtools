@@ -57,13 +57,7 @@ export function PhraseEditor({
                 <Button variant="outline" onClick={onCopy} disabled={!content}>
                     {text(locale, "Copy text", "本文をコピー")} <kbd>⌘⇧C</kbd>
                 </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="danger-button"
-                    onClick={onDelete}
-                    disabled={busy || !filename}
-                >
+                <Button variant="outline" size="sm" onClick={onDelete} disabled={busy || !filename}>
                     {text(locale, "Delete", "削除")}
                 </Button>
             </div>

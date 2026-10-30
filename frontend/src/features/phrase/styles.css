@@ -1,8 +1,20 @@
+:where(.page-host.active-page[data-page="phrase"]) {
+    display: flex;
+    flex-direction: column;
+}
+:where([data-page="phrase"]) > .tool-page {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+}
 :where([data-page="phrase"]) .phrase-layout {
     display: grid;
     grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
+    min-height: 0;
+    flex: 1;
     gap: 14px;
-    align-items: start;
+    align-items: stretch;
 }
 :where([data-page="phrase"]) .template-item {
     display: flex;
@@ -32,10 +44,18 @@
 }
 :where([data-page="phrase"]) .phrase-layout > .input-card:last-child {
     display: flex;
+    min-height: 0;
     flex-direction: column;
     gap: 12px;
 }
+:where([data-page="phrase"]) .phrase-layout > .input-card:last-child > .field:first-child {
+    flex: 0 0 auto;
+}
+:where([data-page="phrase"]) .phrase-layout > .input-card:last-child > .field:nth-child(2) {
+    min-height: 0;
+}
 :where([data-page="phrase"]) .phrase-layout .code-area {
+    flex: 1;
     min-height: 320px;
 }
 

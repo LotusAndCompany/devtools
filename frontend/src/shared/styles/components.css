@@ -301,13 +301,6 @@ textarea.form-control {
     flex-direction: column;
     gap: 7px;
 }
-.danger-button {
-    color: var(--destructive);
-}
-.danger-button:disabled {
-    color: var(--destructive-disabled);
-}
-
 .date-time-input {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
