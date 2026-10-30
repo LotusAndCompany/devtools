@@ -276,6 +276,36 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 &result));
             continue;
         }
+        if (selector == QStringLiteral(".sidebar-bottom .nav-item:nth-child(1)")) {
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral(
+                        "Boolean(document.querySelector('.settings-dialog[role=dialog]'))"),
+                    &result) &&
+                    result.toBool(),
+                5000);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.page-host.active-page')?.dataset.page ?? ''"),
+                &result));
+            QCOMPARE(result.toString(), QStringLiteral("data"));
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.settings-dialog .dialog-footer button:first-of-type')"
+                    ".click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral("!document.querySelector('.settings-dialog[role=dialog]')"),
+                    &result) &&
+                    result.toBool(),
+                5000);
+            continue;
+        }
         bool pageRendered = false;
         for (int attempt = 0; attempt < 50; ++attempt) {
             QVERIFY(evaluateJavaScript(

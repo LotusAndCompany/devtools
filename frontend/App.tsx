@@ -168,6 +168,7 @@ function App() {
     const [bridge, setBridge] = useState<NativeBridge | null>(null);
     const [activePage, setActivePage] = useState<PageId>("welcome");
     const [aboutOpen, setAboutOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
     const [databaseNavigationVersion, setDatabaseNavigationVersion] = useState(0);
     const [search, setSearch] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -246,9 +247,11 @@ function App() {
                     setAboutOpen(true);
                     return;
                 }
-                if (
-                    ["settings", "welcome", ...tools.map((item) => item.id)].includes(event.route)
-                ) {
+                if (event.route === "settings") {
+                    setSettingsOpen(true);
+                    return;
+                }
+                if (["welcome", ...tools.map((item) => item.id)].includes(event.route)) {
                     if (event.route === "db") {
                         setDatabaseNavigationVersion((version) => version + 1);
                     }
@@ -418,8 +421,9 @@ function App() {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={`nav-item ${activePage === "settings" ? "active" : ""}`}
-                            onClick={() => openPage("settings")}
+                            className={`nav-item ${settingsOpen ? "active" : ""}`}
+                            aria-haspopup="dialog"
+                            onClick={() => setSettingsOpen(true)}
                         >
                             <Icon className="nav-icon">{iconFor("settings")}</Icon>
                             {locale === "ja" ? "設定" : "Settings"}
@@ -466,13 +470,6 @@ function App() {
                         >
                             {activePage === "welcome" ? (
                                 <WelcomePage locale={locale} onOpen={openPage} />
-                            ) : activePage === "settings" ? (
-                                <SettingsPage
-                                    locale={locale}
-                                    run={runOperation}
-                                    onLocaleChange={setLocale}
-                                    onThemeChange={setTheme}
-                                />
                             ) : (
                                 <ToolPage
                                     key={activePage}
@@ -508,6 +505,14 @@ function App() {
                 onOpenChange={setAboutOpen}
                 locale={locale}
                 run={runOperation}
+            />
+            <SettingsDialog
+                open={settingsOpen}
+                onOpenChange={setSettingsOpen}
+                locale={locale}
+                run={runOperation}
+                onLocaleChange={setLocale}
+                onThemeChange={setTheme}
             />
         </div>
     );
@@ -552,19 +557,66 @@ const defaultSettings = (locale: Locale): AppSettings => ({
     rememberWindowPosition: true,
 });
 
-function SettingsPage({
+function SettingsDialog({
+    open,
+    onOpenChange,
     locale,
     run,
     onLocaleChange,
     onThemeChange,
 }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
     locale: Locale;
     run: OperationRunner;
     onLocaleChange: (locale: Locale) => void;
     onThemeChange: (theme: "system" | "light" | "dark") => void;
 }) {
+    return (
+        <Dialog.Root open={open} onOpenChange={onOpenChange}>
+            <Dialog.Portal>
+                <Dialog.Backdrop className="dialog-backdrop" />
+                <Dialog.Viewport className="dialog-viewport">
+                    <Dialog.Popup className="settings-dialog">
+                        <Dialog.Title className="dialog-title">
+                            {locale === "ja" ? "設定" : "Settings"}
+                        </Dialog.Title>
+                        <Dialog.Description className="sr-only">
+                            {locale === "ja" ? "アプリケーション設定" : "Application settings"}
+                        </Dialog.Description>
+                        {open && (
+                            <SettingsForm
+                                locale={locale}
+                                run={run}
+                                onLocaleChange={onLocaleChange}
+                                onThemeChange={onThemeChange}
+                                onClose={() => onOpenChange(false)}
+                            />
+                        )}
+                    </Dialog.Popup>
+                </Dialog.Viewport>
+            </Dialog.Portal>
+        </Dialog.Root>
+    );
+}
+
+function SettingsForm({
+    locale,
+    run,
+    onLocaleChange,
+    onThemeChange,
+    onClose,
+}: {
+    locale: Locale;
+    run: OperationRunner;
+    onLocaleChange: (locale: Locale) => void;
+    onThemeChange: (theme: "system" | "light" | "dark") => void;
+    onClose: () => void;
+}) {
     const [settings, setSettings] = useState(defaultSettings(locale));
-    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
     useEffect(() => {
         const settingsEffect = run("getSettings", {}).pipe(
             Effect.tap((result) =>
@@ -572,7 +624,12 @@ function SettingsPage({
                     setSettings((current) => ({ ...current, ...result }) as AppSettings),
                 ),
             ),
-            Effect.catch(() => Effect.void),
+            Effect.catch((reason) =>
+                Effect.sync(() =>
+                    setError(reason instanceof Error ? reason.message : String(reason)),
+                ),
+            ),
+            Effect.ensuring(Effect.sync(() => setLoading(false))),
         );
         return forkUiEffect(settingsEffect);
     }, [run]);
@@ -589,31 +646,33 @@ function SettingsPage({
             locale === "ja" ? "ウィンドウ位置を記憶" : "Remember window position",
     };
     const save = () => {
-        setMessage("");
+        setError("");
+        setSaving(true);
         runUiEffect(
-            Effect.gen(function* () {
-                yield* run("saveSettings", settings);
-                yield* Effect.sync(() => {
-                    const nextLocale = settings.language === "ja_JP" ? "ja" : "en";
-                    onLocaleChange(nextLocale);
-                    onThemeChange(settings.theme);
-                    setMessage(nextLocale === "ja" ? "設定を保存しました。" : "Settings saved.");
-                });
-            }).pipe(
-                Effect.catch((error) =>
+            run("saveSettings", settings).pipe(
+                Effect.tap(() =>
+                    Effect.sync(() => {
+                        const nextLocale = settings.language === "ja_JP" ? "ja" : "en";
+                        onLocaleChange(nextLocale);
+                        onThemeChange(settings.theme);
+                        onClose();
+                    }),
+                ),
+                Effect.catch((reason) =>
                     Effect.sync(() =>
-                        setMessage(error instanceof Error ? error.message : String(error)),
+                        setError(reason instanceof Error ? reason.message : String(reason)),
                     ),
                 ),
+                Effect.ensuring(Effect.sync(() => setSaving(false))),
             ),
         );
     };
     return (
         <div className="settings-page">
-            <PageHeading title={locale === "ja" ? "設定" : "Settings"} />
             <div className="settings-card">
                 <Field label={labels.language}>
                     <SelectBox
+                        disabled={loading || saving}
                         value={settings.language}
                         onValueChange={(language) =>
                             setSettings((value) => ({
@@ -629,6 +688,7 @@ function SettingsPage({
                 </Field>
                 <Field label={labels.theme}>
                     <SelectBox
+                        disabled={loading || saving}
                         value={settings.theme}
                         onValueChange={(theme) =>
                             setSettings((value) => ({
@@ -653,6 +713,7 @@ function SettingsPage({
                             <span>{labels[key]}</span>
                             <Switch
                                 id={`settings-${key}`}
+                                disabled={loading || saving}
                                 checked={settings[key] as boolean}
                                 onCheckedChange={(checked) =>
                                     setSettings((value) => ({ ...value, [key]: checked }))
@@ -660,20 +721,21 @@ function SettingsPage({
                             />
                         </label>
                     ))}
-                <div className="settings-actions">
-                    <span role="status">{message}</span>
-                    <Button onClick={() => void save()}>{locale === "ja" ? "保存" : "Save"}</Button>
+                {error && (
+                    <p className="operation-message error" role="alert">
+                        {error}
+                    </p>
+                )}
+                <div className="settings-actions dialog-footer">
+                    <Dialog.Close render={<Button variant="outline" disabled={saving} />}>
+                        {locale === "ja" ? "キャンセル" : "Cancel"}
+                    </Dialog.Close>
+                    <Button onClick={save} disabled={loading || saving}>
+                        {locale === "ja" ? "保存" : "Save"}
+                    </Button>
                 </div>
             </div>
         </div>
-    );
-}
-
-function PageHeading({ title }: { title: string }) {
-    return (
-        <header className="page-heading sr-only">
-            <h1>{title}</h1>
-        </header>
     );
 }
 

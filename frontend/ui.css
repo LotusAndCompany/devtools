@@ -1294,6 +1294,7 @@ textarea.form-control {
 
 .about-dialog,
 .db-connection-dialog,
+.settings-dialog,
 .message-dialog,
 .confirm-dialog {
     width: min(650px, calc(100vw - 32px));
@@ -1310,6 +1311,24 @@ textarea.form-control {
 .message-dialog,
 .confirm-dialog {
     width: min(440px, calc(100vw - 32px));
+}
+
+.settings-dialog {
+    width: min(620px, calc(100vw - 32px));
+}
+
+.settings-dialog .settings-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.settings-dialog .settings-card {
+    max-width: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .dialog-title {
