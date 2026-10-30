@@ -79,7 +79,7 @@ export function PhraseConfirmationDialogs({
                                 <AlertDialog.Close render={<Button variant="outline" />}>
                                     {text(locale, "Cancel", "キャンセル")}
                                 </AlertDialog.Close>
-                                <Button size="sm" onClick={onConfirmDelete}>
+                                <Button variant="destructive" onClick={onConfirmDelete}>
                                     {text(locale, "Delete", "削除")}
                                 </Button>
                             </div>

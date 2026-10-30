@@ -5,13 +5,6 @@
 }
 
 .about-card {
-    padding: 15px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--card);
-    box-shadow: var(--shadow);
-}
-.about-card {
     display: flex;
     max-width: 650px;
     align-items: center;

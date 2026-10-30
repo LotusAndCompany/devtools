@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Dialog } from "@/shared/components/ui/dialog";
 import { Field } from "@/shared/components/ui/field";
 import { SelectBox } from "@/shared/components/ui/select";
@@ -130,8 +131,8 @@ function SettingsForm({
     };
     return (
         <div className="settings-page">
-            <div className="settings-card">
-                <Field label={labels.language}>
+            <Card className="settings-card">
+                <Field label={labels.language} nativeLabel={false}>
                     <SelectBox
                         disabled={loading || saving}
                         value={settings.language}
@@ -147,7 +148,7 @@ function SettingsForm({
                         ]}
                     />
                 </Field>
-                <Field label={labels.theme}>
+                <Field label={labels.theme} nativeLabel={false}>
                     <SelectBox
                         disabled={loading || saving}
                         value={settings.theme}
@@ -195,7 +196,7 @@ function SettingsForm({
                         {locale === "ja" ? "保存" : "Save"}
                     </Button>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

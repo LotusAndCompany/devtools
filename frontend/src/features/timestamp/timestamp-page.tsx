@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { DateTimeInput } from "@/shared/components/ui/date-time-input";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
@@ -126,21 +127,35 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                 </Button>
             </div>
             <div className="timestamp-groups">
-                <section className="input-card timestamp-group">
-                    <h2>{text(locale, "Unix Timestamp", "Unixタイムスタンプ")}</h2>
-                    {row("seconds", text(locale, "Seconds", "秒"))}
-                    {row("milliseconds", text(locale, "Milliseconds", "ミリ秒"))}
-                </section>
-                <section className="input-card timestamp-group">
-                    <h2>{text(locale, "Date & Time", "日時")}</h2>
-                    {row("local", text(locale, "Local", "ローカル"), true)}
-                    {row("utc", text(locale, "UTC", "UTC"), true)}
-                </section>
-                <section className="input-card timestamp-group">
-                    <h2>ISO 8601</h2>
-                    {row("isoUtc", text(locale, "UTC", "UTC"))}
-                    {row("isoLocal", text(locale, "Local", "ローカル"))}
-                </section>
+                <Card as="section" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>
+                            {text(locale, "Unix Timestamp", "Unixタイムスタンプ")}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("seconds", text(locale, "Seconds", "秒"))}
+                        {row("milliseconds", text(locale, "Milliseconds", "ミリ秒"))}
+                    </CardContent>
+                </Card>
+                <Card as="section" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>{text(locale, "Date & Time", "日時")}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("local", text(locale, "Local", "ローカル"), true)}
+                        {row("utc", text(locale, "UTC", "UTC"), true)}
+                    </CardContent>
+                </Card>
+                <Card as="section" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>ISO 8601</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("isoUtc", text(locale, "UTC", "UTC"))}
+                        {row("isoLocal", text(locale, "Local", "ローカル"))}
+                    </CardContent>
+                </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

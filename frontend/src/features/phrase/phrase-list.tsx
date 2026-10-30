@@ -1,4 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import type { PhraseTemplate } from "@/shared/bridge/types";
 import { text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
@@ -13,7 +14,7 @@ interface PhraseListProps {
 
 export function PhraseList({ locale, templates, filename, onNew, onSelect }: PhraseListProps) {
     return (
-        <aside className="input-card template-list">
+        <Card as="aside" className="input-card template-list">
             <div className="toolbar-row">
                 <h2>{text(locale, "Templates", "定型文一覧")}</h2>
                 <Button variant="outline" onClick={onNew}>
@@ -36,6 +37,6 @@ export function PhraseList({ locale, templates, filename, onNew, onSelect }: Phr
                     <span>{String(item.content).slice(0, 72)}</span>
                 </Button>
             ))}
-        </aside>
+        </Card>
     );
 }

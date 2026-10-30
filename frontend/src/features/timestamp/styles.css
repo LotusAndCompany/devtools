@@ -11,6 +11,12 @@
     gap: 11px;
 }
 
+:where([data-page="timestamp"]) .timestamp-group .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
 :where([data-page="timestamp"]) .timestamp-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;

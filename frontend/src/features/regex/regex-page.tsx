@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
@@ -105,9 +106,9 @@ export function RegexPage({ locale, run }: ToolPageProps) {
         <div className="tool-page">
             <Heading title={text(locale, "Regex Tester", "正規表現テスター")} />
             <div className="regex-layout">
-                <div className="input-card">
+                <Card className="input-card">
                     <div className="toolbar-row">
-                        <Field label={text(locale, "Preset", "プリセット")}>
+                        <Field label={text(locale, "Preset", "プリセット")} nativeLabel={false}>
                             <SelectBox
                                 className="compact"
                                 defaultValue=""
@@ -146,17 +147,20 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                             placeholder="(\\w+)"
                         />
                     </Field>
-                    <div className="flag-grid">
-                        {flags.map(([key, en, ja]) => (
-                            <label key={key} className="inline-check">
-                                <Checkbox
-                                    checked={options[key]}
-                                    onCheckedChange={() => setOption(key)}
-                                />
-                                {text(locale, en, ja)}
-                            </label>
-                        ))}
-                    </div>
+                    <fieldset className="field-set">
+                        <legend>{text(locale, "Flags", "オプション")}</legend>
+                        <div className="flag-grid">
+                            {flags.map(([key, en, ja]) => (
+                                <label key={key} className="inline-check">
+                                    <Checkbox
+                                        checked={options[key]}
+                                        onCheckedChange={() => setOption(key)}
+                                    />
+                                    {text(locale, en, ja)}
+                                </label>
+                            ))}
+                        </div>
+                    </fieldset>
                     <Area
                         label={text(locale, "Test text", "テスト文字列")}
                         value={input}
@@ -175,9 +179,9 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                             {text(locale, "Copy matches", "マッチをコピー")}
                         </Button>
                     </div>
-                </div>
+                </Card>
                 <div className="regex-results">
-                    <section className="input-card">
+                    <Card as="section" className="input-card">
                         <div className="toolbar-row">
                             <h2>{text(locale, "Matches", "マッチ")}</h2>
                             <span className="muted-text">{matches.length}</span>
@@ -204,8 +208,8 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                                 ))}
                             </div>
                         )}
-                    </section>
-                    <section className="input-card">
+                    </Card>
+                    <Card as="section" className="input-card">
                         <h2>{text(locale, "Replacement", "置換")}</h2>
                         <Field label={text(locale, "Replacement pattern", "置換文字列")}>
                             <Input
@@ -230,8 +234,8 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                         >
                             {text(locale, "Copy result", "結果をコピー")}
                         </Button>
-                    </section>
-                    <section className="input-card">
+                    </Card>
+                    <Card as="section" className="input-card">
                         <div className="toolbar-row">
                             <h2>{text(locale, "Quick reference", "クイックリファレンス")}</h2>
                             <Button
@@ -271,7 +275,7 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                                 ))}
                             </div>
                         )}
-                    </section>
+                    </Card>
                 </div>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />

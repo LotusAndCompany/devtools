@@ -1,4 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Area, OutputMessage, text } from "@/shared/tool-page";
@@ -36,7 +37,7 @@ export function PhraseEditor({
     onDismissError,
 }: PhraseEditorProps) {
     return (
-        <div className="input-card">
+        <Card className="input-card">
             <Field label={text(locale, "Title", "タイトル")}>
                 <Input
                     className="form-control"
@@ -57,7 +58,7 @@ export function PhraseEditor({
                 <Button variant="outline" onClick={onCopy} disabled={!content}>
                     {text(locale, "Copy text", "本文をコピー")} <kbd>⌘⇧C</kbd>
                 </Button>
-                <Button variant="outline" size="sm" onClick={onDelete} disabled={busy || !filename}>
+                <Button variant="outline" onClick={onDelete} disabled={busy || !filename}>
                     {text(locale, "Delete", "削除")}
                 </Button>
             </div>
@@ -67,6 +68,6 @@ export function PhraseEditor({
                 message={message}
                 onDismiss={onDismissError}
             />
-        </div>
+        </Card>
     );
 }

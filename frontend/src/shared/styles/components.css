@@ -65,7 +65,9 @@ kbd {
 .tool-page {
     max-width: 1500px;
     margin: 0 auto;
-    padding: 24px 28px 40px;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 22px 24px 28px;
 }
 .page-heading {
     margin: 0 0 22px;
@@ -77,21 +79,55 @@ kbd {
     letter-spacing: -0.02em;
 }
 
+[data-slot="card"],
 .input-card,
-.result-card {
+.result-card,
+.settings-card,
+.about-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 12px;
     padding: 15px;
     border: 1px solid var(--border);
-    border-radius: 9px;
+    border-radius: 10px;
     background: var(--card);
-    box-shadow: var(--shadow);
+    box-shadow: 0 1px 2px var(--palette-shadow-1);
 }
 
-.tool-page > :is(.input-card, .result-card) + :is(.input-card, .result-card) {
-    margin-top: 12px;
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
 }
+.card-title,
 .input-card h2 {
     margin: 0;
     font-size: 13px;
+    font-weight: 650;
+    line-height: 1.35;
+}
+.card-description {
+    margin: 4px 0 0;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 1.45;
+}
+.card-content {
+    min-width: 0;
+}
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.tool-page
+    > :is([data-slot="card"], .input-card, .result-card)
+    + :is([data-slot="card"], .input-card, .result-card) {
+    margin-top: 12px;
 }
 .input-card h3 {
     margin: 6px 0 4px;
@@ -106,19 +142,27 @@ kbd {
     gap: 9px;
 }
 .toolbar-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     margin-bottom: 12px;
 }
+.card-header.toolbar-row {
+    margin-bottom: 0;
+}
+[data-slot="card"] > :is(.toolbar-row, .button-row, .action-row) {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 .toolbar-row h2 {
-    flex: 1;
+    flex: 1 1 auto;
 }
 .button-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     margin-top: 11px;
 }
 .action-row {
+    flex-wrap: wrap;
     justify-content: flex-end;
     margin: 12px 0;
 }
@@ -131,19 +175,64 @@ kbd {
 }
 .field-label {
     color: var(--muted-foreground);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+.field-description {
+    margin: -2px 0 0;
+    color: var(--muted-foreground);
     font-size: 11px;
+    line-height: 1.4;
+}
+.field-group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 12px;
+}
+.field-set {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.field-set legend {
+    margin-bottom: 6px;
+    color: var(--muted-foreground);
+    font-size: 12px;
     font-weight: 600;
 }
 .form-control {
     width: 100%;
     min-width: 0;
-    min-height: 34px;
-    padding: 7px 9px;
+    min-height: 32px;
+    padding: 6px 9px;
     border: 1px solid var(--border);
     border-radius: 6px;
     background: var(--card);
     color: var(--foreground);
-    font-size: 12px;
+    font-size: 13px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background-color 0.15s ease;
+}
+.form-control:hover:not(:disabled, [readonly]) {
+    border-color: var(--palette-border-hovered);
+}
+.form-control:focus-visible,
+.select-trigger:focus-visible {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 45%, transparent);
+}
+.form-control:disabled,
+.select-trigger[data-disabled] {
+    background: var(--muted);
+    color: var(--muted-foreground);
+    cursor: not-allowed;
+    opacity: 0.72;
 }
 .form-control.compact {
     width: auto;
@@ -153,7 +242,7 @@ kbd {
     display: flex;
     width: 100%;
     min-width: 0;
-    min-height: 34px;
+    min-height: 32px;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
@@ -163,9 +252,13 @@ kbd {
     background: var(--card);
     color: var(--foreground);
     font: inherit;
-    font-size: 12px;
+    font-size: 13px;
     text-align: left;
     cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background-color 0.15s ease;
 }
 .select-trigger.compact {
     width: auto;
@@ -175,13 +268,21 @@ kbd {
     display: inline-flex;
     flex: 0 0 auto;
     color: var(--muted-foreground);
-    font-size: 18px;
+}
+.select-chevron svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75;
 }
 .select-positioner {
-    z-index: 102;
+    z-index: 130;
     min-width: var(--anchor-width);
 }
 .select-popup {
+    z-index: 130;
     min-width: var(--anchor-width);
     max-height: min(320px, var(--available-height, 320px));
     overflow: hidden;
@@ -217,10 +318,22 @@ kbd {
     opacity: 0.45;
 }
 .select-item-indicator {
-    display: inline-block;
+    display: none;
     width: 14px;
     flex: 0 0 14px;
-    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
+.select-item[data-selected] .select-item-indicator {
+    display: inline-flex;
+}
+.select-item-indicator svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
 }
 textarea.form-control {
     line-height: 1.45;
@@ -236,8 +349,8 @@ textarea.form-control {
 }
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr));
+    gap: 14px;
 }
 .form-grid.two {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -259,7 +372,9 @@ textarea.form-control {
     gap: 7px;
     margin: 8px 12px 0 0;
     color: var(--muted-foreground);
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
 }
 .inline-check input {
     accent-color: var(--primary);
@@ -332,9 +447,10 @@ textarea.form-control {
     font-size: 17px;
 }
 .date-time-positioner {
-    z-index: 120;
+    z-index: 140;
 }
 .date-time-popup {
+    z-index: 140;
     width: 280px;
     padding: 12px;
     border: 1px solid var(--border);
@@ -505,14 +621,14 @@ textarea.form-control {
 
 .dialog-backdrop {
     position: fixed;
-    z-index: 100;
+    z-index: 120;
     inset: 0;
     background: var(--overlay);
 }
 
 .dialog-viewport {
     position: fixed;
-    z-index: 101;
+    z-index: 121;
     inset: 0;
     display: grid;
     overflow: auto;
@@ -650,7 +766,7 @@ textarea.form-control {
 
 @media (max-width: 900px) {
     .tool-page {
-        padding: 18px 16px 30px;
+        padding: 18px 16px 24px;
     }
 }
 @media (max-width: 650px) {
@@ -661,5 +777,15 @@ textarea.form-control {
 @media (max-width: 650px) {
     .form-grid.two {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .tool-page {
+        padding: 14px 12px 20px;
+    }
+
+    .toolbar-row > .field {
+        flex: 1 1 140px;
     }
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
+import { Card } from "@/shared/components/ui/card";
+import { Field } from "@/shared/components/ui/field";
 import { SelectBox } from "@/shared/components/ui/select";
 import { runUiEffect } from "@/shared/effect";
 import type { OperationOutput } from "@/shared/bridge/types";
@@ -37,36 +39,45 @@ export function DiffPage({ locale, run }: ToolPageProps) {
             <Heading title={text(locale, "Text Diff", "テキスト差分")} />
             <div className="diff-layout">
                 <div className="diff-editors">
-                    <section className="input-card">
+                    <Card className="input-card">
                         <Area
                             label={text(locale, "Original", "変更前")}
                             value={left}
                             onChange={setLeft}
                         />
-                    </section>
-                    <section className="input-card">
+                    </Card>
+                    <Card className="input-card">
                         <Area
                             label={text(locale, "Modified", "変更後")}
                             value={right}
                             onChange={setRight}
                         />
-                    </section>
+                    </Card>
                 </div>
-                <section className="input-card">
+                <Card as="section" className="input-card">
                     <div className="diff-result-heading">
                         <h2>{text(locale, "Diff", "差分")}</h2>
-                        <SelectBox
-                            className="compact"
-                            value={mode}
-                            onValueChange={setMode}
-                            options={[
-                                { value: "inline", label: text(locale, "Inline", "インライン") },
-                                {
-                                    value: "side-by-side",
-                                    label: text(locale, "Side-by-side", "左右に並べる"),
-                                },
-                            ]}
-                        />
+                        <Field
+                            label={text(locale, "View", "表示")}
+                            className="diff-view-field"
+                            nativeLabel={false}
+                        >
+                            <SelectBox
+                                className="compact"
+                                value={mode}
+                                onValueChange={setMode}
+                                options={[
+                                    {
+                                        value: "inline",
+                                        label: text(locale, "Inline", "インライン"),
+                                    },
+                                    {
+                                        value: "side-by-side",
+                                        label: text(locale, "Side-by-side", "左右に並べる"),
+                                    },
+                                ]}
+                            />
+                        </Field>
                     </div>
                     {mode === "inline" ? (
                         <div className="diff-table diff-inline">
@@ -120,7 +131,7 @@ export function DiffPage({ locale, run }: ToolPageProps) {
                             </table>
                         </div>
                     )}
-                </section>
+                </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

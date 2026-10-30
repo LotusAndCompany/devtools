@@ -27,18 +27,22 @@
     flex-direction: column;
     gap: 11px;
 }
-:where([data-page="http"]) .response-card {
-    margin-top: 14px;
-}
-:where([data-page="http"]) .response-card .code-area {
-    min-height: 260px;
-}
-
 :where([data-page="http"]) .http-workspace {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px;
     margin-top: 12px;
+}
+
+:where([data-page="http"]) .http-tabs-card {
+    min-width: 0;
+    min-height: 330px;
+    padding: 0;
+    overflow: hidden;
+}
+
+:where([data-page="http"]) .http-tabs {
+    min-height: inherit;
 }
 
 :where([data-page="http"]) .http-tab-panel {

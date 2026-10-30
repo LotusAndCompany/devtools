@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Field } from "@/shared/components/ui/field";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Field, FieldGroup } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -43,85 +44,89 @@ export function CommandPage({ locale, run }: ToolPageProps) {
     return (
         <div className="tool-page">
             <Heading title={text(locale, "Command Generation", "コマンド生成")} />
-            <div className="input-card">
-                <div className="form-grid">
-                    <Field label={text(locale, "Category", "カテゴリ")}>
-                        <SelectBox
-                            value={category}
-                            onValueChange={(nextCategory) => {
-                                setCategory(nextCategory);
-                                setFunctionIndex(0);
-                                setOptionIndex(0);
-                            }}
-                            options={[
-                                { value: "git", label: "Git" },
-                                { value: "docker", label: "Docker" },
-                                { value: "compose", label: "Docker Compose" },
-                            ]}
-                        />
-                    </Field>
-                    <Field label={text(locale, "Command", "コマンド")}>
-                        <SelectBox
-                            value={String(functionIndex)}
-                            onValueChange={(nextIndex) => {
-                                setFunctionIndex(Number(nextIndex));
-                                setOptionIndex(0);
-                            }}
-                            options={functions.map((item, index) => ({
-                                value: String(index),
-                                label: String(item.name),
-                            }))}
-                        />
-                    </Field>
-                    <Field label={text(locale, "Option", "オプション")}>
-                        <SelectBox
-                            value={String(optionIndex)}
-                            onValueChange={(nextIndex) => setOptionIndex(Number(nextIndex))}
-                            options={options.map((item, index) => ({
-                                value: String(index),
-                                label: `${String(item.name)}${item.title ? ` — ${String(item.title)}` : ""}`,
-                            }))}
-                        />
-                    </Field>
-                    {Boolean(options[optionIndex]?.required || options[optionIndex]?.quotes) && (
-                        <Field
-                            label={String(
-                                options[optionIndex]?.title || text(locale, "Value", "値"),
-                            )}
-                        >
-                            <Input
-                                className="form-control"
-                                value={value}
-                                onChange={(event) => setValue(event.target.value)}
+            <Card className="input-card">
+                <CardContent>
+                    <FieldGroup className="form-grid">
+                        <Field label={text(locale, "Category", "カテゴリ")} nativeLabel={false}>
+                            <SelectBox
+                                value={category}
+                                onValueChange={(nextCategory) => {
+                                    setCategory(nextCategory);
+                                    setFunctionIndex(0);
+                                    setOptionIndex(0);
+                                }}
+                                options={[
+                                    { value: "git", label: "Git" },
+                                    { value: "docker", label: "Docker" },
+                                    { value: "compose", label: "Docker Compose" },
+                                ]}
                             />
                         </Field>
-                    )}
-                </div>
-                <div className="action-row">
-                    <Button
-                        variant="outline"
-                        onClick={() => {
-                            setCategory("git");
-                            setFunctionIndex(0);
-                            setOptionIndex(0);
-                            setValue("");
-                        }}
-                        disabled={busy}
-                    >
-                        {text(locale, "Reset", "リセット")}
-                    </Button>
-                    <Button
-                        onClick={() => runUiEffect(generate())}
-                        disabled={busy || !functions.length}
-                    >
-                        {text(locale, "Generate command", "コマンドを作成")}
-                    </Button>
-                </div>
-            </div>
+                        <Field label={text(locale, "Command", "コマンド")} nativeLabel={false}>
+                            <SelectBox
+                                value={String(functionIndex)}
+                                onValueChange={(nextIndex) => {
+                                    setFunctionIndex(Number(nextIndex));
+                                    setOptionIndex(0);
+                                }}
+                                options={functions.map((item, index) => ({
+                                    value: String(index),
+                                    label: String(item.name),
+                                }))}
+                            />
+                        </Field>
+                        <Field label={text(locale, "Option", "オプション")} nativeLabel={false}>
+                            <SelectBox
+                                value={String(optionIndex)}
+                                onValueChange={(nextIndex) => setOptionIndex(Number(nextIndex))}
+                                options={options.map((item, index) => ({
+                                    value: String(index),
+                                    label: `${String(item.name)}${item.title ? ` — ${String(item.title)}` : ""}`,
+                                }))}
+                            />
+                        </Field>
+                        {Boolean(
+                            options[optionIndex]?.required || options[optionIndex]?.quotes,
+                        ) && (
+                            <Field
+                                label={String(
+                                    options[optionIndex]?.title || text(locale, "Value", "値"),
+                                )}
+                            >
+                                <Input
+                                    className="form-control"
+                                    value={value}
+                                    onChange={(event) => setValue(event.target.value)}
+                                />
+                            </Field>
+                        )}
+                    </FieldGroup>
+                    <div className="action-row">
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                setCategory("git");
+                                setFunctionIndex(0);
+                                setOptionIndex(0);
+                                setValue("");
+                            }}
+                            disabled={busy}
+                        >
+                            {text(locale, "Reset", "リセット")}
+                        </Button>
+                        <Button
+                            onClick={() => runUiEffect(generate())}
+                            disabled={busy || !functions.length}
+                        >
+                            {text(locale, "Generate command", "コマンドを作成")}
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
-            <section className="input-card command-output">
-                <div className="toolbar-row">
-                    <h2>{text(locale, "Generated Result", "生成結果")}</h2>
+            <Card className="input-card command-output">
+                <CardHeader className="toolbar-row">
+                    <CardTitle>{text(locale, "Generated Result", "生成結果")}</CardTitle>
                     <Button
                         variant="outline"
                         disabled={!command}
@@ -132,9 +137,11 @@ export function CommandPage({ locale, run }: ToolPageProps) {
                     <Button variant="ghost" onClick={() => setCommand("")} disabled={!command}>
                         {text(locale, "Clear", "クリア")}
                     </Button>
-                </div>
-                <Textarea value={command} readOnly rows={5} />
-            </section>
+                </CardHeader>
+                <CardContent>
+                    <Textarea value={command} readOnly rows={5} />
+                </CardContent>
+            </Card>
         </div>
     );
 }

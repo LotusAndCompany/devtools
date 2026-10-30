@@ -92,7 +92,10 @@ export function DatabaseConnectionDialog({
                             )}
                             <div className="db-connect-form">
                                 <h2>{text(locale, "New connection", "新しい接続")}</h2>
-                                <Field label={text(locale, "Database type", "データベースの種類")}>
+                                <Field
+                                    label={text(locale, "Database type", "データベースの種類")}
+                                    nativeLabel={false}
+                                >
                                     <SelectBox
                                         value={type}
                                         onValueChange={onTypeChange}

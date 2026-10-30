@@ -47,8 +47,10 @@ function SelectBox<Value extends string>({
                 className={cn("select-trigger", className)}
             >
                 <BaseSelect.Value placeholder={placeholder} />
-                <BaseSelect.Icon className="material-symbols select-chevron" aria-hidden="true">
-                    keyboard_arrow_down
+                <BaseSelect.Icon className="select-chevron" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="m4.5 6 3.5 3.5L11.5 6" />
+                    </svg>
                 </BaseSelect.Icon>
             </BaseSelect.Trigger>
             <BaseSelect.Portal>
@@ -59,23 +61,23 @@ function SelectBox<Value extends string>({
                 >
                     <BaseSelect.Popup className="select-popup">
                         <BaseSelect.List className="select-list">
-                            <BaseSelect.Group>
-                                {options.map((option) => (
-                                    <BaseSelect.Item
-                                        key={option.value}
-                                        value={option.value}
-                                        className="select-item"
+                            {options.map((option) => (
+                                <BaseSelect.Item
+                                    key={option.value}
+                                    value={option.value}
+                                    className="select-item"
+                                >
+                                    <BaseSelect.ItemIndicator
+                                        className="select-item-indicator"
+                                        aria-hidden="true"
                                     >
-                                        <BaseSelect.ItemIndicator
-                                            className="select-item-indicator"
-                                            aria-hidden="true"
-                                        >
-                                            ✓
-                                        </BaseSelect.ItemIndicator>
-                                        <BaseSelect.ItemText>{option.label}</BaseSelect.ItemText>
-                                    </BaseSelect.Item>
-                                ))}
-                            </BaseSelect.Group>
+                                        <svg viewBox="0 0 16 16" fill="none">
+                                            <path d="m3 8 3.25 3.25L13 4.5" />
+                                        </svg>
+                                    </BaseSelect.ItemIndicator>
+                                    <BaseSelect.ItemText>{option.label}</BaseSelect.ItemText>
+                                </BaseSelect.Item>
+                            ))}
                         </BaseSelect.List>
                     </BaseSelect.Popup>
                 </BaseSelect.Positioner>

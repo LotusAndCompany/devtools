@@ -1,7 +1,8 @@
 import type { Dispatch, SetStateAction } from "react";
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Field } from "@/shared/components/ui/field";
+import { Field, FieldGroup } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { text } from "@/shared/tool-page";
@@ -45,9 +46,9 @@ export function ImageSplitControls({
     onSplit,
 }: ImageSplitControlsProps) {
     return (
-        <section className="input-card">
+        <Card as="section" className="input-card">
             <h2>{text(locale, "Split image", "画像を分割")}</h2>
-            <Field label={text(locale, "Split by", "分割方法")}>
+            <Field label={text(locale, "Split by", "分割方法")} nativeLabel={false}>
                 <SelectBox
                     value={splitMode}
                     onValueChange={setSplitMode}
@@ -58,7 +59,7 @@ export function ImageSplitControls({
                 />
             </Field>
             {splitMode === "division" ? (
-                <div className="form-grid two">
+                <FieldGroup className="form-grid two">
                     <Field label={text(locale, "Columns", "横の分割数")}>
                         <Input
                             className="form-control"
@@ -77,9 +78,9 @@ export function ImageSplitControls({
                             onChange={(event) => setVerticalDivisions(event.target.value)}
                         />
                     </Field>
-                </div>
+                </FieldGroup>
             ) : (
-                <div className="form-grid two">
+                <FieldGroup className="form-grid two">
                     <Field label={text(locale, "Cell width", "セル幅")}>
                         <Input
                             className="form-control"
@@ -98,7 +99,7 @@ export function ImageSplitControls({
                             onChange={(event) => setCellHeight(event.target.value)}
                         />
                     </Field>
-                </div>
+                </FieldGroup>
             )}
             <label className="inline-check">
                 <Checkbox checked={ignoreRemainders} onCheckedChange={setIgnoreRemainders} />
@@ -107,6 +108,6 @@ export function ImageSplitControls({
             <Button variant="outline" onClick={onSplit} disabled={busy || !hasImage}>
                 {text(locale, "Choose folder and split", "保存先を選んで分割")}
             </Button>
-        </section>
+        </Card>
     );
 }

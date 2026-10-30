@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Field } from "@/shared/components/ui/field";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -147,7 +148,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                 </label>
             </div>
             <div className="two-column markdown-columns">
-                <section className="input-card markdown-editor-card">
+                <Card className="input-card markdown-editor-card">
                     <Field label={text(locale, "Editor", "エディター")}>
                         <Textarea
                             ref={editorRef}
@@ -159,8 +160,8 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                             spellCheck={false}
                         />
                     </Field>
-                </section>
-                <section className="input-card preview-panel">
+                </Card>
+                <Card className="input-card preview-panel">
                     <span className="field-label">{text(locale, "Preview", "プレビュー")}</span>
                     <iframe
                         ref={previewRef}
@@ -170,7 +171,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                         srcDoc={previewDocument}
                         onLoad={attachPreviewScroll}
                     />
-                </section>
+                </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

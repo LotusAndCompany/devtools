@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { DateTimeInput } from "@/shared/components/ui/date-time-input";
 import { Field } from "@/shared/components/ui/field";
@@ -107,8 +108,8 @@ export function QrPage({ locale, run }: ToolPageProps) {
         <div className="tool-page">
             <Heading title={text(locale, "QR Code Generation", "QRコード生成")} />
             <div className="qr-layout">
-                <div className="input-card">
-                    <Field label={text(locale, "QR type", "QRの種類")}>
+                <Card className="input-card">
+                    <Field label={text(locale, "QR type", "QRの種類")} nativeLabel={false}>
                         <SelectBox
                             value={type}
                             onValueChange={(value) => {
@@ -165,7 +166,10 @@ export function QrPage({ locale, run }: ToolPageProps) {
                     ))}
                     {type === "wifi" && (
                         <>
-                            <Field label={text(locale, "Security", "セキュリティ")}>
+                            <Field
+                                label={text(locale, "Security", "セキュリティ")}
+                                nativeLabel={false}
+                            >
                                 <SelectBox
                                     value={parameters.wifi_security ?? "WPA"}
                                     onValueChange={(wifiSecurity) =>
@@ -203,8 +207,8 @@ export function QrPage({ locale, run }: ToolPageProps) {
                             {text(locale, "Clear", "クリア")}
                         </Button>
                     </div>
-                </div>
-                <div className="qr-preview input-card">
+                </Card>
+                <Card className="input-card qr-preview">
                     {image ? (
                         <img
                             src={image}
@@ -234,7 +238,7 @@ export function QrPage({ locale, run }: ToolPageProps) {
                             </div>
                         </>
                     )}
-                </div>
+                </Card>
             </div>
             <OutputMessage
                 locale={locale}

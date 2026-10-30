@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Field } from "@/shared/components/ui/field";
 import { SelectBox } from "@/shared/components/ui/select";
 import { runUiEffect } from "@/shared/effect";
@@ -38,8 +39,8 @@ export function DataPage({ locale, run }: ToolPageProps) {
         <div className="tool-page">
             <Heading title={text(locale, "Data Conversion", "データ変換")} />
             <div className="two-column data-panels">
-                <section className="input-card data-panel">
-                    <div className="toolbar-row data-panel-toolbar">
+                <Card className="input-card data-panel">
+                    <CardHeader className="toolbar-row data-panel-toolbar">
                         <Button
                             variant="outline"
                             onClick={() => runUiEffect(open())}
@@ -50,17 +51,22 @@ export function DataPage({ locale, run }: ToolPageProps) {
                         <Button variant="ghost" onClick={clear} disabled={!input && !output}>
                             {text(locale, "Clear", "クリア")}
                         </Button>
-                    </div>
-                    <Area
-                        label={text(locale, "Input", "入力")}
-                        value={input}
-                        onChange={setInput}
-                        placeholder={'{"name":"DevTools"}'}
-                    />
-                </section>
-                <section className="input-card data-panel">
-                    <div className="toolbar-row data-panel-toolbar data-output-toolbar">
-                        <Field label={text(locale, "Output format", "出力形式")}>
+                    </CardHeader>
+                    <CardContent>
+                        <Area
+                            label={text(locale, "Input", "入力")}
+                            value={input}
+                            onChange={setInput}
+                            placeholder={'{"name":"DevTools"}'}
+                        />
+                    </CardContent>
+                </Card>
+                <Card className="input-card data-panel">
+                    <CardHeader className="toolbar-row data-panel-toolbar data-output-toolbar">
+                        <Field
+                            label={text(locale, "Output format", "出力形式")}
+                            nativeLabel={false}
+                        >
                             <SelectBox
                                 className="compact"
                                 value={format}
@@ -73,7 +79,10 @@ export function DataPage({ locale, run }: ToolPageProps) {
                                 ]}
                             />
                         </Field>
-                        <Field label={text(locale, "Indentation", "インデント")}>
+                        <Field
+                            label={text(locale, "Indentation", "インデント")}
+                            nativeLabel={false}
+                        >
                             <SelectBox
                                 className="compact"
                                 value={indentation}
@@ -96,14 +105,16 @@ export function DataPage({ locale, run }: ToolPageProps) {
                         >
                             {text(locale, "Save output", "出力を保存")}
                         </Button>
-                    </div>
-                    <Area
-                        label={text(locale, "Output", "出力")}
-                        value={output}
-                        onChange={setOutput}
-                        readOnly={false}
-                    />
-                </section>
+                    </CardHeader>
+                    <CardContent>
+                        <Area
+                            label={text(locale, "Output", "出力")}
+                            value={output}
+                            onChange={setOutput}
+                            readOnly={false}
+                        />
+                    </CardContent>
+                </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>

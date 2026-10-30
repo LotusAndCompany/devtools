@@ -15,10 +15,13 @@ const buttonVariants = cva(
                 outline:
                     "border border-border bg-background hover:bg-muted active:bg-surface-main-3 disabled:border-border-disabled disabled:text-secondary-foreground-disabled",
                 ghost: "hover:bg-muted active:bg-surface-main-3 disabled:text-secondary-foreground-disabled",
+                destructive:
+                    "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-pressed disabled:bg-destructive-disabled disabled:text-destructive-foreground",
             },
             size: {
                 default: "h-8 px-3",
                 sm: "h-7 px-2.5 text-[11px]",
+                icon: "size-8 p-0",
             },
         },
         defaultVariants: { variant: "default", size: "default" },

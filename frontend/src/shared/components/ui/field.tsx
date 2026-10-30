@@ -4,6 +4,7 @@ import {
     cloneElement,
     isValidElement,
     useId,
+    type ComponentProps,
     type ReactElement,
     type ReactNode,
 } from "react";
@@ -13,27 +14,48 @@ function Field({
     label,
     children,
     className,
+    nativeLabel = true,
+    description,
 }: {
     label: string;
     children: ReactNode;
     className?: string;
+    nativeLabel?: boolean;
+    description?: ReactNode;
 }) {
     const id = useId();
     const child = Children.only(children);
+    const controlId =
+        isValidElement(child) && typeof (child.props as { id?: unknown }).id === "string"
+            ? (child.props as { id: string }).id
+            : id;
     const control = isValidElement(child)
         ? cloneElement(child as ReactElement<{ id?: string }>, {
-              id: (child.props as { id?: string }).id ?? id,
+              id: controlId,
           })
         : child;
 
     return (
         <BaseField.Root className={cn("field", className)}>
-            <BaseField.Label className="field-label" htmlFor={id}>
+            <BaseField.Label
+                className="field-label"
+                htmlFor={nativeLabel ? controlId : undefined}
+                nativeLabel={nativeLabel}
+            >
                 {label}
             </BaseField.Label>
             {control}
+            {description && (
+                <BaseField.Description className="field-description">
+                    {description}
+                </BaseField.Description>
+            )}
         </BaseField.Root>
     );
 }
 
-export { Field };
+function FieldGroup({ className, ...props }: ComponentProps<"div">) {
+    return <div data-slot="field-group" className={cn("field-group", className)} {...props} />;
+}
+
+export { Field, FieldGroup };

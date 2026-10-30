@@ -1,4 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
 import { Icon } from "@/shared/components/ui/icon";
 import { text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
@@ -12,7 +13,7 @@ interface TableBrowserProps {
 
 export function TableBrowser({ locale, tables, connected, onSelectTable }: TableBrowserProps) {
     return (
-        <aside className="input-card db-sidebar">
+        <Card as="aside" className="input-card db-sidebar">
             <h2>{text(locale, "Tables", "テーブル")}</h2>
             <div className="db-table-list">
                 {tables.map((table) => (
@@ -39,6 +40,6 @@ export function TableBrowser({ locale, tables, connected, onSelectTable }: Table
                     </span>
                 )}
             </div>
-        </aside>
+        </Card>
     );
 }

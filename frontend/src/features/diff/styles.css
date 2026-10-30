@@ -70,6 +70,10 @@
     margin-bottom: 8px;
 }
 
+:where([data-page="diff"]) .diff-view-field {
+    flex: 0 0 170px;
+}
+
 @media (max-width: 820px) {
     :where([data-page="diff"]) .diff-editors {
         grid-template-columns: minmax(0, 1fr);
