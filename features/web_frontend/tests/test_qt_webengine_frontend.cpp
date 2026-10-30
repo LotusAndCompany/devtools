@@ -165,6 +165,19 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 &result));
             QVERIFY(result.toBool());
         }
+        if (index == 4) {
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("(() => { const row = document.querySelector("
+                               "'.page-host.active-page .data-toolbar'); "
+                               "const controls = [...row.querySelectorAll(':scope > button'), "
+                               "...row.querySelectorAll('.select-trigger')]; "
+                               "const bottoms = controls.map((control) => "
+                               "control.getBoundingClientRect().bottom); "
+                               "return Math.max(...bottoms) - Math.min(...bottoms) < 1; })()"),
+                &result));
+            QVERIFY2(result.toBool(), "Data conversion toolbar controls are not bottom-aligned.");
+        }
         if (index == 2) {
             QVERIFY(evaluateJavaScript(
                 view.page(),

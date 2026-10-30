@@ -32,7 +32,7 @@ export function DataPage({ locale, run }: ToolPageProps) {
     return (
         <div className="tool-page">
             <Heading title={text(locale, "Data Conversion", "データ変換")} />
-            <div className="toolbar-row">
+            <div className="toolbar-row data-toolbar">
                 <Button variant="outline" onClick={() => runUiEffect(open())} disabled={busy}>
                     {text(locale, "Open file", "ファイルを開く")}
                 </Button>
