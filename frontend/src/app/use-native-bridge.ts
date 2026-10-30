@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Effect } from "effect";
 import {
   BRIDGE_CONTRACT_VERSION,
@@ -36,7 +36,7 @@ export function useNativeBridge({
   const pending = useRef(new Map<string, () => void>());
   const localeRef = useRef(locale);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     localeRef.current = locale;
   }, [locale]);
 

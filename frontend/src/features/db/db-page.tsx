@@ -13,6 +13,7 @@ import type { DatabaseHistoryEntry, DatabaseQueryTab } from "./types";
 export function DatabasePage({ locale, run, active, databaseNavigationVersion }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
     const [type, setType] = useState<DatabaseDriver>("QSQLITE");
+    const [connectedType, setConnectedType] = useState<DatabaseDriver>("QSQLITE");
     const [host, setHost] = useState("localhost");
     const [database, setDatabase] = useState("");
     const [username, setUsername] = useState("");
@@ -69,7 +70,13 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 Effect.sync(() => {
                     setHistory(result.history);
                     setSelectedFileName(result.selectedFileName);
-                    if (result.connected) setConnected(true);
+                    if (result.connected) {
+                        setConnected(true);
+                        if (result.connectedType) {
+                            setType(result.connectedType);
+                            setConnectedType(result.connectedType);
+                        }
+                    }
                 }),
             ),
         );
@@ -83,13 +90,20 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             yield* Effect.sync(() => {
                 setHistory(result.history);
                 setSelectedFileName(selected);
-                if (result.connected) setConnected(true);
+                if (result.connected) {
+                    setConnected(true);
+                    if (result.connectedType) {
+                        setType(result.connectedType);
+                        setConnectedType(result.connectedType);
+                    }
+                }
             });
             if (selected && !result.connected) {
                 const connectedResult = yield* run("databaseConnect", { type: "QSQLITE" });
                 if (mounted && connectedResult.connected) {
                     yield* Effect.sync(() => {
                         setConnected(true);
+                        setConnectedType("QSQLITE");
                         setDisplayName(connectedResult.displayName || `SQLite: ${selected}`);
                         setTables(connectedResult.tables);
                     });
@@ -116,6 +130,10 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
         );
     const connect = (historyIndex?: number) =>
         Effect.gen(function* () {
+            const connectionType =
+                historyIndex === undefined
+                    ? type
+                    : (history.find((item) => item.index === historyIndex)?.type ?? type);
             const payload: DatabaseConnectionInput =
                 historyIndex === undefined
                     ? { type, host, database, username, password }
@@ -124,9 +142,11 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             if (!result) return;
             yield* Effect.sync(() => {
                 setConnected(true);
+                setType(connectionType);
+                setConnectedType(connectionType);
                 setDisplayName(
                     result.displayName ||
-                        (type === "QSQLITE"
+                        (connectionType === "QSQLITE"
                             ? `SQLite: ${selectedFileName}`
                             : `${database}@${host}`),
                 );
@@ -208,7 +228,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                     onSelectTable={(table) =>
                         updateActiveQuery((current) => ({
                             ...current,
-                            sql: `SELECT * FROM "${table.replaceAll('"', '""')}" LIMIT 1000;`,
+                            sql: `SELECT * FROM ${quoteIdentifier(table, connectedType)} LIMIT 1000;`,
                         }))
                     }
                 />
@@ -254,4 +274,9 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
+}
+
+function quoteIdentifier(identifier: string, driver: DatabaseDriver) {
+    const quote = driver === "QMYSQL" ? "`" : '"';
+    return `${quote}${identifier.replaceAll(quote, quote + quote)}${quote}`;
 }

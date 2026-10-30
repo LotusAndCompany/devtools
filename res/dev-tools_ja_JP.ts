@@ -916,6 +916,10 @@
         <source>HTML files (*.html *.htm);;All files (*)</source>
         <translation>HTMLファイル (*.html *.htm);;すべてのファイル (*)</translation>
     </message>
+    <message>
+        <source>2025 © Lotus&amp;Company Inc. All rights reserved.</source>
+        <translation>2025 © Lotus&amp;Company Inc. 無断転載を禁じます。</translation>
+    </message>
 </context>
 <context>
     <name>QCoreApplication</name>

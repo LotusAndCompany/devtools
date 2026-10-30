@@ -126,14 +126,14 @@ void NativeBridge::startAboutInfo(const QString &requestId)
     if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         licenseText = QString::fromUtf8(licenseFile.readAll());
     }
-    completeOnUiThread(requestId,
-                       {{QStringLiteral("appVersion"), QString::fromUtf8(DevTools::APP_VERSION)},
-                        {QStringLiteral("revision"), QString::fromUtf8(DevTools::GIT_REVISION)},
-                        {QStringLiteral("buildEnvironment"), buildEnvironment},
-                        {QStringLiteral("qtVersion"), QString::fromUtf8(qVersion())},
-                        {QStringLiteral("copyright"),
-                         QStringLiteral("2025 © Lotus&Company Inc. All rights reserved.")},
-                        {QStringLiteral("licenseText"), licenseText}});
+    completeOnUiThread(
+        requestId,
+        {{QStringLiteral("appVersion"), QString::fromUtf8(DevTools::APP_VERSION)},
+         {QStringLiteral("revision"), QString::fromUtf8(DevTools::GIT_REVISION)},
+         {QStringLiteral("buildEnvironment"), buildEnvironment},
+         {QStringLiteral("qtVersion"), QString::fromUtf8(qVersion())},
+         {QStringLiteral("copyright"), tr("2025 © Lotus&Company Inc. All rights reserved.")},
+         {QStringLiteral("licenseText"), licenseText}});
 }
 
 void NativeBridge::startSaveLastUsedTool(const QString &requestId, const QVariantMap &payload)

@@ -7,7 +7,12 @@ import type { PageId } from "./tool-registry";
 describe("ToolStage", () => {
     it("keeps registry-marked screens mounted while switching pages", async () => {
         const run = createOperationRunner({
-            databaseHistory: () => ({ history: [], selectedFileName: "", connected: true }),
+            databaseHistory: () => ({
+                history: [],
+                selectedFileName: "",
+                connected: true,
+                connectedType: "QSQLITE",
+            }),
         });
         const props = {
             activePage: "db" as const,

@@ -18,6 +18,8 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
         const QSettings settings;
         const QList<QJsonObject> stored = ConnectionHistory::read(settings);
         QVariantList history;
+        const QString connectedType =
+            database_state_->connection().value(QStringLiteral("type")).toString();
         for (int index = 0; index < stored.size(); ++index) {
             const QJsonObject &item = stored.at(index);
             const QString type = item.value(QStringLiteral("type")).toString();
@@ -35,7 +37,8 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
         completeOnUiThread(
             requestId, {{QStringLiteral("history"), history},
                         {QStringLiteral("selectedFileName"), database_state_->selectedFileName()},
-                        {QStringLiteral("connected"), database_state_->connected()}});
+                        {QStringLiteral("connected"), database_state_->connected()},
+                        {QStringLiteral("connectedType"), connectedType}});
         return;
     }
     if (operation == QStringLiteral("databaseDisconnect")) {

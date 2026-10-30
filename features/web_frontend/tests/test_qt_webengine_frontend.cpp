@@ -115,6 +115,21 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         5000);
 
     for (int index = 0; index < 11; ++index) {
+        QVariant expectedHeadingValue;
+        QVERIFY(
+            evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[%1]"
+                                              "?.lastElementChild?.textContent ?? ''")
+                                   .arg(index),
+                               &expectedHeadingValue));
+        QString expectedHeading = expectedHeadingValue.toString().trimmed();
+        if (index == 6) {
+            expectedHeading = expectedHeading == QStringLiteral("QRコード")
+                                  ? QStringLiteral("QRコード生成")
+                                  : QStringLiteral("QR Code Generation");
+        }
+        QVERIFY(!expectedHeading.isEmpty());
+
         const QString clickScript =
             QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[%1].click(); true")
                 .arg(index);
@@ -129,13 +144,12 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                                "?.textContent ?? ''"),
                 &heading));
             headingText = heading.toString().trimmed();
-            if (!headingText.isEmpty()) {
+            if (headingText == expectedHeading) {
                 break;
             }
             QTest::qWait(100);
         }
-        QVERIFY2(!headingText.isEmpty(),
-                 qPrintable(QStringLiteral("Tool route %1 rendered no page heading.").arg(index)));
+        QCOMPARE(headingText, expectedHeading);
         QVERIFY(evaluateJavaScript(
             view.page(),
             QStringLiteral("document.querySelectorAll('.page-host:not([hidden]) .input-card, "
@@ -168,7 +182,8 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral("Math.round(parseFloat(getComputedStyle(document.querySelector("
-                               "'.page-host.active-page .danger-button')).height)) === 28"),
+                               "'.page-host.active-page .button-row button:last-child'))"
+                               ".height)) === 28"),
                 &result));
             QVERIFY(result.toBool());
         }
@@ -209,6 +224,38 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                                "'.page-host:not([hidden]) [data-slot=button]')).height)) === 32"),
                 &result));
             QVERIFY(result.toBool());
+        }
+        if (index == 10) {
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("document.querySelector('.page-host.active-page "
+                               ".diff-result-heading .select-trigger').click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(view.page(),
+                                   QStringLiteral("Array.from(document.querySelectorAll("
+                                                  "'.select-popup .select-item')).some((item) => "
+                                                  "item.textContent.trim() === 'Side-by-side')"),
+                                   &result) &&
+                    result.toBool(),
+                5000);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("Array.from(document.querySelectorAll("
+                               "'.select-popup .select-item')).find((item) => "
+                               "item.textContent.trim() === 'Side-by-side').click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral("(() => { const table = document.querySelector("
+                                   "'.page-host.active-page table[aria-label=\"Diff result\"]'); "
+                                   "return table?.querySelectorAll("
+                                   "'thead th[scope=col]').length === 2 && "
+                                   "Boolean(table.querySelector('tbody')); })()"),
+                    &result) &&
+                    result.toBool(),
+                5000);
         }
     }
 

@@ -278,6 +278,7 @@ export type OperationContracts = {
       history: DatabaseHistoryEntry[];
       selectedFileName: string;
       connected: boolean;
+      connectedType: DatabaseDriver | "";
     };
   };
   databaseSelectFile: {

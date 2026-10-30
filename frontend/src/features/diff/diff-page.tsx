@@ -93,21 +93,31 @@ export function DiffPage({ locale, run }: ToolPageProps) {
                             })}
                         </div>
                     ) : (
-                        <div
-                            className="diff-table"
-                            role="table"
-                            aria-label={text(locale, "Diff result", "差分結果")}
-                        >
-                            {rows.map((row, index) => (
-                                <div key={index} className="diff-row">
-                                    <code className={row.leftChanged ? "removed" : ""}>
-                                        {row.left}
-                                    </code>
-                                    <code className={row.rightChanged ? "added" : ""}>
-                                        {row.right}
-                                    </code>
-                                </div>
-                            ))}
+                        <div className="diff-table">
+                            <table aria-label={text(locale, "Diff result", "差分結果")}>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">{text(locale, "Original", "変更前")}</th>
+                                        <th scope="col">{text(locale, "Modified", "変更後")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rows.map((row, index) => (
+                                        <tr className="diff-row" key={index}>
+                                            <td>
+                                                <code className={row.leftChanged ? "removed" : ""}>
+                                                    {row.left}
+                                                </code>
+                                            </td>
+                                            <td>
+                                                <code className={row.rightChanged ? "added" : ""}>
+                                                    {row.right}
+                                                </code>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     )}
                 </section>

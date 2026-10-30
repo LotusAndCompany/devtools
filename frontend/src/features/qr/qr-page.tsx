@@ -44,6 +44,10 @@ export function QrPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
     const [type, setType] = useState<QrCodeType>("text");
     const [parameters, setParameters] = useState<Record<string, string>>({ text_content: "" });
+    const [generatedInput, setGeneratedInput] = useState<{
+        type: QrCodeType;
+        parameters: Record<string, string>;
+    } | null>(null);
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");
     const [message, setMessage] = useState("");
@@ -56,6 +60,7 @@ export function QrPage({ locale, run }: ToolPageProps) {
                 yield* Effect.sync(() => {
                     setContent(String(result.content ?? ""));
                     setImage(String(result.imageDataUrl ?? ""));
+                    setGeneratedInput({ type, parameters: { ...parameters } });
                 });
             }
         });
@@ -67,6 +72,7 @@ export function QrPage({ locale, run }: ToolPageProps) {
                   ? { wifi_security: "WPA", wifi_hidden: "false" }
                   : {},
         );
+        setGeneratedInput(null);
         setContent("");
         setImage("");
         setMessage("");
@@ -81,20 +87,22 @@ export function QrPage({ locale, run }: ToolPageProps) {
             ),
         );
     const save = () =>
-        execute("saveQrImage", { type, parameters }).pipe(
-            Effect.tap((result) =>
-                Effect.sync(() => {
-                    if (result)
-                        setMessage(
-                            text(
-                                locale,
-                                `Saved ${String(result.fileName ?? "QR image")}.`,
-                                `${String(result.fileName ?? "QR画像")}を保存しました。`,
-                            ),
-                        );
-                }),
-            ),
-        );
+        generatedInput
+            ? execute("saveQrImage", generatedInput).pipe(
+                  Effect.tap((result) =>
+                      Effect.sync(() => {
+                          if (result)
+                              setMessage(
+                                  text(
+                                      locale,
+                                      `Saved ${String(result.fileName ?? "QR image")}.`,
+                                      `${String(result.fileName ?? "QR画像")}を保存しました。`,
+                                  ),
+                              );
+                      }),
+                  ),
+              )
+            : Effect.void;
     return (
         <div className="tool-page">
             <Heading title={text(locale, "QR Code Generation", "QRコード生成")} />
@@ -112,6 +120,7 @@ export function QrPage({ locale, run }: ToolPageProps) {
                                           ? { wifi_security: "WPA", wifi_hidden: "false" }
                                           : {},
                                 );
+                                setGeneratedInput(null);
                                 setContent("");
                                 setImage("");
                                 setMessage("");
