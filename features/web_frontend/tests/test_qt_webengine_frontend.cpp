@@ -142,6 +142,29 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 "Boolean(document.querySelector('.page-host:not([hidden]) > .empty-state'))"),
             &result));
         QVERIFY(!result.toBool());
+        QVERIFY(evaluateJavaScript(
+            view.page(),
+            QStringLiteral(
+                "Array.from(document.querySelectorAll('.page-host.active-page .button-row, "
+                ".page-host.active-page .toolbar-row')).every((row) => { "
+                "const buttons = Array.from(row.children).filter((child) => "
+                "child.matches('button')); "
+                "const first = buttons[0]?.getBoundingClientRect(); "
+                "return buttons.length < 2 || buttons.every((button) => { "
+                "const rect = button.getBoundingClientRect(); "
+                "return Math.min(first.bottom, rect.bottom) - "
+                "Math.max(first.top, rect.top) > 0; }); })"),
+            &result));
+        QVERIFY2(result.toBool(),
+                 qPrintable(QStringLiteral("Button group wrapped on route %1").arg(index)));
+        if (index == 1) {
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("Math.round(parseFloat(getComputedStyle(document.querySelector("
+                               "'.page-host.active-page .danger-button')).height)) === 28"),
+                &result));
+            QVERIFY(result.toBool());
+        }
         if (index == 2) {
             QVERIFY(evaluateJavaScript(
                 view.page(),
@@ -157,6 +180,65 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             QVERIFY(result.toBool());
         }
     }
+
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[6].click(); true"),
+        &result));
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.page-host[data-page=qr] .select-trigger').click(); true"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral(
+                "Array.from(document.querySelectorAll('.select-popup .select-item')).some((item) "
+                "=> item.textContent.trim() === 'Calendar')"),
+            &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "Array.from(document.querySelectorAll('.select-popup .select-item')).find((item) "
+            "=> item.textContent.trim() === 'Calendar').click(); true"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Boolean(document.querySelector('.date-time-input'))"),
+                           &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.page-host[data-page=qr] .date-time-trigger').click(); true"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Boolean(document.querySelector('.date-time-popup'))"),
+                           &result) &&
+            result.toBool(),
+        5000);
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral("(() => { const day = Array.from(document.querySelectorAll("
+                       "'.date-time-popup .date-time-day')).find((button) => "
+                       "!button.classList.contains('outside-month')); if (!day) return false; "
+                       "day.click(); return true; })()"),
+        &result));
+    QVERIFY(result.toBool());
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral("/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$/.test(document.querySelector("
+                           "'.page-host[data-page=qr] .date-time-input input').value) "
+                           "&& !document.querySelector('input[type=datetime-local]')"),
+            &result) &&
+            result.toBool(),
+        5000);
 
     QVERIFY(evaluateJavaScript(
         view.page(),

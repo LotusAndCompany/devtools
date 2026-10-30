@@ -79,7 +79,11 @@ export function PhraseConfirmationDialogs({
                                 <AlertDialog.Close render={<Button variant="outline" />}>
                                     {text(locale, "Cancel", "キャンセル")}
                                 </AlertDialog.Close>
-                                <Button className="danger-button" onClick={onConfirmDelete}>
+                                <Button
+                                    size="sm"
+                                    className="danger-button"
+                                    onClick={onConfirmDelete}
+                                >
                                     {text(locale, "Delete", "削除")}
                                 </Button>
                             </div>

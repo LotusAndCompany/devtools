@@ -92,14 +92,16 @@ kbd {
     gap: 9px;
 }
 .toolbar-row {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     margin-bottom: 12px;
 }
 .toolbar-row h2 {
     flex: 1;
 }
 .button-row {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     margin-top: 11px;
 }
 .action-row {
@@ -298,7 +300,89 @@ textarea.form-control {
     gap: 7px;
 }
 .danger-button {
-    color: var(--danger);
+    color: var(--destructive);
+}
+
+.date-time-input {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+}
+.date-time-input .form-control {
+    min-width: 0;
+}
+.date-time-trigger {
+    width: 30px;
+    padding: 0;
+}
+.date-time-trigger .material-symbols,
+.date-time-calendar-nav .material-symbols {
+    font-size: 17px;
+}
+.date-time-positioner {
+    z-index: 120;
+}
+.date-time-popup {
+    width: 280px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--foreground);
+    box-shadow: var(--shadow);
+}
+.date-time-calendar-header,
+.date-time-calendar-nav {
+    display: flex;
+    align-items: center;
+}
+.date-time-calendar-header {
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.date-time-month {
+    font-size: 12px;
+    font-weight: 600;
+}
+.date-time-calendar-nav {
+    gap: 2px;
+}
+.date-time-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+}
+.date-time-weekday {
+    display: grid;
+    min-height: 28px;
+    place-items: center;
+    color: var(--muted-foreground);
+    font-size: 10px;
+}
+.date-time-day {
+    display: grid;
+    min-width: 0;
+    height: 30px;
+    place-items: center;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--foreground);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+.date-time-day:hover {
+    background: var(--muted);
+}
+.date-time-day.outside-month {
+    color: var(--muted-foreground);
+}
+.date-time-day.selected {
+    background: var(--primary);
+    color: var(--primary-foreground);
 }
 .match-list {
     display: flex;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { DateTimeInput } from "@/shared/components/ui/date-time-input";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { runUiEffect } from "@/shared/effect";
@@ -82,20 +83,26 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
             );
         });
     const copy = (value: string) => run("copyToClipboard", { text: value });
-    const row = (
-        key: keyof TimestampValues,
-        label: string,
-        type: "text" | "datetime-local" = "text",
-    ) => (
+    const row = (key: keyof TimestampValues, label: string, dateTime = false) => (
         <div className="timestamp-row" key={key}>
             <Field label={label}>
-                <Input
-                    type={type}
-                    value={values[key]}
-                    onChange={(event) =>
-                        setValues((current) => ({ ...current, [key]: event.target.value }))
-                    }
-                />
+                {dateTime ? (
+                    <DateTimeInput
+                        locale={locale}
+                        value={values[key]}
+                        onValueChange={(value) =>
+                            setValues((current) => ({ ...current, [key]: value }))
+                        }
+                        aria-label={label}
+                    />
+                ) : (
+                    <Input
+                        value={values[key]}
+                        onChange={(event) =>
+                            setValues((current) => ({ ...current, [key]: event.target.value }))
+                        }
+                    />
+                )}
             </Field>
             <Button
                 variant="outline"
@@ -126,8 +133,8 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                 </section>
                 <section className="input-card timestamp-group">
                     <h2>{text(locale, "Date & Time", "日時")}</h2>
-                    {row("local", text(locale, "Local", "ローカル"), "datetime-local")}
-                    {row("utc", text(locale, "UTC", "UTC"), "datetime-local")}
+                    {row("local", text(locale, "Local", "ローカル"), true)}
+                    {row("utc", text(locale, "UTC", "UTC"), true)}
                 </section>
                 <section className="input-card timestamp-group">
                     <h2>ISO 8601</h2>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { DateTimeInput } from "@/shared/components/ui/date-time-input";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
@@ -129,23 +130,27 @@ export function QrPage({ locale, run }: ToolPageProps) {
                     </Field>
                     {fields.map(([key, label, required]) => (
                         <Field key={key} label={`${label}${required ? " *" : ""}`}>
-                            <Input
-                                className="form-control"
-                                type={
-                                    key === "wifi_password"
-                                        ? "password"
-                                        : key.startsWith("cal_")
-                                          ? "datetime-local"
-                                          : "text"
-                                }
-                                value={parameters[key] ?? ""}
-                                onChange={(event) =>
-                                    setParameters((current) => ({
-                                        ...current,
-                                        [key]: event.target.value,
-                                    }))
-                                }
-                            />
+                            {key.startsWith("cal_") ? (
+                                <DateTimeInput
+                                    locale={locale}
+                                    value={parameters[key] ?? ""}
+                                    onValueChange={(value) =>
+                                        setParameters((current) => ({ ...current, [key]: value }))
+                                    }
+                                    aria-label={label}
+                                />
+                            ) : (
+                                <Input
+                                    type={key === "wifi_password" ? "password" : "text"}
+                                    value={parameters[key] ?? ""}
+                                    onChange={(event) =>
+                                        setParameters((current) => ({
+                                            ...current,
+                                            [key]: event.target.value,
+                                        }))
+                                    }
+                                />
+                            )}
                         </Field>
                     ))}
                     {type === "wifi" && (

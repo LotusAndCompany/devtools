@@ -59,6 +59,7 @@ export function PhraseEditor({
                 </Button>
                 <Button
                     variant="outline"
+                    size="sm"
                     className="danger-button"
                     onClick={onDelete}
                     disabled={busy || !filename}
