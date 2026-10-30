@@ -131,7 +131,7 @@ FrontendOperationService::Result databaseQuery(const QVariantMap &payload)
                 }
                 row.append(text);
             }
-            rows.append(row);
+            rows.append(QVariant::fromValue(row));
         }
         return FrontendOperationService::Result{
             {{QStringLiteral("columns"), columns},

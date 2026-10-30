@@ -528,13 +528,40 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral("(() => { const field = document.querySelector('.db-workspace textarea'); "
-                       "if (!field) return ''; "
+                       "if (!field) return ''; const sql = \"SELECT 123 AS value, 'ok' AS text;\"; "
                        "Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')"
-                       ".set.call(field, 'SELECT 123;'); "
+                       ".set.call(field, sql); "
                        "field.dispatchEvent(new Event('input', { bubbles: true })); "
                        "return field.value; })()"),
         &result));
-    QCOMPARE(result.toString(), QStringLiteral("SELECT 123;"));
+    QCOMPARE(result.toString(), QStringLiteral("SELECT 123 AS value, 'ok' AS text;"));
+    QSignalSpy operationCompleted(view.nativeBridge(), &NativeBridge::operationCompleted);
+    QVERIFY(operationCompleted.isValid());
+    const qsizetype completedBeforeQuery = operationCompleted.size();
+    QVERIFY(evaluateJavaScript(
+        view.page(),
+        QStringLiteral(
+            "document.querySelector('.db-query-panel .action-row button').click(); true"),
+        &result));
+    QTRY_VERIFY_WITH_TIMEOUT(operationCompleted.size() > completedBeforeQuery, 5000);
+    const QVariantMap queryResult =
+        qvariant_cast<QVariantMap>(operationCompleted.constLast().at(1));
+    const QVariant queryRowsValue = queryResult.value(QStringLiteral("rows"));
+    const QVariantList queryRows = queryRowsValue.toList();
+    QCOMPARE(queryRows.size(), 1);
+    QVERIFY(queryRows.first().canConvert<QVariantList>());
+    const QVariantList firstRow = queryRows.first().toList();
+    QCOMPARE(firstRow.size(), 2);
+    QCOMPARE(firstRow.at(0).toString(), QStringLiteral("123"));
+    QCOMPARE(firstRow.at(1).toString(), QStringLiteral("ok"));
+    QTRY_VERIFY_WITH_TIMEOUT(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("document.querySelector('.db-query-panel .table-wrap "
+                                          "tbody tr td')?.textContent === "
+                                          "'123'"),
+                           &result) &&
+            result.toBool(),
+        5000);
 
     const QString secondDatabasePath = databaseDirectory.filePath(QStringLiteral("second.sqlite"));
     QFile secondDatabase(secondDatabasePath);
@@ -551,7 +578,7 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             view.page(),
             QStringLiteral("document.querySelector('.db-workspace textarea')?.value ?? ''"),
             &result) &&
-            result.toString() == QStringLiteral("SELECT 123;"),
+            result.toString() == QStringLiteral("SELECT 123 AS value, 'ok' AS text;"),
         5000);
 }
 
