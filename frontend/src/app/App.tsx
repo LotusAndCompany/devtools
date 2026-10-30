@@ -5,6 +5,7 @@ import { AppShell } from "./app-shell";
 import { ToolStage } from "./tool-stage";
 import { pageForToolId, tools, type PageId } from "./tool-registry";
 import { useDroppedImage, useNativeBridge } from "./use-native-bridge";
+import type { ApplicationSettings } from "@/shared/bridge/types";
 import type { Locale } from "@/shared/types";
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
         [openPage],
     );
     const onStartupSettings = useCallback(
-        (settings: Record<string, unknown>) => {
+        (settings: Partial<ApplicationSettings>) => {
             if (settings.language === "ja_JP") setLocale("ja");
             else if (settings.language === "en") setLocale("en");
             if (

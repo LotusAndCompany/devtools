@@ -3,7 +3,11 @@ import { Effect } from "effect";
 import {
   BRIDGE_CONTRACT_VERSION,
   NativeOperationError,
+  type ApplicationSettings,
+  type ImageTakeDroppedResult,
+  type OperationInput,
   type OperationName,
+  type OperationRequest,
   type OperationRunner,
   type BridgeEvent,
 } from "@/shared/bridge/types";
@@ -16,8 +20,8 @@ type UseNativeBridgeOptions = {
   locale: Locale;
   activePage: PageId;
   onNavigate: (route: string) => void;
-  onDroppedImage: (result: Record<string, unknown>) => void;
-  onStartupSettings: (settings: Record<string, unknown>) => void;
+  onDroppedImage: (result: ImageTakeDroppedResult) => void;
+  onStartupSettings: (settings: Partial<ApplicationSettings>) => void;
 };
 
 export function useNativeBridge({
@@ -37,11 +41,21 @@ export function useNativeBridge({
   }, [locale]);
 
   const runWithBridge = useCallback(
-    (native: NativeBridge, operation: OperationName, payload: Record<string, unknown>) => {
+    <Name extends OperationName>(
+      native: NativeBridge,
+      operation: Name,
+      payload: OperationInput<Name>,
+    ) => {
       const requestId = crypto.randomUUID().replaceAll("-", "");
+      const request: OperationRequest<Name> = {
+        contractVersion: BRIDGE_CONTRACT_VERSION,
+        requestId,
+        operation,
+        payload,
+      };
       return runNativeOperation(
         native,
-        { contractVersion: BRIDGE_CONTRACT_VERSION, requestId, operation, payload },
+        request,
         localeRef.current === "ja" ? "処理をキャンセルしました。" : "Operation cancelled.",
         (id, isPending, cancel) => {
           if (isPending) pending.current.set(id, cancel);
@@ -81,15 +95,15 @@ export function useNativeBridge({
       const [droppedImageResult, settings] = yield* Effect.all(
         [
           runWithBridge(connected, "imageTakeDropped", {}).pipe(
-            Effect.catch(() => Effect.succeed({} as Record<string, unknown>)),
+            Effect.catch(() => Effect.succeed<ImageTakeDroppedResult>({ found: false })),
           ),
           runWithBridge(connected, "getSettings", {}).pipe(
-            Effect.catch(() => Effect.succeed({} as Record<string, unknown>)),
+            Effect.catch(() => Effect.succeed<Partial<ApplicationSettings>>({})),
           ),
         ],
         { concurrency: "unbounded" },
       );
-      if (mounted && droppedImageResult.found === true) {
+      if (mounted && droppedImageResult.found) {
         yield* Effect.sync(() => onDroppedImage(droppedImageResult));
       }
       if (mounted) yield* Effect.sync(() => onStartupSettings(settings));
@@ -104,7 +118,7 @@ export function useNativeBridge({
   }, [onDroppedImage, onNavigate, onStartupSettings, runWithBridge]);
 
   const run: OperationRunner = useCallback(
-    (operation, payload) => {
+    <Name extends OperationName>(operation: Name, payload: OperationInput<Name>) => {
       if (!bridge) {
         return Effect.fail(
           new NativeOperationError(
@@ -140,18 +154,18 @@ export function useNativeBridge({
 
 export function useDroppedImage(
   openPage: (page: PageId) => void,
-): [DroppedImage | null, (result: Record<string, unknown>) => void, (id: string) => void] {
+): [DroppedImage | null, (result: ImageTakeDroppedResult) => void, (id: string) => void] {
   const [droppedImage, setDroppedImage] = useState<DroppedImage | null>(null);
   const accept = useCallback(
-    (result: Record<string, unknown>) => {
-      if (typeof result.imageDataUrl !== "string" || !result.imageDataUrl) return;
+    (result: ImageTakeDroppedResult) => {
+      if (!result.found || !result.imageDataUrl) return;
       openPage("image");
       setDroppedImage({
         id: crypto.randomUUID(),
         imageDataUrl: result.imageDataUrl,
-        fileName: String(result.fileName ?? ""),
-        width: Number(result.width ?? 0),
-        height: Number(result.height ?? 0),
+        fileName: result.fileName,
+        width: result.width,
+        height: result.height,
       });
     },
     [openPage],

@@ -1,21 +1,21 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
 import { cn } from "@/shared/lib/utils";
 
-type SelectBoxOption = { value: string; label: string };
+type SelectBoxOption<Value extends string = string> = { value: Value; label: string };
 
-type SelectBoxProps = {
+type SelectBoxProps<Value extends string = string> = {
     id?: string;
     "aria-label"?: string;
     className?: string;
     disabled?: boolean;
-    options: readonly SelectBoxOption[];
-    value?: string;
-    defaultValue?: string;
+    options: readonly SelectBoxOption<Value>[];
+    value?: Value;
+    defaultValue?: Value;
     placeholder?: string;
-    onValueChange?: (value: string) => void;
+    onValueChange?: (value: Value) => void;
 };
 
-function SelectBox({
+function SelectBox<Value extends string>({
     id,
     "aria-label": ariaLabel,
     className,
@@ -25,7 +25,7 @@ function SelectBox({
     defaultValue,
     placeholder,
     onValueChange,
-}: SelectBoxProps) {
+}: SelectBoxProps<Value>) {
     return (
         <BaseSelect.Root
             items={options}
@@ -33,7 +33,12 @@ function SelectBox({
             defaultValue={defaultValue}
             disabled={disabled}
             onValueChange={(nextValue) => {
-                if (typeof nextValue === "string") onValueChange?.(nextValue);
+                if (
+                    typeof nextValue === "string" &&
+                    options.some((option) => option.value === nextValue)
+                ) {
+                    onValueChange?.(nextValue as Value);
+                }
             }}
         >
             <BaseSelect.Trigger

@@ -23,11 +23,11 @@ export function ToolStage({
 }: ToolStageProps) {
     const activeTool = toolForPage(activePage);
     const ActiveScreen = activeTool?.screen;
-    const DatabaseScreen = toolForPage("db")!.screen;
+    const keepAliveTools = tools.filter((tool) => tool.keepAlive);
 
     return (
         <div className="page-stack">
-            {activePage !== "db" && (
+            {activePage === "welcome" || !activeTool?.keepAlive ? (
                 <section
                     className="page-host active-page"
                     data-page={activePage}
@@ -46,20 +46,25 @@ export function ToolStage({
                         />
                     ) : null}
                 </section>
-            )}
-            <section
-                className="page-host database-cache"
-                data-page="db"
-                aria-label={titleFor("db", locale)}
-                hidden={activePage !== "db"}
-            >
-                <DatabaseScreen
-                    locale={locale}
-                    run={run}
-                    active={activePage === "db"}
-                    databaseNavigationVersion={databaseNavigationVersion}
-                />
-            </section>
+            ) : null}
+            {keepAliveTools.map(({ id, screen: Screen }) => (
+                <section
+                    key={id}
+                    className="page-host"
+                    data-page={id}
+                    aria-label={titleFor(id, locale)}
+                    hidden={activePage !== id}
+                >
+                    <Screen
+                        locale={locale}
+                        run={run}
+                        active={activePage === id}
+                        droppedImage={droppedImage}
+                        onDroppedImageConsumed={onDroppedImageConsumed}
+                        databaseNavigationVersion={databaseNavigationVersion}
+                    />
+                </section>
+            ))}
         </div>
     );
 }

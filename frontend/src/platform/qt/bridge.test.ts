@@ -120,7 +120,7 @@ const request: OperationRequest = {
   contractVersion: BRIDGE_CONTRACT_VERSION,
   requestId: "request-1",
   operation: "formatJson",
-  payload: {},
+  payload: { text: "{}", indentation: "2" },
 };
 
 function createBridge(start?: (emit: (event: BridgeEvent) => void) => void) {

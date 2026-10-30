@@ -2,6 +2,7 @@ import { useEffect, useState, type MouseEvent } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { runUiEffect } from "@/shared/effect";
+import type { ImageEditInput, ImagePreviewResult, ImageSplitInput } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 import { ImageEditControls } from "./image-edit-controls";
@@ -28,20 +29,20 @@ export function ImagePage({
     const [smooth, setSmooth] = useState(true);
     const [transparency, setTransparency] = useState("1");
     const [tolerance, setTolerance] = useState("0.1");
-    const [colorMode, setColorMode] = useState("rgb");
+    const [colorMode, setColorMode] = useState<"rgb" | "hsl" | "hsv">("rgb");
     const [contiguousOnly, setContiguousOnly] = useState(true);
-    const [splitMode, setSplitMode] = useState("division");
+    const [splitMode, setSplitMode] = useState<"division" | "cell-size">("division");
     const [horizontalDivisions, setHorizontalDivisions] = useState("2");
     const [verticalDivisions, setVerticalDivisions] = useState("2");
     const [cellWidth, setCellWidth] = useState("128");
     const [cellHeight, setCellHeight] = useState("128");
     const [ignoreRemainders, setIgnoreRemainders] = useState(true);
 
-    const updateImage = (result: Record<string, unknown>) => {
-        setImage(String(result.imageDataUrl ?? ""));
-        setWidth(Number(result.width ?? 0));
-        setHeight(Number(result.height ?? 0));
-        if (result.fileName) setFileName(String(result.fileName));
+    const updateImage = (result: ImagePreviewResult) => {
+        setImage(result.imageDataUrl);
+        setWidth(result.width);
+        setHeight(result.height);
+        if (result.fileName) setFileName(result.fileName);
     };
     useEffect(() => {
         if (!active || !droppedImage) return;
@@ -52,9 +53,9 @@ export function ImagePage({
         setHeight(droppedImage.height);
         onDroppedImageConsumed?.(droppedImage.id);
     }, [active, droppedImage, onDroppedImageConsumed]);
-    const performEdit = (action: string, extra: Record<string, unknown> = {}) =>
+    const performEdit = (input: ImageEditInput) =>
         Effect.gen(function* () {
-            const result = yield* execute("imageEdit", { action, ...extra });
+            const result = yield* execute("imageEdit", input);
             if (result) yield* Effect.sync(() => updateImage(result));
         });
     const open = () =>
@@ -65,17 +66,25 @@ export function ImagePage({
     const save = () =>
         Effect.gen(function* () {
             const result = yield* execute("imageSave", {});
-            if (result) yield* Effect.sync(() => setFileName(String(result.fileName ?? fileName)));
+            if (result) yield* Effect.sync(() => setFileName(result.fileName || fileName));
         });
-    const split = () =>
-        execute("imageSplit", {
-            mode: splitMode === "division" ? "division" : "cell-size",
-            horizontalDivisions: Number(horizontalDivisions),
-            verticalDivisions: Number(verticalDivisions),
-            cellWidth: Number(cellWidth),
-            cellHeight: Number(cellHeight),
-            ignoreRemainders,
-        });
+    const split = () => {
+        const input: ImageSplitInput =
+            splitMode === "division"
+                ? {
+                      mode: "division",
+                      horizontalDivisions: Number(horizontalDivisions),
+                      verticalDivisions: Number(verticalDivisions),
+                      ignoreRemainders,
+                  }
+                : {
+                      mode: "cell-size",
+                      cellWidth: Number(cellWidth),
+                      cellHeight: Number(cellHeight),
+                      ignoreRemainders,
+                  };
+        return execute("imageSplit", input);
+    };
     const chooseTransparentPoint = (event: MouseEvent<HTMLImageElement>) => {
         const rect = event.currentTarget.getBoundingClientRect();
         const x = Math.max(
@@ -87,7 +96,8 @@ export function ImagePage({
             Math.min(height - 1, Math.floor(((event.clientY - rect.top) * height) / rect.height)),
         );
         runUiEffect(
-            performEdit("transparent", {
+            performEdit({
+                action: "transparent",
                 x,
                 y,
                 transparency: Number(transparency),
@@ -162,7 +172,7 @@ export function ImagePage({
                         setTolerance={setTolerance}
                         setTransparency={setTransparency}
                         setContiguousOnly={setContiguousOnly}
-                        onEdit={(action, extra) => runUiEffect(performEdit(action, extra))}
+                        onEdit={(input) => runUiEffect(performEdit(input))}
                     />
                     <ImageSplitControls
                         locale={locale}

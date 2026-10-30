@@ -15,10 +15,6 @@
     white-space: nowrap;
 }
 
-:where([data-page="db"]) .database-cache[hidden] {
-    display: none !important;
-}
-
 :where([data-page="db"]) .db-layout {
     min-height: 0;
 }

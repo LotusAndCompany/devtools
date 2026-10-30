@@ -7,6 +7,7 @@ import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { runUiEffect } from "@/shared/effect";
+import type { QrCodeType } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
@@ -41,7 +42,7 @@ const qrFields: Record<string, Array<[string, string, boolean?]>> = {
 
 export function QrPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
-    const [type, setType] = useState("text");
+    const [type, setType] = useState<QrCodeType>("text");
     const [parameters, setParameters] = useState<Record<string, string>>({ text_content: "" });
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");

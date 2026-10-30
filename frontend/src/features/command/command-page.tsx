@@ -6,13 +6,14 @@ import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
+import type { CommandFunction } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
 export function CommandPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
-    const [category, setCategory] = useState("git");
-    const [functions, setFunctions] = useState<Array<Record<string, unknown>>>([]);
+    const [category, setCategory] = useState<"git" | "docker" | "compose">("git");
+    const [functions, setFunctions] = useState<CommandFunction[]>([]);
     const [functionIndex, setFunctionIndex] = useState(0);
     const [optionIndex, setOptionIndex] = useState(0);
     const [value, setValue] = useState("");
@@ -20,15 +21,13 @@ export function CommandPage({ locale, run }: ToolPageProps) {
     useEffect(() => {
         const loadFunctions = run("commandData", { action: "list", category }).pipe(
             Effect.tap((result) =>
-                Effect.sync(() =>
-                    setFunctions((result.functions as Array<Record<string, unknown>>) ?? []),
-                ),
+                Effect.sync(() => setFunctions("functions" in result ? result.functions : [])),
             ),
             Effect.catch(() => Effect.sync(() => setFunctions([]))),
         );
         return forkUiEffect(loadFunctions);
     }, [category, run]);
-    const options = (functions[functionIndex]?.options as Array<Record<string, unknown>>) ?? [];
+    const options = functions[functionIndex]?.options ?? [];
     const generate = () =>
         execute("commandData", {
             action: "generate",
@@ -37,7 +36,9 @@ export function CommandPage({ locale, run }: ToolPageProps) {
             optionIndex,
             value,
         }).pipe(
-            Effect.tap((result) => Effect.sync(() => setCommand(String(result?.command ?? "")))),
+            Effect.tap((result) =>
+                Effect.sync(() => setCommand(result && "command" in result ? result.command : "")),
+            ),
         );
     return (
         <div className="tool-page">

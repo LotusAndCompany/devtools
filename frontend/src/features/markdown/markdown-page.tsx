@@ -22,7 +22,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                 run("renderMarkdown", { markdown }).pipe(
                     Effect.tap((result) =>
                         Effect.sync(() => {
-                            setPreview(String(result.html ?? ""));
+                            setPreview(result.html);
                             setError("");
                         }),
                     ),
@@ -39,7 +39,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
     const open = () =>
         Effect.gen(function* () {
             const result = yield* execute("openTextFile", { fileType: "markdown" });
-            if (result) yield* Effect.sync(() => setMarkdown(String(result.text ?? "")));
+            if (result) yield* Effect.sync(() => setMarkdown(result.text));
         });
     const save = (html = false) =>
         execute("saveTextFile", {

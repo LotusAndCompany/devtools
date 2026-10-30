@@ -1,8 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
+import type { PhraseTemplate } from "@/shared/bridge/types";
 import { text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
-
-type PhraseTemplate = Record<string, unknown>;
 
 interface PhraseListProps {
     locale: Locale;

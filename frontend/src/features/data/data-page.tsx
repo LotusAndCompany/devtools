@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Field } from "@/shared/components/ui/field";
 import { SelectBox } from "@/shared/components/ui/select";
 import { runUiEffect } from "@/shared/effect";
+import type { DataFormat, JsonIndentation } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
@@ -11,17 +12,17 @@ export function DataPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
-    const [format, setFormat] = useState("json");
-    const [indentation, setIndentation] = useState("2");
+    const [format, setFormat] = useState<DataFormat>("json");
+    const [indentation, setIndentation] = useState<JsonIndentation>("2");
     const convert = () =>
         Effect.gen(function* () {
             const result = yield* execute("convertData", { input, format, indentation });
-            if (result) yield* Effect.sync(() => setOutput(String(result.output ?? "")));
+            if (result) yield* Effect.sync(() => setOutput(result.output));
         });
     const open = () =>
         Effect.gen(function* () {
             const result = yield* execute("openTextFile", { fileType: "data" });
-            if (result) yield* Effect.sync(() => setInput(String(result.text ?? "")));
+            if (result) yield* Effect.sync(() => setInput(result.text));
         });
     const save = () =>
         execute("saveTextFile", {

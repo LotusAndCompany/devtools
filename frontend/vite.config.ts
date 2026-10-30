@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
 const sourceRoot = path.resolve(frontendRoot, "src");
@@ -85,6 +85,12 @@ export default defineConfig(({ mode }) => {
             asset.name?.endsWith(".css") ? "assets/style.css" : "assets/[name][extname]",
         },
       },
+    },
+    test: {
+      environment: "happy-dom",
+      setupFiles: ["./src/test/setup.ts"],
+      clearMocks: true,
+      restoreMocks: true,
     },
   };
 });

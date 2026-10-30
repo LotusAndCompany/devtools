@@ -6,12 +6,13 @@ import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { Tabs } from "@/shared/components/ui/tabs";
 import { runUiEffect } from "@/shared/effect";
+import type { HttpMethod, HttpResponse } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
 export function HttpPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
-    const [method, setMethod] = useState("GET");
+    const [method, setMethod] = useState<HttpMethod>("GET");
     const [url, setUrl] = useState("");
     const [headers, setHeaders] = useState("");
     const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ export function HttpPage({ locale, run }: ToolPageProps) {
     const [parameters, setParameters] = useState<
         Array<{ key: string; value: string; description: string }>
     >(Array.from({ length: 10 }, () => ({ key: "", value: "", description: "" })));
-    const [response, setResponse] = useState<Record<string, unknown> | null>(null);
+    const [response, setResponse] = useState<HttpResponse | null>(null);
     const [httpTab, setHttpTab] = useState("parameters");
     const send = () =>
         Effect.gen(function* () {

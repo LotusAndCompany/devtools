@@ -7,17 +7,9 @@ import { SelectBox } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import { type Locale } from "@/shared/types";
-import { type OperationRunner } from "@/shared/bridge/types";
+import type { ApplicationSettings, OperationRunner } from "@/shared/bridge/types";
 
-type AppSettings = {
-    language: "en" | "ja_JP";
-    theme: "system" | "light" | "dark";
-    showSidebarOnStartup: boolean;
-    showLastToolOnStartup: boolean;
-    alwaysOnTop: boolean;
-    rememberWindowSize: boolean;
-    rememberWindowPosition: boolean;
-};
+type AppSettings = Omit<ApplicationSettings, "lastUsedTool">;
 const defaultSettings = (locale: Locale): AppSettings => ({
     language: locale === "ja" ? "ja_JP" : "en",
     theme: "system",
@@ -91,9 +83,7 @@ function SettingsForm({
     useEffect(() => {
         const settingsEffect = run("getSettings", {}).pipe(
             Effect.tap((result) =>
-                Effect.sync(() =>
-                    setSettings((current) => ({ ...current, ...result }) as AppSettings),
-                ),
+                Effect.sync(() => setSettings((current) => ({ ...current, ...result }))),
             ),
             Effect.catch((reason) =>
                 Effect.sync(() =>

@@ -5,6 +5,7 @@ import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { text } from "@/shared/tool-page";
+import type { ImageEditInput } from "@/shared/bridge/types";
 import type { Locale } from "@/shared/types";
 
 interface ImageEditControlsProps {
@@ -17,7 +18,7 @@ interface ImageEditControlsProps {
     verticalScale: string;
     keepAspect: boolean;
     smooth: boolean;
-    colorMode: string;
+    colorMode: "rgb" | "hsl" | "hsv";
     tolerance: string;
     transparency: string;
     contiguousOnly: boolean;
@@ -27,11 +28,11 @@ interface ImageEditControlsProps {
     setVerticalScale: Dispatch<SetStateAction<string>>;
     setKeepAspect: Dispatch<SetStateAction<boolean>>;
     setSmooth: Dispatch<SetStateAction<boolean>>;
-    setColorMode: Dispatch<SetStateAction<string>>;
+    setColorMode: Dispatch<SetStateAction<"rgb" | "hsl" | "hsv">>;
     setTolerance: Dispatch<SetStateAction<string>>;
     setTransparency: Dispatch<SetStateAction<string>>;
     setContiguousOnly: Dispatch<SetStateAction<boolean>>;
-    onEdit: (action: string, extra?: Record<string, unknown>) => void;
+    onEdit: (input: ImageEditInput) => void;
 }
 
 export function ImageEditControls(props: ImageEditControlsProps) {
@@ -123,7 +124,8 @@ export function ImageEditControls(props: ImageEditControlsProps) {
                         variant="outline"
                         disabled={busy || !hasImage}
                         onClick={() =>
-                            onEdit("resize-size", {
+                            onEdit({
+                                action: "resize-size",
                                 width: Number(targetWidth),
                                 height: Number(targetHeight),
                                 keepAspectRatio: keepAspect,
@@ -137,7 +139,8 @@ export function ImageEditControls(props: ImageEditControlsProps) {
                         variant="outline"
                         disabled={busy || !hasImage}
                         onClick={() =>
-                            onEdit("resize-scale", {
+                            onEdit({
+                                action: "resize-scale",
                                 horizontalPercent: Number(horizontalScale),
                                 verticalPercent: Number(verticalScale),
                                 keepAspectRatio: keepAspect,
@@ -155,28 +158,28 @@ export function ImageEditControls(props: ImageEditControlsProps) {
                     <Button
                         variant="outline"
                         disabled={busy || !hasImage}
-                        onClick={() => onEdit("rotate-left")}
+                        onClick={() => onEdit({ action: "rotate-left" })}
                     >
                         ↶ {text(locale, "Rotate left", "左に回転")}
                     </Button>
                     <Button
                         variant="outline"
                         disabled={busy || !hasImage}
-                        onClick={() => onEdit("rotate-right")}
+                        onClick={() => onEdit({ action: "rotate-right" })}
                     >
                         ↷ {text(locale, "Rotate right", "右に回転")}
                     </Button>
                     <Button
                         variant="outline"
                         disabled={busy || !hasImage}
-                        onClick={() => onEdit("flip-horizontal")}
+                        onClick={() => onEdit({ action: "flip-horizontal" })}
                     >
                         {text(locale, "Flip horizontal", "左右反転")}
                     </Button>
                     <Button
                         variant="outline"
                         disabled={busy || !hasImage}
-                        onClick={() => onEdit("flip-vertical")}
+                        onClick={() => onEdit({ action: "flip-vertical" })}
                     >
                         {text(locale, "Flip vertical", "上下反転")}
                     </Button>

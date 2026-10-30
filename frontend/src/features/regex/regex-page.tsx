@@ -6,17 +6,9 @@ import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
+import type { RegexMatch, RegexOptions } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
-
-type RegexOptions = {
-    global: boolean;
-    caseInsensitive: boolean;
-    multiline: boolean;
-    dotMatchesEverything: boolean;
-    useUnicodeProperties: boolean;
-    extendedPatternSyntax: boolean;
-};
 
 export function RegexPage({ locale, run }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
@@ -31,7 +23,7 @@ export function RegexPage({ locale, run }: ToolPageProps) {
         useUnicodeProperties: false,
         extendedPatternSyntax: false,
     });
-    const [matches, setMatches] = useState<Array<Record<string, unknown>>>([]);
+    const [matches, setMatches] = useState<RegexMatch[]>([]);
     const [replacedText, setReplacedText] = useState("");
     const [quickReference, setQuickReference] = useState(true);
     const [settingsLoaded, setSettingsLoaded] = useState(false);
@@ -45,8 +37,8 @@ export function RegexPage({ locale, run }: ToolPageProps) {
             Effect.tap((result) =>
                 Effect.sync(() => {
                     if (!result) return;
-                    setMatches((result.matches as Array<Record<string, unknown>>) ?? []);
-                    setReplacedText(String(result.replacedText ?? ""));
+                    setMatches(result.matches);
+                    setReplacedText(result.replacedText);
                 }),
             ),
         );
@@ -54,13 +46,11 @@ export function RegexPage({ locale, run }: ToolPageProps) {
         const loadSettings = run("regexSettings", { action: "load" }).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => {
-                    setPattern(String(result.pattern ?? ""));
-                    setInput(String(result.testText ?? ""));
-                    setReplacement(String(result.replacePattern ?? ""));
-                    setOptions((current) => ({
-                        ...current,
-                        ...(result.options as Partial<RegexOptions>),
-                    }));
+                    if (!("options" in result)) return;
+                    setPattern(result.pattern);
+                    setInput(result.testText);
+                    setReplacement(result.replacePattern);
+                    setOptions((current) => ({ ...current, ...result.options }));
                 }),
             ),
             Effect.catch(() => Effect.void),
@@ -87,10 +77,7 @@ export function RegexPage({ locale, run }: ToolPageProps) {
         setOptions((current) => ({ ...current, [key]: !current[key] }));
     const copyMatches = () => {
         const plain = matches
-            .map(
-                (match, index) =>
-                    `${index + 1}: ${String(match.value ?? "")} @ ${String(match.offset ?? 0)}`,
-            )
+            .map((match, index) => [index + 1, ": ", match.value, " @ ", match.offset].join(""))
             .join("\n");
         return run("copyToClipboard", { text: plain });
     };
@@ -203,20 +190,16 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                             <div className="match-list">
                                 {matches.map((match, index) => (
                                     <div key={index} className="match-item">
-                                        <strong>{String(match.value)}</strong>
+                                        <strong>{match.value}</strong>
                                         <span>
-                                            {text(locale, "Offset", "位置")} {String(match.offset)}{" "}
-                                            · {text(locale, "Length", "長さ")}{" "}
-                                            {String(match.length)}
+                                            {text(locale, "Offset", "位置")} {match.offset} ·{" "}
+                                            {text(locale, "Length", "長さ")} {match.length}
                                         </span>
-                                        {((match.groups as Array<Record<string, unknown>>) ?? [])
-                                            .slice(1)
-                                            .map((group) => (
-                                                <code key={String(group.index)}>
-                                                    {String(group.name || group.index)}:{" "}
-                                                    {String(group.value)}
-                                                </code>
-                                            ))}
+                                        {match.groups.slice(1).map((group) => (
+                                            <code key={group.index}>
+                                                {group.name || group.index}: {group.value}
+                                            </code>
+                                        ))}
                                     </div>
                                 ))}
                             </div>

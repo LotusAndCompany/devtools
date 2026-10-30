@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { SelectBox } from "@/shared/components/ui/select";
 import { runUiEffect } from "@/shared/effect";
+import type { OperationOutput } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
@@ -9,7 +10,7 @@ export function DiffPage({ locale, run }: ToolPageProps) {
     const { error, setError } = useOperation(run);
     const [left, setLeft] = useState("");
     const [right, setRight] = useState("");
-    const [rows, setRows] = useState<Array<Record<string, unknown>>>([]);
+    const [rows, setRows] = useState<OperationOutput<"compareText">["rows"]>([]);
     const [mode, setMode] = useState("inline");
     useEffect(() => {
         const timer = window.setTimeout(() => {
@@ -17,7 +18,7 @@ export function DiffPage({ locale, run }: ToolPageProps) {
                 run("compareText", { left, right }).pipe(
                     Effect.tap((result) =>
                         Effect.sync(() => {
-                            setRows((result.rows as Array<Record<string, unknown>>) ?? []);
+                            setRows(result.rows);
                             setError("");
                         }),
                     ),
@@ -70,8 +71,8 @@ export function DiffPage({ locale, run }: ToolPageProps) {
                     {mode === "inline" ? (
                         <div className="diff-table diff-inline">
                             {rows.map((row, index) => {
-                                const leftText = String(row.left ?? "");
-                                const rightText = String(row.right ?? "");
+                                const leftText = row.left;
+                                const rightText = row.right;
                                 if (row.leftChanged && row.rightChanged) {
                                     return (
                                         <div className="diff-row" key={index}>
@@ -100,10 +101,10 @@ export function DiffPage({ locale, run }: ToolPageProps) {
                             {rows.map((row, index) => (
                                 <div key={index} className="diff-row">
                                     <code className={row.leftChanged ? "removed" : ""}>
-                                        {String(row.left ?? "")}
+                                        {row.left}
                                     </code>
                                     <code className={row.rightChanged ? "added" : ""}>
-                                        {String(row.right ?? "")}
+                                        {row.right}
                                     </code>
                                 </div>
                             ))}

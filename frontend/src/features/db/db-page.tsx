@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
+import type { DatabaseConnectionInput, DatabaseDriver } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 import { DatabaseConnectionDialog } from "./connection-dialog";
@@ -11,7 +12,7 @@ import type { DatabaseHistoryEntry, DatabaseQueryTab } from "./types";
 
 export function DatabasePage({ locale, run, active, databaseNavigationVersion }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
-    const [type, setType] = useState("QSQLITE");
+    const [type, setType] = useState<DatabaseDriver>("QSQLITE");
     const [host, setHost] = useState("localhost");
     const [database, setDatabase] = useState("");
     const [username, setUsername] = useState("");
@@ -27,8 +28,8 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             id: "query-1",
             title: "SQL",
             sql: "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;",
-            columns: [] as string[],
-            rows: [] as Array<Array<unknown>>,
+            columns: [],
+            rows: [],
             truncated: false,
         },
     ]);
@@ -66,8 +67,8 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
         run("databaseHistory", {}).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => {
-                    setHistory((result.history as DatabaseHistoryEntry[]) ?? []);
-                    setSelectedFileName(String(result.selectedFileName ?? ""));
+                    setHistory(result.history);
+                    setSelectedFileName(result.selectedFileName);
                     if (result.connected) setConnected(true);
                 }),
             ),
@@ -78,9 +79,9 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
         const initialize = Effect.gen(function* () {
             const result = yield* run("databaseHistory", {});
             if (!mounted) return;
-            const selected = String(result.selectedFileName ?? "");
+            const selected = result.selectedFileName;
             yield* Effect.sync(() => {
-                setHistory((result.history as DatabaseHistoryEntry[]) ?? []);
+                setHistory(result.history);
                 setSelectedFileName(selected);
                 if (result.connected) setConnected(true);
             });
@@ -89,10 +90,8 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 if (mounted && connectedResult.connected) {
                     yield* Effect.sync(() => {
                         setConnected(true);
-                        setDisplayName(
-                            String(connectedResult.displayName ?? `SQLite: ${selected}`),
-                        );
-                        setTables((connectedResult.tables as string[]) ?? []);
+                        setDisplayName(connectedResult.displayName || `SQLite: ${selected}`);
+                        setTables(connectedResult.tables);
                     });
                 }
             }
@@ -110,14 +109,14 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             Effect.tap((result) =>
                 Effect.sync(() => {
                     if (!result) return;
-                    setSelectedFileName(String(result.fileName ?? ""));
+                    setSelectedFileName(result.fileName);
                     setType("QSQLITE");
                 }),
             ),
         );
     const connect = (historyIndex?: number) =>
         Effect.gen(function* () {
-            const payload =
+            const payload: DatabaseConnectionInput =
                 historyIndex === undefined
                     ? { type, host, database, username, password }
                     : { historyIndex, password };
@@ -126,14 +125,12 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             yield* Effect.sync(() => {
                 setConnected(true);
                 setDisplayName(
-                    String(
-                        result.displayName ??
-                            (type === "QSQLITE"
-                                ? `SQLite: ${selectedFileName}`
-                                : `${database}@${host}`),
-                    ),
+                    result.displayName ||
+                        (type === "QSQLITE"
+                            ? `SQLite: ${selectedFileName}`
+                            : `${database}@${host}`),
                 );
-                setTables((result.tables as string[]) ?? []);
+                setTables(result.tables);
                 setConnectionDialogOpen(false);
             });
             yield* refreshHistory();
@@ -145,9 +142,9 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                     if (!result) return;
                     updateActiveQuery((current) => ({
                         ...current,
-                        columns: (result.columns as string[]) ?? [],
-                        rows: (result.rows as Array<Array<unknown>>) ?? [],
-                        truncated: Boolean(result.truncated),
+                        columns: result.columns,
+                        rows: result.rows,
+                        truncated: result.truncated,
                     }));
                 }),
             ),
@@ -156,7 +153,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
         execute("databaseTables", {}).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => {
-                    if (result) setTables((result.tables as string[]) ?? []);
+                    if (result) setTables(result.tables);
                 }),
             ),
         );

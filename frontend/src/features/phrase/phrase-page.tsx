@@ -4,14 +4,15 @@ import { PhraseConfirmationDialogs } from "./phrase-confirmation-dialogs";
 import { PhraseEditor } from "./phrase-editor";
 import { PhraseList } from "./phrase-list";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
+import type { PhraseTemplate } from "@/shared/bridge/types";
 import { Heading, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
 export function PhrasePage({ locale, run, active }: ToolPageProps) {
     type PhraseDraft = { title: string; content: string };
-    type PendingAction = { type: "new" } | { type: "select"; item: Record<string, unknown> };
+    type PendingAction = { type: "new" } | { type: "select"; item: PhraseTemplate };
     const { busy, error, execute, setError } = useOperation(run);
-    const [templates, setTemplates] = useState<Array<Record<string, unknown>>>([]);
+    const [templates, setTemplates] = useState<PhraseTemplate[]>([]);
     const [filename, setFilename] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -26,19 +27,17 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
     const refresh = () =>
         Effect.gen(function* () {
             const result = yield* execute("phraseData", { action: "list" });
-            if (result) {
-                yield* Effect.sync(() =>
-                    setTemplates((result.templates as Array<Record<string, unknown>>) ?? []),
-                );
+            if (result && "templates" in result) {
+                yield* Effect.sync(() => setTemplates(result.templates));
             }
         });
     useEffect(() => {
         return forkUiEffect(
             run("phraseData", { action: "list" }).pipe(
                 Effect.tap((result) =>
-                    Effect.sync(() =>
-                        setTemplates((result.templates as Array<Record<string, unknown>>) ?? []),
-                    ),
+                    Effect.sync(() => {
+                        if ("templates" in result) setTemplates(result.templates);
+                    }),
                 ),
                 Effect.catch(() => Effect.void),
             ),
@@ -51,10 +50,10 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
             setContent("");
             setSavedDraft(null);
         } else {
-            const nextFilename = String(action.item.filename ?? "");
+            const nextFilename = action.item.filename;
             const nextDraft = {
-                title: String(action.item.title ?? ""),
-                content: String(action.item.content ?? ""),
+                title: action.item.title,
+                content: action.item.content,
             };
             setFilename(nextFilename);
             setTitle(nextDraft.title);
@@ -64,7 +63,7 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
         setMessage("");
     };
     const requestAction = (action: PendingAction) => {
-        if (action.type === "select" && String(action.item.filename ?? "") === filename) return;
+        if (action.type === "select" && action.item.filename === filename) return;
         if (hasUnsavedChanges) {
             setPendingAction(action);
             setUnsavedDialogOpen(true);
@@ -80,10 +79,10 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
                 title,
                 content,
             });
-            if (!result) return false;
+            if (!result || !("filename" in result)) return false;
             const nextDraft = { title, content };
             yield* Effect.sync(() => {
-                setFilename(String(result.filename));
+                setFilename(result.filename);
                 setSavedDraft(nextDraft);
                 setMessage(text(locale, "Template saved.", "定型文を保存しました。"));
             });

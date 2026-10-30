@@ -70,15 +70,15 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                           : values[key];
             const result = yield* execute("convertTimestamp", { value, source });
             if (!result) return;
-            const instant = new Date(String(result.utc));
+            const instant = new Date(result.utc);
             yield* Effect.sync(() =>
                 setValues({
-                    seconds: String(result.seconds ?? ""),
-                    milliseconds: String(result.milliseconds ?? ""),
+                    seconds: result.seconds,
+                    milliseconds: result.milliseconds,
                     local: toLocalInput(instant),
                     utc: toLocalInput(instant, true),
-                    isoUtc: String(result.utc ?? ""),
-                    isoLocal: String(result.local ?? ""),
+                    isoUtc: result.utc,
+                    isoLocal: result.local,
                 }),
             );
         });

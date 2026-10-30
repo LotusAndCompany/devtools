@@ -11,13 +11,13 @@ interface ImageSplitControlsProps {
     locale: Locale;
     busy: boolean;
     hasImage: boolean;
-    splitMode: string;
+    splitMode: "division" | "cell-size";
     horizontalDivisions: string;
     verticalDivisions: string;
     cellWidth: string;
     cellHeight: string;
     ignoreRemainders: boolean;
-    setSplitMode: Dispatch<SetStateAction<string>>;
+    setSplitMode: Dispatch<SetStateAction<"division" | "cell-size">>;
     setHorizontalDivisions: Dispatch<SetStateAction<string>>;
     setVerticalDivisions: Dispatch<SetStateAction<string>>;
     setCellWidth: Dispatch<SetStateAction<string>>;

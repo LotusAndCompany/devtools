@@ -4,6 +4,7 @@ import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
 import { text } from "@/shared/tool-page";
+import type { DatabaseDriver } from "@/shared/bridge/types";
 import type { Locale } from "@/shared/types";
 import type { DatabaseHistoryEntry } from "./types";
 
@@ -13,14 +14,14 @@ interface DatabaseConnectionDialogProps {
     history: DatabaseHistoryEntry[];
     busy: boolean;
     connected: boolean;
-    type: string;
+    type: DatabaseDriver;
     host: string;
     database: string;
     username: string;
     password: string;
     selectedFileName: string;
     onOpenChange: (open: boolean) => void;
-    onTypeChange: (value: string) => void;
+    onTypeChange: (value: DatabaseDriver) => void;
     onHostChange: (value: string) => void;
     onDatabaseChange: (value: string) => void;
     onUsernameChange: (value: string) => void;

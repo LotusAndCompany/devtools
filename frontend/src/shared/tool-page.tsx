@@ -5,6 +5,7 @@ import { MessageDialog } from "@/shared/components/ui/message-dialog";
 import { Textarea } from "@/shared/components/ui/textarea";
 import {
     OperationCancelledError,
+    type OperationInput,
     type OperationRunner,
     type OperationName,
 } from "@/shared/bridge/types";
@@ -15,7 +16,7 @@ export const text = (locale: Locale, en: string, ja: string) => (locale === "ja"
 export function useOperation(run: OperationRunner) {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
-    const execute = (operation: OperationName, payload: Record<string, unknown>) =>
+    const execute = <Name extends OperationName>(operation: Name, payload: OperationInput<Name>) =>
         Effect.gen(function* () {
             yield* Effect.sync(() => {
                 setBusy(true);
