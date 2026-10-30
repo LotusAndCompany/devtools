@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@/shared/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45",
+    "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45",
     {
         variants: {
             variant: {
@@ -14,8 +14,8 @@ const buttonVariants = cva(
                 ghost: "hover:bg-muted",
             },
             size: {
-                default: "h-10 px-4",
-                sm: "h-9 px-3 text-xs",
+                default: "h-8 px-3",
+                sm: "h-7 px-2.5 text-[11px]",
             },
         },
         defaultVariants: { variant: "default", size: "default" },

@@ -42,7 +42,9 @@ function SelectBox({
                 className={cn("select-trigger", className)}
             >
                 <BaseSelect.Value placeholder={placeholder} />
-                <BaseSelect.Icon className="select-chevron" aria-hidden="true" />
+                <BaseSelect.Icon className="material-symbols select-chevron" aria-hidden="true">
+                    keyboard_arrow_down
+                </BaseSelect.Icon>
             </BaseSelect.Trigger>
             <BaseSelect.Portal>
                 <BaseSelect.Positioner

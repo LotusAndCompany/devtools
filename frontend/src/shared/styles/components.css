@@ -71,6 +71,10 @@ kbd {
     background: var(--card);
     box-shadow: var(--shadow);
 }
+
+.tool-page > :is(.input-card, .result-card) + :is(.input-card, .result-card) {
+    margin-top: 12px;
+}
 .input-card h2 {
     margin: 0;
     font-size: 13px;
@@ -152,15 +156,13 @@ kbd {
     min-width: 120px;
 }
 .select-chevron {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
+    display: inline-flex;
     flex: 0 0 auto;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-    transform: translateY(-2px) rotate(45deg);
+    color: var(--muted-foreground);
+    font-size: 18px;
 }
 .select-positioner {
+    z-index: 102;
     min-width: var(--anchor-width);
 }
 .select-popup {

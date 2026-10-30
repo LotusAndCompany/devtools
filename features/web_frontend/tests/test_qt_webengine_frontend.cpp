@@ -142,6 +142,20 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 "Boolean(document.querySelector('.page-host:not([hidden]) > .empty-state'))"),
             &result));
         QVERIFY(!result.toBool());
+        if (index == 2) {
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("parseFloat(getComputedStyle(document.querySelector("
+                               "'.page-host:not([hidden]) .command-output')).marginTop) >= 12"),
+                &result));
+            QVERIFY(result.toBool());
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("Math.round(parseFloat(getComputedStyle(document.querySelector("
+                               "'.page-host:not([hidden]) [data-slot=button]')).height)) === 32"),
+                &result));
+            QVERIFY(result.toBool());
+        }
     }
 
     QVERIFY(evaluateJavaScript(
@@ -291,6 +305,55 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                     "document.querySelector('.page-host.active-page')?.dataset.page ?? ''"),
                 &result));
             QCOMPARE(result.toString(), QStringLiteral("data"));
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.settings-dialog .select-chevron')?.textContent"
+                    ".trim() === 'keyboard_arrow_down'"),
+                &result));
+            QVERIFY(result.toBool());
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(view.page(),
+                                   QStringLiteral("Boolean(document.querySelector('.settings-"
+                                                  "dialog .select-trigger:not(:disabled)'))"),
+                                   &result) &&
+                    result.toBool(),
+                5000);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.settings-dialog .select-trigger').click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral("Boolean(document.querySelector('.select-popup .select-item'))"),
+                    &result) &&
+                    result.toBool(),
+                5000);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "(() => { const item = document.querySelector('.select-popup .select-item'); "
+                    "if (!item) return false; const rect = item.getBoundingClientRect(); "
+                    "return document.elementFromPoint(rect.x + rect.width / 2, "
+                    "rect.y + rect.height / 2)?.closest('.select-item') === item; })()"),
+                &result));
+            QVERIFY(result.toBool());
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral(
+                    "document.querySelector('.select-popup .select-item').click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral(
+                        "document.querySelector('.settings-dialog .select-trigger')?.textContent"
+                        ".includes('English') ?? false"),
+                    &result) &&
+                    result.toBool(),
+                5000);
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral(
