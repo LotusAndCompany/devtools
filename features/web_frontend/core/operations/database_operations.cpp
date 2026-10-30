@@ -105,7 +105,8 @@ FrontendOperationService::Result databaseQuery(const QVariantMap &payload)
         qsizetype totalBytes = 0;
         bool truncated = false;
         constexpr int MAX_ROWS = 1000;
-        constexpr qsizetype MAX_RESULT_BYTES = 4 * 1024 * 1024;
+        constexpr qsizetype MAX_RESULT_BYTES = qsizetype{4} * 1024 * 1024;
+        constexpr qsizetype MAX_CELL_TEXT_CHARS = qsizetype{64} * 1024;
         while (execution.query.next()) {
             if (rows.size() >= MAX_ROWS) {
                 truncated = true;
@@ -121,7 +122,7 @@ FrontendOperationService::Result databaseQuery(const QVariantMap &payload)
                 }
                 const QString text = value.toString();
                 totalBytes += text.toUtf8().size();
-                if (text.size() > 64 * 1024 || totalBytes > MAX_RESULT_BYTES) {
+                if (text.size() > MAX_CELL_TEXT_CHARS || totalBytes > MAX_RESULT_BYTES) {
                     return FrontendOperationService::Result{
                         {},
                         QStringLiteral("SIZE_LIMIT_EXCEEDED"),

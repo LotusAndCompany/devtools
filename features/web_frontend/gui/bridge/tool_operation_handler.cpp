@@ -40,6 +40,7 @@ void NativeBridge::startJsonFormat(const QString &requestId, const QVariantMap &
         });
 }
 
+// NOLINTNEXTLINE(readability-function-size) -- dialog and save worker share one operation lifetime.
 void NativeBridge::startQrImageSaveOperation(const QString &requestId, const QVariantMap &payload)
 {
     const auto current = operations_.constFind(requestId);

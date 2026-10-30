@@ -10,6 +10,7 @@
 
 #include <memory>
 
+// NOLINTNEXTLINE(readability-function-size) -- shared connection and file lifetimes.
 void NativeBridge::startDatabaseOperation(const QString &requestId, const QString &operation,
                                           const QVariantMap &payload)
 {
@@ -18,7 +19,7 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
         const QList<QJsonObject> stored = ConnectionHistory::read(settings);
         QVariantList history;
         for (int index = 0; index < stored.size(); ++index) {
-            const QJsonObject item = stored.at(index);
+            const QJsonObject &item = stored.at(index);
             const QString type = item.value(QStringLiteral("type")).toString();
             const QString database = item.value(QStringLiteral("database")).toString();
             const QString displayName = item.value(QStringLiteral("displayName")).toString();
@@ -156,9 +157,12 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
             return;
         }
         const auto access = database_state_->fileAccess();
-        const QString typeText = type == QStringLiteral("QSQLITE")  ? tr("SQLite")
-                                 : type == QStringLiteral("QMYSQL") ? tr("MySQL")
-                                                                    : tr("PostgreSQL");
+        QString typeText = tr("PostgreSQL");
+        if (type == QStringLiteral("QSQLITE")) {
+            typeText = tr("SQLite");
+        } else if (type == QStringLiteral("QMYSQL")) {
+            typeText = tr("MySQL");
+        }
         startWorker(
             requestId, operation,
             [connection, access](const CancellationToken &token, const ProgressCallback &progress) {

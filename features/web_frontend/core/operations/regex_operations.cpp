@@ -12,6 +12,7 @@ using FrontendOperationSupport::readText;
 
 namespace FrontendOperationHandlers {
 
+// NOLINTNEXTLINE(readability-function-size) -- one result flow.
 FrontendOperationService::Result evaluateRegex(
     const QVariantMap &payload, const FrontendOperationService::CancellationToken &cancellation,
     const FrontendOperationService::ProgressCallback &progress)

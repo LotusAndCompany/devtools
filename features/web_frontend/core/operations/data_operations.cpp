@@ -12,6 +12,10 @@ using FrontendOperationSupport::readText;
 
 namespace FrontendOperationHandlers {
 
+namespace {
+constexpr qsizetype MAX_CONVERTED_OUTPUT_BYTES = qsizetype{4} * 1024 * 1024;
+} // namespace
+
 FrontendOperationService::Result convertData(const QVariantMap &payload)
 {
     QString input;
@@ -55,7 +59,7 @@ FrontendOperationService::Result convertData(const QVariantMap &payload)
         conversion.outputText().isEmpty()) {
         return invalidInput(conversion.messages());
     }
-    if (conversion.outputText().toUtf8().size() > 4 * 1024 * 1024) {
+    if (conversion.outputText().toUtf8().size() > MAX_CONVERTED_OUTPUT_BYTES) {
         return {{},
                 QStringLiteral("SIZE_LIMIT_EXCEEDED"),
                 QStringLiteral("Converted output is larger than 4 MiB."),

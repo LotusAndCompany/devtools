@@ -51,10 +51,10 @@ private:
     void retranslateUi();
     static QString droppedSQLiteFilePath(const QMimeData *mimeData);
     static QString droppedImageFilePath(const QMimeData *mimeData);
+    static void onLanguageChanged(const QString &languageCode);
 
 private slots:
     void onActionTriggered(QAction *action);
-    void onLanguageChanged(const QString &languageCode);
 };
 
 #endif // MAIN_WINDOW_H

@@ -19,6 +19,8 @@
 #include <QWebEngineUrlRequestInterceptor>
 #include <QWidget>
 
+#include <utility>
+
 #ifndef NDEBUG
 #include <QProcessEnvironment>
 #endif
@@ -178,9 +180,12 @@ void QtWebEngineAdapter::installDropEventFilters(QObject *object)
 bool QtWebEngineAdapter::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ChildAdded) {
-        const auto *childEvent = static_cast<QChildEvent *>(event);
-        const QPointer<QObject> child = childEvent->child();
-        QTimer::singleShot(0, this, [this, child]() {
+        const auto *childEvent = dynamic_cast<QChildEvent *>(event);
+        if (childEvent == nullptr) {
+            return QWebEngineView::eventFilter(watched, event);
+        }
+        QPointer<QObject> child = childEvent->child();
+        QTimer::singleShot(0, this, [this, child = std::move(child)]() {
             if (child) {
                 installDropEventFilters(child);
             }
@@ -189,26 +194,28 @@ bool QtWebEngineAdapter::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (event->type() == QEvent::DragEnter) {
-        auto *dragEvent = static_cast<QDragEnterEvent *>(event);
-        if (!droppedSQLiteFilePath(dragEvent->mimeData()).isEmpty() ||
-            !droppedImageFilePath(dragEvent->mimeData()).isEmpty()) {
+        auto *dragEvent = dynamic_cast<QDragEnterEvent *>(event);
+        if (dragEvent != nullptr && (!droppedSQLiteFilePath(dragEvent->mimeData()).isEmpty() ||
+                                     !droppedImageFilePath(dragEvent->mimeData()).isEmpty())) {
             dragEvent->acceptProposedAction();
             return true;
         }
     } else if (event->type() == QEvent::Drop) {
-        auto *dropEvent = static_cast<QDropEvent *>(event);
-        const QMimeData *const mimeData = dropEvent->mimeData();
-        const QString databasePath = droppedSQLiteFilePath(mimeData);
-        if (!databasePath.isEmpty()) {
-            native_bridge_->openDroppedSQLiteFile(databasePath);
-            dropEvent->acceptProposedAction();
-            return true;
-        }
-        const QString imagePath = droppedImageFilePath(mimeData);
-        if (!imagePath.isEmpty()) {
-            native_bridge_->openDroppedImageFile(imagePath);
-            dropEvent->acceptProposedAction();
-            return true;
+        auto *dropEvent = dynamic_cast<QDropEvent *>(event);
+        if (dropEvent != nullptr) {
+            const QMimeData *const mimeData = dropEvent->mimeData();
+            const QString databasePath = droppedSQLiteFilePath(mimeData);
+            if (!databasePath.isEmpty()) {
+                native_bridge_->openDroppedSQLiteFile(databasePath);
+                dropEvent->acceptProposedAction();
+                return true;
+            }
+            const QString imagePath = droppedImageFilePath(mimeData);
+            if (!imagePath.isEmpty()) {
+                native_bridge_->openDroppedImageFile(imagePath);
+                dropEvent->acceptProposedAction();
+                return true;
+            }
         }
     }
     return QWebEngineView::eventFilter(watched, event);

@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     retranslateUi();
     connect(menuBar(), &QMenuBar::triggered, this, &MainWindow::onActionTriggered);
     connect(web_frontend_->nativeBridge(), &NativeBridge::languageChangeRequested, this,
-            &MainWindow::onLanguageChanged);
+            [](const QString &languageCode) { MainWindow::onLanguageChanged(languageCode); });
 
     const ApplicationSettings settings = ApplicationSettingsService().read();
     setWindowFlag(Qt::WindowStaysOnTopHint, settings.alwaysOnTop);

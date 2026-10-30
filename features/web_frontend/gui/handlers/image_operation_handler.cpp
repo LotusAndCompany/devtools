@@ -15,6 +15,7 @@
 
 namespace {
 constexpr qint64 MAX_IMAGE_PIXELS = 100'000'000;
+constexpr qsizetype MAX_IMAGE_PREVIEW_BYTES = qsizetype{768} * 1024;
 
 QString imagePreviewDataUrl(const QImage &image)
 {
@@ -28,7 +29,7 @@ QString imagePreviewDataUrl(const QImage &image)
         if (!buffer.open(QIODevice::WriteOnly) || !preview.save(&buffer, "PNG")) {
             return {};
         }
-        if (bytes.size() <= 768 * 1024) {
+        if (bytes.size() <= MAX_IMAGE_PREVIEW_BYTES) {
             return QStringLiteral("data:image/png;base64,") + QString::fromLatin1(bytes.toBase64());
         }
         if (preview.width() <= 128 || preview.height() <= 128) {
@@ -97,6 +98,7 @@ NativeBridge::OperationResult NativeBridge::readImageFile(const QString &path,
                            false};
 }
 
+// NOLINTNEXTLINE(readability-function-size) -- operation routes share dialog and worker state.
 void NativeBridge::startImageOperation(const QString &requestId, const QString &operation,
                                        const QVariantMap &payload)
 {
@@ -138,9 +140,12 @@ void NativeBridge::startImageOperation(const QString &requestId, const QString &
         }
         const bool saving = operation == QStringLiteral("imageSave");
         const bool selectingFolder = operation == QStringLiteral("imageSplit");
-        const QString title = operation == QStringLiteral("imageOpen") ? tr("Open image")
-                              : saving                                 ? tr("Save image")
-                                                                       : tr("Select save folder");
+        QString title = tr("Select save folder");
+        if (operation == QStringLiteral("imageOpen")) {
+            title = tr("Open image");
+        } else if (saving) {
+            title = tr("Save image");
+        }
         auto *dialog = new QFileDialog(dialog_parent_, title);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         if (selectingFolder) {
@@ -301,6 +306,7 @@ void NativeBridge::startImageOperation(const QString &requestId, const QString &
         startWorker(
             requestId, operation,
             [restored](const CancellationToken &token, const ProgressCallback &progress) {
+                Q_UNUSED(progress);
                 if (token->load(std::memory_order_relaxed)) {
                     return OperationResult{{}, {}, {}, true};
                 }

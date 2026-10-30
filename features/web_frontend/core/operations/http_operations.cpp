@@ -19,6 +19,9 @@ using FrontendOperationSupport::readText;
 
 namespace FrontendOperationHandlers {
 
+constexpr qsizetype MAX_HTTP_RESPONSE_BYTES = qsizetype{4} * 1024 * 1024;
+
+// NOLINTNEXTLINE(readability-function-size) -- keep request and response lifecycle together.
 FrontendOperationService::Result sendHttpRequest(
     const QVariantMap &payload, const FrontendOperationService::CancellationToken &cancellation,
     const FrontendOperationService::ProgressCallback &progress)
@@ -103,7 +106,7 @@ FrontendOperationService::Result sendHttpRequest(
     bool tooLarge = false;
     QObject::connect(reply, &QIODevice::readyRead, reply, [&]() {
         responseBody.append(reply->readAll());
-        if (responseBody.size() > 4 * 1024 * 1024) {
+        if (responseBody.size() > MAX_HTTP_RESPONSE_BYTES) {
             tooLarge = true;
             reply->abort();
         }
@@ -129,7 +132,7 @@ FrontendOperationService::Result sendHttpRequest(
     if (cancellation->load(std::memory_order_relaxed)) {
         return {{}, {}, {}, true};
     }
-    if (tooLarge || responseBody.size() > 4 * 1024 * 1024) {
+    if (tooLarge || responseBody.size() > MAX_HTTP_RESPONSE_BYTES) {
         return {{},
                 QStringLiteral("SIZE_LIMIT_EXCEEDED"),
                 QStringLiteral("HTTP response body is limited to 4 MiB."),

@@ -11,6 +11,7 @@
 
 #include <algorithm>
 
+// NOLINTNEXTLINE(readability-function-size) -- keep file dialog and worker ownership together.
 void NativeBridge::startFileDialog(const QString &requestId, const QString &operation,
                                    const QVariantMap &payload)
 {

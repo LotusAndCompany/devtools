@@ -50,11 +50,13 @@ FrontendOperationService::Result phraseData(const QVariantMap &payload)
         }
         const TemplateSaveResult saved = TemplateRepository::save(title, content, filename);
         if (saved.error != TemplateValidationError::None || !saved.written) {
-            return invalidInput(saved.error == TemplateValidationError::EmptyTitle
-                                    ? QStringLiteral("Template title is required.")
-                                : saved.error == TemplateValidationError::EmptyContent
-                                    ? QStringLiteral("Template content is required.")
-                                    : QStringLiteral("Could not save the template."));
+            QString errorMessage = QStringLiteral("Could not save the template.");
+            if (saved.error == TemplateValidationError::EmptyTitle) {
+                errorMessage = QStringLiteral("Template title is required.");
+            } else if (saved.error == TemplateValidationError::EmptyContent) {
+                errorMessage = QStringLiteral("Template content is required.");
+            }
+            return invalidInput(errorMessage);
         }
         return {{{QStringLiteral("filename"), saved.filename}}, {}, {}, false};
     }

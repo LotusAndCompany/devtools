@@ -24,7 +24,7 @@ static QString qrImageData(const QImage &image)
         if (!buffer.open(QIODevice::WriteOnly) || !preview.save(&buffer, "PNG")) {
             return {};
         }
-        if (bytes.size() <= 1024 * 1024) {
+        if (bytes.size() <= qsizetype{1024} * 1024) {
             return QStringLiteral("data:image/png;base64,") + QString::fromLatin1(bytes.toBase64());
         }
         if (preview.width() <= 128 || preview.height() <= 128) {
@@ -34,6 +34,7 @@ static QString qrImageData(const QImage &image)
     }
 }
 
+// NOLINTNEXTLINE(readability-function-size) -- validation and key mapping.
 FrontendOperationService::Result generateQr(const QVariantMap &payload)
 {
     const QString typeName = payload.value(QStringLiteral("type")).toString();
@@ -41,7 +42,7 @@ FrontendOperationService::Result generateQr(const QVariantMap &payload)
         QStringLiteral("text"),    QStringLiteral("url"),      QStringLiteral("email"),
         QStringLiteral("phone"),   QStringLiteral("sms"),      QStringLiteral("wifi"),
         QStringLiteral("contact"), QStringLiteral("calendar"), QStringLiteral("geo")};
-    const int typeIndex = names.indexOf(typeName);
+    const int typeIndex = static_cast<int>(names.indexOf(typeName));
     if (typeIndex < 0) {
         return invalidInput(QStringLiteral("QR code type is not supported."));
     }
