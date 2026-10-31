@@ -116,7 +116,7 @@ cmake --build build --target run
 
 - [ユーザーガイド](../user-guide/overview.md) - 各機能の使い方
 - [開発者向けガイド](../development/architecture.md) - コントリビューター向け
-- [アイコン資産](../development/icon-assets.md) - Material Symbolsアイコンの追加方法
+- [アイコン資産](../development/icon-assets.md) - Reactとネイティブホストのアイコン
 - [APIドキュメント](https://LotusAndCompany.github.io/devtools/)（Doxygen）
 
 ### その他のリソース
@@ -153,7 +153,6 @@ DevToolsは以下のサードパーティライブラリを使用しています
 | yaml-cpp | MIT |
 | qlementine | MIT |
 | qrcodegen | MIT |
-| Material Symbols | Apache 2.0 |
 | `@base-ui/react` | MIT |
 | `class-variance-authority` | Apache 2.0 |
 | `cn` | MIT |

@@ -6,9 +6,9 @@ paths:
 # Project Rules
 
 DevTools is a macOS desktop application with a C++17/Qt 6 native host and a
-React/TypeScript frontend rendered by Qt WebEngine. Qt Widgets still provides
-the native window and platform integration; existing C++ feature UIs remain
-for native support and tests.
+React/TypeScript frontend rendered by Qt WebEngine. Qt Widgets provides the
+native window, menus, OS dialogs, and platform integration. Feature screens are
+implemented in React; C++ feature modules provide processing services only.
 
 ## Build
 
@@ -50,9 +50,10 @@ bun run --bun test
 
 ## Architecture
 
-- `features/{feature}/core/`: business logic. Do not introduce Qt Widgets
-  dependencies here. QtCore, QtGui, QtSql, QtNetwork are allowed.
-- `features/{feature}/gui/`: Qt6 Widgets UI layer.
+- `features/{feature}/core/`: feature processing services used through the native
+  bridge. Do not introduce Qt Widgets dependencies here. QtCore, QtGui, QtSql,
+  and QtNetwork are allowed.
+- `features/framework/gui/`: Qt application and window host.
 - `main/`: application entry point.
 - `frontend/src/app/`, `features/`, `shared/`, and `platform/qt/`: React UI, tools, shared code, and Qt WebChannel adapter.
 - `features/web_frontend/`: native bridge, operation handlers, and C++ service calls for the React UI.

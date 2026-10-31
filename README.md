@@ -105,7 +105,7 @@ For detailed build instructions, see [BUILD.md](BUILD.md).
 ### Detailed Documentation
 - [User Guide](docs/user-guide/overview.md) - How to use each feature
 - [Development Guide](docs/development/architecture.md) - For contributors
-- [Icon Assets](docs/development/icon-assets.md) - Bundled icon font and license records
+- [Icon Assets](docs/development/icon-assets.md) - Frontend and native host icons
 - [API Documentation](https://LotusAndCompany.github.io/devtools/) (Doxygen)
 
 ### Other Resources
@@ -141,7 +141,6 @@ DevTools uses the following third-party libraries:
 | yaml-cpp | MIT |
 | qlementine | MIT |
 | qrcodegen | MIT |
-| Material Symbols | Apache 2.0 |
 | `@base-ui/react` | MIT |
 | `class-variance-authority` | Apache 2.0 |
 | `cn` | MIT |

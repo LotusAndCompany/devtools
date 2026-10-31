@@ -32,7 +32,7 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 ```mermaid
 flowchart TD
     root["devtools/"]
-    root --> features["features/<br/>機能モジュール<br/>(core/, gui/, tests/)"]
+    root --> features["features/<br/>機能モジュール<br/>(core/, tests/)"]
     root --> frontend["frontend/src/<br/>React・TypeScript UI<br/>(app/, features/, shared/, platform/qt/)"]
     root --> webbridge["features/web_frontend/<br/>Qt WebEngineとC++ブリッジ"]
     root --> main["main/<br/>アプリケーションエントリーポイント"]
@@ -236,11 +236,11 @@ Code Qualityワークフローは、設定されたパスフィルターに一�
 | 定数 | SCREAMING_SNAKE_CASE | `MAX_IMAGE_SIZE` |
 | ファイル | snake_case | `image_resize.cpp` |
 
-### ネイティブC++モジュールの追加
+### ネイティブC++サービスの追加
 
-通常のツール画面はReactで実装します。現行の追加手順は
+ツール画面はReactで実装します。画面の追加と必要なネイティブ処理との接続は
 [新しいツールの追加ガイド](../development/adding-new-tools.md)を参照してください。
-以下はネイティブC++機能モジュールまたは旧Qt Widgets画面を追加する場合の手順です。
+C++機能モジュールには再利用可能な処理サービスを実装します。機能ごとのQt Widgets画面は追加しません。
 
 1. 機能ディレクトリ構造を作成：
    ```mermaid
@@ -248,9 +248,7 @@ Code Qualityワークフローは、設定されたパスフィルターに一�
        module["features/your_module/"]
        module --> cmake["CMakeLists.txt"]
        module --> core["core/"]
-       core --> core_files["your_module.h<br/>your_module.cpp"]
-       module --> gui["gui/"]
-       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       core --> core_files["your_service.h<br/>your_service.cpp"]
        module --> tests["tests/"]
        tests --> test_file["test_your_module.cpp"]
    ```
@@ -260,11 +258,10 @@ Code Qualityワークフローは、設定されたパスフィルターに一�
    qt_add_library(${PROJECT_NAME}_your_module STATIC)
    ```
 
-3. `features/your_module/CMakeLists.txt`にソースファイルを列挙：
+3. `features/your_module/CMakeLists.txt`にサービスのソースを列挙：
    ```cmake
    target_sources(${PROJECT_NAME}_your_module PRIVATE
-       core/your_module.h core/your_module.cpp
-       gui/your_module_gui.h gui/your_module_gui.cpp
+       core/your_service.h core/your_service.cpp
    )
    ```
 
@@ -276,7 +273,7 @@ Code Qualityワークフローは、設定されたパスフィルターに一�
    )
    ```
 
-5. `features/CMakeLists.txt`に機能を登録：
+5. `features/CMakeLists.txt`にモジュールを登録：
    ```cmake
    add_subdirectory(your_module)
    ```

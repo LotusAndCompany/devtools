@@ -32,7 +32,7 @@ Before contributing, make sure you have:
 ```mermaid
 flowchart TD
     root["devtools/"]
-    root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
+    root --> features["features/<br/>Feature modules<br/>(core/, tests/)"]
     root --> frontend["frontend/src/<br/>React and TypeScript UI<br/>(app/, features/, shared/, platform/qt/)"]
     root --> webbridge["features/web_frontend/<br/>Qt WebEngine host and C++ bridge"]
     root --> main["main/<br/>Application entry point"]
@@ -239,12 +239,12 @@ path filters match. The PR-title check runs on pull requests independently.
 | Constants | SCREAMING_SNAKE_CASE | `MAX_IMAGE_SIZE` |
 | Files | snake_case | `image_resize.cpp` |
 
-### Adding Native C++ Modules
+### Adding Native C++ Services
 
-Regular tool screens are React features. Follow the
-[Adding New Tools guide](docs/development/adding-new-tools.md) for the current
-React workflow. The steps below apply to a native C++ feature module or a
-legacy Qt Widgets screen.
+Tool screens are implemented in React. Follow the
+[Adding New Tools guide](docs/development/adding-new-tools.md) to add a screen
+and connect it to native work when needed. C++ feature modules contain reusable
+processing services; do not add per-feature Qt Widgets screens.
 
 1. Create the feature directory structure:
    ```mermaid
@@ -252,9 +252,7 @@ legacy Qt Widgets screen.
        module["features/your_module/"]
        module --> cmake["CMakeLists.txt"]
        module --> core["core/"]
-       core --> core_files["your_module.h<br/>your_module.cpp"]
-       module --> gui["gui/"]
-       gui --> gui_files["your_module_gui.h<br/>your_module_gui.cpp"]
+       core --> core_files["your_service.h<br/>your_service.cpp"]
        module --> tests["tests/"]
        tests --> test_file["test_your_module.cpp"]
    ```
@@ -264,11 +262,10 @@ legacy Qt Widgets screen.
    qt_add_library(${PROJECT_NAME}_your_module STATIC)
    ```
 
-3. List source files in `features/your_module/CMakeLists.txt`:
+3. List service source files in `features/your_module/CMakeLists.txt`:
    ```cmake
    target_sources(DevTools_your_module PRIVATE
-       core/your_module.h core/your_module.cpp
-       gui/your_module_gui.h gui/your_module_gui.cpp
+       core/your_service.h core/your_service.cpp
    )
    ```
 
@@ -280,7 +277,7 @@ legacy Qt Widgets screen.
    )
    ```
 
-5. Register the feature in `features/CMakeLists.txt`:
+5. Register the module in `features/CMakeLists.txt`:
    ```cmake
    add_subdirectory(your_module)
    ```

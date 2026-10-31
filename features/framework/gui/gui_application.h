@@ -24,9 +24,6 @@ class GuiApplication : public QApplication, public ApplicationMixin
 public:
     /**
      * @brief コンストラクタ
-     * @details シグナルを接続している@n
-     *          MainWindow::colorSchemeChanged() →
-     * GuiApplication::onWindowColorSchemeChanged()
      * @param argc `int main(int argc, char *argv[])`で受け取った `argc`
      * @param argv `int main(int argc, char *argv[])`で受け取った `argv`
      */
@@ -45,11 +42,6 @@ public:
      * @return 変更に成功したかどうか
      */
     bool changeLanguage(const QString &languageCode);
-
-    /**
-     * @brief システムのカラースキームを適用する
-     */
-    void applySystemColorScheme();
 
     void setup() override;
     int start() override;
@@ -83,24 +75,9 @@ private:
 
     // NOTE: staticにできる
     /**
-     * @brief カラースキームを変更をUIに反映する
-     * @details Material Symbols Outlined のグリフをアプリケーションフォントから生成し、
-     *          qlementineのテーマとシステムスキームに合わせてパレットを切り替える
-     *
-     * @sa [QIcon::setThemeName(const QString
-     * &name)](https://doc.qt.io/qt-6/qicon.html#setThemeName)
+     * @brief qlementineのテーマをシステムカラースキームに合わせる
      */
     void applyColorScheme();
-
-    /**
-     * @brief カラースキームが変更された時に呼ばれる
-     * @details MainWindow::colorSchemeChanged() と接続されている
-     * @sa GuiApplication::GuiApplication(int &argc, char **argv)
-     */
-    void onWindowColorSchemeChanged();
-
-    /// Material Symbols Outlined の登録に成功したかどうか
-    bool material_symbols_loaded = false;
 
 // Platform specific
 #ifdef Q_OS_MACOS

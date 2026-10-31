@@ -17,15 +17,7 @@ target_sources(DevTools_core PRIVATE
 )
 
 target_sources(DevTools_framework_gui PRIVATE
-    # GUI
-    gui/icon_utils.h gui/icon_utils.cpp
+    # Qt Widgets application host
     gui/main_window.h
     gui/gui_application.h gui/gui_application.cpp
-    gui/design_system.h gui/design_system.cpp
-    gui/gui_tool.h gui/gui_tool.cpp
-    gui/sidemenu.h gui/sidemenu.cpp
-    gui/sidemenu_item.h gui/sidemenu_item.cpp
-    gui/welcome_page.h gui/welcome_page.cpp
-    gui/menubar/about_devtools_dialog.h gui/menubar/about_devtools_dialog.cpp
-    gui/menubar/settings_dialog.h gui/menubar/settings_dialog.cpp
 )

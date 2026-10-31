@@ -225,34 +225,12 @@ std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
 
 ### UI Construction
 
-- Build Qt Widgets layouts in C++ only for native host or legacy widget screens;
-  the regular tool screens are implemented in React.
-- Use Qt parent-child ownership for widget lifetime management.
-- Name UI elements descriptively: `saveButton`, `inputLineEdit`
-- Reuse `DevTools::Ui` helpers from `features/framework/gui/design_system.h` for
-  common layouts and widget configuration.
-- Use `DevTools::Ui::Metrics` for shared spacing and size values instead of
-  repeating literals in feature screens.
-- Use the active qlementine palette for common colors. Avoid feature-local
-  style sheets or duplicate theme values.
-- Add a helper to the design system only when the pattern is shared by more
-  than one screen; keep one-off layout decisions in the feature GUI.
-
-### Widget Roles
-
-- Use `QListWidget` or `QListView` for flat collections, and reserve tree
-  widgets for genuinely hierarchical data.
-- Use a read-only `QPlainTextEdit` configured with
-  `configureDisplayTextControl()` for multi-line text output. Do not model a
-  single response or result string as a one-item list.
-- Keep `configureItemView()` and `configureTableView()` on all list and table
-  views so their font, frame, selection, and theme treatment stay shared.
-- List views must use the shared rounded frame from `configureItemView()` and
-  must not be wrapped in another framed pane. Table and tree views use the
-  containing pane as their outer frame; do not add feature-local borders.
-- Display-only text controls must not receive focus or hover styling. Preserve
-  text or link interaction only when the screen explicitly needs selection,
-  copying, or link activation.
+- Implement tool screens and shared application UI in React under
+  `frontend/src/`; use the project's shared and shadcn components.
+- Keep Qt Widgets code in the native host and integration layers. Use Qt
+  parent-child ownership for widget lifetime management.
+- Use the active qlementine palette for native host colors. Avoid rebuilding
+  tool-screen UI in C++.
 
 ## C++17 Features
 

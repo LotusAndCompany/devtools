@@ -36,9 +36,6 @@ public:
     MainWindow(MainWindow &&) = delete;
     MainWindow &operator=(MainWindow &&) = delete;
 
-signals:
-    void colorSchemeChanged();
-
 private:
     void changeEvent(QEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;

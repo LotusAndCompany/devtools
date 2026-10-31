@@ -44,8 +44,7 @@ bool isBundledResourceUrl(const QUrl &url)
     return url.scheme() == QStringLiteral("qrc") &&
            (path.startsWith(QStringLiteral("/frontend/")) ||
             path.startsWith(QStringLiteral("/qtwebchannel/")) ||
-            path == QStringLiteral("/logo/dev-tools_logo.png") ||
-            path == QStringLiteral("/fonts/MaterialSymbolsOutlined.ttf"));
+            path == QStringLiteral("/logo/dev-tools_logo.png"));
 }
 
 class FrontendRequestInterceptor final : public QWebEngineUrlRequestInterceptor

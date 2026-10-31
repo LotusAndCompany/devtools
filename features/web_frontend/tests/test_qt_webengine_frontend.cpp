@@ -106,14 +106,6 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             &result) &&
             result.toBool(),
         5000);
-    QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(
-            view.page(),
-            QStringLiteral("document.fonts.check('20px \"Material Symbols Outlined\"', 'menu')"),
-            &result) &&
-            result.toBool(),
-        5000);
-
     for (int index = 0; index < 11; ++index) {
         QVariant expectedHeadingValue;
         QVERIFY(

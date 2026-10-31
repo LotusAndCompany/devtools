@@ -2,7 +2,6 @@
 
 #include "features/framework/core/application_settings_service.h"
 #include "features/framework/core/local_file_selection_service.h"
-#include "features/framework/gui/design_system.h"
 #include "features/framework/gui/gui_application.h"
 #include "features/image/core/image_processing_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
@@ -25,7 +24,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setObjectName(QStringLiteral("MainWindow"));
-    resize(DevTools::Ui::mainWindowSize());
+    resize(1280, 720);
     setWindowTitle(QStringLiteral("DevTools"));
     setAcceptDrops(true);
 
@@ -114,18 +113,10 @@ void MainWindow::onActionTriggered(QAction *action)
 
 void MainWindow::changeEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::PaletteChange:
-        emit colorSchemeChanged();
-        event->accept();
-        break;
-    case QEvent::LanguageChange:
+    if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
-        event->accept();
-        break;
-    default:
-        QMainWindow::changeEvent(event);
     }
+    QMainWindow::changeEvent(event);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

@@ -5,5 +5,4 @@ target_sources(DevTools_qr_code_generation PRIVATE
     core/qr_validation.h core/qr_validation.cpp
     core/qr_image.h core/qr_image.cpp
     core/qrcodegen.hpp core/qrcodegen.cpp
-    gui/qr_code_generation_gui.h gui/qr_code_generation_gui.cpp
 )

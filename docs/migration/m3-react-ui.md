@@ -43,15 +43,20 @@ image previews, regex matches, and individual inputs have explicit bounds in
 the native operation paths. Markdown HTML is isolated in a sandboxed iframe;
 the bundled page CSP and WebEngine request policy remain in force.
 
-The WebEngine host and existing UI modules still compile in the same CMake
-build. Legacy Qt screen classes remain in the source tree because the existing
-Qt GUI unit tests and feature targets still use them; they are not reachable
-through the new app navigation. Removing that test/build support is a separate
-cleanup item and is not evidence that a Qt WebEngine runtime path works.
+## Native Qt Host Scope
+
+The post-migration cleanup removes feature-level Qt Widgets screens and their
+screen-specific helpers. React is the only implementation of tool and settings
+screens. The native `GuiApplication` and `MainWindow`, Qt WebEngine adapter,
+NativeBridge, OS dialogs, file-drop handling, and C++ feature services remain.
+The bundled Material Symbols font was removed because the native feature screens
+were its only consumer; React uses `lucide-react`.
 
 ## Verification record
 
-Local checks for this M3 source snapshot (2026-10-29):
+The following checks were recorded for the M3 source snapshot before native
+feature-screen cleanup (2026-10-29). They are historical results; the retired
+Qt Widgets screen tests are no longer part of the current test set.
 
 - `npm run typecheck` passed.
 - `npm test` passed (6 frontend contract tests).

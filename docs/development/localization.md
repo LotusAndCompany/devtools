@@ -27,7 +27,7 @@ flowchart TD
     lupdate --> ts[".ts<br/>(tracked)"]
     ts --> lrelease["lrelease"]
     lrelease --> qm[".qm<br/>(generated)"]
-    qm --> native["Native Qt UI<br/>(runtime)"]
+    qm --> native["Native Qt host text<br/>(runtime)"]
 ```
 
 1. **Native C++ source**: English strings marked with `tr()`
@@ -93,17 +93,9 @@ Edit the tracked `.ts` files when translation text changes. The update target us
 `-locations none -no-obsolete` so source line numbers and obsolete messages do not create
 unrelated diffs.
 
-### Translation Entry Shape
-
-```xml
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Language:</source>
-        <translation>言語:</translation>
-    </message>
-</context>
-```
+React screens use the locale-aware `text()` helper and keep their strings in
+TypeScript. The Qt translation catalog is reserved for native host and bridge
+messages; React strings do not belong in the `.ts` catalog.
 
 ## Adding a New Language
 
@@ -218,29 +210,12 @@ target.
    - Missing translations
    - Wrong context translations
 
-### Shared Qt Widgets and Localization
+### Native Qt Host Localization
 
-Use the shared UI contract in `features/framework/gui/design_system.*` when
-adding or changing native or legacy Qt Widgets controls. Shared field, pane,
-action-bar, and dialog-footer helpers provide the size policies and spacing
-that allow English and Japanese text to fit consistently.
-
-Do not compensate for a translation with a screen-specific fixed width, font,
-or stylesheet. Prefer layouts and size hints; if a reusable role cannot fit a
-translation, update the shared helper and add a focused UI regression test.
-
-### Runtime Language Changes in Qt Widgets
-
-Every native or legacy Qt Widgets screen that keeps user-visible labels, pane
-titles, button text, placeholders, combo-box items, or table headers must
-provide a `retranslateUi()`
-method and handle `QEvent::LanguageChange`. Text created only in a constructor
-will remain in the old language when the user changes the language while the
-screen is open. Preserve user data and selection state while refreshing the
-labels and translated item text.
-
-Use `tr()` at the point where runtime messages are shown as well, so dialogs,
-errors, and status messages use the language active at the time of the action.
+Qt translations cover native menu labels and C++ messages. The MainWindow
+retranslates its menus when it receives `QEvent::LanguageChange`. Feature
+screens are React components and do not use Qt Widgets or `retranslateUi()`.
+Use `tr()` for new user-visible C++ host or bridge text.
 
 React screens receive the current `locale` prop and render both language
 variants with `text(locale, english, japanese)`. React does not use
