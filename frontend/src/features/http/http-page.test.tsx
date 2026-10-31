@@ -29,7 +29,11 @@ describe("HttpPage", () => {
         });
         fireEvent.click(screen.getByRole("button", { name: "Send" }));
 
-        await waitFor(() => expect(screen.getAllByDisplayValue("created item")).toHaveLength(2));
+        await waitFor(() =>
+            expect((screen.getByLabelText("Response body") as HTMLTextAreaElement).value).toBe(
+                "created item",
+            ),
+        );
         expect(requests).toHaveLength(1);
         expect(requests[0]).toMatchObject({
             method: "GET",
