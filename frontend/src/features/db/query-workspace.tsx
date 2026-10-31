@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
-import { Tabs } from "@/shared/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { Area, text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
 import { QueryResults } from "./query-results";
@@ -32,14 +32,14 @@ export function QueryWorkspace({
     return (
         <div className="db-workspace">
             <Card className="db-query-card">
-                <Tabs.Root
+                <Tabs
                     className="db-query-tabs"
                     value={activeId}
                     onValueChange={(value) => onActiveChange(String(value))}
                 >
-                    <Tabs.List>
+                    <TabsList>
                         {tabs.map((queryTab) => (
-                            <Tabs.Tab
+                            <TabsTrigger
                                 key={queryTab.id}
                                 className="feature-tab db-query-tab"
                                 value={queryTab.id}
@@ -66,11 +66,11 @@ export function QueryWorkspace({
                                         ×
                                     </span>
                                 )}
-                            </Tabs.Tab>
+                            </TabsTrigger>
                         ))}
-                    </Tabs.List>
+                    </TabsList>
                     {tabs.map((queryTab) => (
-                        <Tabs.Panel
+                        <TabsContent
                             key={queryTab.id}
                             className="db-query-panel"
                             value={queryTab.id}
@@ -87,9 +87,9 @@ export function QueryWorkspace({
                                 </Button>
                             </div>
                             <QueryResults locale={locale} query={queryTab} />
-                        </Tabs.Panel>
+                        </TabsContent>
                     ))}
-                </Tabs.Root>
+                </Tabs>
             </Card>
         </div>
     );

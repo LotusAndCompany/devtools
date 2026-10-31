@@ -669,7 +669,7 @@ body {
     background: var(--tab-bar);
 }
 
-:is([data-slot="tabs-tab"], .feature-tab) {
+:is([data-slot="tabs-trigger"], .feature-tab) {
     min-height: var(--tabs-tab-height);
     padding: var(--space-8) var(--space-12);
     border: 0;
@@ -680,10 +680,37 @@ body {
     font-size: var(--font-size-caption);
 }
 
-:is([data-slot="tabs-tab"], .feature-tab)[data-selected] {
+:is([data-slot="tabs-trigger"], .feature-tab)[data-active] {
     background: var(--card);
     color: var(--foreground);
     box-shadow: var(--shadow-card);
+}
+
+[data-slot="tabs-list"][data-variant="line"] {
+    background: transparent;
+}
+
+[data-slot="tabs-list"][data-variant="line"] :is([data-slot="tabs-trigger"], .feature-tab) {
+    position: relative;
+    border-radius: 0;
+}
+
+[data-slot="tabs-list"][data-variant="line"]
+    :is([data-slot="tabs-trigger"], .feature-tab)[data-active] {
+    background: transparent;
+    box-shadow: none;
+}
+
+[data-slot="tabs-list"][data-variant="line"]
+    :is([data-slot="tabs-trigger"], .feature-tab)[data-active]::after {
+    position: absolute;
+    right: var(--space-8);
+    bottom: calc(0px - var(--space-4) - var(--border-width));
+    left: var(--space-8);
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--primary);
+    content: "";
 }
 
 :is([data-slot="dialog-backdrop"], [data-slot="alert-dialog-backdrop"], .dialog-backdrop) {

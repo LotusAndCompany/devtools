@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog } from "@/shared/components/ui/dialog";
-import { Tabs } from "@/shared/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { type AboutInfo, type OperationRunner } from "@/shared/bridge/types";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
@@ -89,16 +89,16 @@ export function AboutDialog({
                                 ? "DevToolsのアプリケーション情報とライセンス"
                                 : "DevTools application information and license"}
                         </Dialog.Description>
-                        <Tabs.Root defaultValue="about" className="about-tabs">
-                            <Tabs.List>
-                                <Tabs.Tab value="about">
+                        <Tabs defaultValue="about" className="about-tabs">
+                            <TabsList variant="line">
+                                <TabsTrigger value="about">
                                     {locale === "ja" ? "概要" : "About"}
-                                </Tabs.Tab>
-                                <Tabs.Tab value="license">
+                                </TabsTrigger>
+                                <TabsTrigger value="license">
                                     {locale === "ja" ? "ライセンス" : "License"}
-                                </Tabs.Tab>
-                            </Tabs.List>
-                            <Tabs.Panel value="about" className="about-panel">
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="about" className="about-panel">
                                 <div className="about-brand">
                                     <img src={devToolsLogoUrl} alt="" />
                                     <strong>DevTools</strong>
@@ -118,16 +118,16 @@ export function AboutDialog({
                                         {locale === "ja" ? "コピー" : "Copy"}
                                     </Button>
                                 </div>
-                            </Tabs.Panel>
-                            <Tabs.Panel value="license" className="about-panel">
+                            </TabsContent>
+                            <TabsContent value="license" className="about-panel">
                                 <Textarea
                                     className="license-text"
                                     value={licenseTextOrFallback(info?.licenseText, locale)}
                                     readOnly
                                     spellCheck={false}
                                 />
-                            </Tabs.Panel>
-                        </Tabs.Root>
+                            </TabsContent>
+                        </Tabs>
                         <div data-slot="dialog-footer">
                             <Dialog.Close render={<Button variant="outline" />}>
                                 {locale === "ja" ? "OK" : "OK"}

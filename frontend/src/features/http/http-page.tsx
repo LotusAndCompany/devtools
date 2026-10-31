@@ -5,7 +5,7 @@ import { Card } from "@/shared/components/ui/card";
 import { Field } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectBox } from "@/shared/components/ui/select";
-import { Tabs } from "@/shared/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { runUiEffect } from "@/shared/effect";
 import type { HttpMethod, HttpResponse } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -86,24 +86,24 @@ export function HttpPage({ locale, run }: ToolPageProps) {
             </Card>
             <div className="http-workspace">
                 <Card className="http-tabs-card">
-                    <Tabs.Root
+                    <Tabs
                         className="http-tabs"
                         value={httpTab}
                         onValueChange={(value) => setHttpTab(String(value))}
                     >
-                        <Tabs.List>
-                            <Tabs.Tab value="parameters">
+                        <TabsList variant="line">
+                            <TabsTrigger value="parameters">
                                 {text(locale, "Parameters", "パラメーター")}
-                            </Tabs.Tab>
-                            <Tabs.Tab value="authentication">
+                            </TabsTrigger>
+                            <TabsTrigger value="authentication">
                                 {text(locale, "Authentication", "認証")}
-                            </Tabs.Tab>
-                            <Tabs.Tab value="headers">
+                            </TabsTrigger>
+                            <TabsTrigger value="headers">
                                 {text(locale, "Headers", "ヘッダー")}
-                            </Tabs.Tab>
-                            <Tabs.Tab value="body">{text(locale, "Body", "本文")}</Tabs.Tab>
-                        </Tabs.List>
-                        <Tabs.Panel className="http-tab-panel" value="parameters">
+                            </TabsTrigger>
+                            <TabsTrigger value="body">{text(locale, "Body", "本文")}</TabsTrigger>
+                        </TabsList>
+                        <TabsContent className="http-tab-panel" value="parameters">
                             <div className="http-parameter-grid">
                                 <strong>{text(locale, "Key", "キー")}</strong>
                                 <strong>{text(locale, "Value", "値")}</strong>
@@ -155,8 +155,8 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                                     </div>
                                 ))}
                             </div>
-                        </Tabs.Panel>
-                        <Tabs.Panel className="http-tab-panel" value="authentication">
+                        </TabsContent>
+                        <TabsContent className="http-tab-panel" value="authentication">
                             <div className="auth-card">
                                 <Field label={text(locale, "Username", "ユーザー名")}>
                                     <Input
@@ -174,8 +174,8 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                                     />
                                 </Field>
                             </div>
-                        </Tabs.Panel>
-                        <Tabs.Panel className="http-tab-panel" value="headers">
+                        </TabsContent>
+                        <TabsContent className="http-tab-panel" value="headers">
                             <Area
                                 label={text(
                                     locale,
@@ -187,16 +187,16 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                                 rows={12}
                                 placeholder="Accept: application/json"
                             />
-                        </Tabs.Panel>
-                        <Tabs.Panel className="http-tab-panel" value="body">
+                        </TabsContent>
+                        <TabsContent className="http-tab-panel" value="body">
                             <Area
                                 label={text(locale, "Request body", "リクエスト本文")}
                                 value={body}
                                 onChange={setBody}
                                 rows={12}
                             />
-                        </Tabs.Panel>
-                    </Tabs.Root>
+                        </TabsContent>
+                    </Tabs>
                 </Card>
                 <Card as="section" className="input-card http-response-panel">
                     <div className="toolbar-row">
