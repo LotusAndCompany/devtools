@@ -25,14 +25,6 @@ body {
     background: var(--primary);
     color: var(--primary-foreground);
 }
-kbd {
-    padding: var(--space-2) var(--space-4);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-xs);
-    color: var(--muted-foreground);
-    font: var(--font-size-micro) var(--font-family-mono);
-    white-space: nowrap;
-}
 :where([data-slot="button"]) {
     display: inline-flex;
     height: var(--control-height);

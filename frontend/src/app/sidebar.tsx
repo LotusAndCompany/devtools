@@ -75,7 +75,6 @@ export function Sidebar({
                     placeholder={locale === "ja" ? "ツールを検索" : "Search tools"}
                     aria-label={locale === "ja" ? "ツールを検索" : "Search tools"}
                 />
-                <kbd>⌘K</kbd>
             </label>
             <Button
                 variant="ghost"
