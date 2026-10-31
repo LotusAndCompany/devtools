@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { DateTimeInput } from "@/shared/components/ui/date-time-input";
-import { Field } from "@/shared/components/ui/field";
+import { DateTimeInput } from "@/shared/components/date-time-input";
+import { FormField } from "@/shared/components/form-field";
 import { Input } from "@/shared/components/ui/input";
 import { runUiEffect } from "@/shared/effect";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -86,7 +86,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
     const copy = (value: string) => run("copyToClipboard", { text: value });
     const row = (key: keyof TimestampValues, label: string, dateTime = false) => (
         <div className="timestamp-row" key={key}>
-            <Field label={label}>
+            <FormField label={label}>
                 {dateTime ? (
                     <DateTimeInput
                         locale={locale}
@@ -104,7 +104,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                         }
                     />
                 )}
-            </Field>
+            </FormField>
             <Button
                 variant="outline"
                 size="sm"
@@ -127,7 +127,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                 </Button>
             </div>
             <div className="timestamp-groups">
-                <Card as="section" className="input-card timestamp-group">
+                <Card role="region" className="input-card timestamp-group">
                     <CardHeader>
                         <CardTitle>
                             {text(locale, "Unix Timestamp", "Unixタイムスタンプ")}
@@ -138,7 +138,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                         {row("milliseconds", text(locale, "Milliseconds", "ミリ秒"))}
                     </CardContent>
                 </Card>
-                <Card as="section" className="input-card timestamp-group">
+                <Card role="region" className="input-card timestamp-group">
                     <CardHeader>
                         <CardTitle>{text(locale, "Date & Time", "日時")}</CardTitle>
                     </CardHeader>
@@ -147,7 +147,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                         {row("utc", text(locale, "UTC", "UTC"), true)}
                     </CardContent>
                 </Card>
-                <Card as="section" className="input-card timestamp-group">
+                <Card role="region" className="input-card timestamp-group">
                     <CardHeader>
                         <CardTitle>ISO 8601</CardTitle>
                     </CardHeader>

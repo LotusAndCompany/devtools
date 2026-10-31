@@ -7,16 +7,8 @@ import { defineConfig } from "vitest/config";
 
 const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
 const sourceRoot = path.resolve(frontendRoot, "src");
-const materialSymbolsFontPath = path.resolve(
-  frontendRoot,
-  "../res/fonts/MaterialSymbolsOutlined.ttf",
-);
 const devToolsLogoPath = path.resolve(frontendRoot, "../res/dev-tools_logo.png");
 const developmentAssets = new Map<string, { path: string; contentType: string }>([
-  [
-    "/__devtools/MaterialSymbolsOutlined.ttf",
-    { path: materialSymbolsFontPath, contentType: "font/ttf" },
-  ],
   ["/__devtools/dev-tools_logo.png", { path: devToolsLogoPath, contentType: "image/png" }],
 ]);
 

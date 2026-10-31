@@ -1,10 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Field, FieldGroup } from "@/shared/components/ui/field";
+import { FormField } from "@/shared/components/form-field";
+import { Field, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
-import { SelectBox } from "@/shared/components/ui/select";
+import { SelectControl } from "@/shared/components/select-control";
 import { text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
 
@@ -46,68 +47,74 @@ export function ImageSplitControls({
     onSplit,
 }: ImageSplitControlsProps) {
     return (
-        <Card as="section" className="input-card">
-            <h2>{text(locale, "Split image", "画像を分割")}</h2>
-            <Field label={text(locale, "Split by", "分割方法")} nativeLabel={false}>
-                <SelectBox
-                    value={splitMode}
-                    onValueChange={setSplitMode}
-                    options={[
-                        { value: "division", label: text(locale, "Number of parts", "分割数") },
-                        { value: "cell-size", label: text(locale, "Cell size", "セルサイズ") },
-                    ]}
-                />
-            </Field>
-            {splitMode === "division" ? (
-                <FieldGroup className="form-grid two">
-                    <Field label={text(locale, "Columns", "横の分割数")}>
-                        <Input
-                            className="form-control"
-                            type="number"
-                            min="1"
-                            value={horizontalDivisions}
-                            onChange={(event) => setHorizontalDivisions(event.target.value)}
-                        />
-                    </Field>
-                    <Field label={text(locale, "Rows", "縦の分割数")}>
-                        <Input
-                            className="form-control"
-                            type="number"
-                            min="1"
-                            value={verticalDivisions}
-                            onChange={(event) => setVerticalDivisions(event.target.value)}
-                        />
-                    </Field>
-                </FieldGroup>
-            ) : (
-                <FieldGroup className="form-grid two">
-                    <Field label={text(locale, "Cell width", "セル幅")}>
-                        <Input
-                            className="form-control"
-                            type="number"
-                            min="1"
-                            value={cellWidth}
-                            onChange={(event) => setCellWidth(event.target.value)}
-                        />
-                    </Field>
-                    <Field label={text(locale, "Cell height", "セル高さ")}>
-                        <Input
-                            className="form-control"
-                            type="number"
-                            min="1"
-                            value={cellHeight}
-                            onChange={(event) => setCellHeight(event.target.value)}
-                        />
-                    </Field>
-                </FieldGroup>
-            )}
-            <label className="inline-check">
-                <Checkbox checked={ignoreRemainders} onCheckedChange={setIgnoreRemainders} />
-                {text(locale, "Ignore remainder pixels", "余りのピクセルを無視")}
-            </label>
-            <Button variant="outline" onClick={onSplit} disabled={busy || !hasImage}>
-                {text(locale, "Choose folder and split", "保存先を選んで分割")}
-            </Button>
+        <Card role="region" className="input-card">
+            <CardHeader>
+                <CardTitle>{text(locale, "Split image", "画像を分割")}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3">
+                <FormField label={text(locale, "Split by", "分割方法")} nativeLabel={false}>
+                    <SelectControl
+                        value={splitMode}
+                        onValueChange={setSplitMode}
+                        options={[
+                            { value: "division", label: text(locale, "Number of parts", "分割数") },
+                            { value: "cell-size", label: text(locale, "Cell size", "セルサイズ") },
+                        ]}
+                    />
+                </FormField>
+                {splitMode === "division" ? (
+                    <FieldGroup className="form-grid two">
+                        <FormField label={text(locale, "Columns", "横の分割数")}>
+                            <Input
+                                type="number"
+                                min="1"
+                                value={horizontalDivisions}
+                                onChange={(event) => setHorizontalDivisions(event.target.value)}
+                            />
+                        </FormField>
+                        <FormField label={text(locale, "Rows", "縦の分割数")}>
+                            <Input
+                                type="number"
+                                min="1"
+                                value={verticalDivisions}
+                                onChange={(event) => setVerticalDivisions(event.target.value)}
+                            />
+                        </FormField>
+                    </FieldGroup>
+                ) : (
+                    <FieldGroup className="form-grid two">
+                        <FormField label={text(locale, "Cell width", "セル幅")}>
+                            <Input
+                                type="number"
+                                min="1"
+                                value={cellWidth}
+                                onChange={(event) => setCellWidth(event.target.value)}
+                            />
+                        </FormField>
+                        <FormField label={text(locale, "Cell height", "セル高さ")}>
+                            <Input
+                                type="number"
+                                min="1"
+                                value={cellHeight}
+                                onChange={(event) => setCellHeight(event.target.value)}
+                            />
+                        </FormField>
+                    </FieldGroup>
+                )}
+                <Field orientation="horizontal">
+                    <Checkbox
+                        id="image-ignore-remainder"
+                        checked={ignoreRemainders}
+                        onCheckedChange={setIgnoreRemainders}
+                    />
+                    <FieldLabel htmlFor="image-ignore-remainder" className="font-normal">
+                        {text(locale, "Ignore remainder pixels", "余りのピクセルを無視")}
+                    </FieldLabel>
+                </Field>
+                <Button variant="outline" onClick={onSplit} disabled={busy || !hasImage}>
+                    {text(locale, "Choose folder and split", "保存先を選んで分割")}
+                </Button>
+            </CardContent>
         </Card>
     );
 }

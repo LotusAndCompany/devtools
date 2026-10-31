@@ -15,19 +15,12 @@
     margin-bottom: 0;
 }
 
-:where([data-page="data"]) .data-output-toolbar .field {
+:where([data-page="data"]) .data-output-toolbar [data-slot="field"] {
     flex: 1 1 120px;
 }
 
 :where([data-page="data"]) .data-file-actions {
     flex: 1 1 auto;
-}
-
-:where([data-page="data"]) .data-file-action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-8);
 }
 
 :where([data-page="data"]) .data-panel .code-area {

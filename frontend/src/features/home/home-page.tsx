@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { Icon } from "@/shared/components/ui/icon";
+import type { LucideIcon } from "lucide-react";
 import type { Locale, ToolId } from "@/shared/types";
 
 type HomeTool = {
@@ -8,7 +8,7 @@ type HomeTool = {
     ja: string;
     detailEn: string;
     detailJa: string;
-    icon: string;
+    icon: LucideIcon;
 };
 
 export function WelcomePage({
@@ -23,18 +23,21 @@ export function WelcomePage({
     return (
         <div className="welcome-page">
             <div className="tool-card-grid">
-                {tools.map((tool) => (
-                    <Button
-                        key={tool.id}
-                        variant="ghost"
-                        className="tool-card h-auto"
-                        onClick={() => onOpen(tool.id)}
-                    >
-                        <Icon className="tool-card-icon">{tool.icon}</Icon>
-                        <strong>{locale === "ja" ? tool.ja : tool.en}</strong>
-                        <span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span>
-                    </Button>
-                ))}
+                {tools.map((tool) => {
+                    const ToolIcon = tool.icon;
+                    return (
+                        <Button
+                            key={tool.id}
+                            variant="ghost"
+                            className="tool-card h-auto"
+                            onClick={() => onOpen(tool.id)}
+                        >
+                            <ToolIcon className="tool-card-icon" aria-hidden="true" />
+                            <strong>{locale === "ja" ? tool.ja : tool.en}</strong>
+                            <span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span>
+                        </Button>
+                    );
+                })}
             </div>
         </div>
     );

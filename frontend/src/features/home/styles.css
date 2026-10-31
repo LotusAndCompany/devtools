@@ -1,64 +1,66 @@
-:where([data-page="welcome"]) .welcome-page {
-    max-width: var(--content-max-width);
-    margin: 0 auto;
-    padding: var(--space-24) var(--space-28) var(--space-40);
-}
-:where([data-page="welcome"]) .tool-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
-    gap: var(--space-12);
-}
-:where([data-page="welcome"]) .tool-card {
-    display: flex;
-    min-height: 104px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-8);
-    padding: var(--space-16);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-tile);
-    background: var(--card);
-    text-align: left;
-    cursor: pointer;
-    transition:
-        border-color var(--control-transition),
-        transform var(--control-transition);
-}
-:where([data-page="welcome"]) .tool-card:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
-}
-:where([data-page="welcome"]) .tool-card strong {
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-semibold);
-}
-:where([data-page="welcome"]) .tool-card > span:last-child {
-    color: var(--muted-foreground);
-    font-size: var(--font-size-caption);
-    line-height: var(--line-height-compact);
-}
-:where([data-page="welcome"]) .tool-card-icon {
-    display: grid;
-    width: 24px;
-    height: 24px;
-    place-items: center;
-    border-radius: var(--radius-popup);
-    background: var(--muted);
-    color: var(--muted-foreground);
-    font-weight: var(--font-weight-bold);
-}
-
-:where([data-page="welcome"]) .tool-card {
-    height: auto;
-    justify-content: flex-start;
-}
-
-:where([data-page="welcome"]) .tool-card-icon {
-    font-size: var(--font-size-tool-icon);
-}
-
-@media (max-width: 900px) {
+@layer components {
     :where([data-page="welcome"]) .welcome-page {
-        padding: var(--space-20) var(--space-16) var(--space-32);
+        max-width: var(--content-max-width);
+        margin: 0 auto;
+        padding: var(--space-24) var(--space-28) var(--space-40);
+    }
+    :where([data-page="welcome"]) .tool-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+        gap: var(--space-12);
+    }
+    :where([data-page="welcome"]) .tool-card {
+        display: flex;
+        min-height: 104px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-8);
+        padding: var(--space-16);
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-tile);
+        background: var(--card);
+        text-align: left;
+        cursor: pointer;
+        transition:
+            border-color var(--control-transition),
+            transform var(--control-transition);
+    }
+    :where([data-page="welcome"]) .tool-card:hover {
+        transform: translateY(-1px);
+        border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+    }
+    :where([data-page="welcome"]) .tool-card strong {
+        font-size: var(--font-size-label);
+        font-weight: var(--font-weight-semibold);
+    }
+    :where([data-page="welcome"]) .tool-card > span:last-child {
+        color: var(--muted-foreground);
+        font-size: var(--font-size-caption);
+        line-height: var(--line-height-compact);
+    }
+    :where([data-page="welcome"]) .tool-card-icon {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        border-radius: var(--radius-popup);
+        background: transparent;
+        color: var(--muted-foreground);
+        font-weight: var(--font-weight-bold);
+    }
+
+    :where([data-page="welcome"]) .tool-card {
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    :where([data-page="welcome"]) .tool-card-icon {
+        font-size: var(--font-size-tool-icon);
+    }
+
+    @media (max-width: 900px) {
+        :where([data-page="welcome"]) .welcome-page {
+            padding: var(--space-20) var(--space-16) var(--space-32);
+        }
     }
 }

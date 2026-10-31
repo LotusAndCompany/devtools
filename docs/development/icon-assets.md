@@ -1,12 +1,10 @@
 # Icon Assets
 
-DevTools bundles the Material Symbols Outlined font for both the React UI and
-native Qt Widgets. The embedded React UI loads it from the Qt resource URL;
-HMR serves the same font from Vite so the HTTP page does not request a `qrc:`
-font across origins. React renders glyphs through the shared `Icon` component;
-tool icon names are assigned in `frontend/src/app/tool-registry.ts`. Native Qt
-Widgets use Qt 6.9 named-glyph support through `IconUtils::themedIcon()`, which
-provides a standard Qt fallback. Icons use the active theme in each UI layer.
+The React UI uses `lucide-react`, matching the `lucide` icon library selected
+in `frontend/components.json`. Tool icons are Lucide components assigned in
+`frontend/src/app/tool-registry.ts`. The native Qt Widgets UI uses the bundled
+Material Symbols Outlined font through `IconUtils::themedIcon()`, with a
+standard Qt fallback. The font is only needed by the native UI.
 
 ## Material Symbols Outlined
 
@@ -27,14 +25,13 @@ provides a standard Qt fallback. Icons use the active theme in each UI layer.
 | NOTICE | No separate `NOTICE` file is included at the pinned commit |
 
 The native application loads the font with
-`QFontDatabase::addApplicationFont()` at startup. React registers the bundled
-font using the `qrc:/fonts/MaterialSymbolsOutlined.ttf` URL. Qt 6.9 or later is
-required for native named-glyph `QIcon` rendering.
+`QFontDatabase::addApplicationFont()` at startup. Qt 6.9 or later is required
+for native named-glyph `QIcon` rendering.
 
 ## Glyph Mapping
 
-The following table lists the primary glyph names used by the application UI.
-It is not an exhaustive list of glyphs used in examples or tests.
+The following table lists glyph names used by the native Qt UI. It does not
+describe the React UI icons.
 
 | Use | Material Symbols glyph |
 |-----|------------------------|
@@ -67,11 +64,11 @@ It is not an exhaustive list of glyphs used in examples or tests.
 | Close side panel | `left_panel_close` |
 | Always-on-top control | `flip_to_front` |
 
-For a React tool, add its Material Symbols glyph name to the tool definition in
-`frontend/src/app/tool-registry.ts`. For native Qt Widgets, use
-`IconUtils::themedIcon()` and a suitable `QStyle::StandardPixmap` fallback.
-Do not add light/dark SVG files or duplicate the bundled font. The native
-helper provides a standard Qt icon when the font or glyph cannot be resolved.
+For React UI icons, import the appropriate component from `lucide-react`. For
+native Qt Widgets, use `IconUtils::themedIcon()` and a suitable
+`QStyle::StandardPixmap` fallback. Do not add light/dark SVG files or duplicate
+the bundled font. The native helper provides a standard Qt icon when the font
+or glyph cannot be resolved.
 
 ## Former Remix Icon Assets
 

@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
-import { Dialog } from "@/shared/components/ui/dialog";
-import { Field } from "@/shared/components/ui/field";
-import { SelectBox } from "@/shared/components/ui/select";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/shared/components/ui/dialog";
+import { FormField } from "@/shared/components/form-field";
+import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import { Field, FieldLabel } from "@/shared/components/ui/field";
+import { SelectControl } from "@/shared/components/select-control";
 import { Switch } from "@/shared/components/ui/switch";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import { type Locale } from "@/shared/types";
@@ -37,28 +46,29 @@ export function SettingsDialog({
     onThemeChange: (theme: "system" | "light" | "dark") => void;
 }) {
     return (
-        <Dialog.Root open={open} onOpenChange={onOpenChange}>
-            <Dialog.Portal>
-                <Dialog.Backdrop />
-                <Dialog.Viewport>
-                    <Dialog.Popup data-size="medium">
-                        <Dialog.Title>{locale === "ja" ? "設定" : "Settings"}</Dialog.Title>
-                        <Dialog.Description className="sr-only">
-                            {locale === "ja" ? "アプリケーション設定" : "Application settings"}
-                        </Dialog.Description>
-                        {open && (
-                            <SettingsForm
-                                locale={locale}
-                                run={run}
-                                onLocaleChange={onLocaleChange}
-                                onThemeChange={onThemeChange}
-                                onClose={() => onOpenChange(false)}
-                            />
-                        )}
-                    </Dialog.Popup>
-                </Dialog.Viewport>
-            </Dialog.Portal>
-        </Dialog.Root>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent
+                data-size="medium"
+                className="max-h-[min(760px,calc(100vh-40px))] overflow-y-auto sm:max-w-[620px]"
+                showCloseButton={false}
+            >
+                <DialogHeader>
+                    <DialogTitle>{locale === "ja" ? "設定" : "Settings"}</DialogTitle>
+                    <DialogDescription className="sr-only">
+                        {locale === "ja" ? "アプリケーション設定" : "Application settings"}
+                    </DialogDescription>
+                </DialogHeader>
+                {open && (
+                    <SettingsForm
+                        locale={locale}
+                        run={run}
+                        onLocaleChange={onLocaleChange}
+                        onThemeChange={onThemeChange}
+                        onClose={() => onOpenChange(false)}
+                    />
+                )}
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -97,7 +107,7 @@ function SettingsForm({
         language: locale === "ja" ? "言語" : "Language",
         theme: locale === "ja" ? "テーマ" : "Theme",
         showSidebarOnStartup:
-            locale === "ja" ? "起動時にサイドバーを表示" : "Show sidebar on startup",
+            locale === "ja" ? "起動時にサイドバーを展開" : "Expand sidebar on startup",
         showLastToolOnStartup:
             locale === "ja" ? "前回のツールを開く" : "Open last used tool on startup",
         alwaysOnTop: locale === "ja" ? "ウィンドウを常に手前に表示" : "Keep window on top",
@@ -128,73 +138,71 @@ function SettingsForm({
         );
     };
     return (
-        <div className="settings-page">
-            <Card className="settings-card">
-                <Field label={labels.language} nativeLabel={false}>
-                    <SelectBox
-                        disabled={loading || saving}
-                        value={settings.language}
-                        onValueChange={(language) =>
-                            setSettings((value) => ({
-                                ...value,
-                                language: language as AppSettings["language"],
-                            }))
-                        }
-                        options={[
-                            { value: "en", label: "English" },
-                            { value: "ja_JP", label: "日本語" },
-                        ]}
-                    />
-                </Field>
-                <Field label={labels.theme} nativeLabel={false}>
-                    <SelectBox
-                        disabled={loading || saving}
-                        value={settings.theme}
-                        onValueChange={(theme) =>
-                            setSettings((value) => ({
-                                ...value,
-                                theme: theme as AppSettings["theme"],
-                            }))
-                        }
-                        options={[
-                            {
-                                value: "system",
-                                label: locale === "ja" ? "システム設定に合わせる" : "Follow system",
-                            },
-                            { value: "light", label: locale === "ja" ? "ライト" : "Light" },
-                            { value: "dark", label: locale === "ja" ? "ダーク" : "Dark" },
-                        ]}
-                    />
-                </Field>
-                {(Object.keys(labels) as Array<keyof AppSettings>)
-                    .filter((key) => key !== "language" && key !== "theme")
-                    .map((key) => (
-                        <label key={key} className="settings-toggle">
-                            <span>{labels[key]}</span>
-                            <Switch
-                                id={`settings-${key}`}
-                                disabled={loading || saving}
-                                checked={settings[key] as boolean}
-                                onCheckedChange={(checked) =>
-                                    setSettings((value) => ({ ...value, [key]: checked }))
-                                }
-                            />
-                        </label>
-                    ))}
-                {error && (
-                    <p className="operation-message error" role="alert">
-                        {error}
-                    </p>
-                )}
-                <div data-slot="dialog-footer" className="settings-actions">
-                    <Dialog.Close render={<Button variant="outline" disabled={saving} />}>
-                        {locale === "ja" ? "キャンセル" : "Cancel"}
-                    </Dialog.Close>
-                    <Button onClick={save} disabled={loading || saving}>
-                        {locale === "ja" ? "保存" : "Save"}
-                    </Button>
-                </div>
-            </Card>
+        <div className="settings-page flex flex-col gap-4">
+            <FormField label={labels.language} nativeLabel={false}>
+                <SelectControl
+                    disabled={loading || saving}
+                    value={settings.language}
+                    onValueChange={(language) =>
+                        setSettings((value) => ({
+                            ...value,
+                            language: language as AppSettings["language"],
+                        }))
+                    }
+                    options={[
+                        { value: "en", label: "English" },
+                        { value: "ja_JP", label: "日本語" },
+                    ]}
+                />
+            </FormField>
+            <FormField label={labels.theme} nativeLabel={false}>
+                <SelectControl
+                    disabled={loading || saving}
+                    value={settings.theme}
+                    onValueChange={(theme) =>
+                        setSettings((value) => ({
+                            ...value,
+                            theme: theme as AppSettings["theme"],
+                        }))
+                    }
+                    options={[
+                        {
+                            value: "system",
+                            label: locale === "ja" ? "システム設定に合わせる" : "Follow system",
+                        },
+                        { value: "light", label: locale === "ja" ? "ライト" : "Light" },
+                        { value: "dark", label: locale === "ja" ? "ダーク" : "Dark" },
+                    ]}
+                />
+            </FormField>
+            {(Object.keys(labels) as Array<keyof AppSettings>)
+                .filter((key) => key !== "language" && key !== "theme")
+                .map((key) => (
+                    <Field key={key} orientation="horizontal" className="settings-toggle">
+                        <FieldLabel htmlFor={`settings-${key}`}>{labels[key]}</FieldLabel>
+                        <Switch
+                            id={`settings-${key}`}
+                            disabled={loading || saving}
+                            checked={settings[key] as boolean}
+                            onCheckedChange={(checked) =>
+                                setSettings((value) => ({ ...value, [key]: checked }))
+                            }
+                        />
+                    </Field>
+                ))}
+            {error && (
+                <Alert variant="destructive" className="operation-message error">
+                    <AlertDescription>{error}</AlertDescription>
+                </Alert>
+            )}
+            <DialogFooter className="settings-actions">
+                <DialogClose render={<Button variant="outline" disabled={saving} />}>
+                    {locale === "ja" ? "キャンセル" : "Cancel"}
+                </DialogClose>
+                <Button onClick={save} disabled={loading || saving}>
+                    {locale === "ja" ? "保存" : "Save"}
+                </Button>
+            </DialogFooter>
         </div>
     );
 }

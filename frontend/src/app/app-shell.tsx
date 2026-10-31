@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
+import { SidebarInset, SidebarProvider } from "@/shared/components/ui/sidebar";
 import type { PageId } from "./tool-registry";
 import type { Locale } from "@/shared/types";
 
@@ -12,7 +13,7 @@ type AppShellProps = {
     onNavigate: (page: PageId) => void;
     onOpenSettings: () => void;
     onOpenAbout: () => void;
-    onToggleSidebar: () => void;
+    onSidebarOpenChange: (open: boolean) => void;
     children: ReactNode;
 };
 
@@ -24,28 +25,28 @@ export function AppShell({
     onNavigate,
     onOpenSettings,
     onOpenAbout,
-    onToggleSidebar,
+    onSidebarOpenChange,
     children,
 }: AppShellProps) {
     return (
-        <div
-            data-slot="app-shell"
-            className={`app-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
+        <SidebarProvider
+            open={sidebarOpen}
+            onOpenChange={onSidebarOpenChange}
+            className="app-shell"
+            style={{ "--sidebar-width": "var(--app-sidebar-width)" } as CSSProperties}
         >
-            {sidebarOpen && (
-                <Sidebar
-                    locale={locale}
-                    activePage={activePage}
-                    settingsOpen={settingsOpen}
-                    onNavigate={onNavigate}
-                    onOpenSettings={onOpenSettings}
-                    onOpenAbout={onOpenAbout}
-                />
-            )}
-            <main data-slot="app-main" className="app-main">
-                <Topbar locale={locale} activePage={activePage} onToggleSidebar={onToggleSidebar} />
+            <Sidebar
+                locale={locale}
+                activePage={activePage}
+                settingsOpen={settingsOpen}
+                onNavigate={onNavigate}
+                onOpenSettings={onOpenSettings}
+                onOpenAbout={onOpenAbout}
+            />
+            <SidebarInset className="app-main">
+                <Topbar locale={locale} activePage={activePage} />
                 {children}
-            </main>
-        </div>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }

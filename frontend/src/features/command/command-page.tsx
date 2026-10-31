@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Field, FieldGroup } from "@/shared/components/ui/field";
+import { FormField } from "@/shared/components/form-field";
+import { FieldGroup } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
-import { SelectBox } from "@/shared/components/ui/select";
+import { SelectControl } from "@/shared/components/select-control";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import type { CommandFunction } from "@/shared/bridge/types";
@@ -47,8 +48,8 @@ export function CommandPage({ locale, run }: ToolPageProps) {
             <Card className="input-card">
                 <CardContent>
                     <FieldGroup className="form-grid">
-                        <Field label={text(locale, "Category", "カテゴリ")} nativeLabel={false}>
-                            <SelectBox
+                        <FormField label={text(locale, "Category", "カテゴリ")} nativeLabel={false}>
+                            <SelectControl
                                 value={category}
                                 onValueChange={(nextCategory) => {
                                     setCategory(nextCategory);
@@ -61,9 +62,9 @@ export function CommandPage({ locale, run }: ToolPageProps) {
                                     { value: "compose", label: "Docker Compose" },
                                 ]}
                             />
-                        </Field>
-                        <Field label={text(locale, "Command", "コマンド")} nativeLabel={false}>
-                            <SelectBox
+                        </FormField>
+                        <FormField label={text(locale, "Command", "コマンド")} nativeLabel={false}>
+                            <SelectControl
                                 value={String(functionIndex)}
                                 onValueChange={(nextIndex) => {
                                     setFunctionIndex(Number(nextIndex));
@@ -74,9 +75,9 @@ export function CommandPage({ locale, run }: ToolPageProps) {
                                     label: String(item.name),
                                 }))}
                             />
-                        </Field>
-                        <Field label={text(locale, "Option", "オプション")} nativeLabel={false}>
-                            <SelectBox
+                        </FormField>
+                        <FormField label={text(locale, "Option", "オプション")} nativeLabel={false}>
+                            <SelectControl
                                 value={String(optionIndex)}
                                 onValueChange={(nextIndex) => setOptionIndex(Number(nextIndex))}
                                 options={options.map((item, index) => ({
@@ -84,21 +85,20 @@ export function CommandPage({ locale, run }: ToolPageProps) {
                                     label: `${String(item.name)}${item.title ? ` — ${String(item.title)}` : ""}`,
                                 }))}
                             />
-                        </Field>
+                        </FormField>
                         {Boolean(
                             options[optionIndex]?.required || options[optionIndex]?.quotes,
                         ) && (
-                            <Field
+                            <FormField
                                 label={String(
                                     options[optionIndex]?.title || text(locale, "Value", "値"),
                                 )}
                             >
                                 <Input
-                                    className="form-control"
                                     value={value}
                                     onChange={(event) => setValue(event.target.value)}
                                 />
-                            </Field>
+                            </FormField>
                         )}
                     </FieldGroup>
                     <div className="action-row">

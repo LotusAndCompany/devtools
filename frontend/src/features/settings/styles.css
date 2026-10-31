@@ -11,9 +11,6 @@
     gap: var(--space-8);
     margin-top: 0;
 }
-.settings-card {
-    max-width: var(--dialog-width-medium);
-}
 .settings-toggle {
     display: flex;
     align-items: center;
@@ -32,18 +29,10 @@
     font-size: var(--font-size-caption);
 }
 
-[data-slot="dialog-popup"][data-size="medium"] .settings-page {
+[data-slot="dialog-content"][data-size="medium"] .settings-page {
     max-width: none;
     margin: 0;
     padding: 0;
-}
-
-[data-slot="dialog-popup"][data-size="medium"] .settings-page > [data-slot="card"] {
-    max-width: none;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
 }
 
 @media (max-width: 900px) {

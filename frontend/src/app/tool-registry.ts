@@ -1,4 +1,20 @@
 import type { ComponentType } from "react";
+import {
+  ArrowLeftRight,
+  BookOpen,
+  Clock,
+  Database,
+  FileText,
+  GitCompareArrows,
+  House,
+  Image,
+  Network,
+  QrCode,
+  Regex,
+  Settings,
+  Terminal,
+  type LucideIcon,
+} from "lucide-react";
 import { CommandPage } from "@/features/command";
 import { DataPage } from "@/features/data";
 import { DatabasePage } from "@/features/db";
@@ -23,7 +39,7 @@ export type ToolDefinition = {
   ja: string;
   detailEn: string;
   detailJa: string;
-  icon: string;
+  icon: LucideIcon;
   screen: ComponentType<ToolPageProps>;
   keepAlive?: boolean;
 };
@@ -36,7 +52,7 @@ export const tools: ToolDefinition[] = [
     ja: "画像編集",
     detailEn: "Resize, transform and split images",
     detailJa: "画像のサイズ変更、変形、分割",
-    icon: "image",
+    icon: Image,
     screen: ImagePage,
   },
   {
@@ -46,7 +62,7 @@ export const tools: ToolDefinition[] = [
     ja: "定型文生成",
     detailEn: "Create and manage text templates",
     detailJa: "定型文を作成、管理",
-    icon: "library_books",
+    icon: BookOpen,
     screen: PhrasePage,
   },
   {
@@ -56,7 +72,7 @@ export const tools: ToolDefinition[] = [
     ja: "コマンド生成",
     detailEn: "Build Git and Docker commands",
     detailJa: "GitやDockerのコマンドを作成",
-    icon: "terminal",
+    icon: Terminal,
     screen: CommandPage,
   },
   {
@@ -66,7 +82,7 @@ export const tools: ToolDefinition[] = [
     ja: "HTTPリクエスト",
     detailEn: "Send and inspect API requests",
     detailJa: "APIリクエストを送信、確認",
-    icon: "lan",
+    icon: Network,
     screen: HttpPage,
   },
   {
@@ -76,7 +92,7 @@ export const tools: ToolDefinition[] = [
     ja: "データ変換",
     detailEn: "Convert JSON, YAML and TOML",
     detailJa: "JSON、YAML、TOMLを変換",
-    icon: "transform",
+    icon: ArrowLeftRight,
     screen: DataPage,
   },
   {
@@ -86,7 +102,7 @@ export const tools: ToolDefinition[] = [
     ja: "データベース",
     detailEn: "Connect and run SQL queries",
     detailJa: "データベースに接続してSQLを実行",
-    icon: "database",
+    icon: Database,
     screen: DatabasePage,
     keepAlive: true,
   },
@@ -97,7 +113,7 @@ export const tools: ToolDefinition[] = [
     ja: "QRコード",
     detailEn: "Create QR codes from common data",
     detailJa: "各種データからQRコードを作成",
-    icon: "qr_code",
+    icon: QrCode,
     screen: QrPage,
   },
   {
@@ -107,7 +123,7 @@ export const tools: ToolDefinition[] = [
     ja: "Markdownプレビュー",
     detailEn: "Edit Markdown and preview safely",
     detailJa: "Markdownを編集、安全にプレビュー",
-    icon: "article",
+    icon: FileText,
     screen: MarkdownPage,
   },
   {
@@ -117,7 +133,7 @@ export const tools: ToolDefinition[] = [
     ja: "タイムスタンプ変換",
     detailEn: "Convert Unix and ISO-8601 values",
     detailJa: "Unix時刻とISO-8601形式を変換",
-    icon: "schedule",
+    icon: Clock,
     screen: TimestampPage,
   },
   {
@@ -127,7 +143,7 @@ export const tools: ToolDefinition[] = [
     ja: "正規表現テスター",
     detailEn: "Test patterns, matches and replacement",
     detailJa: "パターン、マッチ、置換を確認",
-    icon: "regular_expression",
+    icon: Regex,
     screen: RegexPage,
   },
   {
@@ -137,7 +153,7 @@ export const tools: ToolDefinition[] = [
     ja: "テキスト差分",
     detailEn: "Compare two text versions",
     detailJa: "2つのテキストを比較",
-    icon: "difference",
+    icon: GitCompareArrows,
     screen: DiffPage,
   },
 ];
@@ -159,6 +175,6 @@ export function titleFor(page: PageId, locale: Locale) {
 }
 
 export function iconFor(page: PageId) {
-  if (page === "welcome") return "home";
-  return toolForPage(page)?.icon ?? "settings";
+  if (page === "welcome") return House;
+  return toolForPage(page)?.icon ?? Settings;
 }

@@ -6,7 +6,13 @@
     min-width: 0;
     flex-direction: column;
 }
-:where([data-page="markdown"]) .markdown-editor-card .field {
+:where([data-page="markdown"]) .markdown-editor-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+:where([data-page="markdown"]) .markdown-editor-card [data-slot="field"] {
     flex: 1;
 }
 :where([data-page="markdown"]) .markdown-editor-card .code-area {
@@ -22,6 +28,12 @@
     flex-direction: column;
     gap: var(--space-8);
 }
+:where([data-page="markdown"]) .preview-panel-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+}
 :where([data-page="markdown"]) .preview-panel iframe {
     width: 100%;
     flex: 1;
@@ -31,7 +43,8 @@
     background: var(--card);
 }
 :where([data-page="markdown"]) .markdown-sync {
-    display: inline-flex;
+    width: auto;
+    flex-direction: row;
     align-items: center;
     gap: var(--space-8);
     color: var(--muted-foreground);

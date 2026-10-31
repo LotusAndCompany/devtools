@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
-import { Field } from "@/shared/components/ui/field";
+import { Card, CardContent } from "@/shared/components/ui/card";
+import { FormField } from "@/shared/components/form-field";
 import { Input } from "@/shared/components/ui/input";
 import { Area, OutputMessage, text } from "@/shared/tool-page";
 import type { Locale } from "@/shared/types";
@@ -38,36 +38,34 @@ export function PhraseEditor({
 }: PhraseEditorProps) {
     return (
         <Card className="input-card">
-            <Field label={text(locale, "Title", "タイトル")}>
-                <Input
-                    className="form-control"
-                    value={title}
-                    onChange={(event) => onTitleChange(event.target.value)}
+            <CardContent className="phrase-editor-content">
+                <FormField label={text(locale, "Title", "タイトル")}>
+                    <Input value={title} onChange={(event) => onTitleChange(event.target.value)} />
+                </FormField>
+                <Area
+                    label={text(locale, "Template text", "テンプレート本文")}
+                    value={content}
+                    onChange={onContentChange}
+                    rows={16}
                 />
-            </Field>
-            <Area
-                label={text(locale, "Template text", "テンプレート本文")}
-                value={content}
-                onChange={onContentChange}
-                rows={16}
-            />
-            <div className="button-row">
-                <Button onClick={onSave} disabled={busy}>
-                    {text(locale, "Save template", "定型文を保存")}
-                </Button>
-                <Button variant="outline" onClick={onCopy} disabled={!content}>
-                    {text(locale, "Copy text", "本文をコピー")}
-                </Button>
-                <Button variant="outline" onClick={onDelete} disabled={busy || !filename}>
-                    {text(locale, "Delete", "削除")}
-                </Button>
-            </div>
-            <OutputMessage
-                locale={locale}
-                error={error}
-                message={message}
-                onDismiss={onDismissError}
-            />
+                <div className="button-row">
+                    <Button onClick={onSave} disabled={busy}>
+                        {text(locale, "Save template", "定型文を保存")}
+                    </Button>
+                    <Button variant="outline" onClick={onCopy} disabled={!content}>
+                        {text(locale, "Copy text", "本文をコピー")}
+                    </Button>
+                    <Button variant="outline" onClick={onDelete} disabled={busy || !filename}>
+                        {text(locale, "Delete", "削除")}
+                    </Button>
+                </div>
+                <OutputMessage
+                    locale={locale}
+                    error={error}
+                    message={message}
+                    onDismiss={onDismissError}
+                />
+            </CardContent>
         </Card>
     );
 }

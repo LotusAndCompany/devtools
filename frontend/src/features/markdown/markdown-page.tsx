@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Effect } from "effect";
 import previewStyles from "./preview.css?inline";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Field } from "@/shared/components/ui/field";
+import { FormField } from "@/shared/components/form-field";
+import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { runUiEffect } from "@/shared/effect";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -141,35 +142,47 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
                 >
                     {text(locale, "Export HTML", "HTMLを出力")}
                 </Button>
-                <label className="markdown-sync">
-                    <Checkbox checked={syncScroll} onCheckedChange={setSyncScroll} />
-                    {text(locale, "Sync scroll", "スクロールを同期")}
-                </label>
+                <Field orientation="horizontal" className="markdown-sync">
+                    <Checkbox
+                        id="markdown-sync-scroll"
+                        checked={syncScroll}
+                        onCheckedChange={setSyncScroll}
+                    />
+                    <FieldLabel htmlFor="markdown-sync-scroll" className="font-normal">
+                        {text(locale, "Sync scroll", "スクロールを同期")}
+                    </FieldLabel>
+                </Field>
             </div>
             <div className="two-column markdown-columns">
                 <Card className="input-card markdown-editor-card">
-                    <Field label={text(locale, "Editor", "エディター")}>
-                        <Textarea
-                            ref={editorRef}
-                            className="code-area markdown-editor"
-                            value={markdown}
-                            onChange={(event) => setMarkdown(event.target.value)}
-                            onScroll={syncEditorToPreview}
-                            rows={20}
-                            spellCheck={false}
-                        />
-                    </Field>
+                    <CardContent className="markdown-editor-content">
+                        <FormField label={text(locale, "Editor", "エディター")}>
+                            <Textarea
+                                ref={editorRef}
+                                className="code-area markdown-editor"
+                                value={markdown}
+                                onChange={(event) => setMarkdown(event.target.value)}
+                                onScroll={syncEditorToPreview}
+                                rows={20}
+                                spellCheck={false}
+                            />
+                        </FormField>
+                    </CardContent>
                 </Card>
                 <Card className="input-card preview-panel">
-                    <span className="field-label">{text(locale, "Preview", "プレビュー")}</span>
-                    <iframe
-                        ref={previewRef}
-                        title={text(locale, "Markdown preview", "Markdownプレビュー")}
-                        sandbox="allow-same-origin"
-                        referrerPolicy="no-referrer"
-                        srcDoc={previewDocument}
-                        onLoad={attachPreviewScroll}
-                    />
+                    <CardHeader>
+                        <CardTitle>{text(locale, "Preview", "プレビュー")}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="preview-panel-content">
+                        <iframe
+                            ref={previewRef}
+                            title={text(locale, "Markdown preview", "Markdownプレビュー")}
+                            sandbox="allow-same-origin"
+                            referrerPolicy="no-referrer"
+                            srcDoc={previewDocument}
+                            onLoad={attachPreviewScroll}
+                        />
+                    </CardContent>
                 </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />

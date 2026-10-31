@@ -11,7 +11,7 @@
     gap: var(--space-12);
 }
 
-:where([data-page="timestamp"]) .timestamp-group .card-content {
+:where([data-page="timestamp"]) .timestamp-group [data-slot="card-content"] {
     display: flex;
     flex-direction: column;
     gap: var(--space-12);
@@ -24,7 +24,7 @@
     align-items: end;
 }
 
-:where([data-page="timestamp"]) .timestamp-row .field {
+:where([data-page="timestamp"]) .timestamp-row [data-slot="field"] {
     min-width: 0;
 }
 

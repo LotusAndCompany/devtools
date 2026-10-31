@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Effect } from "effect";
-import { Field } from "@/shared/components/ui/field";
-import { MessageDialog } from "@/shared/components/ui/message-dialog";
+import { FormField } from "@/shared/components/form-field";
+import { MessageDialog } from "@/shared/components/message-dialog";
+import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Textarea } from "@/shared/components/ui/textarea";
 import {
     OperationCancelledError,
@@ -60,9 +61,9 @@ export function Area({
     readOnly?: boolean;
 }) {
     return (
-        <Field label={label}>
+        <FormField label={label}>
             <Textarea
-                className="form-control code-area"
+                className="code-area"
                 rows={rows}
                 value={value}
                 onChange={(event) => onChange?.(event.target.value)}
@@ -70,7 +71,7 @@ export function Area({
                 readOnly={readOnly}
                 spellCheck={false}
             />
-        </Field>
+        </FormField>
     );
 }
 
@@ -88,9 +89,9 @@ export function OutputMessage({
     return (
         <>
             {message && !error && (
-                <p className="operation-message success" role="status">
-                    {message}
-                </p>
+                <Alert role="status" className="operation-message success">
+                    <AlertDescription>{message}</AlertDescription>
+                </Alert>
             )}
             <MessageDialog
                 open={Boolean(error)}

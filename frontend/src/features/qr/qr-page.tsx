@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
+import { Card, CardContent } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { DateTimeInput } from "@/shared/components/ui/date-time-input";
-import { Field } from "@/shared/components/ui/field";
+import { DateTimeInput } from "@/shared/components/date-time-input";
+import { FormField } from "@/shared/components/form-field";
+import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
-import { SelectBox } from "@/shared/components/ui/select";
+import { SelectControl } from "@/shared/components/select-control";
 import { runUiEffect } from "@/shared/effect";
 import type { QrCodeType } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -109,135 +110,148 @@ export function QrPage({ locale, run }: ToolPageProps) {
             <Heading title={text(locale, "QR Code Generation", "QRコード生成")} />
             <div className="qr-layout">
                 <Card className="input-card">
-                    <Field label={text(locale, "QR type", "QRの種類")} nativeLabel={false}>
-                        <SelectBox
-                            value={type}
-                            onValueChange={(value) => {
-                                setType(value);
-                                setParameters(
-                                    value === "text"
-                                        ? { text_content: "" }
-                                        : value === "wifi"
-                                          ? { wifi_security: "WPA", wifi_hidden: "false" }
-                                          : {},
-                                );
-                                setGeneratedInput(null);
-                                setContent("");
-                                setImage("");
-                                setMessage("");
-                            }}
-                            options={[
-                                { value: "text", label: "Text" },
-                                { value: "url", label: "URL" },
-                                { value: "email", label: "Email" },
-                                { value: "phone", label: "Phone" },
-                                { value: "sms", label: "SMS" },
-                                { value: "wifi", label: "Wi-Fi" },
-                                { value: "contact", label: "Contact" },
-                                { value: "calendar", label: "Calendar" },
-                                { value: "geo", label: "Location" },
-                            ]}
-                        />
-                    </Field>
-                    {fields.map(([key, label, required]) => (
-                        <Field key={key} label={`${label}${required ? " *" : ""}`}>
-                            {key.startsWith("cal_") ? (
-                                <DateTimeInput
-                                    locale={locale}
-                                    value={parameters[key] ?? ""}
-                                    onValueChange={(value) =>
-                                        setParameters((current) => ({ ...current, [key]: value }))
-                                    }
-                                    aria-label={label}
-                                />
-                            ) : (
-                                <Input
-                                    type={key === "wifi_password" ? "password" : "text"}
-                                    value={parameters[key] ?? ""}
-                                    onChange={(event) =>
-                                        setParameters((current) => ({
-                                            ...current,
-                                            [key]: event.target.value,
-                                        }))
-                                    }
-                                />
-                            )}
-                        </Field>
-                    ))}
-                    {type === "wifi" && (
-                        <>
-                            <Field
-                                label={text(locale, "Security", "セキュリティ")}
-                                nativeLabel={false}
-                            >
-                                <SelectBox
-                                    value={parameters.wifi_security ?? "WPA"}
-                                    onValueChange={(wifiSecurity) =>
-                                        setParameters((current) => ({
-                                            ...current,
-                                            wifi_security: wifiSecurity,
-                                        }))
-                                    }
-                                    options={[
-                                        { value: "WPA", label: "WPA" },
-                                        { value: "WEP", label: "WEP" },
-                                        { value: "nopass", label: text(locale, "None", "なし") },
-                                    ]}
-                                />
-                            </Field>
-                            <label className="inline-check">
-                                <Checkbox
-                                    checked={parameters.wifi_hidden === "true"}
-                                    onCheckedChange={(checked) =>
-                                        setParameters((current) => ({
-                                            ...current,
-                                            wifi_hidden: String(checked),
-                                        }))
-                                    }
-                                />
-                                {text(locale, "Hidden network", "非公開ネットワーク")}
-                            </label>
-                        </>
-                    )}
-                    <div className="button-row">
-                        <Button onClick={() => runUiEffect(generate())} disabled={busy}>
-                            {text(locale, "Generate", "生成")}
-                        </Button>
-                        <Button variant="outline" onClick={clear} disabled={busy}>
-                            {text(locale, "Clear", "クリア")}
-                        </Button>
-                    </div>
+                    <CardContent className="qr-input-content">
+                        <FormField label={text(locale, "QR type", "QRの種類")} nativeLabel={false}>
+                            <SelectControl
+                                value={type}
+                                onValueChange={(value) => {
+                                    setType(value);
+                                    setParameters(
+                                        value === "text"
+                                            ? { text_content: "" }
+                                            : value === "wifi"
+                                              ? { wifi_security: "WPA", wifi_hidden: "false" }
+                                              : {},
+                                    );
+                                    setGeneratedInput(null);
+                                    setContent("");
+                                    setImage("");
+                                    setMessage("");
+                                }}
+                                options={[
+                                    { value: "text", label: "Text" },
+                                    { value: "url", label: "URL" },
+                                    { value: "email", label: "Email" },
+                                    { value: "phone", label: "Phone" },
+                                    { value: "sms", label: "SMS" },
+                                    { value: "wifi", label: "Wi-Fi" },
+                                    { value: "contact", label: "Contact" },
+                                    { value: "calendar", label: "Calendar" },
+                                    { value: "geo", label: "Location" },
+                                ]}
+                            />
+                        </FormField>
+                        {fields.map(([key, label, required]) => (
+                            <FormField key={key} label={`${label}${required ? " *" : ""}`}>
+                                {key.startsWith("cal_") ? (
+                                    <DateTimeInput
+                                        locale={locale}
+                                        value={parameters[key] ?? ""}
+                                        onValueChange={(value) =>
+                                            setParameters((current) => ({
+                                                ...current,
+                                                [key]: value,
+                                            }))
+                                        }
+                                        aria-label={label}
+                                    />
+                                ) : (
+                                    <Input
+                                        type={key === "wifi_password" ? "password" : "text"}
+                                        value={parameters[key] ?? ""}
+                                        onChange={(event) =>
+                                            setParameters((current) => ({
+                                                ...current,
+                                                [key]: event.target.value,
+                                            }))
+                                        }
+                                    />
+                                )}
+                            </FormField>
+                        ))}
+                        {type === "wifi" && (
+                            <>
+                                <FormField
+                                    label={text(locale, "Security", "セキュリティ")}
+                                    nativeLabel={false}
+                                >
+                                    <SelectControl
+                                        value={parameters.wifi_security ?? "WPA"}
+                                        onValueChange={(wifiSecurity) =>
+                                            setParameters((current) => ({
+                                                ...current,
+                                                wifi_security: wifiSecurity,
+                                            }))
+                                        }
+                                        options={[
+                                            { value: "WPA", label: "WPA" },
+                                            { value: "WEP", label: "WEP" },
+                                            {
+                                                value: "nopass",
+                                                label: text(locale, "None", "なし"),
+                                            },
+                                        ]}
+                                    />
+                                </FormField>
+                                <Field orientation="horizontal">
+                                    <Checkbox
+                                        id="qr-wifi-hidden"
+                                        checked={parameters.wifi_hidden === "true"}
+                                        onCheckedChange={(checked) =>
+                                            setParameters((current) => ({
+                                                ...current,
+                                                wifi_hidden: String(checked),
+                                            }))
+                                        }
+                                    />
+                                    <FieldLabel htmlFor="qr-wifi-hidden" className="font-normal">
+                                        {text(locale, "Hidden network", "非公開ネットワーク")}
+                                    </FieldLabel>
+                                </Field>
+                            </>
+                        )}
+                        <div className="button-row">
+                            <Button onClick={() => runUiEffect(generate())} disabled={busy}>
+                                {text(locale, "Generate", "生成")}
+                            </Button>
+                            <Button variant="outline" onClick={clear} disabled={busy}>
+                                {text(locale, "Clear", "クリア")}
+                            </Button>
+                        </div>
+                    </CardContent>
                 </Card>
-                <Card className="input-card qr-preview">
-                    {image ? (
-                        <img
-                            src={image}
-                            alt={text(locale, "Generated QR code", "生成したQRコード")}
-                        />
-                    ) : (
-                        <span>{text(locale, "QR code preview", "QRコードのプレビュー")}</span>
-                    )}
-                    {content && (
-                        <>
-                            <code>{content}</code>
-                            <div className="button-row">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => runUiEffect(copy())}
-                                    disabled={busy}
-                                >
-                                    {text(locale, "Copy image", "画像をコピー")}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => runUiEffect(save())}
-                                    disabled={busy}
-                                >
-                                    {text(locale, "Save image", "画像を保存")}
-                                </Button>
-                            </div>
-                        </>
-                    )}
+                <Card className="input-card">
+                    <CardContent className="qr-preview">
+                        {image ? (
+                            <img
+                                src={image}
+                                alt={text(locale, "Generated QR code", "生成したQRコード")}
+                            />
+                        ) : (
+                            <span>{text(locale, "QR code preview", "QRコードのプレビュー")}</span>
+                        )}
+                        {content && (
+                            <>
+                                <code>{content}</code>
+                                <div className="button-row">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => runUiEffect(copy())}
+                                        disabled={busy}
+                                    >
+                                        {text(locale, "Copy image", "画像をコピー")}
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => runUiEffect(save())}
+                                        disabled={busy}
+                                    >
+                                        {text(locale, "Save image", "画像を保存")}
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+                    </CardContent>
                 </Card>
             </div>
             <OutputMessage

@@ -1,4 +1,13 @@
 import { text } from "@/shared/tool-page";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/shared/components/ui/table";
 import type { Locale } from "@/shared/types";
 import type { DatabaseQueryTab } from "./types";
 
@@ -12,26 +21,31 @@ export function QueryResults({ locale, query }: QueryResultsProps) {
 
     return (
         <div className="table-wrap">
-            <table>
-                <thead>
-                    <tr>
+            <Table>
+                <TableCaption className="sr-only">
+                    {text(locale, "Query results", "クエリ結果")}
+                </TableCaption>
+                <TableHeader>
+                    <TableRow>
                         {query.columns.map((column) => (
-                            <th key={column}>{column}</th>
+                            <TableHead key={column} scope="col">
+                                {column}
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {query.rows.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
+                        <TableRow key={rowIndex}>
                             {row.map((value, columnIndex) => (
-                                <td key={columnIndex}>
+                                <TableCell key={columnIndex}>
                                     {value === null ? <em>NULL</em> : String(value)}
-                                </td>
+                                </TableCell>
                             ))}
-                        </tr>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
             {query.truncated && (
                 <p className="muted-text">
                     {text(

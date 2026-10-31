@@ -88,7 +88,7 @@ function App() {
                 onNavigate={openPage}
                 onOpenSettings={() => setSettingsOpen(true)}
                 onOpenAbout={() => setAboutOpen(true)}
-                onToggleSidebar={() => setSidebarOpen((open) => !open)}
+                onSidebarOpenChange={setSidebarOpen}
             >
                 <ToolStage
                     activePage={activePage}

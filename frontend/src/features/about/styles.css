@@ -75,10 +75,9 @@
     margin-top: var(--space-12);
 }
 
-.about-actions span {
+.about-actions [role="status"] {
     flex: 1;
-    color: var(--muted-foreground);
-    font-size: var(--font-size-caption);
+    margin: 0;
 }
 
 .license-text {

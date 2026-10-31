@@ -40,7 +40,7 @@
     gap: var(--space-12);
 }
 :where([data-page="image"]) .image-controls .input-card {
-    padding: var(--space-12);
+    --card-spacing: var(--space-12);
 }
 :where([data-page="image"]) .image-controls .code-area {
     min-height: 70px;

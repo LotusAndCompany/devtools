@@ -1,9 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
+  "style": "base-nova",
   "rsc": false,
   "tsx": true,
-  "base": "base",
   "tailwind": {
     "config": "",
     "css": "src/shared/styles/index.css",

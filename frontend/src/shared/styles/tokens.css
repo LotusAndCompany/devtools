@@ -2,6 +2,9 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
     --color-primary: var(--primary);
     --color-primary-hover: var(--primary-hover);
     --color-primary-pressed: var(--primary-pressed);
@@ -17,17 +20,46 @@
     --color-secondary-foreground-disabled: var(--secondary-foreground-disabled);
     --color-muted: var(--muted);
     --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
     --color-border: var(--border);
+    --color-overlay: var(--overlay);
+    --color-input: var(--input);
     --color-border-disabled: var(--border-disabled);
     --color-ring: var(--ring);
     --color-destructive: var(--destructive);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
     --color-destructive-hover: var(--destructive-hover);
     --color-destructive-pressed: var(--destructive-pressed);
     --color-destructive-disabled: var(--destructive-disabled);
     --color-destructive-foreground: var(--destructive-foreground);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+}
+
+@custom-variant dark {
+    &:where([data-theme="dark"], [data-theme="dark"] *) {
+        @slot;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        &:where([data-theme="system"], [data-theme="system"] *) {
+            @slot;
+        }
+    }
 }
 
 :root {
+    --radius: 10px;
     --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
     --font-weight-normal: 400;
@@ -84,11 +116,7 @@
     --code-area-responsive-max-height: 528px;
     --app-min-height: 420px;
     --app-sidebar-width: 252px;
-    --app-sidebar-width-medium: 216px;
-    --app-sidebar-width-narrow: 184px;
     --brand-logo-size: 32px;
-    --sidebar-search-height: 36px;
-    --sidebar-search-input-height: 32px;
     --sidebar-nav-item-height: 36px;
     --app-topbar-height: 52px;
     --dialog-width-default: 440px;
@@ -206,6 +234,9 @@
     --background: var(--palette-workspace);
     --foreground: var(--palette-secondary);
     --card: var(--palette-main-1);
+    --card-foreground: var(--foreground);
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
     --surface-main-3: var(--palette-main-3);
     --primary: var(--palette-primary);
     --primary-hover: var(--palette-primary-hovered);
@@ -221,7 +252,10 @@
     --secondary-foreground-disabled: var(--palette-secondary-alternative-disabled);
     --muted: var(--palette-main-2);
     --muted-foreground: var(--palette-secondary-alternative);
+    --accent: var(--muted);
+    --accent-foreground: var(--foreground);
     --border: var(--palette-border);
+    --input: var(--border);
     --border-disabled: var(--palette-border-disabled);
     --ring: var(--palette-focus);
     --destructive: var(--palette-status-error);
@@ -233,6 +267,13 @@
     --info: var(--palette-status-info);
     --warning: var(--palette-status-warning);
     --sidebar: var(--palette-main-2);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--surface-main-3);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
     --tab-bar: var(--palette-tab-bar);
     --overlay: var(--palette-shadow-2);
     --shadow: 0 8px 28px var(--palette-shadow-1);

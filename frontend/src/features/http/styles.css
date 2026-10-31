@@ -37,16 +37,31 @@
 :where([data-page="http"]) .http-tabs-card {
     min-width: 0;
     min-height: 330px;
-    padding: 0;
     overflow: hidden;
 }
 
+:where([data-page="http"]) .http-tabs-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
 :where([data-page="http"]) .http-tabs {
-    min-height: inherit;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0;
+}
+
+:where([data-page="http"]) .http-tabs > [data-slot="tabs-list"] {
+    flex: 0 0 auto;
 }
 
 :where([data-page="http"]) .http-tab-panel {
-    min-height: 330px;
+    flex: 1;
+    min-height: 280px;
     padding: var(--space-12);
 }
 
@@ -57,6 +72,13 @@
 
 :where([data-page="http"]) .http-response-panel .code-area {
     min-height: 280px;
+}
+
+:where([data-page="http"]) .http-response-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
 }
 
 @media (max-width: 820px) {

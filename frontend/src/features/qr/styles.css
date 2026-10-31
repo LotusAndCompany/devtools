@@ -9,6 +9,11 @@
     flex-direction: column;
     gap: var(--space-12);
 }
+:where([data-page="qr"]) .qr-input-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
 :where([data-page="qr"]) .qr-preview {
     display: flex;
     min-height: 300px;

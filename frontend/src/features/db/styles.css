@@ -39,8 +39,26 @@
     min-height: 0;
 }
 
+:where([data-page="db"]) .db-query-card-content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
 :where([data-page="db"]) .db-query-tabs [data-slot="tabs-list"] {
     overflow-x: auto;
+}
+
+:where([data-page="db"]) .db-query-tabs-header {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+:where([data-page="db"]) .db-query-tabs-header [data-slot="tabs-list"] {
+    min-width: 0;
+    flex: 1;
 }
 
 :where([data-page="db"]) .db-query-tab {
@@ -49,25 +67,15 @@
     gap: var(--space-8);
 }
 
-:where([data-page="db"]) .db-query-tab-close {
-    display: inline-grid;
-    width: 16px;
-    height: 16px;
-    place-items: center;
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-tight);
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-}
-
 :where([data-page="db"]) .db-query-panel {
     display: flex;
     min-height: 0;
     flex-direction: column;
     gap: var(--space-12);
     padding-top: var(--space-12);
+}
+:where([data-page="db"]) .db-query-panel[hidden] {
+    display: none !important;
 }
 
 :where([data-page="db"]) .db-query-panel .code-area {
@@ -86,12 +94,51 @@
     flex-direction: column;
     gap: var(--space-12);
 }
-:where([data-page="db"]) .db-connect-form {
+:where([data-page="db"]) .db-table-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+.db-connection-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+}
+
+.db-connection-content .db-history-section {
     display: flex;
     flex-direction: column;
     gap: var(--space-12);
-    padding-top: var(--space-8);
+}
+
+.db-connection-content .history-list {
+    gap: var(--space-8);
+}
+
+.db-connection-content .db-history-section h2,
+.db-connection-content .db-connect-form h2 {
+    margin: 0;
+}
+
+.db-connection-content .db-connect-form {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-16);
+}
+
+.db-connection-content .db-connect-form > .selected-file,
+.db-connection-content .db-connect-form > .button-row {
+    width: 100%;
+}
+
+.db-connection-content .db-connect-form.has-history {
+    padding-top: var(--space-12);
     border-top: var(--border-width) solid var(--border);
+}
+
+.db-connection-content .db-connect-form > .button-row {
+    margin-top: 0;
 }
 
 .db-connection-content .selected-file {
@@ -103,36 +150,36 @@
     font-size: var(--font-size-caption);
 }
 .db-connection-content .history-item {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: var(--space-8);
-    padding: var(--space-8);
     border-radius: var(--radius-control);
-    background: var(--muted);
 }
-.db-connection-content .history-item > div {
-    display: flex;
+
+.db-connection-content .history-item [data-slot="item-content"] {
     min-width: 0;
-    flex-direction: column;
-    gap: var(--space-4);
 }
-.db-connection-content .history-item strong,
-.db-connection-content .history-item span {
+
+.db-connection-content .history-item [data-slot="item-title"],
+.db-connection-content .history-item [data-slot="item-description"] {
     overflow: hidden;
     font-size: var(--font-size-micro);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.db-connection-content .history-item span {
+
+.db-connection-content .history-item [data-slot="item-description"] {
     color: var(--muted-foreground);
 }
 :where([data-page="db"]) .table-wrap {
     max-width: 100%;
-    overflow: auto;
+    overflow: hidden;
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-surface);
     background: var(--card);
+}
+:where([data-page="db"]) .table-wrap [data-slot="table-container"] {
+    max-height: min(50vh, 480px);
+    overflow: auto;
 }
 :where([data-page="db"]) .table-wrap table {
     width: 100%;

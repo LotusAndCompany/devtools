@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Field } from "@/shared/components/ui/field";
+import { FormField } from "@/shared/components/form-field";
+import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/shared/components/ui/field";
+import { Empty, EmptyDescription, EmptyHeader } from "@/shared/components/ui/empty";
 import { Input } from "@/shared/components/ui/input";
-import { SelectBox } from "@/shared/components/ui/select";
+import {
+    Item,
+    ItemContent,
+    ItemDescription,
+    ItemGroup,
+    ItemTitle,
+} from "@/shared/components/ui/item";
+import { SelectControl } from "@/shared/components/select-control";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import type { RegexMatch, RegexOptions } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -107,10 +116,10 @@ export function RegexPage({ locale, run }: ToolPageProps) {
             <Heading title={text(locale, "Regex Tester", "正規表現テスター")} />
             <div className="regex-layout">
                 <Card className="input-card">
-                    <div className="toolbar-row">
-                        <Field label={text(locale, "Preset", "プリセット")} nativeLabel={false}>
-                            <SelectBox
-                                className="compact"
+                    <CardHeader className="toolbar-row">
+                        <FormField label={text(locale, "Preset", "プリセット")} nativeLabel={false}>
+                            <SelectControl
+                                className="w-auto min-w-[120px]"
                                 defaultValue=""
                                 onValueChange={(value) => {
                                     const preset = presets.find((item) => item.label === value);
@@ -131,122 +140,160 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                                     })),
                                 ]}
                             />
-                        </Field>
+                        </FormField>
                         <Button
                             variant="outline"
                             onClick={() => runUiEffect(run("copyToClipboard", { text: pattern }))}
                         >
                             {text(locale, "Copy pattern", "パターンをコピー")}
                         </Button>
-                    </div>
-                    <Field label={text(locale, "Pattern", "パターン")}>
-                        <Input
-                            className="form-control code-input"
-                            value={pattern}
-                            onChange={(event) => setPattern(event.target.value)}
-                            placeholder="(\\w+)"
-                        />
-                    </Field>
-                    <fieldset className="field-set">
-                        <legend>{text(locale, "Flags", "オプション")}</legend>
-                        <div className="flag-grid">
-                            {flags.map(([key, en, ja]) => (
-                                <label key={key} className="inline-check">
-                                    <Checkbox
-                                        checked={options[key]}
-                                        onCheckedChange={() => setOption(key)}
-                                    />
-                                    {text(locale, en, ja)}
-                                </label>
-                            ))}
-                        </div>
-                    </fieldset>
-                    <Area
-                        label={text(locale, "Test text", "テスト文字列")}
-                        value={input}
-                        onChange={setInput}
-                        rows={14}
-                    />
-                    <div className="action-row">
-                        <Button onClick={() => runUiEffect(evaluate())} disabled={busy}>
-                            {text(locale, "Test pattern", "テスト")}
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => runUiEffect(copyMatches())}
-                            disabled={!matches.length}
-                        >
-                            {text(locale, "Copy matches", "マッチをコピー")}
-                        </Button>
-                    </div>
-                </Card>
-                <div className="regex-results">
-                    <Card as="section" className="input-card">
-                        <div className="toolbar-row">
-                            <h2>{text(locale, "Matches", "マッチ")}</h2>
-                            <span className="muted-text">{matches.length}</span>
-                        </div>
-                        {matches.length === 0 ? (
-                            <p className="muted-text">
-                                {text(locale, "No matches yet.", "マッチ結果はありません。")}
-                            </p>
-                        ) : (
-                            <div className="match-list">
-                                {matches.map((match, index) => (
-                                    <div key={index} className="match-item">
-                                        <strong>{match.value}</strong>
-                                        <span>
-                                            {text(locale, "Offset", "位置")} {match.offset} ·{" "}
-                                            {text(locale, "Length", "長さ")} {match.length}
-                                        </span>
-                                        {match.groups.slice(1).map((group) => (
-                                            <code key={group.index}>
-                                                {group.name || group.index}: {group.value}
-                                            </code>
-                                        ))}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </Card>
-                    <Card as="section" className="input-card">
-                        <h2>{text(locale, "Replacement", "置換")}</h2>
-                        <Field label={text(locale, "Replacement pattern", "置換文字列")}>
+                    </CardHeader>
+                    <CardContent className="regex-input-content">
+                        <FormField label={text(locale, "Pattern", "パターン")}>
                             <Input
-                                className="form-control code-input"
-                                value={replacement}
-                                onChange={(event) => setReplacement(event.target.value)}
-                                placeholder="$1"
+                                className="code-input"
+                                value={pattern}
+                                onChange={(event) => setPattern(event.target.value)}
+                                placeholder="(\\w+)"
                             />
-                        </Field>
+                        </FormField>
+                        <FieldSet className="field-set">
+                            <FieldLegend variant="label">
+                                {text(locale, "Flags", "オプション")}
+                            </FieldLegend>
+                            <FieldGroup className="flag-grid">
+                                {flags.map(([key, en, ja]) => (
+                                    <Field key={key} orientation="horizontal">
+                                        <Checkbox
+                                            id={`regex-flag-${key}`}
+                                            checked={options[key]}
+                                            onCheckedChange={() => setOption(key)}
+                                        />
+                                        <FieldLabel
+                                            htmlFor={`regex-flag-${key}`}
+                                            className="font-normal"
+                                        >
+                                            {text(locale, en, ja)}
+                                        </FieldLabel>
+                                    </Field>
+                                ))}
+                            </FieldGroup>
+                        </FieldSet>
                         <Area
-                            label={text(locale, "Result", "結果")}
-                            value={replacedText}
-                            readOnly
-                            rows={8}
+                            label={text(locale, "Test text", "テスト文字列")}
+                            value={input}
+                            onChange={setInput}
+                            rows={14}
                         />
-                        <Button
-                            variant="outline"
-                            onClick={() =>
-                                runUiEffect(run("copyToClipboard", { text: replacedText }))
-                            }
-                            disabled={!replacedText}
-                        >
-                            {text(locale, "Copy result", "結果をコピー")}
-                        </Button>
-                    </Card>
-                    <Card as="section" className="input-card">
-                        <div className="toolbar-row">
-                            <h2>{text(locale, "Quick reference", "クイックリファレンス")}</h2>
+                        <div className="action-row">
+                            <Button onClick={() => runUiEffect(evaluate())} disabled={busy}>
+                                {text(locale, "Test pattern", "テスト")}
+                            </Button>
                             <Button
-                                variant="ghost"
-                                onClick={() => setQuickReference((value) => !value)}
+                                variant="outline"
+                                onClick={() => runUiEffect(copyMatches())}
+                                disabled={!matches.length}
                             >
-                                {quickReference ? "−" : "+"}
+                                {text(locale, "Copy matches", "マッチをコピー")}
                             </Button>
                         </div>
+                    </CardContent>
+                </Card>
+                <div className="regex-results">
+                    <Card role="region" className="input-card">
+                        <CardHeader className="toolbar-row">
+                            <CardTitle>{text(locale, "Matches", "マッチ")}</CardTitle>
+                            <span className="muted-text">{matches.length}</span>
+                        </CardHeader>
+                        <CardContent>
+                            {matches.length === 0 ? (
+                                <Empty className="regex-empty">
+                                    <EmptyHeader>
+                                        <EmptyDescription>
+                                            {text(
+                                                locale,
+                                                "No matches yet.",
+                                                "マッチ結果はありません。",
+                                            )}
+                                        </EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
+                            ) : (
+                                <ItemGroup className="match-list">
+                                    {matches.map((match, index) => (
+                                        <Item
+                                            key={index}
+                                            variant="muted"
+                                            size="sm"
+                                            className="match-item"
+                                        >
+                                            <ItemContent>
+                                                <ItemTitle className="match-value">
+                                                    {match.value}
+                                                </ItemTitle>
+                                                <ItemDescription>
+                                                    {text(locale, "Offset", "位置")} {match.offset}{" "}
+                                                    · {text(locale, "Length", "長さ")}{" "}
+                                                    {match.length}
+                                                </ItemDescription>
+                                                {match.groups.slice(1).map((group) => (
+                                                    <code key={group.index}>
+                                                        {group.name || group.index}: {group.value}
+                                                    </code>
+                                                ))}
+                                            </ItemContent>
+                                        </Item>
+                                    ))}
+                                </ItemGroup>
+                            )}
+                        </CardContent>
+                    </Card>
+                    <Card role="region" className="input-card">
+                        <CardHeader>
+                            <CardTitle>{text(locale, "Replacement", "置換")}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="regex-replacement-content">
+                            <FormField label={text(locale, "Replacement pattern", "置換文字列")}>
+                                <Input
+                                    className="code-input"
+                                    value={replacement}
+                                    onChange={(event) => setReplacement(event.target.value)}
+                                    placeholder="$1"
+                                />
+                            </FormField>
+                            <Area
+                                label={text(locale, "Result", "結果")}
+                                value={replacedText}
+                                readOnly
+                                rows={8}
+                            />
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    runUiEffect(run("copyToClipboard", { text: replacedText }))
+                                }
+                                disabled={!replacedText}
+                            >
+                                {text(locale, "Copy result", "結果をコピー")}
+                            </Button>
+                        </CardContent>
+                    </Card>
+                    <Card role="region" className="input-card">
+                        <CardHeader className="toolbar-row">
+                            <CardTitle>
+                                {text(locale, "Quick reference", "クイックリファレンス")}
+                            </CardTitle>
+                            <CardAction>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => setQuickReference((value) => !value)}
+                                >
+                                    {quickReference ? "−" : "+"}
+                                </Button>
+                            </CardAction>
+                        </CardHeader>
                         {quickReference && (
-                            <div className="quick-reference">
+                            <CardContent className="quick-reference">
                                 {[
                                     ["\\d", text(locale, "Digit", "数字")],
                                     ["\\w", text(locale, "Word character", "単語文字")],
@@ -266,14 +313,14 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                                     <Button
                                         key={token}
                                         variant="ghost"
-                                        className="quick-reference-item h-auto"
+                                        className="quick-reference-item h-auto justify-start gap-2 rounded-sm border-0 bg-muted p-2 text-left font-normal"
                                         onClick={() => insert(token)}
                                     >
                                         <code>{token}</code>
                                         <span>{description}</span>
                                     </Button>
                                 ))}
-                            </div>
+                            </CardContent>
                         )}
                     </Card>
                 </div>

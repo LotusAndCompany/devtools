@@ -1,24 +1,22 @@
-import { Button } from "@/shared/components/ui/button";
-import { Icon } from "@/shared/components/ui/icon";
+import { Menu } from "lucide-react";
+import { SidebarTrigger } from "@/shared/components/ui/sidebar";
 import { titleFor, type PageId } from "./tool-registry";
 import type { Locale } from "@/shared/types";
 
 type TopbarProps = {
     locale: Locale;
     activePage: PageId;
-    onToggleSidebar: () => void;
 };
 
-export function Topbar({ locale, activePage, onToggleSidebar }: TopbarProps) {
+export function Topbar({ locale, activePage }: TopbarProps) {
     return (
         <header data-slot="app-topbar" className="app-topbar">
-            <Button
-                variant="ghost"
+            <SidebarTrigger
                 aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"}
-                onClick={onToggleSidebar}
+                title={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"}
             >
-                <Icon>menu</Icon>
-            </Button>
+                <Menu aria-hidden="true" />
+            </SidebarTrigger>
             <div data-slot="app-topbar-title" className="topbar-title">
                 {titleFor(activePage, locale)}
             </div>

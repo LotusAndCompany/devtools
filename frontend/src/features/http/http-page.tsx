@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
-import { Field } from "@/shared/components/ui/field";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Empty, EmptyDescription, EmptyHeader } from "@/shared/components/ui/empty";
+import { FormField } from "@/shared/components/form-field";
 import { Input } from "@/shared/components/ui/input";
-import { SelectBox } from "@/shared/components/ui/select";
+import { SelectControl } from "@/shared/components/select-control";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { runUiEffect } from "@/shared/effect";
 import type { HttpMethod, HttpResponse } from "@/shared/bridge/types";
@@ -59,148 +60,163 @@ export function HttpPage({ locale, run }: ToolPageProps) {
         <div className="tool-page">
             <Heading title={text(locale, "HTTP Request", "HTTPリクエスト")} />
             <Card className="input-card">
-                <div className="http-request-row">
-                    <Field label={text(locale, "Method", "メソッド")} nativeLabel={false}>
-                        <SelectBox
-                            value={method}
-                            onValueChange={setMethod}
-                            options={[
-                                { value: "GET", label: "GET" },
-                                { value: "POST", label: "POST" },
-                                { value: "PUT", label: "PUT" },
-                                { value: "DELETE", label: "DELETE" },
-                            ]}
-                        />
-                    </Field>
-                    <Field label="URL">
-                        <Input
-                            value={url}
-                            onChange={(event) => setUrl(event.target.value)}
-                            placeholder="https://api.example.com/v1/items"
-                        />
-                    </Field>
-                    <Button onClick={() => runUiEffect(send())} disabled={busy}>
-                        {busy ? text(locale, "Sending…", "送信中…") : text(locale, "Send", "送信")}
-                    </Button>
-                </div>
+                <CardContent>
+                    <div className="http-request-row">
+                        <FormField label={text(locale, "Method", "メソッド")} nativeLabel={false}>
+                            <SelectControl
+                                value={method}
+                                onValueChange={setMethod}
+                                options={[
+                                    { value: "GET", label: "GET" },
+                                    { value: "POST", label: "POST" },
+                                    { value: "PUT", label: "PUT" },
+                                    { value: "DELETE", label: "DELETE" },
+                                ]}
+                            />
+                        </FormField>
+                        <FormField label="URL">
+                            <Input
+                                value={url}
+                                onChange={(event) => setUrl(event.target.value)}
+                                placeholder="https://api.example.com/v1/items"
+                            />
+                        </FormField>
+                        <Button onClick={() => runUiEffect(send())} disabled={busy}>
+                            {busy
+                                ? text(locale, "Sending…", "送信中…")
+                                : text(locale, "Send", "送信")}
+                        </Button>
+                    </div>
+                </CardContent>
             </Card>
             <div className="http-workspace">
-                <Card className="http-tabs-card">
-                    <Tabs
-                        className="http-tabs"
-                        value={httpTab}
-                        onValueChange={(value) => setHttpTab(String(value))}
-                    >
-                        <TabsList variant="line">
-                            <TabsTrigger value="parameters">
-                                {text(locale, "Parameters", "パラメーター")}
-                            </TabsTrigger>
-                            <TabsTrigger value="authentication">
-                                {text(locale, "Authentication", "認証")}
-                            </TabsTrigger>
-                            <TabsTrigger value="headers">
-                                {text(locale, "Headers", "ヘッダー")}
-                            </TabsTrigger>
-                            <TabsTrigger value="body">{text(locale, "Body", "本文")}</TabsTrigger>
-                        </TabsList>
-                        <TabsContent className="http-tab-panel" value="parameters">
-                            <div className="http-parameter-grid">
-                                <strong>{text(locale, "Key", "キー")}</strong>
-                                <strong>{text(locale, "Value", "値")}</strong>
-                                <strong>{text(locale, "Description", "説明")}</strong>
-                                {parameters.map((parameter, index) => (
-                                    <div className="http-parameter-row" key={index}>
+                <Card className="http-tabs-card py-0">
+                    <CardContent className="http-tabs-content p-0">
+                        <Tabs
+                            className="http-tabs"
+                            value={httpTab}
+                            onValueChange={(value) => setHttpTab(String(value))}
+                        >
+                            <TabsList variant="line">
+                                <TabsTrigger value="parameters">
+                                    {text(locale, "Parameters", "パラメーター")}
+                                </TabsTrigger>
+                                <TabsTrigger value="authentication">
+                                    {text(locale, "Authentication", "認証")}
+                                </TabsTrigger>
+                                <TabsTrigger value="headers">
+                                    {text(locale, "Headers", "ヘッダー")}
+                                </TabsTrigger>
+                                <TabsTrigger value="body">
+                                    {text(locale, "Body", "本文")}
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent className="http-tab-panel" value="parameters">
+                                <div className="http-parameter-grid">
+                                    <strong>{text(locale, "Key", "キー")}</strong>
+                                    <strong>{text(locale, "Value", "値")}</strong>
+                                    <strong>{text(locale, "Description", "説明")}</strong>
+                                    {parameters.map((parameter, index) => (
+                                        <div className="http-parameter-row" key={index}>
+                                            <Input
+                                                aria-label={`${text(locale, "Parameter key", "パラメーターキー")} ${index + 1}`}
+                                                value={parameter.key}
+                                                onChange={(event) =>
+                                                    setParameters((current) =>
+                                                        current.map((item, itemIndex) =>
+                                                            itemIndex === index
+                                                                ? {
+                                                                      ...item,
+                                                                      key: event.target.value,
+                                                                  }
+                                                                : item,
+                                                        ),
+                                                    )
+                                                }
+                                            />
+                                            <Input
+                                                aria-label={`${text(locale, "Parameter value", "パラメーター値")} ${index + 1}`}
+                                                value={parameter.value}
+                                                onChange={(event) =>
+                                                    setParameters((current) =>
+                                                        current.map((item, itemIndex) =>
+                                                            itemIndex === index
+                                                                ? {
+                                                                      ...item,
+                                                                      value: event.target.value,
+                                                                  }
+                                                                : item,
+                                                        ),
+                                                    )
+                                                }
+                                            />
+                                            <Input
+                                                aria-label={`${text(locale, "Parameter description", "パラメーター説明")} ${index + 1}`}
+                                                value={parameter.description}
+                                                onChange={(event) =>
+                                                    setParameters((current) =>
+                                                        current.map((item, itemIndex) =>
+                                                            itemIndex === index
+                                                                ? {
+                                                                      ...item,
+                                                                      description:
+                                                                          event.target.value,
+                                                                  }
+                                                                : item,
+                                                        ),
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </TabsContent>
+                            <TabsContent className="http-tab-panel" value="authentication">
+                                <div className="auth-card">
+                                    <FormField label={text(locale, "Username", "ユーザー名")}>
                                         <Input
-                                            aria-label={`${text(locale, "Parameter key", "パラメーターキー")} ${index + 1}`}
-                                            value={parameter.key}
-                                            onChange={(event) =>
-                                                setParameters((current) =>
-                                                    current.map((item, itemIndex) =>
-                                                        itemIndex === index
-                                                            ? { ...item, key: event.target.value }
-                                                            : item,
-                                                    ),
-                                                )
-                                            }
+                                            autoComplete="username"
+                                            value={username}
+                                            onChange={(event) => setUsername(event.target.value)}
                                         />
+                                    </FormField>
+                                    <FormField label={text(locale, "Password", "パスワード")}>
                                         <Input
-                                            aria-label={`${text(locale, "Parameter value", "パラメーター値")} ${index + 1}`}
-                                            value={parameter.value}
-                                            onChange={(event) =>
-                                                setParameters((current) =>
-                                                    current.map((item, itemIndex) =>
-                                                        itemIndex === index
-                                                            ? { ...item, value: event.target.value }
-                                                            : item,
-                                                    ),
-                                                )
-                                            }
+                                            type="password"
+                                            autoComplete="current-password"
+                                            value={password}
+                                            onChange={(event) => setPassword(event.target.value)}
                                         />
-                                        <Input
-                                            aria-label={`${text(locale, "Parameter description", "パラメーター説明")} ${index + 1}`}
-                                            value={parameter.description}
-                                            onChange={(event) =>
-                                                setParameters((current) =>
-                                                    current.map((item, itemIndex) =>
-                                                        itemIndex === index
-                                                            ? {
-                                                                  ...item,
-                                                                  description: event.target.value,
-                                                              }
-                                                            : item,
-                                                    ),
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </TabsContent>
-                        <TabsContent className="http-tab-panel" value="authentication">
-                            <div className="auth-card">
-                                <Field label={text(locale, "Username", "ユーザー名")}>
-                                    <Input
-                                        autoComplete="username"
-                                        value={username}
-                                        onChange={(event) => setUsername(event.target.value)}
-                                    />
-                                </Field>
-                                <Field label={text(locale, "Password", "パスワード")}>
-                                    <Input
-                                        type="password"
-                                        autoComplete="current-password"
-                                        value={password}
-                                        onChange={(event) => setPassword(event.target.value)}
-                                    />
-                                </Field>
-                            </div>
-                        </TabsContent>
-                        <TabsContent className="http-tab-panel" value="headers">
-                            <Area
-                                label={text(
-                                    locale,
-                                    "Headers (one name: value per line)",
-                                    "ヘッダー (1行に1つ name: value)",
-                                )}
-                                value={headers}
-                                onChange={setHeaders}
-                                rows={12}
-                                placeholder="Accept: application/json"
-                            />
-                        </TabsContent>
-                        <TabsContent className="http-tab-panel" value="body">
-                            <Area
-                                label={text(locale, "Request body", "リクエスト本文")}
-                                value={body}
-                                onChange={setBody}
-                                rows={12}
-                            />
-                        </TabsContent>
-                    </Tabs>
+                                    </FormField>
+                                </div>
+                            </TabsContent>
+                            <TabsContent className="http-tab-panel" value="headers">
+                                <Area
+                                    label={text(
+                                        locale,
+                                        "Headers (one name: value per line)",
+                                        "ヘッダー (1行に1つ name: value)",
+                                    )}
+                                    value={headers}
+                                    onChange={setHeaders}
+                                    rows={12}
+                                    placeholder="Accept: application/json"
+                                />
+                            </TabsContent>
+                            <TabsContent className="http-tab-panel" value="body">
+                                <Area
+                                    label={text(locale, "Request body", "リクエスト本文")}
+                                    value={body}
+                                    onChange={setBody}
+                                    rows={12}
+                                />
+                            </TabsContent>
+                        </Tabs>
+                    </CardContent>
                 </Card>
-                <Card as="section" className="input-card http-response-panel">
-                    <div className="toolbar-row">
-                        <h2>{text(locale, "Response", "レスポンス")}</h2>
+                <Card role="region" className="input-card http-response-panel">
+                    <CardHeader className="toolbar-row">
+                        <CardTitle>{text(locale, "Response", "レスポンス")}</CardTitle>
                         {response && (
                             <span className="muted-text">
                                 {String(response.status ?? "")} {String(response.reason ?? "")} ·{" "}
@@ -208,19 +224,29 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                                 {String(response.bytes ?? "")} B
                             </span>
                         )}
-                    </div>
-                    {response ? (
-                        <Area
-                            label={text(locale, "Response body", "レスポンス本文")}
-                            value={String(response.body ?? "")}
-                            readOnly
-                            rows={16}
-                        />
-                    ) : (
-                        <div className="empty-state">
-                            {text(locale, "No response yet.", "レスポンスはありません。")}
-                        </div>
-                    )}
+                    </CardHeader>
+                    <CardContent className="http-response-content">
+                        {response ? (
+                            <Area
+                                label={text(locale, "Response body", "レスポンス本文")}
+                                value={String(response.body ?? "")}
+                                readOnly
+                                rows={16}
+                            />
+                        ) : (
+                            <Empty className="empty-state">
+                                <EmptyHeader>
+                                    <EmptyDescription>
+                                        {text(
+                                            locale,
+                                            "No response yet.",
+                                            "レスポンスはありません。",
+                                        )}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        )}
+                    </CardContent>
                 </Card>
             </div>
             <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />

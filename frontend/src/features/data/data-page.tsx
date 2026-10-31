@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
-import { Field } from "@/shared/components/ui/field";
-import { SelectBox } from "@/shared/components/ui/select";
+import { ButtonGroup } from "@/shared/components/ui/button-group";
+import { FormField } from "@/shared/components/form-field";
+import { SelectControl } from "@/shared/components/select-control";
 import { runUiEffect } from "@/shared/effect";
 import type { DataFormat, JsonIndentation } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -41,14 +42,13 @@ export function DataPage({ locale, run }: ToolPageProps) {
             <div className="two-column data-panels">
                 <Card className="input-card data-panel">
                     <CardHeader className="toolbar-row data-panel-toolbar">
-                        <Field
+                        <FormField
                             className="data-file-actions"
                             label={text(locale, "Input file", "入力ファイル")}
                             nativeLabel={false}
                         >
-                            <div
+                            <ButtonGroup
                                 className="data-file-action-buttons"
-                                role="group"
                                 aria-label={text(locale, "Input file actions", "入力ファイル操作")}
                             >
                                 <Button
@@ -59,14 +59,14 @@ export function DataPage({ locale, run }: ToolPageProps) {
                                     {text(locale, "Open file", "ファイルを開く")}
                                 </Button>
                                 <Button
-                                    variant="ghost"
+                                    variant="outline"
                                     onClick={clear}
                                     disabled={!input && !output}
                                 >
                                     {text(locale, "Clear", "クリア")}
                                 </Button>
-                            </div>
-                        </Field>
+                            </ButtonGroup>
+                        </FormField>
                     </CardHeader>
                     <CardContent>
                         <Area
@@ -79,12 +79,12 @@ export function DataPage({ locale, run }: ToolPageProps) {
                 </Card>
                 <Card className="input-card data-panel">
                     <CardHeader className="toolbar-row data-panel-toolbar data-output-toolbar">
-                        <Field
+                        <FormField
                             label={text(locale, "Output format", "出力形式")}
                             nativeLabel={false}
                         >
-                            <SelectBox
-                                className="compact"
+                            <SelectControl
+                                className="w-auto min-w-[120px]"
                                 value={format}
                                 onValueChange={setFormat}
                                 options={[
@@ -94,13 +94,13 @@ export function DataPage({ locale, run }: ToolPageProps) {
                                     { value: "toml", label: "TOML" },
                                 ]}
                             />
-                        </Field>
-                        <Field
+                        </FormField>
+                        <FormField
                             label={text(locale, "Indentation", "インデント")}
                             nativeLabel={false}
                         >
-                            <SelectBox
-                                className="compact"
+                            <SelectControl
+                                className="w-auto min-w-[120px]"
                                 value={indentation}
                                 onValueChange={setIndentation}
                                 options={[
@@ -110,7 +110,7 @@ export function DataPage({ locale, run }: ToolPageProps) {
                                     { value: "minified", label: "Minified" },
                                 ]}
                             />
-                        </Field>
+                        </FormField>
                         <Button onClick={() => runUiEffect(convert())} disabled={busy}>
                             {text(locale, "Convert", "変換")}
                         </Button>
