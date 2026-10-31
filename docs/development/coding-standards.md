@@ -8,6 +8,34 @@ This document describes the coding standards and conventions used in the DevTool
 
 DevTools uses clang-format for automatic code formatting. Configuration is in `.clang-format` at the project root.
 
+### React Frontend
+
+The React UI uses TypeScript, Oxlint, Oxfmt, and Vitest. Keep screens and
+screen-specific state in `frontend/src/features/{feature}/`; use the app
+registry for tool metadata and `shared/` only for code reused across features.
+The Qt WebChannel adapter belongs in `platform/qt/`, so feature screens should
+use the typed operation runner rather than calling the native bridge directly.
+
+Build controls from the project's Base UI-backed shadcn components in
+`frontend/src/shared/components/ui/`. Keep shared design tokens in
+`frontend/src/shared/styles/tokens.css` and common component and app-shell styles
+in `frontend/src/shared/styles/components.css`. Keep tool-specific layout and
+presentation in `frontend/src/features/{feature}/styles.css`, scoped to that
+feature's root. When a style is shared by multiple tools, define it in the shared
+styles instead of repeating it in feature styles. Avoid browser-native controls
+and one-off global styles. Put interaction tests beside the feature they cover.
+
+Run the frontend checks from `frontend/`:
+
+```bash
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun build
+bun run --bun test
+```
+
 #### Run Formatting
 
 ```bash
@@ -197,33 +225,12 @@ std::unique_ptr<DataProcessor> processor = std::make_unique<DataProcessor>();
 
 ### UI Construction
 
-- Build Qt Widgets layouts in C++.
-- Use Qt parent-child ownership for widget lifetime management.
-- Name UI elements descriptively: `saveButton`, `inputLineEdit`
-- Reuse `DevTools::Ui` helpers from `features/framework/gui/design_system.h` for
-  common layouts and widget configuration.
-- Use `DevTools::Ui::Metrics` for shared spacing and size values instead of
-  repeating literals in feature screens.
-- Use the active qlementine palette for common colors. Avoid feature-local
-  style sheets or duplicate theme values.
-- Add a helper to the design system only when the pattern is shared by more
-  than one screen; keep one-off layout decisions in the feature GUI.
-
-### Widget Roles
-
-- Use `QListWidget` or `QListView` for flat collections, and reserve tree
-  widgets for genuinely hierarchical data.
-- Use a read-only `QPlainTextEdit` configured with
-  `configureDisplayTextControl()` for multi-line text output. Do not model a
-  single response or result string as a one-item list.
-- Keep `configureItemView()` and `configureTableView()` on all list and table
-  views so their font, frame, selection, and theme treatment stay shared.
-- List views must use the shared rounded frame from `configureItemView()` and
-  must not be wrapped in another framed pane. Table and tree views use the
-  containing pane as their outer frame; do not add feature-local borders.
-- Display-only text controls must not receive focus or hover styling. Preserve
-  text or link interaction only when the screen explicitly needs selection,
-  copying, or link activation.
+- Implement tool screens and shared application UI in React under
+  `frontend/src/`; use the project's shared and shadcn components.
+- Keep Qt Widgets code in the native host and integration layers. Use Qt
+  parent-child ownership for widget lifetime management.
+- Use the active qlementine palette for native host colors. Avoid rebuilding
+  tool-screen UI in C++.
 
 ## C++17 Features
 
@@ -410,15 +417,12 @@ pre-commit autoupdate
 
 ## CI (GitHub Actions)
 
-Code quality checks run automatically on:
-- **Pull Request** to `main`
-
-| Check | Runner | Description |
-|-------|--------|-------------|
-| clang-format | macOS | Format check on changed files |
-| clang-tidy | Ubuntu | Static analysis on changed files |
-| format-suggestion | macOS | PR comment with format suggestions |
-| semantic-pr | Ubuntu | Validate PR title follows Conventional Commits |
+The Code Quality workflow runs on pull requests to `main` when its configured
+path filters match. It runs Frontend Checks (Oxlint, Oxfmt, TypeScript,
+Vitest, and Vite build), clang-format checks on changed C++ files, and
+clang-tidy analysis. Separate workflows validate the PR title and provide C++
+format suggestions. The CTest suite is run locally as described in the
+[Testing Guide](testing-guide.md); Code Quality does not run CTest.
 
 ## Related Documentation
 

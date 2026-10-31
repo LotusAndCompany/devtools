@@ -1,0 +1,28 @@
+:where([data-page="data"]) .data-panels {
+    align-items: start;
+}
+
+:where([data-page="data"]) .data-panel {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+:where([data-page="data"]) .data-panel-toolbar {
+    align-items: flex-end;
+    min-height: 56px;
+    margin-bottom: 0;
+}
+
+:where([data-page="data"]) .data-output-toolbar [data-slot="field"] {
+    flex: 1 1 120px;
+}
+
+:where([data-page="data"]) .data-file-actions {
+    flex: 1 1 auto;
+}
+
+:where([data-page="data"]) .data-panel .code-area {
+    height: min(54vh, 530px);
+}

@@ -1,0 +1,163 @@
+import { useState } from "react";
+import { Effect } from "effect";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { DateTimeInput } from "@/shared/components/date-time-input";
+import { FormField } from "@/shared/components/form-field";
+import { Input } from "@/shared/components/ui/input";
+import { runUiEffect } from "@/shared/effect";
+import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
+import type { ToolPageProps } from "@/shared/types";
+
+type TimestampValues = {
+    seconds: string;
+    milliseconds: string;
+    local: string;
+    utc: string;
+    isoUtc: string;
+    isoLocal: string;
+};
+
+const padDatePart = (value: number) => String(value).padStart(2, "0");
+
+function toLocalInput(date: Date, utc = false) {
+    const year = utc ? date.getUTCFullYear() : date.getFullYear();
+    const month = padDatePart((utc ? date.getUTCMonth() : date.getMonth()) + 1);
+    const day = padDatePart(utc ? date.getUTCDate() : date.getDate());
+    const hour = padDatePart(utc ? date.getUTCHours() : date.getHours());
+    const minute = padDatePart(utc ? date.getUTCMinutes() : date.getMinutes());
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+}
+
+function toLocalIso(date: Date) {
+    const offset = -date.getTimezoneOffset();
+    const sign = offset >= 0 ? "+" : "-";
+    const absoluteOffset = Math.abs(offset);
+    const seconds = padDatePart(date.getSeconds());
+    const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+    return `${toLocalInput(date)}:${seconds}.${milliseconds}${sign}${padDatePart(Math.floor(absoluteOffset / 60))}:${padDatePart(absoluteOffset % 60)}`;
+}
+
+function timestampValues(date: Date): TimestampValues {
+    return {
+        seconds: String(Math.floor(date.getTime() / 1000)),
+        milliseconds: String(date.getTime()),
+        local: toLocalInput(date),
+        utc: toLocalInput(date, true),
+        isoUtc: date.toISOString(),
+        isoLocal: toLocalIso(date),
+    };
+}
+
+export function TimestampPage({ locale, run }: ToolPageProps) {
+    const { busy, error, execute, setError } = useOperation(run);
+    const [values, setValues] = useState<TimestampValues>(() => timestampValues(new Date()));
+    const convert = (key: keyof TimestampValues) =>
+        Effect.gen(function* () {
+            const source =
+                key === "seconds" ? "seconds" : key === "milliseconds" ? "milliseconds" : "iso";
+            const localDate = new Date(values.local);
+            const value =
+                key === "local"
+                    ? Number.isNaN(localDate.getTime())
+                        ? values.local
+                        : localDate.toISOString()
+                    : key === "utc"
+                      ? `${values.utc}:00Z`
+                      : key === "isoUtc"
+                        ? values.isoUtc
+                        : key === "isoLocal"
+                          ? values.isoLocal
+                          : values[key];
+            const result = yield* execute("convertTimestamp", { value, source });
+            if (!result) return;
+            const instant = new Date(result.utc);
+            yield* Effect.sync(() =>
+                setValues({
+                    seconds: result.seconds,
+                    milliseconds: result.milliseconds,
+                    local: toLocalInput(instant),
+                    utc: toLocalInput(instant, true),
+                    isoUtc: result.utc,
+                    isoLocal: result.local,
+                }),
+            );
+        });
+    const copy = (value: string) => run("copyToClipboard", { text: value });
+    const row = (key: keyof TimestampValues, label: string, dateTime = false) => (
+        <div className="timestamp-row" key={key}>
+            <FormField label={label}>
+                {dateTime ? (
+                    <DateTimeInput
+                        locale={locale}
+                        value={values[key]}
+                        onValueChange={(value) =>
+                            setValues((current) => ({ ...current, [key]: value }))
+                        }
+                        aria-label={label}
+                    />
+                ) : (
+                    <Input
+                        value={values[key]}
+                        onChange={(event) =>
+                            setValues((current) => ({ ...current, [key]: event.target.value }))
+                        }
+                    />
+                )}
+            </FormField>
+            <Button
+                variant="outline"
+                size="sm"
+                disabled={busy}
+                onClick={() => runUiEffect(convert(key))}
+            >
+                {text(locale, "Convert", "変換")}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => runUiEffect(copy(values[key]))}>
+                {text(locale, "Copy", "コピー")}
+            </Button>
+        </div>
+    );
+    return (
+        <div className="tool-page">
+            <Heading title={text(locale, "Timestamp Conversion", "タイムスタンプ変換")} />
+            <div className="timestamp-toolbar">
+                <Button variant="outline" onClick={() => setValues(timestampValues(new Date()))}>
+                    {text(locale, "Now", "現在時刻")}
+                </Button>
+            </div>
+            <div className="timestamp-groups">
+                <Card role="region" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>
+                            {text(locale, "Unix Timestamp", "Unixタイムスタンプ")}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("seconds", text(locale, "Seconds", "秒"))}
+                        {row("milliseconds", text(locale, "Milliseconds", "ミリ秒"))}
+                    </CardContent>
+                </Card>
+                <Card role="region" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>{text(locale, "Date & Time", "日時")}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("local", text(locale, "Local", "ローカル"), true)}
+                        {row("utc", text(locale, "UTC", "UTC"), true)}
+                    </CardContent>
+                </Card>
+                <Card role="region" className="input-card timestamp-group">
+                    <CardHeader>
+                        <CardTitle>ISO 8601</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {row("isoUtc", text(locale, "UTC", "UTC"))}
+                        {row("isoLocal", text(locale, "Local", "ローカル"))}
+                    </CardContent>
+                </Card>
+            </div>
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
+        </div>
+    );
+}

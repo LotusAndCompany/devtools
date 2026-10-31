@@ -1,6 +1,4 @@
-#include "tests/test_util.h"
-
-#include <QDateTime>
+#include <QDebug>
 #include <QtTest>
 
 namespace Test {

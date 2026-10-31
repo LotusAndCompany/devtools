@@ -25,15 +25,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
 
-# NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
-#       the user interface file "*.ui" could not be found in the following directories "SRC:..."
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    features/image/gui/basic/
-)
-
 # Qtのパッケージを探す
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 6.9 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
+find_package(Qt6 6.9 REQUIRED COMPONENTS
+    Core Widgets LinguistTools Sql Network Svg Concurrent WebChannel WebEngineWidgets
+)
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -93,7 +89,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
-        features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
         vcpkg.json
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
@@ -109,16 +104,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_regex_tester STATIC)
     qt_add_library(${PROJECT_NAME}_phrase_generation STATIC)
     qt_add_library(${PROJECT_NAME}_image_core STATIC)
-    qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC)
     qt_add_library(${PROJECT_NAME}_db_tool STATIC)
     qt_add_library(${PROJECT_NAME}_data_conversion STATIC)
     qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC)
     qt_add_library(${PROJECT_NAME}_markdown_preview STATIC)
     qt_add_library(${PROJECT_NAME}_timestamp_conversion STATIC)
     qt_add_library(${PROJECT_NAME}_diff_tool STATIC)
-
-    # 画像関係の依存関係
-    add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
+    qt_add_library(${PROJECT_NAME}_web_frontend STATIC)
 
     # toml11, yaml-cppのインクルードディレクトリ
     target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC
@@ -186,10 +178,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # メモリアドレス関連の静的チェックを有効にする
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
-# 画像関係の依存関係
-# target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
-target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}_image_core)
-
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME}_framework_gui ${PROJECT_NAME}_app_info)
@@ -211,7 +199,6 @@ set(MODULE_LIST
     ${PROJECT_NAME}_core
     ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_image_core
-    ${PROJECT_NAME}_image_tools_unified
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
@@ -222,10 +209,11 @@ set(MODULE_LIST
     ${PROJECT_NAME}_diff_tool
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_timestamp_conversion
+    ${PROJECT_NAME}_web_frontend
 )
 
 set(APPLICATION_MODULE_LIST
-    ${PROJECT_NAME}_image_tools_unified
+    ${PROJECT_NAME}_image_core
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
@@ -237,6 +225,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_timestamp_conversion
+    ${PROJECT_NAME}_web_frontend
 )
 set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
 
@@ -266,21 +255,17 @@ foreach (MODULE ${MODULE_LIST})
         target_include_directories(${MODULE} PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${Qt6Core_INCLUDE_DIRS}
-            ${Qt6Bus_INCLUDE_DIRS}
             ${Qt6Gui_INCLUDE_DIRS}
-            ${Qt6Widgets_INCLUDE_DIRS}
             ${Qt6Network_INCLUDE_DIRS}
             ${Qt6Sql_INCLUDE_DIRS}
         )
         target_link_libraries(${MODULE} PUBLIC
             ${PROJECT_NAME}_core
-            ${PROJECT_NAME}_framework_gui
             Qt6::Core
-            Qt6::DBus
             Qt6::Gui
-            Qt6::Widgets
             Qt6::Network
             Qt6::Sql
+            Qt6::Concurrent
         )
     endif()
 endforeach()
@@ -390,6 +375,30 @@ else()
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
     )
+
+    if(APPLE)
+        get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION_RELEASE)
+        if(NOT DEVTOOLS_QT_WEBENGINE_CORE)
+            get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION)
+        endif()
+        get_filename_component(DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR
+            "${DEVTOOLS_QT_WEBENGINE_CORE}" DIRECTORY)
+        set(DEVTOOLS_QT_WEBENGINE_PROCESS_APP
+            "${DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR}/Helpers/QtWebEngineProcess.app")
+        if(NOT EXISTS "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}/Contents/MacOS/QtWebEngineProcess")
+            message(WARNING
+                "QtWebEngineProcess was not found beside QtWebEngineCore: "
+                "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}")
+        else()
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND "${CMAKE_COMMAND}" -E copy_directory
+                    "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}"
+                    "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Helpers/QtWebEngineProcess.app"
+                COMMENT "Copying Qt WebEngine process into the application bundle"
+                VERBATIM
+            )
+        endif()
+    endif()
 endif()
 
 include(GNUInstallDirs)

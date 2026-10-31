@@ -1,0 +1,52 @@
+:where([data-page="markdown"]) .two-column > .preview-panel {
+    min-width: 0;
+}
+:where([data-page="markdown"]) .markdown-editor-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+:where([data-page="markdown"]) .markdown-editor-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+:where([data-page="markdown"]) .markdown-editor-card [data-slot="field"] {
+    flex: 1;
+}
+:where([data-page="markdown"]) .markdown-editor-card .code-area {
+    flex: 1;
+    min-height: 330px;
+}
+:where([data-page="markdown"]) .markdown-columns {
+    min-height: 420px;
+}
+:where([data-page="markdown"]) .preview-panel {
+    display: flex;
+    min-height: 350px;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+:where([data-page="markdown"]) .preview-panel-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+:where([data-page="markdown"]) .preview-panel iframe {
+    width: 100%;
+    flex: 1;
+    min-height: 330px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-control);
+    background: var(--card);
+}
+:where([data-page="markdown"]) .markdown-sync {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-caption);
+}

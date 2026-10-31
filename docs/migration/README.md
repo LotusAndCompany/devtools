@@ -37,8 +37,8 @@ must be used with evidence, and out-of-scope entries need a reason.
 | M-1: intake and base SHA | Verified for this snapshot | [pr-intake.md](pr-intake.md); original Issue #130 artifact was absent |
 | M0: current-state audit | Verified with explicit gaps | This document set; limited runtime and UI smoke evidence is recorded, with large-workload, OS-cold/warm launch, operation, and distribution gaps remaining |
 | M1: separate C++ UI and processing | Verified | [m1-final-verification.md](m1-final-verification.md); the complete 56-test suite and application build passed |
-| M2: React / Qt WebEngine foundation | Not started | Define and test a real NativeBridge contract and deployable host |
-| M3: move all UI to React | Not started | Preserve every registered tool and shared interaction |
+| M2: React / Qt WebEngine foundation | Verified with explicit gaps | [m2-react-webengine.md](m2-react-webengine.md); production qrc smoke, HMR, real C++ operations, tests, and package / memory measurements are recorded; signed package launch and repeatable Release measurements remain open |
+| M3: move all UI to React | Implemented / unverified | [m3-react-ui.md](m3-react-ui.md); all 11 registered tool routes and shared navigation now use React, but full Qt WebEngine UI/E2E and distribution checks remain |
 | M4: test Tauri portability | Not started | Run the same UI and contract against a Tauri adapter |
 | M5: move feature processing to Rust or TypeScript | Not started | Compare behavior, errors, cancellation, and persisted data against this baseline |
 | M6: remove Qt and verify distribution | Not started | Validate clean install, migration, update, recovery, and uninstall |

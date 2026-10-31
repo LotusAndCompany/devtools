@@ -1,0 +1,59 @@
+:where([data-page="image"]) .image-editor-layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 1.2fr) minmax(310px, 0.8fr);
+    gap: var(--space-16);
+    align-items: start;
+}
+:where([data-page="image"]) .image-preview-panel {
+    position: sticky;
+    top: 0;
+    display: grid;
+    min-height: 300px;
+    max-height: 75vh;
+    place-items: center;
+    overflow: auto;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-tile);
+    background-color: var(--card);
+    background-image:
+        linear-gradient(45deg, var(--muted) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--muted) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--muted) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--muted) 75%);
+    background-size: 18px 18px;
+    background-position:
+        0 0,
+        0 9px,
+        9px -9px,
+        -9px 0;
+}
+:where([data-page="image"]) .image-preview-panel img {
+    display: block;
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    cursor: crosshair;
+}
+:where([data-page="image"]) .image-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="image"]) .image-controls .input-card {
+    --card-spacing: var(--space-12);
+}
+:where([data-page="image"]) .image-controls .code-area {
+    min-height: 70px;
+}
+
+@media (max-width: 900px) {
+    :where([data-page="image"]) .image-editor-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    :where([data-page="image"]) .image-preview-panel {
+        position: static;
+    }
+}

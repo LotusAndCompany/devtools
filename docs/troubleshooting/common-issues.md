@@ -23,7 +23,10 @@ Could not find a package configuration file provided by "Qt6"
 2. Set Qt6_DIR:
    ```bash
    export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   cmake .. \
+     -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6 \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
 #### vcpkg Packages Not Found
@@ -47,7 +50,9 @@ Could not find a package configuration file provided by "yaml-cpp"
 
 3. Specify toolchain file:
    ```bash
-   cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+   cmake .. \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
 ### Compilation Errors
@@ -77,7 +82,7 @@ Undefined symbols for architecture arm64
 
 Use parallel builds:
 ```bash
-make -j$(sysctl -n hw.ncpu)
+cmake --build build --parallel
 ```
 
 #### Frequent Rebuilds
@@ -87,9 +92,10 @@ make -j$(sysctl -n hw.ncpu)
 Clean and rebuild:
 ```bash
 rm -rf build
-mkdir build && cd build
-cmake ..
-make
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
+cmake --build build --parallel
 ```
 
 ## Runtime Issues
@@ -126,7 +132,9 @@ Cannot be opened because the developer cannot be verified
 
 2. Rebuild with correct triplet:
    ```bash
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   cmake -S . -B build \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
 ### Feature-Specific Issues
@@ -151,7 +159,8 @@ Cannot be opened because the developer cannot be verified
 
 **Solutions:**
 
-1. Check file format is supported (PNG, JPEG, BMP)
+1. Check that Qt can read the file format (the Open image dialog lists PNG,
+   JPEG, BMP, GIF, and WebP)
 2. Check file is not corrupted
 3. Check file permissions
 
@@ -206,7 +215,8 @@ Cannot be opened because the developer cannot be verified
 **Solutions:**
 
 1. **SQLite**: Verify the file path is correct and the file is a valid SQLite database
-2. **MySQL/PostgreSQL**: Check hostname, port, username, and password
+2. **MySQL/PostgreSQL**: Check hostname, database name, username, password,
+   and that the server accepts connections
 3. **Server not running**: Ensure the database server is running and accessible
 4. **Driver not found**: Ensure the Qt SQL driver plugin (QSQLITE, QMYSQL, QPSQL) is installed
 
@@ -219,7 +229,7 @@ Cannot be opened because the developer cannot be verified
 
 1. Click the **Refresh** button in the toolbar
 2. Verify the database contains tables
-3. Check that the connection is active (SQL and Refresh buttons should be enabled)
+3. Check that the connection is active (**Execute** and **Refresh** should be enabled)
 
 ## UI Issues
 
@@ -238,20 +248,14 @@ Cannot be opened because the developer cannot be verified
 ### Theme Not Applied
 
 **Symptoms:**
-- Icons wrong color
-- Incorrect appearance
-- Widgets look like the platform default style instead of qlementine
+- Icons have the wrong color
+- Controls do not match the selected theme
 
 **Solutions:**
 
-1. Change the macOS appearance and verify DevTools follows the system light/dark mode.
-2. If the appearance does not update, restart DevTools and try again.
-3. Confirm the theme resources exist in the build: `:/themes/light.json` and
-   `:/themes/dark.json` are registered through `res/application.qrc`.
-4. Confirm the Material Symbols font resource `:/fonts/MaterialSymbolsOutlined.ttf` is registered
-   by `res/application.qrc`.
-5. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
-   linked into `DevTools_core`.
+1. Open **Settings** and select **Follow system**, **Light**, or **Dark**.
+2. Restart DevTools if the selected appearance does not update.
+3. If the issue remains, rebuild the application so CMake embeds the current frontend assets.
 
 ### Language Not Changed
 
@@ -260,10 +264,15 @@ Cannot be opened because the developer cannot be verified
 
 **Solutions:**
 
-1. Click **Apply** or **OK** after changing the language in **DevTools > Settings**.
+1. Click **Save** after changing the language in **Settings**.
 2. If the UI does not update, close and reopen the application.
 
 ## Installation Issues
+
+### Bun Not Found
+
+The CMake configure step requires Bun 1.3.14 or later to build the embedded
+React frontend. Install Bun, confirm `bun --version`, then configure again.
 
 ### vcpkg Bootstrap Fails
 
@@ -306,8 +315,11 @@ export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
 
 Enable tests:
 ```bash
-cmake .. -DENABLE_UNIT_TEST=ON
-make
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
 ```
 
 ### Qt Tests Crash
@@ -317,9 +329,11 @@ make
 
 **Solution:**
 
-Ensure QApplication is created in test fixture:
-```cpp
-static QApplication* app_;
+When running widget tests in an environment without a display, use Qt's
+offscreen platform plugin:
+
+```bash
+QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure
 ```
 
 ## Getting More Help

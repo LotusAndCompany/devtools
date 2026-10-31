@@ -1,0 +1,75 @@
+:where([data-page="regex"]) .regex-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(300px, 0.9fr);
+    gap: var(--space-16);
+    align-items: start;
+}
+:where([data-page="regex"]) .match-list {
+    max-height: 360px;
+    gap: var(--space-8);
+    overflow: auto;
+}
+:where([data-page="regex"]) .regex-layout > .input-card,
+:where([data-page="regex"]) .regex-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="regex"]) .regex-input-content,
+:where([data-page="regex"]) .regex-replacement-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="regex"]) .regex-results [data-slot="card-content"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="regex"]) .regex-results .input-card {
+    box-shadow: none;
+}
+:where([data-page="regex"]) .regex-layout .code-area {
+    min-height: 220px;
+}
+:where([data-page="regex"]) .flag-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-12);
+}
+:where([data-page="regex"]) .match-item {
+    border-radius: var(--radius-control);
+}
+:where([data-page="regex"]) .match-item [data-slot="item-title"],
+:where([data-page="regex"]) .match-item code {
+    overflow-wrap: anywhere;
+    font: var(--font-size-caption) var(--font-family-mono);
+}
+:where([data-page="regex"]) .match-item [data-slot="item-title"] {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+}
+:where([data-page="regex"]) .match-item [data-slot="item-description"] {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-micro);
+}
+:where([data-page="regex"]) .quick-reference {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+:where([data-page="regex"]) .quick-reference code {
+    min-width: 50px;
+    font-size: var(--font-size-micro);
+}
+:where([data-page="regex"]) .quick-reference span {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-micro);
+}
+
+@media (max-width: 900px) {
+    :where([data-page="regex"]) .regex-layout {
+        grid-template-columns: 1fr;
+    }
+}

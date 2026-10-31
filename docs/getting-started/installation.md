@@ -12,8 +12,9 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9+ | GUI framework; 6.9.3 is tested; 6.9+ is required for named-glyph QIcon support |
+| Qt | 6.9+ | Native host and WebEngine; 6.9.3 is tested |
 | vcpkg | Latest | Package management |
+| Bun | 1.3.14 | Installs frontend dependencies and builds the embedded React UI |
 
 ### Optional Tools
 | Tool | Version | Purpose |
@@ -47,7 +48,8 @@ export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
 1. Download the installer from [qt.io](https://www.qt.io/download)
 2. Run the installer
 3. Select Qt 6.9 or later for macOS
-4. Optionally install Qt Creator
+4. Include the WebEngine, WebChannel, Network, Sql, and Svg modules
+5. Optionally install Qt Creator
 
 ### 2. Install vcpkg
 
@@ -62,8 +64,8 @@ cd ~/vcpkg
 ./bootstrap-vcpkg.sh
 
 # Add to PATH (add to your shell profile)
-export PATH="$HOME/vcpkg:$PATH"
 export VCPKG_ROOT="$HOME/vcpkg"
+export PATH="$VCPKG_ROOT:$PATH"
 ```
 
 Verify installation:
@@ -91,6 +93,10 @@ brew install graphviz
 ```bash
 brew install llvm
 ```
+
+Install Bun 1.3.14 or later from the
+[official installation guide](https://bun.sh/docs/installation). CMake invokes
+Bun to install the locked frontend dependencies and build the React assets.
 
 ### 4. Clone the Repository
 
@@ -121,11 +127,13 @@ installation.
 # Create build directory
 mkdir build && cd build
 
-# Configure with CMake. This also downloads qlementine with FetchContent.
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# Configure with CMake. This installs manifest dependencies and downloads qlementine.
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build (using all available cores)
-make -j$(sysctl -n hw.ncpu)
+cmake --build . --parallel
 ```
 
 ### 7. Run DevTools
@@ -193,10 +201,10 @@ After building, verify everything works:
 # Run the application
 ./DevTools.app/Contents/MacOS/DevTools
 
-# Run tests (if enabled)
+# Run tests (if enabled). Keep the vcpkg toolchain and triplet from configuration.
 cmake .. -DENABLE_UNIT_TEST=ON
-make
-ctest --output-on-failure
+cmake --build . --parallel
+ctest --test-dir . --output-on-failure
 ```
 
 ## Next Steps

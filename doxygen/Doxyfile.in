@@ -49,8 +49,8 @@ HTML_COLORSTYLE = AUTO_LIGHT
 # コードブロックのコピーボタン
 HTML_COPY_CLIPBOARD = YES
 
-# ビルドの並列化
-NUM_PROC_THREADS = 0
+# Doxygenの自動スレッド数はmacOSのDoxygen 1.18.0でクラッシュするため、直列で生成する
+NUM_PROC_THREADS = 1
 
 # タイムスタンプをヘッダーに含めない（ビルド再現性）
 TIMESTAMP = NO

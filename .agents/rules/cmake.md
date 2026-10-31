@@ -15,8 +15,9 @@ paths:
   `CMakeLists.txt` and register them in `MODULE_LIST`.
 - List each module's source files in `features/{module}/CMakeLists.txt` using
   `target_sources()`.
-- Place business logic in `features/{feature}/core/` and UI components in
-  `features/{feature}/gui/`.
+- Place business logic in `features/{feature}/core/` and React screens in
+  `frontend/src/features/{feature}/`. Reserve `features/{feature}/gui/` for
+  native host or bridge integration.
 - Update `vcpkg.json` when adding vcpkg-managed packages.
 - Add per-feature tests in `features/{feature}/tests/` and register them in
   `tests/DevToolsTests.cmake` using `DevTools_add_test()`.

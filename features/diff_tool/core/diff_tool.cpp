@@ -3,7 +3,7 @@
 #include <vector>
 
 /**
- * @brief 差分ツールの ID と翻訳情報を初期化する
+ * @brief 差分ツールの ID を検証する
  * @param parent 親オブジェクト
  */
 DiffTool::DiffTool(QObject *parent) : Tool(Tool::ID::DIFF_TOOL, "diff-tool", parent) {}

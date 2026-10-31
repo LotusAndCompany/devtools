@@ -1,0 +1,282 @@
+import { Effect } from "effect";
+import { prepareBridgeValue } from "@/shared/bridge/contract";
+import {
+  BRIDGE_CONTRACT_VERSION,
+  NativeOperationError,
+  OperationCancelledError,
+  type BridgeError,
+  type BridgeEvent,
+  type OperationName,
+  type OperationRequest,
+  type OperationOutput,
+} from "@/shared/bridge/types";
+
+export {
+  BRIDGE_CONTRACT_VERSION,
+  NativeOperationError,
+  OperationCancelledError,
+} from "@/shared/bridge/types";
+export type {
+  AboutInfo,
+  ApplicationSettings,
+  BridgeError,
+  BridgeEvent,
+  OperationInput,
+  OperationContracts,
+  OperationOutput,
+  OperationName,
+  OperationRequest,
+} from "@/shared/bridge/types";
+
+export class BridgeConnectionError extends Error {
+  readonly _tag = "BridgeConnectionError";
+
+  constructor(message: string) {
+    super(message);
+    this.name = this._tag;
+  }
+}
+
+type QtSignal<Args extends unknown[]> = {
+  connect: (handler: (...args: Args) => void) => void;
+  disconnect: (handler: (...args: Args) => void) => void;
+};
+
+type RawNativeBridge = {
+  contractVersion: string;
+  startOperation: (request: OperationRequest) => void;
+  cancelOperation: (requestId: string) => void;
+  operationStarted: QtSignal<[string, string]>;
+  operationProgress: QtSignal<[string, number, string]>;
+  operationCompleted: QtSignal<[string, Record<string, unknown>]>;
+  operationFailed: QtSignal<[string, BridgeError]>;
+  operationCancelled: QtSignal<[string]>;
+  imageDropAvailable: QtSignal<[]>;
+  navigationRequested: QtSignal<[string]>;
+};
+
+type QWebChannelInstance = {
+  objects: Record<string, unknown>;
+};
+
+declare global {
+  interface Window {
+    qt?: { webChannelTransport: unknown };
+    QWebChannel?: new (
+      transport: unknown,
+      initialized: (channel: QWebChannelInstance) => void,
+    ) => unknown;
+  }
+}
+
+export type NativeBridge = {
+  contractVersion: string;
+  startOperation: (request: OperationRequest) => void;
+  cancelOperation: (requestId: string) => void;
+  subscribe: (handler: (event: BridgeEvent) => void) => () => void;
+};
+
+function loadQWebChannel(): Effect.Effect<void, BridgeConnectionError> {
+  if (window.QWebChannel) return Effect.void;
+
+  return Effect.callback<void, BridgeConnectionError>((resume, signal) => {
+    const script = document.createElement("script");
+    script.src = "qrc:///qtwebchannel/qwebchannel.js";
+    const cleanup = () => {
+      script.removeEventListener("load", onLoad);
+      script.removeEventListener("error", onError);
+      signal.removeEventListener("abort", onAbort);
+      script.remove();
+    };
+    const finish = (effect: Effect.Effect<void, BridgeConnectionError>) => {
+      cleanup();
+      resume(effect);
+    };
+    const onLoad = () => {
+      if (window.QWebChannel) finish(Effect.void);
+      else finish(Effect.fail(new BridgeConnectionError("WebChannel script did not initialize.")));
+    };
+    const onError = () =>
+      finish(Effect.fail(new BridgeConnectionError("Could not load Qt WebChannel support.")));
+    const onAbort = () => cleanup();
+
+    script.addEventListener("load", onLoad, { once: true });
+    script.addEventListener("error", onError, { once: true });
+    signal.addEventListener("abort", onAbort, { once: true });
+    document.head.appendChild(script);
+    return Effect.sync(cleanup);
+  });
+}
+
+export function connectNativeBridge(): Effect.Effect<NativeBridge, BridgeConnectionError> {
+  return Effect.gen(function* () {
+    const transport = window.qt?.webChannelTransport;
+    if (!transport) {
+      return yield* Effect.fail(
+        new BridgeConnectionError(
+          "Launch this screen from DevTools to connect native C++ services.",
+        ),
+      );
+    }
+
+    yield* loadQWebChannel();
+    const QWebChannel = window.QWebChannel;
+    if (!QWebChannel) {
+      return yield* Effect.fail(new BridgeConnectionError("Qt WebChannel support is unavailable."));
+    }
+
+    const channel = yield* Effect.callback<QWebChannelInstance, BridgeConnectionError>(
+      (resume, signal) => {
+        let settled = false;
+        let timeout: number;
+        const cleanup = () => {
+          window.clearTimeout(timeout);
+          signal.removeEventListener("abort", cleanup);
+        };
+        const finish = (effect: Effect.Effect<QWebChannelInstance, BridgeConnectionError>) => {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          resume(effect);
+        };
+
+        timeout = window.setTimeout(
+          () =>
+            finish(Effect.fail(new BridgeConnectionError("Native bridge connection timed out."))),
+          10_000,
+        );
+        signal.addEventListener("abort", cleanup, { once: true });
+        try {
+          const webChannel = new QWebChannel(transport, (initialized) =>
+            finish(Effect.succeed(initialized)),
+          );
+          void webChannel;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          finish(Effect.fail(new BridgeConnectionError(message)));
+        }
+        return Effect.sync(cleanup);
+      },
+    );
+
+    const native = channel.objects.nativeBridge as RawNativeBridge | undefined;
+    if (!native || typeof native.contractVersion !== "string") {
+      return yield* Effect.fail(new BridgeConnectionError("The native bridge was not registered."));
+    }
+    if (native.contractVersion !== BRIDGE_CONTRACT_VERSION) {
+      return yield* Effect.fail(
+        new BridgeConnectionError(
+          "Bridge contract mismatch: frontend " +
+            BRIDGE_CONTRACT_VERSION +
+            ", native " +
+            native.contractVersion +
+            ".",
+        ),
+      );
+    }
+
+    return {
+      contractVersion: native.contractVersion,
+      startOperation: (request) =>
+        native.startOperation(prepareBridgeValue(request) as OperationRequest),
+      cancelOperation: (requestId) => native.cancelOperation(requestId),
+      subscribe: (handler) => {
+        const started = (requestId: string, operation: string) =>
+          handler({ type: "started", requestId, operation });
+        const progress = (requestId: string, percent: number, message: string) =>
+          handler({ type: "progress", requestId, percent, message });
+        const completed = (requestId: string, result: Record<string, unknown>) =>
+          handler({ type: "completed", requestId, result });
+        const failed = (requestId: string, error: BridgeError) =>
+          handler({ type: "failed", requestId, error });
+        const cancelled = (requestId: string) => handler({ type: "cancelled", requestId });
+        const imageDropAvailable = () => handler({ type: "imageDropAvailable" });
+        const navigate = (route: string) => handler({ type: "navigate", route });
+
+        native.operationStarted.connect(started);
+        native.operationProgress.connect(progress);
+        native.operationCompleted.connect(completed);
+        native.operationFailed.connect(failed);
+        native.operationCancelled.connect(cancelled);
+        native.imageDropAvailable.connect(imageDropAvailable);
+        native.navigationRequested.connect(navigate);
+
+        return () => {
+          native.operationStarted.disconnect(started);
+          native.operationProgress.disconnect(progress);
+          native.operationCompleted.disconnect(completed);
+          native.operationFailed.disconnect(failed);
+          native.operationCancelled.disconnect(cancelled);
+          native.imageDropAvailable.disconnect(imageDropAvailable);
+          native.navigationRequested.disconnect(navigate);
+        };
+      },
+    };
+  });
+}
+
+export function runNativeOperation<Name extends OperationName>(
+  native: NativeBridge,
+  request: OperationRequest<Name>,
+  cancellationMessage: string,
+  onPendingChange?: (requestId: string, isPending: boolean, cancel: () => void) => void,
+): Effect.Effect<OperationOutput<Name>, NativeOperationError | OperationCancelledError> {
+  return Effect.callback<OperationOutput<Name>, NativeOperationError | OperationCancelledError>(
+    (resume) => {
+      let settled = false;
+      let unsubscribe: (() => void) | undefined;
+      const cancel = () => {
+        try {
+          native.cancelOperation(request.requestId);
+        } catch {
+          // The native operation may already have completed while the UI is closing.
+        }
+      };
+      const cleanup = () => {
+        unsubscribe?.();
+        unsubscribe = undefined;
+        onPendingChange?.(request.requestId, false, cancel);
+      };
+      const finish = (
+        effect: Effect.Effect<
+          OperationOutput<Name>,
+          NativeOperationError | OperationCancelledError
+        >,
+      ) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resume(effect);
+      };
+
+      onPendingChange?.(request.requestId, true, cancel);
+      try {
+        unsubscribe = native.subscribe((event) => {
+          if (event.type === "completed" && event.requestId === request.requestId) {
+            // Qt transports QVariantMap values without schema metadata; this is the typed boundary.
+            finish(Effect.succeed(event.result as OperationOutput<Name>));
+          } else if (event.type === "failed" && event.requestId === request.requestId) {
+            finish(
+              Effect.fail(
+                new NativeOperationError(event.error.message || event.error.code, event.error.code),
+              ),
+            );
+          } else if (event.type === "cancelled" && event.requestId === request.requestId) {
+            finish(Effect.fail(new OperationCancelledError(cancellationMessage)));
+          }
+        });
+        native.startOperation(request as OperationRequest);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        finish(Effect.fail(new NativeOperationError(message, "START_FAILED")));
+      }
+
+      return Effect.sync(() => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        cancel();
+      });
+    },
+  );
+}
