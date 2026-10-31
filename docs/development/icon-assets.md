@@ -1,11 +1,12 @@
 # Icon Assets
 
 DevTools bundles the Material Symbols Outlined font for both the React UI and
-native Qt Widgets. React loads it from the Qt resource URL and renders glyphs
-through the shared `Icon` component; tool icon names are assigned in
-`frontend/src/app/tool-registry.ts`. Native Qt Widgets use Qt 6.9 named-glyph
-support through `IconUtils::themedIcon()`, which provides a standard Qt
-fallback. Icons use the active theme in each UI layer.
+native Qt Widgets. The embedded React UI loads it from the Qt resource URL;
+HMR serves the same font from Vite so the HTTP page does not request a `qrc:`
+font across origins. React renders glyphs through the shared `Icon` component;
+tool icon names are assigned in `frontend/src/app/tool-registry.ts`. Native Qt
+Widgets use Qt 6.9 named-glyph support through `IconUtils::themedIcon()`, which
+provides a standard Qt fallback. Icons use the active theme in each UI layer.
 
 ## Material Symbols Outlined
 

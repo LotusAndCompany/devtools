@@ -6,18 +6,10 @@ import type { Locale } from "@/shared/types";
 type TopbarProps = {
     locale: Locale;
     activePage: PageId;
-    pendingCount: number;
     onToggleSidebar: () => void;
-    onCancelOperations: () => void;
 };
 
-export function Topbar({
-    locale,
-    activePage,
-    pendingCount,
-    onToggleSidebar,
-    onCancelOperations,
-}: TopbarProps) {
+export function Topbar({ locale, activePage, onToggleSidebar }: TopbarProps) {
     return (
         <header className="app-topbar">
             <Button
@@ -28,11 +20,6 @@ export function Topbar({
                 <Icon>menu</Icon>
             </Button>
             <div className="topbar-title">{titleFor(activePage, locale)}</div>
-            {pendingCount > 0 && (
-                <Button variant="outline" onClick={onCancelOperations}>
-                    {locale === "ja" ? "キャンセル" : "Cancel"} ({pendingCount})
-                </Button>
-            )}
         </header>
     );
 }

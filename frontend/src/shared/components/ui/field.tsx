@@ -41,6 +41,7 @@ function Field({
                 className="field-label"
                 htmlFor={nativeLabel ? controlId : undefined}
                 nativeLabel={nativeLabel}
+                render={nativeLabel ? undefined : <div />}
             >
                 {label}
             </BaseField.Label>

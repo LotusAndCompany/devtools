@@ -9,12 +9,10 @@ type AppShellProps = {
     activePage: PageId;
     sidebarOpen: boolean;
     settingsOpen: boolean;
-    pendingCount: number;
     onNavigate: (page: PageId) => void;
     onOpenSettings: () => void;
     onOpenAbout: () => void;
     onToggleSidebar: () => void;
-    onCancelOperations: () => void;
     children: ReactNode;
 };
 
@@ -23,12 +21,10 @@ export function AppShell({
     activePage,
     sidebarOpen,
     settingsOpen,
-    pendingCount,
     onNavigate,
     onOpenSettings,
     onOpenAbout,
     onToggleSidebar,
-    onCancelOperations,
     children,
 }: AppShellProps) {
     return (
@@ -44,13 +40,7 @@ export function AppShell({
                 />
             )}
             <main className="app-main">
-                <Topbar
-                    locale={locale}
-                    activePage={activePage}
-                    pendingCount={pendingCount}
-                    onToggleSidebar={onToggleSidebar}
-                    onCancelOperations={onCancelOperations}
-                />
+                <Topbar locale={locale} activePage={activePage} onToggleSidebar={onToggleSidebar} />
                 {children}
             </main>
         </div>

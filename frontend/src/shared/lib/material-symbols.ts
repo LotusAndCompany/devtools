@@ -1,4 +1,6 @@
-const materialSymbolsFontUrl = "qrc:/fonts/MaterialSymbolsOutlined.ttf";
+const materialSymbolsFontUrl = import.meta.env.DEV
+  ? "/__devtools/MaterialSymbolsOutlined.ttf"
+  : "qrc:/fonts/MaterialSymbolsOutlined.ttf";
 
 export function registerMaterialSymbolsFont(): void {
   const style = document.createElement("style");

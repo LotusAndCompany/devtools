@@ -63,7 +63,7 @@ function App() {
         [onNavigate],
     );
     const [droppedImage, acceptDroppedImage, clearDroppedImage] = useDroppedImage(openPage);
-    const { run, pendingCount, cancelAll } = useNativeBridge({
+    const { run } = useNativeBridge({
         locale,
         activePage,
         onNavigate,
@@ -85,12 +85,10 @@ function App() {
                 activePage={activePage}
                 sidebarOpen={sidebarOpen}
                 settingsOpen={settingsOpen}
-                pendingCount={pendingCount}
                 onNavigate={openPage}
                 onOpenSettings={() => setSettingsOpen(true)}
                 onOpenAbout={() => setAboutOpen(true)}
                 onToggleSidebar={() => setSidebarOpen((open) => !open)}
-                onCancelOperations={cancelAll}
             >
                 <ToolStage
                     activePage={activePage}

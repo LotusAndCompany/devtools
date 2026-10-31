@@ -219,7 +219,7 @@ export function runNativeOperation<Name extends OperationName>(
   native: NativeBridge,
   request: OperationRequest<Name>,
   cancellationMessage: string,
-  onPendingChange: (requestId: string, isPending: boolean, cancel: () => void) => void,
+  onPendingChange?: (requestId: string, isPending: boolean, cancel: () => void) => void,
 ): Effect.Effect<OperationOutput<Name>, NativeOperationError | OperationCancelledError> {
   return Effect.callback<OperationOutput<Name>, NativeOperationError | OperationCancelledError>(
     (resume) => {
@@ -235,7 +235,7 @@ export function runNativeOperation<Name extends OperationName>(
       const cleanup = () => {
         unsubscribe?.();
         unsubscribe = undefined;
-        onPendingChange(request.requestId, false, cancel);
+        onPendingChange?.(request.requestId, false, cancel);
       };
       const finish = (
         effect: Effect.Effect<
@@ -249,7 +249,7 @@ export function runNativeOperation<Name extends OperationName>(
         resume(effect);
       };
 
-      onPendingChange(request.requestId, true, cancel);
+      onPendingChange?.(request.requestId, true, cancel);
       try {
         unsubscribe = native.subscribe((event) => {
           if (event.type === "completed" && event.requestId === request.requestId) {

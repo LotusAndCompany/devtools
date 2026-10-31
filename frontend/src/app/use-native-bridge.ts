@@ -32,8 +32,6 @@ export function useNativeBridge({
   onStartupSettings,
 }: UseNativeBridgeOptions) {
   const [bridge, setBridge] = useState<NativeBridge | null>(null);
-  const [pendingCount, setPendingCount] = useState(0);
-  const pending = useRef(new Map<string, () => void>());
   const localeRef = useRef(locale);
 
   useLayoutEffect(() => {
@@ -57,11 +55,6 @@ export function useNativeBridge({
         native,
         request,
         localeRef.current === "ja" ? "処理をキャンセルしました。" : "Operation cancelled.",
-        (id, isPending, cancel) => {
-          if (isPending) pending.current.set(id, cancel);
-          else pending.current.delete(id);
-          setPendingCount(pending.current.size);
-        },
       );
     },
     [],
@@ -145,11 +138,7 @@ export function useNativeBridge({
     // oxlint-disable-next-line react/exhaustive-effect-dependencies -- runWithBridge is stable
   }, [activePage, bridge, runWithBridge]);
 
-  const cancelAll = useCallback(() => {
-    for (const cancel of pending.current.values()) cancel();
-  }, []);
-
-  return { run, pendingCount, cancelAll };
+  return { run };
 }
 
 export function useDroppedImage(
