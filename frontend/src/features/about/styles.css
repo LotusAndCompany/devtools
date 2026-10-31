@@ -1,53 +1,41 @@
 .about-page {
-    max-width: 1500px;
+    max-width: var(--content-max-width);
     margin: 0 auto;
-    padding: 24px 28px 40px;
+    padding: var(--space-24) var(--space-28) var(--space-40);
 }
 
 .about-card {
     display: flex;
-    max-width: 650px;
+    max-width: var(--dialog-width-wide);
     align-items: center;
-    gap: 18px;
+    gap: var(--space-18);
 }
 .about-card strong {
-    font-size: 16px;
+    font-size: var(--font-size-emphasis);
 }
 .about-card p {
     color: var(--muted-foreground);
-    font-size: 12px;
-}
-
-.about-dialog {
-    width: min(650px, calc(100vw - 32px));
-    max-height: min(760px, calc(100vh - 40px));
-    overflow: auto;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card);
-    color: var(--foreground);
-    box-shadow: var(--dialog-shadow);
+    font-size: var(--font-size-label);
 }
 
 .about-tabs {
-    border: 1px solid var(--border);
-    border-radius: 7px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-popup);
     overflow: hidden;
 }
 
 .about-panel {
     min-height: 250px;
-    padding: 14px;
+    padding: var(--space-14);
 }
 
 .about-brand {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin: 4px 0 18px;
-    font-size: 16px;
+    gap: var(--space-10);
+    margin: var(--space-4) 0 var(--space-18);
+    font-size: var(--font-size-emphasis);
 }
 
 .about-brand img {
@@ -59,9 +47,9 @@
 .about-metadata {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: 8px 14px;
+    gap: var(--space-8) var(--space-14);
     margin: 0;
-    font-size: 11px;
+    font-size: var(--font-size-caption);
 }
 
 .about-metadata > div {
@@ -83,26 +71,26 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 12px;
+    gap: var(--space-10);
+    margin-top: var(--space-12);
 }
 
 .about-actions span {
     flex: 1;
     color: var(--muted-foreground);
-    font-size: 11px;
+    font-size: var(--font-size-caption);
 }
 
 .license-text {
     width: 100%;
     min-height: 340px;
     resize: vertical;
-    font-family: ui-monospace, monospace;
-    font-size: 10px;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-micro);
 }
 
 @media (max-width: 900px) {
     .about-page {
-        padding: 18px 16px 30px;
+        padding: var(--space-18) var(--space-16) var(--space-30);
     }
 }

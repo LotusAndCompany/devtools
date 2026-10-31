@@ -41,20 +41,36 @@ export function DataPage({ locale, run }: ToolPageProps) {
             <div className="two-column data-panels">
                 <Card className="input-card data-panel">
                     <CardHeader className="toolbar-row data-panel-toolbar">
-                        <Button
-                            variant="outline"
-                            onClick={() => runUiEffect(open())}
-                            disabled={busy}
+                        <Field
+                            className="data-file-actions"
+                            label={text(locale, "Input file", "入力ファイル")}
+                            nativeLabel={false}
                         >
-                            {text(locale, "Open file", "ファイルを開く")}
-                        </Button>
-                        <Button variant="ghost" onClick={clear} disabled={!input && !output}>
-                            {text(locale, "Clear", "クリア")}
-                        </Button>
+                            <div
+                                className="data-file-action-buttons"
+                                role="group"
+                                aria-label={text(locale, "Input file actions", "入力ファイル操作")}
+                            >
+                                <Button
+                                    variant="outline"
+                                    onClick={() => runUiEffect(open())}
+                                    disabled={busy}
+                                >
+                                    {text(locale, "Open file", "ファイルを開く")}
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    onClick={clear}
+                                    disabled={!input && !output}
+                                >
+                                    {text(locale, "Clear", "クリア")}
+                                </Button>
+                            </div>
+                        </Field>
                     </CardHeader>
                     <CardContent>
                         <Area
-                            label={text(locale, "Input", "入力")}
+                            label={text(locale, "Input data", "入力データ")}
                             value={input}
                             onChange={setInput}
                             placeholder={'{"name":"DevTools"}'}

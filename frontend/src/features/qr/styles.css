@@ -1,13 +1,13 @@
 :where([data-page="qr"]) .qr-layout {
     display: grid;
     grid-template-columns: minmax(270px, 1fr) minmax(260px, 0.8fr);
-    gap: 14px;
+    gap: var(--space-14);
     align-items: start;
 }
 :where([data-page="qr"]) .qr-layout .input-card {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-12);
 }
 :where([data-page="qr"]) .qr-preview {
     display: flex;
@@ -15,7 +15,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 13px;
+    gap: var(--space-13);
     color: var(--muted-foreground);
 }
 :where([data-page="qr"]) .qr-preview img {
@@ -26,9 +26,7 @@
     max-width: 100%;
     overflow-wrap: anywhere;
     text-align: center;
-    font:
-        10px ui-monospace,
-        monospace;
+    font: var(--font-size-micro) var(--font-family-mono);
 }
 @media (max-width: 650px) {
     :where([data-page="qr"]) .qr-layout {

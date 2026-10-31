@@ -18,7 +18,7 @@ export function PhraseList({ locale, templates, filename, onNew, onSelect }: Phr
             <div className="toolbar-row">
                 <h2>{text(locale, "Templates", "定型文一覧")}</h2>
                 <Button variant="outline" onClick={onNew}>
-                    {text(locale, "New", "新規")} <kbd>⌘N</kbd>
+                    {text(locale, "New", "新規")}
                 </Button>
             </div>
             {templates.length === 0 && (

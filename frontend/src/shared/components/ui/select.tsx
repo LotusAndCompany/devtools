@@ -42,12 +42,17 @@ function SelectBox<Value extends string>({
             }}
         >
             <BaseSelect.Trigger
+                data-slot="select-trigger"
                 id={id}
                 aria-label={ariaLabel}
                 className={cn("select-trigger", className)}
             >
                 <BaseSelect.Value placeholder={placeholder} />
-                <BaseSelect.Icon className="select-chevron" aria-hidden="true">
+                <BaseSelect.Icon
+                    data-slot="select-icon"
+                    className="select-chevron"
+                    aria-hidden="true"
+                >
                     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="m4.5 6 3.5 3.5L11.5 6" />
                     </svg>
@@ -55,19 +60,22 @@ function SelectBox<Value extends string>({
             </BaseSelect.Trigger>
             <BaseSelect.Portal>
                 <BaseSelect.Positioner
+                    data-slot="select-positioner"
                     className="select-positioner"
                     sideOffset={4}
                     alignItemWithTrigger={false}
                 >
-                    <BaseSelect.Popup className="select-popup">
-                        <BaseSelect.List className="select-list">
+                    <BaseSelect.Popup data-slot="select-popup" className="select-popup">
+                        <BaseSelect.List data-slot="select-list" className="select-list">
                             {options.map((option) => (
                                 <BaseSelect.Item
+                                    data-slot="select-item"
                                     key={option.value}
                                     value={option.value}
                                     className="select-item"
                                 >
                                     <BaseSelect.ItemIndicator
+                                        data-slot="select-item-indicator"
                                         className="select-item-indicator"
                                         aria-hidden="true"
                                     >

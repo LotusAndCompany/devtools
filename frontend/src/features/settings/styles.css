@@ -1,74 +1,44 @@
 .settings-page {
-    max-width: 1500px;
+    max-width: var(--content-max-width);
     margin: 0 auto;
-    padding: 24px 28px 40px;
+    padding: var(--space-24) var(--space-28) var(--space-40);
 }
 
-.settings-card h2 {
-    margin: 0;
-    font-size: 13px;
-}
 .settings-actions {
     display: flex;
     align-items: center;
-    gap: 9px;
+    justify-content: flex-end;
+    gap: var(--space-9);
+    margin-top: 0;
 }
 .settings-card {
-    max-width: 620px;
-}
-.settings-card > .field {
-    margin: 0;
+    max-width: var(--dialog-width-medium);
 }
 .settings-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: var(--space-16);
     min-height: 42px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
+    padding: var(--space-6) 0;
+    border-bottom: var(--border-width) solid var(--border);
     color: var(--foreground);
-    font-size: 12px;
+    font-size: var(--font-size-label);
     cursor: pointer;
-}
-.settings-toggle input {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primary);
-}
-.settings-actions {
-    justify-content: flex-end;
-    margin-top: 0;
 }
 .settings-actions [role="status"] {
     flex: 1;
     color: var(--muted-foreground);
-    font-size: 11px;
+    font-size: var(--font-size-caption);
 }
 
-.settings-dialog {
-    width: min(650px, calc(100vw - 32px));
-    max-height: min(760px, calc(100vh - 40px));
-    overflow: auto;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card);
-    color: var(--foreground);
-    box-shadow: var(--dialog-shadow);
-}
-
-.settings-dialog {
-    width: min(620px, calc(100vw - 32px));
-}
-
-.settings-dialog .settings-page {
+[data-slot="dialog-popup"][data-size="medium"] .settings-page {
     max-width: none;
     margin: 0;
     padding: 0;
 }
 
-.settings-dialog .settings-card {
+[data-slot="dialog-popup"][data-size="medium"] .settings-page > [data-slot="card"] {
     max-width: none;
     padding: 0;
     border: 0;
@@ -78,6 +48,6 @@
 
 @media (max-width: 900px) {
     .settings-page {
-        padding: 18px 16px 30px;
+        padding: var(--space-18) var(--space-16) var(--space-30);
     }
 }

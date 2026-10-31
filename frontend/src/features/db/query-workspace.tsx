@@ -37,7 +37,7 @@ export function QueryWorkspace({
                     value={activeId}
                     onValueChange={(value) => onActiveChange(String(value))}
                 >
-                    <Tabs.List className="feature-tabs-list">
+                    <Tabs.List>
                         {tabs.map((queryTab) => (
                             <Tabs.Tab
                                 key={queryTab.id}

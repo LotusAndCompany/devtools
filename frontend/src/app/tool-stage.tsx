@@ -26,10 +26,11 @@ export function ToolStage({
     const keepAliveTools = tools.filter((tool) => tool.keepAlive);
 
     return (
-        <div className="page-stack">
+        <div data-slot="page-stack" className="page-stack">
             {activePage === "welcome" || !activeTool?.keepAlive ? (
                 <section
                     className="page-host active-page"
+                    data-slot="page-host"
                     data-page={activePage}
                     aria-label={titleFor(activePage, locale)}
                 >
@@ -51,6 +52,7 @@ export function ToolStage({
                 <section
                     key={id}
                     className="page-host"
+                    data-slot="page-host"
                     data-page={id}
                     aria-label={titleFor(id, locale)}
                     hidden={activePage !== id}

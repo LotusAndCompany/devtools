@@ -1,11 +1,11 @@
 :where([data-page="http"]) .http-request-row {
     display: grid;
     grid-template-columns: 120px minmax(0, 1fr) auto;
-    gap: 10px;
+    gap: var(--space-10);
     align-items: end;
 }
 :where([data-page="http"]) .http-options {
-    margin: 14px 0;
+    margin: var(--space-14) 0;
 }
 :where([data-page="http"]) .http-options .code-area {
     min-height: 130px;
@@ -13,25 +13,25 @@
 :where([data-page="http"]) .http-parameter-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(150px, 1fr));
-    gap: 7px;
+    gap: var(--space-7);
     overflow-x: auto;
 }
 :where([data-page="http"]) .http-parameter-row {
     display: grid;
     grid-column: 1 / -1;
     grid-template-columns: repeat(3, minmax(150px, 1fr));
-    gap: 7px;
+    gap: var(--space-7);
 }
 :where([data-page="http"]) .auth-card {
     display: flex;
     flex-direction: column;
-    gap: 11px;
+    gap: var(--space-11);
 }
 :where([data-page="http"]) .http-workspace {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 12px;
-    margin-top: 12px;
+    gap: var(--space-12);
+    margin-top: var(--space-12);
 }
 
 :where([data-page="http"]) .http-tabs-card {
@@ -47,7 +47,7 @@
 
 :where([data-page="http"]) .http-tab-panel {
     min-height: 330px;
-    padding: 12px;
+    padding: var(--space-12);
 }
 
 :where([data-page="http"]) .http-response-panel {
@@ -75,7 +75,7 @@
     }
 }
 @media (max-width: 650px) {
-    :where([data-page="http"]) .http-request-row > button {
+    :where([data-page="http"]) .http-request-row > [data-slot="button"] {
         grid-column: 1 / -1;
         justify-self: end;
     }

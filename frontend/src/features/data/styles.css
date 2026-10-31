@@ -6,7 +6,7 @@
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-12);
 }
 
 :where([data-page="data"]) .data-panel-toolbar {
@@ -17,6 +17,17 @@
 
 :where([data-page="data"]) .data-output-toolbar .field {
     flex: 1 1 120px;
+}
+
+:where([data-page="data"]) .data-file-actions {
+    flex: 1 1 auto;
+}
+
+:where([data-page="data"]) .data-file-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-9);
 }
 
 :where([data-page="data"]) .data-panel .code-area {

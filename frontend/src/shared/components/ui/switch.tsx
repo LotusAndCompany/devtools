@@ -14,7 +14,7 @@ function Switch({ className, onCheckedChange, ...props }: SwitchProps) {
             onCheckedChange={(checked) => onCheckedChange?.(checked)}
             {...props}
         >
-            <BaseSwitch.Thumb className="switch-thumb" />
+            <BaseSwitch.Thumb data-slot="switch-thumb" className="switch-thumb" />
         </BaseSwitch.Root>
     );
 }

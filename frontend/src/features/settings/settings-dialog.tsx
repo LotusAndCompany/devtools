@@ -39,12 +39,10 @@ export function SettingsDialog({
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
             <Dialog.Portal>
-                <Dialog.Backdrop className="dialog-backdrop" />
-                <Dialog.Viewport className="dialog-viewport">
-                    <Dialog.Popup className="settings-dialog">
-                        <Dialog.Title className="dialog-title">
-                            {locale === "ja" ? "設定" : "Settings"}
-                        </Dialog.Title>
+                <Dialog.Backdrop />
+                <Dialog.Viewport>
+                    <Dialog.Popup data-size="medium">
+                        <Dialog.Title>{locale === "ja" ? "設定" : "Settings"}</Dialog.Title>
                         <Dialog.Description className="sr-only">
                             {locale === "ja" ? "アプリケーション設定" : "Application settings"}
                         </Dialog.Description>
@@ -188,7 +186,7 @@ function SettingsForm({
                         {error}
                     </p>
                 )}
-                <div className="settings-actions dialog-footer">
+                <div data-slot="dialog-footer" className="settings-actions">
                     <Dialog.Close render={<Button variant="outline" disabled={saving} />}>
                         {locale === "ja" ? "キャンセル" : "Cancel"}
                     </Dialog.Close>

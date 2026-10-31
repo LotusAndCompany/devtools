@@ -93,7 +93,7 @@ function DateTimeInput({
     const [today] = useState(() => new Date());
 
     return (
-        <div className="date-time-input">
+        <div data-slot="date-time-input" className="date-time-input">
             <Input
                 id={id}
                 value={value}
@@ -137,20 +137,24 @@ function DateTimeInput({
                 />
                 <BasePopover.Portal>
                     <BasePopover.Positioner
+                        data-slot="calendar-positioner"
                         className="date-time-positioner"
                         side="bottom"
                         align="end"
                         sideOffset={6}
                     >
-                        <BasePopover.Popup className="date-time-popup">
-                            <div className="date-time-calendar-header">
-                                <BasePopover.Title className="date-time-month">
+                        <BasePopover.Popup data-slot="calendar-popup" className="date-time-popup">
+                            <div data-slot="calendar-header" className="date-time-calendar-header">
+                                <BasePopover.Title
+                                    data-slot="calendar-month"
+                                    className="date-time-month"
+                                >
                                     {new Intl.DateTimeFormat(language, {
                                         year: "numeric",
                                         month: "long",
                                     }).format(visibleMonth)}
                                 </BasePopover.Title>
-                                <div className="date-time-calendar-nav">
+                                <div data-slot="calendar-nav" className="date-time-calendar-nav">
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -193,10 +197,15 @@ function DateTimeInput({
                                     </Button>
                                 </div>
                             </div>
-                            <div className="date-time-calendar-grid" role="grid">
+                            <div
+                                data-slot="calendar-grid"
+                                className="date-time-calendar-grid"
+                                role="grid"
+                            >
                                 {weekdays.map((weekday, index) => (
                                     <span
                                         key={`${weekday}-${index}`}
+                                        data-slot="calendar-weekday"
                                         className="date-time-weekday"
                                         role="columnheader"
                                     >
@@ -214,6 +223,9 @@ function DateTimeInput({
                                         <button
                                             key={date.toISOString()}
                                             type="button"
+                                            data-slot="calendar-day"
+                                            data-outside-month={!inMonth ? "" : undefined}
+                                            data-selected={selectedDate ? "" : undefined}
                                             role="gridcell"
                                             aria-pressed={Boolean(selectedDate)}
                                             aria-current={
@@ -222,13 +234,6 @@ function DateTimeInput({
                                             aria-label={new Intl.DateTimeFormat(language, {
                                                 dateStyle: "full",
                                             }).format(date)}
-                                            className={[
-                                                "date-time-day",
-                                                inMonth ? "" : "outside-month",
-                                                selectedDate ? "selected" : "",
-                                            ]
-                                                .filter(Boolean)
-                                                .join(" ")}
                                             onClick={() => {
                                                 onValueChange(
                                                     dateValue(date, selected?.time ?? "00:00"),

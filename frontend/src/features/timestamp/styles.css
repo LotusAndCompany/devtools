@@ -1,26 +1,26 @@
 :where([data-page="timestamp"]) .timestamp-groups {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: var(--space-12);
 }
 
 :where([data-page="timestamp"]) .timestamp-group {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 11px;
+    gap: var(--space-11);
 }
 
 :where([data-page="timestamp"]) .timestamp-group .card-content {
     display: flex;
     flex-direction: column;
-    gap: 11px;
+    gap: var(--space-11);
 }
 
 :where([data-page="timestamp"]) .timestamp-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
-    gap: 5px;
+    gap: var(--space-5);
     align-items: end;
 }
 
@@ -32,8 +32,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
 }
 
 @media (max-width: 820px) {

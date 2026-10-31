@@ -11,7 +11,7 @@ type TopbarProps = {
 
 export function Topbar({ locale, activePage, onToggleSidebar }: TopbarProps) {
     return (
-        <header className="app-topbar">
+        <header data-slot="app-topbar" className="app-topbar">
             <Button
                 variant="ghost"
                 aria-label={locale === "ja" ? "サイドバーの表示切替" : "Toggle sidebar"}
@@ -19,7 +19,9 @@ export function Topbar({ locale, activePage, onToggleSidebar }: TopbarProps) {
             >
                 <Icon>menu</Icon>
             </Button>
-            <div className="topbar-title">{titleFor(activePage, locale)}</div>
+            <div data-slot="app-topbar-title" className="topbar-title">
+                {titleFor(activePage, locale)}
+            </div>
         </header>
     );
 }

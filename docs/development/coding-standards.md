@@ -17,9 +17,13 @@ The Qt WebChannel adapter belongs in `platform/qt/`, so feature screens should
 use the typed operation runner rather than calling the native bridge directly.
 
 Build controls from the project's Base UI-backed shadcn components in
-`frontend/src/shared/components/ui/`. Use the shared theme tokens and feature-root CSS
-scope instead of browser-native controls or one-off global styles. Put
-interaction tests beside the feature they cover.
+`frontend/src/shared/components/ui/`. Keep shared design tokens in
+`frontend/src/shared/styles/tokens.css` and common component and app-shell styles
+in `frontend/src/shared/styles/components.css`. Keep tool-specific layout and
+presentation in `frontend/src/features/{feature}/styles.css`, scoped to that
+feature's root. When a style is shared by multiple tools, define it in the shared
+styles instead of repeating it in feature styles. Avoid browser-native controls
+and one-off global styles. Put interaction tests beside the feature they cover.
 
 Run the frontend checks from `frontend/`:
 

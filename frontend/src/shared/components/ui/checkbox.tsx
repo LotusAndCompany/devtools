@@ -14,7 +14,9 @@ function Checkbox({ className, onCheckedChange, ...props }: CheckboxProps) {
             onCheckedChange={(checked) => onCheckedChange?.(checked)}
             {...props}
         >
-            <BaseCheckbox.Indicator className="checkbox-indicator">✓</BaseCheckbox.Indicator>
+            <BaseCheckbox.Indicator data-slot="checkbox-indicator" className="checkbox-indicator">
+                ✓
+            </BaseCheckbox.Indicator>
         </BaseCheckbox.Root>
     );
 }

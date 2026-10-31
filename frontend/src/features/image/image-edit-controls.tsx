@@ -65,7 +65,7 @@ export function ImageEditControls(props: ImageEditControlsProps) {
     } = props;
 
     return (
-        <div className="image-edit-controls">
+        <>
             <Card as="section" className="input-card">
                 <h2>{text(locale, "Resize", "サイズ変更")}</h2>
                 <FieldGroup className="form-grid two">
@@ -235,6 +235,6 @@ export function ImageEditControls(props: ImageEditControlsProps) {
                     {text(locale, "Only connected pixels", "隣接する領域のみ")}
                 </label>
             </Card>
-        </div>
+        </>
     );
 }

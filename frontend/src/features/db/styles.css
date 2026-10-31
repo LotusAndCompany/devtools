@@ -1,16 +1,16 @@
 :where([data-page="db"]) .database-toolbar {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: var(--space-9);
     min-height: 42px;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-10);
 }
 
 :where([data-page="db"]) .database-toolbar .connection-name {
     flex: 1;
     overflow: hidden;
     color: var(--muted-foreground);
-    font-size: 11px;
+    font-size: var(--font-size-caption);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -27,7 +27,7 @@
 :where([data-page="db"]) .db-table-item {
     width: 100%;
     justify-content: flex-start;
-    font-family: ui-monospace, monospace;
+    font-family: var(--font-family-mono);
 }
 
 :where([data-page="db"]) .db-query-tabs {
@@ -39,14 +39,14 @@
     min-height: 0;
 }
 
-:where([data-page="db"]) .db-query-tabs .feature-tabs-list {
+:where([data-page="db"]) .db-query-tabs [data-slot="tabs-list"] {
     overflow-x: auto;
 }
 
 :where([data-page="db"]) .db-query-tab {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: var(--space-7);
 }
 
 :where([data-page="db"]) .db-query-tab-close {
@@ -56,7 +56,7 @@
     place-items: center;
     padding: 0;
     border: 0;
-    border-radius: 3px;
+    border-radius: var(--radius-tight);
     background: transparent;
     color: inherit;
     cursor: pointer;
@@ -66,48 +66,95 @@
     display: flex;
     min-height: 0;
     flex-direction: column;
-    gap: 10px;
-    padding-top: 12px;
+    gap: var(--space-10);
+    padding-top: var(--space-12);
 }
 
 :where([data-page="db"]) .db-query-panel .code-area {
     min-height: 180px;
 }
 
-.db-connection-dialog {
-    width: min(600px, calc(100vw - 32px));
-}
-
-.db-connection-dialog {
-    width: min(650px, calc(100vw - 32px));
-    max-height: min(760px, calc(100vh - 40px));
-    overflow: auto;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card);
-    color: var(--foreground);
-    box-shadow: var(--dialog-shadow);
-}
-
 :where([data-page="db"]) .db-layout {
     display: grid;
     grid-template-columns: minmax(260px, 0.65fr) minmax(0, 1.35fr);
-    gap: 14px;
+    gap: var(--space-14);
     align-items: start;
 }
 :where([data-page="db"]) .db-sidebar,
 :where([data-page="db"]) .db-workspace {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-12);
 }
 :where([data-page="db"]) .db-connect-form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
+    gap: var(--space-10);
+    padding-top: var(--space-8);
+    border-top: var(--border-width) solid var(--border);
+}
+
+.db-connection-content .selected-file {
+    padding: var(--space-8);
+    overflow-wrap: anywhere;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-caption);
+}
+.db-connection-content .history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    border-radius: var(--radius-control);
+    background: var(--muted);
+}
+.db-connection-content .history-item > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+.db-connection-content .history-item strong,
+.db-connection-content .history-item span {
+    overflow: hidden;
+    font-size: var(--font-size-micro);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.db-connection-content .history-item span {
+    color: var(--muted-foreground);
+}
+:where([data-page="db"]) .table-wrap {
+    max-width: 100%;
+    overflow: auto;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-surface);
+    background: var(--card);
+}
+:where([data-page="db"]) .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-caption);
+}
+:where([data-page="db"]) .table-wrap th,
+:where([data-page="db"]) .table-wrap td {
+    max-width: 320px;
+    padding: var(--space-7) var(--space-9);
+    overflow-wrap: anywhere;
+    border-bottom: var(--border-width) solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+:where([data-page="db"]) .table-wrap th {
+    position: sticky;
+    top: 0;
+    background: var(--muted);
+}
+:where([data-page="db"]) .table-wrap em {
+    color: var(--muted-foreground);
 }
 
 @media (max-width: 900px) {

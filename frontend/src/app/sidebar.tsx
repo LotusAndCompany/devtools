@@ -51,12 +51,21 @@ export function Sidebar({
     );
 
     return (
-        <aside className="app-sidebar" aria-label={locale === "ja" ? "ツール" : "Tools"}>
-            <div className="brand-row">
-                <img className="brand-logo" src="qrc:/logo/dev-tools_logo.png" alt="" />
+        <aside
+            data-slot="app-sidebar"
+            className="app-sidebar"
+            aria-label={locale === "ja" ? "ツール" : "Tools"}
+        >
+            <div data-slot="brand-row" className="brand-row">
+                <img
+                    data-slot="brand-logo"
+                    className="brand-logo"
+                    src="qrc:/logo/dev-tools_logo.png"
+                    alt=""
+                />
                 <strong>DevTools</strong>
             </div>
-            <label className="search-wrap">
+            <label data-slot="search-wrap" className="search-wrap">
                 <span aria-hidden="true">⌕</span>
                 <Input
                     className="search-control"
@@ -77,8 +86,10 @@ export function Sidebar({
                 <Icon className="nav-icon">{iconFor("welcome")}</Icon>
                 {locale === "ja" ? "ホーム" : "Home"}
             </Button>
-            <div className="sidebar-section-title">{locale === "ja" ? "ツール" : "WORKSPACE"}</div>
-            <nav className="tool-nav">
+            <div data-slot="sidebar-section-title" className="sidebar-section-title">
+                {locale === "ja" ? "ツール" : "WORKSPACE"}
+            </div>
+            <nav data-slot="tool-nav" className="tool-nav">
                 {filteredTools.map((tool) => (
                     <Button
                         key={tool.id}
@@ -92,7 +103,7 @@ export function Sidebar({
                     </Button>
                 ))}
             </nav>
-            <div className="sidebar-bottom">
+            <div data-slot="sidebar-bottom" className="sidebar-bottom">
                 <Button
                     variant="ghost"
                     size="sm"

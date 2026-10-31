@@ -9,7 +9,8 @@ runtime.
 
 - React and TypeScript are bundled by Vite.
 - The UI uses shadcn/ui component conventions with Base UI primitives and
-  Tailwind CSS. The Button component is stored in `frontend/components/ui/`.
+  Tailwind CSS. Shared UI components are stored in
+  `frontend/src/shared/components/ui/`.
 - `frontend/bun.lock` pins the resolved JavaScript dependency tree.
 - CMake runs `bun install --frozen-lockfile` and `bun run --bun build`, then
   embeds the generated HTML, JavaScript, and CSS in the

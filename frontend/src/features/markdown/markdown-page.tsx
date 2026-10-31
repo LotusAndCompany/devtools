@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Effect } from "effect";
+import previewStyles from "./preview.css?inline";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
@@ -70,67 +71,20 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
 
         const rootStyles = getComputedStyle(document.documentElement);
         const color = (name: string) => rootStyles.getPropertyValue(name).trim();
+        const previewTokens = new Set(
+            Array.from(previewStyles.matchAll(/var\((--[\w-]+)/g), ([, token]) => token),
+        );
+        const tokenDeclarations = Array.from(previewTokens, (token) => {
+            const value = color(token);
+            return value ? `${token}: ${value};` : "";
+        })
+            .filter(Boolean)
+            .join("\n");
         const style =
             iframeDocument.getElementById("devtools-preview-theme") ??
             iframeDocument.createElement("style");
         style.id = "devtools-preview-theme";
-        style.textContent = `
-            :root { color-scheme: ${rootStyles.colorScheme}; }
-            body {
-                margin: 12px;
-                background: ${color("--card")};
-                color: ${color("--foreground")};
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-                font-size: 13px !important;
-                line-height: 1.65 !important;
-            }
-            body * { font-family: inherit !important; }
-            h1, h2, h3, h4, h5, h6 {
-                margin: 1.15em 0 0.55em;
-                font-weight: 650 !important;
-                line-height: 1.35 !important;
-            }
-            h1 { font-size: 21px !important; }
-            h2 { font-size: 18px !important; }
-            h3 { font-size: 16px !important; }
-            h4, h5, h6 { font-size: 14px !important; }
-            h1:first-child, h2:first-child, h3:first-child,
-            h4:first-child, h5:first-child, h6:first-child { margin-top: 0; }
-            p, ul, ol, blockquote, pre, table { margin: 0 0 0.9em; }
-            p, li, th, td, blockquote { font-size: 13px !important; }
-            body span { font-size: inherit !important; }
-            ul, ol { padding-inline-start: 1.5em; }
-            li + li { margin-top: 0.25em; }
-            blockquote {
-                padding: 0.15em 0 0.15em 12px;
-                border-inline-start: 3px solid ${color("--border")};
-                color: ${color("--muted-foreground")};
-            }
-            a { color: ${color("--primary-hover")}; }
-            pre {
-                overflow: auto;
-                padding: 12px;
-                border-radius: 6px;
-                background: ${color("--muted")};
-            }
-            code {
-                padding: 0.1em 0.3em;
-                border-radius: 4px;
-                background: ${color("--muted")};
-                font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
-                font-size: 12px !important;
-            }
-            pre code { padding: 0; background: transparent; }
-            table { border-collapse: collapse; }
-            th, td {
-                padding: 6px 9px;
-                border: 1px solid ${color("--border")};
-                text-align: left;
-                vertical-align: top;
-            }
-            hr { border-color: ${color("--border")}; }
-            img { max-width: 100%; height: auto; }
-        `;
+        style.textContent = `:root { color-scheme: ${rootStyles.colorScheme}; ${tokenDeclarations} }\n${previewStyles}`;
         if (!style.parentElement) iframeDocument.head.appendChild(style);
     }, []);
     const attachPreviewScroll = useCallback(() => {

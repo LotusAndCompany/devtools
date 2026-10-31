@@ -91,19 +91,17 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                         value={httpTab}
                         onValueChange={(value) => setHttpTab(String(value))}
                     >
-                        <Tabs.List className="feature-tabs-list">
-                            <Tabs.Tab className="feature-tab" value="parameters">
+                        <Tabs.List>
+                            <Tabs.Tab value="parameters">
                                 {text(locale, "Parameters", "パラメーター")}
                             </Tabs.Tab>
-                            <Tabs.Tab className="feature-tab" value="authentication">
+                            <Tabs.Tab value="authentication">
                                 {text(locale, "Authentication", "認証")}
                             </Tabs.Tab>
-                            <Tabs.Tab className="feature-tab" value="headers">
+                            <Tabs.Tab value="headers">
                                 {text(locale, "Headers", "ヘッダー")}
                             </Tabs.Tab>
-                            <Tabs.Tab className="feature-tab" value="body">
-                                {text(locale, "Body", "本文")}
-                            </Tabs.Tab>
+                            <Tabs.Tab value="body">{text(locale, "Body", "本文")}</Tabs.Tab>
                         </Tabs.List>
                         <Tabs.Panel className="http-tab-panel" value="parameters">
                             <div className="http-parameter-grid">

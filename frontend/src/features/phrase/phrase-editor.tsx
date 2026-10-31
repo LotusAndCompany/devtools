@@ -53,10 +53,10 @@ export function PhraseEditor({
             />
             <div className="button-row">
                 <Button onClick={onSave} disabled={busy}>
-                    {text(locale, "Save template", "定型文を保存")} <kbd>⌘S</kbd>
+                    {text(locale, "Save template", "定型文を保存")}
                 </Button>
                 <Button variant="outline" onClick={onCopy} disabled={!content}>
-                    {text(locale, "Copy text", "本文をコピー")} <kbd>⌘⇧C</kbd>
+                    {text(locale, "Copy text", "本文をコピー")}
                 </Button>
                 <Button variant="outline" onClick={onDelete} disabled={busy || !filename}>
                     {text(locale, "Delete", "削除")}

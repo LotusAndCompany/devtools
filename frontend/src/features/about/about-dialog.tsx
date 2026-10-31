@@ -77,10 +77,10 @@ export function AboutDialog({
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
             <Dialog.Portal>
-                <Dialog.Backdrop className="dialog-backdrop" />
-                <Dialog.Viewport className="dialog-viewport">
-                    <Dialog.Popup className="about-dialog">
-                        <Dialog.Title className="dialog-title">
+                <Dialog.Backdrop />
+                <Dialog.Viewport>
+                    <Dialog.Popup data-size="wide">
+                        <Dialog.Title>
                             {locale === "ja" ? "DevToolsについて" : "About DevTools"}
                         </Dialog.Title>
                         <Dialog.Description className="sr-only">
@@ -89,11 +89,11 @@ export function AboutDialog({
                                 : "DevTools application information and license"}
                         </Dialog.Description>
                         <Tabs.Root defaultValue="about" className="about-tabs">
-                            <Tabs.List className="feature-tabs-list">
-                                <Tabs.Tab value="about" className="feature-tab">
+                            <Tabs.List>
+                                <Tabs.Tab value="about">
                                     {locale === "ja" ? "概要" : "About"}
                                 </Tabs.Tab>
-                                <Tabs.Tab value="license" className="feature-tab">
+                                <Tabs.Tab value="license">
                                     {locale === "ja" ? "ライセンス" : "License"}
                                 </Tabs.Tab>
                             </Tabs.List>
@@ -127,7 +127,7 @@ export function AboutDialog({
                                 />
                             </Tabs.Panel>
                         </Tabs.Root>
-                        <div className="dialog-footer">
+                        <div data-slot="dialog-footer">
                             <Dialog.Close render={<Button variant="outline" />}>
                                 {locale === "ja" ? "OK" : "OK"}
                             </Dialog.Close>

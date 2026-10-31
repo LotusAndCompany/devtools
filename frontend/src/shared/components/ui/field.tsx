@@ -36,8 +36,9 @@ function Field({
         : child;
 
     return (
-        <BaseField.Root className={cn("field", className)}>
+        <BaseField.Root data-slot="field" className={cn("field", className)}>
             <BaseField.Label
+                data-slot="field-label"
                 className="field-label"
                 htmlFor={nativeLabel ? controlId : undefined}
                 nativeLabel={nativeLabel}
@@ -47,7 +48,7 @@ function Field({
             </BaseField.Label>
             {control}
             {description && (
-                <BaseField.Description className="field-description">
+                <BaseField.Description data-slot="field-description" className="field-description">
                     {description}
                 </BaseField.Description>
             )}

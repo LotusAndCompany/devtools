@@ -1,7 +1,7 @@
 :where([data-page="diff"]) .diff-table {
     overflow: auto;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-surface);
     background: var(--card);
 }
 :where([data-page="diff"]) .diff-table table {
@@ -10,19 +10,19 @@
     table-layout: fixed;
 }
 :where([data-page="diff"]) .diff-table th {
-    padding: 5px 9px;
-    border-bottom: 1px solid var(--border);
+    padding: var(--space-5) var(--space-9);
+    border-bottom: var(--border-width) solid var(--border);
     color: var(--muted-foreground);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
     text-align: left;
 }
 :where([data-page="diff"]) .diff-table th + th,
 :where([data-page="diff"]) .diff-row td + td {
-    border-left: 1px solid var(--border);
+    border-left: var(--border-width) solid var(--border);
 }
 :where([data-page="diff"]) .diff-row {
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-width) solid var(--border);
 }
 :where([data-page="diff"]) .diff-row:last-child {
     border-bottom: 0;
@@ -33,11 +33,9 @@
 :where([data-page="diff"]) .diff-row code {
     display: block;
     min-height: 27px;
-    padding: 5px 9px;
+    padding: var(--space-5) var(--space-9);
     overflow-wrap: anywhere;
-    font:
-        11px/1.5 ui-monospace,
-        monospace;
+    font: var(--font-size-caption) / var(--line-height-code) var(--font-family-mono);
 }
 :where([data-page="diff"]) .diff-row .removed {
     background: var(--diff-removed);
@@ -49,7 +47,7 @@
 :where([data-page="diff"]) .diff-editors {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: var(--space-10);
 }
 
 :where([data-page="diff"]) .diff-editors .code-area {
@@ -59,15 +57,15 @@
 :where([data-page="diff"]) .diff-layout {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-12);
 }
 
 :where([data-page="diff"]) .diff-result-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: var(--space-12);
+    margin-bottom: var(--space-8);
 }
 
 :where([data-page="diff"]) .diff-view-field {

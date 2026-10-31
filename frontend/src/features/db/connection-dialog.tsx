@@ -62,10 +62,10 @@ export function DatabaseConnectionDialog({
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
             <Dialog.Portal>
-                <Dialog.Backdrop className="dialog-backdrop" />
-                <Dialog.Viewport className="dialog-viewport">
-                    <Dialog.Popup className="db-connection-dialog">
-                        <Dialog.Title className="dialog-title">
+                <Dialog.Backdrop />
+                <Dialog.Viewport>
+                    <Dialog.Popup data-size="wide">
+                        <Dialog.Title>
                             {text(locale, "Database Connection Settings", "データベース接続設定")}
                         </Dialog.Title>
                         <div className="db-connection-content">
@@ -175,7 +175,7 @@ export function DatabaseConnectionDialog({
                                 </div>
                             </div>
                         </div>
-                        <div className="dialog-footer">
+                        <div data-slot="dialog-footer">
                             <Dialog.Close render={<Button variant="outline" />}>
                                 {text(locale, "Close", "閉じる")}
                             </Dialog.Close>

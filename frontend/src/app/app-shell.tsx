@@ -28,7 +28,10 @@ export function AppShell({
     children,
 }: AppShellProps) {
     return (
-        <div className={`app-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+        <div
+            data-slot="app-shell"
+            className={`app-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
+        >
             {sidebarOpen && (
                 <Sidebar
                     locale={locale}
@@ -39,7 +42,7 @@ export function AppShell({
                     onOpenAbout={onOpenAbout}
                 />
             )}
-            <main className="app-main">
+            <main data-slot="app-main" className="app-main">
                 <Topbar locale={locale} activePage={activePage} onToggleSidebar={onToggleSidebar} />
                 {children}
             </main>

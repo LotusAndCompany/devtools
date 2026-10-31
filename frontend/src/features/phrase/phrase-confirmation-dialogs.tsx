@@ -32,20 +32,20 @@ export function PhraseConfirmationDialogs({
         <>
             <AlertDialog.Root open={unsavedOpen} onOpenChange={onUnsavedOpenChange}>
                 <AlertDialog.Portal>
-                    <AlertDialog.Backdrop className="dialog-backdrop" />
-                    <AlertDialog.Viewport className="dialog-viewport">
-                        <AlertDialog.Popup className="confirm-dialog">
-                            <AlertDialog.Title className="dialog-title">
+                    <AlertDialog.Backdrop />
+                    <AlertDialog.Viewport>
+                        <AlertDialog.Popup>
+                            <AlertDialog.Title>
                                 {text(locale, "Unsaved Changes", "未保存の変更")}
                             </AlertDialog.Title>
-                            <AlertDialog.Description className="dialog-description">
+                            <AlertDialog.Description>
                                 {text(
                                     locale,
                                     "Save your changes before continuing?",
                                     "変更を保存して続行しますか？",
                                 )}
                             </AlertDialog.Description>
-                            <div className="dialog-footer">
+                            <div data-slot="dialog-footer">
                                 <AlertDialog.Close render={<Button variant="outline" />}>
                                     {text(locale, "Cancel", "キャンセル")}
                                 </AlertDialog.Close>
@@ -62,20 +62,20 @@ export function PhraseConfirmationDialogs({
             </AlertDialog.Root>
             <AlertDialog.Root open={deleteOpen} onOpenChange={onDeleteOpenChange}>
                 <AlertDialog.Portal>
-                    <AlertDialog.Backdrop className="dialog-backdrop" />
-                    <AlertDialog.Viewport className="dialog-viewport">
-                        <AlertDialog.Popup className="confirm-dialog">
-                            <AlertDialog.Title className="dialog-title">
+                    <AlertDialog.Backdrop />
+                    <AlertDialog.Viewport>
+                        <AlertDialog.Popup>
+                            <AlertDialog.Title>
                                 {text(locale, "Confirm Delete", "削除の確認")}
                             </AlertDialog.Title>
-                            <AlertDialog.Description className="dialog-description">
+                            <AlertDialog.Description>
                                 {text(
                                     locale,
                                     `Are you sure you want to delete "${title}"?`,
                                     `「${title}」を削除しますか？`,
                                 )}
                             </AlertDialog.Description>
-                            <div className="dialog-footer">
+                            <div data-slot="dialog-footer">
                                 <AlertDialog.Close render={<Button variant="outline" />}>
                                     {text(locale, "Cancel", "キャンセル")}
                                 </AlertDialog.Close>
