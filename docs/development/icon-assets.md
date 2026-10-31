@@ -6,6 +6,10 @@ in `frontend/components.json`. Tool icons are Lucide components assigned in
 Material Symbols Outlined font through `IconUtils::themedIcon()`, with a
 standard Qt fallback. The font is only needed by the native UI.
 
+`lucide-react` is distributed under the ISC license. Its license and the
+licenses of the other frontend runtime dependencies are listed in the
+[third-party license inventory](../../README.md#third-party-licenses).
+
 ## Material Symbols Outlined
 
 | Field | Value |

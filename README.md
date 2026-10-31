@@ -142,6 +142,15 @@ DevTools uses the following third-party libraries:
 | qlementine | MIT |
 | qrcodegen | MIT |
 | Material Symbols | Apache 2.0 |
+| `@base-ui/react` | MIT |
+| `class-variance-authority` | Apache 2.0 |
+| `cn` | MIT |
+| `date-fns` | MIT |
+| `effect` | MIT |
+| `lucide-react` | ISC |
+| `react` | MIT |
+| `react-dom` | MIT |
+| `react-day-picker` | MIT |
 
 ## Acknowledgments
 
