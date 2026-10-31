@@ -10,7 +10,7 @@
     table-layout: fixed;
 }
 :where([data-page="diff"]) .diff-table th {
-    padding: var(--space-5) var(--space-9);
+    padding: var(--space-4) var(--space-8);
     border-bottom: var(--border-width) solid var(--border);
     color: var(--muted-foreground);
     font-size: var(--font-size-caption);
@@ -33,7 +33,7 @@
 :where([data-page="diff"]) .diff-row code {
     display: block;
     min-height: 27px;
-    padding: var(--space-5) var(--space-9);
+    padding: var(--space-4) var(--space-8);
     overflow-wrap: anywhere;
     font: var(--font-size-caption) / var(--line-height-code) var(--font-family-mono);
 }
@@ -47,7 +47,7 @@
 :where([data-page="diff"]) .diff-editors {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-10);
+    gap: var(--space-12);
 }
 
 :where([data-page="diff"]) .diff-editors .code-area {

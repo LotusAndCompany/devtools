@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Icon } from "@/shared/components/ui/icon";
 import { Input } from "@/shared/components/ui/input";
+import { devToolsLogoUrl } from "@/shared/lib/resources";
 import { tools, iconFor, type PageId } from "./tool-registry";
 import type { Locale } from "@/shared/types";
 
@@ -57,12 +58,7 @@ export function Sidebar({
             aria-label={locale === "ja" ? "ツール" : "Tools"}
         >
             <div data-slot="brand-row" className="brand-row">
-                <img
-                    data-slot="brand-logo"
-                    className="brand-logo"
-                    src="qrc:/logo/dev-tools_logo.png"
-                    alt=""
-                />
+                <img data-slot="brand-logo" className="brand-logo" src={devToolsLogoUrl} alt="" />
                 <strong>DevTools</strong>
             </div>
             <label data-slot="search-wrap" className="search-wrap">
@@ -86,7 +82,7 @@ export function Sidebar({
                 {locale === "ja" ? "ホーム" : "Home"}
             </Button>
             <div data-slot="sidebar-section-title" className="sidebar-section-title">
-                {locale === "ja" ? "ツール" : "WORKSPACE"}
+                {locale === "ja" ? "ツール" : "Tools"}
             </div>
             <nav data-slot="tool-nav" className="tool-nav">
                 {filteredTools.map((tool) => (

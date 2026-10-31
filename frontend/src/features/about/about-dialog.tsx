@@ -6,6 +6,7 @@ import { Tabs } from "@/shared/components/ui/tabs";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { type AboutInfo, type OperationRunner } from "@/shared/bridge/types";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
+import { devToolsLogoUrl } from "@/shared/lib/resources";
 import { type Locale } from "@/shared/types";
 import { licenseTextOrFallback } from "./license";
 
@@ -99,7 +100,7 @@ export function AboutDialog({
                             </Tabs.List>
                             <Tabs.Panel value="about" className="about-panel">
                                 <div className="about-brand">
-                                    <img src="qrc:/logo/dev-tools_logo.png" alt="" />
+                                    <img src={devToolsLogoUrl} alt="" />
                                     <strong>DevTools</strong>
                                 </div>
                                 {error && <p className="operation-message error">{error}</p>}

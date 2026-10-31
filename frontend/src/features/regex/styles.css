@@ -1,14 +1,14 @@
 :where([data-page="regex"]) .regex-layout {
     display: grid;
     grid-template-columns: minmax(320px, 1fr) minmax(300px, 0.9fr);
-    gap: var(--space-14);
+    gap: var(--space-16);
     align-items: start;
 }
 :where([data-page="regex"]) .match-list {
     display: flex;
     max-height: 360px;
     flex-direction: column;
-    gap: var(--space-7);
+    gap: var(--space-8);
     overflow: auto;
 }
 :where([data-page="regex"]) .regex-layout > .input-card,
@@ -26,13 +26,13 @@
 :where([data-page="regex"]) .flag-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2) var(--space-10);
+    gap: var(--space-2) var(--space-12);
 }
 :where([data-page="regex"]) .match-item {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    padding: var(--space-9);
+    padding: var(--space-8);
     border-radius: var(--radius-control);
     background: var(--muted);
 }
@@ -54,7 +54,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-8);
-    padding: var(--space-6);
+    padding: var(--space-8);
     border: 0;
     border-radius: var(--radius-sm);
     background: var(--muted);

@@ -2,7 +2,14 @@ import { Button } from "@/shared/components/ui/button";
 import { Icon } from "@/shared/components/ui/icon";
 import type { Locale, ToolId } from "@/shared/types";
 
-type HomeTool = { id: ToolId; en: string; ja: string; icon: string };
+type HomeTool = {
+    id: ToolId;
+    en: string;
+    ja: string;
+    detailEn: string;
+    detailJa: string;
+    icon: string;
+};
 
 export function WelcomePage({
     locale,
@@ -25,6 +32,7 @@ export function WelcomePage({
                     >
                         <Icon className="tool-card-icon">{tool.icon}</Icon>
                         <strong>{locale === "ja" ? tool.ja : tool.en}</strong>
+                        <span>{locale === "ja" ? tool.detailJa : tool.detailEn}</span>
                     </Button>
                 ))}
             </div>

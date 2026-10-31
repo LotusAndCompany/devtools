@@ -8,7 +8,7 @@
     display: flex;
     max-width: var(--dialog-width-wide);
     align-items: center;
-    gap: var(--space-18);
+    gap: var(--space-20);
 }
 .about-card strong {
     font-size: var(--font-size-emphasis);
@@ -26,15 +26,15 @@
 
 .about-panel {
     min-height: 250px;
-    padding: var(--space-14);
+    padding: var(--space-16);
 }
 
 .about-brand {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-10);
-    margin: var(--space-4) 0 var(--space-18);
+    gap: var(--space-12);
+    margin: var(--space-4) 0 var(--space-20);
     font-size: var(--font-size-emphasis);
 }
 
@@ -47,7 +47,7 @@
 .about-metadata {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: var(--space-8) var(--space-14);
+    gap: var(--space-8) var(--space-16);
     margin: 0;
     font-size: var(--font-size-caption);
 }
@@ -71,7 +71,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--space-10);
+    gap: var(--space-12);
     margin-top: var(--space-12);
 }
 
@@ -91,6 +91,6 @@
 
 @media (max-width: 900px) {
     .about-page {
-        padding: var(--space-18) var(--space-16) var(--space-30);
+        padding: var(--space-20) var(--space-16) var(--space-32);
     }
 }

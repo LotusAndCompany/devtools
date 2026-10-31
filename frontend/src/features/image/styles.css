@@ -1,7 +1,7 @@
 :where([data-page="image"]) .image-editor-layout {
     display: grid;
     grid-template-columns: minmax(300px, 1.2fr) minmax(310px, 0.8fr);
-    gap: var(--space-14);
+    gap: var(--space-16);
     align-items: start;
 }
 :where([data-page="image"]) .image-preview-panel {
@@ -37,7 +37,7 @@
 :where([data-page="image"]) .image-controls {
     display: flex;
     flex-direction: column;
-    gap: var(--space-11);
+    gap: var(--space-12);
 }
 :where([data-page="image"]) .image-controls .input-card {
     padding: var(--space-12);

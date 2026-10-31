@@ -1,9 +1,9 @@
 :where([data-page="db"]) .database-toolbar {
     display: flex;
     align-items: center;
-    gap: var(--space-9);
+    gap: var(--space-8);
     min-height: 42px;
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--space-12);
 }
 
 :where([data-page="db"]) .database-toolbar .connection-name {
@@ -46,7 +46,7 @@
 :where([data-page="db"]) .db-query-tab {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-7);
+    gap: var(--space-8);
 }
 
 :where([data-page="db"]) .db-query-tab-close {
@@ -66,7 +66,7 @@
     display: flex;
     min-height: 0;
     flex-direction: column;
-    gap: var(--space-10);
+    gap: var(--space-12);
     padding-top: var(--space-12);
 }
 
@@ -77,7 +77,7 @@
 :where([data-page="db"]) .db-layout {
     display: grid;
     grid-template-columns: minmax(260px, 0.65fr) minmax(0, 1.35fr);
-    gap: var(--space-14);
+    gap: var(--space-16);
     align-items: start;
 }
 :where([data-page="db"]) .db-sidebar,
@@ -89,7 +89,7 @@
 :where([data-page="db"]) .db-connect-form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-10);
+    gap: var(--space-12);
     padding-top: var(--space-8);
     border-top: var(--border-width) solid var(--border);
 }
@@ -115,7 +115,7 @@
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-4);
 }
 .db-connection-content .history-item strong,
 .db-connection-content .history-item span {
@@ -142,7 +142,7 @@
 :where([data-page="db"]) .table-wrap th,
 :where([data-page="db"]) .table-wrap td {
     max-width: 320px;
-    padding: var(--space-7) var(--space-9);
+    padding: var(--space-8) var(--space-8);
     overflow-wrap: anywhere;
     border-bottom: var(--border-width) solid var(--border);
     text-align: left;

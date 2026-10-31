@@ -11,6 +11,14 @@ const materialSymbolsFontPath = path.resolve(
   frontendRoot,
   "../res/fonts/MaterialSymbolsOutlined.ttf",
 );
+const devToolsLogoPath = path.resolve(frontendRoot, "../res/dev-tools_logo.png");
+const developmentAssets = new Map<string, { path: string; contentType: string }>([
+  [
+    "/__devtools/MaterialSymbolsOutlined.ttf",
+    { path: materialSymbolsFontPath, contentType: "font/ttf" },
+  ],
+  ["/__devtools/dev-tools_logo.png", { path: devToolsLogoPath, contentType: "image/png" }],
+]);
 
 const developmentCsp = [
   "default-src 'none'",
@@ -54,21 +62,22 @@ export default defineConfig(({ mode }) => {
         configureServer(server) {
           server.middlewares.use((request, response, next) => {
             const requestPath = request.url?.split("?")[0];
-            if (requestPath === "/__devtools/MaterialSymbolsOutlined.ttf") {
+            const developmentAsset = requestPath ? developmentAssets.get(requestPath) : undefined;
+            if (developmentAsset) {
               if (request.method !== "GET" && request.method !== "HEAD") {
                 response.statusCode = 405;
                 response.end();
                 return;
               }
 
-              response.setHeader("Content-Type", "font/ttf");
+              response.setHeader("Content-Type", developmentAsset.contentType);
               response.setHeader("Cache-Control", "no-cache");
               if (request.method === "HEAD") {
                 response.end();
                 return;
               }
 
-              createReadStream(materialSymbolsFontPath).on("error", next).pipe(response);
+              createReadStream(developmentAsset.path).on("error", next).pipe(response);
               return;
             }
             if (requestPath === "/" || requestPath === "/index.html") {

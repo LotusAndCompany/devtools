@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--space-9);
+    gap: var(--space-8);
     margin-top: 0;
 }
 .settings-card {
@@ -20,7 +20,7 @@
     justify-content: space-between;
     gap: var(--space-16);
     min-height: 42px;
-    padding: var(--space-6) 0;
+    padding: var(--space-8) 0;
     border-bottom: var(--border-width) solid var(--border);
     color: var(--foreground);
     font-size: var(--font-size-label);
@@ -48,6 +48,6 @@
 
 @media (max-width: 900px) {
     .settings-page {
-        padding: var(--space-18) var(--space-16) var(--space-30);
+        padding: var(--space-20) var(--space-16) var(--space-32);
     }
 }

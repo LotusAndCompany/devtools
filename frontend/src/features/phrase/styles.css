@@ -1,20 +1,20 @@
 :where([data-page="phrase"]) .phrase-layout {
     display: grid;
     grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
-    gap: var(--space-14);
+    gap: var(--space-16);
     align-items: start;
 }
 :where([data-page="phrase"]) .template-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-7);
+    gap: var(--space-8);
 }
 :where([data-page="phrase"]) .template-item {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-4);
-    padding: var(--space-9);
+    padding: var(--space-8);
     border: var(--border-width) solid transparent;
     border-radius: var(--radius-control);
     background: var(--muted);

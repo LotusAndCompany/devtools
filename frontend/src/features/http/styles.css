@@ -1,11 +1,11 @@
 :where([data-page="http"]) .http-request-row {
     display: grid;
     grid-template-columns: 120px minmax(0, 1fr) auto;
-    gap: var(--space-10);
+    gap: var(--space-12);
     align-items: end;
 }
 :where([data-page="http"]) .http-options {
-    margin: var(--space-14) 0;
+    margin: var(--space-16) 0;
 }
 :where([data-page="http"]) .http-options .code-area {
     min-height: 130px;
@@ -13,19 +13,19 @@
 :where([data-page="http"]) .http-parameter-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(150px, 1fr));
-    gap: var(--space-7);
+    gap: var(--space-8);
     overflow-x: auto;
 }
 :where([data-page="http"]) .http-parameter-row {
     display: grid;
     grid-column: 1 / -1;
     grid-template-columns: repeat(3, minmax(150px, 1fr));
-    gap: var(--space-7);
+    gap: var(--space-8);
 }
 :where([data-page="http"]) .auth-card {
     display: flex;
     flex-direction: column;
-    gap: var(--space-11);
+    gap: var(--space-12);
 }
 :where([data-page="http"]) .http-workspace {
     display: grid;
