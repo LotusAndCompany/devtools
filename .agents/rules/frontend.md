@@ -17,5 +17,7 @@ paths:
 - Keep tool label, icon, native ID, component, and lifetime policy in `src/app/tool-registry.ts`.
 - Add feature-specific styles under the feature root and scope selectors to that feature's root element.
 - Keep bridge operations typed through the shared contract and run asynchronous UI operations through the shared Effect runner.
-- Run `bun run lint`, `bun run format:check`, `bun run typecheck`, `bun run build`, and `bun run test` from `frontend/` after frontend changes.
+- Run `bun run lint`, `bun run format:check`, `bun run --bun typecheck`,
+  `bun run --bun build`, and `bun run --bun test` from `frontend/` after
+  frontend changes.
 - CMake watches `src/**/*.ts`, `src/**/*.tsx`, and `src/**/*.css` recursively. Keep frontend imports and shadcn output paths rooted at `@/`.

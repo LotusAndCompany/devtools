@@ -24,7 +24,7 @@ DevToolsは、開発に使うさまざまなツールを、ひとつの使いや
 ### 画像処理
 
 - **リサイズ**: 画像を指定したサイズに拡大・縮小
-- **回転**: 画像を任意の角度で回転
+- **回転と反転**: 90度単位の回転と、水平・垂直方向への反転
 - **分割**: 画像を複数のパーツに分割
 - **透過**: 指定した色を透明化
 
@@ -35,7 +35,7 @@ DevToolsは、開発に使うさまざまなツールを、ひとつの使いや
 
 ### APIテスト
 
-- HTTPリクエスト（GET、POST、PUT、DELETEなど）を送信
+- HTTPリクエスト（GET、POST、PUT、DELETE）を送信
 - レスポンスを読み取り専用のテキストとして表示
 
 ### Markdownプレビュー
@@ -75,29 +75,31 @@ DevToolsは、開発に使うさまざまなツールを、ひとつの使いや
 ## 必要環境
 
 - **OS**: macOS 15.0以降（Apple Silicon / arm64のみ）
-- **Qt**: 6.9以上（6.9.3で検証済み。Material Symbolsの名前付きグリフに必要）
+- **Qt**: 6.9以上（6.9.3で検証済み。アプリが使うWebEngineモジュールを含む）
 - **CMake**: 3.21.1以降
 - **C++コンパイラ**: C++17対応
+- **Bun**: 1.3.14（React UIのビルドに必要）
 
 ## クイックスタート
+
+Qt 6、Bun 1.3.14以降、vcpkgをインストールし、インストールガイドに従って
+`VCPKG_ROOT`を設定してください。
 
 ```bash
 # リポジトリをクローン
 git clone https://github.com/LotusAndCompany/devtools.git
 cd devtools
 
-# vcpkgで依存関係をインストール
-vcpkg install
-
-# CMakeで構成
-mkdir build && cd build
-cmake ..
+# CMakeで構成。vcpkgの依存ライブラリは構成時にインストールされます。
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # ビルド
-make
+cmake --build build --parallel
 
 # ビルドして実行
-cmake --build . --target run
+cmake --build build --target run
 ```
 
 詳しいビルド手順は[BUILD.md](BUILD.md)を参照してください。
@@ -156,7 +158,7 @@ DevToolsは以下のサードパーティライブラリを使用しています
 ## 謝辞
 
 - [Qt Project](https://www.qt.io/) - 優れたクロスプラットフォームフレームワーク
-- [Qlementine](https://github.com/oclero/qlementine) - Qt Widgets向けのモダンなスタイル
+- [Qlementine](https://github.com/oclero/qlementine) - ネイティブ部品で使うQt Widgets向けスタイル
 - [Project Nayuki](https://www.nayuki.io/) - QRコード生成ライブラリ
 - DevToolsのすべてのコントリビューターとユーザー
 

@@ -5,29 +5,47 @@ paths:
 
 # Project Rules
 
-DevTools is a macOS desktop application built with C++17 and Qt6 Widgets.
+DevTools is a macOS desktop application with a C++17/Qt 6 native host and a
+React/TypeScript frontend rendered by Qt WebEngine. Qt Widgets still provides
+the native window and platform integration; existing C++ feature UIs remain
+for native support and tests.
 
 ## Build
 
 ```bash
-# Configure with CMake (vcpkg toolchain)
-cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+# Configure with CMake (set VCPKG_ROOT to your vcpkg installation)
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build
-make -j8
+cmake --build build --parallel 8
 
 # Build and run with console output
-cmake --build . --target run
+cmake --build build --target run
 
 # Enable and run unit tests
-cmake .. -DENABLE_UNIT_TEST=ON
-ctest
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel 8
+ctest --test-dir build --output-on-failure
 
 # Format check
-cmake --build . --target format-check
+cmake --build build --target format-check
 
 # Static analysis
-cmake --build . --target lint
+cmake --build build --target lint
+
+# Frontend checks (run from frontend/)
+cd frontend
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun build
+bun run --bun test
 ```
 
 ## Architecture
@@ -36,6 +54,8 @@ cmake --build . --target lint
   dependencies here. QtCore, QtGui, QtSql, QtNetwork are allowed.
 - `features/{feature}/gui/`: Qt6 Widgets UI layer.
 - `main/`: application entry point.
+- `frontend/src/app/`, `features/`, `shared/`, and `platform/qt/`: React UI, tools, shared code, and Qt WebChannel adapter.
+- `features/web_frontend/`: native bridge, operation handlers, and C++ service calls for the React UI.
 - `tests/`: shared test helpers (mock_helper, random_data, test_util).
 - `features/{feature}/tests/`: per-feature unit tests.
 - Each feature is a static library module registered in `MODULE_LIST`.
@@ -43,7 +63,8 @@ cmake --build . --target lint
 ## Dependencies
 
 - vcpkg: toml11, yaml-cpp. See `vcpkg.json`.
-- Qt6: Core, Widgets, LinguistTools, Sql, Network.
+- Qt6: Core, Widgets, LinguistTools, Sql, Network, Concurrent, WebChannel, and WebEngineWidgets.
+- Bun 1.3.14: frontend dependency installation and production asset build.
 - Bundled vendor code: qrcodegen under `features/qr_code/core/qrcodegen.*`.
 
 ## Pre-commit Hooks

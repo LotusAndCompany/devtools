@@ -1,29 +1,76 @@
 # Adding New Tools
 
-This guide explains how to add new tool modules to DevTools.
+Regular application tools are React screens hosted by Qt WebEngine. Use the
+React workflow below to add a tool to the application. The native Qt Widgets
+module workflow later in this document applies only when adding a native or
+legacy widget screen; registering a C++ menu entry alone does not add a React
+tool to the application.
 
 ## Overview
 
-DevTools organizes each feature under `features/{your_tool}/` with `core/`,
-`gui/`, and `tests/` subdirectories. Shared non-Widget framework code lives in
+The React screen and its feature-specific components live under
+`frontend/src/features/{tool}/`. Native operation support remains under
+`features/web_frontend/`, and reusable processing lives in the existing C++
+feature services under `features/{feature}/core/`. Shared non-Widget framework code lives in
 `features/framework/core/` and is compiled as `DevTools_core`. The application
 shell and shared widgets mostly live in `features/framework/gui/` and are
 compiled as `DevTools_framework_gui`; `ContentsArea` remains in the application
 executable. Feature libraries currently list both core and GUI sources in one
 target; keep their source dependencies one-way, from GUI to core.
 
-Adding a new tool involves:
+Adding a React tool involves:
 
-1. Creating the feature directory structure under `features/{your_tool}/`
-2. Implementing core services and processing without Qt Widgets dependencies
-3. Creating GUI components (Qt Widgets)
-4. Registering the module in CMake (target declaration + `target_sources` + `add_subdirectory`)
-5. Adding a tool ID in the framework
-6. Registering in the side menu and contents area
-7. Adding translations
-8. Writing tests in `features/{your_tool}/tests/`
+1. Creating a feature directory under `frontend/src/features/{tool}/`
+2. Implementing the screen and feature-specific components in that directory
+3. Adding its route, labels, icon, native ID, and screen to
+   `frontend/src/app/tool-registry.ts`
+4. Adding a typed bridge operation only when the screen needs native work
+5. Adding or extending tests beside the affected feature
 
-## Step-by-Step Guide
+## React Tool Workflow
+
+### 1. Add the screen
+
+Create a feature folder with an `index.ts` public entry point, the screen
+component, and feature-local styles or components as needed. Keep feature-only
+state and UI inside the folder. Put reusable UI in `frontend/src/shared/` only
+when more than one feature needs it. Follow the dependency direction and the
+Base UI-backed shadcn components described in
+[Coding Standards](coding-standards.md).
+
+### 2. Register the tool
+
+Add the screen import and one `ToolDefinition` to
+`frontend/src/app/tool-registry.ts`. The registry drives the sidebar, home
+screen, screen title, icon, and native tool ID. Set `keepAlive: true` only
+when leaving the screen must preserve its mounted state. Do not add a separate
+app-level tab or register the React screen in the legacy Qt menu.
+
+### 3. Add native operations when needed
+
+Use the existing typed operation runner from the screen. Add the operation's
+input and output to `OperationContracts` in
+`frontend/src/shared/bridge/types.ts`, then implement and register the native
+handler under `features/web_frontend/`. Register its route in
+`features/web_frontend/gui/bridge/operation_registry.cpp` and list any new C++
+source in `features/web_frontend/CMakeLists.txt`. Reuse the relevant C++ core service;
+keep file paths and native dialogs in C++, and do not call Qt WebChannel
+directly from a feature. Update the bridge contract version only when the
+wire contract changes. See [System Architecture](architecture.md) and the
+existing bridge tests for the current boundary.
+
+### 4. Add tests and verify
+
+Keep React interaction tests next to the feature. Add native bridge or service
+tests under the corresponding C++ test directory when native behavior changes.
+Run the frontend checks from `frontend/`, then build and run the C++ tests as
+described in the [Testing Guide](testing-guide.md).
+
+## Legacy Native Qt Widgets Module Workflow
+
+The steps below describe the existing C++ static-library and Qt Widgets path.
+Use them only for native/legacy screens or native feature modules; regular
+React tool navigation is managed by the React registry above.
 
 ### 1. Plan Your Tool
 
@@ -404,21 +451,24 @@ it with `CORE_ONLY`, list the service implementation in `SOURCES`, and link any
 additional Qt or project libraries with `target_link_libraries()`. See the
 [Testing Guide](testing-guide.md) for an example.
 
-### 12. Build and Test
+### 12. Build and Test the Native Module
 
 ```bash
-# Build with tests enabled
-cmake .. -DENABLE_UNIT_TEST=ON
-make
+# Configure with C++ tests enabled from the repository root
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
 
 # Run tests
-ctest --output-on-failure
+ctest --test-dir build --output-on-failure
 
 # Run specific test
-./test_your_tool
+./build/test_your_tool
 
 # Build and launch the app to verify
-cmake --build . --target run
+cmake --build build --target run
 ```
 
 ## Checklist

@@ -12,8 +12,10 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Sql, Network, Svgモジュール）
+- **Qt**: 6.9以上（6.9.3で検証済み。Core、Gui、Widgets、LinguistTools、Sql、
+  Network、Svg、Concurrent、WebChannel、WebEngineWidgetsモジュール）
 - **vcpkg**: 依存関係管理用
+- **Bun**: 1.3.14（Reactフロントエンドのビルドに必要）
 
 ### 依存ライブラリ（vcpkg経由）
 - toml11
@@ -23,9 +25,8 @@
 - qlementine v1.4.2（Qt Widgets向けのモダンな `QStyle`、MITライセンス）
 
 qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
-Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは名前付きグリフのアイコンのためQt 6.9以上を
-必要とし、`DevTools_core` にリンクし、
-同梱テーマをQtリソースの `:/themes` から読み込みます。
+Qt 6.8以上とCMake 3.21以上が必要です。DevToolsではQt Widgetsのサポートライブラリにリンクします。
+アプリのメイン画面はReactで構成し、ViteでバンドルしてQt WebEngineに表示します。
 
 ### オプション
 - **Doxygen**: 1.18以上（APIドキュメント生成用）
@@ -46,6 +47,7 @@ brew install qt@6
 #### Qt Online Installerを使用する場合
 [qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.9以上をインストール：
 - Qt 6.9以上 for macOS
+- Core、Gui、Widgets、LinguistTools、Sql、Network、Svg、Concurrent、WebChannel、WebEngineWidgetsモジュール
 - Qt Creator（オプション、推奨）
 
 ### 2. vcpkgのインストール
@@ -58,8 +60,9 @@ cd vcpkg
 # ブートストラップ
 ./bootstrap-vcpkg.sh
 
-# PATHに追加（永続化するにはシェルプロファイルに追加）
-export PATH="$PWD:$PATH"
+# vcpkgのルートを設定してPATHに追加
+export VCPKG_ROOT="$PWD"
+export PATH="$VCPKG_ROOT:$PATH"
 ```
 
 ### 3. リポジトリをクローン
@@ -69,7 +72,16 @@ git clone https://github.com/LotusAndCompany/devtools.git
 cd devtools
 ```
 
-### 4. 依存関係のインストール
+### 4. Bunのインストール
+
+[Bun公式ガイド](https://bun.sh/docs/installation)に従ってBun 1.3.14以降をインストールし、
+バージョンを確認します。
+
+```bash
+bun --version
+```
+
+### 5. 依存関係のインストール
 
 ```bash
 vcpkg install
@@ -83,14 +95,13 @@ vcpkg install
 # ビルドディレクトリを作成
 mkdir build && cd build
 
-# 構成（CMake FetchContentでqlementineも取得します）
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# 構成（vcpkgの依存関係とqlementineを取得します）
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # ビルド
-make
-
-# または並列ジョブで
-make -j$(sysctl -n hw.ncpu)
+cmake --build . --parallel
 ```
 
 ### アプリケーションの実行
@@ -107,6 +118,10 @@ cmake --build . --target run
 # またはApp Bundleを開く
 open DevTools.app
 ```
+
+`run`ターゲットは、このソースツリーから起動した古いDevToolsプロセスを置き換えます。
+別途インストールしたDevToolsが起動中の場合は、先に終了してください。対象を誤って選ぶのを避けるため、
+そのプロセスが残っているとターゲットはエラーで停止します。
 
 ログ出力は重要度に応じて色分けされます：DEBUG=灰色, INFO=デフォルト, WARN=黄色, CRIT=赤。
 
@@ -140,10 +155,13 @@ cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 ```bash
 # まずテストを有効化
-cmake .. -DENABLE_UNIT_TEST=ON
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
 
 # ビルド
-make
+cmake --build . --parallel
 
 # テスト実行
 ctest
@@ -170,8 +188,7 @@ GraphVizがインストールされていない場合、図表なしでドキュ
 
 ### ドキュメントの生成
 ```bash
-cd build
-make DevTools_docs
+cmake --build build --target DevTools_docs
 ```
 
 生成されたドキュメントは `build/doxygen/html/` に出力されます。
@@ -187,7 +204,10 @@ make DevTools_docs
    ```
 3. **ビルドディレクトリのクリーン**:
    ```bash
-   rm -rf build && mkdir build && cd build && cmake ..
+   rm -rf build
+   cmake -S . -B build \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
 ### vcpkgの問題
@@ -222,6 +242,8 @@ qlementineのダウンロード中にCMake構成が失敗する場合は、以�
 2. FetchContentのキャッシュを削除して再構成する。
    ```bash
    rm -rf build/_deps/qlementine-*
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   cmake -S . -B build \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。

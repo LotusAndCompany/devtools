@@ -1,7 +1,11 @@
 # Design Files
 
-UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`.
-Some screens are design-only and are not available in the current application yet.
+UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under
+`designs/screens/`. Most designs correspond to the current React tool screens;
+the Color Converter design is not part of the 11 tools currently in the app.
+Use the [user guide overview](../user-guide/overview.md) as the current tool
+inventory. The design files are references; implement shared controls using
+the components described in [Coding Standards](coding-standards.md).
 
 ## File Layout
 

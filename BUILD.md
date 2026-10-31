@@ -12,8 +12,10 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.9+ (6.9.3 tested; Widgets, LinguistTools, Sql, Network, Svg modules)
+- **Qt**: 6.9+ (6.9.3 tested; Core, Gui, Widgets, LinguistTools, Sql, Network, Svg,
+  Concurrent, WebChannel, and WebEngineWidgets modules)
 - **vcpkg**: For dependency management
+- **Bun**: 1.3.14 (required to build the React frontend)
 
 ### Dependencies (via vcpkg)
 - toml11
@@ -23,10 +25,9 @@ This document describes how to build DevTools from source.
 - qlementine v1.4.2 (modern Qt Widgets `QStyle`, MIT license)
 
 Qlementine is fetched during CMake configure from
-`https://github.com/oclero/qlementine.git`. It requires Qt 6.8+ and CMake 3.21+;
-DevTools additionally requires Qt 6.9+ for named-glyph icon support, links qlementine into
-`DevTools_core`, and loads the bundled themes from the Qt resource
-prefix `:/themes`.
+`https://github.com/oclero/qlementine.git`. It requires Qt 6.8+ and CMake 3.21+.
+DevTools links it into the Qt Widgets support library. The main application
+screen is React, bundled by Vite and hosted by Qt WebEngine.
 
 ### Optional
 - **Doxygen**: 1.18+ (API documentation generation)
@@ -47,6 +48,7 @@ brew install qt@6
 #### Using Qt Online Installer
 Download from [qt.io](https://www.qt.io/download) and install Qt 6.9 or later with the following components:
 - Qt 6.9 or later for macOS
+- Core, Gui, Widgets, LinguistTools, Sql, Network, Svg, Concurrent, WebChannel, and WebEngineWidgets modules
 - Qt Creator (optional, but recommended)
 
 ### 2. Install vcpkg
@@ -59,8 +61,9 @@ cd vcpkg
 # Bootstrap
 ./bootstrap-vcpkg.sh
 
-# Add to PATH (add to your shell profile for persistence)
-export PATH="$PWD:$PATH"
+# Configure the vcpkg root and add it to PATH.
+export VCPKG_ROOT="$PWD"
+export PATH="$VCPKG_ROOT:$PATH"
 ```
 
 ### 3. Clone the Repository
@@ -70,7 +73,17 @@ git clone https://github.com/LotusAndCompany/devtools.git
 cd devtools
 ```
 
-### 4. Install Dependencies
+### 4. Install Bun
+
+Install Bun 1.3.14 or later from the
+[official installation guide](https://bun.sh/docs/installation), then verify
+the version:
+
+```bash
+bun --version
+```
+
+### 5. Install Dependencies
 
 ```bash
 vcpkg install
@@ -84,14 +97,13 @@ vcpkg install
 # Create build directory
 mkdir build && cd build
 
-# Configure. This also downloads qlementine through CMake FetchContent.
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# Configure. This installs vcpkg manifest dependencies and downloads qlementine.
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build
-make
-
-# Or with parallel jobs
-make -j$(sysctl -n hw.ncpu)
+cmake --build . --parallel
 ```
 
 ### Running DevTools
@@ -109,6 +121,10 @@ cmake --build . --target run
 open DevTools.app
 ```
 
+The `run` target replaces older DevTools processes from this source tree. If a
+separately installed DevTools app is running, quit it first; the target stops
+with an error rather than selecting that process.
+
 Log output is color-coded by severity: DEBUG=dim, INFO=default, WARN=yellow, CRIT=red.
 
 ### Using Qt Creator
@@ -117,6 +133,7 @@ Log output is color-coded by severity: DEBUG=dim, INFO=default, WARN=yellow, CRI
 2. Enable the vcpkg plugin in Qt Creator settings
 3. Add the following CMake argument:
    ```
+   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
    -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 4. Configure the project
@@ -134,7 +151,10 @@ Qlementine's example applications are disabled in the project configuration
 
 Example with options:
 ```bash
-cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
 ```
 
 ## Running Tests
@@ -144,7 +164,7 @@ cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
 cmake .. -DENABLE_UNIT_TEST=ON
 
 # Build
-make
+cmake --build . --parallel
 
 # Run tests
 ctest
@@ -171,8 +191,7 @@ If GraphViz is not installed, documentation will be generated without diagrams.
 
 ### Generate Documentation
 ```bash
-cd build
-make DevTools_docs
+cmake --build build --target DevTools_docs
 ```
 
 The generated documentation will be in `build/doxygen/html/`.
@@ -188,7 +207,10 @@ The generated documentation will be in `build/doxygen/html/`.
    ```
 3. **Clean build directory**:
    ```bash
-   rm -rf build && mkdir build && cd build && cmake ..
+   rm -rf build
+   cmake -S . -B build \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
 ### vcpkg Issues
@@ -204,7 +226,7 @@ The generated documentation will be in `build/doxygen/html/`.
    ./bootstrap-vcpkg.sh
    ```
 
-### Qt Not Found
+### Qt or Qt WebEngine Not Found
 
 1. **Set Qt6_DIR** environment variable:
    ```bash
@@ -223,6 +245,8 @@ If configuration fails while downloading qlementine:
 2. Delete the FetchContent cache and configure again:
    ```bash
    rm -rf build/_deps/qlementine-*
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+   cmake -S . -B build \
+     -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+     -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 3. Verify that the active Qt installation is Qt 6.9 or later and includes the Svg module.

@@ -1,9 +1,11 @@
 # Icon Assets
 
-DevTools uses the Qt 6.9 named-glyph icon support with the Material Symbols
-Outlined application font. The standard icon helper is
-`IconUtils::themedIcon()`, which wraps `QIcon::fromTheme()` with a standard Qt
-fallback. Icons are rendered using the active application palette.
+DevTools bundles the Material Symbols Outlined font for both the React UI and
+native Qt Widgets. React loads it from the Qt resource URL and renders glyphs
+through the shared `Icon` component; tool icon names are assigned in
+`frontend/src/app/tool-registry.ts`. Native Qt Widgets use Qt 6.9 named-glyph
+support through `IconUtils::themedIcon()`, which provides a standard Qt
+fallback. Icons use the active theme in each UI layer.
 
 ## Material Symbols Outlined
 
@@ -23,9 +25,10 @@ fallback. Icons are rendered using the active application palette.
 | Modification | Font bytes are unmodified; only the local filename is normalized |
 | NOTICE | No separate `NOTICE` file is included at the pinned commit |
 
-The font is loaded with `QFontDatabase::addApplicationFont()` at application
-startup. Qt 6.9 or later is required because earlier Qt versions do not
-provide the named-glyph `QIcon` engine.
+The native application loads the font with
+`QFontDatabase::addApplicationFont()` at startup. React registers the bundled
+font using the `qrc:/fonts/MaterialSymbolsOutlined.ttf` URL. Qt 6.9 or later is
+required for native named-glyph `QIcon` rendering.
 
 ## Glyph Mapping
 
@@ -63,9 +66,11 @@ It is not an exhaustive list of glyphs used in examples or tests.
 | Close side panel | `left_panel_close` |
 | Always-on-top control | `flip_to_front` |
 
-When adding an icon, confirm the name with `QIcon::hasThemeIcon()` and do not
-add a light/dark SVG or update an icon `.qrc` file. `IconUtils::themedIcon()`
-provides a standard Qt icon when the font or glyph cannot be resolved.
+For a React tool, add its Material Symbols glyph name to the tool definition in
+`frontend/src/app/tool-registry.ts`. For native Qt Widgets, use
+`IconUtils::themedIcon()` and a suitable `QStyle::StandardPixmap` fallback.
+Do not add light/dark SVG files or duplicate the bundled font. The native
+helper provides a standard Qt icon when the font or glyph cannot be resolved.
 
 ## Former Remix Icon Assets
 

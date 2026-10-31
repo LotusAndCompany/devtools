@@ -25,12 +25,14 @@ Color Converter from the separate, unmerged PR #122 is not part of this set.
 | Regex Tester | Qt regular-expression syntax, six options, presets, match offsets/captures, replacement, copy, quick reference, persisted input/settings | `evaluateRegex`, `regexSettings`, `copyToClipboard`; existing regex evaluation/settings services |
 | Text Diff | Two editable inputs and native line-diff results with added/removed rows | `compareText`; existing diff service |
 
-Shared React UI includes welcome/tool search, tabs, keyboard navigation,
-settings, language and theme selection, About, pending-operation cancellation,
+Shared React UI includes Home and tool search, sidebar navigation, keyboard
+navigation, Settings and About dialogs, pending-operation cancellation,
 last-used-tool persistence, and startup sidebar/last-tool preferences. The
-Qt menu still hosts About/Settings navigation, and Qt handles OS dialogs and
-window behavior. The current baseline has no favorites implementation, so
-M3 does not add one.
+sidebar opens Settings and About; the application shell does not add
+cross-tool tabs. Tabs remain inside tools that use them, including HTTP
+request options and database SQL workspaces. Qt handles native OS dialogs,
+clipboard integration, file drops, and window behavior. The current baseline
+has no favorites implementation, so M3 does not add one.
 
 ## Contract and safety boundaries
 

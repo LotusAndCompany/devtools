@@ -36,58 +36,56 @@ development build in `build/`.
 
 ## Application Overview
 
-When you launch DevTools, you'll see:
-
-1. **Side Menu** (left) - Navigate between tools
-2. **Main Content Area** (center) - Tool interface
-3. **Menu Bar** (top) - File and DevTools menus
+The sidebar contains Home, tool search, the 11 tools, Settings, and About. The
+top bar shows the selected screen and has a button to collapse or restore the
+sidebar. The main area shows one selected screen at a time. Settings and About
+open as dialogs; tabs remain inside tools that use them, such as HTTP Request
+and Database.
 
 ## Using the Tools
 
 ### QR Code Generation
 
-1. Click **QR Code Generation** in the side menu
-2. Select the QR code type (Text, URL, Email, etc.)
+1. Click **QR Code** in the sidebar
+2. Select a type from **QR type** (Text, URL, Email, Wi-Fi, and others)
 3. Enter your content
 4. Click **Generate**
-5. Click **Save Image** to save the QR code
+5. Click **Save image** to save the QR code
 
 **Example: Create a URL QR Code**
 1. Select **URL** from the QR code type selector
 2. Enter: `https://example.com`
 3. Click **Generate**
-4. Click **Save Image**
+4. Click **Save image**
 
 ### Image Processing
 
-1. Click **Image** in the side menu
-2. Choose a tool: Resize, Rotate, Split, or Transparency
-3. Load an image
-4. Adjust settings
-5. Process and save
+1. Click **Image Editor** in the sidebar
+2. Click **Open image** or drop an image into the window
+3. Use the Resize, Rotate and flip, Make a color transparent, or Split image card
+4. Click the matching Apply button, click a preview pixel to make its color transparent, or choose a folder to split the image
+5. Click **Save image**
 
 **Example: Resize an Image**
-1. Select **Resize** tab
-2. Click **Open Image**
-3. Set width and height
-4. Check **Keep Aspect Ratio** if needed
-5. Click **Resize**
-6. Save the result
+1. Enter the target width and height in the Resize card
+2. Select **Keep aspect ratio** if needed
+3. Click **Apply size**
+4. Click **Save image**
 
 ### Data Conversion
 
-1. Click **Data/Format Conversion** in the side menu
+1. Click **Data Conversion** in the sidebar
 2. Paste or type your data in the input area
-3. Select the output format
-4. Select the indentation style
-5. Read the converted result in the output area
+3. Select the output format and indentation
+4. Click **Convert**
+5. Read or edit the result in the output area
 
 **Example: Convert JSON to YAML**
 1. Paste your JSON:
    ```json
    {"name": "DevTools"}
    ```
-2. Set output: **YAML (Block style)**
+2. Set **Output format** to **YAML (block)**
 3. Choose an indentation style
 4. Result:
    ```yaml
@@ -96,10 +94,11 @@ When you launch DevTools, you'll see:
 
 ### HTTP Request
 
-1. Click **HTTP Request** in the side menu
+1. Click **HTTP Request** in the sidebar
 2. Enter the URL
 3. Select HTTP method (GET, POST, etc.)
-4. For query parameters or Basic authentication, use the corresponding Options tab
+4. Use the **Parameters** tab for query parameters or **Authentication** for
+   Basic authentication
 5. Add a JSON body in the **Body** tab for POST/PUT requests
 6. Click **Send**
 7. View the read-only response
@@ -112,7 +111,7 @@ When you launch DevTools, you'll see:
 
 ### Command Generation
 
-1. Click **Command Generation** in the side menu
+1. Click **Command Generation** in the sidebar
 2. Select a command category and command
 3. Select an option and enter a value when requested
 4. Click **Generate command**
@@ -120,46 +119,47 @@ When you launch DevTools, you'll see:
 
 The tool generates command text; it does not execute shell commands.
 
-### DB Tool
+### Database
 
-1. Click **DB Tool** in the side menu
-2. Click **DB Connection Settings** to open connection settings
-3. Create a new connection or select from history
-4. Browse tables in the left panel
-5. Click **SQL** to open a query tab
-6. Enter SQL and click **Execute** to execute
+1. Click **Database** in the sidebar
+2. Click **Connection settings** to open the connection dialog
+3. Choose a saved connection or enter a new one
+4. Click a table name to place a SELECT query in the current SQL tab
+5. Click **New SQL** to create another query tab
+6. Enter SQL and click **Execute**
 
 **Example: Browse a SQLite Database**
-1. Click **DB Connection Settings** > **New Connection**
+1. Click **Connection settings**
 2. Select **SQLite**
-3. Click **Browse...** and select your `.db` file
+3. Click **Choose SQLite file** and select your `.db` file
 4. Click **Connect**
-5. Click a table name to view its data
+5. Click a table name to fill the SQL editor with a SELECT query
+6. Click **Execute** to view the rows
 
 ### Phrase Generation
 
-1. Click **Phrase Generation** in the side menu
-2. Click **Add** to create a template, or select an existing template
+1. Click **Phrase Generation** in the sidebar
+2. Click **New** to create a template, or select an existing template
 3. Enter the title and template text
-4. Click **Save**
-5. Click **Copy** to copy the template text
+4. Click **Save template**
+5. Click **Copy text** to copy the template text
 
 ### Markdown Preview
 
-1. Click **Markdown Preview** in the side menu
+1. Click **Markdown Preview** in the sidebar
 2. Type or paste Markdown in the **Editor** pane
 3. Review the rendered result in the **Preview** pane
 
 ### Regex Tester
 
-1. Click **Regex Tester** in the side menu
+1. Click **Regex Tester** in the sidebar
 2. Enter a regular expression and test text
 3. Choose flags or a preset when needed
 4. Review matches and replacement results
 
 ### Timestamp Conversion
 
-1. Click **Timestamp Conversion** in the side menu
+1. Click **Timestamp Conversion** in the sidebar
 2. Enter a value in any row (Unix Timestamp, Date & Time, or ISO 8601)
 3. Click that row's **Convert** button
 4. Read the converted value in the other rows
@@ -171,7 +171,7 @@ The tool generates command text; it does not execute shell commands.
 
 ### Diff Comparison Tool
 
-1. Click **Diff Comparison Tool** in the side menu
+1. Click **Text Diff** in the sidebar
 2. Paste the original text in the **Original** pane
 3. Paste the modified text in the **Modified** pane
 4. Choose **Inline** or **Side-by-side** to review the differences
@@ -181,25 +181,19 @@ The tool generates command text; it does not execute shell commands.
 | Shortcut | Action |
 |----------|--------|
 | `Ctrl + W` | Close window |
+| `Cmd/Ctrl + K` | Focus tool search |
 
 ## Changing Language
 
-DevTools supports English and Japanese:
-
-1. Go to **DevTools > Settings**
-2. Select **Language**
-3. Choose your preferred language
-4. Click **Apply** or **OK**; the UI changes immediately
+DevTools supports English and Japanese. Open **Settings** at the bottom of the
+sidebar, choose a language, and click **Save**. The interface changes
+immediately.
 
 ## Changing Theme
 
-DevTools follows the macOS system appearance. When the system switches between light and
-dark mode, the application updates the qlementine widget theme. Material Symbols are bundled
- as an application font, and their icons follow the active UI palette instead of using separate
- light and dark SVG files.
+Choose **Follow system**, **Light**, or **Dark** from **Theme** in Settings.
+The application colors update to match the selected theme.
 
-Bundled qlementine themes are stored in `res/themes/light.json` and
-`res/themes/dark.json` and are loaded from the Qt resource prefix `:/themes`.
 
 ## Next Steps
 

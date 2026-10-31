@@ -4,33 +4,42 @@ This document describes the architecture of DevTools, including module structure
 
 ## Overview
 
-DevTools is a Qt6-based desktop application built with C++17. The architecture uses a modular static library design to reduce compilation time and improve code organization.
+DevTools is a C++17 desktop application with a Qt 6 native host and a React
+frontend rendered by Qt WebEngine. C++ feature services remain the source of
+native operations. The C++ libraries use modular static targets; frontend
+screens are organized by feature under frontend/src/.
 
 ## Technology Stack
 
 | Component | Technology |
 |-----------|------------|
 | Language | C++17 |
-| GUI Framework | Qt 6.9+ (Widgets) |
+| Native host | Qt 6.9+ (Widgets, WebEngine, WebChannel) |
+| Frontend | React, TypeScript, Vite |
 | Build System | CMake 3.21.1+ |
-| Package Manager | vcpkg |
+| C++ Package Manager | vcpkg |
+| Frontend Package Manager | Bun 1.3.14 |
 | Code Formatting | clang-format |
 | Static Analysis | clang-tidy |
 
 ## Directory Structure
 
-Each feature lives under `features/{feature}/` with `core/`, `gui/`, and
+The current screens live under `frontend/src/features/{feature}/`. Each
+existing C++ feature lives under `features/{feature}/` with `core/`, `gui/`, and
 `tests/` subdirectories. Shared framework code lives in `features/framework/`:
 non-Widget classes are compiled as `DevTools_core`, while most shared GUI classes
 are compiled as `DevTools_framework_gui`. `ContentsArea` remains part of the
 application executable. Feature libraries still list their `core/` and `gui/`
 sources in the same target. The separation is at the source dependency level:
 feature `core/` code does not include Qt Widgets, the shared GUI framework, or
-feature GUI headers.
+feature GUI headers. The remaining C++ `gui/` code supports the native Qt
+framework and its tests; the normal application routes are React screens.
 
 ```mermaid
 flowchart TD
     root["devtools/"]
+    root --> frontend["frontend/src/<br/>React UI<br/>(app/, features/, shared/, platform/qt/)"]
+    root --> web_frontend["features/web_frontend/<br/>Qt WebEngine host and C++ bridge"]
     root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
     features --> framework["framework/<br/>Shared framework"]
     framework --> framework_core["DevTools_core<br/>Non-Widget framework"]
@@ -61,6 +70,11 @@ flowchart TD
 ```mermaid
 flowchart TD
     app["DevTools executable"]
+    app --> web_host["Qt WebEngine host"]
+    web_host --> react["React screens<br/>frontend/src/"]
+    react --> bridge["NativeBridge<br/>Qt WebChannel"]
+    bridge --> operations["C++ operation handlers<br/>features/web_frontend/"]
+    operations --> features
     features["Feature libraries"]
     image["DevTools_image_tools_unified"]
     image_core["DevTools_image_core"]
@@ -84,7 +98,7 @@ Their `core/` sources still have no source-level dependency on the GUI target.
 | Module | Description | Dependencies |
 |--------|-------------|--------------|
 | `DevTools_core` | Non-Widget framework services, tool base, and exceptions | Qt6::Core |
-| `DevTools_framework_gui` | Shared application GUI, widgets, dialogs, and design system | DevTools_core, Qt6::Core, Qt6::Gui, Qt6::Widgets, qlementine |
+| `DevTools_framework_gui` | Shared Qt Widgets support, dialogs, and legacy UI design system | DevTools_core, Qt6::Core, Qt6::Gui, Qt6::Widgets, qlementine |
 
 Feature targets are declared in the root `CMakeLists.txt` and list their sources
 in `features/{feature}/CMakeLists.txt`. The root currently links them to both
@@ -94,6 +108,10 @@ links yaml-cpp and toml11; `DevTools_image_tools_unified` links
 in the root CMake file.
 
 ### Shared Framework Structure
+
+These C++ framework classes remain in the build for the native host, platform
+integration, and legacy Qt Widgets tests. The regular app shell and tool screens
+are implemented in React.
 
 Both targets are implemented in `features/framework/`; their sources are listed
 with `target_sources()` in `features/framework/CMakeLists.txt`:
@@ -106,9 +124,9 @@ recorded in the [M1 architecture inventory](../migration/m1-architecture-invento
 
 ## Design Patterns
 
-### Core and GUI Source Boundary
+### Existing C++ Feature Source Boundary
 
-Each tool follows a similar pattern:
+Existing C++ feature modules follow this pattern:
 
 ```mermaid
 flowchart LR
@@ -156,23 +174,26 @@ Benefits:
 
 ```mermaid
 flowchart TD
-    user["User clicks side menu"] --> side["Sidemenu<br/>(sidemenu.h)"]
-    side -->|"signal: itemSelected(Sidemenu::ID id)"| main["MainWindow<br/>(main_window.h)"]
-    main -->|"MainWindow::onSidemenuItemSelected"| main
-    side -->|"signal: itemSelected(Sidemenu::ID id)"| area["ContentsArea<br/>(contents_area.h)"]
-    area -->|"ContentsArea::onSidemenuItemChanged"| area
-    area -->|"shows appropriate widget"| tool["Tool GUI<br/>(e.g., QR)"]
+    user["User selects a tool in React sidebar"] --> screen["ToolStage<br/>tool-registry.ts"]
+    screen --> feature["React feature screen<br/>frontend/src/features/"]
+    feature --> runner["Typed Effect operation runner"]
+    runner --> channel["Qt WebChannel adapter"]
+    channel --> bridge["NativeBridge<br/>request validation and lifecycle"]
+    bridge --> registry["C++ operation registry and handlers"]
+    registry --> service["Existing C++ core services"]
 ```
 
 ### Image Processing Flow
 
 ```mermaid
 flowchart TD
-    user["User loads image"] --> gui["ImageToolsUnifiedGUI"]
-    gui <-->|"open/save"| dialog["File Dialog<br/>(Qt native)"]
-    gui -->|"options and image"| core["ImageProcessingService<br/>(image/core)"]
-    core -->|"processed image"| gui
-    gui --> output["Output<br/>save dialog"]
+    user["User opens or drops an image"] --> screen["React Image Editor"]
+    screen -->|"typed image operation"| bridge["Qt WebChannel bridge"]
+    bridge -->|"native file dialog and image state"| handler["C++ image handler"]
+    handler -->|"image processing"| core["ImageProcessingService<br/>(image/core)"]
+    core --> handler
+    handler -->|"preview result"| screen
+    screen -->|"save request"| handler
 ```
 
 ## External Dependencies
@@ -187,6 +208,9 @@ flowchart TD
 | Qt6::Sql | Database operations |
 | Qt6::LinguistTools | Translations |
 | Qt6::Svg | SVG support required by qlementine |
+| Qt6::Concurrent | Native operation workers |
+| Qt6::WebChannel | React-to-C++ bridge |
+| Qt6::WebEngineWidgets | Embedded React application |
 
 ### vcpkg Libraries
 
@@ -213,6 +237,10 @@ links the style library into `DevTools_framework_gui`.
 
 ## Application Styling and Themes
 
+Qlementine styles the Qt Widgets host and remaining native or legacy widget
+components. The React screen uses the shared frontend CSS tokens and follows
+the System, Light, or Dark theme selected in Settings.
+
 DevTools uses qlementine as the application-wide `QStyle`:
 
 1. `GuiApplication::setup()` creates `oclero::qlementine::QlementineStyle` and installs it
@@ -231,7 +259,7 @@ Colors, borders, and text roles come from the active qlementine style.
 
 ### UI Consistency Contract
 
-Every screen is composed from the shared UI contract in
+Existing Qt Widgets screens are composed from the shared UI contract in
 `features/framework/gui/design_system.h` and `.cpp`. The contract defines page,
 content, panel, toolbar, and inline layout roles, along with standard and
 compact panes, form fields, code editors, status views, item views, table views,

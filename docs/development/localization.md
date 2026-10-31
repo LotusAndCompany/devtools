@@ -4,28 +4,37 @@ This guide explains how to add and manage translations in DevTools.
 
 ## Overview
 
-DevTools uses Qt's internationalization (i18n) system with Qt translation tools. Currently
-supported languages:
+The application has two translation paths. The regular tool screens and React
+shell use English/Japanese strings in TypeScript. Native Qt menus, file dialogs,
+and bridge messages use Qt Linguist translations. Currently supported languages:
 
 - English (en) - Default source language, no `.ts` file
 - Japanese (ja_JP)
 
+For React text, use the `text(locale, english, japanese)` helper and pass the
+active `locale` through the screen props. Tool names and descriptions belong in
+`frontend/src/app/tool-registry.ts`. React strings are not extracted into the
+Qt `.ts` file. For native C++ text, use `tr()` and update
+`res/dev-tools_ja_JP.ts`.
+
 ## How It Works
 
 ```mermaid
-flowchart LR
-    source["Source Code<br/>tr(text)"] --> lupdate["lupdate"]
+flowchart TD
+    react["React UI strings<br/>text(locale, en, ja)"] --> locale["React locale state"]
+    locale --> react_ui["React screens and shell"]
+    cpp["Native C++ strings<br/>tr(text)"] --> lupdate["lupdate"]
     lupdate --> ts[".ts<br/>(tracked)"]
     ts --> lrelease["lrelease"]
     lrelease --> qm[".qm<br/>(generated)"]
-    qm --> app["Application<br/>(runtime)"]
+    qm --> native["Native Qt UI<br/>(runtime)"]
 ```
 
-1. **Source Code**: English strings marked with `tr()`
-2. **lupdate**: Extracts strings to .ts files when explicitly requested
-3. **.ts files**: XML translation source files tracked in Git
-4. **lrelease**: Compiles to binary .qm files during normal builds
-5. **Runtime**: Application loads .qm files for translated languages; English uses the source text
+1. **Native C++ source**: English strings marked with `tr()`
+2. **lupdate**: Extracts strings to `.ts` files when explicitly requested
+3. **`.ts` files**: XML translation source files tracked in Git
+4. **lrelease**: Compiles to binary `.qm` files during normal builds
+5. **Runtime**: The Qt application loads `.qm` files for translated native UI; English uses the source text
 
 ## Translation Files
 
@@ -180,9 +189,11 @@ QString date = locale.toString(QDate::currentDate());
 
 For testing, you can switch language in settings:
 
-1. DevTools > Settings
-2. Select Language
-3. Click Apply or OK; the UI changes immediately
+1. Open **Settings** from the sidebar.
+2. Choose **English** or **日本語** in **Language**.
+3. Click **Save**. The React interface changes immediately.
+
+This setting also updates the language used by native Qt menus and dialogs.
 
 ### Check for Untranslated Strings
 
@@ -193,7 +204,9 @@ cmake --build build --target check_devtools_translations
 ```
 
 The check target fails when the Japanese `.ts` file contains an unfinished or
-empty translation. Run it after adding or changing any user-visible string.
+empty translation. Run it after adding or changing native Qt strings; React
+strings are checked in the TypeScript source and are not included in this
+target.
 
 ### Visual Testing
 
@@ -205,21 +218,22 @@ empty translation. Run it after adding or changing any user-visible string.
    - Missing translations
    - Wrong context translations
 
-### Shared UI and Localization
+### Shared Qt Widgets and Localization
 
 Use the shared UI contract in `features/framework/gui/design_system.*` when
-adding or changing translatable controls. Shared field, pane, action-bar, and
-dialog-footer helpers provide the size policies and spacing that allow English
-and Japanese text to fit consistently across screens.
+adding or changing native or legacy Qt Widgets controls. Shared field, pane,
+action-bar, and dialog-footer helpers provide the size policies and spacing
+that allow English and Japanese text to fit consistently.
 
 Do not compensate for a translation with a screen-specific fixed width, font,
 or stylesheet. Prefer layouts and size hints; if a reusable role cannot fit a
 translation, update the shared helper and add a focused UI regression test.
 
-### Runtime Language Changes
+### Runtime Language Changes in Qt Widgets
 
-Every screen that keeps user-visible labels, pane titles, button text,
-placeholders, combo-box items, or table headers must provide a `retranslateUi()`
+Every native or legacy Qt Widgets screen that keeps user-visible labels, pane
+titles, button text, placeholders, combo-box items, or table headers must
+provide a `retranslateUi()`
 method and handle `QEvent::LanguageChange`. Text created only in a constructor
 will remain in the old language when the user changes the language while the
 screen is open. Preserve user data and selection state while refreshing the
@@ -227,6 +241,10 @@ labels and translated item text.
 
 Use `tr()` at the point where runtime messages are shown as well, so dialogs,
 errors, and status messages use the language active at the time of the action.
+
+React screens receive the current `locale` prop and render both language
+variants with `text(locale, english, japanese)`. React does not use
+`QEvent::LanguageChange` or `retranslateUi()`.
 
 ## Common Issues
 
@@ -248,18 +266,24 @@ button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
 ### Missing Translations
 
-1. Check string is marked with tr()
-2. Run `cmake --build build --target update_devtools_translations`
-3. Find `type="unfinished"` entries in the `.ts` files
+For native Qt text:
+
+1. Check that the source string uses `tr()`.
+2. Run `cmake --build build --target update_devtools_translations`.
+3. Find `type="unfinished"` entries in the `.ts` file.
+
+For React text, check both language arguments at the call site and verify the
+screen in English and Japanese. The Qt translation target does not inspect
+React strings.
 
 ## Translation Workflow
 
 ### For Developers
 
-1. Write new UI with tr()
-2. Run `cmake --build build --target update_devtools_translations`
-3. Update `.ts` translations when needed
-4. Commit `.ts` changes with the code change
+1. For React UI, add both English and Japanese text at the component call site.
+2. For native Qt UI, mark source text with `tr()`.
+3. Run `cmake --build build --target update_devtools_translations` for Qt text.
+4. Update `.ts` translations when needed and commit them with the code change.
 
 ### Release Preparation
 

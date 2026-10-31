@@ -4,7 +4,7 @@
 
 ### What is DevTools?
 
-DevTools is a unified desktop application that combines various development tools into a single interface. It provides QR code generation, image processing, data conversion, API testing, command execution, phrase generation, and database management.
+DevTools combines 11 developer tools in one desktop application. The tools cover QR codes, image editing, data conversion, HTTP requests, Markdown preview, command generation, phrase templates, databases, regular expressions, timestamps, and text diffs.
 
 ### What platforms are supported?
 
@@ -29,7 +29,7 @@ Yes, DevTools is open source under the Apache License 2.0. You can use, modify, 
 
 **For users**: No, the distributed application includes all necessary Qt libraries.
 
-**For developers**: Yes, you need Qt 6.9 or later installed to build from source.
+**For developers**: Yes. You need Qt 6.9 or later, Bun 1.3.14 or later, and vcpkg to build from source.
 
 ### How do I install vcpkg?
 
@@ -38,6 +38,7 @@ git clone https://github.com/Microsoft/vcpkg.git ~/vcpkg
 cd ~/vcpkg
 ./bootstrap-vcpkg.sh
 export PATH="$HOME/vcpkg:$PATH"
+export VCPKG_ROOT="$HOME/vcpkg"
 ```
 
 See [Installation Guide](../getting-started/installation.md) for details.
@@ -59,8 +60,9 @@ brew install qt@6
 
 ### What image formats are supported?
 
-**Input**: PNG, JPEG, BMP, GIF, TIFF
-**Output**: PNG, JPEG
+**Input**: PNG, JPEG, BMP, GIF, and WebP appear in the Open image dialog.
+Additional formats depend on the installed Qt image plugins.
+**Output**: Formats supported by the installed Qt image plugins
 
 ### What data formats can I convert?
 
@@ -69,17 +71,11 @@ DevTools supports conversion between:
 - YAML
 - TOML
 
-### Can I generate QR codes for WiFi networks?
+### Can I generate QR codes for Wi-Fi networks?
 
-Not currently. Supported QR code types:
-- Text
-- URL
-- Email (mailto:)
-- Phone (tel:)
-- SMS
-- Geographic location (geo:)
-
-WiFi support may be added in future versions.
+Yes. Select **Wi-Fi**, enter the network name and security details, then click
+**Generate**. The QR tool also supports text, URLs, email, phone, SMS, contacts,
+calendar events, and locations.
 
 ### What databases are supported?
 
@@ -92,27 +88,25 @@ Appropriate Qt SQL driver plugins must be installed for MySQL and PostgreSQL.
 
 ### Are generated QR codes saved automatically?
 
-No, you need to save them manually. Right-click the generated QR code and select "Save Image".
+No. After generating a code, click **Save image** and choose a destination.
 
 ## Usage
 
 ### How do I change the language?
 
-1. Go to **DevTools > Settings**
-2. Select the **Language** tab
-3. Choose your language
-4. Click **Apply** or **OK**; the UI changes immediately
+1. Click **Settings** at the bottom of the sidebar
+2. Choose **English** or **日本語**
+3. Click **Save**; the interface changes immediately
 
 ### How do I change the theme?
 
-DevTools follows the macOS system appearance. Change macOS between light and dark mode;
-DevTools updates the qlementine widget theme and renders Material Symbols with the active palette.
+Open **Settings** and choose **Follow system**, **Light**, or **Dark** from
+**Theme**.
 
 ### Can I use keyboard shortcuts?
 
-The application provides `Ctrl + W` to close the window. Standard macOS
-shortcuts such as `Cmd + C` and `Cmd + V` are handled by the operating system
-and individual widgets.
+Use `Ctrl + W` to close the window and `Cmd/Ctrl + K` to focus tool search.
+Standard copy and paste shortcuts are also available in editable fields.
 
 ### Why does the API test feature not work with HTTPS?
 
@@ -147,16 +141,21 @@ This builds and launches the app with colored console output (DEBUG=dim, WARN=ye
 
 ### How do I run tests?
 
+Configure the existing build with unit tests enabled, then build and run them:
+
 ```bash
-cmake .. -DENABLE_UNIT_TEST=ON
-make
-ctest
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 ```
 
 ### Where is the API documentation?
 
 - Online: [https://LotusAndCompany.github.io/devtools/](https://LotusAndCompany.github.io/devtools/)
-- Generate locally: `make DevTools_docs`
+- Generate locally: `cmake --build build --target DevTools_docs`
 
 ## Troubleshooting
 
@@ -180,14 +179,10 @@ ctest
 2. Check you selected the correct input format
 3. Note: Comments are lost when converting from YAML/TOML to JSON
 
-### Command execution hangs
+### Does DevTools execute generated commands?
 
-Some commands aren't supported:
-- Interactive commands (vim, nano)
-- Commands requiring TTY
-- Commands needing password input
-
-Use Terminal.app for these.
+No. Command Generation builds command text and copies it to the clipboard.
+Run the command in a terminal yourself.
 
 ## Future Plans
 

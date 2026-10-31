@@ -33,6 +33,8 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 flowchart TD
     root["devtools/"]
     root --> features["features/<br/>機能モジュール<br/>(core/, gui/, tests/)"]
+    root --> frontend["frontend/src/<br/>React・TypeScript UI<br/>(app/, features/, shared/, platform/qt/)"]
+    root --> webbridge["features/web_frontend/<br/>Qt WebEngineとC++ブリッジ"]
     root --> main["main/<br/>アプリケーションエントリーポイント"]
     root --> resources["res/<br/>リソースと翻訳ファイル"]
     root --> tests["tests/<br/>共有テストヘルパー"]
@@ -83,10 +85,12 @@ flowchart TD
 
 ### ローカライゼーション
 
-- ユーザーに表示される source 文字列は英語で記述し、`tr()` でラップする
-- 日本語翻訳は `res/dev-tools_ja_JP.ts` で管理する
+- React UIの文字列は、共通の `text(locale, english, japanese)` 関数で
+  英語と日本語を指定する。
+- ネイティブC++ UIの文字列は英語で記述し、`tr()` で囲む。
+- ネイティブQt UIの日本語訳は `res/dev-tools_ja_JP.ts` で管理する。
 - 英語は source 文字列を使用するため、英語用の `.ts` ファイルは追加しない
-- 翻訳対象文字列を変更した場合のみ `.ts` を更新する：
+- ネイティブQtの翻訳対象文字列が変わった場合のみ `.ts` を更新する：
   `cmake --build build --target update_devtools_translations`
 
 ### React / Qt WebEngine UI のHMR
@@ -98,7 +102,7 @@ Bun 1.3.14が必要です。バージョンは`frontend/package.json`で固定�
 
 ```bash
 cd frontend
-bun install
+bun install --frozen-lockfile
 bun run --bun dev
 ```
 
@@ -109,6 +113,21 @@ DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --targe
 ```
 
 HMRはDebugビルドでのみ利用でき、アプリが受け付けるURLはこのループバックURLに限られます。Releaseビルドでは埋め込み済みのフロントエンドを使います。詳しくは[React移行メモ](../migration/m3-react-ui.md)を参照してください。
+
+### フロントエンドの確認
+
+フロントエンドを変更した場合は、frontend/で次のコマンドを実行します。
+
+~~~bash
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun build
+bun run --bun test
+~~~
+
+CMakeでアプリをビルドするときも、Bunが依存関係をロックファイルから復元し、埋め込み用のフロントエンドを生成します。
 
 ### コードフォーマット
 
@@ -190,11 +209,12 @@ pre-commit autoupdate
 
 #### CI (GitHub Actions)
 
-コード品質チェックは以下のタイミングで自動実行されます：
-- `main` への**プルリクエスト**時
+Code Qualityワークフローは、設定されたパスフィルターに一致する変更を含む
+`main`向けプルリクエストで実行されます。PRタイトルのチェックはパスに関係なく実行されます。
 
 | チェック | 実行環境 | 説明 |
 |---------|---------|------|
+| Frontend Checks | Ubuntu | Oxlint、Oxfmt、TypeScript、Viteビルド、Vitest |
 | clang-format | macOS | 変更ファイルのフォーマットチェック |
 | clang-tidy | Ubuntu | 変更ファイルの静的解析 |
 | format-suggestion | macOS | PRにフォーマット修正提案をコメント |
@@ -216,7 +236,11 @@ pre-commit autoupdate
 | 定数 | SCREAMING_SNAKE_CASE | `MAX_IMAGE_SIZE` |
 | ファイル | snake_case | `image_resize.cpp` |
 
-### 新しいモジュールの追加
+### ネイティブC++モジュールの追加
+
+通常のツール画面はReactで実装します。現行の追加手順は
+[新しいツールの追加ガイド](../development/adding-new-tools.md)を参照してください。
+以下はネイティブC++機能モジュールまたは旧Qt Widgets画面を追加する場合の手順です。
 
 1. 機能ディレクトリ構造を作成：
    ```mermaid
@@ -267,7 +291,17 @@ DevTools_add_test(test_your_module
 )
 ```
 
-`cmake .. -DENABLE_UNIT_TEST=ON`でテストを有効化します。
+リポジトリのルートから、アプリのビルドで使ったvcpkgツールチェーンと
+トリプレットを指定してC++テストを有効化します。
+
+```bash
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
 
 ### デザインファイル
 

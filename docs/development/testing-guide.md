@@ -4,45 +4,70 @@ This guide explains how to write and run tests for DevTools.
 
 ## Overview
 
-DevTools uses Qt Test. Tests are organized by feature and cover core services,
-processing, and GUI behavior. Test cases are methods on a `QObject` test class;
-`QTEST_GUILESS_MAIN` starts a `QCoreApplication` for tests without widgets, and
-`QTEST_MAIN` starts a `QApplication` for widget tests.
+DevTools uses Qt Test for C++ services and widgets, and Vitest with Testing
+Library for React behavior. Tests are organized by feature and cover core
+services, processing, GUI behavior, and frontend interactions. C++ test cases
+are methods on a `QObject` test class. `QTEST_GUILESS_MAIN` starts a
+`QCoreApplication` for tests without widgets, and `QTEST_MAIN` starts a
+`QApplication` for widget tests.
 
 ## Test Structure
 
 Test sources live alongside each feature under `features/{feature}/tests/`.
 Shared test helpers and test data live under the top-level `tests/` directory.
+React tests live beside their feature in `frontend/src/features/` or beside
+the shared bridge code they exercise.
 
 ```mermaid
 flowchart TD
     tests["tests/"]
     tests --> registration["DevToolsTests.cmake<br/>Test registration"]
     tests --> helpers["test_util.h/.cpp<br/>random_data.h/.cpp<br/>mock_helper.h"]
-    tests --> fixtures["core/<br/>Test fixtures"]
+    tests --> fixtures["core/<br/>C++ test fixtures"]
     fixtures --> conversion["data_conversion/"]
     fixtures --> image["image/"]
     feature["features/{feature}/"] --> feature_tests["tests/<br/>Per-feature test sources"]
     feature_tests --> test_file["test_*.cpp"]
+    frontend["frontend/src/"] --> frontend_features["features/{feature}/"]
+    frontend_features --> frontend_tests["*.test.tsx<br/>Vitest + Testing Library"]
 ```
 
 ## Enabling Tests
 
-Tests are disabled by default. Enable them with CMake:
+Native C++ tests are disabled by default. Configure them with CMake, preserving
+the vcpkg toolchain used for the application:
 
 ```bash
-# Configure with tests enabled
-cmake .. -DENABLE_UNIT_TEST=ON
+# Configure from the repository root (set VCPKG_ROOT first)
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
 
-# Build
-make
+# Build the application and C++ tests
+cmake --build build --parallel
 
-# Run all tests
-ctest
-
-# Run with verbose output
-ctest --output-on-failure
+# Run all registered C++ tests
+ctest --test-dir build --output-on-failure
 ```
+
+## React Frontend Tests
+
+From `frontend/`, install the locked dependencies and run the checks used by
+the Code Quality workflow:
+
+```bash
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun test
+bun run --bun build
+```
+
+Vitest and Testing Library tests should cover observable screen behavior such
+as user input, button actions, validation, empty states, and rendered results.
+Keep the tests beside the feature or shared bridge module they cover.
 
 ## Writing Tests
 
@@ -99,7 +124,7 @@ directory and keep reusable widget rules in the framework test.
 
 For a UI-wide change, perform a manual smoke pass with the application running:
 
-1. Open every registered tool from the side menu.
+1. Open every registered tool from the sidebar.
 2. Check the default, empty, error, and result states relevant to each tool.
 3. Resize the main window through the supported range and check splitter and
    scroll behavior.
@@ -322,41 +347,40 @@ QTEST_GUILESS_MAIN(TestProcessor)
 ### Run All Tests
 
 ```bash
-cd build
-ctest
+ctest --test-dir build
 ```
 
 ### Run Specific Test
 
 ```bash
 # By test name
-ctest -R test_json_parser
+ctest --test-dir build -R test_json_parser
 
 # Run executable directly for more control
-./test_json_parser
+./build/test_json_parser
 ```
 
 ### Run Selected Test Methods
 
 ```bash
 # List test methods in a Qt Test executable
-./test_your_module -functions
+./build/test_your_module -functions
 
 # Run one test method
-./test_your_module parsesValidJson
+./build/test_your_module parsesValidJson
 ```
 
 ### Verbose Output
 
 ```bash
-# CMake verbose
-ctest --output-on-failure
+# CTest verbose
+ctest --test-dir build --output-on-failure
 
 # Qt Test verbose output
-./test_your_module -v1
+./build/test_your_module -v1
 
 # Write a JUnit XML report
-./test_your_module -o results.xml,junitxml
+./build/test_your_module -o build/results.xml,junitxml
 ```
 
 ## Best Practices
@@ -398,22 +422,18 @@ private slots:
 
 ## Continuous Integration
 
-Tests run automatically on:
-
-- Pull request creation
-- Push to develop/main branches
-
-GitHub Actions workflow checks:
-1. Build succeeds
-2. All tests pass
-3. Code formatting is correct
+The Code Quality workflow runs on pull requests to `main` when its path
+filters match. Frontend Checks run lint, format check, type check, Vitest, and
+the Vite build. The workflow also builds the C++ application and checks
+clang-format and clang-tidy, but it does not run CTest. Run the C++ test suite
+locally with the command above.
 
 ## Troubleshooting
 
 ### Tests Not Found
 
 1. Check test is registered in DevToolsTests.cmake
-2. Rebuild: `make clean && make`
+2. Reconfigure with `-DENABLE_UNIT_TEST=ON` as described in the Enabling Tests section, then rebuild with `cmake --build build --parallel`.
 3. Verify ENABLE_UNIT_TEST=ON
 
 ### Qt Tests Crash

@@ -9,7 +9,7 @@ A unified desktop application that combines various development tools into a sin
 
 ## Features
 
-### QR Code Generation
+### QR Code
 - **Text**: Generate QR codes from plain text
 - **URL**: Create QR codes for website links
 - **Email**: Generate mailto: QR codes
@@ -20,18 +20,18 @@ A unified desktop application that combines various development tools into a sin
 - **Calendar**: Generate calendar event QR codes
 - **Geo Location**: Create location-based QR codes
 
-### Image Processing
-- **Resize**: Scale images to specific dimensions
-- **Rotation**: Rotate images by any angle
-- **Division**: Split images into multiple parts
-- **Transparency**: Make specific colors transparent
+### Image Editor
+- **Resize**: Scale images to specific dimensions or percentages
+- **Rotate and flip**: Rotate in 90-degree steps or flip horizontally/vertically
+- **Split**: Divide images by number of parts or cell size
+- **Transparency**: Make a selected color transparent
 
 ### Data Conversion
 - Convert between **JSON**, **YAML**, and **TOML** formats
 - Syntax validation and formatting
 
-### API Testing
-- Send HTTP requests (GET, POST, PUT, DELETE, etc.)
+### HTTP Request
+- Send HTTP requests (GET, POST, PUT, DELETE)
 - View responses as read-only, selectable text
 
 ### Markdown Preview
@@ -41,7 +41,7 @@ A unified desktop application that combines various development tools into a sin
 - Build Git, Docker, and Docker Compose commands from the GUI
 - Copy generated commands for use in a terminal
 
-### Database Management
+### Database
 - Connect to **SQLite**, **MySQL**, and **PostgreSQL** databases
 - Browse tables and view data
 - Execute SQL queries with tabbed interface
@@ -49,7 +49,7 @@ A unified desktop application that combines various development tools into a sin
 ### Phrase Generation
 - Create and reuse named text templates
 
-### Regular Expression Tester
+### Regex Tester
 - Test regular expressions and replacements
 - Inspect matches and capture groups
 
@@ -59,16 +59,17 @@ A unified desktop application that combines various development tools into a sin
 - Edit any row and press **Convert** to apply it to every other row
 - **Now** fills all rows with the current time; **Copy** copies a row's value
 
-### Diff Comparison Tool
+### Text Diff
 - Compare two texts line by line
 - View differences inline or side by side
 
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
-- **Qt**: 6.9+ (6.9.3 tested; required for named-glyph QIcon support)
+- **Qt**: 6.9+ (6.9.3 tested; includes the WebEngine modules used by the app)
 - **CMake**: 3.21.1+
 - **C++ Compiler**: C++17 compatible
+- **Bun**: 1.3.14 (frontend build tool)
 
 ## Quick Start
 
@@ -77,18 +78,19 @@ A unified desktop application that combines various development tools into a sin
 git clone https://github.com/LotusAndCompany/devtools.git
 cd devtools
 
-# Install dependencies via vcpkg
-vcpkg install
+# Install Qt 6, Bun 1.3.14, and vcpkg. See the installation guide for setup.
+# Set VCPKG_ROOT to the vcpkg installation directory.
 
-# Configure with CMake
-mkdir build && cd build
-cmake ..
+# Configure with CMake. vcpkg manifest dependencies are installed during configure.
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build
-make
+cmake --build build --parallel
 
 # Build and run
-cmake --build . --target run
+cmake --build build --target run
 ```
 
 For detailed build instructions, see [BUILD.md](BUILD.md).
@@ -144,10 +146,10 @@ DevTools uses the following third-party libraries:
 ## Acknowledgments
 
 - [Qt Project](https://www.qt.io/) for the excellent cross-platform framework
-- [Qlementine](https://github.com/oclero/qlementine) for the modern Qt Widgets style
+- [Qlementine](https://github.com/oclero/qlementine) for Qt Widgets support used by native components
 - [Project Nayuki](https://www.nayuki.io/) for the QR code generator library
 - All contributors and users of DevTools
 
 ---
 
-Made with by [Lotus&Company Inc.](https://lotusandcompanyinc.com/)
+Made by [Lotus&Company Inc.](https://lotusandcompanyinc.com/)

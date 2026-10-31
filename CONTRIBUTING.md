@@ -33,6 +33,8 @@ Before contributing, make sure you have:
 flowchart TD
     root["devtools/"]
     root --> features["features/<br/>Feature modules<br/>(core/, gui/, tests/)"]
+    root --> frontend["frontend/src/<br/>React and TypeScript UI<br/>(app/, features/, shared/, platform/qt/)"]
+    root --> webbridge["features/web_frontend/<br/>Qt WebEngine host and C++ bridge"]
     root --> main["main/<br/>Application entry point"]
     root --> resources["res/<br/>Resources and translations"]
     root --> tests["tests/<br/>Shared test helpers"]
@@ -83,10 +85,12 @@ flowchart TD
 
 ### Localization
 
-- Write user-visible source strings in English and wrap them with `tr()`
-- Track Japanese translations in `res/dev-tools_ja_JP.ts`
+- For React UI, provide English and Japanese strings with the shared
+  `text(locale, english, japanese)` helper.
+- For native C++ UI, write source strings in English and wrap them with `tr()`.
+- Track Japanese translations for native Qt text in `res/dev-tools_ja_JP.ts`.
 - Do not add an English `.ts` file; English uses the source text
-- Update `.ts` files only when translatable strings change:
+- Update `.ts` files only when native Qt strings change:
   `cmake --build build --target update_devtools_translations`
 
 ### React / Qt WebEngine UI with HMR
@@ -98,7 +102,7 @@ Start Vite in one terminal:
 
 ```bash
 cd frontend
-bun install
+bun install --frozen-lockfile
 bun run --bun dev
 ```
 
@@ -111,6 +115,22 @@ DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --targe
 Hot reload is available only in Debug builds and the app accepts only this
 loopback URL. Release builds use the embedded frontend assets. See the
 [React migration notes](docs/migration/m3-react-ui.md) for details.
+
+### Frontend checks
+
+Run these commands from `frontend/` before submitting frontend changes:
+
+```bash
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun build
+bun run --bun test
+```
+
+CMake also runs the locked Bun install and production frontend build when it
+builds the application target.
 
 ### Code Formatting
 
@@ -192,11 +212,12 @@ pre-commit autoupdate
 
 #### CI (GitHub Actions)
 
-Code quality checks run automatically on:
-- **Pull Request** to `main`
+The Code Quality workflow runs on pull requests to `main` when its configured
+path filters match. The PR-title check runs on pull requests independently.
 
 | Check | Runner | Description |
 |-------|--------|-------------|
+| Frontend Checks | Ubuntu | Oxlint, Oxfmt, TypeScript, Vite build, and Vitest |
 | clang-format | macOS | Format check on changed files |
 | clang-tidy | Ubuntu | Static analysis on changed files |
 | format-suggestion | macOS | PR comment with format suggestions |
@@ -218,7 +239,12 @@ Code quality checks run automatically on:
 | Constants | SCREAMING_SNAKE_CASE | `MAX_IMAGE_SIZE` |
 | Files | snake_case | `image_resize.cpp` |
 
-### Adding New Modules
+### Adding Native C++ Modules
+
+Regular tool screens are React features. Follow the
+[Adding New Tools guide](docs/development/adding-new-tools.md) for the current
+React workflow. The steps below apply to a native C++ feature module or a
+legacy Qt Widgets screen.
 
 1. Create the feature directory structure:
    ```mermaid
@@ -269,7 +295,17 @@ DevTools_add_test(test_your_module
 )
 ```
 
-Enable tests with `cmake .. -DENABLE_UNIT_TEST=ON`.
+Enable C++ tests from the repository root, keeping the vcpkg toolchain and
+triplet used by the application build:
+
+```bash
+cmake -S . -B build \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
 
 ### Design Files
 
