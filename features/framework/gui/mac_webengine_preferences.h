@@ -1,0 +1,6 @@
+#ifndef MAC_WEBENGINE_PREFERENCES_H
+#define MAC_WEBENGINE_PREFERENCES_H
+
+void configureMacWebEngineScrolling();
+
+#endif // MAC_WEBENGINE_PREFERENCES_H

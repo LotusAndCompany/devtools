@@ -1,6 +1,9 @@
 #include "gui_application.h"
 
 #include "features/framework/core/application_settings_service.h"
+#ifdef Q_OS_MACOS
+#include "mac_webengine_preferences.h"
+#endif
 
 #include <QApplicationStateChangeEvent>
 #include <QStyleHints>
@@ -15,6 +18,8 @@ GuiApplication::GuiApplication(int &argc, char **argv)
     QCoreApplication::setApplicationName("DevTools");
 
 #ifdef Q_OS_MACOS
+    configureMacWebEngineScrolling();
+
     /*
     connect(this,
             &QGuiApplication::applicationStateChanged,

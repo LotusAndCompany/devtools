@@ -8,6 +8,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QNativeGestureEvent>
 #include <QPointer>
 #include <QTimer>
 #include <QUrl>
@@ -17,6 +18,7 @@
 #include <QWebEngineSettings>
 #include <QWebEngineUrlRequestInfo>
 #include <QWebEngineUrlRequestInterceptor>
+#include <QWheelEvent>
 #include <QWidget>
 
 #include <utility>
@@ -178,6 +180,18 @@ void QtWebEngineAdapter::installDropEventFilters(QObject *object)
 
 bool QtWebEngineAdapter::eventFilter(QObject *watched, QEvent *event)
 {
+    if (event->type() == QEvent::NativeGesture) {
+        const auto *gesture = static_cast<const QNativeGestureEvent *>(event);
+        if (gesture->gestureType() == Qt::ZoomNativeGesture ||
+            gesture->gestureType() == Qt::SmartZoomNativeGesture) {
+            return true;
+        }
+    }
+    if (event->type() == QEvent::Wheel &&
+        static_cast<const QWheelEvent *>(event)->modifiers().testFlag(Qt::ControlModifier)) {
+        return true;
+    }
+
     if (event->type() == QEvent::ChildAdded) {
         const auto *childEvent = dynamic_cast<QChildEvent *>(event);
         if (childEvent == nullptr) {
