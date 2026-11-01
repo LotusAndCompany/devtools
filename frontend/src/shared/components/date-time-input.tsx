@@ -124,7 +124,7 @@ function DateTimeInput({
                 />
                 <PopoverContent
                     data-calendar-popup=""
-                    className="date-time-popup w-[var(--calendar-popup-width)] gap-0 p-0"
+                    className="date-time-popup w-fit gap-0 p-0"
                     side="bottom"
                     align="end"
                     sideOffset={6}
