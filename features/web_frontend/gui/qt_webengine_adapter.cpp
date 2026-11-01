@@ -181,15 +181,17 @@ void QtWebEngineAdapter::installDropEventFilters(QObject *object)
 bool QtWebEngineAdapter::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::NativeGesture) {
-        const auto *gesture = static_cast<const QNativeGestureEvent *>(event);
-        if (gesture->gestureType() == Qt::ZoomNativeGesture ||
-            gesture->gestureType() == Qt::SmartZoomNativeGesture) {
+        const auto *gesture = dynamic_cast<const QNativeGestureEvent *>(event);
+        if (gesture != nullptr && (gesture->gestureType() == Qt::ZoomNativeGesture ||
+                                   gesture->gestureType() == Qt::SmartZoomNativeGesture)) {
             return true;
         }
     }
-    if (event->type() == QEvent::Wheel &&
-        static_cast<const QWheelEvent *>(event)->modifiers().testFlag(Qt::ControlModifier)) {
-        return true;
+    if (event->type() == QEvent::Wheel) {
+        const auto *wheelEvent = dynamic_cast<const QWheelEvent *>(event);
+        if (wheelEvent != nullptr && wheelEvent->modifiers().testFlag(Qt::ControlModifier)) {
+            return true;
+        }
     }
 
     if (event->type() == QEvent::ChildAdded) {
