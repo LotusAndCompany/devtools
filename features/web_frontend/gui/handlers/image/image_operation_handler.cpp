@@ -71,14 +71,15 @@ NativeBridge::OperationResult NativeBridge::readImageFile(const QString &path,
                                QStringLiteral("The selected image exceeds the pixel limit."),
                                false};
     }
-    const QImage loaded = reader.read();
-    if (!isSupportedImage(loaded)) {
+    const QImage decoded = reader.read();
+    if (!isSupportedImage(decoded)) {
         return OperationResult{{},
                                QStringLiteral("INVALID_INPUT"),
                                QStringLiteral("The selected file is not a supported image or "
                                               "exceeds the pixel limit."),
                                false};
     }
+    const QImage loaded = decoded.convertToFormat(QImage::Format_RGBA8888);
     const QString preview = imagePreviewDataUrl(loaded);
     if (preview.isEmpty()) {
         return OperationResult{{},

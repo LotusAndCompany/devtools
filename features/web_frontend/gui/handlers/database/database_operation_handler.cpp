@@ -1,4 +1,5 @@
 #include "features/db_tool/core/connection_history.h"
+#include "features/web_frontend/gui/bridge/operations/database/database_operations.h"
 #include "features/web_frontend/gui/bridge/operations/frontend_operation_service.h"
 #include "features/web_frontend/gui/handlers/database/database_state_handler.h"
 #include "features/web_frontend/gui/native_bridge.h"
@@ -42,8 +43,16 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
         return;
     }
     if (operation == QStringLiteral("databaseDisconnect")) {
-        database_state_->disconnect();
-        completeOnUiThread(requestId, {{QStringLiteral("disconnected"), true}});
+        startWorker(
+            requestId, operation,
+            [](const CancellationToken &token, const ProgressCallback &) {
+                if (token->load(std::memory_order_relaxed)) {
+                    return OperationResult{{}, {}, {}, true};
+                }
+                FrontendOperationHandlers::databaseDisconnect();
+                return OperationResult{{{QStringLiteral("disconnected"), true}}, {}, {}, false};
+            },
+            [this](QVariantMap &) { database_state_->disconnect(); });
         return;
     }
     if (operation == QStringLiteral("databaseSelectFile")) {

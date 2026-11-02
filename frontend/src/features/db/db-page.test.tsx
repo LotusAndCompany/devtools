@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { OperationInput } from "@/shared/bridge/types";
 import { createOperationRunner } from "@/test/operation-runner";
@@ -57,5 +57,47 @@ describe("DatabasePage", () => {
         expect(
             (screen.getByRole("tabpanel").querySelector("textarea") as HTMLTextAreaElement).value,
         ).toBe("SELECT * FROM `user``profiles` LIMIT 1000;");
+    });
+
+    it("asks for a saved MySQL connection password before connecting", async () => {
+        const connections: OperationInput<"databaseConnect">[] = [];
+        const run = createOperationRunner({
+            databaseHistory: () => ({
+                history: [
+                    {
+                        index: 0,
+                        type: "QMYSQL",
+                        host: "db.example.test",
+                        database: "app",
+                        username: "dev",
+                        displayName: "Development database",
+                    },
+                ],
+                selectedFileName: "",
+                connected: false,
+                connectedType: "",
+            }),
+            databaseConnect: (input) => {
+                connections.push(input);
+                return {
+                    connected: true,
+                    displayName: "Development database",
+                    tables: [],
+                };
+            },
+        });
+
+        render(<DatabasePage locale="en" run={run} active />);
+        fireEvent.click(screen.getByRole("button", { name: "Connection settings" }));
+        fireEvent.click(screen.getAllByRole("button", { name: "Connect" })[0]);
+        fireEvent.change(await screen.findByLabelText("Password"), {
+            target: { value: "secret" },
+        });
+        const passwordForm = screen
+            .getByLabelText("Password")
+            .closest(".db-connect-form") as HTMLElement;
+        fireEvent.click(within(passwordForm).getByRole("button", { name: "Connect" }));
+
+        await waitFor(() => expect(connections).toEqual([{ historyIndex: 0, password: "secret" }]));
     });
 });

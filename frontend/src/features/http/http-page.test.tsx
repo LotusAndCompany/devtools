@@ -41,4 +41,29 @@ describe("HttpPage", () => {
             parameters: [],
         });
     });
+
+    it("displays network error details while keeping the response body visible", async () => {
+        const run = createOperationRunner({
+            sendHttpRequest: () => ({
+                status: 503,
+                reason: "Service Unavailable",
+                elapsedMs: 9,
+                errorCode: 7,
+                error: "Connection refused",
+                body: "service diagnostic",
+                bytes: 19,
+            }),
+        });
+
+        render(<HttpPage locale="en" run={run} />);
+        fireEvent.change(screen.getByLabelText("URL"), {
+            target: { value: "https://example.test/items" },
+        });
+        fireEvent.click(screen.getByRole("button", { name: "Send" }));
+
+        expect((await screen.findByRole("alert")).textContent).toContain("Connection refused");
+        expect((screen.getByLabelText("Response body") as HTMLTextAreaElement).value).toBe(
+            "service diagnostic",
+        );
+    });
 });

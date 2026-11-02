@@ -227,12 +227,20 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                     </CardHeader>
                     <CardContent className="http-response-content">
                         {response ? (
-                            <Area
-                                label={text(locale, "Response body", "レスポンス本文")}
-                                value={String(response.body ?? "")}
-                                readOnly
-                                rows={16}
-                            />
+                            <>
+                                {response.errorCode !== 0 && response.error && (
+                                    <p className="text-destructive text-sm" role="alert">
+                                        {text(locale, "Request error", "リクエストエラー")} (
+                                        {String(response.errorCode)}): {response.error}
+                                    </p>
+                                )}
+                                <Area
+                                    label={text(locale, "Response body", "レスポンス本文")}
+                                    value={String(response.body ?? "")}
+                                    readOnly
+                                    rows={16}
+                                />
+                            </>
                         ) : (
                             <Empty className="empty-state">
                                 <EmptyHeader>

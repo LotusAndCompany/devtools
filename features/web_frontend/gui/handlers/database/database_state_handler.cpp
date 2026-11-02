@@ -3,9 +3,17 @@
 #include "features/db_tool/core/connection_history.h"
 #include "features/db_tool/core/database_connection.h"
 #include "features/db_tool/core/sqlite_file_access.h"
+#include "features/web_frontend/gui/bridge/operations/database/database_operations.h"
 
 #include <QFileInfo>
 #include <QSettings>
+
+DatabaseStateHandler::~DatabaseStateHandler()
+{
+    if (connected() || connection_file_access_) {
+        FrontendOperationHandlers::databaseDisconnect();
+    }
+}
 
 bool DatabaseStateHandler::connected() const
 {
@@ -68,6 +76,7 @@ void DatabaseStateHandler::disconnect()
 {
     connection_.clear();
     file_access_.reset();
+    connection_file_access_.reset();
     selected_file_path_.clear();
 }
 
@@ -80,6 +89,10 @@ void DatabaseStateHandler::completeConnection(const QVariantMap &connection,
                                               const QString &typeText)
 {
     connection_ = connection;
+    connection_file_access_ =
+        connection.value(QStringLiteral("type")).toString() == QStringLiteral("QSQLITE")
+            ? file_access_
+            : nullptr;
     const DatabaseParameters parameters{connection.value(QStringLiteral("type")).toString(),
                                         connection.value(QStringLiteral("host")).toString(),
                                         connection.value(QStringLiteral("database")).toString(),

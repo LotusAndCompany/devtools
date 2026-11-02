@@ -4,53 +4,167 @@
 #include "features/db_tool/core/query_service.h"
 #include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
+#include <QMetaObject>
 #include <QMetaType>
+#include <QObject>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QThread>
 #include <QUuid>
 #include <QVariantList>
+
+#include <functional>
 
 using FrontendOperationSupport::invalidInput;
 using FrontendOperationSupport::readText;
 
 namespace FrontendOperationHandlers {
 
-FrontendOperationService::Result withDatabase(
-    const QVariantMap &payload,
-    const std::function<FrontendOperationService::Result(const QSqlDatabase &)> &callback)
+namespace {
+
+using DatabaseResult = FrontendOperationService::Result;
+using DatabaseCallback = std::function<DatabaseResult(const QSqlDatabase &)>;
+
+class DatabaseSession final
 {
-    const QVariantMap parameters = payload.value(QStringLiteral("connection")).toMap();
+public:
+    DatabaseSession()
+    {
+        worker_ = new QObject();
+        worker_->moveToThread(&thread_);
+        QObject::connect(&thread_, &QThread::finished, worker_, &QObject::deleteLater);
+        thread_.setObjectName(QStringLiteral("DatabaseSession"));
+        thread_.start();
+    }
+
+    ~DatabaseSession()
+    {
+        close();
+        thread_.quit();
+        thread_.wait();
+    }
+
+    DatabaseResult connect(const DatabaseParameters &parameters, const DatabaseCallback &callback)
+    {
+        return dispatch([this, parameters, callback]() {
+            const QString candidateName =
+                QStringLiteral("react-%1").arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
+            QSqlDatabase candidate = DatabaseConnection::open(parameters, candidateName);
+            if (!candidate.isOpen()) {
+                const QString message = candidate.lastError().text();
+                closeConnection(candidate, candidateName);
+                return DatabaseResult{{}, QStringLiteral("IO_ERROR"), message, false};
+            }
+
+            DatabaseResult result = callback(candidate);
+            if (!result.errorCode.isEmpty() || result.cancelled) {
+                closeConnection(candidate, candidateName);
+                return result;
+            }
+
+            QSqlDatabase previous = database_;
+            const QString previousName = connection_name_;
+            database_ = candidate;
+            connection_name_ = candidateName;
+            candidate = QSqlDatabase();
+            closeConnection(previous, previousName);
+            return result;
+        });
+    }
+
+    DatabaseResult execute(const DatabaseCallback &callback)
+    {
+        return dispatch([this, callback]() {
+            if (!database_.isOpen()) {
+                return invalidInput(QStringLiteral("Connect to a database first."));
+            }
+            return callback(database_);
+        });
+    }
+
+    void close()
+    {
+        dispatch([this]() {
+            closeConnection(database_, connection_name_);
+            connection_name_.clear();
+            return true;
+        });
+    }
+
+private:
+    template <typename Function>
+    auto dispatch(Function function) -> decltype(function())
+    {
+        using Result = decltype(function());
+        if (QThread::currentThread() == worker_->thread()) {
+            return function();
+        }
+
+        Result result{};
+        const bool invoked = QMetaObject::invokeMethod(
+            worker_, [&function, &result]() { result = function(); }, Qt::BlockingQueuedConnection);
+        Q_ASSERT(invoked);
+        return result;
+    }
+
+    static void closeConnection(QSqlDatabase &database, const QString &connectionName)
+    {
+        if (connectionName.isEmpty()) {
+            return;
+        }
+        database.close();
+        database = QSqlDatabase();
+        QSqlDatabase::removeDatabase(connectionName);
+    }
+
+    QThread thread_;
+    QObject *worker_{nullptr};
+    QSqlDatabase database_;
+    QString connection_name_;
+};
+
+DatabaseSession &databaseSession()
+{
+    static DatabaseSession session;
+    return session;
+}
+
+bool readDatabaseParameters(const QVariantMap &parameters, DatabaseParameters *dbParameters,
+                            QString *error)
+{
     const QString type = parameters.value(QStringLiteral("type")).toString();
     if (type != QStringLiteral("QSQLITE") && type != QStringLiteral("QMYSQL") &&
         type != QStringLiteral("QPSQL")) {
-        return invalidInput(QStringLiteral("Choose SQLite, MySQL or PostgreSQL."));
+        *error = QStringLiteral("Choose SQLite, MySQL or PostgreSQL.");
+        return false;
     }
-    const DatabaseParameters dbParameters{type, parameters.value(QStringLiteral("host")).toString(),
-                                          parameters.value(QStringLiteral("database")).toString(),
-                                          parameters.value(QStringLiteral("username")).toString(),
-                                          parameters.value(QStringLiteral("password")).toString()};
-    if (dbParameters.database.isEmpty() ||
+    *dbParameters = {type, parameters.value(QStringLiteral("host")).toString(),
+                     parameters.value(QStringLiteral("database")).toString(),
+                     parameters.value(QStringLiteral("username")).toString(),
+                     parameters.value(QStringLiteral("password")).toString()};
+    if (dbParameters->database.isEmpty() ||
         (type != QStringLiteral("QSQLITE") &&
-         (dbParameters.host.isEmpty() || dbParameters.username.isEmpty()))) {
-        return invalidInput(QStringLiteral("Complete the database connection fields."));
+         (dbParameters->host.isEmpty() || dbParameters->username.isEmpty()))) {
+        *error = QStringLiteral("Complete the database connection fields.");
+        return false;
     }
-    const QString connectionName =
-        QStringLiteral("react-%1").arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
-    QSqlDatabase database = DatabaseConnection::open(dbParameters, connectionName);
-    if (!database.isOpen()) {
-        const QString message = database.lastError().text();
-        database = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connectionName);
-        return {{}, QStringLiteral("IO_ERROR"), message, false};
-    }
-    FrontendOperationService::Result result = callback(database);
-    database.close();
-    database = QSqlDatabase();
-    QSqlDatabase::removeDatabase(connectionName);
-    return result;
+    return true;
 }
+
+DatabaseResult withDatabase(const QVariantMap &payload, const DatabaseCallback &callback)
+{
+    DatabaseParameters parameters;
+    QString error;
+    if (!readDatabaseParameters(payload.value(QStringLiteral("connection")).toMap(), &parameters,
+                                &error)) {
+        return invalidInput(error);
+    }
+    return databaseSession().execute(callback);
+}
+
+} // namespace
 
 FrontendOperationService::Result databaseConnect(const QVariantMap &payload)
 {
@@ -58,9 +172,14 @@ FrontendOperationService::Result databaseConnect(const QVariantMap &payload)
     connection.remove(QStringLiteral("action"));
     connection.remove(QStringLiteral("contractVersion"));
     connection.remove(QStringLiteral("requestId"));
-    const QVariantMap wrapper{{QStringLiteral("connection"), connection}};
-    return withDatabase(
-        wrapper, [&connection](const QSqlDatabase &database) -> FrontendOperationService::Result {
+    DatabaseParameters parameters;
+    QString error;
+    if (!readDatabaseParameters(connection, &parameters, &error)) {
+        return invalidInput(error);
+    }
+    return databaseSession().connect(
+        parameters,
+        [&connection](const QSqlDatabase &database) -> FrontendOperationService::Result {
             const QString displayName = connection.value(QStringLiteral("displayName")).toString();
             const QStringList tables = database.tables();
             return {{{QStringLiteral("connected"), true},
@@ -70,6 +189,11 @@ FrontendOperationService::Result databaseConnect(const QVariantMap &payload)
                     {},
                     false};
         });
+}
+
+void databaseDisconnect()
+{
+    databaseSession().close();
 }
 
 FrontendOperationService::Result databaseTables(const QVariantMap &payload)

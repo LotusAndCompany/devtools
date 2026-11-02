@@ -1,4 +1,5 @@
 #include "features/framework/core/application_settings_service.h"
+#include "features/framework/gui/gui_application.h"
 #include "features/regex_tool/core/regex_settings_repository.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
@@ -101,9 +102,15 @@ void NativeBridge::startRegexSettings(const QString &requestId, const QVariantMa
 void NativeBridge::startSettingsRead(const QString &requestId)
 {
     const ApplicationSettings settings = ApplicationSettingsService().read();
+    QString language = settings.language;
+    if (!settings.hasSavedLanguage) {
+        if (auto *const app = qobject_cast<GuiApplication *>(QApplication::instance())) {
+            language = app->language();
+        }
+    }
     completeOnUiThread(
         requestId,
-        {{QStringLiteral("language"), settings.language},
+        {{QStringLiteral("language"), language},
          {QStringLiteral("showSidebarOnStartup"), settings.showSidemenuOnStartup},
          {QStringLiteral("showLastToolOnStartup"), settings.showLastToolOnStartup},
          {QStringLiteral("lastUsedTool"), settings.lastUsedTool},

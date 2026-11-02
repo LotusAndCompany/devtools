@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
     Dialog,
@@ -71,12 +72,20 @@ export function DatabaseConnectionDialog({
     onSelectFile,
     onDisconnect,
 }: DatabaseConnectionDialogProps) {
+    const [selectedHistoryIndex, setSelectedHistoryIndex] = useState<number | null>(null);
     const canConnect =
         !busy &&
         (type === "QSQLITE" ? Boolean(selectedFileName) : Boolean(host && database && username));
+    const selectedHistory = history.find((item) => item.index === selectedHistoryIndex);
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog
+            open={open}
+            onOpenChange={(nextOpen) => {
+                if (!nextOpen) setSelectedHistoryIndex(null);
+                onOpenChange(nextOpen);
+            }}
+        >
             <DialogContent
                 className="max-h-[min(760px,calc(100vh-40px))] overflow-y-auto sm:max-w-[648px]"
                 showCloseButton={false}
@@ -112,7 +121,15 @@ export function DatabaseConnectionDialog({
                                                 variant="outline"
                                                 size="sm"
                                                 disabled={busy}
-                                                onClick={() => onConnectSaved(Number(item.index))}
+                                                onClick={() => {
+                                                    if (item.type === "QSQLITE") {
+                                                        setSelectedHistoryIndex(null);
+                                                        onConnectSaved(Number(item.index));
+                                                        return;
+                                                    }
+                                                    setSelectedHistoryIndex(Number(item.index));
+                                                    onPasswordChange("");
+                                                }}
                                             >
                                                 {text(locale, "Connect", "接続")}
                                             </Button>
@@ -120,6 +137,26 @@ export function DatabaseConnectionDialog({
                                     </Item>
                                 ))}
                             </ItemGroup>
+                            {selectedHistory && selectedHistory.type !== "QSQLITE" && (
+                                <div className="db-connect-form">
+                                    <FormField label={text(locale, "Password", "パスワード")}>
+                                        <Input
+                                            type="password"
+                                            autoComplete="current-password"
+                                            value={password}
+                                            onChange={(event) =>
+                                                onPasswordChange(event.target.value)
+                                            }
+                                        />
+                                    </FormField>
+                                    <Button
+                                        disabled={busy}
+                                        onClick={() => onConnectSaved(selectedHistory.index)}
+                                    >
+                                        {text(locale, "Connect", "接続")}
+                                    </Button>
+                                </div>
+                            )}
                         </section>
                     )}
                     <div className={`db-connect-form${history.length > 0 ? " has-history" : ""}`}>

@@ -20,24 +20,37 @@ type DateParts = {
 };
 
 function parseDateTime(value: string): DateParts | null {
-    const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+    const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?$/.exec(
+        value,
+    );
     if (!match) return null;
 
-    const [, yearText, monthText, dayText, hourText, minuteText] = match;
+    const [, yearText, monthText, dayText, hourText, minuteText, secondText, millisecondText] =
+        match;
     const year = Number(yearText);
     const month = Number(monthText) - 1;
     const day = Number(dayText);
+    const second = Number(secondText ?? "0");
     const date = new Date(year, month, day);
     if (
         date.getFullYear() !== year ||
         date.getMonth() !== month ||
         date.getDate() !== day ||
         Number(hourText) > 23 ||
-        Number(minuteText) > 59
+        Number(minuteText) > 59 ||
+        second > 59
     ) {
         return null;
     }
-    return { year, month, day, time: `${hourText}:${minuteText}` };
+    return {
+        year,
+        month,
+        day,
+        time:
+            secondText === undefined
+                ? `${hourText}:${minuteText}`
+                : `${hourText}:${minuteText}:${secondText}${millisecondText ? `.${millisecondText}` : ""}`,
+    };
 }
 
 function dateValue(date: Date, time: string) {

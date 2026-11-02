@@ -109,8 +109,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::onActionTriggered(QAction *action)
 {
     if (action == action_about_) {
+        show();
+        raise();
+        activateWindow();
         native_bridge_->navigateTo(QStringLiteral("about"));
     } else if (action == action_settings_) {
+        show();
+        raise();
+        activateWindow();
         native_bridge_->navigateTo(QStringLiteral("settings"));
     } else if (action == action_close_) {
         close();

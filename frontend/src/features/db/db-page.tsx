@@ -152,6 +152,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 );
                 setTables(result.tables);
                 setConnectionDialogOpen(false);
+                setPassword("");
             });
             yield* refreshHistory();
         });
@@ -194,7 +195,12 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             <div className="database-toolbar">
                 {connected && <span className="connection-name">{displayName}</span>}
                 {connected && (
-                    <Button variant="ghost" size="sm" onClick={() => runUiEffect(disconnect())}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={busy}
+                        onClick={() => runUiEffect(disconnect())}
+                    >
                         {text(locale, "Disconnect", "切断")}
                     </Button>
                 )}

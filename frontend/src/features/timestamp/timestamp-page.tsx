@@ -26,16 +26,25 @@ function toLocalInput(date: Date, utc = false) {
     const day = padDatePart(utc ? date.getUTCDate() : date.getDate());
     const hour = padDatePart(utc ? date.getUTCHours() : date.getHours());
     const minute = padDatePart(utc ? date.getUTCMinutes() : date.getMinutes());
-    return `${year}-${month}-${day}T${hour}:${minute}`;
+    const seconds = padDatePart(utc ? date.getUTCSeconds() : date.getSeconds());
+    const milliseconds = String(utc ? date.getUTCMilliseconds() : date.getMilliseconds()).padStart(
+        3,
+        "0",
+    );
+    return `${year}-${month}-${day}T${hour}:${minute}:${seconds}.${milliseconds}`;
 }
 
 function toLocalIso(date: Date) {
     const offset = -date.getTimezoneOffset();
     const sign = offset >= 0 ? "+" : "-";
     const absoluteOffset = Math.abs(offset);
-    const seconds = padDatePart(date.getSeconds());
-    const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
-    return `${toLocalInput(date)}:${seconds}.${milliseconds}${sign}${padDatePart(Math.floor(absoluteOffset / 60))}:${padDatePart(absoluteOffset % 60)}`;
+    return `${toLocalInput(date)}${sign}${padDatePart(Math.floor(absoluteOffset / 60))}:${padDatePart(absoluteOffset % 60)}`;
+}
+
+function toUtcIsoInput(value: string) {
+    const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?$/.exec(value);
+    if (!match) return `${value}Z`;
+    return `${match[1]}:${match[2] ?? "00"}.${(match[3] ?? "").padEnd(3, "0")}Z`;
 }
 
 function timestampValues(date: Date): TimestampValues {
@@ -63,7 +72,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                         ? values.local
                         : localDate.toISOString()
                     : key === "utc"
-                      ? `${values.utc}:00Z`
+                      ? toUtcIsoInput(values.utc)
                       : key === "isoUtc"
                         ? values.isoUtc
                         : key === "isoLocal"
@@ -91,6 +100,7 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                     <DateTimeInput
                         locale={locale}
                         value={values[key]}
+                        placeholder={dateTime ? "YYYY-MM-DDTHH:mm:ss.SSS" : undefined}
                         onValueChange={(value) =>
                             setValues((current) => ({ ...current, [key]: value }))
                         }

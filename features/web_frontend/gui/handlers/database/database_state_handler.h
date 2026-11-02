@@ -11,6 +11,7 @@ class SQLiteFileAccess;
 class DatabaseStateHandler
 {
 public:
+    ~DatabaseStateHandler();
     [[nodiscard]] bool connected() const;
     [[nodiscard]] const QVariantMap &connection() const;
     [[nodiscard]] QString selectedFilePath() const;
@@ -27,6 +28,7 @@ private:
     QVariantMap connection_;
     QString selected_file_path_;
     std::shared_ptr<SQLiteFileAccess> file_access_;
+    std::shared_ptr<SQLiteFileAccess> connection_file_access_;
 };
 
 #endif // DATABASE_STATE_HANDLER_H
