@@ -24,6 +24,8 @@ directory docs/ja/articles/ and does not modify it.
 - [pr-intake.md](pr-intake.md): open and merged PRs and the M0 base.
 - [execution-log.md](execution-log.md): commands and outcomes for this audit,
   historic estimates clearly separated from measurements, and follow-up work.
+- [qt-webview-feasibility.md](qt-webview-feasibility.md): PR #142 baseline,
+  operation mapping, and the Qt WebView G0 result recorded on 2026-11-02.
 
 ## Migration progress
 
