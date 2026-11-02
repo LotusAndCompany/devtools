@@ -367,21 +367,22 @@ bool WKWebViewAdapter::extractFrontendBundle()
     if (!QDir().mkpath(assetDirectory)) {
         return false;
     }
-    const QList<QPair<QString, QString>> files = {
-        {QStringLiteral(":/frontend/index.html"),
-         QDir(bundle_directory_->path()).filePath(QStringLiteral("index.html"))},
-        {QStringLiteral(":/frontend/assets/app.js"),
-         QDir(assetDirectory).filePath(QStringLiteral("app.js"))},
-        {QStringLiteral(":/frontend/assets/style.css"),
-         QDir(assetDirectory).filePath(QStringLiteral("style.css"))},
-    };
-    for (const auto &[resourcePath, outputPath] : files) {
+    const auto copyResource = [](const QString &resourcePath, const QString &outputPath) {
         QFile::remove(outputPath);
         if (!QFile::copy(resourcePath, outputPath)) {
             qWarning() << "Could not extract frontend resource" << resourcePath;
             return false;
         }
         QFile::setPermissions(outputPath, QFileDevice::ReadOwner);
+        return true;
+    };
+    if (!copyResource(QStringLiteral(":/frontend/index.html"),
+                      QDir(bundle_directory_->path()).filePath(QStringLiteral("index.html"))) ||
+        !copyResource(QStringLiteral(":/frontend/assets/app.js"),
+                      QDir(assetDirectory).filePath(QStringLiteral("app.js"))) ||
+        !copyResource(QStringLiteral(":/frontend/assets/style.css"),
+                      QDir(assetDirectory).filePath(QStringLiteral("style.css")))) {
+        return false;
     }
     index_file_path_ = QDir(bundle_directory_->path()).filePath(QStringLiteral("index.html"));
 
