@@ -2,7 +2,7 @@
 
 #include "features/db_tool/core/database_connection.h"
 #include "features/db_tool/core/query_service.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 #include <QMetaType>
 #include <QSqlDatabase>

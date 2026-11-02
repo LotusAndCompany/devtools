@@ -48,24 +48,24 @@ target_sources(DevTools_web_frontend PRIVATE
     gui/bridge/operation_runtime.cpp
     gui/bridge/request_validation.cpp
     gui/bridge/tool_operation_handler.cpp
-    gui/handlers/database_state_handler.h gui/handlers/database_state_handler.cpp
-    gui/handlers/database_operation_handler.cpp
-    gui/handlers/image_state_handler.h gui/handlers/image_state_handler.cpp
-    gui/handlers/image_operation_handler.cpp
-    gui/handlers/native_settings_handler.cpp
-    gui/handlers/text_file_handler.cpp
+    gui/handlers/database/database_state_handler.h gui/handlers/database/database_state_handler.cpp
+    gui/handlers/database/database_operation_handler.cpp
+    gui/handlers/image/image_state_handler.h gui/handlers/image/image_state_handler.cpp
+    gui/handlers/image/image_operation_handler.cpp
+    gui/handlers/settings/native_settings_handler.cpp
+    gui/handlers/files/text_file_handler.cpp
     gui/qt_webengine_adapter.h gui/qt_webengine_adapter.cpp
-    core/operations/command_operations.h core/operations/command_operations.cpp
-    core/operations/data_operations.h core/operations/data_operations.cpp
-    core/operations/database_operations.h core/operations/database_operations.cpp
-    core/operations/diff_operations.h core/operations/diff_operations.cpp
-    core/operations/frontend_operation_service.h core/operations/frontend_operation_service.cpp
-    core/operations/http_operations.h core/operations/http_operations.cpp
-    core/operations/markdown_operations.h core/operations/markdown_operations.cpp
-    core/operations/operation_support.h
-    core/operations/phrase_operations.h core/operations/phrase_operations.cpp
-    core/operations/qr_operations.h core/operations/qr_operations.cpp
-    core/operations/regex_operations.h core/operations/regex_operations.cpp
+    gui/bridge/operations/command/command_operations.h gui/bridge/operations/command/command_operations.cpp
+    gui/bridge/operations/data/data_operations.h gui/bridge/operations/data/data_operations.cpp
+    gui/bridge/operations/database/database_operations.h gui/bridge/operations/database/database_operations.cpp
+    gui/bridge/operations/diff/diff_operations.h gui/bridge/operations/diff/diff_operations.cpp
+    gui/bridge/operations/frontend_operation_service.h gui/bridge/operations/frontend_operation_service.cpp
+    gui/bridge/operations/http/http_operations.h gui/bridge/operations/http/http_operations.cpp
+    gui/bridge/operations/markdown/markdown_operations.h gui/bridge/operations/markdown/markdown_operations.cpp
+    gui/bridge/operations/operation_support.h
+    gui/bridge/operations/phrase/phrase_operations.h gui/bridge/operations/phrase/phrase_operations.cpp
+    gui/bridge/operations/qr/qr_operations.h gui/bridge/operations/qr/qr_operations.cpp
+    gui/bridge/operations/regex/regex_operations.h gui/bridge/operations/regex/regex_operations.cpp
     resources/frontend.qrc
 )
 target_include_directories(DevTools_web_frontend PRIVATE ${CMAKE_BINARY_DIR})

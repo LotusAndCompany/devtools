@@ -1,7 +1,7 @@
 #ifndef FRONTEND_REGEX_OPERATIONS_H
 #define FRONTEND_REGEX_OPERATIONS_H
 
-#include "frontend_operation_service.h"
+#include "features/web_frontend/gui/bridge/operations/frontend_operation_service.h"
 
 namespace FrontendOperationHandlers {
 FrontendOperationService::Result evaluateRegex(

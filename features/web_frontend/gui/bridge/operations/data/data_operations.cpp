@@ -2,7 +2,7 @@
 
 #include "features/data_conversion/core/data_conversion.h"
 #include "features/timestamp_conversion/core/timestamp_conversion.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 #include <QMetaType>
 #include <QVariantList>

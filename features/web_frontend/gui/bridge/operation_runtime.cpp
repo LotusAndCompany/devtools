@@ -1,4 +1,4 @@
-#include "features/web_frontend/gui/handlers/image_state_handler.h"
+#include "features/web_frontend/gui/handlers/image/image_state_handler.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
 #include <QFileDialog>

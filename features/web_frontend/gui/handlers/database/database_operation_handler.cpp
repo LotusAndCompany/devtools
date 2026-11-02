@@ -1,6 +1,6 @@
 #include "features/db_tool/core/connection_history.h"
-#include "features/web_frontend/core/operations/frontend_operation_service.h"
-#include "features/web_frontend/gui/handlers/database_state_handler.h"
+#include "features/web_frontend/gui/bridge/operations/frontend_operation_service.h"
+#include "features/web_frontend/gui/handlers/database/database_state_handler.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
 #include <QFileDialog>

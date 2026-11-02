@@ -1,8 +1,8 @@
 #include "features/data_conversion/core/emitter/json_emitter.h"
 #include "features/data_conversion/core/parser/json_parser.h"
 #include "features/qr_code/core/qr_image.h"
-#include "features/web_frontend/core/operations/frontend_operation_service.h"
 #include "features/web_frontend/gui/bridge/bridge_io.h"
+#include "features/web_frontend/gui/bridge/operations/frontend_operation_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
 #include <QFileDialog>

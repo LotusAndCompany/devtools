@@ -1,7 +1,7 @@
 #include "markdown_operations.h"
 
 #include "features/markdown_preview/core/markdown_service.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 using FrontendOperationSupport::invalidInput;
 using FrontendOperationSupport::readText;

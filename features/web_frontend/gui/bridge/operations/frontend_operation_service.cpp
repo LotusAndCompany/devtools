@@ -1,15 +1,15 @@
 #include "frontend_operation_service.h"
 
-#include "command_operations.h"
-#include "data_operations.h"
-#include "database_operations.h"
-#include "diff_operations.h"
-#include "http_operations.h"
-#include "markdown_operations.h"
-#include "operation_support.h"
-#include "phrase_operations.h"
-#include "qr_operations.h"
-#include "regex_operations.h"
+#include "features/web_frontend/gui/bridge/operations/command/command_operations.h"
+#include "features/web_frontend/gui/bridge/operations/data/data_operations.h"
+#include "features/web_frontend/gui/bridge/operations/database/database_operations.h"
+#include "features/web_frontend/gui/bridge/operations/diff/diff_operations.h"
+#include "features/web_frontend/gui/bridge/operations/http/http_operations.h"
+#include "features/web_frontend/gui/bridge/operations/markdown/markdown_operations.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/phrase/phrase_operations.h"
+#include "features/web_frontend/gui/bridge/operations/qr/qr_operations.h"
+#include "features/web_frontend/gui/bridge/operations/regex/regex_operations.h"
 
 using FrontendOperationSupport::invalidInput;
 

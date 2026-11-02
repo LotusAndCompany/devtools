@@ -2,7 +2,7 @@
 
 #include "features/phrase_generation/core/template_reader.h"
 #include "features/phrase_generation/core/template_repository.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 #include <QMetaType>
 #include <QRegularExpression>

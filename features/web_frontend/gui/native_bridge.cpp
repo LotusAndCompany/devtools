@@ -1,8 +1,8 @@
 #include "native_bridge.h"
 
 #include "features/web_frontend/gui/bridge/operation_registry.h"
-#include "features/web_frontend/gui/handlers/database_state_handler.h"
-#include "features/web_frontend/gui/handlers/image_state_handler.h"
+#include "features/web_frontend/gui/handlers/database/database_state_handler.h"
+#include "features/web_frontend/gui/handlers/image/image_state_handler.h"
 
 #include <QFileDialog>
 

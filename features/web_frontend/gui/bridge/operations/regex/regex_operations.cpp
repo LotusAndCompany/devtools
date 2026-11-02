@@ -1,7 +1,7 @@
 #include "regex_operations.h"
 
 #include "features/regex_tool/core/regex_tool.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 #include <QMetaType>
 #include <QRegularExpression>

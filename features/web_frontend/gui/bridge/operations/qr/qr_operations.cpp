@@ -3,7 +3,7 @@
 #include "features/qr_code/core/content_generator.h"
 #include "features/qr_code/core/qr_image.h"
 #include "features/qr_code/core/qr_validation.h"
-#include "operation_support.h"
+#include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
 #include <QBuffer>
 #include <QDateTime>
