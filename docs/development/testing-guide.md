@@ -6,9 +6,9 @@ This guide explains how to write and run tests for DevTools.
 
 DevTools uses Qt Test for C++ services and native bridge integration, and
 Vitest with Testing Library for React behavior. Tests cover feature processing,
-the Qt WebEngine bridge, and screen interactions. C++ test cases are methods on
+the platform web host bridge, and screen interactions. C++ test cases are methods on
 a `QObject` test class. `QTEST_GUILESS_MAIN` starts a `QCoreApplication` for
-service tests; Qt WebEngine integration tests use a GUI application.
+service tests; web-host integration tests use a GUI application.
 
 ## Test Structure
 
@@ -107,14 +107,16 @@ QTEST_GUILESS_MAIN(TestMyClass)
 #include "test_my_class.moc"
 ```
 
-### React UI and Qt WebEngine Coverage
+### React UI and Web Host Coverage
 
 React tests should cover observable screen behavior: editing inputs, invoking
 actions, validation, empty states, and rendered results. Keep them beside the
 feature or shared component they exercise.
 
-`features/web_frontend/tests/test_qt_webengine_frontend.cpp` covers the bundled
-React app and the WebEngine/native bridge boundary. Extend it when changing
+`features/web_frontend/tests/test_wkwebview_frontend.cpp` covers the macOS
+bundle and WKWebView bridge. Non-macOS builds use
+`test_qt_webengine_frontend.cpp` for the Qt WebEngine host. Extend the matching
+integration test when changing
 route loading, bridge operations, native file handling, or integration behavior.
 For a UI-wide change, manually open the registered tools and check relevant
 empty/error/result states, window resizing, light and dark themes, and English
@@ -221,12 +223,12 @@ QTEST_GUILESS_MAIN(TestJsonParser)
 #include "test_json_parser.moc"
 ```
 
-### Qt WebEngine Integration Tests
+### Web Host Integration Tests
 
-Use `QTEST_MAIN` for tests that create the Qt WebEngine host or native dialogs.
+Use `QTEST_MAIN` for tests that create the platform web host or native dialogs.
 Keep these tests focused on host and bridge integration; feature presentation is
 tested through React. A headless test environment may require
-`QT_QPA_PLATFORM=offscreen` and the Qt WebEngine runtime setup.
+`QT_QPA_PLATFORM=offscreen` and the runtime setup required by the platform web host.
 
 ## Registering Tests
 
@@ -399,9 +401,9 @@ locally with the command above.
 
 ### Qt Tests Crash
 
-1. Use `QTEST_MAIN` for Qt WebEngine integration and `QTEST_GUILESS_MAIN` for service tests
+1. Use `QTEST_MAIN` for web-host integration and `QTEST_GUILESS_MAIN` for service tests
 2. Set `QT_QPA_PLATFORM=offscreen` when no display is available
-3. Check for missing Qt WebEngine runtime files and Qt plugins
+3. Check for missing platform web-host runtime files and Qt plugins
 
 ### Flaky Tests
 

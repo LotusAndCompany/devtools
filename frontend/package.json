@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:wkwebview": "VITE_DEVTOOLS_HOST=wkwebview vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "format": "oxfmt .",

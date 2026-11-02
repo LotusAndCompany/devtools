@@ -1,15 +1,16 @@
 # System Architecture
 
-DevTools is a C++17 macOS application with a React frontend hosted by Qt
-WebEngine. React owns all feature screens. The Qt host owns the native window,
-menus, OS dialogs, clipboard integration, file drops, and the bridge to C++
-processing services.
+DevTools is a C++17 macOS application with a React frontend hosted by Apple's
+WKWebView inside Qt Widgets. React owns all feature screens. The Qt host owns
+the native window, menus, OS dialogs, clipboard integration, file drops, and
+the bridge to C++ processing services. Non-macOS builds continue to use Qt
+WebEngine.
 
 ## Technology Stack
 
 | Component | Technology |
 |-----------|------------|
-| Native host and processing | C++17, Qt 6.9+ |
+| Native host and processing | C++17, Qt 6.12.0+ |
 | Feature screens | React, TypeScript, shadcn components |
 | Web assets | Vite, Bun 1.3.14 |
 | Build system | CMake 3.21.1+ |
@@ -23,11 +24,11 @@ devtools/
 │   ├── app/                    React shell, navigation, tool registry
 │   ├── features/{feature}/     React tool screens
 │   ├── shared/                 Shared UI, bridge contracts, helpers
-│   └── platform/qt/            Qt WebChannel adapter
+│   └── platform/               WKWebView and Qt WebEngine adapters
 ├── features/
 │   ├── framework/core/         Settings, file selection, app services
 │   ├── framework/gui/          QApplication and native MainWindow
-│   ├── web_frontend/           WebEngine host, bridge, native handlers
+│   ├── web_frontend/           WKWebView/WebEngine hosts, bridge, handlers
 │   └── {feature}/core/         C++ processing services
 ├── res/                        Qt resources, themes, translations
 ├── tests/                      Shared C++ test helpers
@@ -36,16 +37,16 @@ devtools/
 
 Feature modules contain reusable processing code and tests. They do not
 contain Qt Widgets screens. Qt Widgets remains in the host for native window
-and platform integration; `features/web_frontend/` contains native dialogs and
-the WebEngine bridge required by the React UI.
+and platform integration; `features/web_frontend/` contains the platform web
+host, bridge, and native dialogs required by the React UI.
 
 ## Module Architecture
 
 ```mermaid
 flowchart TD
     app["DevTools executable"] --> host["Qt application host"]
-    host --> webengine["Qt WebEngine + WebChannel"]
-    webengine --> react["React screens<br/>frontend/src/"]
+    host --> hostview["macOS: WKWebView<br/>Other: Qt WebEngine + WebChannel"]
+    hostview --> react["React screens<br/>frontend/src/"]
     react --> bridge["NativeBridge"]
     bridge --> handlers["Native operation handlers"]
     handlers --> services["C++ feature services"]
@@ -60,21 +61,21 @@ flowchart TD
 | Feature libraries | C++ processing services used by bridge operations |
 | `DevTools_web_frontend` | React asset hosting, bridge validation, native dialogs, and operation dispatch |
 
-The WebEngine bridge validates operation names and payloads before calling
-feature services. File paths and OS-specific resources stay in the native
-process. The frontend receives typed operation results and never calls
-Qt WebChannel directly from feature screens.
+The native bridge validates operation names and payloads before calling feature
+services. macOS uses a WKWebView message adapter; other platforms use Qt
+WebChannel. File paths and OS-specific resources stay in the native process.
+Feature screens use the typed operation interface, not host APIs directly.
 
 ## Feature Boundaries
 
 - **React feature screen**: owns presentation, input state, accessibility, and
   user interaction for one tool.
 - **C++ feature service**: owns reusable processing and domain behavior. Keep
-  platform dialogs and WebEngine APIs out of feature services.
+  platform dialogs and web-host APIs out of feature services.
 - **Native operation handler**: validates the bridge request, coordinates
   native resources, and calls the appropriate C++ service.
 - **Qt host**: owns application lifecycle, window behavior, OS integration,
-  and the WebEngine security boundary.
+  and the platform web-host security boundary.
 
 When a tool needs native work, register a typed operation in
 `frontend/src/shared/bridge/types.ts`, implement it under
@@ -99,8 +100,7 @@ target_sources(DevTools_your_feature PRIVATE
 ```
 
 Link only the Qt modules required by the service. `DevTools_web_frontend` links
-the feature libraries and the Qt Widgets/WebEngine modules used by native
-integration.
+the feature libraries and platform-specific web host frameworks/modules.
 
 ## Data Flow: Image Processing
 
@@ -126,7 +126,9 @@ image data and operation results through the typed bridge contract.
 
 | Dependency | Purpose |
 |------------|---------|
-| Qt 6 Core, Gui, Widgets, Network, Sql, WebChannel, WebEngine | Native host and feature services |
+| Qt 6 Core, Gui, Widgets, Network, Sql | Native host and feature services |
+| Qt WebChannel, WebEngine | Web host on non-macOS platforms |
+| Apple AppKit, WebKit | WKWebView host on macOS |
 | qlementine | Theme and style for native Qt host widgets |
 | toml11, yaml-cpp | Data conversion |
 | qrcodegen | QR code generation |

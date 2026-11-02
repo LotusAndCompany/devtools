@@ -2,7 +2,7 @@
 
 Every tool screen is implemented in React and registered in the React tool
 registry. C++ feature modules provide reusable processing services; the Qt host
-provides native integration through the WebEngine bridge. Do not add a
+provides native integration through its platform web bridge. Do not add a
 per-feature Qt Widgets screen.
 
 ## React Tool Workflow
@@ -30,7 +30,7 @@ For native work, add the input and output to `OperationContracts` in
 processing in `features/{feature}/core/` and list new service sources in that
 feature's `CMakeLists.txt`.
 
-Keep OS dialogs, clipboard access, file paths, and Qt WebChannel calls in the
+Keep OS dialogs, clipboard access, file paths, and platform bridge calls in the
 native host and bridge layers. React features use the typed operation runner;
 they do not call Qt APIs directly. Update the bridge contract version only when
 the wire contract changes.
@@ -38,8 +38,8 @@ the wire contract changes.
 ### 4. Add coverage
 
 Keep React interaction tests beside the feature. Add a C++ service test when
-processing behavior changes, and a bridge or Qt WebEngine integration test when
-native request handling changes. See the [Testing Guide](testing-guide.md).
+processing behavior changes, and a bridge or platform web-host integration test
+when native request handling changes. See the [Testing Guide](testing-guide.md).
 
 ### 5. Run the checks
 
@@ -65,7 +65,7 @@ cmake --build build --parallel
 
 Create a `core/` directory for processing logic and a `tests/` directory for
 focused service tests. Do not create a `gui/` directory for feature screens.
-Services should not depend on Qt Widgets or the WebEngine bridge. Keep platform
+Services should not depend on Qt Widgets or the platform web-host bridge. Keep platform
 dialogs and user-facing state in the native handler.
 
 Register the static target in the root `CMakeLists.txt`:

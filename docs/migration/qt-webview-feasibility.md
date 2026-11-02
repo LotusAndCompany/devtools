@@ -1,32 +1,44 @@
 # PR #142 Qt WebView feasibility
 
 This record follows the Qt WebView migration design supplied for PR #142. It
-distinguishes verified repository state from SDK and macOS runtime checks that
-have not been performed.
+preserves the G0 result for the standard Qt WebView API and records the selected
+macOS WKWebView adapter separately. Updated 2026-11-02.
 
 ## Decision
 
-**G0 is blocked. Keep Qt WebEngine as the current host and do not start the
-Qt WebView host replacement.** The installed SDK cannot compile the C++ QWebView
-API. Qt WebView's older QML API is installed, but its public surface also lacks
-the application-owned pre-navigation allowlist required by the current host.
-Original-file drag-and-drop remains unverified on either WebView surface.
+The standard Qt `QWebView` route remains blocked at G0: its inspected public API
+does not expose the pre-navigation policy needed to preserve the current host's
+allowlist. The user selected the alternative **Qt host with a direct adapter
+over public Apple WKWebView APIs**. On macOS, `WKWebView` is hosted inside the
+Qt Widgets window using Qt's foreign-window container; Linux keeps its existing
+Qt WebEngine host.
 
-This is a gate result for the proposed Qt WebView path. It does not mark the
-separate Tauri migration milestone or this task as complete.
+This is an experimental host implementation, not adoption of the standard Qt
+WebView module. The project minimum and CI pin now match Qt 6.12.0. The adapter
+uses Qt's public native-window hosting API and does not use `QWebView`. Qt 6.12.0
+is installed locally; the selected-SDK build and test results are recorded in
+the verification table below. This does not establish release readiness.
+
+The WKWebView integration test verifies frontend startup, Bridge v2 requests
+and responses, all 11 tool routes, Markdown `srcdoc` rendering, rejection of an
+external top-level navigation, and the C++ file-path routing used by image and
+SQLite drops. The user manually confirmed that Finder-originated image and
+SQLite file drops both work in the Qt 6.12.0 WKWebView app.
 
 ## Baseline
 
 | Item | Verified state |
 |---|---|
 | Repository branch | feature/issue-133-134-react-ui |
-| Checked-out commit | 58ea590979cab3c25d3e23aff57a3a29c028260e |
-| PR #142 | Open and unmerged; GitHub head matches the checked-out commit |
+| Checked-out commit | `986b439effc338c386c9ab763f50b35a77bbea08` |
+| PR #142 | Open and unmerged; published head is `58ea590979cab3c25d3e23aff57a3a29c028260e`; this checkout has four later local commits and uncommitted changes |
 | Business contract | Bridge v2 |
 | Frontend tools | 11 registered React tool screens |
 | Contract coverage | 31 TypeScript operations and 31 C++ registry entries; names match exactly |
-| Current host | QtWebEngineAdapter, QWebChannel, QWebEnginePage, request interceptor |
-| Current drop path | MainWindow and WebEngine child-widget handlers pass original image/SQLite paths to C++ |
+| Current macOS host | `WKWebViewAdapter`, hosted in the Qt Widgets window with `QWindow::fromWinId`; native bridge messages are validated by `NativeBridge` |
+| Other platform host | `QtWebEngineAdapter`, `QWebChannel`, `QWebEnginePage`, and a request interceptor |
+| macOS drop path | AppKit file-URL drag handling on the WKWebView subclass validates image/SQLite paths and passes the original paths to C++; the user confirmed both Finder drops work |
+| Other platform drop path | Qt/WebEngine drop handlers route the original image/SQLite paths to C++ |
 
 The screen-to-operation and retained-behavior inventory is in
 [M3 React UI migration](m3-react-ui.md). The contract and registry are
@@ -58,39 +70,48 @@ path nor image drop sends a local file path to React.
 
 | Gate check | Result | Evidence |
 |---|---|---|
-| Compile QWebView with Widgets | Not run: no Qt 6.11 SDK is installed | qmake selects Homebrew Qt 6.9.2; the separate Qt SDK is 6.9.3. Neither installation has the public C++ QWebView header. Qt documents the C++ class as available since Qt 6.11. The QtWebView QML plugin is installed in Homebrew Qt 6.9.2. |
-| JavaScript result callback | QML API confirmed, C++ QWebView compile unverified | The Qt 6.9 QML WebView API and Qt 6.11.2 public C++ header both declare runJavaScript result callbacks. |
-| Native macOS backend | Runtime unverified | Qt documents that macOS uses the system web view. The installed SDK has a Darwin QtWebView plugin, but the QWebView C++ host could not be built or run. |
-| Pre-navigation rejection | **Fails the required public-API gate** | The public QWebView header exposes urlChanged and loadingChanged, but no navigation-policy hook. The Qt 6.9 QML WebView type exposes urlChanged/loadingChanged but no navigationRequested signal; the installed plugins.qmltypes metadata agrees. The Qt 6.11.2 Darwin delegate allows schemes handled by WKWebView and opens unhandled schemes through NSWorkspace; target=_blank is sent to that external path. Observing urlChanged and then stopping is after the navigation decision. |
-| Original-file image and SQLite drop | Not verified | Qt states that WebView events are not guaranteed to propagate into Qt's event-delivery system. QWidget::createWindowContainer embeds a native child window; the existing parent-widget filters therefore cannot be assumed to receive WKWebView drops. A real Finder drop test is still required. |
+| Compile QWebView with Widgets | Not run; this route was not selected | Qt 6.12.0 is installed, but the direct WKWebView adapter is the selected host. The Qt 6.12.0 public C++ reference still exposes no navigation-policy hook, so compiling the class would not clear G0. |
+| JavaScript result callback | Present in the QWebView API; not used by the selected host | The Qt 6.12.0 public C++ reference declares `runJavaScript` with a result callback. |
+| Native backend for standard Qt `QWebView` | Not run; not selected | The active macOS host is the direct WKWebView adapter. Its runtime is covered separately in the current verification table. |
+| Pre-navigation rejection | **Fails the required public-API gate** | The Qt 6.12.0 QWebView reference lists `urlChanged` and `loadingChanged`, but no navigation-policy hook. Observing `urlChanged` and then stopping is after the navigation decision. |
+| Original-file image and SQLite drops through standard Qt `QWebView` | Not applicable to the selected route | The user manually verified Finder-originated image and SQLite drops in the Qt 6.12.0 app using the direct WKWebView adapter; the result is recorded below. |
 
-The API evidence is from Qt's [QWebView class reference](https://doc.qt.io/qt-6/qwebview.html),
+The API evidence is from Qt's [Qt 6.12.0 QWebView reference](https://doc.qt.io/qt-6.12/qwebview.html),
 [Qt 6.9 QML WebView reference](https://doc.qt.io/qt-6.9/qml-qtwebview-webview.html),
 [Qt WebView platform overview](https://doc.qt.io/qt-6/qtwebview-index.html),
 [Qt 6.11.2 public QWebView header](https://raw.githubusercontent.com/qt/qtwebview/v6.11.2/src/webview/qwebview.h),
 [Qt 6.11.2 Darwin backend](https://raw.githubusercontent.com/qt/qtwebview/v6.11.2/src/plugins/darwin/qdarwinwebview.mm),
 and [QWidget::createWindowContainer](https://doc.qt.io/qt-6/qwidget.html#createWindowContainer).
 
-The navigation result is a design blocker independent of the missing SDK:
-the inspected standard public API/backend cannot preserve the existing
-top-level document allowlist. No Qt private API, source fork, or alternate
-WKWebView host has been adopted.
+The navigation result is a design blocker for the standard Qt WebView API,
+independent of the missing SDK. The selected direct WKWebView adapter installs
+its own public `WKNavigationDelegate` and rejects non-allowlisted main-frame
+navigation before it proceeds. This is a distinct architecture with Apple
+framework dependencies; it does not clear the standard Qt WebView gate.
 
 ## Current verification baseline
 
 | Check | Result |
 |---|---|
-| Frontend unit tests | bun run test: 21 tests passed in 9 files |
-| Frontend production build | bun run build: passed; Vite reports a 676.70 kB JavaScript chunk above its 500 kB warning threshold |
-| Native CTest suite | 38 of 38 passed |
-| Qt WebEngine frontend test | test_qt_webengine_frontend passed, including all 11 tool routes, settings/about dialogs, QR date selection, phrase discard, data conversion, database operations, and both file-drop tests |
-| QWebView compile or runtime test | Not run; installed Qt is older than the C++ QWebView API |
-| Finder drag-and-drop, signed package, notarization | Not run |
+| Frontend checks | `bun run lint`, `bun run format:check`, `bun run typecheck`, and `bun run test` passed; Vitest reports 24 tests in 10 files |
+| WKWebView production assets | `VITE_DEVTOOLS_HOST=wkwebview bun run --bun build` passed; generated app JavaScript is 696.58 kB and triggers Vite's 500 kB advisory |
+| WKWebView frontend integration | `test_wkwebview_frontend` passed under Qt 6.12.0 in actual WKWebView, including all 11 tool routes, Markdown `srcdoc` rendering, external top-level navigation rejection, Bridge v2 request/event delivery, and C++ file-path routing |
+| Interactive macOS rendering | Launched the Qt 6.12.0 app executable and confirmed the React home screen, sidebar, and tool cards are visible |
+| Native build and CTest | Full Qt 6.12.0 build passed; all 38 CTest tests passed |
+| macOS app dependency scan | `otool -L` shows Qt 6.12.0 frameworks and Apple WebKit, with no Qt WebEngine or Qt WebChannel linkage; the app bundle contains no WebEngine helper or plugin |
+| Selected Qt 6.12.0 SDK build | Passed in `/private/tmp/devtools-pr142-qt6120-build` |
+| Standard Qt `QWebView` compile/runtime | Not run; the standard route is not selected |
+| Finder-originated image and SQLite drops | Verified manually by the user in the Qt 6.12.0 app |
+| Xcode Release build with build number 11 | Passed with Xcode 27.0 and Qt 6.12.0. The bundle reports marketing version 0.8.0 and build number 11. This is a local working-tree build, not a release-tag Archive. |
+| Xcode version accepted by App Store Connect | Not confirmed. Check the currently accepted Xcode version before creating the release Archive. |
+| Mac App Store signing and Archive validation | Not complete; distribution is on hold. The local `.app` build selected Apple Development and strict signature verification failed with `CSSMERR_TP_NOT_TRUSTED`. A later attempt reported no `Mac Installer Distribution` certificate/private key and an outstanding Program License Agreement. Apple distinguishes the app-signing identity (`Mac App Distribution`) from the installer-package identity (`Mac Installer Distribution`); no signed App Store `.pkg` or release Archive was produced. |
+| macdeployqt database plugins | The local `.app` bundle contains `libqsqlite.dylib` and `libqsqlmimer.dylib`; Mimer cannot load because `/usr/local/lib/libmimerapi.dylib` is missing. `QMYSQL` and `QPSQL` are absent, and `QPSQL`/ODBC were skipped as not App Store compliant. The user guide lists MySQL and PostgreSQL support, so a release package would not yet contain all documented database drivers. |
 
-The integration test had selectors and layout expectations from an earlier UI
-structure. They now target the current sidebar, component slots, dialogs, and
-calendar, and check that controls do not overlap while allowing responsive
-wrapping.
+The WK integration test creates the real embedded frontend and exercises the
+current sidebar routes and Markdown sandbox. It also verifies that the trusted
+host rejects an external main-frame navigation before loading it. File-drop
+tests cover path validation and routing after AppKit supplies file paths; they
+do not synthesize a Finder drag event.
 
 ## Engine-independent preparation
 
@@ -107,19 +128,43 @@ The shared-client preparation is implemented:
   frontend/src/platform/qt.
 - The operation-client tests now live beside the shared implementation.
 
-After this change, frontend lint, formatting, typecheck, production build, and
-all 21 Vitest tests pass. All 38 CTest tests pass, including
-test_native_bridge and the Qt WebEngine frontend test.
+The shared transport interface remains engine-independent. The selected WK
+adapter reuses the Bridge v2 operation contract and existing C++ `NativeBridge`;
+the WebEngine transport stays available to non-macOS builds. macOS frontend
+assets are emitted as a self-contained classic JavaScript bundle, extracted to
+a private temporary directory, and loaded with WKWebView's file read scope
+limited to that directory. The adapter uses a nonpersistent website data store,
+restricts top-level navigation to the packaged entry or fixed debug server,
+rejects popup creation, and accepts only the three existing Bridge message
+types from the trusted main frame.
 
-No Qt WebView host, asset packager, or transport has been added while G0 is
-unresolved.
+The current macOS build no longer links Qt WebEngine or Qt WebChannel. The
+non-macOS build still uses Qt WebEngine, as intended by the platform split.
+The adapter implements AppKit file URL drag handling on its WKWebView subclass.
+Its path validation and routing are covered in C++ tests, and the user confirmed
+that Finder-originated image and SQLite drops work. A cross-app Finder drag was
+also attempted through computer-use automation but did not deliver a drop
+event; the manual confirmation is the acceptance evidence. A clean app-bundle
+rebuild also confirmed that the old `QtWebEngineProcess.app` residue came from
+the previous bundle and is not copied into the new WKWebView bundle.
 
 ## Next work
 
-Formal host replacement requires a separate architecture decision because the
-standard Qt WebView path does not satisfy navigation policy. Options identified
-in the design are a maintained Qt patch/fork, a Qt-hosted adapter built on
-public Apple WKWebView APIs, or moving the host work directly to Tauri 2. Any
-choice must preserve the original-file drop behavior and be verified on macOS.
-Until that decision and a Qt 6.11 SDK are available, WebView host, bundle, and
-security implementation remain gated.
+The host migration findings are documented; the Mac App Store distribution
+work is explicitly on hold at the user's request. The current CMake/Xcode
+build path deploys an `.app` bundle with `macdeployqt`; it has not produced a
+release Archive or the signed `.pkg` used for Mac App Store submission. Apple's
+certificate guide distinguishes the identity that signs the app
+(`Mac App Distribution`) from the identity that signs its installer package
+(`Mac Installer Distribution`). The latest attempt reported that the Account
+Holder must accept the updated Program License Agreement and that no matching
+`Mac Installer Distribution` certificate/private key is available. This
+package-signing error does not by itself diagnose the app bundle's signing
+identity. See Apple's [certificate purposes](https://developer.apple.com/help/account/certificates/certificates-overview/)
+and [Mac packaging guidance](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution).
+The bundled database plugins also lack the documented MySQL/PostgreSQL drivers,
+so that packaging gap remains open.
+
+Keep the standard Qt WebView G0 result separate from the implemented direct
+WKWebView adapter. The published PR head and this checkout differ; do not treat
+the local host implementation as merged or release-ready.

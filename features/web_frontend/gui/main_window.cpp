@@ -5,7 +5,11 @@
 #include "features/framework/gui/gui_application.h"
 #include "features/image/core/image_processing_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
+#ifdef Q_OS_MACOS
+#include "features/web_frontend/gui/wk_webview_adapter.h"
+#else
 #include "features/web_frontend/gui/qt_webengine_adapter.h"
+#endif
 
 #include <QAction>
 #include <QApplication>
@@ -32,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setupMenuBar();
     retranslateUi();
     connect(menuBar(), &QMenuBar::triggered, this, &MainWindow::onActionTriggered);
-    connect(web_frontend_->nativeBridge(), &NativeBridge::languageChangeRequested, this,
+    connect(native_bridge_, &NativeBridge::languageChangeRequested, this,
             [](const QString &languageCode) { MainWindow::onLanguageChanged(languageCode); });
 
     const ApplicationSettings settings = ApplicationSettingsService().read();
@@ -50,7 +54,13 @@ void MainWindow::setupCentralWidget()
     auto *layout = new QHBoxLayout(central);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    web_frontend_ = new QtWebEngineAdapter(central);
+#ifdef Q_OS_MACOS
+    auto *host = new WKWebViewAdapter(central);
+#else
+    auto *host = new QtWebEngineAdapter(central);
+#endif
+    web_frontend_ = host;
+    native_bridge_ = host->nativeBridge();
     layout->addWidget(web_frontend_);
     setCentralWidget(central);
 }
@@ -99,9 +109,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::onActionTriggered(QAction *action)
 {
     if (action == action_about_) {
-        web_frontend_->nativeBridge()->navigateTo(QStringLiteral("about"));
+        native_bridge_->navigateTo(QStringLiteral("about"));
     } else if (action == action_settings_) {
-        web_frontend_->nativeBridge()->navigateTo(QStringLiteral("settings"));
+        native_bridge_->navigateTo(QStringLiteral("settings"));
     } else if (action == action_close_) {
         close();
     } else if (action == action_show_window_) {
@@ -134,7 +144,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     const QMimeData *const mimeData = event->mimeData();
     const QString databasePath = droppedSQLiteFilePath(mimeData);
     if (!databasePath.isEmpty()) {
-        web_frontend_->nativeBridge()->openDroppedSQLiteFile(databasePath);
+        native_bridge_->openDroppedSQLiteFile(databasePath);
         event->acceptProposedAction();
         return;
     }
@@ -143,7 +153,7 @@ void MainWindow::dropEvent(QDropEvent *event)
         QMainWindow::dropEvent(event);
         return;
     }
-    web_frontend_->nativeBridge()->openDroppedImageFile(imagePath);
+    native_bridge_->openDroppedImageFile(imagePath);
     event->acceptProposedAction();
 }
 

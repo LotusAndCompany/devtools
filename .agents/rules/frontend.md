@@ -11,7 +11,8 @@ paths:
 - Keep application startup, shell composition, navigation, and the tool registry in `src/app/`.
 - Keep each screen and its private components, hooks, styles, and tests in `src/features/<feature>/`.
 - Put reusable UI, contract types, and Effect helpers in `src/shared/` only when multiple features use them.
-- Keep Qt WebChannel and Qt-specific connection code in `src/platform/qt/`.
+- Keep platform host transports in `src/platform/qt/` and
+  `src/platform/wkwebview/`.
 - Preserve the dependency direction: `app -> features/platform -> shared`; features must not import other features.
 - Export feature APIs through its `index.ts`. Avoid importing another feature's implementation files.
 - Keep tool label, icon, native ID, component, and lifetime policy in `src/app/tool-registry.ts`.

@@ -12,8 +12,9 @@ This document describes how to build DevTools from source.
 ### Tools
 - **CMake**: 3.21.1 or later
 - **C++ Compiler**: C++17 compatible (Clang recommended)
-- **Qt**: 6.9+ (6.9.3 tested; Core, Gui, Widgets, LinguistTools, Sql, Network, Svg,
-  Concurrent, WebChannel, and WebEngineWidgets modules)
+- **Qt**: 6.12.0+ (CI pins 6.12.0). macOS uses Core, Gui, Widgets,
+  LinguistTools, Sql, Network, Svg, and Concurrent; non-macOS builds also use
+  WebChannel and WebEngineWidgets.
 - **vcpkg**: For dependency management
 - **Bun**: 1.3.14 (required to build the React frontend)
 
@@ -27,29 +28,34 @@ This document describes how to build DevTools from source.
 Qlementine is fetched during CMake configure from
 `https://github.com/oclero/qlementine.git`. It requires Qt 6.8+ and CMake 3.21+.
 DevTools links it into the Qt Widgets support library. The main application
-screen is React, bundled by Vite and hosted by Qt WebEngine.
+screen is React, bundled by Vite and hosted by Apple's WKWebView on macOS.
+Other platform builds use Qt WebEngine.
 
 ### Optional
 - **Doxygen**: 1.18+ (API documentation generation)
 - **GraphViz**: For class diagrams and dependency graphs in documentation (optional)
 - **Qt Creator**: 18.0.1+ (IDE with Qt integration)
 - **Ninja**: 1.12.1+ (Fast build tool)
-- **Qt Installer Framework**: 4.10 (Application packaging)
 
 ## Installation
 
 ### 1. Install Qt6
 
-#### Using Homebrew (recommended for macOS)
+#### Using Qt Online Installer (recommended)
+
+Download from [qt.io](https://www.qt.io/download) and install Qt 6.12.0 or later
+for macOS (`macos/clang_64`) with Core, Gui, Widgets, LinguistTools, Sql,
+Network, Svg, and Concurrent. Qt Creator is optional. The macOS build does not
+need Qt WebEngine, WebChannel, or Qt WebView.
+
+#### Using Homebrew
+
+The Homebrew Qt package can also be used if its installed version is 6.12.0 or
+later. Check the version before configuring the project.
+
 ```bash
 brew install qt@6
 ```
-
-#### Using Qt Online Installer
-Download from [qt.io](https://www.qt.io/download) and install Qt 6.9 or later with the following components:
-- Qt 6.9 or later for macOS
-- Core, Gui, Widgets, LinguistTools, Sql, Network, Svg, Concurrent, WebChannel, and WebEngineWidgets modules
-- Qt Creator (optional, but recommended)
 
 ### 2. Install vcpkg
 
@@ -94,16 +100,14 @@ vcpkg install
 ### Using CMake (Command Line)
 
 ```bash
-# Create build directory
-mkdir build && cd build
-
 # Configure. This installs vcpkg manifest dependencies and downloads qlementine.
-cmake .. \
+cmake -S . -B build \
+  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build
-cmake --build . --parallel
+cmake --build build --parallel
 ```
 
 ### Running DevTools
@@ -112,13 +116,13 @@ After building, launch the application:
 
 ```bash
 # Build and run with colored console output
-cmake --build . --target run
+cmake --build build --target run
 
 # Or run the binary directly
-./DevTools.app/Contents/MacOS/DevTools
+./build/DevTools.app/Contents/MacOS/DevTools
 
 # Or open the app bundle
-open DevTools.app
+open build/DevTools.app
 ```
 
 The `run` target replaces older DevTools processes from this source tree. If a
@@ -151,7 +155,8 @@ Qlementine's example applications are disabled in the project configuration
 
 Example with options:
 ```bash
-cmake .. \
+cmake -S . -B build \
+  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx \
   -DENABLE_UNIT_TEST=ON
@@ -161,13 +166,17 @@ cmake .. \
 
 ```bash
 # Enable tests first
-cmake .. -DENABLE_UNIT_TEST=ON
+cmake -S . -B build \
+  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
 
 # Build
-cmake --build . --parallel
+cmake --build build --parallel
 
 # Run tests
-ctest
+ctest --test-dir build --output-on-failure
 ```
 
 ## Generating Documentation
@@ -209,6 +218,7 @@ The generated documentation will be in `build/doxygen/html/`.
    ```bash
    rm -rf build
    cmake -S . -B build \
+     -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
@@ -226,16 +236,17 @@ The generated documentation will be in `build/doxygen/html/`.
    ./bootstrap-vcpkg.sh
    ```
 
-### Qt or Qt WebEngine Not Found
+### Qt 6.12.0 or a required Qt module not found
 
-1. **Set Qt6_DIR** environment variable:
+1. **Point `Qt6_DIR` at Qt 6.12.0 or later**. For the Qt Online Installer default:
    ```bash
-   export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   export Qt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
    ```
 2. **Or pass it to CMake**:
    ```bash
-   cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
+   cmake -S . -B build -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
    ```
+3. Non-macOS builds also require the Qt WebChannel and WebEngineWidgets modules.
 
 ### qlementine FetchContent Issues
 
@@ -249,4 +260,5 @@ If configuration fails while downloading qlementine:
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
-3. Verify that the active Qt installation is Qt 6.9 or later and includes the Svg module.
+3. Verify that the active Qt installation is Qt 6.12.0 or later and includes
+   the Svg module.

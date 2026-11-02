@@ -29,7 +29,7 @@ Yes, DevTools is open source under the Apache License 2.0. You can use, modify, 
 
 **For users**: No, the distributed application includes all necessary Qt libraries.
 
-**For developers**: Yes. You need Qt 6.9 or later, Bun 1.3.14 or later, and vcpkg to build from source.
+**For developers**: Yes. You need Qt 6.12.0 or later, Bun 1.3.14 or later, and vcpkg to build from source.
 
 ### How do I install vcpkg?
 

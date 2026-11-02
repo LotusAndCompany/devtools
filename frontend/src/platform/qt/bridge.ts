@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import { prepareBridgeValue } from "@/shared/bridge/contract";
-import type { NativeBridge } from "@/shared/bridge/native-bridge";
+import { BridgeConnectionError, type NativeBridge } from "@/shared/bridge/native-bridge";
 import {
   BRIDGE_CONTRACT_VERSION,
   type BridgeError,
@@ -24,14 +24,7 @@ export type {
   OperationRequest,
 } from "@/shared/bridge/types";
 
-export class BridgeConnectionError extends Error {
-  readonly _tag = "BridgeConnectionError";
-
-  constructor(message: string) {
-    super(message);
-    this.name = this._tag;
-  }
-}
+export { BridgeConnectionError };
 
 type QtSignal<Args extends unknown[]> = {
   connect: (handler: (...args: Args) => void) => void;

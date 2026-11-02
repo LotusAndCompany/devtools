@@ -22,14 +22,22 @@ file(GLOB_RECURSE FRONTEND_SOURCE_FILES CONFIGURE_DEPENDS
 )
 list(APPEND FRONTEND_INPUTS ${FRONTEND_SOURCE_FILES})
 
+set(FRONTEND_HOST_ENV)
+if(APPLE)
+    list(APPEND FRONTEND_HOST_ENV "VITE_DEVTOOLS_HOST=wkwebview")
+endif()
+
 add_custom_command(
     OUTPUT "${FRONTEND_DIST_DIR}/index.html"
            "${FRONTEND_DIST_DIR}/assets/app.js"
            "${FRONTEND_DIST_DIR}/assets/style.css"
     COMMAND "${BUN_EXECUTABLE}" install --frozen-lockfile
-    COMMAND "${BUN_EXECUTABLE}" run --bun build
+    COMMAND "${CMAKE_COMMAND}" -E env
+            ${FRONTEND_HOST_ENV}
+            "${BUN_EXECUTABLE}" run --bun build
     WORKING_DIRECTORY "${FRONTEND_DIR}"
     DEPENDS ${FRONTEND_INPUTS} "${FRONTEND_DIR}/bun.lock"
+            "${CMAKE_SOURCE_DIR}/res/dev-tools_logo.png"
     COMMENT "Building embedded React frontend"
     VERBATIM
 )
@@ -54,7 +62,6 @@ target_sources(DevTools_web_frontend PRIVATE
     gui/handlers/image/image_operation_handler.cpp
     gui/handlers/settings/native_settings_handler.cpp
     gui/handlers/files/text_file_handler.cpp
-    gui/qt_webengine_adapter.h gui/qt_webengine_adapter.cpp
     gui/bridge/operations/command/command_operations.h gui/bridge/operations/command/command_operations.cpp
     gui/bridge/operations/data/data_operations.h gui/bridge/operations/data/data_operations.cpp
     gui/bridge/operations/database/database_operations.h gui/bridge/operations/database/database_operations.cpp
@@ -68,6 +75,28 @@ target_sources(DevTools_web_frontend PRIVATE
     gui/bridge/operations/regex/regex_operations.h gui/bridge/operations/regex/regex_operations.cpp
     resources/frontend.qrc
 )
+
+if(APPLE)
+    target_sources(DevTools_web_frontend PRIVATE
+        gui/wk_webview_adapter.h gui/wk_webview_adapter.mm
+    )
+    set_source_files_properties(gui/wk_webview_adapter.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    set_target_properties(DevTools_web_frontend PROPERTIES
+        OBJCXX_STANDARD 17
+        OBJCXX_STANDARD_REQUIRED YES
+    )
+    find_library(DEVTOOLS_APPKIT_FRAMEWORK AppKit REQUIRED)
+    find_library(DEVTOOLS_WEBKIT_FRAMEWORK WebKit REQUIRED)
+    target_link_libraries(DevTools_web_frontend PUBLIC
+        "${DEVTOOLS_APPKIT_FRAMEWORK}"
+        "${DEVTOOLS_WEBKIT_FRAMEWORK}"
+    )
+else()
+    target_sources(DevTools_web_frontend PRIVATE
+        gui/qt_webengine_adapter.h gui/qt_webengine_adapter.cpp
+    )
+    target_link_libraries(DevTools_web_frontend PUBLIC Qt6::WebChannel Qt6::WebEngineWidgets)
+endif()
 target_include_directories(DevTools_web_frontend PRIVATE ${CMAKE_BINARY_DIR})
 add_dependencies(DevTools_web_frontend DevTools_app_info)
 add_dependencies(DevTools_web_frontend DevTools_frontend_assets)
@@ -90,6 +119,4 @@ target_link_libraries(DevTools_web_frontend PUBLIC
     Qt6::Network
     Qt6::Sql
     Qt6::Concurrent
-    Qt6::WebChannel
-    Qt6::WebEngineWidgets
 )

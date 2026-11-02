@@ -21,16 +21,3 @@ target_sources(DevTools_framework_gui PRIVATE
     gui/main_window.h
     gui/gui_application.h gui/gui_application.cpp
 )
-
-if(APPLE)
-    target_sources(DevTools_framework_gui PRIVATE
-        gui/mac_webengine_preferences.h
-        gui/mac_webengine_preferences.mm
-    )
-    set_target_properties(DevTools_framework_gui PROPERTIES
-        OBJCXX_STANDARD 17
-        OBJCXX_STANDARD_REQUIRED YES
-    )
-    find_library(DEVTOOLS_FOUNDATION_FRAMEWORK Foundation REQUIRED)
-    target_link_libraries(DevTools_framework_gui PRIVATE "${DEVTOOLS_FOUNDATION_FRAMEWORK}")
-endif()

@@ -6,7 +6,7 @@ This document lists common issues and their solutions.
 
 ### CMake Configuration Errors
 
-#### Qt Not Found
+#### Qt 6.12.0 or a required module not found
 
 **Error:**
 ```
@@ -15,19 +15,18 @@ Could not find a package configuration file provided by "Qt6"
 
 **Solution:**
 
-1. Install Qt6:
+Install Qt 6.12.0 or later. For the Qt Online Installer default, set `Qt6_DIR`
+and configure from the repository root:
    ```bash
-   brew install qt@6
-   ```
-
-2. Set Qt6_DIR:
-   ```bash
-   export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   cmake .. \
-     -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6 \
+   export Qt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
+   cmake -S . -B build \
+     -DQt6_DIR="$Qt6_DIR" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
+
+The macOS host uses WKWebView and does not need Qt WebEngine or WebChannel.
+Non-macOS builds also need Qt WebEngineWidgets and WebChannel.
 
 #### vcpkg Packages Not Found
 
@@ -50,7 +49,8 @@ Could not find a package configuration file provided by "yaml-cpp"
 
 3. Specify toolchain file:
    ```bash
-   cmake .. \
+   cmake -S . -B build \
+     -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```

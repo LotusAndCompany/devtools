@@ -174,12 +174,21 @@ DevTools_add_test(test_native_bridge CORE_ONLY
     res/application.qrc
 )
 target_link_libraries(test_native_bridge PRIVATE DevTools_web_frontend)
-DevTools_add_test(test_qt_webengine_frontend CORE_ONLY
-    SOURCES
-    features/web_frontend/tests/test_qt_webengine_frontend.cpp
-    res/application.qrc
-)
-target_link_libraries(test_qt_webengine_frontend PRIVATE DevTools_web_frontend)
+if(APPLE)
+    DevTools_add_test(test_wkwebview_frontend CORE_ONLY
+        SOURCES
+        features/web_frontend/tests/test_wkwebview_frontend.cpp
+        res/application.qrc
+    )
+    target_link_libraries(test_wkwebview_frontend PRIVATE DevTools_web_frontend)
+else()
+    DevTools_add_test(test_qt_webengine_frontend CORE_ONLY
+        SOURCES
+        features/web_frontend/tests/test_qt_webengine_frontend.cpp
+        res/application.qrc
+    )
+    target_link_libraries(test_qt_webengine_frontend PRIVATE DevTools_web_frontend)
+endif()
 # core/data_conversion
 DevTools_add_test(test_data_conversion CORE_ONLY
     SOURCES

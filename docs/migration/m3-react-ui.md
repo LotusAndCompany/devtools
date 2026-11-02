@@ -2,9 +2,17 @@
 
 M3 replaces the normal tool and settings screens with React while keeping
 feature processing in the existing C++ services. The Qt application remains
-the host for WebEngine, window lifecycle, native dialogs, clipboard, and
-SQLite or image file drag-and-drop. The app's regular navigation no longer
+the native window host. macOS displays React in Apple's WKWebView; non-macOS
+builds use Qt WebEngine. The platform adapter owns its web-host security and
+bridge transport, while Qt Widgets owns window lifecycle, native dialogs,
+clipboard, and platform integration. The app's regular navigation no longer
 opens a Qt Widgets tool screen.
+
+The 2026-10-29 WebEngine verification below is historical. Current macOS
+WKWebView implementation and Qt 6.12.0 results, including the user's manual
+confirmation of Finder image and SQLite drops, are recorded in
+[Qt WebView feasibility](qt-webview-feasibility.md). Mac App Store archive,
+signing, and upload work is on hold at the user's request.
 
 ## Screen and behavior mapping
 
@@ -41,22 +49,24 @@ names and payloads, keeps file paths in the native process, and performs file,
 network, database, image, and feature work. Request bodies, database results,
 image previews, regex matches, and individual inputs have explicit bounds in
 the native operation paths. Markdown HTML is isolated in a sandboxed iframe;
-the bundled page CSP and WebEngine request policy remain in force.
+the bundled page CSP and each host adapter's navigation/request policy remain
+in force.
 
 ## Native Qt Host Scope
 
 The post-migration cleanup removes feature-level Qt Widgets screens and their
 screen-specific helpers. React is the only implementation of tool and settings
-screens. The native `GuiApplication` and `MainWindow`, Qt WebEngine adapter,
-NativeBridge, OS dialogs, file-drop handling, and C++ feature services remain.
-The bundled Material Symbols font was removed because the native feature screens
+screens. The native `GuiApplication` and `MainWindow`, NativeBridge, OS dialogs,
+file-drop handling, and C++ feature services remain. CMake selects
+`WKWebViewAdapter` on macOS and `QtWebEngineAdapter` on non-macOS builds. The
+bundled Material Symbols font was removed because the native feature screens
 were its only consumer; React uses `lucide-react`.
 
 ## Verification record
 
 The following checks were recorded for the M3 source snapshot before native
-feature-screen cleanup (2026-10-29). They are historical results; the retired
-Qt Widgets screen tests are no longer part of the current test set.
+feature-screen cleanup (2026-10-29). They are historical Qt WebEngine results;
+the retired Qt Widgets screen tests are no longer part of the current test set.
 
 - `npm run typecheck` passed.
 - `npm test` passed (6 frontend contract tests).
@@ -79,12 +89,12 @@ Qt Widgets screen tests are no longer part of the current test set.
   interactive screenshot was captured; the Qt WebEngine integration test
   loaded the bundled UI, connected the bridge, and rendered all 11 tool routes.
 
-The project acceptance checklist also requires interactive Qt WebEngine
-coverage for all tools, keyboard and accessibility checks, data/edge-case
-equivalence (including large input, timezone/DST, TLS/proxy/redirect,
-transactions and cancellation), and a distributable-package launch. A passing
-frontend or C++ unit suite alone does not satisfy those checks. Record the
-remaining checks here before advancing M3 to verified.
+The project acceptance checklist requires interactive coverage on each
+supported host, keyboard and accessibility checks, data/edge-case equivalence
+(including large input, timezone/DST, TLS/proxy/redirect, transactions and
+cancellation), and a distributable-package launch. A passing frontend or C++
+unit suite alone does not satisfy those checks. Mac App Store archive, signing,
+and upload checks are currently deferred at the user's request.
 
 ## HMR during development
 
@@ -102,6 +112,10 @@ In another terminal, launch a Debug build with the loopback URL:
 DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
 ```
 
-Release builds ignore this variable and load the embedded `qrc:/frontend`
-assets. Stop the Vite server when development ends. See the security and
-resource details in [m2-react-webengine.md](m2-react-webengine.md).
+Release builds ignore this variable and use bundled frontend assets. The
+non-macOS Qt WebEngine host loads `qrc:/frontend` assets; the macOS WKWebView
+host extracts its self-contained bundle to a private temporary directory and
+loads it with a restricted file read scope. Stop the Vite server when
+development ends. See the historical WebEngine details in
+[m2-react-webengine.md](m2-react-webengine.md) and current WKWebView details in
+[qt-webview-feasibility.md](qt-webview-feasibility.md).

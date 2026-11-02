@@ -1,9 +1,18 @@
 # M2 React and Qt WebEngine foundation
 
+> **Historical implementation record:** the M2 and M3 prototypes used Qt
+> WebEngine/QWebChannel on macOS. The current host split (updated
+> 2026-11-02) uses Apple's WKWebView adapter on macOS and retains Qt WebEngine
+> for non-macOS builds. This document's contract-v1, QWebChannel security
+> details, package size, and process measurements describe the historical
+> WebEngine snapshot; the current bridge is v2. See
+> [Qt WebView feasibility](qt-webview-feasibility.md) for current host and
+> verification status.
+
 M2 adds an embedded React screen to the existing Qt Widgets application. The
 screen uses a versioned Qt WebChannel contract to call real C++ services. It
 does not replace the existing tools or move the application to another UI
-runtime.
+runtime. This opening describes the original M2 implementation.
 
 ## Stack and build
 
@@ -132,7 +141,7 @@ ctest --test-dir <build-dir> -R test_native_bridge --output-on-failure
 The application target also builds the frontend and embeds the resource
 assets.
 
-### Local verification (2026-10-28)
+### Historical local verification (2026-10-28)
 
 - `npm run typecheck`, `npm test` (6 tests), and `npm run build` passed. The
   frontend test suite includes a timed-out Qt WebChannel initialization case.
@@ -158,11 +167,10 @@ assets.
 | 42-byte JSON format click to completed accessibility state | 657 ms | One CUA end-to-end sample through the real C++ parser/emitter. M0's 25.2 ms synchronous `setValue` sample used a different interaction and is not directly comparable. |
 | React page process footprint | DevTools 345.7 MiB (peak 484.3 MiB); QtWebEngineProcess 55.3 MiB (peak 56.8 MiB) | One Debug/HMR session, sampled with `vmmap -summary` about four minutes after launch. M0 used Activity Monitor's Memory column, so these numbers are not directly comparable; no production idle or no-page sample was collected. |
 
-The WebEngine runtime adds a substantial macOS bundle footprint. Keep this
-measurement visible in the migration decision and collect a Release build,
-signed package, repeatable launch-to-accessibility distribution, and same-method
-idle / peak memory samples before making a final distribution or performance
-claim.
+The WebEngine runtime added a substantial macOS bundle footprint in this
+historical build. This measurement does not describe the current WKWebView
+bundle. A repeatable Release comparison and same-method idle/peak memory samples
+remain open before making a general distribution or performance claim.
 
 ### Sources
 

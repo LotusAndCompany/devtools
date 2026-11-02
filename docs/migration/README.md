@@ -39,13 +39,31 @@ must be used with evidence, and out-of-scope entries need a reason.
 | M-1: intake and base SHA | Verified for this snapshot | [pr-intake.md](pr-intake.md); original Issue #130 artifact was absent |
 | M0: current-state audit | Verified with explicit gaps | This document set; limited runtime and UI smoke evidence is recorded, with large-workload, OS-cold/warm launch, operation, and distribution gaps remaining |
 | M1: separate C++ UI and processing | Verified | [m1-final-verification.md](m1-final-verification.md); the complete 56-test suite and application build passed |
-| M2: React / Qt WebEngine foundation | Verified with explicit gaps | [m2-react-webengine.md](m2-react-webengine.md); production qrc smoke, HMR, real C++ operations, tests, and package / memory measurements are recorded; signed package launch and repeatable Release measurements remain open |
-| M3: move all UI to React | Implemented / unverified | [m3-react-ui.md](m3-react-ui.md); all 11 registered tool routes and shared navigation now use React, but full Qt WebEngine UI/E2E and distribution checks remain |
+| M2: React / native bridge foundation | Implemented on current checkout; not merged | [m2-react-webengine.md](m2-react-webengine.md) preserves the historical WebEngine measurements; [qt-webview-feasibility.md](qt-webview-feasibility.md) records the current platform split and Qt 6.12.0 evidence |
+| M3: move all UI to React | Implemented on current checkout; acceptance gaps remain | [m3-react-ui.md](m3-react-ui.md); all 11 registered routes use React, with host-specific security/integration checks and broader feature-equivalence/distribution work still open |
 | M4: test Tauri portability | Not started | Run the same UI and contract against a Tauri adapter |
 | M5: move feature processing to Rust or TypeScript | Not started | Compare behavior, errors, cancellation, and persisted data against this baseline |
 | M6: remove Qt and verify distribution | Not started | Validate clean install, migration, update, recovery, and uninstall |
 
 The parent issue requires a working app at each stage. A status must not be
 advanced based on a PR description, a mock-only test, or an unrun check.
-Unmerged PR features remain outside this baseline until their code is merged
-and this inventory is updated.
+The migration audit above remains anchored to its M0 snapshot. The following
+host update records later implementation evidence without rewriting that
+baseline.
+
+## Current host update (2026-11-02)
+
+- macOS uses a direct public-API WKWebView adapter inside the Qt Widgets host;
+  non-macOS builds retain the Qt WebEngine adapter.
+- The shared frontend uses NativeBridge contract v2. CMake selects the matching
+  native source, framework dependencies, frontend bundle mode, and integration
+  test for each host.
+- The Qt 6.12.0 build, 38-test CTest run, WKWebView integration test, and
+  interactive macOS launch passed. The user manually confirmed Finder drops
+  for an image and a SQLite database.
+- The published PR #142 head is older than the current local checkout. These
+  later changes are not merged; keep the GitHub milestone open until its PR
+  contains the current host split and is merged.
+- Mac App Store signing, Archive validation, and upload are on hold at the
+  user's request. This change produced no release Archive or `.pkg`; package
+  signing is separate from the app-bundle build.

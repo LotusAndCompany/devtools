@@ -1,11 +1,7 @@
 #include "gui_application.h"
 
 #include "features/framework/core/application_settings_service.h"
-#ifdef Q_OS_MACOS
-#include "mac_webengine_preferences.h"
-#endif
 
-#include <QApplicationStateChangeEvent>
 #include <QStyleHints>
 #include <QTranslator>
 #include <QWidget>
@@ -16,17 +12,6 @@ GuiApplication::GuiApplication(int &argc, char **argv)
     : QApplication(argc, argv), ApplicationMixin(AppType::GUI, argc, argv)
 {
     QCoreApplication::setApplicationName("DevTools");
-
-#ifdef Q_OS_MACOS
-    configureMacWebEngineScrolling();
-
-    /*
-    connect(this,
-            &QGuiApplication::applicationStateChanged,
-            this,
-            &GuiApplication::onApplicationStateChanged);
-    */
-#endif
 }
 
 void GuiApplication::setup()
@@ -173,21 +158,4 @@ bool GuiApplication::event(QEvent *event)
     }
 }
 
-// NOTE:
-// これでもDockからウィンドウを表示させる事はできるが、アプリケーション起動時にwindow.show()が2回呼ばれるかも?
-/*
-void GuiApplication::onApplicationStateChanged(Qt::ApplicationState state)
-{
-    qDebug() << "Application state changed";
-    switch (state) {
-    case Qt::ApplicationInactive:
-        window->hide();
-        break;
-    case Qt::ApplicationActive:
-        window->show();
-        break;
-    default:
-    }
-}
-*/
 #endif

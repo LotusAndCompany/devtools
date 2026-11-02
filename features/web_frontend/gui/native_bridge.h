@@ -17,7 +17,7 @@ class QWidget;
 class ImageStateHandler;
 
 /**
- * @brief Versioned, bounded WebChannel API for the React frontend.
+ * @brief Versioned, bounded native API for the React frontend host adapters.
  */
 class NativeBridge : public QObject
 {
@@ -33,6 +33,7 @@ public:
     explicit NativeBridge(QWidget *dialogParent, QObject *parent = nullptr);
     ~NativeBridge() override;
 
+    [[nodiscard]] QString contractVersion() const { return contract_version_; }
     Q_INVOKABLE void startOperation(const QVariantMap &request);
     Q_INVOKABLE void cancelOperation(const QString &requestId);
     Q_INVOKABLE void navigateTo(const QString &route);

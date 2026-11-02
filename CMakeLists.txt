@@ -13,7 +13,8 @@ endif()
 set(DevTools_VERSION_SUFFIX "")
 set(DevTools_BUILD_NUMBER "${PROJECT_VERSION}" CACHE STRING "App bundle build number")
 set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
-set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING "Apple code-signing identity")
+set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING
+    "Code-signing identity for the DevTools .app bundle and embedded Qt frameworks")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -26,10 +27,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
 
 # Qtのパッケージを探す
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 6.9 REQUIRED COMPONENTS
-    Core Widgets LinguistTools Sql Network Svg Concurrent WebChannel WebEngineWidgets
-)
+set(DEVTOOLS_QT_MIN_VERSION 6.12.0)
+if(APPLE)
+    find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
+        Core Widgets LinguistTools Sql Network Svg Concurrent
+    )
+else()
+    find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
+        Core Widgets LinguistTools Sql Network Svg Concurrent WebChannel WebEngineWidgets
+    )
+endif()
+set(QT_VERSION_MAJOR ${Qt6_VERSION_MAJOR})
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -80,7 +88,7 @@ add_custom_target(${PROJECT_NAME}_app_info
     COMMAND ${SH_FILE} "${CMAKE_PROJECT_VERSION}${DevTools_VERSION_SUFFIX}" "${OS_NAME}" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     # Project files
     # main
     qt_add_executable(${PROJECT_NAME}
@@ -354,6 +362,8 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
         list(APPEND MACDEPLOYQT_OPTIONS "-codesign=${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}")
     endif()
+    # This deploys Qt dependencies into the .app; it does not create the signed
+    # Mac App Store .pkg.
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND "${MACDEPLOYQT_EXECUTABLE}"
             "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" ${MACDEPLOYQT_OPTIONS}
@@ -376,29 +386,6 @@ else()
         WIN32_EXECUTABLE TRUE
     )
 
-    if(APPLE)
-        get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION_RELEASE)
-        if(NOT DEVTOOLS_QT_WEBENGINE_CORE)
-            get_target_property(DEVTOOLS_QT_WEBENGINE_CORE Qt6::WebEngineCore IMPORTED_LOCATION)
-        endif()
-        get_filename_component(DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR
-            "${DEVTOOLS_QT_WEBENGINE_CORE}" DIRECTORY)
-        set(DEVTOOLS_QT_WEBENGINE_PROCESS_APP
-            "${DEVTOOLS_QT_WEBENGINE_FRAMEWORK_VERSION_DIR}/Helpers/QtWebEngineProcess.app")
-        if(NOT EXISTS "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}/Contents/MacOS/QtWebEngineProcess")
-            message(WARNING
-                "QtWebEngineProcess was not found beside QtWebEngineCore: "
-                "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}")
-        else()
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND "${CMAKE_COMMAND}" -E copy_directory
-                    "${DEVTOOLS_QT_WEBENGINE_PROCESS_APP}"
-                    "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Helpers/QtWebEngineProcess.app"
-                COMMENT "Copying Qt WebEngine process into the application bundle"
-                VERBATIM
-            )
-        endif()
-    endif()
 endif()
 
 include(GNUInstallDirs)

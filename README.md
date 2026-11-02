@@ -66,7 +66,7 @@ A unified desktop application that combines various development tools into a sin
 ## Requirements
 
 - **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
-- **Qt**: 6.9+ (6.9.3 tested; includes the WebEngine modules used by the app)
+- **Qt**: 6.12.0+ (CI pins 6.12.0; macOS uses WKWebView, Linux uses WebEngine)
 - **CMake**: 3.21.1+
 - **C++ Compiler**: C++17 compatible
 - **Bun**: 1.3.14 (frontend build tool)
@@ -78,11 +78,13 @@ A unified desktop application that combines various development tools into a sin
 git clone https://github.com/LotusAndCompany/devtools.git
 cd devtools
 
-# Install Qt 6, Bun 1.3.14, and vcpkg. See the installation guide for setup.
+# Install Qt 6.12.0+, Bun 1.3.14, and vcpkg. See the installation guide for setup.
 # Set VCPKG_ROOT to the vcpkg installation directory.
+QT6120_ROOT="$HOME/Qt/6.12.0/macos"
 
 # Configure with CMake. vcpkg manifest dependencies are installed during configure.
 cmake -S . -B build \
+  -DQt6_DIR="$QT6120_ROOT/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx
 

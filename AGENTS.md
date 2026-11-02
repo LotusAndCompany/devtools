@@ -1,8 +1,9 @@
 # DevTools - AI Agent Bootstrap
 
-DevTools is a macOS desktop application with a C++17/Qt 6 native host and a
-React/TypeScript frontend rendered by Qt WebEngine. Qt Widgets still provides
-the native window and platform integration.
+DevTools is a desktop application with a C++17/Qt 6 native host and a
+React/TypeScript frontend. macOS renders the frontend in Apple's WKWebView;
+other platforms use Qt WebEngine. Qt Widgets provides the native window and
+platform integration.
 
 This file is intentionally short. Detailed, path-scoped guidance lives in
 `.agents/rules/` and is synchronized into tool-specific adapters.

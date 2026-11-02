@@ -11,7 +11,7 @@ class QDropEvent;
 class QEvent;
 class QMenu;
 class QMimeData;
-class QtWebEngineAdapter;
+class NativeBridge;
 
 /**
  * @brief Main application window that hosts the React frontend.
@@ -20,7 +20,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    QtWebEngineAdapter *web_frontend_{nullptr};
+    QWidget *web_frontend_{nullptr};
+    NativeBridge *native_bridge_{nullptr};
     QMenu *menu_file_{nullptr};
     QMenu *menu_devtools_{nullptr};
     QAction *action_settings_{nullptr};
