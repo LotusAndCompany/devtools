@@ -8,9 +8,9 @@ have not been performed.
 
 **G0 is blocked. Keep Qt WebEngine as the current host and do not start the
 Qt WebView host replacement.** The installed SDK cannot compile the C++ QWebView
-API, and the inspected Qt 6.11.2 public API/backend does not provide the
-application-owned pre-navigation allowlist required by the current host.
-Original-file drag-and-drop also remains unverified on QWebView.
+API. Qt WebView's older QML API is installed, but its public surface also lacks
+the application-owned pre-navigation allowlist required by the current host.
+Original-file drag-and-drop remains unverified on either WebView surface.
 
 This is a gate result for the proposed Qt WebView path. It does not mark the
 separate Tauri migration milestone or this task as complete.
@@ -58,13 +58,14 @@ path nor image drop sends a local file path to React.
 
 | Gate check | Result | Evidence |
 |---|---|---|
-| Compile QWebView with Widgets | Not run: no Qt 6.11 SDK is installed | qmake selects Homebrew Qt 6.9.2; the separate Qt SDK is 6.9.3. Searches found no QWebView C++ header in either installation. Qt documents the C++ QWebView class as available since Qt 6.11. |
-| JavaScript result callback | API confirmed, compilation unverified | The Qt 6.11.2 public header declares runJavaScript with a QVariant result callback. |
-| Native macOS backend | Runtime unverified | Qt documents that macOS uses the system web view. The installed SDK cannot build the C++ QWebView host. |
-| Pre-navigation rejection | **Fails the required public-API gate** | The public QWebView header exposes urlChanged and loadingChanged, but no navigation-policy hook. The Qt 6.11.2 Darwin delegate allows schemes handled by WKWebView and opens unhandled schemes through NSWorkspace; target=_blank is sent to that external path. Observing urlChanged and then stopping is after the navigation decision. |
+| Compile QWebView with Widgets | Not run: no Qt 6.11 SDK is installed | qmake selects Homebrew Qt 6.9.2; the separate Qt SDK is 6.9.3. Neither installation has the public C++ QWebView header. Qt documents the C++ class as available since Qt 6.11. The QtWebView QML plugin is installed in Homebrew Qt 6.9.2. |
+| JavaScript result callback | QML API confirmed, C++ QWebView compile unverified | The Qt 6.9 QML WebView API and Qt 6.11.2 public C++ header both declare runJavaScript result callbacks. |
+| Native macOS backend | Runtime unverified | Qt documents that macOS uses the system web view. The installed SDK has a Darwin QtWebView plugin, but the QWebView C++ host could not be built or run. |
+| Pre-navigation rejection | **Fails the required public-API gate** | The public QWebView header exposes urlChanged and loadingChanged, but no navigation-policy hook. The Qt 6.9 QML WebView type exposes urlChanged/loadingChanged but no navigationRequested signal; the installed plugins.qmltypes metadata agrees. The Qt 6.11.2 Darwin delegate allows schemes handled by WKWebView and opens unhandled schemes through NSWorkspace; target=_blank is sent to that external path. Observing urlChanged and then stopping is after the navigation decision. |
 | Original-file image and SQLite drop | Not verified | Qt states that WebView events are not guaranteed to propagate into Qt's event-delivery system. QWidget::createWindowContainer embeds a native child window; the existing parent-widget filters therefore cannot be assumed to receive WKWebView drops. A real Finder drop test is still required. |
 
 The API evidence is from Qt's [QWebView class reference](https://doc.qt.io/qt-6/qwebview.html),
+[Qt 6.9 QML WebView reference](https://doc.qt.io/qt-6.9/qml-qtwebview-webview.html),
 [Qt WebView platform overview](https://doc.qt.io/qt-6/qtwebview-index.html),
 [Qt 6.11.2 public QWebView header](https://raw.githubusercontent.com/qt/qtwebview/v6.11.2/src/webview/qwebview.h),
 [Qt 6.11.2 Darwin backend](https://raw.githubusercontent.com/qt/qtwebview/v6.11.2/src/plugins/darwin/qdarwinwebview.mm),
