@@ -1,0 +1,18 @@
+if(DEFINED ENV{TARGET_BUILD_DIR} AND DEFINED ENV{FULL_PRODUCT_NAME})
+    set(APP_BUNDLE "$ENV{TARGET_BUILD_DIR}/$ENV{FULL_PRODUCT_NAME}")
+else()
+    set(APP_BUNDLE "${APP_BUNDLE_PATH}")
+endif()
+
+if(NOT EXISTS "${APP_BUNDLE}")
+    message(FATAL_ERROR "Could not find app bundle \"${APP_BUNDLE}\"")
+endif()
+
+execute_process(
+    COMMAND "${MACDEPLOYQT_EXECUTABLE}" "${APP_BUNDLE}" ${MACDEPLOYQT_OPTIONS}
+    RESULT_VARIABLE MACDEPLOYQT_RESULT
+)
+
+if(NOT MACDEPLOYQT_RESULT EQUAL 0)
+    message(FATAL_ERROR "macdeployqt failed with exit code ${MACDEPLOYQT_RESULT}")
+endif()

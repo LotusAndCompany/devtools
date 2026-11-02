@@ -366,8 +366,11 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     # This deploys Qt dependencies into the .app; it does not create the signed
     # Mac App Store .pkg.
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND "${MACDEPLOYQT_EXECUTABLE}"
-            "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" ${MACDEPLOYQT_OPTIONS}
+        COMMAND "${CMAKE_COMMAND}"
+            "-DMACDEPLOYQT_EXECUTABLE=${MACDEPLOYQT_EXECUTABLE}"
+            "-DMACDEPLOYQT_OPTIONS=${MACDEPLOYQT_OPTIONS}"
+            "-DAPP_BUNDLE_PATH=$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>"
+            -P "${CMAKE_SOURCE_DIR}/scripts/deploy_qt_dependencies.cmake"
         COMMENT "Deploying App Store-compliant Qt dependencies"
         VERBATIM
     )
