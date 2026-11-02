@@ -9,6 +9,10 @@
         margin: 0;
     }
 
+    :where(*) {
+        overscroll-behavior: none;
+    }
+
     body {
         color: var(--foreground);
         background: var(--background);
@@ -360,7 +364,6 @@
     flex: 1;
     min-height: 0;
     overflow: auto;
-    overscroll-behavior: none;
     background: var(--background);
 }
 

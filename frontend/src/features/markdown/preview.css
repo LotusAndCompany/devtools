@@ -5,10 +5,12 @@ body {
     font-family: var(--font-family-sans) !important;
     font-size: var(--font-size-control) !important;
     line-height: var(--line-height-preview-body) !important;
+    overscroll-behavior: none;
 }
 
 body * {
     font-family: inherit !important;
+    overscroll-behavior: none;
 }
 
 h1,
