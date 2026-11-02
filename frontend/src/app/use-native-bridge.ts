@@ -11,7 +11,9 @@ import {
   type OperationRunner,
   type BridgeEvent,
 } from "@/shared/bridge/types";
-import { connectNativeBridge, runNativeOperation, type NativeBridge } from "@/platform/qt/bridge";
+import { createNativeBridge } from "@/platform/create-native-bridge";
+import { runNativeOperation } from "@/shared/bridge/operation-client";
+import type { NativeBridge } from "@/shared/bridge/native-bridge";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import { toolForPage, type PageId } from "./tool-registry";
 import type { DroppedImage, Locale } from "@/shared/types";
@@ -79,7 +81,7 @@ export function useNativeBridge({
       if (event.type === "navigate") onNavigate(event.route);
     };
     const setup = Effect.gen(function* () {
-      const connected = yield* connectNativeBridge();
+      const connected = yield* createNativeBridge();
       if (!mounted) return;
       native = connected;
       unsubscribe = connected.subscribe(onEvent);
