@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.8.0 LANGUAGES CXX) # x-release-please-version
+project(DevTools VERSION 0.9.0 LANGUAGES CXX) # x-release-please-version
 
 if(APPLE)
     enable_language(OBJCXX)
@@ -11,7 +11,7 @@ endif()
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
-set(DevTools_BUILD_NUMBER "${PROJECT_VERSION}" CACHE STRING "App bundle build number")
+set(DevTools_BUILD_NUMBER "12" CACHE STRING "App bundle build number")
 set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
 set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING
     "Code-signing identity for the DevTools .app bundle and embedded Qt frameworks")
@@ -333,6 +333,7 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
         XCODE_ATTRIBUTE_ARCHS   "arm64"
         XCODE_ATTRIBUTE_SDKROOT "macosx"
         XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH  "YES"
+        XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
         XCODE_ATTRIBUTE_PRODUCT_NAME    ${PROJECT_NAME}
         MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
         #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
