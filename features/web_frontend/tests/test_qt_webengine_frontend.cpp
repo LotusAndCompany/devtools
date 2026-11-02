@@ -75,8 +75,9 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
 
     const QString snapshotScript = QStringLiteral(
         "JSON.stringify({"
-        "toolCount: document.querySelectorAll('.tool-nav .nav-item').length,"
-        "main: Boolean(document.querySelector('main.app-main')),"
+        "toolCount: document.querySelectorAll('.app-sidebar-nav "
+        "[data-slot=sidebar-menu-button]').length - 1,"
+        "main: Boolean(document.querySelector('.app-main')),"
         "mounted: Boolean(document.querySelector('#root > *')),"
         "})");
     QJsonObject snapshot;
@@ -108,12 +109,13 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         5000);
     for (int index = 0; index < 11; ++index) {
         QVariant expectedHeadingValue;
-        QVERIFY(
-            evaluateJavaScript(view.page(),
-                               QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[%1]"
-                                              "?.lastElementChild?.textContent ?? ''")
-                                   .arg(index),
-                               &expectedHeadingValue));
+        QVERIFY(evaluateJavaScript(
+            view.page(),
+            QStringLiteral(
+                "document.querySelectorAll('.app-sidebar-nav [data-slot=sidebar-menu-button]')[%1]"
+                "?.lastElementChild?.textContent ?? ''")
+                .arg(index + 1),
+            &expectedHeadingValue));
         QString expectedHeading = expectedHeadingValue.toString().trimmed();
         if (index == 6) {
             expectedHeading = expectedHeading == QStringLiteral("QRコード")
@@ -122,9 +124,10 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         }
         QVERIFY(!expectedHeading.isEmpty());
 
-        const QString clickScript =
-            QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[%1].click(); true")
-                .arg(index);
+        const QString clickScript = QStringLiteral(
+                                        "document.querySelectorAll('.app-sidebar-nav "
+                                        "[data-slot=sidebar-menu-button]')[%1].click(); true")
+                                        .arg(index + 1);
         QVERIFY(evaluateJavaScript(view.page(), clickScript, &result));
 
         QString headingText;
@@ -162,20 +165,20 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 ".page-host.active-page .toolbar-row')).every((row) => { "
                 "const buttons = Array.from(row.children).filter((child) => "
                 "child.matches('button')); "
-                "const first = buttons[0]?.getBoundingClientRect(); "
-                "return buttons.length < 2 || buttons.every((button) => { "
-                "const rect = button.getBoundingClientRect(); "
-                "return Math.min(first.bottom, rect.bottom) - "
-                "Math.max(first.top, rect.top) > 0; }); })"),
+                "const rects = buttons.map((button) => button.getBoundingClientRect()); "
+                "return rects.every((rect, index) => rect.width > 0 && rect.height > 0 && "
+                "rects.slice(index + 1).every((other) => "
+                "rect.right <= other.left || other.right <= rect.left || "
+                "rect.bottom <= other.top || other.bottom <= rect.top)); })"),
             &result));
         QVERIFY2(result.toBool(),
-                 qPrintable(QStringLiteral("Button group wrapped on route %1").arg(index)));
+                 qPrintable(QStringLiteral("Buttons overlap on route %1").arg(index)));
         if (index == 1) {
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral("Math.round(parseFloat(getComputedStyle(document.querySelector("
                                "'.page-host.active-page .button-row button:last-child'))"
-                               ".height)) === 28"),
+                               ".height)) === 32"),
                 &result));
             QVERIFY(result.toBool());
         }
@@ -196,12 +199,15 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
                 QStringLiteral("(() => { const row = document.querySelector("
                                "'.page-host.active-page .data-output-toolbar'); "
                                "const controls = [...row.querySelectorAll(':scope > button'), "
-                               "...row.querySelectorAll('.select-trigger')]; "
-                               "const bottoms = controls.map((control) => "
-                               "control.getBoundingClientRect().bottom); "
-                               "return Math.max(...bottoms) - Math.min(...bottoms) < 1; })()"),
+                               "...row.querySelectorAll('[data-slot=select-trigger]')]; "
+                               "const rects = controls.map((control) => "
+                               "control.getBoundingClientRect()); "
+                               "return rects.every((rect, index) => rect.width > 0 && "
+                               "rect.height > 0 && rects.slice(index + 1).every((other) => "
+                               "rect.right <= other.left || other.right <= rect.left || "
+                               "rect.bottom <= other.top || other.bottom <= rect.top)); })()"),
                 &result));
-            QVERIFY2(result.toBool(), "Data conversion toolbar controls are not bottom-aligned.");
+            QVERIFY2(result.toBool(), "Data conversion toolbar controls overlap.");
         }
         if (index == 2) {
             QVERIFY(evaluateJavaScript(
@@ -221,21 +227,24 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral("document.querySelector('.page-host.active-page "
-                               ".diff-result-heading .select-trigger').click(); true"),
+                               ".diff-result-heading [data-slot=select-trigger]').click(); true"),
                 &result));
             QTRY_VERIFY_WITH_TIMEOUT(
-                evaluateJavaScript(view.page(),
-                                   QStringLiteral("Array.from(document.querySelectorAll("
-                                                  "'.select-popup .select-item')).some((item) => "
-                                                  "item.textContent.trim() === 'Side-by-side')"),
-                                   &result) &&
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral(
+                        "Array.from(document.querySelectorAll("
+                        "'[data-slot=select-content] [data-slot=select-item]')).some((item) => "
+                        "item.textContent.trim() === 'Side-by-side')"),
+                    &result) &&
                     result.toBool(),
                 5000);
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral("Array.from(document.querySelectorAll("
-                               "'.select-popup .select-item')).find((item) => "
-                               "item.textContent.trim() === 'Side-by-side').click(); true"),
+                QStringLiteral(
+                    "Array.from(document.querySelectorAll("
+                    "'[data-slot=select-content] [data-slot=select-item]')).find((item) => "
+                    "item.textContent.trim() === 'Side-by-side').click(); true"),
                 &result));
             QTRY_VERIFY_WITH_TIMEOUT(
                 evaluateJavaScript(
@@ -251,29 +260,27 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         }
     }
 
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[6].click(); true"),
-        &result));
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral(
-            "document.querySelector('.page-host[data-page=qr] .select-trigger').click(); true"),
-        &result));
+    QVERIFY(evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelectorAll('.app-sidebar-nav "
+                                              "[data-slot=sidebar-menu-button]')[7].click(); true"),
+                               &result));
+    QVERIFY(evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelector('.page-host[data-page=qr] "
+                                              "[data-slot=select-trigger]').click(); true"),
+                               &result));
     QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(
-            view.page(),
-            QStringLiteral(
-                "Array.from(document.querySelectorAll('.select-popup .select-item')).some((item) "
-                "=> item.textContent.trim() === 'Calendar')"),
-            &result) &&
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Array.from(document.querySelectorAll('[data-slot=select-"
+                                          "content] [data-slot=select-item]')).some((item) "
+                                          "=> item.textContent.trim() === 'Calendar')"),
+                           &result) &&
             result.toBool(),
         5000);
     QVERIFY(evaluateJavaScript(
         view.page(),
-        QStringLiteral(
-            "Array.from(document.querySelectorAll('.select-popup .select-item')).find((item) "
-            "=> item.textContent.trim() === 'Calendar').click(); true"),
+        QStringLiteral("Array.from(document.querySelectorAll('[data-slot=select-content] "
+                       "[data-slot=select-item]')).find((item) "
+                       "=> item.textContent.trim() === 'Calendar').click(); true"),
         &result));
     QTRY_VERIFY_WITH_TIMEOUT(
         evaluateJavaScript(view.page(),
@@ -294,10 +301,10 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         5000);
     QVERIFY(evaluateJavaScript(
         view.page(),
-        QStringLiteral("(() => { const day = Array.from(document.querySelectorAll("
-                       "'.date-time-popup .date-time-day')).find((button) => "
-                       "!button.classList.contains('outside-month')); if (!day) return false; "
-                       "day.click(); return true; })()"),
+        QStringLiteral(
+            "(() => { const day = document.querySelector("
+            "'.date-time-popup [data-slot=calendar] button[data-day]'); if (!day) return false; "
+            "day.click(); return true; })()"),
         &result));
     QVERIFY(result.toBool());
     QTRY_VERIFY_WITH_TIMEOUT(
@@ -310,10 +317,10 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             result.toBool(),
         5000);
 
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[1].click(); true"),
-        &result));
+    QVERIFY(evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelectorAll('.app-sidebar-nav "
+                                              "[data-slot=sidebar-menu-button]')[2].click(); true"),
+                               &result));
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral(
@@ -328,17 +335,18 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             "document.querySelector('.template-list .toolbar-row button').click(); true; })()"),
         &result));
     QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(view.page(),
-                           QStringLiteral("Boolean(document.querySelector('.confirm-dialog'))"),
-                           &result) &&
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral("Boolean(document.querySelector('[data-slot=alert-dialog-content]'))"),
+            &result) &&
             result.toBool(),
         5000);
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral(
-            "document.querySelector('.confirm-dialog .dialog-footer button:first-of-type')"
-            ".click(); true"),
-        &result));
+    QVERIFY(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("document.querySelector('[data-slot=alert-dialog-content]"
+                                          " [data-slot=alert-dialog-footer] button:first-of-type')"
+                                          ".click(); true"),
+                           &result));
     QVERIFY(evaluateJavaScript(
         view.page(), QStringLiteral("document.querySelector('.phrase-layout input')?.value ?? ''"),
         &result));
@@ -350,27 +358,28 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             "document.querySelector('.template-list .toolbar-row button').click(); true"),
         &result));
     QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(view.page(),
-                           QStringLiteral("Boolean(document.querySelector('.confirm-dialog "
-                                          ".dialog-footer button:nth-of-type(2)'))"),
-                           &result) &&
+        evaluateJavaScript(
+            view.page(),
+            QStringLiteral("Boolean(document.querySelector('[data-slot=alert-dialog-content] "
+                           "[data-slot=alert-dialog-footer] button:nth-of-type(2)'))"),
+            &result) &&
             result.toBool(),
         5000);
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral(
-            "document.querySelector('.confirm-dialog .dialog-footer button:nth-of-type(2)')"
-            ".click(); true"),
-        &result));
+    QVERIFY(
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("document.querySelector('[data-slot=alert-dialog-content]"
+                                          " [data-slot=alert-dialog-footer] button:nth-of-type(2)')"
+                                          ".click(); true"),
+                           &result));
     QVERIFY(evaluateJavaScript(
         view.page(), QStringLiteral("document.querySelector('.phrase-layout input')?.value ?? ''"),
         &result));
     QVERIFY(result.toString().isEmpty());
 
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[4].click(); true"),
-        &result));
+    QVERIFY(evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelectorAll('.app-sidebar-nav "
+                                              "[data-slot=sidebar-menu-button]')[5].click(); true"),
+                               &result));
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral(
@@ -387,38 +396,42 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
         &result));
     QCOMPARE(result.toString(), QStringLiteral("{"));
     QTRY_VERIFY_WITH_TIMEOUT(
-        evaluateJavaScript(
-            view.page(),
-            QStringLiteral("Boolean(document.querySelector('.message-dialog[role=alertdialog]'))"),
-            &result) &&
+        evaluateJavaScript(view.page(),
+                           QStringLiteral("Boolean(document.querySelector('[data-slot=alert-dialog-"
+                                          "content][role=alertdialog]'))"),
+                           &result) &&
             result.toBool(),
         5000);
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral(
-            "document.querySelector('.message-dialog .dialog-title')?.textContent ?? ''"),
+            "document.querySelector('[data-slot=alert-dialog-title]')?.textContent ?? ''"),
         &result));
     QVERIFY(result.toString() == QStringLiteral("Error") ||
             result.toString() == QStringLiteral("エラー"));
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral(
-            "document.querySelector('.message-dialog .dialog-footer button').click(); true"),
+            "document.querySelector('[data-slot=alert-dialog-footer] button').click(); true"),
         &result));
 
-    for (const QString &selector : {QStringLiteral(".sidebar-bottom .nav-item:nth-child(1)"),
-                                    QStringLiteral(".sidebar-bottom .nav-item:nth-child(2)"),
-                                    QStringLiteral("aside .nav-item")}) {
-        QVERIFY(evaluateJavaScript(
-            view.page(), QStringLiteral("document.querySelector('%1').click(); true").arg(selector),
-            &result));
-        if (selector == QStringLiteral(".sidebar-bottom .nav-item:nth-child(2)")) {
+    const QString settingsButton = QStringLiteral(
+        "document.querySelectorAll('.app-sidebar-footer [data-slot=sidebar-menu-button]')[0]");
+    const QString aboutButton = QStringLiteral(
+        "document.querySelectorAll('.app-sidebar-footer [data-slot=sidebar-menu-button]')[1]");
+    for (const QString &buttonScript :
+         {settingsButton, aboutButton,
+          QStringLiteral("document.querySelectorAll('.app-sidebar-nav "
+                         "[data-slot=sidebar-menu-button]')[0]")}) {
+        QVERIFY(evaluateJavaScript(view.page(), buttonScript + QStringLiteral(".click(); true"),
+                                   &result));
+        if (buttonScript == aboutButton) {
             bool aboutDialogOpened = false;
             for (int attempt = 0; attempt < 50; ++attempt) {
-                QVERIFY(evaluateJavaScript(
-                    view.page(),
-                    QStringLiteral("Boolean(document.querySelector('.about-dialog[role=dialog]'))"),
-                    &result));
+                QVERIFY(evaluateJavaScript(view.page(),
+                                           QStringLiteral("Boolean(document.querySelector('[data-"
+                                                          "slot=dialog-content][role=dialog]'))"),
+                                           &result));
                 aboutDialogOpened = result.toBool();
                 if (aboutDialogOpened)
                     break;
@@ -427,27 +440,28 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             QVERIFY(aboutDialogOpened);
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral(
-                    "document.querySelectorAll('.about-dialog [role=tab]')[1]?.click(); true"),
+                QStringLiteral("document.querySelectorAll('[data-slot=dialog-content][role=dialog] "
+                               "[role=tab]')[1]?.click(); true"),
                 &result));
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral("Boolean(document.querySelector('.about-dialog textarea')?.value)"),
+                QStringLiteral("Boolean(document.querySelector('[data-slot=dialog-content][role="
+                               "dialog] textarea.license-text')?.value)"),
                 &result));
             QVERIFY(result.toBool());
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral(
-                    "document.querySelector('.about-dialog .dialog-footer button').click(); true"),
+                QStringLiteral("document.querySelector('[data-slot=dialog-content][role=dialog] "
+                               "[data-slot=dialog-footer] button').click(); true"),
                 &result));
             continue;
         }
-        if (selector == QStringLiteral(".sidebar-bottom .nav-item:nth-child(1)")) {
+        if (buttonScript == settingsButton) {
             QTRY_VERIFY_WITH_TIMEOUT(
                 evaluateJavaScript(
                     view.page(),
-                    QStringLiteral(
-                        "Boolean(document.querySelector('.settings-dialog[role=dialog]'))"),
+                    QStringLiteral("Boolean(document.querySelector('[data-slot=dialog-content]["
+                                   "data-size=medium][role=dialog]'))"),
                     &result) &&
                     result.toBool(),
                 5000);
@@ -460,63 +474,66 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral(
-                    "document.querySelector('.settings-dialog .select-chevron')?.textContent"
-                    ".trim() === 'keyboard_arrow_down'"),
+                    "Boolean(document.querySelector('[data-slot=dialog-content][data-size=medium] "
+                    "[data-slot=select-trigger] svg'))"),
                 &result));
             QVERIFY(result.toBool());
             QTRY_VERIFY_WITH_TIMEOUT(
+                evaluateJavaScript(
+                    view.page(),
+                    QStringLiteral(
+                        "Boolean(document.querySelector('[data-slot=dialog-content]"
+                        "[data-size=medium] [data-slot=select-trigger]:not(:disabled)'))"),
+                    &result) &&
+                    result.toBool(),
+                5000);
+            QVERIFY(evaluateJavaScript(
+                view.page(),
+                QStringLiteral("document.querySelector('[data-slot=dialog-content][data-size="
+                               "medium] [data-slot=select-trigger]').click(); true"),
+                &result));
+            QTRY_VERIFY_WITH_TIMEOUT(
                 evaluateJavaScript(view.page(),
-                                   QStringLiteral("Boolean(document.querySelector('.settings-"
-                                                  "dialog .select-trigger:not(:disabled)'))"),
+                                   QStringLiteral("Boolean(document.querySelector('[data-slot="
+                                                  "select-content] [data-slot=select-item]'))"),
                                    &result) &&
                     result.toBool(),
                 5000);
             QVERIFY(evaluateJavaScript(
                 view.page(),
                 QStringLiteral(
-                    "document.querySelector('.settings-dialog .select-trigger').click(); true"),
-                &result));
-            QTRY_VERIFY_WITH_TIMEOUT(
-                evaluateJavaScript(
-                    view.page(),
-                    QStringLiteral("Boolean(document.querySelector('.select-popup .select-item'))"),
-                    &result) &&
-                    result.toBool(),
-                5000);
-            QVERIFY(evaluateJavaScript(
-                view.page(),
-                QStringLiteral(
-                    "(() => { const item = document.querySelector('.select-popup .select-item'); "
+                    "(() => { const item = document.querySelector('[data-slot=select-content] "
+                    "[data-slot=select-item]'); "
                     "if (!item) return false; const rect = item.getBoundingClientRect(); "
                     "return document.elementFromPoint(rect.x + rect.width / 2, "
-                    "rect.y + rect.height / 2)?.closest('.select-item') === item; })()"),
+                    "rect.y + rect.height / 2)?.closest('[data-slot=select-item]') === item; })()"),
                 &result));
             QVERIFY(result.toBool());
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral(
-                    "document.querySelector('.select-popup .select-item').click(); true"),
+                QStringLiteral("document.querySelector('[data-slot=select-content] "
+                               "[data-slot=select-item]').click(); true"),
                 &result));
             QTRY_VERIFY_WITH_TIMEOUT(
                 evaluateJavaScript(
                     view.page(),
-                    QStringLiteral(
-                        "document.querySelector('.settings-dialog .select-trigger')?.textContent"
-                        ".includes('English') ?? false"),
+                    QStringLiteral("document.querySelector('[data-slot=dialog-content][data-size="
+                                   "medium] [data-slot=select-trigger]')?.textContent"
+                                   ".includes('English') ?? false"),
                     &result) &&
                     result.toBool(),
                 5000);
             QVERIFY(evaluateJavaScript(
                 view.page(),
-                QStringLiteral(
-                    "document.querySelector('.settings-dialog .dialog-footer button:first-of-type')"
-                    ".click(); true"),
+                QStringLiteral("document.querySelector('[data-slot=dialog-content][data-size="
+                               "medium] [data-slot=dialog-footer] button:first-of-type')"
+                               ".click(); true"),
                 &result));
             QTRY_VERIFY_WITH_TIMEOUT(
-                evaluateJavaScript(
-                    view.page(),
-                    QStringLiteral("!document.querySelector('.settings-dialog[role=dialog]')"),
-                    &result) &&
+                evaluateJavaScript(view.page(),
+                                   QStringLiteral("!document.querySelector('[data-slot=dialog-"
+                                                  "content][data-size=medium][role=dialog]')"),
+                                   &result) &&
                     result.toBool(),
                 5000);
             continue;
@@ -545,10 +562,10 @@ void TestQtWebEngineFrontend::loadsBundledReactAppAndRendersEveryRoute()
     QVERIFY(firstDatabase.open(QIODevice::WriteOnly));
     firstDatabase.close();
 
-    QVERIFY(evaluateJavaScript(
-        view.page(),
-        QStringLiteral("document.querySelectorAll('.tool-nav .nav-item')[5].click(); true"),
-        &result));
+    QVERIFY(evaluateJavaScript(view.page(),
+                               QStringLiteral("document.querySelectorAll('.app-sidebar-nav "
+                                              "[data-slot=sidebar-menu-button]')[6].click(); true"),
+                               &result));
     QVERIFY(evaluateJavaScript(
         view.page(),
         QStringLiteral(
