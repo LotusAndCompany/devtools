@@ -6,7 +6,9 @@
 #include <QFileInfo>
 #include <QMetaType>
 #include <QRegularExpression>
+#ifndef Q_OS_MACOS
 #include <QSaveFile>
+#endif
 #include <QStringDecoder>
 
 #include <algorithm>
@@ -162,10 +164,31 @@ NativeBridge::OperationResult NativeBridge::saveTextFile(const QString &path, co
                                false};
     }
 
+#ifdef Q_OS_MACOS
+    if (cancellation->load(std::memory_order_relaxed)) {
+        return OperationResult{{}, {}, {}, true};
+    }
+    // shortcut: save-panel access may not cover QSaveFile's sibling temp; use coordinated
+    // replacement if atomic writes are required.
+    QFile file(path);
+#else
     QSaveFile file(path);
+#endif
     if (!file.open(QIODevice::WriteOnly)) {
         return OperationResult{{}, frontendIoErrorCode(file.error()), file.errorString(), false};
     }
+
+#ifdef Q_OS_MACOS
+    const qint64 writtenBytes = file.write(bytes);
+    if (writtenBytes != bytes.size() || !file.flush()) {
+        const QFileDevice::FileError error = file.error();
+        const QString errorMessage = error == QFileDevice::NoError
+                                         ? QStringLiteral("Could not write the complete file.")
+                                         : file.errorString();
+        return OperationResult{{}, frontendIoErrorCode(error), errorMessage, false};
+    }
+    progress(90, QStringLiteral("Writing file"));
+#else
     qint64 writtenBytes = 0;
     while (writtenBytes < bytes.size()) {
         if (cancellation->load(std::memory_order_relaxed)) {
@@ -192,6 +215,7 @@ NativeBridge::OperationResult NativeBridge::saveTextFile(const QString &path, co
     if (!file.commit()) {
         return OperationResult{{}, frontendIoErrorCode(file.error()), file.errorString(), false};
     }
+#endif
 
     return OperationResult{{{QStringLiteral("fileName"), QFileInfo(path).fileName()},
                             {QStringLiteral("bytesWritten"), writtenBytes}},

@@ -5,10 +5,13 @@
 #include "features/web_frontend/gui/bridge/operations/frontend_operation_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QImage>
+#ifndef Q_OS_MACOS
 #include <QSaveFile>
+#endif
 
 #include <exception>
 
@@ -113,19 +116,26 @@ void NativeBridge::startQrImageSaveOperation(const QString &requestId, const QVa
                 if (cancellation->load(std::memory_order_relaxed)) {
                     return OperationResult{{}, {}, {}, true};
                 }
+#ifdef Q_OS_MACOS
+                QFile file(path);
+#else
                 QSaveFile file(path);
+#endif
                 if (!file.open(QIODevice::WriteOnly)) {
                     return OperationResult{
                         {}, frontendIoErrorCode(file.error()), file.errorString(), false};
                 }
                 progress(40, QStringLiteral("Saving QR image"));
                 if (!image.save(&file, "PNG")) {
+#ifndef Q_OS_MACOS
                     file.cancelWriting();
+#endif
                     return OperationResult{{},
                                            QStringLiteral("IO_ERROR"),
                                            QStringLiteral("Could not encode the QR image."),
                                            false};
                 }
+#ifndef Q_OS_MACOS
                 if (cancellation->load(std::memory_order_relaxed)) {
                     file.cancelWriting();
                     return OperationResult{{}, {}, {}, true};
@@ -134,6 +144,12 @@ void NativeBridge::startQrImageSaveOperation(const QString &requestId, const QVa
                     return OperationResult{
                         {}, frontendIoErrorCode(file.error()), file.errorString(), false};
                 }
+#else
+                if (!file.flush()) {
+                    return OperationResult{
+                        {}, frontendIoErrorCode(file.error()), file.errorString(), false};
+                }
+#endif
                 return OperationResult{
                     {{QStringLiteral("fileName"), QFileInfo(path).fileName()}}, {}, {}, false};
             });
