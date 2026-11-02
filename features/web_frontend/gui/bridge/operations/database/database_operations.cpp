@@ -30,6 +30,11 @@ using DatabaseCallback = std::function<DatabaseResult(const QSqlDatabase &)>;
 class DatabaseSession final
 {
 public:
+    DatabaseSession(const DatabaseSession &) = delete;
+    DatabaseSession &operator=(const DatabaseSession &) = delete;
+    DatabaseSession(DatabaseSession &&) = delete;
+    DatabaseSession &operator=(DatabaseSession &&) = delete;
+
     DatabaseSession()
     {
         worker_ = new QObject();
