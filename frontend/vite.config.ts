@@ -66,7 +66,10 @@ const wkProductionCsp = [
 ].join("; ");
 
 export default defineConfig(({ mode }) => {
-  const useWKWebView = loadEnv(mode, frontendRoot, "VITE_").VITE_DEVTOOLS_HOST === "wkwebview";
+  const configuredHost = loadEnv(mode, frontendRoot, "VITE_").VITE_DEVTOOLS_HOST;
+  const useWKWebView = configuredHost
+    ? configuredHost === "wkwebview"
+    : process.platform === "darwin";
   const csp =
     mode === "development"
       ? useWKWebView

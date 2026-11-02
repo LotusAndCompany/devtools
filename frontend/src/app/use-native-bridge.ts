@@ -34,6 +34,7 @@ export function useNativeBridge({
   onStartupSettings,
 }: UseNativeBridgeOptions) {
   const [bridge, setBridge] = useState<NativeBridge | null>(null);
+  const [bridgeError, setBridgeError] = useState<string | null>(null);
   const localeRef = useRef(locale);
 
   useLayoutEffect(() => {
@@ -102,7 +103,15 @@ export function useNativeBridge({
         yield* Effect.sync(() => onDroppedImage(droppedImageResult));
       }
       if (mounted) yield* Effect.sync(() => onStartupSettings(settings));
-    }).pipe(Effect.catch(() => Effect.void));
+    }).pipe(
+      Effect.catch((cause) =>
+        Effect.sync(() => {
+          if (mounted) {
+            setBridgeError(cause instanceof Error ? cause.message : String(cause));
+          }
+        }),
+      ),
+    );
     const interruptSetup = forkUiEffect(setup);
     return () => {
       mounted = false;
@@ -117,16 +126,18 @@ export function useNativeBridge({
       if (!bridge) {
         return Effect.fail(
           new NativeOperationError(
-            locale === "ja"
-              ? "ネイティブ連携に接続していません。"
-              : "Native services are not connected.",
+            bridgeError
+              ? `${locale === "ja" ? "ネイティブ連携エラー" : "Native bridge error"}: ${bridgeError}`
+              : locale === "ja"
+                ? "ネイティブ連携に接続していません。"
+                : "Native services are not connected.",
             "NOT_CONNECTED",
           ),
         );
       }
       return runWithBridge(bridge, operation, payload);
     },
-    [bridge, locale, runWithBridge],
+    [bridge, bridgeError, locale, runWithBridge],
   );
 
   useEffect(() => {
