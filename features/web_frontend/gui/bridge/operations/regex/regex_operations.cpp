@@ -9,6 +9,9 @@
 #include <QRegularExpression>
 #include <QVariantList>
 
+#include <cstdint>
+#include <utility>
+
 using FrontendOperationSupport::invalidInput;
 using FrontendOperationSupport::readText;
 
@@ -17,10 +20,12 @@ namespace {
 constexpr qsizetype MAX_REGEX_MATCHES = 10000;
 constexpr qsizetype REGEX_RESULT_METADATA_BYTES = 128;
 
-enum class RegexResultBuildStatus {
+enum class RegexResultBuildStatus : std::uint8_t {
     Completed,
     Cancelled,
     SizeLimitExceeded,
+    MatchCountExceeded,
+    MatchLimitExceeded,
 };
 
 FrontendOperationService::Result regexSizeLimitExceeded(const QString &message)
@@ -31,8 +36,8 @@ FrontendOperationService::Result regexSizeLimitExceeded(const QString &message)
 class RegexResultBuilder
 {
 public:
-    explicit RegexResultBuilder(const FrontendOperationService::CancellationToken &cancellation)
-        : cancellation_(cancellation)
+    explicit RegexResultBuilder(FrontendOperationService::CancellationToken cancellation)
+        : cancellation_(std::move(cancellation))
     {}
 
     [[nodiscard]] bool isCancelled() const
@@ -80,11 +85,11 @@ public:
 
     [[nodiscard]] bool setReplacementText(const QString &text)
     {
-        if (!addString(text)) {
-            return false;
+        const bool accepted = addString(text);
+        if (accepted) {
+            replaced_text_ = text;
         }
-        replaced_text_ = text;
-        return true;
+        return accepted;
     }
 
     [[nodiscard]] QVariantMap value() const
@@ -107,21 +112,21 @@ private:
 
     bool addMetadata()
     {
-        if (REGEX_RESULT_METADATA_BYTES > remainingBytes()) {
-            return false;
+        const bool withinLimit = REGEX_RESULT_METADATA_BYTES <= remainingBytes();
+        if (withinLimit) {
+            result_budget_bytes_ += REGEX_RESULT_METADATA_BYTES;
         }
-        result_budget_bytes_ += REGEX_RESULT_METADATA_BYTES;
-        return true;
+        return withinLimit;
     }
 
     bool addString(const QString &value)
     {
         const qsizetype bytes = value.toUtf8().size();
-        if (bytes > remainingBytes()) {
-            return false;
+        const bool withinLimit = bytes <= remainingBytes();
+        if (withinLimit) {
+            result_budget_bytes_ += bytes;
         }
-        result_budget_bytes_ += bytes;
-        return true;
+        return withinLimit;
     }
 };
 
@@ -139,7 +144,82 @@ FrontendOperationService::Result regexResultBuildFailure(RegexResultBuildStatus 
     if (status == RegexResultBuildStatus::Cancelled) {
         return {{}, {}, {}, true};
     }
+    if (status == RegexResultBuildStatus::MatchLimitExceeded) {
+        return invalidInput(QStringLiteral("Regular expression match limit exceeded."));
+    }
+    if (status == RegexResultBuildStatus::MatchCountExceeded) {
+        return regexSizeLimitExceeded(
+            QStringLiteral("Regex results are limited to 10,000 matches."));
+    }
     return regexSizeLimitExceeded(QStringLiteral("Regex results exceed the 4 MiB output limit."));
+}
+
+bool readRegexInput(const QVariantMap &payload, QString *pattern, QString *input,
+                    QString *replacement)
+{
+    return readText(payload, QStringLiteral("pattern"), pattern) &&
+           readText(payload, QStringLiteral("text"), input) &&
+           readText(payload, QStringLiteral("replacement"), replacement);
+}
+
+RegexResultBuildStatus appendRegexMatches(
+    const QRegularExpression &regex, const QString &input, bool global,
+    RegexResultBuilder *resultBuilder, const FrontendOperationService::ProgressCallback &progress)
+{
+    progress(15, QStringLiteral("Matching regular expression"));
+    const QStringList captureNames = regex.namedCaptureGroups();
+    int matchIndex = 0;
+    if (!global) {
+        if (resultBuilder->isCancelled()) {
+            return RegexResultBuildStatus::Cancelled;
+        }
+        const QRegularExpressionMatch match = regex.match(input);
+        return match.hasMatch() ? resultBuilder->appendMatch(match, captureNames, matchIndex)
+                                : RegexResultBuildStatus::Completed;
+    }
+
+    QRegularExpressionMatchIterator iterator = regex.globalMatch(input);
+    while (iterator.hasNext()) {
+        if (resultBuilder->isCancelled()) {
+            return RegexResultBuildStatus::Cancelled;
+        }
+        if (matchIndex >= MAX_REGEX_MATCHES) {
+            return RegexResultBuildStatus::MatchCountExceeded;
+        }
+        const RegexResultBuildStatus status =
+            resultBuilder->appendMatch(iterator.next(), captureNames, matchIndex++);
+        if (status != RegexResultBuildStatus::Completed) {
+            return status;
+        }
+    }
+    if (resultBuilder->isCancelled()) {
+        return RegexResultBuildStatus::Cancelled;
+    }
+    return iterator.isValid() ? RegexResultBuildStatus::Completed
+                              : RegexResultBuildStatus::MatchLimitExceeded;
+}
+
+RegexResultBuildStatus buildRegexReplacement(
+    const QString &pattern, const QString &input, const QString &replacement,
+    QRegularExpression::PatternOptions options, bool global, RegexResultBuilder *resultBuilder,
+    const FrontendOperationService::CancellationToken &cancellation)
+{
+    QString replaced;
+    const auto status = devtools::RegexTool::replaceBounded(
+        pattern, input, replacement, options, global, resultBuilder->remainingBytes(),
+        MAX_REGEX_MATCHES,
+        [cancellation]() { return cancellation->load(std::memory_order_relaxed); }, &replaced);
+    if (status == devtools::RegexTool::BoundedReplaceResult::Cancelled) {
+        return RegexResultBuildStatus::Cancelled;
+    }
+    if (status == devtools::RegexTool::BoundedReplaceResult::MatchLimitExceeded) {
+        return RegexResultBuildStatus::MatchLimitExceeded;
+    }
+    if (status == devtools::RegexTool::BoundedReplaceResult::SizeLimitExceeded ||
+        !resultBuilder->setReplacementText(replaced)) {
+        return RegexResultBuildStatus::SizeLimitExceeded;
+    }
+    return RegexResultBuildStatus::Completed;
 }
 } // namespace
 
@@ -150,9 +230,7 @@ FrontendOperationService::Result evaluateRegex(
     QString pattern;
     QString input;
     QString replacement;
-    if (!readText(payload, QStringLiteral("pattern"), &pattern) ||
-        !readText(payload, QStringLiteral("text"), &input) ||
-        !readText(payload, QStringLiteral("replacement"), &replacement)) {
+    if (!readRegexInput(payload, &pattern, &input, &replacement)) {
         return invalidInput(QStringLiteral(
             "Pattern, text and replacement must be UTF-8 strings no larger than 1 MiB."));
     }
@@ -186,56 +264,14 @@ FrontendOperationService::Result evaluateRegex(
         return {{}, {}, {}, true};
     }
 
-    progress(15, QStringLiteral("Matching regular expression"));
-    const QStringList captureNames = regex.namedCaptureGroups();
-    auto iterator = global ? regex.globalMatch(input) : QRegularExpressionMatchIterator{};
-    int matchIndex = 0;
-    if (global) {
-        while (iterator.hasNext()) {
-            if (resultBuilder.isCancelled()) {
-                return {{}, {}, {}, true};
-            }
-            if (matchIndex >= MAX_REGEX_MATCHES) {
-                return regexSizeLimitExceeded(
-                    QStringLiteral("Regex results are limited to 10,000 matches."));
-            }
-            const RegexResultBuildStatus status =
-                resultBuilder.appendMatch(iterator.next(), captureNames, matchIndex++);
-            if (status != RegexResultBuildStatus::Completed) {
-                return regexResultBuildFailure(status);
-            }
-        }
-        if (!iterator.isValid()) {
-            return invalidInput(QStringLiteral("Regular expression match limit exceeded."));
-        }
-    } else {
-        const QRegularExpressionMatch match = regex.match(input);
-        if (match.hasMatch()) {
-            const RegexResultBuildStatus status = resultBuilder.appendMatch(match, captureNames, 0);
-            if (status != RegexResultBuildStatus::Completed) {
-                return regexResultBuildFailure(status);
-            }
-        }
+    auto status = appendRegexMatches(regex, input, global, &resultBuilder, progress);
+    if (status != RegexResultBuildStatus::Completed) {
+        return regexResultBuildFailure(status);
     }
-    if (resultBuilder.isCancelled()) {
-        return {{}, {}, {}, true};
-    }
-
-    QString replaced;
-    const auto replaceResult = devtools::RegexTool::replaceBounded(
-        limitedPattern, input, replacement, options, global, resultBuilder.remainingBytes(),
-        MAX_REGEX_MATCHES,
-        [cancellation]() { return cancellation->load(std::memory_order_relaxed); }, &replaced);
-    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::Cancelled) {
-        return {{}, {}, {}, true};
-    }
-    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::MatchLimitExceeded) {
-        return invalidInput(QStringLiteral("Regular expression match limit exceeded."));
-    }
-    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::SizeLimitExceeded ||
-        !resultBuilder.setReplacementText(replaced)) {
-        return regexSizeLimitExceeded(
-            QStringLiteral("Regex results exceed the 4 MiB output limit."));
+    status = buildRegexReplacement(limitedPattern, input, replacement, options, global,
+                                   &resultBuilder, cancellation);
+    if (status != RegexResultBuildStatus::Completed) {
+        return regexResultBuildFailure(status);
     }
 
     progress(90, QStringLiteral("Building results"));
