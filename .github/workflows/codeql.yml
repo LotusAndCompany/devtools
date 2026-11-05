@@ -34,7 +34,8 @@ jobs:
 
   analyze-cpp:
     name: Analyze C++
-    runs-on: ubuntu-latest
+    # Keep vcpkg-based C++ checks on Ubuntu 24.04 until the 26.04 image is validated.
+    runs-on: ubuntu-24.04
     if: github.actor != 'dependabot[bot]'
 
     steps:

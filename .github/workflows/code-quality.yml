@@ -112,7 +112,8 @@ jobs:
 
   clang-tidy:
     name: Static Analysis
-    runs-on: ubuntu-latest
+    # Keep vcpkg-based C++ checks on Ubuntu 24.04 until the 26.04 image is validated.
+    runs-on: ubuntu-24.04
     if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
