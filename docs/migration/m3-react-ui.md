@@ -47,10 +47,11 @@ has no favorites implementation, so M3 does not add one.
 React calls only versioned `nativeBridge` operations. C++ validates operation
 names and payloads, keeps file paths in the native process, and performs file,
 network, database, image, and feature work. Request bodies, database results,
-image previews, regex matches, and individual inputs have explicit bounds in
-the native operation paths. Markdown HTML is isolated in a sandboxed iframe;
-the bundled page CSP and each host adapter's navigation/request policy remain
-in force.
+image previews, and individual inputs have explicit bounds in the native
+operation paths. Regex results, including capture values and replacement text,
+are capped at 4 MiB of serialized output and 10,000 matches. Markdown HTML is
+isolated in a sandboxed iframe; the bundled page CSP and each host adapter's
+navigation/request policy remain in force.
 
 ## Native Qt Host Scope
 

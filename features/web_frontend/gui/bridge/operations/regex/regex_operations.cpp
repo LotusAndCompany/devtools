@@ -1,8 +1,10 @@
 #include "regex_operations.h"
 
 #include "features/regex_tool/core/regex_tool.h"
+#include "features/web_frontend/gui/bridge/bridge_limits.h"
 #include "features/web_frontend/gui/bridge/operations/operation_support.h"
 
+#include <QJsonDocument>
 #include <QMetaType>
 #include <QRegularExpression>
 #include <QVariantList>
@@ -11,8 +13,136 @@ using FrontendOperationSupport::invalidInput;
 using FrontendOperationSupport::readText;
 
 namespace FrontendOperationHandlers {
+namespace {
+constexpr qsizetype MAX_REGEX_MATCHES = 10000;
+constexpr qsizetype REGEX_RESULT_METADATA_BYTES = 128;
 
-// NOLINTNEXTLINE(readability-function-size) -- one result flow.
+enum class RegexResultBuildStatus {
+    Completed,
+    Cancelled,
+    SizeLimitExceeded,
+};
+
+FrontendOperationService::Result regexSizeLimitExceeded(const QString &message)
+{
+    return {{}, QStringLiteral("SIZE_LIMIT_EXCEEDED"), message, false};
+}
+
+class RegexResultBuilder
+{
+public:
+    explicit RegexResultBuilder(const FrontendOperationService::CancellationToken &cancellation)
+        : cancellation_(cancellation)
+    {}
+
+    [[nodiscard]] bool isCancelled() const
+    {
+        return cancellation_->load(std::memory_order_relaxed);
+    }
+
+    [[nodiscard]] qsizetype remainingBytes() const
+    {
+        return BridgeLimits::MAX_OUTPUT_BYTES - result_budget_bytes_;
+    }
+
+    RegexResultBuildStatus appendMatch(const QRegularExpressionMatch &match,
+                                       const QStringList &captureNames, int matchIndex)
+    {
+        QVariantList groups;
+        for (int groupIndex = 0; groupIndex <= match.lastCapturedIndex(); ++groupIndex) {
+            if (isCancelled()) {
+                return RegexResultBuildStatus::Cancelled;
+            }
+            const QString name = captureNames.value(groupIndex);
+            const QString groupValue = match.captured(groupIndex);
+            if (!addMetadata() || !addString(name) || !addString(groupValue)) {
+                return RegexResultBuildStatus::SizeLimitExceeded;
+            }
+            groups.append(
+                QVariantMap{{QStringLiteral("index"), groupIndex},
+                            {QStringLiteral("name"), name},
+                            {QStringLiteral("value"), groupValue},
+                            {QStringLiteral("offset"), match.capturedStart(groupIndex)},
+                            {QStringLiteral("length"), match.capturedLength(groupIndex)}});
+        }
+
+        const QString matchValue = match.captured(0);
+        if (!addMetadata() || !addString(matchValue)) {
+            return RegexResultBuildStatus::SizeLimitExceeded;
+        }
+        matches_.append(QVariantMap{{QStringLiteral("index"), matchIndex},
+                                    {QStringLiteral("offset"), match.capturedStart()},
+                                    {QStringLiteral("length"), match.capturedLength()},
+                                    {QStringLiteral("value"), matchValue},
+                                    {QStringLiteral("groups"), groups}});
+        return RegexResultBuildStatus::Completed;
+    }
+
+    [[nodiscard]] bool setReplacementText(const QString &text)
+    {
+        if (!addString(text)) {
+            return false;
+        }
+        replaced_text_ = text;
+        return true;
+    }
+
+    [[nodiscard]] QVariantMap value() const
+    {
+        return {{QStringLiteral("matches"), matches_},
+                {QStringLiteral("replacedText"), replaced_text_}};
+    }
+
+    [[nodiscard]] bool fitsSerializedLimit() const
+    {
+        return QJsonDocument::fromVariant(value()).toJson(QJsonDocument::Compact).size() <=
+               BridgeLimits::MAX_OUTPUT_BYTES;
+    }
+
+private:
+    FrontendOperationService::CancellationToken cancellation_;
+    QVariantList matches_;
+    QString replaced_text_;
+    qsizetype result_budget_bytes_{REGEX_RESULT_METADATA_BYTES};
+
+    bool addMetadata()
+    {
+        if (REGEX_RESULT_METADATA_BYTES > remainingBytes()) {
+            return false;
+        }
+        result_budget_bytes_ += REGEX_RESULT_METADATA_BYTES;
+        return true;
+    }
+
+    bool addString(const QString &value)
+    {
+        const qsizetype bytes = value.toUtf8().size();
+        if (bytes > remainingBytes()) {
+            return false;
+        }
+        result_budget_bytes_ += bytes;
+        return true;
+    }
+};
+
+FrontendOperationService::Result completedRegexResult(const RegexResultBuilder &builder)
+{
+    if (!builder.fitsSerializedLimit()) {
+        return regexSizeLimitExceeded(
+            QStringLiteral("Regex results exceed the 4 MiB output limit."));
+    }
+    return {builder.value(), {}, {}, false};
+}
+
+FrontendOperationService::Result regexResultBuildFailure(RegexResultBuildStatus status)
+{
+    if (status == RegexResultBuildStatus::Cancelled) {
+        return {{}, {}, {}, true};
+    }
+    return regexSizeLimitExceeded(QStringLiteral("Regex results exceed the 4 MiB output limit."));
+}
+} // namespace
+
 FrontendOperationService::Result evaluateRegex(
     const QVariantMap &payload, const FrontendOperationService::CancellationToken &cancellation,
     const FrontendOperationService::ProgressCallback &progress)
@@ -26,13 +156,19 @@ FrontendOperationService::Result evaluateRegex(
         return invalidInput(QStringLiteral(
             "Pattern, text and replacement must be UTF-8 strings no larger than 1 MiB."));
     }
-    if (pattern.isEmpty()) {
-        return {
-            {{QStringLiteral("matches"), QVariantList{}}, {QStringLiteral("replacedText"), input}},
-            {},
-            {},
-            false};
+
+    RegexResultBuilder resultBuilder(cancellation);
+    if (resultBuilder.isCancelled()) {
+        return {{}, {}, {}, true};
     }
+    if (pattern.isEmpty()) {
+        if (!resultBuilder.setReplacementText(input)) {
+            return regexSizeLimitExceeded(
+                QStringLiteral("Regex results exceed the 4 MiB output limit."));
+        }
+        return completedRegexResult(resultBuilder);
+    }
+
     const auto options = devtools::RegexTool::patternOptions(
         payload.value(QStringLiteral("caseInsensitive")).toBool(),
         payload.value(QStringLiteral("multiline")).toBool(),
@@ -46,40 +182,27 @@ FrontendOperationService::Result evaluateRegex(
     if (!regex.isValid()) {
         return invalidInput(regex.errorString());
     }
-    if (cancellation->load(std::memory_order_relaxed)) {
+    if (resultBuilder.isCancelled()) {
         return {{}, {}, {}, true};
     }
 
     progress(15, QStringLiteral("Matching regular expression"));
-    QVariantList matches;
     const QStringList captureNames = regex.namedCaptureGroups();
     auto iterator = global ? regex.globalMatch(input) : QRegularExpressionMatchIterator{};
-    int index = 0;
+    int matchIndex = 0;
     if (global) {
         while (iterator.hasNext()) {
-            if (cancellation->load(std::memory_order_relaxed)) {
+            if (resultBuilder.isCancelled()) {
                 return {{}, {}, {}, true};
             }
-            const QRegularExpressionMatch match = iterator.next();
-            QVariantList groups;
-            for (int groupIndex = 0; groupIndex <= match.lastCapturedIndex(); ++groupIndex) {
-                groups.append(
-                    QVariantMap{{QStringLiteral("index"), groupIndex},
-                                {QStringLiteral("name"), captureNames.value(groupIndex)},
-                                {QStringLiteral("value"), match.captured(groupIndex)},
-                                {QStringLiteral("offset"), match.capturedStart(groupIndex)},
-                                {QStringLiteral("length"), match.capturedLength(groupIndex)}});
+            if (matchIndex >= MAX_REGEX_MATCHES) {
+                return regexSizeLimitExceeded(
+                    QStringLiteral("Regex results are limited to 10,000 matches."));
             }
-            matches.append(QVariantMap{{QStringLiteral("index"), index++},
-                                       {QStringLiteral("offset"), match.capturedStart()},
-                                       {QStringLiteral("length"), match.capturedLength()},
-                                       {QStringLiteral("value"), match.captured(0)},
-                                       {QStringLiteral("groups"), groups}});
-            if (matches.size() >= 10000) {
-                return {{},
-                        QStringLiteral("SIZE_LIMIT_EXCEEDED"),
-                        QStringLiteral("Regex results are limited to 10,000 matches."),
-                        false};
+            const RegexResultBuildStatus status =
+                resultBuilder.appendMatch(iterator.next(), captureNames, matchIndex++);
+            if (status != RegexResultBuildStatus::Completed) {
+                return regexResultBuildFailure(status);
             }
         }
         if (!iterator.isValid()) {
@@ -88,32 +211,35 @@ FrontendOperationService::Result evaluateRegex(
     } else {
         const QRegularExpressionMatch match = regex.match(input);
         if (match.hasMatch()) {
-            QVariantList groups;
-            for (int groupIndex = 0; groupIndex <= match.lastCapturedIndex(); ++groupIndex) {
-                groups.append(
-                    QVariantMap{{QStringLiteral("index"), groupIndex},
-                                {QStringLiteral("name"), captureNames.value(groupIndex)},
-                                {QStringLiteral("value"), match.captured(groupIndex)},
-                                {QStringLiteral("offset"), match.capturedStart(groupIndex)},
-                                {QStringLiteral("length"), match.capturedLength(groupIndex)}});
+            const RegexResultBuildStatus status = resultBuilder.appendMatch(match, captureNames, 0);
+            if (status != RegexResultBuildStatus::Completed) {
+                return regexResultBuildFailure(status);
             }
-            matches.append(QVariantMap{{QStringLiteral("index"), 0},
-                                       {QStringLiteral("offset"), match.capturedStart()},
-                                       {QStringLiteral("length"), match.capturedLength()},
-                                       {QStringLiteral("value"), match.captured(0)},
-                                       {QStringLiteral("groups"), groups}});
         }
     }
-    if (cancellation->load(std::memory_order_relaxed)) {
+    if (resultBuilder.isCancelled()) {
         return {{}, {}, {}, true};
     }
-    const QString replaced =
-        devtools::RegexTool::replace(limitedPattern, input, replacement, options, global);
+
+    QString replaced;
+    const auto replaceResult = devtools::RegexTool::replaceBounded(
+        limitedPattern, input, replacement, options, global, resultBuilder.remainingBytes(),
+        MAX_REGEX_MATCHES,
+        [cancellation]() { return cancellation->load(std::memory_order_relaxed); }, &replaced);
+    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::Cancelled) {
+        return {{}, {}, {}, true};
+    }
+    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::MatchLimitExceeded) {
+        return invalidInput(QStringLiteral("Regular expression match limit exceeded."));
+    }
+    if (replaceResult == devtools::RegexTool::BoundedReplaceResult::SizeLimitExceeded ||
+        !resultBuilder.setReplacementText(replaced)) {
+        return regexSizeLimitExceeded(
+            QStringLiteral("Regex results exceed the 4 MiB output limit."));
+    }
+
     progress(90, QStringLiteral("Building results"));
-    return {{{QStringLiteral("matches"), matches}, {QStringLiteral("replacedText"), replaced}},
-            {},
-            {},
-            false};
+    return completedRegexResult(resultBuilder);
 }
 
 } // namespace FrontendOperationHandlers

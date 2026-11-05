@@ -39,6 +39,14 @@ struct WKWebViewStorage
 namespace {
 constexpr const char *MESSAGE_HANDLER_NAME = "devtoolsNativeBridge";
 constexpr const char *DEV_SERVER_URL = "http://127.0.0.1:5173";
+constexpr qsizetype WK_START_OPERATION_ENVELOPE_BYTES =
+    sizeof("{\"type\":\"startOperation\",\"request\":}") - 1;
+
+struct ParsedScriptMessage
+{
+    QVariantMap value;
+    QString oversizedRequestId;
+};
 
 NSString *toNSString(const QString &value)
 {
@@ -72,7 +80,7 @@ QStringList localFilePaths(NSArray<NSURL *> *urls)
     return paths;
 }
 
-QVariantMap variantMapFromMessage(id body)
+ParsedScriptMessage variantMapFromMessage(id body)
 {
     if (![body isKindOfClass:[NSDictionary class]]) {
         return {};
@@ -81,15 +89,36 @@ QVariantMap variantMapFromMessage(id body)
     NSData *const data = [NSJSONSerialization dataWithJSONObject:body
                                                          options:NSJSONWritingFragmentsAllowed
                                                            error:&error];
-    if (data == nil || data.length > NativeBridge::MAX_MESSAGE_BYTES) {
+    if (data == nil) {
         return {};
+    }
+    NSDictionary *const dictionary = (NSDictionary *)body;
+    NSString *const type = [dictionary objectForKey:@"type"];
+    const bool isStartOperation = [type isKindOfClass:[NSString class]] &&
+                                  [type isEqualToString:@"startOperation"];
+    // Allow room for WK's outer transport envelope and JSON escaping while
+    // serializing the JS object. NativeBridge validates the inner request at 2 MiB.
+    const qsizetype maxMessageBytes =
+        NativeBridge::MAX_MESSAGE_BYTES * (isStartOperation ? 2 : 1) +
+        (isStartOperation ? WK_START_OPERATION_ENVELOPE_BYTES : 0);
+    if (data.length > static_cast<NSUInteger>(maxMessageBytes)) {
+        NSString *requestId = nil;
+        NSDictionary *const request = [dictionary objectForKey:@"request"];
+        if (isStartOperation && [request isKindOfClass:[NSDictionary class]]) {
+            id const candidate = [request objectForKey:@"requestId"];
+            if ([candidate isKindOfClass:[NSString class]]) {
+                requestId = candidate;
+            }
+        }
+        return {{}, toQString(requestId)};
     }
     const QByteArray json(static_cast<const char *>(data.bytes), static_cast<qsizetype>(data.length));
     QJsonParseError parseError;
     const QJsonDocument document = QJsonDocument::fromJson(json, &parseError);
-    return parseError.error == QJsonParseError::NoError && document.isObject()
-               ? document.object().toVariantMap()
-               : QVariantMap{};
+    return {parseError.error == QJsonParseError::NoError && document.isObject()
+                ? document.object().toVariantMap()
+                : QVariantMap{},
+            {}};
 }
 } // namespace
 
@@ -103,8 +132,16 @@ QVariantMap variantMapFromMessage(id body)
         return;
     }
     const QString sourceUrl = toQString(message.frameInfo.request.URL.absoluteString);
-    self.adapter->handleScriptMessage(sourceUrl, message.frameInfo.isMainFrame,
-                                      variantMapFromMessage(message.body));
+    if (!message.frameInfo.isMainFrame || !self.adapter->isAllowedNavigation(sourceUrl, true)) {
+        return;
+    }
+    const ParsedScriptMessage parsed = variantMapFromMessage(message.body);
+    if (!parsed.oversizedRequestId.isEmpty()) {
+        self.adapter->handleOversizedScriptMessage(sourceUrl, message.frameInfo.isMainFrame,
+                                                   parsed.oversizedRequestId);
+    } else {
+        self.adapter->handleScriptMessage(sourceUrl, message.frameInfo.isMainFrame, parsed.value);
+    }
 }
 
 - (void)webView:(WKWebView *)webView
@@ -430,6 +467,15 @@ void WKWebViewAdapter::handleScriptMessage(const QString &sourceUrl, bool mainFr
     } else if (type == QStringLiteral("cancelOperation")) {
         native_bridge_->cancelOperation(message.value(QStringLiteral("requestId")).toString());
     }
+}
+
+void WKWebViewAdapter::handleOversizedScriptMessage(const QString &sourceUrl, bool mainFrame,
+                                                     const QString &requestId)
+{
+    if (!mainFrame || !isAllowedNavigation(sourceUrl, true) || native_bridge_ == nullptr) {
+        return;
+    }
+    native_bridge_->rejectOversizedRequest(requestId);
 }
 
 bool WKWebViewAdapter::canAcceptDroppedFilePaths(const QStringList &paths) const

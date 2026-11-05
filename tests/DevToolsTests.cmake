@@ -224,6 +224,13 @@ DevTools_add_test(test_regex_tool CORE_ONLY
     features/regex_tool/core/regex_tool.cpp
 )
 
+DevTools_add_test(test_regex_operations CORE_ONLY
+    SOURCES
+    features/web_frontend/tests/test_regex_operations.cpp
+    features/web_frontend/gui/bridge/operations/regex/regex_operations.cpp
+    features/regex_tool/core/regex_tool.cpp
+)
+
 # Exercise the regex worker without linking or constructing Widgets.
 DevTools_add_test(test_regex_worker CORE_ONLY
     SOURCES

@@ -25,10 +25,20 @@ parallel native menu entry.
 ### 3. Add native operations when needed
 
 For native work, add the input and output to `OperationContracts` in
-`frontend/src/shared/bridge/types.ts`. Implement the handler and register it in
-`features/web_frontend/gui/bridge/operation_registry.cpp`. Put reusable
-processing in `features/{feature}/core/` and list new service sources in that
-feature's `CMakeLists.txt`.
+`frontend/src/shared/bridge/types.ts`. Add the native operation name and handler
+category to `features/web_frontend/gui/bridge/operation_registry.cpp`, then
+implement the handler. Generic tool operations also need a dispatch case in
+`features/web_frontend/gui/bridge/operations/frontend_operation_service.cpp`;
+a new handler category needs an enum entry in `operation_registry.h` and a
+dispatch case in `native_bridge.cpp`. Put reusable processing in
+`features/{feature}/core/` and list new sources in the relevant
+`CMakeLists.txt`.
+
+Keep the TypeScript contract and C++ registry names in sync; the
+`operation-contract-parity.test.mjs` test checks this. Most operations do not
+need host-specific transport changes: Qt WebEngine and WKWebView both carry the
+same versioned request through `NativeBridge`. Change a transport adapter only
+when the wire envelope or its platform behavior changes.
 
 Keep OS dialogs, clipboard access, file paths, and platform bridge calls in the
 native host and bridge layers. React features use the typed operation runner;

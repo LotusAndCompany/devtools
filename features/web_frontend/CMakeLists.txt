@@ -52,6 +52,7 @@ target_sources(DevTools_web_frontend PRIVATE
     gui/main_window.cpp
     gui/native_bridge.h gui/native_bridge.cpp
     gui/bridge/operation_registry.h gui/bridge/operation_registry.cpp
+    gui/bridge/bridge_limits.h
     gui/bridge/bridge_io.h
     gui/bridge/operation_runtime.cpp
     gui/bridge/request_validation.cpp

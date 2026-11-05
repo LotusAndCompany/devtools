@@ -2,7 +2,7 @@
 
 This record follows the Qt WebView migration design supplied for PR #142. It
 preserves the G0 result for the standard Qt WebView API and records the selected
-macOS WKWebView adapter separately. Updated 2026-11-02.
+macOS WKWebView adapter separately. Updated 2026-11-05.
 
 ## Decision
 
@@ -25,7 +25,11 @@ external top-level navigation, and the C++ file-path routing used by image and
 SQLite drops. The user manually confirmed that Finder-originated image and
 SQLite file drops both work in the Qt 6.12.0 WKWebView app.
 
-## Baseline
+## Baseline snapshot (2026-11-02)
+
+The following table preserves the repository and PR state at the time of the
+original feasibility update; it is historical evidence, not the current
+checkout state.
 
 | Item | Verified state |
 |---|---|
@@ -39,6 +43,30 @@ SQLite file drops both work in the Qt 6.12.0 WKWebView app.
 | Other platform host | `QtWebEngineAdapter`, `QWebChannel`, `QWebEnginePage`, and a request interceptor |
 | macOS drop path | AppKit file-URL drag handling on the WKWebView subclass validates image/SQLite paths and passes the original paths to C++; the user confirmed both Finder drops work |
 | Other platform drop path | Qt/WebEngine drop handlers route the original image/SQLite paths to C++ |
+
+## Local bridge follow-up snapshot (2026-11-05)
+
+- Local branch: `feature/issue-133-134-react-ui`, based at
+  `591036d3b7ec71920bd25af6f17dd7d882007bad`.
+- PR #142 remains open and unmerged. Its published head matched this base when
+  this review began; the bridge follow-up below is still local and uncommitted.
+- Regex results now have a 4 MiB serialized-output cap, including duplicated
+  capture data and replacement text, plus the existing 10,000-match limit.
+  Cancellation is checked during capture collection and replacement building.
+- WKWebView accounts for the `startOperation` wrapper around the frontend's
+  2 MiB serialized request limit. Oversized requests with a valid request ID
+  produce a correlated failure event; untrusted frames and invalid IDs do not.
+- The TypeScript operation contract and C++ registry have a Vitest parity
+  check; all 31 operation names match.
+- Frontend lint, formatting, typecheck, production build, and all 28 Vitest
+  tests passed across 12 files. The build reports Vite's 500 kB chunk advisory
+  for the 700.32 kB app bundle.
+- `test_native_bridge`, `test_regex_tool`, and `test_regex_operations` passed.
+  Its MySQL/PostgreSQL integration case was skipped because the server
+  environment variables were not configured.
+- `test_wkwebview_frontend` compiled, but its runtime suite could not complete
+  in this runner: WebKit reported no available screen and the suite exited with
+  SIGBUS during the existing all-routes rendering case.
 
 The screen-to-operation and retained-behavior inventory is in
 [M3 React UI migration](m3-react-ui.md). The contract and registry are
@@ -166,5 +194,6 @@ The bundled database plugins also lack the documented MySQL/PostgreSQL drivers,
 so that packaging gap remains open.
 
 Keep the standard Qt WebView G0 result separate from the implemented direct
-WKWebView adapter. The published PR head and this checkout differ; do not treat
-the local host implementation as merged or release-ready.
+WKWebView adapter. At the 2026-11-02 snapshot, the published PR head and local
+checkout differed. The current local bridge follow-up is still uncommitted and
+must not be treated as merged or release-ready.

@@ -1,5 +1,6 @@
 #include "features/regex_tool/core/regex_tool.h"
 
+#include <QByteArray>
 #include <QThread>
 
 namespace {
@@ -45,6 +46,90 @@ QString substituteReplacement(const QString &replacement, const QRegularExpressi
         }
     }
     return result;
+}
+
+using BoundedReplaceResult = devtools::RegexTool::BoundedReplaceResult;
+
+BoundedReplaceResult appendBounded(QString *result, const QString &fragment, qsizetype *outputBytes,
+                                   qsizetype maxOutputBytes)
+{
+    const qsizetype fragmentBytes = fragment.toUtf8().size();
+    if (fragmentBytes > maxOutputBytes - *outputBytes) {
+        return BoundedReplaceResult::SizeLimitExceeded;
+    }
+    result->append(fragment);
+    *outputBytes += fragmentBytes;
+    return BoundedReplaceResult::Completed;
+}
+
+BoundedReplaceResult appendReplacementBounded(QString *result, const QString &replacement,
+                                              const QRegularExpressionMatch &match,
+                                              qsizetype *outputBytes, qsizetype maxOutputBytes,
+                                              const std::function<bool()> &isCancelled)
+{
+    const qsizetype length = replacement.size();
+    for (qsizetype i = 0; i < length;) {
+        if (isCancelled()) {
+            return BoundedReplaceResult::Cancelled;
+        }
+
+        const QChar current = replacement.at(i);
+        if (current != '$') {
+            const qsizetype start = i;
+            const qsizetype endLimit = qMin(length, start + 4096);
+            while (i < endLimit && replacement.at(i) != '$') {
+                ++i;
+            }
+            const auto appendResult = appendBounded(result, replacement.mid(start, i - start),
+                                                    outputBytes, maxOutputBytes);
+            if (appendResult != BoundedReplaceResult::Completed) {
+                return appendResult;
+            }
+            continue;
+        }
+
+        if (i + 1 >= length) {
+            const auto appendResult =
+                appendBounded(result, QStringLiteral("$"), outputBytes, maxOutputBytes);
+            if (appendResult != BoundedReplaceResult::Completed) {
+                return appendResult;
+            }
+            ++i;
+            continue;
+        }
+
+        const QChar next = replacement.at(i + 1);
+        QString captured;
+        qsizetype consumed = 1;
+        if (next == '$') {
+            captured = QStringLiteral("$");
+            consumed = 2;
+        } else if (next == '&') {
+            captured = match.captured(0);
+            consumed = 2;
+        } else if (next == '<') {
+            const qsizetype end = replacement.indexOf('>', i + 2);
+            if (end > i + 2) {
+                captured = match.captured(replacement.mid(i + 2, end - i - 2));
+                consumed = end - i + 1;
+            } else {
+                captured = QStringLiteral("$<");
+                consumed = 2;
+            }
+        } else if (next.isDigit() && next.digitValue() >= 1 && next.digitValue() <= 9) {
+            captured = match.captured(next.digitValue());
+            consumed = 2;
+        } else {
+            captured = QStringLiteral("$");
+        }
+
+        const auto appendResult = appendBounded(result, captured, outputBytes, maxOutputBytes);
+        if (appendResult != BoundedReplaceResult::Completed) {
+            return appendResult;
+        }
+        i += consumed;
+    }
+    return BoundedReplaceResult::Completed;
 }
 
 } // namespace
@@ -148,6 +233,80 @@ QString RegexTool::replace(const QString &pattern, const QString &text, const QS
     // Append the remaining text
     result.append(text.mid(lastPos));
     return result;
+}
+
+RegexTool::BoundedReplaceResult RegexTool::replaceBounded(
+    const QString &pattern, const QString &text, const QString &replacement,
+    QRegularExpression::PatternOptions options, bool global, qsizetype maxOutputBytes,
+    qsizetype maxMatches, const std::function<bool()> &isCancelled, QString *result)
+{
+    result->clear();
+    qsizetype outputBytes = 0;
+    if (isCancelled()) {
+        return BoundedReplaceResult::Cancelled;
+    }
+    if (pattern.isEmpty()) {
+        return appendBounded(result, text, &outputBytes, maxOutputBytes);
+    }
+
+    QRegularExpression const re(pattern, options);
+    if (!re.isValid()) {
+        return appendBounded(result, text, &outputBytes, maxOutputBytes);
+    }
+
+    qsizetype lastPos = 0;
+    qsizetype matchCount = 0;
+    const auto appendMatch = [&](const QRegularExpressionMatch &match) {
+        if (isCancelled()) {
+            return BoundedReplaceResult::Cancelled;
+        }
+        if (matchCount >= maxMatches) {
+            return BoundedReplaceResult::SizeLimitExceeded;
+        }
+        auto appendResult =
+            appendBounded(result, text.mid(lastPos, match.capturedStart() - lastPos), &outputBytes,
+                          maxOutputBytes);
+        if (appendResult != BoundedReplaceResult::Completed) {
+            return appendResult;
+        }
+        appendResult = appendReplacementBounded(result, replacement, match, &outputBytes,
+                                                maxOutputBytes, isCancelled);
+        if (appendResult != BoundedReplaceResult::Completed) {
+            return appendResult;
+        }
+        lastPos = match.capturedEnd();
+        ++matchCount;
+        return BoundedReplaceResult::Completed;
+    };
+
+    if (global) {
+        QRegularExpressionMatchIterator iterator = re.globalMatch(text);
+        while (iterator.hasNext()) {
+            if (isCancelled()) {
+                return BoundedReplaceResult::Cancelled;
+            }
+            const BoundedReplaceResult appendResult = appendMatch(iterator.next());
+            if (appendResult != BoundedReplaceResult::Completed) {
+                return appendResult;
+            }
+        }
+        if (!iterator.isValid()) {
+            return BoundedReplaceResult::MatchLimitExceeded;
+        }
+    } else {
+        const QRegularExpressionMatch match = re.match(text);
+        if (match.hasMatch()) {
+            const BoundedReplaceResult appendResult = appendMatch(match);
+            if (appendResult != BoundedReplaceResult::Completed) {
+                return appendResult;
+            }
+        }
+    }
+
+    if (isCancelled()) {
+        return BoundedReplaceResult::Cancelled;
+    }
+    return appendBounded(result, text.mid(lastPos), &outputBytes, maxOutputBytes);
 }
 
 QString RegexTool::formatMatchesForClipboard(const QVector<MatchResult> &matches,

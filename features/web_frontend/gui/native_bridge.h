@@ -1,6 +1,8 @@
 #ifndef NATIVE_BRIDGE_H
 #define NATIVE_BRIDGE_H
 
+#include "features/web_frontend/gui/bridge/bridge_limits.h"
+
 #include <QFutureWatcher>
 #include <QHash>
 #include <QObject>
@@ -25,9 +27,9 @@ class NativeBridge : public QObject
     Q_PROPERTY(QString contractVersion MEMBER contract_version_ CONSTANT)
 
 public:
-    static constexpr qsizetype MAX_INPUT_BYTES = 1024 * 1024;
-    static constexpr qsizetype MAX_OUTPUT_BYTES = 4 * 1024 * 1024;
-    static constexpr qsizetype MAX_MESSAGE_BYTES = 2 * 1024 * 1024;
+    static constexpr qsizetype MAX_INPUT_BYTES = BridgeLimits::MAX_INPUT_BYTES;
+    static constexpr qsizetype MAX_OUTPUT_BYTES = BridgeLimits::MAX_OUTPUT_BYTES;
+    static constexpr qsizetype MAX_MESSAGE_BYTES = BridgeLimits::MAX_MESSAGE_BYTES;
     static constexpr int MAX_CONCURRENT_OPERATIONS = 4;
 
     explicit NativeBridge(QWidget *dialogParent, QObject *parent = nullptr);
@@ -52,6 +54,7 @@ Q_SIGNALS:
 
 private:
     friend class TestNativeBridge;
+    friend class WKWebViewAdapter;
 
     struct OperationResult
     {
@@ -81,6 +84,7 @@ private:
     QString contract_version_ = QStringLiteral("2");
 
     [[nodiscard]] bool validateRequest(const QString &requestId, const QVariantMap &request);
+    void rejectOversizedRequest(const QString &requestId);
     [[nodiscard]] bool textPayload(const QString &requestId, const QVariantMap &payload,
                                    const QString &sizeError, QString *text);
     [[nodiscard]] bool parseIndentation(const QString &requestId, const QVariantMap &payload,

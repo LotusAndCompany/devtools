@@ -67,3 +67,30 @@ baseline.
 - Mac App Store signing, Archive validation, and upload are on hold at the
   user's request. This change produced no release Archive or `.pkg`; package
   signing is separate from the app-bundle build.
+- At this 2026-11-02 snapshot, the published PR #142 head was older than the
+  local checkout. The later 2026-11-05 checkpoint below records the updated PR
+  and bridge review state.
+
+## Bridge review update (2026-11-05)
+
+- The local branch is `feature/issue-133-134-react-ui` at base commit
+  `591036d3b7ec71920bd25af6f17dd7d882007bad`. PR #142 remains open and
+  unmerged; its published head matched this base when this update began.
+- This follow-up bounds aggregate regex results and replacement output to the
+  4 MiB serialized-result limit, keeps the 10,000-match cap, and checks
+  cancellation while building captures and replacement text.
+- WKWebView allows the fixed start-operation envelope around a valid 2 MiB
+  frontend request. Requests beyond the limit return a correlated
+  `SIZE_LIMIT_EXCEEDED` event when the request ID is valid.
+- The implementation, parity test, and focused verification results are
+  recorded in the current working tree; these changes are not yet committed or
+  published in PR #142.
+- Frontend lint, formatting, typecheck, build, and all 28 Vitest tests passed
+  across 12 files. The build reports Vite's 500 kB chunk-size advisory for the
+  700.32 kB app bundle.
+- `test_native_bridge`, `test_regex_tool`, and `test_regex_operations` passed.
+  The MySQL/PostgreSQL integration case in `test_native_bridge` was skipped
+  because its server environment variables were not set.
+- The WKWebView integration target compiled. Its runtime suite could not be
+  completed in this runner: WebKit reported no available screen, and the suite
+  exited with SIGBUS during the existing all-routes rendering case.

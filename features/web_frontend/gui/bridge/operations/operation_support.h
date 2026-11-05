@@ -1,6 +1,7 @@
 #ifndef FRONTEND_OPERATION_SUPPORT_H
 #define FRONTEND_OPERATION_SUPPORT_H
 
+#include "features/web_frontend/gui/bridge/bridge_limits.h"
 #include "frontend_operation_service.h"
 
 #include <QMetaType>
@@ -18,7 +19,7 @@ inline bool readText(const QVariantMap &payload, const QString &key, QString *va
         return false;
     }
     *value = field.toString();
-    return value->toUtf8().size() <= 1024 * 1024;
+    return value->toUtf8().size() <= BridgeLimits::MAX_INPUT_BYTES;
 }
 } // namespace FrontendOperationSupport
 

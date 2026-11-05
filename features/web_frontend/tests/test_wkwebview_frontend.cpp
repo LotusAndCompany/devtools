@@ -22,6 +22,7 @@ private slots:
     void rendersEveryToolRoute();
     void blocksExternalMainFrameNavigation();
     void routesSupportedNativeFileDrops();
+    void correlatesOversizedTrustedMessages();
 
 private:
     bool evaluateJavaScript(WKWebViewAdapter *adapter, const QString &script, QVariant *result);
@@ -106,6 +107,28 @@ void TestWKWebViewFrontend::loadsBundledFrontendAndRunsBridgeRequest()
     QCOMPARE(event.value(QStringLiteral("type")).toString(), QStringLiteral("completed"));
     QCOMPARE(event.value(QStringLiteral("requestId")).toString(),
              QStringLiteral("wkwebview_get_about"));
+}
+
+void TestWKWebViewFrontend::correlatesOversizedTrustedMessages()
+{
+    WKWebViewAdapter adapter;
+    QSignalSpy failed(adapter.nativeBridge(), &NativeBridge::operationFailed);
+    QVERIFY(failed.isValid());
+
+    const QString sourceUrl = adapter.development_server_url_.isEmpty()
+                                  ? QUrl::fromLocalFile(adapter.index_file_path_).toString()
+                                  : adapter.development_server_url_ + QStringLiteral("/");
+    adapter.handleOversizedScriptMessage(sourceUrl, true, QStringLiteral("oversized-1"));
+    QCOMPARE(failed.count(), 1);
+    QCOMPARE(failed.constFirst().at(0).toString(), QStringLiteral("oversized-1"));
+    QCOMPARE(failed.constFirst().at(1).toMap().value(QStringLiteral("code")).toString(),
+             QStringLiteral("SIZE_LIMIT_EXCEEDED"));
+
+    adapter.handleOversizedScriptMessage(sourceUrl, true, QStringLiteral("invalid/id"));
+    adapter.handleOversizedScriptMessage(QStringLiteral("https://example.com"), true,
+                                         QStringLiteral("untrusted-1"));
+    adapter.handleOversizedScriptMessage(sourceUrl, false, QStringLiteral("subframe-1"));
+    QCOMPARE(failed.count(), 1);
 }
 
 void TestWKWebViewFrontend::rendersEveryToolRoute()

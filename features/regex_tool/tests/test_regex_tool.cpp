@@ -12,6 +12,9 @@ private slots:
     void testReplace_data();
     void testReplace();
     void testReplaceSingle();
+    void testReplaceBoundedSizeLimit();
+    void testReplaceBoundedCancellation();
+    void testReplaceBoundedPreservesTokens();
 };
 
 void TestRegexTool::testMatch_data()
@@ -90,6 +93,44 @@ void TestRegexTool::testReplaceSingle()
     const QString result = devtools::RegexTool::replace("abc", "abc abc", "xyz",
                                                         QRegularExpression::NoPatternOption, false);
     QCOMPARE(result, QString("xyz abc"));
+}
+
+void TestRegexTool::testReplaceBoundedSizeLimit()
+{
+    QString result;
+    const auto status = devtools::RegexTool::replaceBounded(
+        QStringLiteral("."), QStringLiteral("ab"), QStringLiteral("$&$&"),
+        QRegularExpression::NoPatternOption, true, 3, 10, [] { return false; }, &result);
+
+    QCOMPARE(status, devtools::RegexTool::BoundedReplaceResult::SizeLimitExceeded);
+}
+
+void TestRegexTool::testReplaceBoundedCancellation()
+{
+    QString result;
+    const auto immediateStatus = devtools::RegexTool::replaceBounded(
+        QString(), QStringLiteral("abc"), QString(), QRegularExpression::NoPatternOption, true, 100,
+        10, [] { return true; }, &result);
+    QCOMPARE(immediateStatus, devtools::RegexTool::BoundedReplaceResult::Cancelled);
+
+    int cancellationChecks = 0;
+    const auto status = devtools::RegexTool::replaceBounded(
+        QStringLiteral("."), QStringLiteral("abc"), QStringLiteral("x"),
+        QRegularExpression::NoPatternOption, true, 100, 10,
+        [&cancellationChecks]() { return ++cancellationChecks >= 4; }, &result);
+
+    QCOMPARE(status, devtools::RegexTool::BoundedReplaceResult::Cancelled);
+}
+
+void TestRegexTool::testReplaceBoundedPreservesTokens()
+{
+    QString result;
+    const auto status = devtools::RegexTool::replaceBounded(
+        QStringLiteral("(?<x>a)"), QStringLiteral("a a"), QStringLiteral("$<x>/$1/$&/$$"),
+        QRegularExpression::NoPatternOption, true, 100, 10, [] { return false; }, &result);
+
+    QCOMPARE(status, devtools::RegexTool::BoundedReplaceResult::Completed);
+    QCOMPARE(result, QStringLiteral("a/a/a/$ a/a/a/$"));
 }
 
 QTEST_APPLESS_MAIN(TestRegexTool)

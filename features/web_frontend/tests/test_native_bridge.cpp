@@ -166,9 +166,11 @@ void TestNativeBridge::enforcesInputAndVersionLimits()
     NativeBridge bridge(nullptr);
     QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
     QSignalSpy started(&bridge, &NativeBridge::operationStarted);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
     QSignalSpy progress(&bridge, &NativeBridge::operationProgress);
     QVERIFY(failed.isValid());
     QVERIFY(started.isValid());
+    QVERIFY(completed.isValid());
     QVERIFY(progress.isValid());
 
     bridge.startOperation(formatRequest(
@@ -178,14 +180,44 @@ void TestNativeBridge::enforcesInputAndVersionLimits()
              QStringLiteral("SIZE_LIMIT_EXCEEDED"));
     QCOMPARE(started.count(), 1);
 
+    QVariantMap oversizedRequest =
+        formatRequest(QStringLiteral("large-envelope-1"), QStringLiteral("{}"));
+    oversizedRequest.insert(QStringLiteral("extra"),
+                            QString(NativeBridge::MAX_MESSAGE_BYTES, QLatin1Char('x')));
+    bridge.startOperation(oversizedRequest);
+    QCOMPARE(failed.count(), 2);
+    QCOMPARE(failed.constLast().at(0).toString(), QStringLiteral("large-envelope-1"));
+    QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
+             QStringLiteral("SIZE_LIMIT_EXCEEDED"));
+
+    bridge.rejectOversizedRequest(QStringLiteral("oversized-adapter-1"));
+    QCOMPARE(failed.count(), 3);
+    QCOMPARE(failed.constLast().at(0).toString(), QStringLiteral("oversized-adapter-1"));
+    QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
+             QStringLiteral("SIZE_LIMIT_EXCEEDED"));
+    bridge.rejectOversizedRequest(QStringLiteral("invalid/id"));
+    QCOMPARE(failed.count(), 3);
+
+    const QVariantMap nearLimitRequest{
+        {QStringLiteral("contractVersion"), QStringLiteral("2")},
+        {QStringLiteral("requestId"), QStringLiteral("near-limit-1")},
+        {QStringLiteral("operation"), QStringLiteral("getAboutInfo")},
+        {QStringLiteral("payload"),
+         QVariantMap{{QStringLiteral("extra"),
+                      QString(NativeBridge::MAX_MESSAGE_BYTES - 1024, QLatin1Char('x'))}}}};
+    bridge.startOperation(nearLimitRequest);
+    QCOMPARE(started.count(), 2);
+    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
+    const int progressBeforeUnsupportedRequest = progress.count();
+
     QVariantMap unsupported = formatRequest(QStringLiteral("version-1"), QStringLiteral("{}"));
     unsupported.insert(QStringLiteral("contractVersion"), QStringLiteral("3"));
     bridge.startOperation(unsupported);
-    QCOMPARE(failed.count(), 2);
+    QCOMPARE(failed.count(), 4);
     QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
              QStringLiteral("UNSUPPORTED_VERSION"));
-    QCOMPARE(started.count(), 1);
-    QCOMPARE(progress.count(), 0);
+    QCOMPARE(started.count(), 2);
+    QCOMPARE(progress.count(), progressBeforeUnsupportedRequest);
 }
 
 void TestNativeBridge::rejectsOperationsOutsideTheRegistry()

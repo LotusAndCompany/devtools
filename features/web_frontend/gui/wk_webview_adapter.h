@@ -29,6 +29,8 @@ public:
     // Native delegate entry points implemented by the WKWebView adapter.
     [[nodiscard]] bool isAllowedNavigation(const QString &url, bool mainFrame) const;
     void handleScriptMessage(const QString &sourceUrl, bool mainFrame, const QVariantMap &message);
+    void handleOversizedScriptMessage(const QString &sourceUrl, bool mainFrame,
+                                      const QString &requestId);
     [[nodiscard]] bool canAcceptDroppedFilePaths(const QStringList &paths) const;
     void routeDroppedFilePaths(const QStringList &paths);
     void dispatchNativeEvent(const QVariantMap &event);

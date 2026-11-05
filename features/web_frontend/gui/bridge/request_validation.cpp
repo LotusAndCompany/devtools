@@ -23,11 +23,10 @@ bool NativeBridge::validateRequest(const QString &requestId, const QVariantMap &
              QStringLiteral("The request payload must be an object."));
         return false;
     }
-    const QVariantMap payload = payloadValue.toMap();
-    if (QJsonDocument::fromVariant(payload).toJson(QJsonDocument::Compact).size() >
+    if (QJsonDocument::fromVariant(request).toJson(QJsonDocument::Compact).size() >
         MAX_MESSAGE_BYTES) {
         fail(requestId, QStringLiteral("SIZE_LIMIT_EXCEEDED"),
-             QStringLiteral("The request exceeds the 2 MiB message limit."));
+             QStringLiteral("The serialized request exceeds the 2 MiB message limit."));
         return false;
     }
     if (operations_.contains(requestId)) {
@@ -48,6 +47,14 @@ bool NativeBridge::validateRequest(const QString &requestId, const QVariantMap &
         return false;
     }
     return true;
+}
+
+void NativeBridge::rejectOversizedRequest(const QString &requestId)
+{
+    if (isValidRequestId(requestId)) {
+        fail(requestId, QStringLiteral("SIZE_LIMIT_EXCEEDED"),
+             QStringLiteral("The serialized request exceeds the 2 MiB message limit."));
+    }
 }
 
 bool NativeBridge::textPayload(const QString &requestId, const QVariantMap &payload,
