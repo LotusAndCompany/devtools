@@ -123,8 +123,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install llvm ninja
-          echo "$(brew --prefix llvm)/bin" >> "$GITHUB_PATH"
+          brew install llvm@18 ninja
+          LLVM_PREFIX="$(brew --prefix llvm@18)"
+          echo "$LLVM_PREFIX/bin" >> "$GITHUB_PATH"
+          "$LLVM_PREFIX/bin/clang-tidy" --version
 
       - name: Install Qt
         uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125 # v4
