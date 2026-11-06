@@ -75,6 +75,9 @@ jobs:
           # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
           # fail. Falling back to "clear" rebuilds ports on every run.
           VCPKG_BINARY_SOURCES: clear
+          # yaml-cpp 0.8.0 declares CMake 3.4; CMake 4.0+ requires at least
+          # policy version 3.5. Keep the legacy dependency configurable.
+          CMAKE_POLICY_VERSION_MINIMUM: '3.5'
         run: |
           cmake -B build \
             -G Ninja \
