@@ -4,11 +4,12 @@ This guide explains how to write and run tests for DevTools.
 
 ## Overview
 
-DevTools uses Qt Test for C++ services and native bridge integration, and
-Vitest with Testing Library for React behavior. Tests cover feature processing,
-the platform web host bridge, and screen interactions. C++ test cases are methods on
-a `QObject` test class. `QTEST_GUILESS_MAIN` starts a `QCoreApplication` for
-service tests; web-host integration tests use a GUI application.
+DevTools uses Qt Test for C++ services and WKWebView/native bridge integration,
+and Vitest with Testing Library for React behavior. Tests cover feature
+processing, the web host bridge, and screen interactions. C++ test cases are
+methods on a `QObject` test class. `QTEST_GUILESS_MAIN` starts a
+`QCoreApplication` for service tests; WKWebView integration tests use a GUI
+application.
 
 ## Test Structure
 
@@ -113,11 +114,9 @@ React tests should cover observable screen behavior: editing inputs, invoking
 actions, validation, empty states, and rendered results. Keep them beside the
 feature or shared component they exercise.
 
-`features/web_frontend/tests/test_wkwebview_frontend.cpp` covers the macOS
-bundle and WKWebView bridge. Non-macOS builds use
-`test_qt_webengine_frontend.cpp` for the Qt WebEngine host. Extend the matching
-integration test when changing
-route loading, bridge operations, native file handling, or integration behavior.
+`features/web_frontend/tests/test_wkwebview_frontend.cpp` covers the bundled
+frontend and WKWebView bridge. Extend this integration test when changing route
+loading, bridge operations, native file handling, or integration behavior.
 For a UI-wide change, manually open the registered tools and check relevant
 empty/error/result states, window resizing, light and dark themes, and English
 and Japanese text.

@@ -33,8 +33,8 @@ DevToolsへの貢献に興味を持っていただきありがとうございま
 flowchart TD
     root["devtools/"]
     root --> features["features/<br/>機能モジュール<br/>(core/, tests/)"]
-    root --> frontend["frontend/src/<br/>React・TypeScript UI<br/>(app/, features/, shared/, platform/{qt,wkwebview}/)"]
-    root --> webbridge["features/web_frontend/<br/>WKWebView / Qt WebEngineとC++ブリッジ"]
+    root --> frontend["frontend/src/<br/>React・TypeScript UI<br/>(app/, features/, shared/, platform/wkwebview/)"]
+    root --> webbridge["features/web_frontend/<br/>WKWebViewとC++ブリッジ"]
     root --> main["main/<br/>アプリケーションエントリーポイント"]
     root --> resources["res/<br/>リソースと翻訳ファイル"]
     root --> tests["tests/<br/>共有テストヘルパー"]
@@ -112,7 +112,7 @@ bun run --bun dev
 DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
 ```
 
-HMRはDebugビルドでのみ利用でき、両ホストが受け付けるURLはこのループバックURLに限られます。macOSではWKWebViewが同梱アセットを一時ディレクトリへ展開して読み込み、その他の対応ビルドではQt WebEngineがQtリソースから読み込みます。Releaseビルドでは同梱アセットを使います。詳しくは[React移行メモ](../migration/m3-react-ui.md)を参照してください。
+HMRはDebugビルドでのみ利用でき、WKWebViewが受け付けるURLはこのループバックURLに限られます。同梱アセットは一時ディレクトリへ展開してWKWebViewから読み込みます。Releaseビルドでは同梱アセットを使います。詳しくは[React移行メモ](../migration/m3-react-ui.md)を参照してください。
 
 ### フロントエンドの確認
 

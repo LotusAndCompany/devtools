@@ -12,7 +12,7 @@
 ### ツール
 - **CMake**: 3.21.1以上
 - **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.12.0以上（CIは6.12.0を使用。Core、Gui、Widgets、LinguistTools、Sql、
+- **Qt**: 6.9.0以上（CIは6.9.0を使用。Core、Gui、Widgets、LinguistTools、Sql、
   Network、Svg、Concurrentモジュール。macOSではWKWebViewを使用）
 - **vcpkg**: 依存関係管理用
 - **Bun**: 1.3.14（Reactフロントエンドのビルドに必要）
@@ -26,8 +26,7 @@
 
 qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
 Qt 6.8以上とCMake 3.21以上が必要です。DevToolsではQt Widgetsのサポートライブラリにリンクします。
-アプリのメイン画面はReactで構成し、ViteでバンドルしてmacOSではWKWebView、
-その他の対応ビルドではQt WebEngineに表示します。
+アプリのメイン画面はReactで構成し、ViteでバンドルしてQt Widgetsのウィンドウ内のWKWebViewに表示します。
 
 ### オプション
 - **Doxygen**: 1.18以上（APIドキュメント生成用）
@@ -40,11 +39,11 @@ Qt 6.8以上とCMake 3.21以上が必要です。DevToolsではQt Widgetsのサ�
 ### 1. Qt6のインストール
 
 #### Qt Online Installerを使用する場合（推奨）
-[Qt Online Installer](https://www.qt.io/download)から、Qt 6.12.0のmacOS clang_64版と
+[Qt Online Installer](https://www.qt.io/download)から、Qt 6.9.0のmacOS clang_64版と
 Core、Gui、Widgets、LinguistTools、Sql、Network、Svg、Concurrentをインストールします。
 Qt Creatorは任意です。macOSビルドではQt WebEngine、WebChannel、Qt WebViewは不要です。
 
-Homebrewを使う場合は、インストールされたQtが6.12.0以上であることを確認してください。
+Homebrewを使う場合は、インストールされたQtが6.9.0以上であることを確認してください。
 
 ### 2. vcpkgのインストール
 
@@ -90,7 +89,7 @@ vcpkg install
 ```bash
 # 構成（vcpkgの依存関係とqlementineを取得します）
 cmake -S . -B build \
-  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx
 
@@ -143,7 +142,7 @@ qlementineのサンプルアプリケーションはプロジェクト設定で�
 オプション指定の例：
 ```bash
 cmake -S . -B build \
-  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
 ```
@@ -153,7 +152,7 @@ cmake -S . -B build \
 ```bash
 # まずテストを有効化
 cmake -S . -B build \
-  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx \
   -DENABLE_UNIT_TEST=ON
@@ -204,7 +203,7 @@ cmake --build build --target DevTools_docs
    ```bash
    rm -rf build
    cmake -S . -B build \
-     -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+     -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
@@ -226,13 +225,12 @@ cmake --build build --target DevTools_docs
 
 1. **Qt6_DIR環境変数を設定**:
    ```bash
-   export Qt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
+   export Qt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6"
    ```
 2. **またはCMakeに渡す**:
    ```bash
-   cmake -S . -B build -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
+   cmake -S . -B build -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6"
    ```
-3. Non-macOS builds also require the Qt WebChannel and WebEngineWidgets modules.
 
 ### qlementineのFetchContentで失敗する場合
 
@@ -243,8 +241,8 @@ qlementineのダウンロード中にCMake構成が失敗する場合は、以�
    ```bash
    rm -rf build/_deps/qlementine-*
    cmake -S . -B build \
-     -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+     -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
-3. 使用中のQtが6.12.0以上で、Svgモジュールを含んでいることを確認する。
+3. 使用中のQtが6.9.0以上で、Svgモジュールを含んでいることを確認する。

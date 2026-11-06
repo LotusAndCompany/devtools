@@ -6,7 +6,7 @@ This document lists common issues and their solutions.
 
 ### CMake Configuration Errors
 
-#### Qt 6.12.0 or a required module not found
+#### Qt 6.9.0 or a required module not found
 
 **Error:**
 ```
@@ -15,18 +15,18 @@ Could not find a package configuration file provided by "Qt6"
 
 **Solution:**
 
-Install Qt 6.12.0 or later. For the Qt Online Installer default, set `Qt6_DIR`
+Install Qt 6.9.0 or later. For the Qt Online Installer default, set `Qt6_DIR`
 and configure from the repository root:
    ```bash
-   export Qt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6"
+   export Qt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6"
    cmake -S . -B build \
      -DQt6_DIR="$Qt6_DIR" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```
 
-The macOS host uses WKWebView and does not need Qt WebEngine or WebChannel.
-Non-macOS builds also need Qt WebEngineWidgets and WebChannel.
+The React frontend uses Apple's WKWebView inside the Qt Widgets window. Qt
+WebEngine and WebChannel are not application dependencies.
 
 #### vcpkg Packages Not Found
 
@@ -50,7 +50,7 @@ Could not find a package configuration file provided by "yaml-cpp"
 3. Specify toolchain file:
    ```bash
    cmake -S . -B build \
-     -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+     -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
      -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
      -DVCPKG_TARGET_TRIPLET=arm64-osx
    ```

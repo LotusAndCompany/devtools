@@ -13,9 +13,8 @@ DevTools uses clang-format for automatic code formatting. Configuration is in `.
 The React UI uses TypeScript, Oxlint, Oxfmt, and Vitest. Keep screens and
 screen-specific state in `frontend/src/features/{feature}/`; use the app
 registry for tool metadata and `shared/` only for code reused across features.
-Host transports live in `frontend/src/platform/qt/` and
-`frontend/src/platform/wkwebview/`. Feature screens use the typed operation
-runner rather than calling a host transport directly.
+The host transport lives in `frontend/src/platform/wkwebview/`. Feature screens
+use the typed operation runner rather than calling a host transport directly.
 
 Build controls from the project's Base UI-backed shadcn components in
 `frontend/src/shared/components/ui/`. Keep shared design tokens in

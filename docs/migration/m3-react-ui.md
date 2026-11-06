@@ -1,12 +1,11 @@
 # M3: React UI migration
 
 M3 replaces the normal tool and settings screens with React while keeping
-feature processing in the existing C++ services. The Qt application remains
-the native window host. macOS displays React in Apple's WKWebView; non-macOS
-builds use Qt WebEngine. The platform adapter owns its web-host security and
-bridge transport, while Qt Widgets owns window lifecycle, native dialogs,
-clipboard, and platform integration. The app's regular navigation no longer
-opens a Qt Widgets tool screen.
+feature processing in the existing C++ services. DevTools targets macOS, where
+React runs in Apple's WKWebView inside the Qt Widgets window. The web adapter
+owns its security and bridge transport, while Qt Widgets owns window lifecycle,
+native dialogs, clipboard, and platform integration. The app's regular
+navigation no longer opens a Qt Widgets tool screen.
 
 The 2026-10-29 WebEngine verification below is historical. Current macOS
 WKWebView implementation and Qt 6.12.0 results, including the user's manual
@@ -58,10 +57,11 @@ navigation/request policy remain in force.
 The post-migration cleanup removes feature-level Qt Widgets screens and their
 screen-specific helpers. React is the only implementation of tool and settings
 screens. The native `GuiApplication` and `MainWindow`, NativeBridge, OS dialogs,
-file-drop handling, and C++ feature services remain. CMake selects
-`WKWebViewAdapter` on macOS and `QtWebEngineAdapter` on non-macOS builds. The
-bundled Material Symbols font was removed because the native feature screens
-were its only consumer; React uses `lucide-react`.
+file-drop handling, and C++ feature services remain. CMake builds the
+`WKWebViewAdapter` host. The legacy Qt WebEngine host was removed when the
+project narrowed support to macOS. The bundled Material Symbols font was
+removed because the native feature screens were its only consumer; React uses
+`lucide-react`.
 
 ## Verification record
 
@@ -113,10 +113,9 @@ In another terminal, launch a Debug build with the loopback URL:
 DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
 ```
 
-Release builds ignore this variable and use bundled frontend assets. The
-non-macOS Qt WebEngine host loads `qrc:/frontend` assets; the macOS WKWebView
-host extracts its self-contained bundle to a private temporary directory and
-loads it with a restricted file read scope. Stop the Vite server when
-development ends. See the historical WebEngine details in
+Release builds ignore this variable and use bundled frontend assets. WKWebView
+extracts its self-contained bundle to a private temporary directory and loads
+it with a restricted file read scope. Stop the Vite server when development
+ends. See the historical WebEngine details in
 [m2-react-webengine.md](m2-react-webengine.md) and current WKWebView details in
 [qt-webview-feasibility.md](qt-webview-feasibility.md).

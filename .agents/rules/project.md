@@ -5,11 +5,10 @@ paths:
 
 # Project Rules
 
-DevTools is a desktop application with a C++17/Qt 6 native host and a
-React/TypeScript frontend. macOS renders the frontend in Apple's WKWebView;
-other platforms use Qt WebEngine. Qt Widgets provides the native window, menus,
-OS dialogs, and platform integration. Feature screens are implemented in
-React; C++ feature modules provide processing services only.
+DevTools is a macOS desktop application with a C++17/Qt 6 native host and a
+React/TypeScript frontend rendered in Apple's WKWebView. Qt Widgets provides
+the native window, menus, OS dialogs, and platform integration. Feature screens
+are implemented in React; C++ feature modules provide processing services only.
 
 ## Build
 
@@ -56,7 +55,7 @@ bun run --bun test
   and QtNetwork are allowed.
 - `features/framework/gui/`: Qt application and window host.
 - `main/`: application entry point.
-- `frontend/src/app/`, `features/`, `shared/`, and `platform/{qt,wkwebview}/`:
+- `frontend/src/app/`, `features/`, `shared/`, and `platform/wkwebview/`:
   React UI, tools, shared code, and platform host transports.
 - `features/web_frontend/`: native bridge, operation handlers, and C++ service calls for the React UI.
 - `tests/`: shared test helpers (mock_helper, random_data, test_util).
@@ -66,8 +65,7 @@ bun run --bun test
 ## Dependencies
 
 - vcpkg: toml11, yaml-cpp. See `vcpkg.json`.
-- Qt6 6.12.0+: Core, Widgets, LinguistTools, Sql, Network, Svg, and Concurrent.
-  Non-macOS builds also require WebChannel and WebEngineWidgets.
+- Qt6 6.9.0+: Core, Widgets, LinguistTools, Sql, Network, Svg, and Concurrent.
 - Bun 1.3.14: frontend dependency installation and production asset build.
 - Bundled vendor code: qrcodegen under `features/qr_code/core/qrcodegen.*`.
 

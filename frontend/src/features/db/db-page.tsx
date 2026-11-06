@@ -115,7 +115,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
             mounted = false;
             interrupt();
         };
-        // The bridge runner changes when Qt WebChannel attaches, so refresh this cache then.
+        // Refresh the cache when the native operation runner changes after bridge setup.
         // oxlint-disable-next-line react/exhaustive-effect-dependencies
     }, [active, databaseNavigationVersion, run]);
     const selectFile = () =>

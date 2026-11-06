@@ -34,8 +34,7 @@ jobs:
 
   analyze-cpp:
     name: Analyze C++
-    # Keep vcpkg-based C++ checks on Ubuntu 24.04 until the 26.04 image is validated.
-    runs-on: ubuntu-24.04
+    runs-on: macos-15
     if: github.actor != 'dependabot[bot]'
 
     steps:
@@ -44,16 +43,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y llvm clang ninja-build
+          brew install ninja
 
       - name: Install Qt
         uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125 # v4
         with:
-          version: '6.12.0'
-          host: 'linux'
+          version: '6.9.0'
+          host: 'mac'
           target: 'desktop'
-          modules: 'qtwebchannel qtwebengine qtpositioning'
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
@@ -69,7 +66,7 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: c-cpp
-          build-mode: none
+          build-mode: manual
 
       - name: Configure and Build
         env:
@@ -84,6 +81,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DVCPKG_TARGET_TRIPLET=arm64-osx \
             -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
           cmake --build build
 

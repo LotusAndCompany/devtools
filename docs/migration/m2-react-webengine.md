@@ -1,13 +1,12 @@
 # M2 React and Qt WebEngine foundation
 
 > **Historical implementation record:** the M2 and M3 prototypes used Qt
-> WebEngine/QWebChannel on macOS. The current host split (updated
-> 2026-11-02) uses Apple's WKWebView adapter on macOS and retains Qt WebEngine
-> for non-macOS builds. This document's contract-v1, QWebChannel security
-> details, package size, and process measurements describe the historical
-> WebEngine snapshot; the current bridge is v2. See
-> [Qt WebView feasibility](qt-webview-feasibility.md) for current host and
-> verification status.
+> WebEngine/QWebChannel on macOS. The app later moved to Apple's WKWebView and
+> removed the Qt WebEngine host when support was narrowed to macOS. This
+> document's contract-v1, QWebChannel security details, package size, and
+> process measurements describe the historical WebEngine snapshot; the current
+> bridge is v2. See [Qt WebView feasibility](qt-webview-feasibility.md) for the
+> host migration record.
 
 M2 adds an embedded React screen to the existing Qt Widgets application. The
 screen uses a versioned Qt WebChannel contract to call real C++ services. It

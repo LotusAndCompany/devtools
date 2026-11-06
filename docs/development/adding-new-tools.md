@@ -35,10 +35,9 @@ dispatch case in `native_bridge.cpp`. Put reusable processing in
 `CMakeLists.txt`.
 
 Keep the TypeScript contract and C++ registry names in sync; the
-`operation-contract-parity.test.mjs` test checks this. Most operations do not
-need host-specific transport changes: Qt WebEngine and WKWebView both carry the
-same versioned request through `NativeBridge`. Change a transport adapter only
-when the wire envelope or its platform behavior changes.
+`operation-contract-parity.test.mjs` test checks this. Operations use the
+versioned WKWebView message bridge to reach `NativeBridge`. Change the adapter
+only when the wire envelope or its platform behavior changes.
 
 Keep OS dialogs, clipboard access, file paths, and platform bridge calls in the
 native host and bridge layers. React features use the typed operation runner;

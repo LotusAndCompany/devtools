@@ -22,9 +22,6 @@ declare global {
       };
     };
   }
-  interface ImportMetaEnv {
-    readonly VITE_DEVTOOLS_HOST?: string;
-  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

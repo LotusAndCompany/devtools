@@ -3,7 +3,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { loadEnv } from "vite";
 import { defineConfig } from "vitest/config";
 
 const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -13,20 +12,7 @@ const developmentAssets = new Map<string, { path: string; contentType: string }>
   ["/__devtools/dev-tools_logo.png", { path: devToolsLogoPath, contentType: "image/png" }],
 ]);
 
-const qtDevelopmentCsp = [
-  "default-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "script-src 'self' 'unsafe-inline' qrc:",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: qrc:",
-  "font-src 'self' data: qrc:",
-  "connect-src 'self' ws://127.0.0.1:5173 qrc:",
-  "object-src 'none'",
-  "frame-src 'none'",
-].join("; ");
-
-const wkDevelopmentCsp = [
+const developmentCsp = [
   "default-src 'none'",
   "base-uri 'self'",
   "form-action 'none'",
@@ -39,20 +25,7 @@ const wkDevelopmentCsp = [
   "frame-src 'self'",
 ].join("; ");
 
-const qtProductionCsp = [
-  "default-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "script-src 'self' qrc:",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: qrc:",
-  "font-src 'self' data: qrc:",
-  "connect-src 'self' qrc:",
-  "object-src 'none'",
-  "frame-src 'none'",
-].join("; ");
-
-const wkProductionCsp = [
+const productionCsp = [
   "default-src 'none'",
   "base-uri 'none'",
   "form-action 'none'",
@@ -66,18 +39,7 @@ const wkProductionCsp = [
 ].join("; ");
 
 export default defineConfig(({ mode }) => {
-  const configuredHost = loadEnv(mode, frontendRoot, "VITE_").VITE_DEVTOOLS_HOST;
-  const useWKWebView = configuredHost
-    ? configuredHost === "wkwebview"
-    : process.platform === "darwin";
-  const csp =
-    mode === "development"
-      ? useWKWebView
-        ? wkDevelopmentCsp
-        : qtDevelopmentCsp
-      : useWKWebView
-        ? wkProductionCsp
-        : qtProductionCsp;
+  const csp = mode === "development" ? developmentCsp : productionCsp;
   const cspHeader = `${csp}; frame-ancestors 'none'`;
 
   return {
@@ -120,7 +82,6 @@ export default defineConfig(({ mode }) => {
           return html.replace("__CONTENT_SECURITY_POLICY__", csp);
         },
         generateBundle(_options, bundle) {
-          if (!useWKWebView) return;
           const index = bundle["index.html"];
           if (!index || index.type !== "asset") {
             throw new Error(
@@ -168,7 +129,7 @@ export default defineConfig(({ mode }) => {
             if (asset.name?.endsWith(".css")) return "assets/style.css";
             return "assets/[name][extname]";
           },
-          format: useWKWebView ? "iife" : "es",
+          format: "iife",
         },
       },
       assetsInlineLimit: 20_000,

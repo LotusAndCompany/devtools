@@ -3,14 +3,13 @@
 DevTools is a C++17 macOS application with a React frontend hosted by Apple's
 WKWebView inside Qt Widgets. React owns all feature screens. The Qt host owns
 the native window, menus, OS dialogs, clipboard integration, file drops, and
-the bridge to C++ processing services. Non-macOS builds continue to use Qt
-WebEngine.
+the bridge to C++ processing services.
 
 ## Technology Stack
 
 | Component | Technology |
 |-----------|------------|
-| Native host and processing | C++17, Qt 6.12.0+ |
+| Native host and processing | C++17, Qt 6.9.0+ |
 | Feature screens | React, TypeScript, shadcn components |
 | Web assets | Vite, Bun 1.3.14 |
 | Build system | CMake 3.21.1+ |
@@ -24,7 +23,7 @@ devtools/
 │   ├── app/                    React shell, navigation, tool registry
 │   ├── features/{feature}/     React tool screens
 │   ├── shared/                 Shared UI, bridge contracts, helpers
-│   └── platform/               WKWebView and Qt WebEngine adapters
+│   └── platform/               WKWebView bridge adapter
 ├── features/
 │   ├── framework/core/         Settings, file selection, app services
 │   ├── framework/gui/          QApplication and native MainWindow
@@ -45,7 +44,7 @@ host, bridge, and native dialogs required by the React UI.
 ```mermaid
 flowchart TD
     app["DevTools executable"] --> host["Qt application host"]
-    host --> hostview["macOS: WKWebView<br/>Other: Qt WebEngine + WebChannel"]
+    host --> hostview["WKWebView"]
     hostview --> react["React screens<br/>frontend/src/"]
     react --> bridge["NativeBridge"]
     bridge --> handlers["Native operation handlers"]
@@ -62,9 +61,9 @@ flowchart TD
 | `DevTools_web_frontend` | React asset hosting, bridge validation, native dialogs, and operation dispatch |
 
 The native bridge validates operation names and payloads before calling feature
-services. macOS uses a WKWebView message adapter; other platforms use Qt
-WebChannel. File paths and OS-specific resources stay in the native process.
-Feature screens use the typed operation interface, not host APIs directly.
+services. WKWebView delivers frontend messages to the native host. File paths
+and OS-specific resources stay in the native process. Feature screens use the
+typed operation interface, not host APIs directly.
 
 ## Feature Boundaries
 
@@ -127,7 +126,7 @@ image data and operation results through the typed bridge contract.
 | Dependency | Purpose |
 |------------|---------|
 | Qt 6 Core, Gui, Widgets, Network, Sql | Native host and feature services |
-| Qt WebChannel, WebEngine | Web host on non-macOS platforms |
+| Apple WebKit | WKWebView frontend host |
 | Apple AppKit, WebKit | WKWebView host on macOS |
 | qlementine | Theme and style for native Qt host widgets |
 | toml11, yaml-cpp | Data conversion |

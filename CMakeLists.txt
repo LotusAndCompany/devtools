@@ -5,12 +5,23 @@ set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
 project(DevTools VERSION 0.9.0 LANGUAGES CXX) # x-release-please-version
 
-if(APPLE)
-    enable_language(OBJCXX)
-endif()
-
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
+
+# Documentation is generated without configuring the application or installing
+# its native dependencies.
+option(DEVTOOLS_DOCS_ONLY "Configure only the Doxygen documentation target" OFF)
+if(DEVTOOLS_DOCS_ONLY)
+    find_package(Doxygen 1.18 REQUIRED)
+    include(doxygen/DevToolsDocs.cmake)
+    return()
+endif()
+
+if(NOT APPLE)
+    message(FATAL_ERROR "DevTools currently supports macOS only")
+endif()
+enable_language(OBJCXX)
+
 set(DevTools_BUILD_NUMBER "12" CACHE STRING "App bundle build number")
 set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
 set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING
@@ -27,16 +38,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
 
 # Qtのパッケージを探す
-set(DEVTOOLS_QT_MIN_VERSION 6.12.0)
-if(APPLE)
-    find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
-        Core Widgets LinguistTools Sql Network Svg Concurrent
-    )
-else()
-    find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
-        Core Widgets LinguistTools Sql Network Svg Concurrent WebChannel WebEngineWidgets
-    )
-endif()
+set(DEVTOOLS_QT_MIN_VERSION 6.9.0)
+find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
+    Core Widgets LinguistTools Sql Network Svg Concurrent
+)
 set(QT_VERSION_MAJOR ${Qt6_VERSION_MAJOR})
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
@@ -71,8 +76,6 @@ if(APPLE)
     set(APP_ICON ${APP_ICON_MACOS})
 
     set(OS_NAME "MacOS")
-elseif(UNIX)
-    set(OS_NAME "Linux")
 endif()
 
 # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む

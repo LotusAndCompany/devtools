@@ -10,14 +10,15 @@ The standard Qt `QWebView` route remains blocked at G0: its inspected public API
 does not expose the pre-navigation policy needed to preserve the current host's
 allowlist. The user selected the alternative **Qt host with a direct adapter
 over public Apple WKWebView APIs**. On macOS, `WKWebView` is hosted inside the
-Qt Widgets window using Qt's foreign-window container; Linux keeps its existing
-Qt WebEngine host.
+Qt Widgets window using Qt's foreign-window container. The app now targets
+macOS only; the legacy non-macOS Qt WebEngine host and QWebChannel transport
+have been removed.
 
 This is an experimental host implementation, not adoption of the standard Qt
-WebView module. The project minimum and CI pin now match Qt 6.12.0. The adapter
-uses Qt's public native-window hosting API and does not use `QWebView`. Qt 6.12.0
-is installed locally; the selected-SDK build and test results are recorded in
-the verification table below. This does not establish release readiness.
+WebView module. The application minimum and CI pin are back at Qt 6.9.0, the
+minimum used before the WKWebView host was introduced. The adapter uses Qt's
+public native-window hosting API and does not use `QWebView`. Historical Qt
+6.12.0 build and test results are recorded in the verification table below.
 
 The WKWebView integration test verifies frontend startup, Bridge v2 requests
 and responses, all 11 tool routes, Markdown `srcdoc` rendering, rejection of an
@@ -117,12 +118,12 @@ its own public `WKNavigationDelegate` and rejects non-allowlisted main-frame
 navigation before it proceeds. This is a distinct architecture with Apple
 framework dependencies; it does not clear the standard Qt WebView gate.
 
-## Current verification baseline
+## Verification recorded before host cleanup
 
 | Check | Result |
 |---|---|
 | Frontend checks | `bun run lint`, `bun run format:check`, `bun run typecheck`, and `bun run test` passed; Vitest reports 24 tests in 10 files |
-| WKWebView production assets | `VITE_DEVTOOLS_HOST=wkwebview bun run --bun build` passed; generated app JavaScript is 696.58 kB and triggers Vite's 500 kB advisory |
+| WKWebView production assets | `VITE_DEVTOOLS_HOST=wkwebview bun run --bun build` passed before the host selector was removed; generated app JavaScript is 696.58 kB and triggers Vite's 500 kB advisory |
 | WKWebView frontend integration | `test_wkwebview_frontend` passed under Qt 6.12.0 in actual WKWebView, including all 11 tool routes, Markdown `srcdoc` rendering, external top-level navigation rejection, Bridge v2 request/event delivery, and C++ file-path routing |
 | Interactive macOS rendering | Launched the Qt 6.12.0 app executable and confirmed the React home screen, sidebar, and tool cards are visible |
 | Native build and CTest | Full Qt 6.12.0 build passed; all 38 CTest tests passed |
@@ -152,23 +153,22 @@ The shared-client preparation is implemented:
 - The app hook obtains its connection through
   [create-native-bridge.ts](../../frontend/src/platform/create-native-bridge.ts)
   instead of importing the Qt transport directly.
-- The current QWebChannel connection and its contract checks remain under
-  frontend/src/platform/qt.
+- The former Qt WebEngine and QWebChannel adapter was removed with non-macOS
+  application support.
 - The operation-client tests now live beside the shared implementation.
 
-The shared transport interface remains engine-independent. The selected WK
-adapter reuses the Bridge v2 operation contract and existing C++ `NativeBridge`;
-the WebEngine transport stays available to non-macOS builds. macOS frontend
-assets are emitted as a self-contained classic JavaScript bundle, extracted to
+The WK adapter reuses the Bridge v2 operation contract and existing C++
+`NativeBridge`; it is the only native frontend transport. Frontend assets are
+emitted as a self-contained classic JavaScript bundle, extracted to
 a private temporary directory, and loaded with WKWebView's file read scope
 limited to that directory. The adapter uses a nonpersistent website data store,
 restricts top-level navigation to the packaged entry or fixed debug server,
 rejects popup creation, and accepts only the three existing Bridge message
 types from the trusted main frame.
 
-The current macOS build no longer links Qt WebEngine or Qt WebChannel. The
-non-macOS build still uses Qt WebEngine, as intended by the platform split.
-The adapter implements AppKit file URL drag handling on its WKWebView subclass.
+The app no longer links Qt WebEngine or Qt WebChannel. CMake rejects
+non-macOS application builds, and Linux CI no longer builds the app. The
+adapter implements AppKit file URL drag handling on its WKWebView subclass.
 Its path validation and routing are covered in C++ tests, and the user confirmed
 that Finder-originated image and SQLite drops work. A cross-app Finder drag was
 also attempted through computer-use automation but did not deliver a drop

@@ -33,8 +33,8 @@ Before contributing, make sure you have:
 flowchart TD
     root["devtools/"]
     root --> features["features/<br/>Feature modules<br/>(core/, tests/)"]
-    root --> frontend["frontend/src/<br/>React and TypeScript UI<br/>(app/, features/, shared/, platform/{qt,wkwebview}/)"]
-    root --> webbridge["features/web_frontend/<br/>WKWebView / Qt WebEngine hosts and C++ bridge"]
+    root --> frontend["frontend/src/<br/>React and TypeScript UI<br/>(app/, features/, shared/, platform/wkwebview/)"]
+    root --> webbridge["features/web_frontend/<br/>WKWebView host and C++ bridge"]
     root --> main["main/<br/>Application entry point"]
     root --> resources["res/<br/>Resources and translations"]
     root --> tests["tests/<br/>Shared test helpers"]
@@ -112,10 +112,9 @@ From the repository root, launch the Debug app in another terminal:
 DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
 ```
 
-Hot reload is available only in Debug builds and both host adapters accept only
-this loopback URL. On macOS, the bundled assets are extracted to a private
-temporary directory and loaded by WKWebView; other platform builds load the Qt
-resource assets in Qt WebEngine. Release builds use the bundled assets. See the
+Hot reload is available only in Debug builds, and the WKWebView adapter accepts
+only this loopback URL. The bundled assets are extracted to a private temporary
+directory and loaded by WKWebView; Release builds use the bundled assets. See the
 [React migration notes](docs/migration/m3-react-ui.md) for details.
 
 ### Frontend checks

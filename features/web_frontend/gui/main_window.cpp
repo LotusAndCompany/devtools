@@ -5,11 +5,7 @@
 #include "features/framework/gui/gui_application.h"
 #include "features/image/core/image_processing_service.h"
 #include "features/web_frontend/gui/native_bridge.h"
-#ifdef Q_OS_MACOS
 #include "features/web_frontend/gui/wk_webview_adapter.h"
-#else
-#include "features/web_frontend/gui/qt_webengine_adapter.h"
-#endif
 
 #include <QAction>
 #include <QApplication>
@@ -54,11 +50,7 @@ void MainWindow::setupCentralWidget()
     auto *layout = new QHBoxLayout(central);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-#ifdef Q_OS_MACOS
     auto *host = new WKWebViewAdapter(central);
-#else
-    auto *host = new QtWebEngineAdapter(central);
-#endif
     web_frontend_ = host;
     native_bridge_ = host->nativeBridge();
     layout->addWidget(web_frontend_);

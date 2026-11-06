@@ -12,7 +12,7 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.12.0+ | Native host; CI pins 6.12.0 |
+| Qt | 6.9.0+ | Native host; CI pins 6.9.0 |
 | vcpkg | Latest | Package management |
 | Bun | 1.3.14 | Installs frontend dependencies and builds the embedded React UI |
 
@@ -34,11 +34,11 @@ Qt6 provides the GUI framework for DevTools.
 Use the Qt Online Installer to install the pinned Qt version:
 
 1. Download and run the [Qt Online Installer](https://www.qt.io/download).
-2. In a custom installation, select **Qt 6.12.0 > macOS (clang_64)**.
+2. In a custom installation, select **Qt 6.9.0 > macOS (clang_64)**.
 3. Install the desktop modules used by this project: Core, Gui, Widgets,
    LinguistTools, Sql, Network, Svg, and Concurrent.
-4. Qt Creator is optional. The macOS host uses Apple's WKWebView, so Qt
-   WebEngine, WebChannel, and Qt WebView are not needed for this build.
+4. Qt Creator is optional. The React frontend uses Apple's WKWebView, so Qt
+   WebEngine and WebChannel are not application dependencies.
 
 The Qt Maintenance Tool included with the SDK can add or update components
 later. See the [Qt component guide](https://doc.qt.io/qt-6/add-update-remove-components.html).
@@ -50,7 +50,7 @@ brew install qt@6
 ```
 
 Homebrew may provide a Qt version older than the project minimum. Check the
-installed version before configuring, and use Qt 6.12.0 or later.
+installed version before configuring, and use Qt 6.9.0 or later.
 
 ### 2. Install vcpkg
 
@@ -127,7 +127,7 @@ installation.
 ```bash
 # Configure with CMake. This installs manifest dependencies and downloads qlementine.
 cmake -S . -B build \
-  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx
 
@@ -161,7 +161,7 @@ validation.
 
 1. Open Qt Creator
 2. Go to **Preferences > Kits**
-3. Ensure a Qt 6.12.0 or later kit is configured
+3. Ensure a Qt 6.9.0 or later kit is configured
 4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
 5. Open `CMakeLists.txt` from the project root
 6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
@@ -202,7 +202,7 @@ After building, verify everything works:
 
 # Run tests (if enabled). Keep the vcpkg toolchain and triplet from configuration.
 cmake -S . -B build \
-  -DQt6_DIR="$HOME/Qt/6.12.0/macos/lib/cmake/Qt6" \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DVCPKG_TARGET_TRIPLET=arm64-osx \
   -DENABLE_UNIT_TEST=ON
