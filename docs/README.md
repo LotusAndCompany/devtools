@@ -41,7 +41,7 @@ For contributors and developers:
 - [Architecture](development/architecture.md) - System architecture and module structure
 - [Coding Standards](development/coding-standards.md) - Code style and naming conventions
 - [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
-- [Icon Assets](development/icon-assets.md) - Bundled icon font and license records
+- [Icon Assets](development/icon-assets.md) - Frontend and native host icons
 - [Testing Guide](development/testing-guide.md) - Write and run tests
 - [Localization](development/localization.md) - Add and update translations
 - [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow

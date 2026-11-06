@@ -16,8 +16,6 @@ class TestTool;
  */
 class Tool : public QObject
 {
-    Q_OBJECT
-
 public:
     Tool() = delete;
     Tool(const Tool &) = delete;
@@ -32,10 +30,7 @@ public:
     /**
      * @brief ツールのID
      * @details ID::MIN と ID::MAX 以外は TOOL_ID_FIELDS() を展開する@n
-     *          定義によって値が変わってしまうため、データの保存等に使う場合は #stringID を使う@n
-     *          ID::MAX 以外は Sidemenu::IDと一致する
-     *
-     * @sa Sidemenu::ID
+     *          IDの数値はビルド間で変わるため、永続化には #stringID を使う
      */
     enum class ID : uint8_t {
         MIN,              ///< 最小値
@@ -47,35 +42,10 @@ public:
      */
     const QString stringID; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
-    /**
-     * @brief 翻訳が必要な情報を格納する構造体
-     */
-    struct Translatable
-    {
-        /// ツールの名前
-        QString name;
-        // TODO: ツールの簡単な説明として表示できるようにする
-        /// ツールの簡単な説明
-        QString description;
-    };
-
     /// 比較用のIDの最小値
     constexpr static const int ID_MIN = static_cast<int>(ID::MIN);
     /// 比較用のIDの最大値
     constexpr static const int ID_MAX = static_cast<int>(ID::MAX);
-
-    /**
-     * @brief 指定されたツールIDの情報(翻訳済み)を返す
-     * @details 言語設定が変更された場合にこれを呼び出してUIに反映させる事を想定している
-     * @param id ツールID
-     * @return 指定されたツールIDの情報
-     */
-    static Translatable translatable(ID id) noexcept(false);
-    /**
-     * @brief このインスタンスの情報を返す
-     * @return このインスタンスの情報
-     */
-    [[nodiscard]] const Translatable &translatable() const { return _translatable; }
 
 protected:
     /**
@@ -105,20 +75,7 @@ protected:
      */
     static void validateID(ID id) noexcept(false);
 
-    /**
-     * @brief イベント処理
-     * @details 言語が変更された場合に Translatable translatable(ID id)
-     * でテキストを更新する処理を実装している
-     * @param event 発生したイベント
-     * @return 処理した場合は`true`、無視した場合は`false`
-     */
-    bool event(QEvent *event) override;
-
 private:
-    /// ツールのID。現状使う予定がないため非公開にする。
-    const ID id;
-    /// 翻訳が必要なテキスト情報
-    Translatable _translatable;
 #ifdef _TEST_Tool
     friend class Test::TestTool;
 #endif

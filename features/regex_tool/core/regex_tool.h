@@ -5,6 +5,8 @@
 #include <QString>
 #include <QVector>
 
+#include <functional>
+
 namespace devtools {
 
 /**
@@ -45,6 +47,13 @@ struct MatchResult
 class RegexTool
 {
 public:
+    enum class BoundedReplaceResult {
+        Completed,
+        Cancelled,
+        SizeLimitExceeded,
+        MatchLimitExceeded,
+    };
+
     static QRegularExpression::PatternOptions patternOptions(bool caseInsensitive, bool multiline,
                                                              bool dotMatchesEverything,
                                                              bool useUnicodeProperties,
@@ -71,6 +80,14 @@ public:
      */
     static QString replace(const QString &pattern, const QString &text, const QString &replacement,
                            QRegularExpression::PatternOptions options, bool global = true);
+
+    /**
+     * @brief Replace text while honoring cancellation and a UTF-8 output-byte limit.
+     */
+    static BoundedReplaceResult replaceBounded(
+        const QString &pattern, const QString &text, const QString &replacement,
+        QRegularExpression::PatternOptions options, bool global, qsizetype maxOutputBytes,
+        qsizetype maxMatches, const std::function<bool()> &isCancelled, QString *result);
 
     /**
      * @brief Build the localized plain-text representation used by Copy Matches

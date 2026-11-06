@@ -53,7 +53,8 @@ struct SideBySideRow
  * @brief テキスト差分ツールのロジック
  * @details 2つのテキストの行単位の差分を計算する。@n
  *          状態を持たないため公開メソッドはすべて `static`。@n
- *          `Tool` を継承するのは ID / 翻訳名を提供するためで、UI には依存しない。
+ *          `Tool` を継承するのは ID の検証と QObject の親子関係を利用するためで、UI
+ * には依存しない。
  */
 class DiffTool : public Tool
 {

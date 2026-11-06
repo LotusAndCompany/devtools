@@ -11,8 +11,8 @@
 class CommandFunction
 {
 public:
-    CommandFunction(QString name, QString description, const QList<CommandOption> &options)
-        : name(std::move(name)), description(std::move(description)), options(options)
+    CommandFunction(QString name, QString description, QList<CommandOption> options)
+        : name(std::move(name)), description(std::move(description)), options(std::move(options))
     {}
 
     [[nodiscard]] QString getName() const { return name; }

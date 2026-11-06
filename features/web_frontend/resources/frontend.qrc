@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/frontend">
+    <file alias="index.html">../../../frontend/dist/index.html</file>
+    <file alias="assets/app.js">../../../frontend/dist/assets/app.js</file>
+    <file alias="assets/style.css">../../../frontend/dist/assets/style.css</file>
+  </qresource>
+</RCC>

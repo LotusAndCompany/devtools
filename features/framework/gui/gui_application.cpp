@@ -1,29 +1,17 @@
 #include "gui_application.h"
 
-#include "design_system.h"
 #include "features/framework/core/application_settings_service.h"
-#include "icon_utils.h"
 
-#include <QApplicationStateChangeEvent>
 #include <QStyleHints>
 #include <QTranslator>
 #include <QWidget>
 
 #include <oclero/qlementine.hpp>
 
-GuiApplication::GuiApplication(int argc, char **argv)
+GuiApplication::GuiApplication(int &argc, char **argv)
     : QApplication(argc, argv), ApplicationMixin(AppType::GUI, argc, argv)
 {
     QCoreApplication::setApplicationName("DevTools");
-
-#ifdef Q_OS_MACOS
-    /*
-    connect(this,
-            &QGuiApplication::applicationStateChanged,
-            this,
-            &GuiApplication::onApplicationStateChanged);
-    */
-#endif
 }
 
 void GuiApplication::setup()
@@ -51,17 +39,11 @@ void GuiApplication::setup()
     connect(styleHints(), &QStyleHints::colorSchemeChanged, this,
             &GuiApplication::applyColorScheme);
 
-    // アイコンフォントの読み込み
-    material_symbols_loaded = IconUtils::initializeMaterialSymbols();
-
     // システムテーマを自動適用
     applyColorScheme();
 
     // 翻訳の適用が完了した後にメインウィンドウを生成
     window = std::make_unique<MainWindow>();
-
-    connect(window.get(), &MainWindow::colorSchemeChanged, this,
-            &GuiApplication::onWindowColorSchemeChanged);
 }
 
 bool GuiApplication::changeLanguage(const QString &languageCode)
@@ -96,11 +78,6 @@ bool GuiApplication::applyLanguage(const QString &languageCode)
         qWarning() << "Failed to load translation:" << translationFile;
         return false;
     }
-}
-
-void GuiApplication::applySystemColorScheme()
-{
-    applyColorScheme();
 }
 
 int GuiApplication::start()
@@ -148,10 +125,6 @@ void GuiApplication::applyColorScheme()
         QApplication::setPalette(style()->standardPalette());
     }
 
-    if (material_symbols_loaded) {
-        IconUtils::refreshMaterialSymbolsTheme();
-    }
-
     const auto allWidgets = QApplication::allWidgets();
 
     if (themeChanged) {
@@ -159,7 +132,6 @@ void GuiApplication::applyColorScheme()
             w->setPalette(QPalette());
             w->update();
         }
-        DevTools::Ui::refreshStatusColors();
         return;
     }
 
@@ -169,11 +141,6 @@ void GuiApplication::applyColorScheme()
         }
         w->update();
     }
-}
-
-void GuiApplication::onWindowColorSchemeChanged()
-{
-    applyColorScheme();
 }
 
 #ifdef Q_OS_MACOS
@@ -191,21 +158,4 @@ bool GuiApplication::event(QEvent *event)
     }
 }
 
-// NOTE:
-// これでもDockからウィンドウを表示させる事はできるが、アプリケーション起動時にwindow.show()が2回呼ばれるかも?
-/*
-void GuiApplication::onApplicationStateChanged(Qt::ApplicationState state)
-{
-    qDebug() << "Application state changed";
-    switch (state) {
-    case Qt::ApplicationInactive:
-        window->hide();
-        break;
-    case Qt::ApplicationActive:
-        window->show();
-        break;
-    default:
-    }
-}
-*/
 #endif

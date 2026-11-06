@@ -3,17 +3,29 @@ cmake_minimum_required(VERSION 3.21.1)
 # vcpkgを使わない時はONにする
 set(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP OFF)
 
-project(DevTools VERSION 0.8.0 LANGUAGES CXX) # x-release-please-version
-
-if(APPLE)
-    enable_language(OBJCXX)
-endif()
+project(DevTools VERSION 0.9.0 LANGUAGES CXX) # x-release-please-version
 
 # -test, -alpha, -beta, -rcなど。無しでも良い。
 set(DevTools_VERSION_SUFFIX "")
-set(DevTools_BUILD_NUMBER "${PROJECT_VERSION}" CACHE STRING "App bundle build number")
+
+# Documentation is generated without configuring the application or installing
+# its native dependencies.
+option(DEVTOOLS_DOCS_ONLY "Configure only the Doxygen documentation target" OFF)
+if(DEVTOOLS_DOCS_ONLY)
+    find_package(Doxygen 1.18 REQUIRED)
+    include(doxygen/DevToolsDocs.cmake)
+    return()
+endif()
+
+if(NOT APPLE)
+    message(FATAL_ERROR "DevTools currently supports macOS only")
+endif()
+enable_language(OBJCXX)
+
+set(DevTools_BUILD_NUMBER "12" CACHE STRING "App bundle build number")
 set(DEVTOOLS_APPLE_DEVELOPMENT_TEAM "" CACHE STRING "Apple Developer team used for signing")
-set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING "Apple code-signing identity")
+set(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY "" CACHE STRING
+    "Code-signing identity for the DevTools .app bundle and embedded Qt frameworks")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -25,15 +37,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(ENABLE_UNIT_TEST OFF CACHE BOOL "テストを行う場合はONにする")
 
-# NOTE: ui_*.uiファイルが見つからない場合はここにパスを追加する。殆どの場合は設定不要。
-#       the user interface file "*.ui" could not be found in the following directories "SRC:..."
-set(CMAKE_AUTOUIC_SEARCH_PATHS
-    features/image/gui/basic/
-)
-
 # Qtのパッケージを探す
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 6.9 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network Svg)
+set(DEVTOOLS_QT_MIN_VERSION 6.9.0)
+find_package(Qt6 ${DEVTOOLS_QT_MIN_VERSION} REQUIRED COMPONENTS
+    Core Widgets LinguistTools Sql Network Svg Concurrent
+)
+set(QT_VERSION_MAJOR ${Qt6_VERSION_MAJOR})
 # vcpkgのパッケージを探す
 find_package(toml11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -67,8 +76,6 @@ if(APPLE)
     set(APP_ICON ${APP_ICON_MACOS})
 
     set(OS_NAME "MacOS")
-elseif(UNIX)
-    set(OS_NAME "Linux")
 endif()
 
 # gitハッシュ、アプリケーションのバージョン、コンパイル環境等を書き込む
@@ -84,7 +91,7 @@ add_custom_target(${PROJECT_NAME}_app_info
     COMMAND ${SH_FILE} "${CMAKE_PROJECT_VERSION}${DevTools_VERSION_SUFFIX}" "${OS_NAME}" ${CMAKE_SYSTEM_VERSION} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     # Project files
     # main
     qt_add_executable(${PROJECT_NAME}
@@ -93,7 +100,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_ICON}
         ${APP_INFO_FILE}
         main/main.cpp
-        features/framework/gui/contents_area.h features/framework/gui/contents_area.cpp
         vcpkg.json
         # ここには基本的に追加しないこと
         # qt_add_libraryで静的ライブラリにし、下の[モジュール一覧]に追加する
@@ -109,16 +115,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_library(${PROJECT_NAME}_regex_tester STATIC)
     qt_add_library(${PROJECT_NAME}_phrase_generation STATIC)
     qt_add_library(${PROJECT_NAME}_image_core STATIC)
-    qt_add_library(${PROJECT_NAME}_image_tools_unified STATIC)
     qt_add_library(${PROJECT_NAME}_db_tool STATIC)
     qt_add_library(${PROJECT_NAME}_data_conversion STATIC)
     qt_add_library(${PROJECT_NAME}_qr_code_generation STATIC)
     qt_add_library(${PROJECT_NAME}_markdown_preview STATIC)
     qt_add_library(${PROJECT_NAME}_timestamp_conversion STATIC)
     qt_add_library(${PROJECT_NAME}_diff_tool STATIC)
-
-    # 画像関係の依存関係
-    add_dependencies(${PROJECT_NAME}_image_tools_unified ${PROJECT_NAME}_image_core)
+    qt_add_library(${PROJECT_NAME}_web_frontend STATIC)
 
     # toml11, yaml-cppのインクルードディレクトリ
     target_include_directories(${PROJECT_NAME}_data_conversion PUBLIC
@@ -186,10 +189,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_TYPE_${CMAKE_BUILD_TYPE
 # メモリアドレス関連の静的チェックを有効にする
 #target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 
-# 画像関係の依存関係
-# target_link_libraries を使用してリンク依存関係も設定する（GNU ld 対応）
-target_link_libraries(${PROJECT_NAME}_image_tools_unified PUBLIC ${PROJECT_NAME}_image_core)
-
 # app_info.autogen.cppを自動生成
 add_dependencies(${PROJECT_NAME}_core ${PROJECT_NAME}_app_info)
 add_dependencies(${PROJECT_NAME}_framework_gui ${PROJECT_NAME}_app_info)
@@ -211,7 +210,6 @@ set(MODULE_LIST
     ${PROJECT_NAME}_core
     ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_image_core
-    ${PROJECT_NAME}_image_tools_unified
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
@@ -222,10 +220,11 @@ set(MODULE_LIST
     ${PROJECT_NAME}_diff_tool
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_timestamp_conversion
+    ${PROJECT_NAME}_web_frontend
 )
 
 set(APPLICATION_MODULE_LIST
-    ${PROJECT_NAME}_image_tools_unified
+    ${PROJECT_NAME}_image_core
     ${PROJECT_NAME}_phrase_generation
     ${PROJECT_NAME}_http_request
     ${PROJECT_NAME}_command
@@ -237,6 +236,7 @@ set(APPLICATION_MODULE_LIST
     ${PROJECT_NAME}_db_tool
     ${PROJECT_NAME}_framework_gui
     ${PROJECT_NAME}_timestamp_conversion
+    ${PROJECT_NAME}_web_frontend
 )
 set(APPLICATION_LINK_MODULES ${APPLICATION_MODULE_LIST})
 
@@ -266,21 +266,17 @@ foreach (MODULE ${MODULE_LIST})
         target_include_directories(${MODULE} PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${Qt6Core_INCLUDE_DIRS}
-            ${Qt6Bus_INCLUDE_DIRS}
             ${Qt6Gui_INCLUDE_DIRS}
-            ${Qt6Widgets_INCLUDE_DIRS}
             ${Qt6Network_INCLUDE_DIRS}
             ${Qt6Sql_INCLUDE_DIRS}
         )
         target_link_libraries(${MODULE} PUBLIC
             ${PROJECT_NAME}_core
-            ${PROJECT_NAME}_framework_gui
             Qt6::Core
-            Qt6::DBus
             Qt6::Gui
-            Qt6::Widgets
             Qt6::Network
             Qt6::Sql
+            Qt6::Concurrent
         )
     endif()
 endforeach()
@@ -340,6 +336,7 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
         XCODE_ATTRIBUTE_ARCHS   "arm64"
         XCODE_ATTRIBUTE_SDKROOT "macosx"
         XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH  "YES"
+        XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
         XCODE_ATTRIBUTE_PRODUCT_NAME    ${PROJECT_NAME}
         MACOSX_BUNDLE_INFO_PLIST    ${CMAKE_BINARY_DIR}/distribution/Info.plist
         #XCODE_ATTRIBUTE_INFOPLIST_FILE  ${REL_BUILD_DIR}/distribution/Info.plist
@@ -365,13 +362,24 @@ if(${GENERATOR_LOWER} STREQUAL "xcode")
     get_filename_component(QT_INSTALL_PREFIX "${Qt6_DIR}/../../.." ABSOLUTE)
     find_program(MACDEPLOYQT_EXECUTABLE NAMES macdeployqt HINTS "${QT_INSTALL_PREFIX}/bin"
         NO_DEFAULT_PATH REQUIRED)
+    set(QT_DSYM_ARCHIVING_WORKAROUND_ENABLED OFF)
+    if(QT_USE_RISKY_DSYM_ARCHIVING_WORKAROUND)
+        set(QT_DSYM_ARCHIVING_WORKAROUND_ENABLED ON)
+    endif()
     set(MACDEPLOYQT_OPTIONS -appstore-compliant)
     if(DEVTOOLS_APPLE_CODE_SIGN_IDENTITY)
         list(APPEND MACDEPLOYQT_OPTIONS "-codesign=${DEVTOOLS_APPLE_CODE_SIGN_IDENTITY}")
     endif()
+    # This deploys Qt dependencies into the .app; it does not create the signed
+    # Mac App Store .pkg.
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND "${MACDEPLOYQT_EXECUTABLE}"
-            "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>" ${MACDEPLOYQT_OPTIONS}
+        COMMAND "${CMAKE_COMMAND}"
+            "-DMACDEPLOYQT_EXECUTABLE=${MACDEPLOYQT_EXECUTABLE}"
+            "-DMACDEPLOYQT_OPTIONS=${MACDEPLOYQT_OPTIONS}"
+            "-DQT_INSTALL_PREFIX=${QT_INSTALL_PREFIX}"
+            "-DQT_DSYM_ARCHIVING_WORKAROUND_ENABLED=${QT_DSYM_ARCHIVING_WORKAROUND_ENABLED}"
+            "-DAPP_BUNDLE_PATH=$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>"
+            -P "${CMAKE_SOURCE_DIR}/scripts/deploy_qt_dependencies.cmake"
         COMMENT "Deploying App Store-compliant Qt dependencies"
         VERBATIM
     )
@@ -390,6 +398,7 @@ else()
         MACOSX_BUNDLE    TRUE
         WIN32_EXECUTABLE TRUE
     )
+
 endif()
 
 include(GNUInstallDirs)

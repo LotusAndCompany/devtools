@@ -1,0 +1,56 @@
+:where([data-page="phrase"]) .phrase-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
+    gap: var(--space-16);
+    align-items: start;
+}
+:where([data-page="phrase"]) .template-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+:where([data-page="phrase"]) .template-list-content,
+:where([data-page="phrase"]) .phrase-editor-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="phrase"]) .template-list-content {
+    gap: var(--space-8);
+}
+:where([data-page="phrase"]) .template-items {
+    gap: var(--space-8);
+}
+:where([data-page="phrase"]) .template-item {
+    justify-content: flex-start;
+    border-radius: var(--radius-control);
+    text-align: left;
+    cursor: pointer;
+}
+:where([data-page="phrase"]) .template-item:hover {
+    background: var(--secondary-hover);
+}
+:where([data-page="phrase"]) .template-item[data-active="true"] {
+    border-color: var(--ring);
+}
+:where([data-page="phrase"]) .template-item [data-slot="item-title"] {
+    font-size: var(--font-size-caption);
+}
+:where([data-page="phrase"]) .template-item [data-slot="item-description"] {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-micro);
+}
+:where([data-page="phrase"]) .phrase-layout > .input-card:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+:where([data-page="phrase"]) .phrase-layout .code-area {
+    min-height: 320px;
+}
+
+@media (max-width: 650px) {
+    :where([data-page="phrase"]) .phrase-layout {
+        grid-template-columns: 1fr;
+    }
+}

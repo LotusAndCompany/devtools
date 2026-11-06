@@ -12,8 +12,9 @@ This guide provides detailed instructions for setting up the DevTools developmen
 |------|---------|---------|
 | CMake | 3.21.1+ | Build system |
 | C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9+ | GUI framework; 6.9.3 is tested; 6.9+ is required for named-glyph QIcon support |
+| Qt | 6.9.0+ | Native host; CI pins 6.9.0 |
 | vcpkg | Latest | Package management |
+| Bun | 1.3.14 | Installs frontend dependencies and builds the embedded React UI |
 
 ### Optional Tools
 | Tool | Version | Purpose |
@@ -21,7 +22,6 @@ This guide provides detailed instructions for setting up the DevTools developmen
 | Doxygen | 1.18+ | API documentation generation |
 | Qt Creator | 18.0.1+ | IDE with Qt integration |
 | Ninja | 1.12.1+ | Fast build tool |
-| Qt Installer Framework | 4.10 | Application packaging |
 
 ## Step-by-Step Installation
 
@@ -29,25 +29,28 @@ This guide provides detailed instructions for setting up the DevTools developmen
 
 Qt6 provides the GUI framework for DevTools.
 
-#### Option A: Using Homebrew (Recommended)
+#### Option A: Qt Online Installer (Recommended)
+
+Use the Qt Online Installer to install the pinned Qt version:
+
+1. Download and run the [Qt Online Installer](https://www.qt.io/download).
+2. In a custom installation, select **Qt 6.9.0 > macOS (clang_64)**.
+3. Install the desktop modules used by this project: Core, Gui, Widgets,
+   LinguistTools, Sql, Network, Svg, and Concurrent.
+4. Qt Creator is optional. The React frontend uses Apple's WKWebView, so Qt
+   WebEngine and WebChannel are not application dependencies.
+
+The Qt Maintenance Tool included with the SDK can add or update components
+later. See the [Qt component guide](https://doc.qt.io/qt-6/add-update-remove-components.html).
+
+#### Option B: Using Homebrew
 
 ```bash
 brew install qt@6
 ```
 
-After installation, add Qt to your PATH:
-
-```bash
-# Add to ~/.zshrc or ~/.bash_profile
-export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
-```
-
-#### Option B: Using Qt Online Installer
-
-1. Download the installer from [qt.io](https://www.qt.io/download)
-2. Run the installer
-3. Select Qt 6.9 or later for macOS
-4. Optionally install Qt Creator
+Homebrew may provide a Qt version older than the project minimum. Check the
+installed version before configuring, and use Qt 6.9.0 or later.
 
 ### 2. Install vcpkg
 
@@ -62,8 +65,8 @@ cd ~/vcpkg
 ./bootstrap-vcpkg.sh
 
 # Add to PATH (add to your shell profile)
-export PATH="$HOME/vcpkg:$PATH"
 export VCPKG_ROOT="$HOME/vcpkg"
+export PATH="$VCPKG_ROOT:$PATH"
 ```
 
 Verify installation:
@@ -92,6 +95,10 @@ brew install graphviz
 brew install llvm
 ```
 
+Install Bun 1.3.14 or later from the
+[official installation guide](https://bun.sh/docs/installation). CMake invokes
+Bun to install the locked frontend dependencies and build the React assets.
+
 ### 4. Clone the Repository
 
 ```bash
@@ -118,14 +125,14 @@ installation.
 ### 6. Configure and Build
 
 ```bash
-# Create build directory
-mkdir build && cd build
-
-# Configure with CMake. This also downloads qlementine with FetchContent.
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+# Configure with CMake. This installs manifest dependencies and downloads qlementine.
+cmake -S . -B build \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx
 
 # Build (using all available cores)
-make -j$(sysctl -n hw.ncpu)
+cmake --build build --parallel
 ```
 
 ### 7. Run DevTools
@@ -135,10 +142,10 @@ After building, run the application:
 ```bash
 # Build and run with colored console output (recommended).
 # This replaces older project-local processes before starting.
-cmake --build . --target run
+cmake --build build --target run
 
 # Or run the binary directly
-./DevTools.app/Contents/MacOS/DevTools
+./build/DevTools.app/Contents/MacOS/DevTools
 ```
 
 Use the `run` target when iterating on the source tree. It replaces older
@@ -154,7 +161,7 @@ validation.
 
 1. Open Qt Creator
 2. Go to **Preferences > Kits**
-3. Ensure a Qt 6.9 or later kit is configured
+3. Ensure a Qt 6.9.0 or later kit is configured
 4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
 5. Open `CMakeLists.txt` from the project root
 6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
@@ -191,12 +198,16 @@ After building, verify everything works:
 
 ```bash
 # Run the application
-./DevTools.app/Contents/MacOS/DevTools
+./build/DevTools.app/Contents/MacOS/DevTools
 
-# Run tests (if enabled)
-cmake .. -DENABLE_UNIT_TEST=ON
-make
-ctest --output-on-failure
+# Run tests (if enabled). Keep the vcpkg toolchain and triplet from configuration.
+cmake -S . -B build \
+  -DQt6_DIR="$HOME/Qt/6.9.0/macos/lib/cmake/Qt6" \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+  -DVCPKG_TARGET_TRIPLET=arm64-osx \
+  -DENABLE_UNIT_TEST=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 ```
 
 ## Next Steps

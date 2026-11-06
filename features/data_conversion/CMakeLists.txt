@@ -12,6 +12,4 @@ target_sources(DevTools_data_conversion PRIVATE
     core/emitter/json_emitter.h core/emitter/json_emitter.cpp
     core/emitter/toml_emitter.h core/emitter/toml_emitter.cpp
     core/emitter/yaml_emitter.h core/emitter/yaml_emitter.cpp
-    # GUI
-    gui/data_conversion_gui.h gui/data_conversion_gui.cpp
 )

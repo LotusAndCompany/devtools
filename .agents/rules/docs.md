@@ -5,8 +5,8 @@ paths:
 
 # Documentation Rules
 
-- Keep documentation accurate for a macOS 15.0+ Apple Silicon C++17/Qt6
-  desktop application.
+- Keep documentation accurate for a macOS 15.0+ Apple Silicon desktop app with
+  a C++17/Qt 6.9.0+ native host and WKWebView frontend.
 - Bilingual support exists for English and Japanese; Japanese files live under
   `docs/ja/`.
 - When updating an English document, update the corresponding Japanese document
