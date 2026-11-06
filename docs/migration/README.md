@@ -81,6 +81,16 @@ baseline.
   without installing Qt or vcpkg.
 - Earlier M2/M3 host, test, and performance records remain historical.
 
+### 2026-11-06 CodeQL workflow
+
+- Native C++ static analysis still configures and builds on macOS. CodeQL C++
+  analysis uses Ubuntu's no-build mode, which avoids installing Qt, Bun, and
+  vcpkg or compiling the app solely for the security scan. GitHub documents
+  no-build analysis for C/C++; it can be less precise where generated code or
+  build-only dependency information affects extraction.
+- PR #142 exceeds CodeQL's 300-file diff limit for overlay analysis, so CodeQL
+  may still fall back to a full source database for this PR.
+
 ## Bridge review update (2026-11-05)
 
 - The local branch is `feature/issue-133-134-react-ui` at base commit
