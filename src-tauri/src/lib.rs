@@ -723,6 +723,20 @@ mod tests {
     }
 
     #[test]
+    fn reads_text_file_using_shared_contract_fixture() {
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/tauri-open-text-file.json"
+        ))
+        .expect("shared text-file contract fixture is valid");
+        let input = &fixture["input"];
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join(input["fileName"].as_str().unwrap());
+        fs::write(&path, input["text"].as_str().unwrap()).unwrap();
+
+        assert_eq!(read_text_file(&path).unwrap(), fixture["expected"]);
+    }
+
+    #[test]
     fn settings_are_versioned_and_saved_atomically() {
         let directory = tempfile::tempdir().unwrap();
         let path = directory.path().join("settings.json");

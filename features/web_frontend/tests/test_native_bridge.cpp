@@ -111,6 +111,7 @@ class TestNativeBridge : public QObject
 private Q_SLOTS:
     void formatsJsonUsingTheNativeParserAndEmitter();
     void reportsInvalidJson();
+    void readsTextFileUsingSharedContractFixture();
     void rejectsInvalidUtf8Files();
     void enforcesInputAndVersionLimits();
     void rejectsOperationsOutsideTheRegistry();
@@ -175,6 +176,35 @@ void TestNativeBridge::rejectsInvalidUtf8Files()
         NativeBridge::readTextFile(file.fileName(), cancellation, [](int, const QString &) {});
 
     QCOMPARE(result.errorCode, QStringLiteral("INVALID_ENCODING"));
+}
+
+void TestNativeBridge::readsTextFileUsingSharedContractFixture()
+{
+    QFile contractFixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                          QStringLiteral("/tests/fixtures/tauri-open-text-file.json"));
+    QVERIFY(contractFixture.open(QIODevice::ReadOnly));
+    const QJsonObject contract = QJsonDocument::fromJson(contractFixture.readAll()).object();
+    const QJsonObject input = contract.value(QStringLiteral("input")).toObject();
+    const QJsonObject expected = contract.value(QStringLiteral("expected")).toObject();
+
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    const QString path = directory.filePath(input.value(QStringLiteral("fileName")).toString());
+    QFile file(path);
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    const QByteArray text = input.value(QStringLiteral("text")).toString().toUtf8();
+    QCOMPARE(file.write(text), text.size());
+    file.close();
+
+    const auto cancellation = std::make_shared<std::atomic_bool>(false);
+    const NativeBridge::OperationResult result =
+        NativeBridge::readTextFile(path, cancellation, [](int, const QString &) {});
+
+    QCOMPARE(result.errorCode, QString());
+    QCOMPARE(result.value.value(QStringLiteral("fileName")).toString(),
+             expected.value(QStringLiteral("fileName")).toString());
+    QCOMPARE(result.value.value(QStringLiteral("text")).toString(),
+             expected.value(QStringLiteral("text")).toString());
 }
 
 void TestNativeBridge::enforcesInputAndVersionLimits()

@@ -44,8 +44,9 @@ the system file picker and loaded the shared JSON fixture through
 `openTextFile`. Its Convert action returns the documented
 `UNSUPPORTED_OPERATION` because `convertData` belongs to M5; this screen-level
 smoke confirms the partial-operation boundary, not data-conversion parity.
-`formatJson` output parity is currently checked by the shared Qt/Rust fixture
-tests rather than a UI route.
+`formatJson` and `openTextFile` output parity are checked by shared Qt/Rust
+fixtures rather than a UI route; the Tauri OS picker itself is additionally
+covered by the manual smoke above.
 
 A shell `open -n` attempt returned `kLSNoExecutableErr`, although opening the
 same bundle through the macOS application-control interface displayed the
@@ -57,7 +58,7 @@ machine.
 | Contract operation | Implementation and boundary | Evidence and current limit |
 |---|---|---|
 | `formatJson` | Rust `serde_json`; validates indentation and UTF-8 byte size before parsing. | Rust and Qt tests consume `tests/fixtures/tauri-format-json.json`. Error text is engine-specific; only the code is contractual. |
-| `openTextFile` | Rust invokes the native picker, then reads only the chosen path; UTF-8 and 1 MiB limits are checked. | Rust helper tests cover Unicode names, invalid UTF-8, and oversize input. The macOS system picker opened the shared JSON fixture in the Tauri UI. |
+| `openTextFile` | Rust invokes the native picker, then reads only the chosen path; UTF-8 and 1 MiB limits are checked. | Qt and Rust helper tests read the same UTF-8 text-file contract fixture and compare `text`/`fileName`. The macOS system picker opened the shared JSON fixture in the Tauri UI. |
 | `saveTextFile` | Rust invokes the save picker and atomically replaces only the chosen destination; UTF-8 byte limit is 1 MiB. | Rust helper tests cover a Unicode path and byte count. The macOS save picker, overwrite prompts, and failure recovery remain unverified. Cancellation cannot dismiss an already-open OS picker; after it closes, cancellation is checked before file access. |
 | `getSettings` / `saveSettings` | Rust reads/writes a versioned JSON file under Tauri's app config directory. Writes use a sibling temporary file and replace the target only after a complete write. | Unit test covers defaults, round trip, and rejecting an unknown schema version. The settings screen loaded through `getSettings`; Save/restart persistence was not exercised. The preview identifier uses separate storage; Qt settings are not imported. |
 | `saveLastUsedTool` | Rust updates the same settings file and accepts only current IDs 1–13. | Runtime range validation is implemented. Window-size restoration, always-on-top, and window-position application still need host implementation and parity checks. |
@@ -86,7 +87,7 @@ The Qt host must not be reported as fully removed while a sidecar remains.
 | Operation | M5 target | Dependencies and reason | Data / OS boundary, test, and risk |
 |---|---|---|---|
 | `formatJson` | Rust | `serde_json`; implemented in M4. | Shared fixture covers 2/4-space, tabs, minified output, nested values, and Japanese text. Compare invalid-input diagnostics separately. |
-| `openTextFile` | Rust | `tauri-plugin-dialog` plus Rust file I/O; implemented in M4. | User-selected path only, 1 MiB, UTF-8. Verify permissions, cancellation, and Japanese paths on macOS. |
+| `openTextFile` | Rust | `tauri-plugin-dialog` plus Rust file I/O; implemented in M4. | Shared Qt/Rust fixture compares returned text and filename; user-selected path only, 1 MiB, UTF-8. Verify permissions, cancellation, and Japanese paths on macOS. |
 | `saveTextFile` | Rust | Dialog plugin, `tempfile`; implemented in M4. | Atomic write to selected destination. Verify overwrite prompts, permissions, and failure recovery on macOS. |
 | `convertData` | Rust | `serde_json`, `serde_yaml`, `toml`; consolidate parser and emitter behavior. | Not implemented in M4; the shared UI receives `UNSUPPORTED_OPERATION`. No app-owned data. Reuse cases for numeric precision, YAML tags/dates, TOML types, indentation, and invalid positions. Parser compatibility is a risk. |
 | `convertTimestamp` | TypeScript | Built-in `Date` and `Intl`; timezone display belongs with shared UI. | No persistence or OS API. Test seconds/milliseconds, negative values, invalid input, DST boundaries, and fixed time zones. |
@@ -200,8 +201,9 @@ process set, and artifact class before revising the table.
 - Frontend lint, format check, typecheck, production build, and all 24 Vitest
   tests across 12 files passed. The bundle-size advisory remains for the
   existing 700 kB JavaScript entry chunk.
-- Rust `cargo test` passed all four unit tests; `cargo fmt -- --check` passed.
-- Qt `test_native_bridge` passed with the same formatter fixture; the
+- Rust `cargo test` passed all five unit tests; `cargo fmt -- --check` passed.
+- Qt `test_native_bridge` passed with the shared formatter and text-file
+  contract fixtures; the
   MySQL/PostgreSQL integration case was skipped because server environment
   variables were not configured.
 - The Tauri macOS arm64 `.app` built (11.92 MiB) and the UI smoke described
