@@ -23,6 +23,10 @@ thread. It accepts the existing 1 MiB value limit and 2 MiB message limit, and
 caps formatted JSON output at 4 MiB. Only operations in
 `src-tauri/src/lib.rs`'s `SUPPORTED_OPERATIONS` list are available; the others
 return `UNSUPPORTED_OPERATION` so partial coverage stays visible to the UI.
+The Tauri connection resolves after event subscription is installed, invoke
+errors become request-correlated failures, and interruption sends cancellation.
+NativeBridge v2 has no shared terminal-event timeout policy, so timeout parity
+and late-result behavior during route teardown remain unverified.
 
 The implementation uses `@tauri-apps/api` 2.12.x, Tauri 2, the Tauri dialog
 plugin, Serde JSON, and `tempfile`. The Tauri production CSP is in
@@ -209,7 +213,8 @@ process set, and artifact class before revising the table.
 - The Tauri macOS arm64 `.app` built (11.92 MiB) and the UI smoke described
   above passed for startup, settings/About reads, and native file open.
 - No process-cold or warm timings, memory samples, large-input responsiveness,
-  save picker behavior, signed installer, or non-macOS runtime were measured.
+  save picker behavior, route teardown, a shared operation timeout, signed
+  installer, or non-macOS runtime were verified.
 
 ## Commands and verification boundary
 
