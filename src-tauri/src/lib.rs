@@ -495,6 +495,7 @@ fn execute_operation(
             let Some(selection) = selection else {
                 return Err(Failure::new("CANCELLED", "File selection was cancelled."));
             };
+            // shortcut: cannot cancel an open system dialog, revisit if the API adds support.
             if cancelled.load(Ordering::Relaxed) {
                 return Err(Failure::new("CANCELLED", "Operation was cancelled."));
             }
@@ -553,6 +554,7 @@ fn execute_operation(
             save_settings(&path, &settings)?;
             Ok(json!({"saved":true}))
         }
+        // shortcut: ignore drops until Tauri window drag/drop events are implemented.
         "imageTakeDropped" => Ok(json!({"found":false})),
         "getAboutInfo" => Ok(json!({
             "appVersion": env!("CARGO_PKG_VERSION"),
