@@ -47,7 +47,7 @@ export function CommandPage({ locale, run }: ToolPageProps) {
             <Heading title={text(locale, "Command Generation", "コマンド生成")} />
             <Card className="input-card">
                 <CardContent>
-                    <FieldGroup className="form-grid">
+                    <FieldGroup className="form-grid command-form-grid">
                         <FormField label={text(locale, "Category", "カテゴリ")} nativeLabel={false}>
                             <SelectControl
                                 value={category}

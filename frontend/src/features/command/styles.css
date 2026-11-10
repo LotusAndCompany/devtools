@@ -1,3 +1,3 @@
-.command-output [data-slot="textarea"] {
-    field-sizing: fixed;
+.command-form-grid {
+    container-type: normal;
 }
