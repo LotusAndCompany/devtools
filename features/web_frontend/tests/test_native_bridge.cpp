@@ -2,7 +2,11 @@
 #include "features/web_frontend/gui/native_bridge.h"
 
 #include <QEventLoop>
+#include <QFile>
 #include <QImage>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSettings>
 #include <QSignalSpy>
 #include <QSqlDatabase>
@@ -125,12 +129,24 @@ void TestNativeBridge::formatsJsonUsingTheNativeParserAndEmitter()
     NativeBridge bridge(nullptr);
     QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
     QVERIFY(completed.isValid());
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-format-json.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
 
-    bridge.startOperation(formatRequest(QStringLiteral("format-1"), QStringLiteral("{\"a\":1}")));
-    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
-
-    const QVariantMap result = completed.constFirst().at(1).toMap();
-    QCOMPARE(result.value(QStringLiteral("text")).toString(), QStringLiteral("{\n  \"a\": 1\n}\n"));
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const QJsonObject input = testCase.value(QStringLiteral("input")).toObject();
+        const QString requestId = QStringLiteral("format-shared-%1").arg(index);
+        bridge.startOperation(formatRequest(requestId,
+                                            input.value(QStringLiteral("text")).toString(),
+                                            input.value(QStringLiteral("indentation")).toString()));
+        QTRY_COMPARE_WITH_TIMEOUT(completed.count(), index + 1, 3000);
+        const QVariantMap result = completed.at(index).at(1).toMap();
+        QCOMPARE(result.value(QStringLiteral("text")).toString(),
+                 testCase.value(QStringLiteral("expected")).toString());
+    }
 }
 
 void TestNativeBridge::reportsInvalidJson()
