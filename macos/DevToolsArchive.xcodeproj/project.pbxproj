@@ -128,13 +128,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DevToolsArchive/DevTools.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = C9VXW45UBV;
+				EXECUTABLE_NAME = "devtools-tauri";
 				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = DevToolsArchive/Info.plist;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
@@ -157,6 +158,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = C9VXW45UBV;
+				EXECUTABLE_NAME = "devtools-tauri";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;

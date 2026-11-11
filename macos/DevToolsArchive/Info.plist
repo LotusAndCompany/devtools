@@ -7,7 +7,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>DevTools</string>
 	<key>CFBundleExecutable</key>
-	<string>DevTools</string>
+	<string>devtools-tauri</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
