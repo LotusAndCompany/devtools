@@ -174,6 +174,10 @@ DevTools_add_test(test_native_bridge CORE_ONLY
     res/application.qrc
 )
 target_link_libraries(test_native_bridge PRIVATE DevTools_web_frontend)
+target_compile_definitions(
+    test_native_bridge
+    PRIVATE DEVTOOLS_SOURCE_DIR="${PROJECT_SOURCE_DIR}"
+)
 DevTools_add_test(test_wkwebview_frontend CORE_ONLY
     SOURCES
     features/web_frontend/tests/test_wkwebview_frontend.cpp

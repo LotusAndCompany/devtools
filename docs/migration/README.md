@@ -26,6 +26,8 @@ directory docs/ja/articles/ and does not modify it.
   historic estimates clearly separated from measurements, and follow-up work.
 - [qt-webview-feasibility.md](qt-webview-feasibility.md): PR #142 baseline,
   operation mapping, and the Qt WebView G0 result recorded on 2026-11-02.
+- [m4-tauri.md](m4-tauri.md): Tauri 2 proof, operation-by-operation migration
+  decisions, macOS smoke evidence, and remaining portability/performance gaps.
 
 ## Migration progress
 
@@ -41,7 +43,7 @@ must be used with evidence, and out-of-scope entries need a reason.
 | M1: separate C++ UI and processing | Verified | [m1-final-verification.md](m1-final-verification.md); the complete 56-test suite and application build passed |
 | M2: React / native bridge foundation | Implemented on current checkout; not merged | [m2-react-webengine.md](m2-react-webengine.md) preserves the historical WebEngine measurements; [qt-webview-feasibility.md](qt-webview-feasibility.md) records the host migration and Qt 6.12.0 evidence |
 | M3: move all UI to React | Implemented on current checkout; acceptance gaps remain | [m3-react-ui.md](m3-react-ui.md); all 11 registered routes use React, with host-specific security/integration checks and broader feature-equivalence/distribution work still open |
-| M4: test Tauri portability | Not started | Run the same UI and contract against a Tauri adapter |
+| M4: test Tauri portability | Implemented / unverified | [m4-tauri.md](m4-tauri.md); shared React UI, About/Settings reads, native file open, and Qt/Rust formatter/text-file fixtures were exercised; performance, save picker, signing, and future OS checks remain unverified |
 | M5: move feature processing to Rust or TypeScript | Not started | Compare behavior, errors, cancellation, and persisted data against this baseline |
 | M6: remove Qt and verify distribution | Not started | Validate clean install, migration, update, recovery, and uninstall |
 

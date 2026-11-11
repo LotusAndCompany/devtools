@@ -38,9 +38,26 @@ const productionCsp = [
   "frame-src 'self'",
 ].join("; ");
 
+const tauriDevelopmentCsp = [
+  "default-src 'self'",
+  "base-uri 'none'",
+  "form-action 'none'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' asset: http://asset.localhost blob: data:",
+  "font-src 'self' data:",
+  "connect-src 'self' ipc: http://ipc.localhost ws://127.0.0.1:5173",
+  "object-src 'none'",
+  "frame-src 'self'",
+].join("; ");
+
+const tauriModes = new Set(["tauri-dev", "tauri-build"]);
+
 export default defineConfig(({ mode }) => {
+  const isTauri = tauriModes.has(mode);
   const csp = mode === "development" ? developmentCsp : productionCsp;
   const cspHeader = `${csp}; frame-ancestors 'none'`;
+  const tauriCspHeader = `${tauriDevelopmentCsp}; frame-ancestors 'none'`;
 
   return {
     root: frontendRoot,
@@ -73,13 +90,15 @@ export default defineConfig(({ mode }) => {
               return;
             }
             if (requestPath === "/" || requestPath === "/index.html") {
-              response.setHeader("Content-Security-Policy", cspHeader);
+              response.setHeader("Content-Security-Policy", isTauri ? tauriCspHeader : cspHeader);
             }
             next();
           });
         },
         transformIndexHtml(html: string) {
-          return html.replace("__CONTENT_SECURITY_POLICY__", csp);
+          return isTauri
+            ? html.replace(/\s*<meta http-equiv="Content-Security-Policy"[^>]*>/, "")
+            : html.replace("__CONTENT_SECURITY_POLICY__", csp);
         },
         generateBundle(_options, bundle) {
           const index = bundle["index.html"];
