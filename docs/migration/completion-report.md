@@ -3,8 +3,9 @@
 **Status:** The Tauri-only implementation and local CI checks pass on
 `feature/issue-137-tauri-only-distribution`, based on
 `feature/issue-136-tauri-migration` at `ac772b6`. M6 is not ready for public
-release: clean-install lifecycle checks, signing credentials, performance
-comparisons, and third-party license notices remain outstanding.
+release: clean-install lifecycle checks, Developer ID signing and notarization
+for direct DMG distribution, performance comparisons, and third-party license
+notices remain outstanding.
 
 ## Scope delivered
 
@@ -58,6 +59,21 @@ The release workflow is configured but has not been run with organization
 secrets. Tauri's [macOS signing guide](https://v2.tauri.app/distribute/sign/macos/)
 describes the signing and notarization setup.
 
+## App Store Connect / TestFlight
+
+On 2026-11-11, Xcode Organizer reported that the Tauri macOS app upload to App
+Store Connect completed for version `0.9.0` (build `18`). The only warning was
+a missing app dSYM for UUID `3FB0952A-6A07-3969-AFC8-C22BB7A39BE0`; the app
+binary upload completed. The Rust release binary has no DWARF debug
+information, so this archive cannot produce a matching dSYM. This warning
+affects crash-report symbolication, not the app binary upload.
+
+This was a one-off, manually signed Xcode archive built from the Tauri app
+using the existing App Store provisioning profile and temporary App Store
+configuration. The archive and temporary configuration were not committed;
+the repository does not yet provide a repeatable Xcode archive or dSYM
+generation path for App Store uploads.
+
 ## Legacy data migration
 
 On first run the Rust app reads
@@ -94,8 +110,9 @@ Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 | Bridge contract | Passed as part of the frontend tests: all 31 TypeScript operation names match the Rust registry. |
 | Tauri app | Passed: app bundle built for `aarch64-apple-darwin`; executable is arm64; identifier is `com.lotusandcompanyinc.dev-tools`; version is `0.9.0`; minimum OS is `15.0`. |
 | Local DMG | Passed: unsigned `DevTools_0.9.0_aarch64.dmg` created; `hdiutil verify` reported a valid checksum. |
+| App Store Connect/TestFlight upload | Passed with warning: Xcode Organizer completed upload of arm64 app version `0.9.0` (build `18`); the app dSYM was missing for UUID `3FB0952A-6A07-3969-AFC8-C22BB7A39BE0`. |
 | Agent/workflow config | Passed: shared rules synchronized and checked; Ruby YAML parsing passed for the four GitHub workflows and CodeRabbit config. |
-| Public signature/notarization | Unverified: organization signing and notarization secrets are unavailable in this environment. |
+| Developer ID signature/notarization for public DMG | Unverified: organization signing and notarization secrets are unavailable in this environment. |
 | Clean install/migration lifecycle | Unverified: no separate clean macOS 15 profile was used. |
 | Full feature parity | Unverified: M5 exercised all 11 routes and the 31-operation contract; a complete M6 manual regression pass was not run. |
 | Performance | Unverified: no same-condition launch, responsiveness, workload, or app/child memory comparison was run. |
