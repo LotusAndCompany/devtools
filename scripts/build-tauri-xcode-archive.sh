@@ -17,6 +17,11 @@ repo_root="$(cd "$PROJECT_DIR/.." && pwd)"
 tauri_config="$PROJECT_TEMP_DIR/tauri-xcode-archive.conf.json"
 cargo_target_dir="$PROJECT_TEMP_DIR/cargo-target"
 app_store_info="$PROJECT_DIR/DevToolsArchive/AppStoreInfo.plist"
+export PATH="$HOME/.bun/bin:$HOME/.cargo/bin:/opt/homebrew/bin:$PATH"
+
+command -v bun >/dev/null || { echo "bun is required; install it before archiving" >&2; exit 1; }
+command -v cargo >/dev/null || { echo "cargo is required; install Rust before archiving" >&2; exit 1; }
+
 cat > "$tauri_config" <<EOF
 {
   "bundle": {

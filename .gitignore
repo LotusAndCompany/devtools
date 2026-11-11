@@ -20,6 +20,10 @@ CMakeLists.txt.user*
 *.autosave
 *~
 
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+
 # Tracked AI agent harness files
 !.claude/
 .claude/*

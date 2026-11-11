@@ -128,8 +128,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DevToolsArchive/DevTools.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = C9VXW45UBV;
 				ENABLE_APP_SANDBOX = YES;
@@ -151,8 +152,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DevToolsArchive/DevTools.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution: LOTUS & CO. INC. (C9VXW45UBV)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = C9VXW45UBV;
 				ENABLE_APP_SANDBOX = YES;
