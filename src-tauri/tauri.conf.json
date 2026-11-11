@@ -28,6 +28,9 @@
     "active": true,
     "targets": ["dmg"],
     "licenseFile": "../LICENSE",
+    "resources": {
+      "../THIRD-PARTY-NOTICES.md": "THIRD-PARTY-NOTICES.md"
+    },
     "macOS": {
       "minimumSystemVersion": "15.0"
     },

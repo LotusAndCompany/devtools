@@ -2771,14 +2771,21 @@ fn execute_operation(
         | "imageSplit" => image_operation(app, state, request, cancelled),
         "databaseHistory" => database_history_result(app, state),
         "databaseSelectFile" => database_select_file(app, state, cancelled),
-        "getAboutInfo" => Ok(json!({
-            "appVersion": app.package_info().version.to_string(),
-            "revision": option_env!("DEVTOOLS_GIT_REVISION").unwrap_or("unknown"),
-            "buildEnvironment": format!("{}/{}", std::env::consts::OS, std::env::consts::ARCH),
-            "runtime": "Tauri 2",
-            "copyright": "2025 © Lotus&Company Inc. All rights reserved.",
-            "licenseText": include_str!("../../LICENSE"),
-        })),
+        "getAboutInfo" => {
+            let license_text = format!(
+                "{}\n\n{}",
+                include_str!("../../LICENSE"),
+                include_str!("../../THIRD-PARTY-NOTICES.md")
+            );
+            Ok(json!({
+                "appVersion": app.package_info().version.to_string(),
+                "revision": option_env!("DEVTOOLS_GIT_REVISION").unwrap_or("unknown"),
+                "buildEnvironment": format!("{}/{}", std::env::consts::OS, std::env::consts::ARCH),
+                "runtime": "Tauri 2",
+                "copyright": "2025 © Lotus&Company Inc. All rights reserved.",
+                "licenseText": license_text,
+            }))
+        }
         _ => Err(Failure::new(
             "UNSUPPORTED_OPERATION",
             "Unsupported operation.",
@@ -3788,5 +3795,17 @@ mod tests {
             b"not a plist"
         );
         assert!(!config.join("settings.json").exists());
+    }
+
+    #[test]
+    fn about_license_text_fits_the_frontend_bridge_limit() {
+        // Keep the About license value within the frontend bridge's 1 MiB string limit.
+        let license = format!(
+            "{}\n\n{}",
+            include_str!("../../LICENSE"),
+            include_str!("../../THIRD-PARTY-NOTICES.md")
+        );
+        assert!(license.len() <= 1024 * 1024);
+        assert!(license.contains("# Third-party notices"));
     }
 }
