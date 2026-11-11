@@ -11,6 +11,36 @@
 
 #include <memory>
 
+namespace {
+QString qtDatabaseType(const QString &type)
+{
+    if (type == QStringLiteral("sqlite") || type == QStringLiteral("QSQLITE")) {
+        return QStringLiteral("QSQLITE");
+    }
+    if (type == QStringLiteral("mysql") || type == QStringLiteral("QMYSQL")) {
+        return QStringLiteral("QMYSQL");
+    }
+    if (type == QStringLiteral("postgres") || type == QStringLiteral("QPSQL")) {
+        return QStringLiteral("QPSQL");
+    }
+    return {};
+}
+
+QString sharedDatabaseType(const QString &type)
+{
+    if (type == QStringLiteral("QSQLITE")) {
+        return QStringLiteral("sqlite");
+    }
+    if (type == QStringLiteral("QMYSQL")) {
+        return QStringLiteral("mysql");
+    }
+    if (type == QStringLiteral("QPSQL")) {
+        return QStringLiteral("postgres");
+    }
+    return {};
+}
+} // namespace
+
 // NOLINTNEXTLINE(readability-function-size) -- shared connection and file lifetimes.
 void NativeBridge::startDatabaseOperation(const QString &requestId, const QString &operation,
                                           const QVariantMap &payload)
@@ -19,16 +49,20 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
         const QSettings settings;
         const QList<QJsonObject> stored = ConnectionHistory::read(settings);
         QVariantList history;
-        const QString connectedType =
-            database_state_->connection().value(QStringLiteral("type")).toString();
+        const QString connectedType = sharedDatabaseType(
+            database_state_->connection().value(QStringLiteral("type")).toString());
         for (int index = 0; index < stored.size(); ++index) {
             const QJsonObject &item = stored.at(index);
             const QString type = item.value(QStringLiteral("type")).toString();
+            const QString sharedType = sharedDatabaseType(type);
+            if (sharedType.isEmpty()) {
+                continue;
+            }
             const QString database = item.value(QStringLiteral("database")).toString();
             const QString displayName = item.value(QStringLiteral("displayName")).toString();
             history.append(QVariantMap{
                 {QStringLiteral("index"), index},
-                {QStringLiteral("type"), type},
+                {QStringLiteral("type"), sharedType},
                 {QStringLiteral("host"), item.value(QStringLiteral("host")).toString()},
                 {QStringLiteral("database"),
                  type == QStringLiteral("QSQLITE") ? QFileInfo(database).fileName() : database},
@@ -140,9 +174,19 @@ void NativeBridge::startDatabaseOperation(const QString &requestId, const QStrin
             }
         } else {
             connection = payload;
-            const QString type = connection.value(QStringLiteral("type")).toString();
+            const QString requestedType = connection.value(QStringLiteral("type")).toString();
+            const QString type = qtDatabaseType(requestedType);
+            if (!requestedType.isEmpty() && type.isEmpty()) {
+                fail(requestId, QStringLiteral("INVALID_INPUT"),
+                     QStringLiteral("Choose SQLite, MySQL or PostgreSQL."));
+                operations_.remove(requestId);
+                return;
+            }
+            if (!type.isEmpty()) {
+                connection.insert(QStringLiteral("type"), type);
+            }
             if (type == QStringLiteral("QSQLITE") ||
-                (type.isEmpty() && !database_state_->selectedFilePath().isEmpty())) {
+                (requestedType.isEmpty() && !database_state_->selectedFilePath().isEmpty())) {
                 if (!database_state_->fileAccess() ||
                     database_state_->selectedFilePath().isEmpty()) {
                     fail(requestId, QStringLiteral("INVALID_INPUT"),

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "git commit message",
+    "input": {
+      "action": "generate",
+      "category": "git",
+      "functionIndex": 1,
+      "optionIndex": 1,
+      "value": "release notes"
+    },
+    "expected": { "command": "git commit -m \"release notes\"" }
+  },
+  {
+    "name": "docker run image",
+    "input": {
+      "action": "generate",
+      "category": "docker",
+      "functionIndex": 2,
+      "optionIndex": 0,
+      "value": "nginx:alpine"
+    },
+    "expected": { "command": "docker run nginx:alpine" }
+  },
+  {
+    "name": "compose command without value",
+    "input": {
+      "action": "generate",
+      "category": "compose",
+      "functionIndex": 0,
+      "optionIndex": 0,
+      "value": ""
+    },
+    "expected": { "command": "docker compose build" }
+  },
+  {
+    "name": "quoted values are rejected",
+    "input": {
+      "action": "generate",
+      "category": "git",
+      "functionIndex": 1,
+      "optionIndex": 1,
+      "value": "release \"notes\""
+    },
+    "errorCode": "INVALID_INPUT"
+  }
+]

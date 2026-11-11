@@ -11,7 +11,7 @@ describe("ToolStage", () => {
                 history: [],
                 selectedFileName: "",
                 connected: true,
-                connectedType: "QSQLITE",
+                connectedType: "sqlite",
             }),
         });
         const props = {

@@ -12,11 +12,27 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+ammonia = "4"
+base64 = "0.22"
+chrono = { version = "0.4", features = ["clock"] }
+fancy-regex = "0.20"
+futures-util = "0.3"
+image = { version = "0.25", default-features = false, features = ["bmp", "gif", "jpeg", "png", "webp"] }
+plist = "1"
+pulldown-cmark = "0.13"
+qrcode = "0.14"
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "stream"] }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-tauri = { version = "2", features = [] }
+serde-saphyr = "2"
+serde_json = { version = "1", features = ["arbitrary_precision"] }
+sqlx = { version = "0.8", default-features = false, features = ["any", "runtime-tokio-rustls", "sqlite", "mysql", "postgres"] }
+tauri = { version = "2", features = ["image-png"] }
+tauri-plugin-clipboard-manager = "2"
 tauri-plugin-dialog = "2"
 tempfile = "3"
+toml = "1"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+uuid = { version = "1", features = ["v4"] }
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

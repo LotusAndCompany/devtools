@@ -42,18 +42,26 @@ void ConnectionHistory::add(QSettings &settings, const QJsonObject &connection)
     const QString database = connection["database"].toString();
     const QString type = connection["type"].toString();
     const QString host = connection["host"].toString();
+    int duplicateIndex = -1;
     for (int i = 0; i < history.size(); ++i) {
         const QJsonDocument existing = QJsonDocument::fromJson(history[i].toUtf8());
         if (!existing.isNull() && existing.isObject()) {
             const QJsonObject object = existing.object();
             if (object["database"].toString() == database && object["type"].toString() == type &&
                 object["host"].toString() == host) {
-                history.removeAt(i);
+                duplicateIndex = i;
                 break;
             }
         }
     }
-    history.prepend(QString::fromUtf8(QJsonDocument(connection).toJson(QJsonDocument::Compact)));
+    const QString entry =
+        QString::fromUtf8(QJsonDocument(connection).toJson(QJsonDocument::Compact));
+    if (duplicateIndex == -1) {
+        history.prepend(entry);
+    } else {
+        history[duplicateIndex] = entry;
+        history.move(duplicateIndex, 0);
+    }
     while (history.size() > MAX_HISTORY_ENTRIES) {
         history.removeLast();
     }

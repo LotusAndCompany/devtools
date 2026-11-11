@@ -75,7 +75,7 @@ export function DatabaseConnectionDialog({
     const [selectedHistoryIndex, setSelectedHistoryIndex] = useState<number | null>(null);
     const canConnect =
         !busy &&
-        (type === "QSQLITE" ? Boolean(selectedFileName) : Boolean(host && database && username));
+        (type === "sqlite" ? Boolean(selectedFileName) : Boolean(host && database && username));
     const selectedHistory = history.find((item) => item.index === selectedHistoryIndex);
 
     return (
@@ -122,7 +122,7 @@ export function DatabaseConnectionDialog({
                                                 size="sm"
                                                 disabled={busy}
                                                 onClick={() => {
-                                                    if (item.type === "QSQLITE") {
+                                                    if (item.type === "sqlite") {
                                                         setSelectedHistoryIndex(null);
                                                         onConnectSaved(Number(item.index));
                                                         return;
@@ -137,7 +137,7 @@ export function DatabaseConnectionDialog({
                                     </Item>
                                 ))}
                             </ItemGroup>
-                            {selectedHistory && selectedHistory.type !== "QSQLITE" && (
+                            {selectedHistory && selectedHistory.type !== "sqlite" && (
                                 <div className="db-connect-form">
                                     <FormField label={text(locale, "Password", "パスワード")}>
                                         <Input
@@ -169,13 +169,13 @@ export function DatabaseConnectionDialog({
                                 value={type}
                                 onValueChange={onTypeChange}
                                 options={[
-                                    { value: "QSQLITE", label: "SQLite" },
-                                    { value: "QMYSQL", label: "MySQL" },
-                                    { value: "QPSQL", label: "PostgreSQL" },
+                                    { value: "sqlite", label: "SQLite" },
+                                    { value: "mysql", label: "MySQL" },
+                                    { value: "postgres", label: "PostgreSQL" },
                                 ]}
                             />
                         </FormField>
-                        {type === "QSQLITE" ? (
+                        {type === "sqlite" ? (
                             <>
                                 <div className="selected-file">
                                     {selectedFileName ||

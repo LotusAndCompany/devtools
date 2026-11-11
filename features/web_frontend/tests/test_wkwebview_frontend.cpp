@@ -4,6 +4,7 @@
 #include <QEventLoop>
 #include <QFile>
 #include <QImage>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSignalSpy>
@@ -19,6 +20,7 @@ class TestWKWebViewFrontend : public QObject
 
 private slots:
     void loadsBundledFrontendAndRunsBridgeRequest();
+    void runsSharedFeatureFixturesThroughWebViewBridge();
     void rendersEveryToolRoute();
     void blocksExternalMainFrameNavigation();
     void routesSupportedNativeFileDrops();
@@ -26,6 +28,8 @@ private slots:
 
 private:
     bool evaluateJavaScript(WKWebViewAdapter *adapter, const QString &script, QVariant *result);
+    bool sendOperation(WKWebViewAdapter *adapter, const QString &requestId,
+                       const QString &operation, const QJsonObject &payload, QJsonObject *event);
 };
 
 namespace {
@@ -58,6 +62,43 @@ bool TestWKWebViewFrontend::evaluateJavaScript(WKWebViewAdapter *adapter, const 
         *result = evaluation->result;
     }
     return evaluation->finished;
+}
+
+bool TestWKWebViewFrontend::sendOperation(WKWebViewAdapter *adapter, const QString &requestId,
+                                          const QString &operation, const QJsonObject &payload,
+                                          QJsonObject *event)
+{
+    QJsonObject request{{QStringLiteral("contractVersion"), QStringLiteral("2")},
+                        {QStringLiteral("requestId"), requestId},
+                        {QStringLiteral("operation"), operation},
+                        {QStringLiteral("payload"), payload}};
+    const QString message =
+        QStringLiteral("window.webkit.messageHandlers.devtoolsNativeBridge.postMessage(") +
+        QString::fromUtf8(
+            QJsonDocument(QJsonObject{{QStringLiteral("type"), QStringLiteral("startOperation")},
+                                      {QStringLiteral("request"), request}})
+                .toJson(QJsonDocument::Compact)) +
+        QStringLiteral("); true");
+    QVariant accepted;
+    if (!evaluateJavaScript(adapter, message, &accepted) || !accepted.toBool()) {
+        return false;
+    }
+
+    const QString eventScript =
+        QStringLiteral("JSON.stringify(window.__wkFixtureEvents?.['%1'] ?? null)").arg(requestId);
+    for (int attempt = 0; attempt < 100; ++attempt) {
+        QVariant value;
+        if (!evaluateJavaScript(adapter, eventScript, &value)) {
+            return false;
+        }
+        const QJsonDocument document = QJsonDocument::fromJson(value.toString().toUtf8());
+        if (document.isObject()) {
+            *event = document.object();
+            return true;
+        }
+        QTest::qWait(50);
+    }
+    return false;
 }
 
 void TestWKWebViewFrontend::loadsBundledFrontendAndRunsBridgeRequest()
@@ -107,6 +148,105 @@ void TestWKWebViewFrontend::loadsBundledFrontendAndRunsBridgeRequest()
     QCOMPARE(event.value(QStringLiteral("type")).toString(), QStringLiteral("completed"));
     QCOMPARE(event.value(QStringLiteral("requestId")).toString(),
              QStringLiteral("wkwebview_get_about"));
+}
+
+void TestWKWebViewFrontend::runsSharedFeatureFixturesThroughWebViewBridge()
+{
+    WKWebViewAdapter adapter;
+    adapter.resize(900, 700);
+    adapter.show();
+    QSignalSpy loaded(&adapter, &WKWebViewAdapter::frontendLoadFinished);
+    QTRY_VERIFY_WITH_TIMEOUT(loaded.count() > 0, 15000);
+    QVERIFY(loaded.first().at(0).toBool());
+
+    QVariant listenerInstalled;
+    QVERIFY(evaluateJavaScript(
+        &adapter,
+        QStringLiteral(
+            "window.__wkFixtureEvents = Object.create(null); "
+            "window.addEventListener('devtools-native-event', event => { "
+            "const detail = event.detail; "
+            "if (detail?.requestId && ['completed','failed','cancelled'].includes(detail.type)) "
+            "window.__wkFixtureEvents[detail.requestId] = detail; }); true"),
+        &listenerInstalled));
+
+    int requestNumber = 0;
+    const auto runCases = [&](const QString &fixtureName, const QString &operation,
+                              bool expectedIsString = false) {
+        QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) + QStringLiteral("/tests/fixtures/") +
+                      fixtureName);
+        QVERIFY2(fixture.open(QIODevice::ReadOnly), qPrintable(fixtureName));
+        const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+        QVERIFY2(!cases.isEmpty(), qPrintable(fixtureName));
+
+        for (const QJsonValue &value : cases) {
+            const QJsonObject testCase = value.toObject();
+            const QString timeZone = testCase.value(QStringLiteral("timeZone")).toString();
+            if (!timeZone.isEmpty() && qEnvironmentVariable("TZ") != timeZone) {
+                continue;
+            }
+            const QString requestId = QStringLiteral("wkFixture%1").arg(requestNumber++);
+            QJsonObject event;
+            const bool completed =
+                sendOperation(&adapter, requestId, operation,
+                              testCase.value(QStringLiteral("input")).toObject(), &event);
+            QVERIFY2(completed, qPrintable(fixtureName + QStringLiteral(": bridge timed out")));
+            if (testCase.contains(QStringLiteral("errorCode"))) {
+                QCOMPARE(event.value(QStringLiteral("type")).toString(), QStringLiteral("failed"));
+                QCOMPARE(event.value(QStringLiteral("error"))
+                             .toObject()
+                             .value(QStringLiteral("code"))
+                             .toString(),
+                         testCase.value(QStringLiteral("errorCode")).toString());
+                continue;
+            }
+
+            QCOMPARE(event.value(QStringLiteral("type")).toString(), QStringLiteral("completed"));
+            QJsonObject expected;
+            if (expectedIsString) {
+                expected.insert(QStringLiteral("text"), testCase.value(QStringLiteral("expected")));
+            } else {
+                expected = testCase.value(QStringLiteral("expected")).toObject();
+            }
+            const QJsonObject result = event.value(QStringLiteral("result")).toObject();
+            for (auto it = expected.constBegin(); it != expected.constEnd(); ++it) {
+                QCOMPARE(result.value(it.key()), it.value());
+            }
+        }
+    };
+
+    runCases(QStringLiteral("tauri-format-json.json"), QStringLiteral("formatJson"), true);
+    runCases(QStringLiteral("tauri-convert-data.json"), QStringLiteral("convertData"));
+    runCases(QStringLiteral("tauri-compare-text.json"), QStringLiteral("compareText"));
+    runCases(QStringLiteral("tauri-timestamp.json"), QStringLiteral("convertTimestamp"));
+    runCases(QStringLiteral("tauri-command.json"), QStringLiteral("commandData"));
+    runCases(QStringLiteral("tauri-regex.json"), QStringLiteral("evaluateRegex"));
+    runCases(QStringLiteral("tauri-qr-content.json"), QStringLiteral("generateQr"));
+
+    QFile markdownFixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                          QStringLiteral("/tests/fixtures/tauri-markdown.json"));
+    QVERIFY(markdownFixture.open(QIODevice::ReadOnly));
+    const QJsonObject markdown = QJsonDocument::fromJson(markdownFixture.readAll()).object();
+    const QString markdownId = QStringLiteral("wkFixtureMarkdown");
+    QJsonObject markdownEvent;
+    QVERIFY(sendOperation(
+        &adapter, markdownId, QStringLiteral("renderMarkdown"),
+        {{QStringLiteral("markdown"), markdown.value(QStringLiteral("markdown")).toString()}},
+        &markdownEvent));
+    QCOMPARE(markdownEvent.value(QStringLiteral("type")).toString(), QStringLiteral("completed"));
+    const QString html = markdownEvent.value(QStringLiteral("result"))
+                             .toObject()
+                             .value(QStringLiteral("html"))
+                             .toString();
+    for (const QJsonValue &required : markdown.value(QStringLiteral("requiredHtml")).toArray()) {
+        QVERIFY(html.contains(required.toString()));
+    }
+    for (const QJsonValue &forbidden : markdown.value(QStringLiteral("forbiddenHtml")).toArray()) {
+        QVERIFY(!html.contains(forbidden.toString(), Qt::CaseInsensitive));
+    }
+    for (const QJsonValue &expected : markdown.value(QStringLiteral("qtExpectedHtml")).toArray()) {
+        QVERIFY(html.contains(expected.toString(), Qt::CaseInsensitive));
+    }
 }
 
 void TestWKWebViewFrontend::correlatesOversizedTrustedMessages()
