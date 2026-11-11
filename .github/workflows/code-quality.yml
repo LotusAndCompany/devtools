@@ -30,15 +30,6 @@ jobs:
         working-directory: frontend
         run: bun install --frozen-lockfile
 
-      - name: Check Rust formatting
-        run: cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
-
-      - name: Run Rust lint
-        run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
-
-      - name: Run Rust tests
-        run: cargo test --manifest-path src-tauri/Cargo.toml --locked --quiet
-
       - name: Check frontend
         working-directory: frontend
         run: |
@@ -47,6 +38,15 @@ jobs:
           bun run --bun typecheck
           bun run --bun test
           bun run --bun build
+
+      - name: Check Rust formatting
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
+
+      - name: Run Rust lint
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
+
+      - name: Run Rust tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml --locked --quiet
 
       - name: Build macOS DMG
         working-directory: frontend
