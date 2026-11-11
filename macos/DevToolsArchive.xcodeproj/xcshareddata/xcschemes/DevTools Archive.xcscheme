@@ -2,7 +2,7 @@
 <Scheme LastUpgradeVersion="2700" version="1.7">
    <BuildAction parallelizeBuildables="NO" buildImplicitDependencies="YES">
       <BuildActionEntries>
-         <BuildActionEntry buildForTesting="NO" buildForRunning="NO" buildForProfiling="NO" buildForArchiving="YES" buildForAnalyzing="NO">
+         <BuildActionEntry buildForTesting="NO" buildForRunning="YES" buildForProfiling="NO" buildForArchiving="YES" buildForAnalyzing="NO">
             <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000006" BuildableName="DevTools.app" BlueprintName="DevTools" ReferencedContainer="container:DevToolsArchive.xcodeproj"/>
          </BuildActionEntry>
       </BuildActionEntries>
