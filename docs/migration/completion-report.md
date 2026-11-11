@@ -88,7 +88,7 @@ Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 | Source removal | Passed: no current app-owned C++/Qt/CMake/QWebChannel host or frontend host adapter remains. Historical migration records and legacy import fixtures remain intentionally. |
 | Rust formatting | Passed: `cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check` |
 | Rust lint | Passed: `cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings` |
-| Rust tests | Passed: 30 tests, 0 failures. The optional MySQL/PostgreSQL test is environment-gated and was not configured for this run. |
+| Rust tests | Passed: 31 tests, 0 failures. The optional MySQL/PostgreSQL test is environment-gated and was not configured for this run. |
 | Rust API docs | Passed: cargo doc --locked --no-deps --manifest-path src-tauri/Cargo.toml. |
 | Frontend | Passed: lint, format check, typecheck, all 20 tests, and production build. |
 | Bridge contract | Passed as part of the frontend tests: all 31 TypeScript operation names match the Rust registry. |

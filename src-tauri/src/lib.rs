@@ -1767,10 +1767,9 @@ fn database_url(
     driver: &str,
     host: &str,
     database: &str,
-    username: &str,
-    password: &str,
+    credentials: Option<(&str, &str)>,
 ) -> Result<reqwest::Url, Failure> {
-    let mut url = if driver == "sqlite" {
+    if driver == "sqlite" {
         let path = Path::new(database);
         let file_url = reqwest::Url::from_file_path(path)
             .map_err(|_| Failure::new("INVALID_INPUT", "SQLite database path is invalid."))?;
@@ -1779,14 +1778,19 @@ fn database_url(
         let mut url = url;
         url.query_pairs_mut().append_pair("mode", "rw");
         return Ok(url);
-    } else {
-        reqwest::Url::parse(if driver == "mysql" {
-            "mysql://localhost/"
-        } else {
-            "postgres://localhost/"
-        })
-        .map_err(|_| Failure::new("INTERNAL_ERROR", "Could not configure the database driver."))?
+    }
+    let Some((username, password)) = credentials else {
+        return Err(Failure::new(
+            "INVALID_INPUT",
+            "Database credentials are required.",
+        ));
     };
+    let mut url = reqwest::Url::parse(if driver == "mysql" {
+        "mysql://localhost/"
+    } else {
+        "postgres://localhost/"
+    })
+    .map_err(|_| Failure::new("INTERNAL_ERROR", "Could not configure the database driver."))?;
     url.set_host(Some(host))
         .map_err(|_| Failure::new("INVALID_INPUT", "Database host is invalid."))?;
     url.set_username(username)
@@ -1801,14 +1805,13 @@ async fn open_database_pool(
     driver: &str,
     host: &str,
     database: &str,
-    username: &str,
-    password: &str,
+    credentials: Option<(&str, &str)>,
     cancelled: &AtomicBool,
 ) -> Result<sqlx::AnyPool, Failure> {
     use std::str::FromStr;
     use std::time::Duration;
     SQLX_DRIVER_INIT.call_once(sqlx::any::install_default_drivers);
-    let url = database_url(driver, host, database, username, password)?;
+    let url = database_url(driver, host, database, credentials)?;
     let options = sqlx::any::AnyConnectOptions::from_str(url.as_str())
         .map_err(|_| Failure::new("INVALID_INPUT", "Database connection settings are invalid."))?;
     let connect = sqlx::any::AnyPoolOptions::new()
@@ -2130,9 +2133,10 @@ async fn database_operation(
                 app,
                 json!({"type":"progress", "requestId":request.request_id, "percent":10, "message":"Connecting to database"}),
             );
+            let credentials =
+                (driver != "sqlite").then_some((username.as_str(), password.as_str()));
             let pool =
-                open_database_pool(&driver, &host, &database, &username, &password, cancelled)
-                    .await?;
+                open_database_pool(&driver, &host, &database, credentials, cancelled).await?;
             emit(
                 app,
                 json!({"type":"progress", "requestId":request.request_id, "percent":75, "message":"Reading database tables"}),
@@ -3192,6 +3196,14 @@ mod tests {
         !checksum
     }
 
+    #[test]
+    fn sqlite_database_url_does_not_require_credentials() {
+        let path = std::env::temp_dir().join("devtools.sqlite");
+        let url = database_url("sqlite", "", path.to_str().unwrap(), None).unwrap();
+        assert_eq!(url.scheme(), "sqlite");
+        assert!(database_url("mysql", "localhost", "database", None).is_err());
+    }
+
     #[derive(Deserialize)]
     #[serde(rename_all = "camelCase")]
     struct FormatFixture {
@@ -3404,7 +3416,7 @@ mod tests {
         let path = directory.path().join("日本語.sqlite");
         File::create(&path).unwrap();
         let cancelled = AtomicBool::new(false);
-        let pool = open_database_pool("sqlite", "", path.to_str().unwrap(), "", "", &cancelled)
+        let pool = open_database_pool("sqlite", "", path.to_str().unwrap(), None, &cancelled)
             .await
             .unwrap();
 
@@ -3498,10 +3510,15 @@ mod tests {
                 continue;
             }
             connected = true;
-            let pool =
-                open_database_pool(driver, &host, &database, &username, &password, &cancelled)
-                    .await
-                    .expect("configured database server should accept a connection");
+            let pool = open_database_pool(
+                driver,
+                &host,
+                &database,
+                Some((&username, &password)),
+                &cancelled,
+            )
+            .await
+            .expect("configured database server should accept a connection");
             let version = database_query(&pool, driver, "SELECT VERSION()", &cancelled)
                 .await
                 .expect("server version query should succeed");
