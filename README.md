@@ -2,163 +2,67 @@
 
 [日本語版 README](docs/ja/README.md)
 
-A unified desktop application that combines various development tools into a single, convenient interface. DevTools eliminates the need for multiple web services by providing all essential developer utilities in one place.
-
-<!-- TODO: Add screenshot -->
-<!-- ![DevTools Screenshot](docs/images/screenshot.png) -->
+A desktop collection of developer utilities. The application uses Tauri 2, a
+Rust backend, and a React/TypeScript frontend. macOS supplies WebKit.
 
 ## Features
 
-### QR Code
-- **Text**: Generate QR codes from plain text
-- **URL**: Create QR codes for website links
-- **Email**: Generate mailto: QR codes
-- **Phone**: Create tel: QR codes for phone numbers
-- **SMS**: Generate SMS QR codes
-- **Wi-Fi**: Encode wireless network credentials
-- **Contact**: Generate vCard QR codes
-- **Calendar**: Generate calendar event QR codes
-- **Geo Location**: Create location-based QR codes
-
-### Image Editor
-- **Resize**: Scale images to specific dimensions or percentages
-- **Rotate and flip**: Rotate in 90-degree steps or flip horizontally/vertically
-- **Split**: Divide images by number of parts or cell size
-- **Transparency**: Make a selected color transparent
-
-### Data Conversion
-- Convert between **JSON**, **YAML**, and **TOML** formats
-- Syntax validation and formatting
-
-### HTTP Request
-- Send HTTP requests (GET, POST, PUT, DELETE)
-- View responses as read-only, selectable text
-
-### Markdown Preview
-- Edit Markdown and preview rendered HTML in real time
-
-### Command Generation
-- Build Git, Docker, and Docker Compose commands from the GUI
-- Copy generated commands for use in a terminal
-
-### Database
-- Connect to **SQLite**, **MySQL**, and **PostgreSQL** databases
-- Browse tables and view data
-- Execute SQL queries with tabbed interface
-
-### Phrase Generation
-- Create and reuse named text templates
-
-### Regex Tester
-- Test regular expressions and replacements
-- Inspect matches and capture groups
-
-### Timestamp Conversion
-- Convert between Unix timestamps (seconds/milliseconds), local and UTC
-  date/time, and ISO 8601 (UTC and local offset)
-- Edit any row and press **Convert** to apply it to every other row
-- **Now** fills all rows with the current time; **Copy** copies a row's value
-
-### Text Diff
-- Compare two texts line by line
-- View differences inline or side by side
+- QR code generation
+- Image editing and splitting
+- JSON, YAML, and TOML conversion
+- HTTP requests
+- Markdown preview and export
+- Command generation
+- SQLite, MySQL, and PostgreSQL tools
+- Phrase templates, regex testing, timestamps, and text diff
 
 ## Requirements
 
-- **Platform**: macOS 15.0+ (Apple Silicon / arm64 only)
-- **Qt**: 6.9.0+ (CI pins 6.9.0; the React frontend uses WKWebView)
-- **CMake**: 3.21.1+
-- **C++ Compiler**: C++17 compatible
-- **Bun**: 1.3.14 (frontend build tool)
+- macOS 15.0 or later on Apple Silicon (arm64)
+- Xcode Command Line Tools
+- Rust 1.99.1 with rustfmt and clippy
+- Bun 1.3.14
+
+The app build no longer uses Qt, CMake, the vcpkg package manager,
+QWebChannel, an FFI bridge, or sidecar processes.
 
 ## Quick Start
 
-```bash
-# Clone the repository
+~~~bash
 git clone https://github.com/LotusAndCompany/devtools.git
-cd devtools
+cd devtools/frontend
+bun install --frozen-lockfile
+bun run tauri:dev
+~~~
 
-# Install Qt 6.9.0+, Bun 1.3.14, and vcpkg. See the installation guide for setup.
-# Set VCPKG_ROOT to the vcpkg installation directory.
-QT_ROOT="$HOME/Qt/6.9.0/macos"
+Build a local DMG with:
 
-# Configure with CMake. vcpkg manifest dependencies are installed during configure.
-cmake -S . -B build \
-  -DQt6_DIR="$QT_ROOT/lib/cmake/Qt6" \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
-  -DVCPKG_TARGET_TRIPLET=arm64-osx
+~~~bash
+bun run tauri:build
+~~~
 
-# Build
-cmake --build build --parallel
-
-# Build and run
-cmake --build build --target run
-```
-
-For detailed build instructions, see [BUILD.md](BUILD.md).
+For installation, release signing, and update guidance, see the
+[installation guide](docs/getting-started/installation.md). For contributor
+build and test commands, see [BUILD.md](BUILD.md).
 
 ## Documentation
 
-### Quick Links
 - [Documentation Index](docs/README.md)
-- [Quick Start Guide](docs/getting-started/quick-start.md)
-- [Installation Guide](docs/getting-started/installation.md)
-
-### Detailed Documentation
-- [User Guide](docs/user-guide/overview.md) - How to use each feature
-- [Development Guide](docs/development/architecture.md) - For contributors
-- [Icon Assets](docs/development/icon-assets.md) - Frontend and native host icons
-- [API Documentation](https://LotusAndCompany.github.io/devtools/) (Doxygen)
-
-### Other Resources
-- [Build Instructions](BUILD.md) / [ビルド手順](docs/ja/BUILD.md)
-- [Contributing Guide](CONTRIBUTING.md) / [貢献ガイド](docs/ja/CONTRIBUTING.md)
-- [Troubleshooting](docs/troubleshooting/common-issues.md) / [FAQ](docs/troubleshooting/faq.md)
-
-## Contributing
-
-We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on:
-
-- How to report bugs
-- How to request features
-- How to submit pull requests
-- Code style guidelines
-
-## Security
-
-For security vulnerabilities, please see our [Security Policy](SECURITY.md).
+- [Quick Start](docs/getting-started/quick-start.md)
+- [Installation](docs/getting-started/installation.md)
+- [User Guide](docs/user-guide/overview.md)
+- [Development Architecture](docs/development/architecture.md)
+- [Contributing](CONTRIBUTING.md)
+- [Migration completion report](docs/migration/completion-report.md)
+- [Rust API documentation](https://LotusAndCompany.github.io/devtools/)
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-### Third-Party Licenses
-
-DevTools uses the following third-party libraries:
-
-| Library | License |
-|---------|---------|
-| Qt6 | LGPL v3 |
-| toml11 | MIT |
-| yaml-cpp | MIT |
-| qlementine | MIT |
-| qrcodegen | MIT |
-| `@base-ui/react` | MIT |
-| `class-variance-authority` | Apache 2.0 |
-| `cn` | MIT |
-| `date-fns` | MIT |
-| `effect` | MIT |
-| `lucide-react` | ISC |
-| `react` | MIT |
-| `react-dom` | MIT |
-| `react-day-picker` | MIT |
-
-## Acknowledgments
-
-- [Qt Project](https://www.qt.io/) for the excellent cross-platform framework
-- [Qlementine](https://github.com/oclero/qlementine) for Qt Widgets support used by native components
-- [Project Nayuki](https://www.nayuki.io/) for the QR code generator library
-- All contributors and users of DevTools
+DevTools is licensed under Apache License 2.0; see [LICENSE](LICENSE). Rust and
+frontend dependencies are recorded in src-tauri/Cargo.lock and frontend/bun.lock.
+The release maintainer reviews those dependency licenses before publishing;
+the M6 inventory and verification status are in the
+[migration completion report](docs/migration/completion-report.md).
 
 ---
 

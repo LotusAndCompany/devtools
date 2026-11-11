@@ -1,9 +1,9 @@
 # Icon Assets
 
-The React UI uses `lucide-react`. Tool icons are assigned in
-`frontend/src/app/tool-registry.ts`; shared navigation and component icons are
-imported from the same package. Its license and other frontend runtime licenses
-are listed in the [third-party license inventory](../../README.md#third-party-licenses).
+The macOS app icon sources are the icon files referenced by
+`src-tauri/tauri.conf.json`. The frontend uses its React assets under
+`frontend/src/`.
 
-The native Qt host uses the platform's standard menu and file-dialog icons. It
-does not bundle a separate icon font or native feature-screen icon assets.
+When changing an app icon, update the source asset, verify the Tauri DMG build,
+and inspect the generated app bundle. Do not edit generated bundle assets.
+For screen layouts, use the Pencil workflow in [Design Files](design-files.md).

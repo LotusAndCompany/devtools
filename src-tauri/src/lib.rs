@@ -683,7 +683,7 @@ fn validate_payload(operation: &str, payload: &Value) -> Result<(), Failure> {
             if object
                 .get("toolId")
                 .and_then(Value::as_u64)
-                .map_or(true, |value| value == 0 || value > 13)
+                .is_none_or(|value| value == 0 || value > 13)
             {
                 return Err(Failure::new(
                     "INVALID_INPUT",
@@ -1428,16 +1428,16 @@ fn migrate_qsettings_file(config_dir: &Path, legacy_path: &Path) -> Result<(), F
 }
 
 fn legacy_application_settings(values: &plist::Dictionary) -> Result<ApplicationSettings, Failure> {
-    let mut settings = ApplicationSettings::default();
-    settings.language = legacy_string(values, "language", "en")?;
-    settings.theme = legacy_string(values, "general.theme", "system")?;
-    settings.show_sidebar_on_startup =
-        legacy_boolean(values, "general.showSidemenuOnStartup", true)?;
-    settings.show_last_tool_on_startup =
-        legacy_boolean(values, "general.showLastToolOnStartup", false)?;
-    settings.always_on_top = legacy_boolean(values, "window.alwaysOnTop", false)?;
-    settings.remember_window_size = legacy_boolean(values, "window.rememberSize", true)?;
-    settings.remember_window_position = legacy_boolean(values, "window.rememberPosition", true)?;
+    let mut settings = ApplicationSettings {
+        language: legacy_string(values, "language", "en")?,
+        theme: legacy_string(values, "general.theme", "system")?,
+        show_sidebar_on_startup: legacy_boolean(values, "general.showSidemenuOnStartup", true)?,
+        show_last_tool_on_startup: legacy_boolean(values, "general.showLastToolOnStartup", false)?,
+        always_on_top: legacy_boolean(values, "window.alwaysOnTop", false)?,
+        remember_window_size: legacy_boolean(values, "window.rememberSize", true)?,
+        remember_window_position: legacy_boolean(values, "window.rememberPosition", true)?,
+        ..ApplicationSettings::default()
+    };
     if let Some(value) = legacy_integer(values, "general.lastUsedTool")? {
         settings.last_used_tool = match value {
             -1 => None,
@@ -1492,10 +1492,12 @@ fn legacy_application_settings(values: &plist::Dictionary) -> Result<Application
 }
 
 fn legacy_regex_settings(values: &plist::Dictionary) -> Result<RegexSettings, Failure> {
-    let mut settings = RegexSettings::default();
-    settings.pattern = legacy_string(values, "RegexTester.pattern", "")?;
-    settings.test_text = legacy_string(values, "RegexTester.testText", "")?;
-    settings.replace_pattern = legacy_string(values, "RegexTester.replacePattern", "")?;
+    let mut settings = RegexSettings {
+        pattern: legacy_string(values, "RegexTester.pattern", "")?,
+        test_text: legacy_string(values, "RegexTester.testText", "")?,
+        replace_pattern: legacy_string(values, "RegexTester.replacePattern", "")?,
+        ..RegexSettings::default()
+    };
     if settings.pattern.len() > MAX_VALUE_BYTES
         || settings.test_text.len() > MAX_VALUE_BYTES
         || settings.replace_pattern.len() > MAX_VALUE_BYTES
@@ -2486,8 +2488,7 @@ fn safe_suggested_name(name: &str, file_type: &str) -> String {
         _ => "txt",
     };
     let safe: String = name
-        .replace('/', "_")
-        .replace('\\', "_")
+        .replace(['/', '\\'], "_")
         .replace("..", "")
         .trim()
         .chars()
@@ -2767,9 +2768,9 @@ fn execute_operation(
         "databaseHistory" => database_history_result(app, state),
         "databaseSelectFile" => database_select_file(app, state, cancelled),
         "getAboutInfo" => Ok(json!({
-            "appVersion": env!("CARGO_PKG_VERSION"),
+            "appVersion": app.package_info().version.to_string(),
             "revision": option_env!("DEVTOOLS_GIT_REVISION").unwrap_or("unknown"),
-            "buildEnvironment": format!("Tauri preview ({}/{})", std::env::consts::OS, std::env::consts::ARCH),
+            "buildEnvironment": format!("{}/{}", std::env::consts::OS, std::env::consts::ARCH),
             "runtime": "Tauri 2",
             "copyright": "2025 © Lotus&Company Inc. All rights reserved.",
             "licenseText": include_str!("../../LICENSE"),

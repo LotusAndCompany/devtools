@@ -1,7 +1,6 @@
-# EditorConfig - https://editorconfig.org
+# EditorConfig: https://editorconfig.org
 root = true
 
-# Default settings for all files
 [*]
 charset = utf-8
 end_of_line = lf
@@ -10,42 +9,14 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-# C/C++ source files
-[*.{c,cc,cpp,cxx,h,hh,hpp,hxx}]
-indent_size = 4
-
-# CMake files
-[{CMakeLists.txt,*.cmake}]
-indent_size = 4
-
-# Qt UI files (XML)
-[*.ui]
+[*.{yml,yaml,json}]
 indent_size = 2
 
-# Qt resource files (XML)
-[*.qrc]
-indent_size = 2
-
-# Qt translation files (XML)
-[*.ts]
-indent_size = 2
-
-# YAML files
-[*.{yml,yaml}]
-indent_size = 2
-
-# JSON files
-[*.json]
-indent_size = 2
-
-# Markdown
 [*.md]
 trim_trailing_whitespace = false
 
-# Shell scripts
 [*.sh]
 indent_size = 4
 
-# Makefiles require tabs
-[Makefile]
-indent_style = tab
+[*.{toml,rs}]
+indent_size = 4

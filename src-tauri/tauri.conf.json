@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "DevTools",
-  "version": "0.1.0",
-  "identifier": "com.lotusandcompanyinc.dev-tools.tauri-preview",
+  "version": "../frontend/package.json",
+  "identifier": "com.lotusandcompanyinc.dev-tools",
   "build": {
     "beforeDevCommand": "bun run dev:tauri",
     "devUrl": "http://127.0.0.1:5173",
@@ -26,7 +26,11 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["app"],
+    "targets": ["dmg"],
+    "licenseFile": "../LICENSE",
+    "macOS": {
+      "minimumSystemVersion": "15.0"
+    },
     "category": "DeveloperTool",
     "shortDescription": "Developer utility collection",
     "icon": ["../res/dev-tools.icns", "../res/dev-tools_logo.png"]
