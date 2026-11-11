@@ -4,19 +4,19 @@ const MOBILE_BREAKPOINT = 768;
 const MOBILE_QUERY = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
 
 function subscribe(onStoreChange: () => void) {
-  const mediaQuery = window.matchMedia(MOBILE_QUERY);
-  mediaQuery.addEventListener("change", onStoreChange);
-  return () => mediaQuery.removeEventListener("change", onStoreChange);
+    const mediaQuery = window.matchMedia(MOBILE_QUERY);
+    mediaQuery.addEventListener("change", onStoreChange);
+    return () => mediaQuery.removeEventListener("change", onStoreChange);
 }
 
 function getSnapshot() {
-  return window.matchMedia(MOBILE_QUERY).matches;
+    return window.matchMedia(MOBILE_QUERY).matches;
 }
 
 function getServerSnapshot() {
-  return false;
+    return false;
 }
 
 export function useIsMobile() {
-  return React.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+    return React.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

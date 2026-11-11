@@ -1,270 +1,53 @@
-name: Code Quality
+name: Tauri Quality
 
 on:
   pull_request:
-    branches: [main]
-    paths:
-      - '**.cpp'
-      - '**.h'
-      - '**.hpp'
-      - 'CMakeLists.txt'
-      - 'features/**/CMakeLists.txt'
-      - 'features/web_frontend/**'
-      - 'frontend/**'
-      - 'tests/DevToolsTests.cmake'
-      - '.clang-format'
-      - '.clang-tidy'
-      - '.github/workflows/code-quality.yml'
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  frontend-quality:
-    name: Frontend Checks
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    defaults:
-      run:
-        working-directory: frontend
-
+  checks:
+    name: Rust, React, and macOS bundle
+    runs-on: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Rust
+        run: rustup toolchain install 1.99.1 --profile minimal --component clippy --component rustfmt --target aarch64-apple-darwin
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: '1.3.14'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
         run: bun install --frozen-lockfile
 
-      - name: Lint
-        run: bun run lint
+      - name: Check Rust formatting
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
 
-      - name: Check formatting
-        run: bun run format:check
+      - name: Run Rust lint
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
 
-      - name: Typecheck
-        run: bun run --bun typecheck
+      - name: Run Rust tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml --locked --quiet
 
-      - name: Test
-        run: bun run --bun test
-
-      - name: Build
-        run: bun run --bun build
-
-  clang-format:
-    name: Check Code Formatting
-    runs-on: macos-15
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-
-      - name: Install clang-format
+      - name: Check frontend
+        working-directory: frontend
         run: |
-          brew install llvm
-          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+          bun run lint
+          bun run format:check
+          bun run --bun typecheck
+          bun run --bun test
+          bun run --bun build
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            **/*.cpp
-            **/*.h
-            **/*.hpp
-          files_ignore: |
-            build/**
-            **/moc_*.cpp
-            **/ui_*.h
-            **/qrc_*.cpp
-
-      - name: Check formatting
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          echo "Checking files: $CHANGED_FILES"
-          FAILED=0
-          for file in $CHANGED_FILES; do
-            if ! clang-format --dry-run --Werror "$file" 2>/dev/null; then
-              echo "::error file=$file::File is not properly formatted"
-              clang-format --dry-run "$file" 2>&1 | head -20
-              FAILED=1
-            fi
-          done
-          if [ $FAILED -eq 1 ]; then
-            echo ""
-            echo "::error::Some files are not properly formatted. Run 'clang-format -i <file>' to fix."
-            exit 1
-          fi
-          echo "All checked files are properly formatted!"
-
-  clang-tidy:
-    name: Static Analysis
-    runs-on: macos-15
-    if: github.actor != 'dependabot[bot]'
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Install dependencies
-        run: |
-          brew install llvm@18 ninja
-          LLVM_PREFIX="$(brew --prefix llvm@18)"
-          echo "$LLVM_PREFIX/bin" >> "$GITHUB_PATH"
-          "$LLVM_PREFIX/bin/clang-tidy" --version
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125 # v4
-        with:
-          version: '6.9.0'
-          host: 'mac'
-          target: 'desktop'
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: '1.3.14'
-
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@b1a0dd252f06b9e25b3c022a9a03bd7a427fb6a2 # v11.6
-        with:
-          vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'  # 2024.10.21 release
-
-      - name: Configure CMake
-        env:
-          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
-          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
-          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
-          # fail. Falling back to "clear" rebuilds ports on every run.
-          VCPKG_BINARY_SOURCES: clear
-          # yaml-cpp 0.8.0 declares CMake 3.4; CMake 4.0+ requires at least
-          # policy version 3.5. Keep the legacy dependency configurable.
-          CMAKE_POLICY_VERSION_MINIMUM: '3.5'
-        run: |
-          cmake -B build \
-            -G Ninja \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_C_COMPILER="$(xcrun --find clang)" \
-            -DCMAKE_CXX_COMPILER="$(xcrun --find clang++)" \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-            -DCMAKE_OSX_ARCHITECTURES=arm64 \
-            -DVCPKG_TARGET_TRIPLET=arm64-osx
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            features/**/*.cpp
-            main/**/*.cpp
-          files_ignore: |
-            build/**
-            **/tests/**
-            **/qrcodegen.*
-
-      - name: Build project
-        run: cmake --build build
-
-      - name: Run clang-tidy
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          run-clang-tidy -p build -j 4 \
-            -warnings-as-errors='*' \
-            $CHANGED_FILES
-          echo "Static analysis passed!"
-
-  format-suggestion:
-    name: Format Suggestions (PR Comment)
-    runs-on: macos-15
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Install clang-format
-        run: |
-          brew install llvm
-          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
-
-      - name: Generate format diff
-        id: format-diff
-        run: |
-          FILES=$(find features main tests -name '*.cpp' -o -name '*.h' 2>/dev/null | grep -v '/build/' || true)
-
-          if [ -z "$FILES" ]; then
-            echo "has_diff=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          DIFF=""
-          for file in $FILES; do
-            FILE_DIFF=$(clang-format "$file" | diff -u "$file" - 2>/dev/null || true)
-            if [ -n "$FILE_DIFF" ]; then
-              DIFF="${DIFF}\n\n### $file\n\`\`\`diff\n${FILE_DIFF}\n\`\`\`"
-            fi
-          done
-
-          if [ -n "$DIFF" ]; then
-            echo "has_diff=true" >> $GITHUB_OUTPUT
-            echo -e "$DIFF" > format_diff.md
-          else
-            echo "has_diff=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Comment on PR
-        if: steps.format-diff.outputs.has_diff == 'true'
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        with:
-          script: |
-            const fs = require('fs');
-            const diff = fs.readFileSync('format_diff.md', 'utf8');
-
-            const body = `## :art: Code Formatting Suggestions
-
-            The following files have formatting differences from the project style:
-
-            ${diff}
-
-            <details>
-            <summary>How to fix</summary>
-
-            Run the following command to format all files:
-            \`\`\`bash
-            cmake --build build --target format
-            \`\`\`
-
-            Or format specific files:
-            \`\`\`bash
-            clang-format -i <file>
-            \`\`\`
-            </details>
-            `;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            });
+      - name: Build macOS DMG
+        working-directory: frontend
+        run: bun run tauri:build -- --target aarch64-apple-darwin

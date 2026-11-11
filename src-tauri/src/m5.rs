@@ -405,11 +405,9 @@ fn serialize_toml(value: &toml::Value, indentation: &str) -> Result<String, Fail
     let mut blocks: Vec<(usize, String, String)> = Vec::new();
     let mut block = String::new();
     for line in output.lines() {
-        if !line.starts_with([' ', '\t']) && !line.is_empty() {
-            if !block.is_empty() {
-                let (rank, key) = toml_block_order(value, &block);
-                blocks.push((rank, key, std::mem::take(&mut block)));
-            }
+        if !line.starts_with([' ', '\t']) && !line.is_empty() && !block.is_empty() {
+            let (rank, key) = toml_block_order(value, &block);
+            blocks.push((rank, key, std::mem::take(&mut block)));
         }
         block.push_str(line);
         block.push('\n');
@@ -436,9 +434,7 @@ fn serialize_toml(value: &toml::Value, indentation: &str) -> Result<String, Fail
 
 fn toml_block_order(value: &toml::Value, block: &str) -> (usize, String) {
     let first_line = block.lines().next().unwrap_or_default();
-    let key = if first_line.starts_with("[[") {
-        first_line.trim_start_matches('[').trim_end_matches(']')
-    } else if first_line.starts_with('[') {
+    let key = if first_line.starts_with('[') {
         first_line.trim_start_matches('[').trim_end_matches(']')
     } else {
         first_line
@@ -1108,7 +1104,7 @@ pub(crate) fn split_image(
                 ));
             }
             let count = |source: u32, cell: u32| {
-                if ignore || source % cell == 0 {
+                if ignore || source.is_multiple_of(cell) {
                     source / cell
                 } else {
                     source / cell + 1
@@ -1397,8 +1393,7 @@ pub(crate) fn evaluate_regex(
     let mut matches = Vec::new();
     let mut replaced = String::new();
     let mut last = 0usize;
-    let mut iter = regex.captures_iter(text);
-    while let Some(result) = iter.next() {
+    for result in regex.captures_iter(text) {
         if cancelled.load(std::sync::atomic::Ordering::Relaxed) {
             return Err(Failure::new("CANCELLED", "Operation was cancelled."));
         }
@@ -1463,7 +1458,7 @@ fn expand_replacement(replacement: &str, captures: &Captures<'_, str>, names: &[
                 chars.next();
                 let mut name = String::new();
                 let mut closed = false;
-                while let Some((_, ch)) = chars.next() {
+                for (_, ch) in chars.by_ref() {
                     if ch == '>' {
                         closed = true;
                         break;

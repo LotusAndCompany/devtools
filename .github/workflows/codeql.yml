@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
   schedule:
     - cron: '0 0 * * 1'
 
 permissions:
+  actions: read
   security-events: write
   contents: read
 
@@ -17,7 +17,6 @@ jobs:
     name: Analyze GitHub Actions
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,12 +31,10 @@ jobs:
         with:
           category: "/language:actions"
 
-  analyze-cpp:
-    name: Analyze C++
-    # Source-based CodeQL analysis does not configure or build the macOS app.
+  analyze-app:
+    name: Analyze Rust and TypeScript
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -45,10 +42,10 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: c-cpp
+          languages: rust,javascript-typescript
           build-mode: none
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:c-cpp"
+          category: "/language:rust-javascript-typescript"
