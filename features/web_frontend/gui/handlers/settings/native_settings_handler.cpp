@@ -138,7 +138,7 @@ void NativeBridge::startAboutInfo(const QString &requestId)
         {{QStringLiteral("appVersion"), QString::fromUtf8(DevTools::APP_VERSION)},
          {QStringLiteral("revision"), QString::fromUtf8(DevTools::GIT_REVISION)},
          {QStringLiteral("buildEnvironment"), buildEnvironment},
-         {QStringLiteral("qtVersion"), QString::fromUtf8(qVersion())},
+         {QStringLiteral("runtime"), QStringLiteral("Qt ") + QString::fromUtf8(qVersion())},
          {QStringLiteral("copyright"), tr("2025 © Lotus&Company Inc. All rights reserved.")},
          {QStringLiteral("licenseText"), licenseText}});
 }

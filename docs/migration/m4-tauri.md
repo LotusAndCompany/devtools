@@ -2,6 +2,10 @@
 
 ## Scope
 
+This is a point-in-time M4 record. M5 implementation and current operation
+coverage are tracked separately in [m5-tauri.md](m5-tauri.md); the unsupported
+operations and migration plans below describe the M4 snapshot only.
+
 This is a Tauri 2 proof of the existing React UI and NativeBridge v2 contract,
 not the M5 migration of every native operation. The Tauri window loads the same
 `frontend/` build as Qt. Runtime selection stays in

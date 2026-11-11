@@ -23,15 +23,17 @@ void TestConnectionHistory::preservesHistoryFormat()
         {"type", "QSQLITE"}, {"database", "日本語.sqlite"}, {"host", ""}, {"unknown", "kept"}};
     ConnectionHistory::add(settings, first);
     QCOMPARE(ConnectionHistory::read(settings), QList<QJsonObject>({first}));
+    QJsonObject updated = first;
+    updated["displayName"] = "new";
+    ConnectionHistory::add(settings, updated);
+    QCOMPARE(ConnectionHistory::read(settings), QList<QJsonObject>({updated}));
 
     QStringList raw = settings.value("db_tool/connectionHistory").toStringList();
     raw.prepend("invalid-json");
     settings.setValue("db_tool/connectionHistory", raw);
     QVERIFY(!ConnectionHistory::isEmpty(settings));
-    QCOMPARE(ConnectionHistory::read(settings), QList<QJsonObject>({first}));
+    QCOMPARE(ConnectionHistory::read(settings), QList<QJsonObject>({updated}));
 
-    QJsonObject updated = first;
-    updated["displayName"] = "new";
     ConnectionHistory::add(settings, updated);
     raw = settings.value("db_tool/connectionHistory").toStringList();
     QCOMPARE(raw.size(), 2);

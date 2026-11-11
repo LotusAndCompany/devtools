@@ -28,13 +28,18 @@ directory docs/ja/articles/ and does not modify it.
   operation mapping, and the Qt WebView G0 result recorded on 2026-11-02.
 - [m4-tauri.md](m4-tauri.md): Tauri 2 proof, operation-by-operation migration
   decisions, macOS smoke evidence, and remaining portability/performance gaps.
+- [m5-tauri.md](m5-tauri.md): Tauri implementation for all 31 current bridge
+  operations, Qt/Rust fixtures, migration safeguards, smoke evidence, and open
+  verification items.
 
 ## Migration progress
 
 Status meanings: **verified** means the listed M0 audit evidence exists;
 **not started** means no implementation or verification has been performed;
-**in progress**, **implemented / unverified**, **blocked**, and **out of scope**
-must be used with evidence, and out-of-scope entries need a reason.
+**verified with documented limits** means the milestone's acceptance evidence
+is recorded and the remaining platform or edge-case checks are explicitly
+listed. **In progress**, **implemented / unverified**, **blocked**, and **out of
+scope** also require evidence, and out-of-scope entries need a reason.
 
 | Milestone | Status | Evidence / next condition |
 |---|---|---|
@@ -44,7 +49,7 @@ must be used with evidence, and out-of-scope entries need a reason.
 | M2: React / native bridge foundation | Implemented on current checkout; not merged | [m2-react-webengine.md](m2-react-webengine.md) preserves the historical WebEngine measurements; [qt-webview-feasibility.md](qt-webview-feasibility.md) records the host migration and Qt 6.12.0 evidence |
 | M3: move all UI to React | Implemented on current checkout; acceptance gaps remain | [m3-react-ui.md](m3-react-ui.md); all 11 registered routes use React, with host-specific security/integration checks and broader feature-equivalence/distribution work still open |
 | M4: test Tauri portability | Implemented / unverified | [m4-tauri.md](m4-tauri.md); shared React UI, About/Settings reads, native file open, and Qt/Rust formatter/text-file fixtures were exercised; performance, save picker, signing, and future OS checks remain unverified |
-| M5: move feature processing to Rust or TypeScript | Not started | Compare behavior, errors, cancellation, and persisted data against this baseline |
+| M5: move feature processing to Rust or TypeScript | Verified with documented limits | [m5-tauri.md](m5-tauri.md); all 31 in-scope bridge operations are implemented and covered by shared Qt/Rust fixtures, real service and native-file integration checks, and macOS UI smoke. The user accepted the UI and Markdown sanitization; Color Converter is excluded by explicit scope decision. Remaining Qt server-driver and selected OS/edge-case limits are recorded. |
 | M6: remove Qt and verify distribution | Not started | Validate clean install, migration, update, recovery, and uninstall |
 
 The parent issue requires a working app at each stage. A status must not be

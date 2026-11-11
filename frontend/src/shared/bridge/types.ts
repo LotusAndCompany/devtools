@@ -16,7 +16,7 @@ export type QrCodeType =
   | "contact"
   | "calendar"
   | "geo";
-export type DatabaseDriver = "QSQLITE" | "QMYSQL" | "QPSQL";
+export type DatabaseDriver = "sqlite" | "mysql" | "postgres";
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type TextFileType = "text" | "data" | "markdown" | "html";
 
@@ -24,7 +24,7 @@ export type AboutInfo = {
   appVersion: string;
   revision: string;
   buildEnvironment: string;
-  qtVersion: string;
+  runtime: string;
   copyright: string;
   licenseText: string;
 };
@@ -87,14 +87,14 @@ export type DatabaseHistoryEntry = {
 export type DatabaseConnectionInput =
   | { historyIndex: number; password: string }
   | {
-      type: "QSQLITE";
+      type: "sqlite";
       host?: string;
       database?: string;
       username?: string;
       password?: string;
     }
   | {
-      type: "QMYSQL" | "QPSQL";
+      type: "mysql" | "postgres";
       host: string;
       database: string;
       username: string;

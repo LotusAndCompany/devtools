@@ -44,20 +44,9 @@ describe("native operation contract parity", () => {
         expect(nativeNames).toEqual(frontendNames);
     });
 
-    it("keeps every implemented Tauri operation inside the shared contract", () => {
+    it("keeps the Tauri operation registry in sync with the shared contract", () => {
         const { frontendNames, tauriNames } = operationNames();
-        expect(tauriNames).toEqual(
-            expect.arrayContaining([
-                "formatJson",
-                "openTextFile",
-                "saveTextFile",
-                "getSettings",
-                "saveSettings",
-                "getAboutInfo",
-                "imageTakeDropped",
-                "saveLastUsedTool",
-            ]),
-        );
-        expect(tauriNames.every((name) => frontendNames.includes(name))).toBe(true);
+        expect(new Set(tauriNames).size).toBe(tauriNames.length);
+        expect(tauriNames).toEqual(frontendNames);
     });
 });

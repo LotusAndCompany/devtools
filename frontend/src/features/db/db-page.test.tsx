@@ -12,7 +12,7 @@ describe("DatabasePage", () => {
                 history: [],
                 selectedFileName: "",
                 connected: true,
-                connectedType: "QSQLITE",
+                connectedType: "sqlite",
             }),
             databaseQuery: (input) => {
                 statements.push(input);
@@ -45,7 +45,7 @@ describe("DatabasePage", () => {
                 history: [],
                 selectedFileName: "",
                 connected: true,
-                connectedType: "QMYSQL",
+                connectedType: "mysql",
             }),
             databaseTables: () => ({ tables: ["user`profiles"] }),
         });
@@ -66,7 +66,7 @@ describe("DatabasePage", () => {
                 history: [
                     {
                         index: 0,
-                        type: "QMYSQL",
+                        type: "mysql",
                         host: "db.example.test",
                         database: "app",
                         username: "dev",

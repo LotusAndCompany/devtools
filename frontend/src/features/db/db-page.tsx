@@ -12,8 +12,8 @@ import type { DatabaseHistoryEntry, DatabaseQueryTab } from "./types";
 
 export function DatabasePage({ locale, run, active, databaseNavigationVersion }: ToolPageProps) {
     const { busy, error, execute, setError } = useOperation(run);
-    const [type, setType] = useState<DatabaseDriver>("QSQLITE");
-    const [connectedType, setConnectedType] = useState<DatabaseDriver>("QSQLITE");
+    const [type, setType] = useState<DatabaseDriver>("sqlite");
+    const [connectedType, setConnectedType] = useState<DatabaseDriver>("sqlite");
     const [host, setHost] = useState("localhost");
     const [database, setDatabase] = useState("");
     const [username, setUsername] = useState("");
@@ -99,11 +99,11 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 }
             });
             if (selected && !result.connected) {
-                const connectedResult = yield* run("databaseConnect", { type: "QSQLITE" });
+                const connectedResult = yield* run("databaseConnect", { type: "sqlite" });
                 if (mounted && connectedResult.connected) {
                     yield* Effect.sync(() => {
                         setConnected(true);
-                        setConnectedType("QSQLITE");
+                        setConnectedType("sqlite");
                         setDisplayName(connectedResult.displayName || `SQLite: ${selected}`);
                         setTables(connectedResult.tables);
                     });
@@ -124,7 +124,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 Effect.sync(() => {
                     if (!result) return;
                     setSelectedFileName(result.fileName);
-                    setType("QSQLITE");
+                    setType("sqlite");
                 }),
             ),
         );
@@ -146,7 +146,7 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
                 setConnectedType(connectionType);
                 setDisplayName(
                     result.displayName ||
-                        (connectionType === "QSQLITE"
+                        (connectionType === "sqlite"
                             ? `SQLite: ${selectedFileName}`
                             : `${database}@${host}`),
                 );
@@ -283,6 +283,6 @@ export function DatabasePage({ locale, run, active, databaseNavigationVersion }:
 }
 
 function quoteIdentifier(identifier: string, driver: DatabaseDriver) {
-    const quote = driver === "QMYSQL" ? "`" : '"';
+    const quote = driver === "mysql" ? "`" : '"';
     return `${quote}${identifier.replaceAll(quote, quote + quote)}${quote}`;
 }

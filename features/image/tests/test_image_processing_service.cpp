@@ -3,6 +3,9 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTemporaryDir>
 #include <QtTest>
 
@@ -14,6 +17,7 @@ private slots:
     void loadAndSave();
     void validatesReadableImageFiles();
     void resizeAndTransform();
+    void matchesSharedTauriTransformFixtures();
     void transparency();
     void saveDividedImages();
 };
@@ -99,6 +103,117 @@ void TestImageProcessingService::resizeAndTransform()
 
     QCOMPARE(ImageProcessingService::rotateLeft(ImageProcessingService::rotateRight(source)),
              source);
+}
+
+void TestImageProcessingService::matchesSharedTauriTransformFixtures()
+{
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-image-transforms.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+
+    for (const QJsonValue &value : cases) {
+        const QJsonObject testCase = value.toObject();
+        const int width = testCase.value(QStringLiteral("width")).toInt();
+        const int height = testCase.value(QStringLiteral("height")).toInt();
+        const QJsonArray sourcePixels = testCase.value(QStringLiteral("sourcePixels")).toArray();
+        QImage source(width, height, QImage::Format_RGBA8888);
+        for (int index = 0; index < sourcePixels.size(); ++index) {
+            const QJsonArray pixel = sourcePixels.at(index).toArray();
+            source.setPixelColor(index % width, index / width,
+                                 QColor(pixel.at(0).toInt(), pixel.at(1).toInt(),
+                                        pixel.at(2).toInt(), pixel.at(3).toInt()));
+        }
+
+        const QString action = testCase.value(QStringLiteral("action")).toString();
+        const QJsonObject parameters = testCase.value(QStringLiteral("parameters")).toObject();
+        QImage result;
+        if (action == QStringLiteral("rotate-right")) {
+            result = ImageProcessingService::rotateRight(source);
+        } else if (action == QStringLiteral("rotate-left")) {
+            result = ImageProcessingService::rotateLeft(source);
+        } else if (action == QStringLiteral("flip-horizontal")) {
+            result = ImageProcessingService::flip(source, ImageFlipDirection::Horizontal);
+        } else if (action == QStringLiteral("flip-vertical")) {
+            result = ImageProcessingService::flip(source, ImageFlipDirection::Vertical);
+        } else if (action == QStringLiteral("resize-size")) {
+            result = ImageProcessingService::resizeBySize(
+                source, parameters.value(QStringLiteral("width")).toInt(),
+                parameters.value(QStringLiteral("height")).toInt(),
+                parameters.value(QStringLiteral("keepAspectRatio")).toBool(),
+                parameters.value(QStringLiteral("smoothScaling")).toBool());
+        } else if (action == QStringLiteral("transparent")) {
+            const QPoint point(parameters.value(QStringLiteral("x")).toInt(),
+                               parameters.value(QStringLiteral("y")).toInt());
+            const QString colorMode = parameters.value(QStringLiteral("colorMode")).toString();
+            const QColor::Spec spec = colorMode == QStringLiteral("hsl")   ? QColor::Spec::Hsl
+                                      : colorMode == QStringLiteral("hsv") ? QColor::Spec::Hsv
+                                                                           : QColor::Spec::Rgb;
+            result = ImageProcessingService::makeTransparent(
+                source, point, source.pixelColor(point), spec,
+                parameters.value(QStringLiteral("tolerance")).toDouble(),
+                ImageProcessingService::alphaForTransparency(
+                    parameters.value(QStringLiteral("transparency")).toDouble()),
+                parameters.value(QStringLiteral("contiguousOnly")).toBool());
+        } else if (action == QStringLiteral("split")) {
+            QTemporaryDir directory;
+            QVERIFY(directory.isValid());
+            const QString outputDirectory =
+                QDir(directory.path()).filePath(QStringLiteral("output"));
+            QVERIFY(QDir().mkpath(outputDirectory));
+            ImageSplitOptions options;
+            options.mode =
+                parameters.value(QStringLiteral("mode")).toString() == QStringLiteral("cell-size")
+                    ? ImageSplitMode::CellSize
+                    : ImageSplitMode::DivisionCount;
+            options.horizontalDivisions =
+                parameters.value(QStringLiteral("horizontalDivisions")).toInt();
+            options.verticalDivisions =
+                parameters.value(QStringLiteral("verticalDivisions")).toInt();
+            options.cellWidth = parameters.value(QStringLiteral("cellWidth")).toInt();
+            options.cellHeight = parameters.value(QStringLiteral("cellHeight")).toInt();
+            options.ignoreRemainders =
+                parameters.value(QStringLiteral("ignoreRemainders")).toBool();
+            QVERIFY(ImageProcessingService::saveDividedImages(
+                source, QDir(directory.path()).filePath(QStringLiteral("sample.png")),
+                outputDirectory, options));
+            const QJsonArray expectedParts =
+                testCase.value(QStringLiteral("expectedParts")).toArray();
+            QCOMPARE(QDir(outputDirectory).entryList(QDir::Files).size(), expectedParts.size());
+            for (const QJsonValue &partValue : expectedParts) {
+                const QJsonObject part = partValue.toObject();
+                const QImage image(
+                    QDir(outputDirectory).filePath(part.value(QStringLiteral("name")).toString()));
+                QVERIFY(!image.isNull());
+                QCOMPARE(image.size(), QSize(part.value(QStringLiteral("width")).toInt(),
+                                             part.value(QStringLiteral("height")).toInt()));
+                const QJsonArray expectedPixels = part.value(QStringLiteral("pixels")).toArray();
+                for (int index = 0; index < expectedPixels.size(); ++index) {
+                    const QJsonArray pixel = expectedPixels.at(index).toArray();
+                    QCOMPARE(image.pixelColor(index % image.width(), index / image.width()),
+                             QColor(pixel.at(0).toInt(), pixel.at(1).toInt(), pixel.at(2).toInt(),
+                                    pixel.at(3).toInt()));
+                }
+            }
+            continue;
+        } else {
+            QFAIL("Unknown shared image transform fixture action");
+        }
+
+        QVERIFY(!result.isNull());
+        QCOMPARE(result.size(),
+                 QSize(testCase.value(QStringLiteral("outputWidth")).toInt(width),
+                       testCase.value(QStringLiteral("outputHeight")).toInt(height)));
+        const QJsonArray expectedPixels =
+            testCase.value(QStringLiteral("expectedPixels")).toArray();
+        for (int index = 0; index < expectedPixels.size(); ++index) {
+            const QJsonArray pixel = expectedPixels.at(index).toArray();
+            QCOMPARE(result.pixelColor(index % result.width(), index / result.width()),
+                     QColor(pixel.at(0).toInt(), pixel.at(1).toInt(), pixel.at(2).toInt(),
+                            pixel.at(3).toInt()));
+        }
+    }
 }
 
 void TestImageProcessingService::transparency()

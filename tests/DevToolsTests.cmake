@@ -125,6 +125,10 @@ DevTools_add_test(test_image_processing_service CORE_ONLY
     features/image/core/image_processing_service.cpp
 )
 target_link_libraries(test_image_processing_service PRIVATE Qt6::Gui)
+target_compile_definitions(
+    test_image_processing_service
+    PRIVATE DEVTOOLS_SOURCE_DIR="${PROJECT_SOURCE_DIR}"
+)
 # core/data_conversion/parser
 DevTools_add_test(test_basic_parser CORE_ONLY
     SOURCES
@@ -178,12 +182,21 @@ target_compile_definitions(
     test_native_bridge
     PRIVATE DEVTOOLS_SOURCE_DIR="${PROJECT_SOURCE_DIR}"
 )
+add_test(
+    NAME test_native_bridge_new_york
+    COMMAND test_native_bridge convertsTimestampsUsingSharedContractFixture
+)
+set_tests_properties(test_native_bridge_new_york PROPERTIES ENVIRONMENT "TZ=America/New_York")
 DevTools_add_test(test_wkwebview_frontend CORE_ONLY
     SOURCES
     features/web_frontend/tests/test_wkwebview_frontend.cpp
     res/application.qrc
 )
 target_link_libraries(test_wkwebview_frontend PRIVATE DevTools_web_frontend)
+target_compile_definitions(
+    test_wkwebview_frontend
+    PRIVATE DEVTOOLS_SOURCE_DIR="${PROJECT_SOURCE_DIR}"
+)
 # core/data_conversion
 DevTools_add_test(test_data_conversion CORE_ONLY
     SOURCES

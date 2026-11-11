@@ -1,6 +1,8 @@
 #include "features/web_frontend/gui/handlers/database/database_state_handler.h"
 #include "features/web_frontend/gui/native_bridge.h"
 
+#include <QCoreApplication>
+#include <QDir>
 #include <QEventLoop>
 #include <QFile>
 #include <QImage>
@@ -49,15 +51,23 @@ class ScopedTestSettings final
 public:
     explicit ScopedTestSettings(const QString &userSettingsPath)
         : previous_format_(QSettings::defaultFormat())
+        , previous_organization_name_(QCoreApplication::organizationName())
     {
+        QCoreApplication::setOrganizationName(QStringLiteral("DevToolsTests"));
+        QDir(userSettingsPath).mkpath(QCoreApplication::organizationName());
         QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, userSettingsPath);
         QSettings::setDefaultFormat(QSettings::IniFormat);
     }
 
-    ~ScopedTestSettings() { QSettings::setDefaultFormat(previous_format_); }
+    ~ScopedTestSettings()
+    {
+        QSettings::setDefaultFormat(previous_format_);
+        QCoreApplication::setOrganizationName(previous_organization_name_);
+    }
 
 private:
     QSettings::Format previous_format_;
+    QString previous_organization_name_;
 };
 
 DatabaseOperationOutcome executeDatabaseOperation(NativeBridge &bridge, const QString &requestId,
@@ -110,8 +120,15 @@ class TestNativeBridge : public QObject
 
 private Q_SLOTS:
     void formatsJsonUsingTheNativeParserAndEmitter();
+    void comparesTextUsingSharedContractFixture();
+    void convertsDataFromSharedContractFixture();
+    void rendersMarkdownUsingSharedSafetyFixture();
+    void generatesCommandsUsingSharedContractFixture();
+    void evaluatesRegexUsingSharedContractFixture();
+    void convertsTimestampsUsingSharedContractFixture();
     void reportsInvalidJson();
     void readsTextFileUsingSharedContractFixture();
+    void readsLegacyQtSettingsContractFixture();
     void rejectsInvalidUtf8Files();
     void enforcesInputAndVersionLimits();
     void rejectsOperationsOutsideTheRegistry();
@@ -122,6 +139,7 @@ private Q_SLOTS:
     void loadsImagesInRgbaFormat();
     void readsAboutMetadataAndLicenseResource();
     void keepsSqlTransactionsAcrossQueries();
+    void executesDatabaseQueryUsingSharedContractFixture();
     void connectsToLocalMySqlAndPostgreSql();
 };
 
@@ -162,6 +180,212 @@ void TestNativeBridge::reportsInvalidJson()
     const QVariantMap error = failed.constFirst().at(1).toMap();
     QCOMPARE(error.value(QStringLiteral("code")).toString(), QStringLiteral("INVALID_INPUT"));
     QVERIFY(!error.value(QStringLiteral("message")).toString().isEmpty());
+}
+
+void TestNativeBridge::readsLegacyQtSettingsContractFixture()
+{
+    const QString path = QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                         QStringLiteral("/tests/fixtures/qt-settings-migration.plist");
+    QVERIFY(QFile::exists(path));
+    const QSettings settings(path, QSettings::NativeFormat);
+    QCOMPARE(settings.value(QStringLiteral("language")).toString(), QStringLiteral("ja_JP"));
+    QCOMPARE(settings.value(QStringLiteral("general/showSidemenuOnStartup")).toBool(), false);
+    QCOMPARE(settings.value(QStringLiteral("window/width")).toInt(), 1280);
+    QCOMPARE(settings.value(QStringLiteral("RegexTester/pattern")).toString(),
+             QStringLiteral("(?<日本語>猫)"));
+    const QStringList history =
+        settings.value(QStringLiteral("db_tool/connectionHistory")).toStringList();
+    QCOMPARE(history.size(), 2);
+    QVERIFY(QJsonDocument::fromJson(history.constFirst().toUtf8())
+                .object()
+                .contains(QStringLiteral("securityScopedBookmark")));
+}
+
+void TestNativeBridge::comparesTextUsingSharedContractFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QVERIFY(completed.isValid());
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-compare-text.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const QVariantMap input = testCase.value(QStringLiteral("input")).toObject().toVariantMap();
+        const QString requestId = QStringLiteral("diff-shared-%1").arg(index);
+        bridge.startOperation(databaseRequest(requestId, QStringLiteral("compareText"), input));
+        QTRY_COMPARE_WITH_TIMEOUT(completed.count(), index + 1, 3000);
+        const QVariantList rows =
+            completed.at(index).at(1).toMap().value(QStringLiteral("rows")).toList();
+        QCOMPARE(QJsonArray::fromVariantList(rows), testCase.value(QStringLiteral("expected"))
+                                                        .toObject()
+                                                        .value(QStringLiteral("rows"))
+                                                        .toArray());
+    }
+}
+
+void TestNativeBridge::convertsDataFromSharedContractFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-convert-data.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const int completedBefore = completed.count();
+        const int failedBefore = failed.count();
+        const QString requestId = QStringLiteral("convert-data-%1").arg(index);
+        bridge.startOperation(databaseRequest(
+            requestId, QStringLiteral("convertData"),
+            cases.at(index).toObject().value(QStringLiteral("input")).toObject().toVariantMap()));
+        QTRY_VERIFY_WITH_TIMEOUT(completed.count() > completedBefore, 3000);
+        QCOMPARE(failed.count(), failedBefore);
+        QCOMPARE(QJsonObject::fromVariantMap(completed.constLast().at(1).toMap()),
+                 cases.at(index).toObject().value(QStringLiteral("expected")).toObject());
+    }
+}
+
+void TestNativeBridge::rendersMarkdownUsingSharedSafetyFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-markdown.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonObject testCase = QJsonDocument::fromJson(fixture.readAll()).object();
+    bridge.startOperation(databaseRequest(
+        QStringLiteral("markdown-safety"), QStringLiteral("renderMarkdown"),
+        {{QStringLiteral("markdown"), testCase.value(QStringLiteral("markdown")).toString()}}));
+    QTRY_COMPARE_WITH_TIMEOUT(completed.count(), 1, 3000);
+    const QString html =
+        completed.constFirst().at(1).toMap().value(QStringLiteral("html")).toString();
+    for (const QJsonValue &value : testCase.value(QStringLiteral("requiredHtml")).toArray()) {
+        QVERIFY(html.contains(value.toString()));
+    }
+    for (const QJsonValue &value : testCase.value(QStringLiteral("forbiddenHtml")).toArray()) {
+        QVERIFY2(!html.contains(value.toString(), Qt::CaseInsensitive),
+                 qPrintable(value.toString()));
+    }
+    for (const QJsonValue &value : testCase.value(QStringLiteral("qtExpectedHtml")).toArray()) {
+        QVERIFY(html.contains(value.toString(), Qt::CaseInsensitive));
+    }
+}
+
+void TestNativeBridge::generatesCommandsUsingSharedContractFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-command.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const int completedBefore = completed.count();
+        const int failedBefore = failed.count();
+        bridge.startOperation(databaseRequest(
+            QStringLiteral("command-shared-%1").arg(index), QStringLiteral("commandData"),
+            testCase.value(QStringLiteral("input")).toObject().toVariantMap()));
+        QTRY_VERIFY_WITH_TIMEOUT(
+            completed.count() > completedBefore || failed.count() > failedBefore, 3000);
+        if (testCase.contains(QStringLiteral("errorCode"))) {
+            QVERIFY(failed.count() > failedBefore);
+            QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
+                     testCase.value(QStringLiteral("errorCode")).toString());
+            continue;
+        }
+        QVERIFY(completed.count() > completedBefore);
+        QCOMPARE(QJsonObject::fromVariantMap(completed.constLast().at(1).toMap()),
+                 testCase.value(QStringLiteral("expected")).toObject());
+    }
+}
+
+void TestNativeBridge::evaluatesRegexUsingSharedContractFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-regex.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const int completedBefore = completed.count();
+        const int failedBefore = failed.count();
+        const QString requestId = QStringLiteral("regex-shared-%1").arg(index);
+        bridge.startOperation(
+            databaseRequest(requestId, QStringLiteral("evaluateRegex"),
+                            testCase.value(QStringLiteral("input")).toObject().toVariantMap()));
+        QTRY_VERIFY_WITH_TIMEOUT(
+            completed.count() > completedBefore || failed.count() > failedBefore, 3000);
+        if (testCase.contains(QStringLiteral("errorCode"))) {
+            QVERIFY(failed.count() > failedBefore);
+            QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
+                     testCase.value(QStringLiteral("errorCode")).toString());
+            continue;
+        }
+        QVERIFY(completed.count() > completedBefore);
+        QCOMPARE(QJsonObject::fromVariantMap(completed.constLast().at(1).toMap()),
+                 testCase.value(QStringLiteral("expected")).toObject());
+    }
+}
+
+void TestNativeBridge::convertsTimestampsUsingSharedContractFixture()
+{
+    NativeBridge bridge(nullptr);
+    QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
+    QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-timestamp.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const QString timeZone = testCase.value(QStringLiteral("timeZone")).toString();
+        if (!timeZone.isEmpty() && qEnvironmentVariable("TZ") != timeZone) {
+            continue;
+        }
+        const int completedBefore = completed.count();
+        const int failedBefore = failed.count();
+        const QString requestId = QStringLiteral("timestamp-shared-%1").arg(index);
+        bridge.startOperation(
+            databaseRequest(requestId, QStringLiteral("convertTimestamp"),
+                            testCase.value(QStringLiteral("input")).toObject().toVariantMap()));
+        QTRY_VERIFY_WITH_TIMEOUT(
+            completed.count() > completedBefore || failed.count() > failedBefore, 3000);
+        if (testCase.contains(QStringLiteral("errorCode"))) {
+            QVERIFY(failed.count() > failedBefore);
+            QCOMPARE(failed.constLast().at(1).toMap().value(QStringLiteral("code")).toString(),
+                     testCase.value(QStringLiteral("errorCode")).toString());
+            continue;
+        }
+        QVERIFY(completed.count() > completedBefore);
+        const QVariantMap result = completed.constLast().at(1).toMap();
+        const QJsonObject expected = testCase.value(QStringLiteral("expected")).toObject();
+        for (const QString &key :
+             {QStringLiteral("seconds"), QStringLiteral("milliseconds"), QStringLiteral("utc")}) {
+            QCOMPARE(result.value(key).toString(), expected.value(key).toString());
+        }
+        const QDateTime local = QDateTime::fromString(
+            result.value(QStringLiteral("local")).toString(), Qt::ISODateWithMs);
+        QVERIFY(local.isValid());
+        QCOMPARE(local.toMSecsSinceEpoch(),
+                 result.value(QStringLiteral("milliseconds")).toString().toLongLong());
+    }
 }
 
 void TestNativeBridge::rejectsInvalidUtf8Files()
@@ -327,59 +551,24 @@ void TestNativeBridge::generatesQrThroughTheVersionedBridge()
     QVERIFY(completed.isValid());
     QVERIFY(failed.isValid());
 
-    const QList<QPair<QString, QVariantMap>> samples = {
-        {QStringLiteral("text"), {{QStringLiteral("text_content"), QStringLiteral("bridge test")}}},
-        {QStringLiteral("url"),
-         {{QStringLiteral("url_content"), QStringLiteral("https://example.com")}}},
-        {QStringLiteral("email"),
-         {{QStringLiteral("email_address"), QStringLiteral("a@example.com")}}},
-        {QStringLiteral("phone"),
-         {{QStringLiteral("phone_number"), QStringLiteral("09012345678")}}},
-        {QStringLiteral("sms"),
-         {{QStringLiteral("sms_phone"), QStringLiteral("09012345678")},
-          {QStringLiteral("sms_message"), QStringLiteral("Hello")}}},
-        {QStringLiteral("wifi"),
-         {{QStringLiteral("wifi_ssid"), QStringLiteral("DevTools")},
-          {QStringLiteral("wifi_password"), QStringLiteral("secret")},
-          {QStringLiteral("wifi_security"), QStringLiteral("WPA")},
-          {QStringLiteral("wifi_hidden"), QStringLiteral("false")}}},
-        {QStringLiteral("contact"),
-         {{QStringLiteral("contact_name"), QStringLiteral("Alice")},
-          {QStringLiteral("contact_phone"), QStringLiteral("09012345678")},
-          {QStringLiteral("contact_email"), QStringLiteral("alice@example.com")}}},
-        {QStringLiteral("calendar"),
-         {{QStringLiteral("cal_summary"), QStringLiteral("Review")},
-          {QStringLiteral("cal_start"), QStringLiteral("2026-10-29T10:00")},
-          {QStringLiteral("cal_end"), QStringLiteral("2026-10-29T11:00")}}},
-        {QStringLiteral("geo"),
-         {{QStringLiteral("geo_lat"), QStringLiteral("35.681236")},
-          {QStringLiteral("geo_lng"), QStringLiteral("139.767125")}}},
-    };
-    const QStringList expectedContents = {
-        QStringLiteral("bridge test"),
-        QStringLiteral("https://example.com"),
-        QStringLiteral("mailto:a@example.com"),
-        QStringLiteral("tel:09012345678"),
-        QStringLiteral("SMSTO:09012345678:Hello"),
-        QStringLiteral("WIFI:T:WPA;S:DevTools;P:secret;;"),
-        QStringLiteral("BEGIN:VCARD\nVERSION:3.0\nFN:Alice\nTEL:09012345678\n"
-                       "EMAIL:alice@example.com\nEND:VCARD"),
-        QStringLiteral("BEGIN:VEVENT\nSUMMARY:Review\nDTSTART:20261029T100000\n"
-                       "DTEND:20261029T110000\nEND:VEVENT"),
-        QStringLiteral("geo:35.681236,139.767125"),
-    };
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-qr-content.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
 
-    for (qsizetype index = 0; index < samples.size(); ++index) {
+    for (qsizetype index = 0; index < cases.size(); ++index) {
         const int completedBefore = completed.count();
         const int failedBefore = failed.count();
         const QString requestId = QStringLiteral("qr-%1").arg(index);
-        bridge.startOperation(
-            {{QStringLiteral("contractVersion"), QStringLiteral("2")},
-             {QStringLiteral("requestId"), requestId},
-             {QStringLiteral("operation"), QStringLiteral("generateQr")},
-             {QStringLiteral("payload"),
-              QVariantMap{{QStringLiteral("type"), samples.at(index).first},
-                          {QStringLiteral("parameters"), samples.at(index).second}}}});
+        bridge.startOperation({{QStringLiteral("contractVersion"), QStringLiteral("2")},
+                               {QStringLiteral("requestId"), requestId},
+                               {QStringLiteral("operation"), QStringLiteral("generateQr")},
+                               {QStringLiteral("payload"), cases.at(index)
+                                                               .toObject()
+                                                               .value(QStringLiteral("input"))
+                                                               .toObject()
+                                                               .toVariantMap()}});
         QTRY_VERIFY_WITH_TIMEOUT(
             completed.count() > completedBefore || failed.count() > failedBefore, 3000);
         if (failed.count() != failedBefore) {
@@ -388,7 +577,13 @@ void TestNativeBridge::generatesQrThroughTheVersionedBridge()
         }
 
         const QVariantMap result = completed.constLast().at(1).toMap();
-        QCOMPARE(result.value(QStringLiteral("content")).toString(), expectedContents.at(index));
+        QCOMPARE(result.value(QStringLiteral("content")).toString(),
+                 cases.at(index)
+                     .toObject()
+                     .value(QStringLiteral("expected"))
+                     .toObject()
+                     .value(QStringLiteral("content"))
+                     .toString());
         QVERIFY(result.value(QStringLiteral("imageDataUrl"))
                     .toString()
                     .startsWith(QStringLiteral("data:image/png;base64,")));
@@ -452,7 +647,8 @@ void TestNativeBridge::readsAboutMetadataAndLicenseResource()
     QVERIFY(result.contains(QStringLiteral("appVersion")));
     QVERIFY(result.contains(QStringLiteral("revision")));
     QVERIFY(result.contains(QStringLiteral("buildEnvironment")));
-    QVERIFY(result.contains(QStringLiteral("qtVersion")));
+    QVERIFY(result.contains(QStringLiteral("runtime")));
+    QVERIFY(!result.value(QStringLiteral("runtime")).toString().isEmpty());
     QVERIFY(result.value(QStringLiteral("copyright"))
                 .toString()
                 .contains(QStringLiteral("Lotus&Company")));
@@ -482,6 +678,7 @@ void TestNativeBridge::keepsSqlTransactionsAcrossQueries()
 {
     QTemporaryDir directory;
     QVERIFY(directory.isValid());
+    ScopedTestSettings scopedSettings(directory.filePath(QStringLiteral("settings")));
     const QString databasePath = directory.filePath(QStringLiteral("transaction.sqlite"));
     const QString setupConnectionName = QStringLiteral("test-transaction-setup");
     {
@@ -498,6 +695,21 @@ void TestNativeBridge::keepsSqlTransactionsAcrossQueries()
 
     NativeBridge bridge(nullptr);
     QVERIFY(bridge.database_state_->selectFile(databasePath));
+    {
+        QSettings settings;
+        const QJsonObject savedConnection{
+            {QStringLiteral("type"), QStringLiteral("QSQLITE")},
+            {QStringLiteral("host"), QString()},
+            {QStringLiteral("database"), bridge.database_state_->selectedFilePath()},
+            {QStringLiteral("username"), QString()},
+            {QStringLiteral("displayName"), QStringLiteral("SQLite: transaction.sqlite")}};
+        settings.setValue(QStringLiteral("db_tool/connectionHistory"),
+                          QStringList{QString::fromUtf8(
+                              QJsonDocument(savedConnection).toJson(QJsonDocument::Compact))});
+        settings.sync();
+        QVERIFY(settings.status() == QSettings::NoError);
+    }
+
     QSignalSpy completed(&bridge, &NativeBridge::operationCompleted);
     QSignalSpy failed(&bridge, &NativeBridge::operationFailed);
     QVERIFY(completed.isValid());
@@ -520,8 +732,14 @@ void TestNativeBridge::keepsSqlTransactionsAcrossQueries()
 
     QVariantMap result;
     execute(QStringLiteral("db-connect"), QStringLiteral("databaseConnect"),
-            {{QStringLiteral("type"), QStringLiteral("QSQLITE")}}, &result);
+            {{QStringLiteral("type"), QStringLiteral("sqlite")}}, &result);
     QVERIFY(result.value(QStringLiteral("connected")).toBool());
+    execute(QStringLiteral("db-history"), QStringLiteral("databaseHistory"), {}, &result);
+    QCOMPARE(result.value(QStringLiteral("connectedType")).toString(), QStringLiteral("sqlite"));
+    const QVariantList history = result.value(QStringLiteral("history")).toList();
+    QVERIFY(!history.isEmpty());
+    QCOMPARE(history.constFirst().toMap().value(QStringLiteral("type")).toString(),
+             QStringLiteral("sqlite"));
 
     execute(QStringLiteral("db-begin"), QStringLiteral("databaseQuery"),
             {{QStringLiteral("sql"), QStringLiteral("BEGIN;")}}, &result);
@@ -537,6 +755,47 @@ void TestNativeBridge::keepsSqlTransactionsAcrossQueries()
     QCOMPARE(rows.constFirst().toList().constFirst().toString(), QStringLiteral("0"));
 }
 
+void TestNativeBridge::executesDatabaseQueryUsingSharedContractFixture()
+{
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    ScopedTestSettings scopedSettings(directory.filePath(QStringLiteral("settings")));
+    const QString databasePath = directory.filePath(QStringLiteral("fixture.sqlite"));
+    QFile databaseFile(databasePath);
+    QVERIFY(databaseFile.open(QIODevice::WriteOnly));
+    databaseFile.close();
+
+    NativeBridge bridge(nullptr);
+    QVERIFY(bridge.database_state_->selectFile(databasePath));
+    auto outcome = executeDatabaseOperation(bridge, QStringLiteral("fixture-connect"),
+                                            QStringLiteral("databaseConnect"),
+                                            {{QStringLiteral("type"), QStringLiteral("sqlite")}});
+    QVERIFY2(outcome.succeeded, qPrintable(outcome.error));
+
+    QFile fixture(QStringLiteral(DEVTOOLS_SOURCE_DIR) +
+                  QStringLiteral("/tests/fixtures/tauri-sqlite-query.json"));
+    QVERIFY(fixture.open(QIODevice::ReadOnly));
+    const QJsonArray cases = QJsonDocument::fromJson(fixture.readAll()).array();
+    QVERIFY(!cases.isEmpty());
+    for (qsizetype index = 0; index < cases.size(); ++index) {
+        const QJsonObject testCase = cases.at(index).toObject();
+        const QString requestId = QStringLiteral("fixture-query-%1").arg(index);
+        outcome = executeDatabaseOperation(
+            bridge, requestId, QStringLiteral("databaseQuery"),
+            {{QStringLiteral("sql"), testCase.value(QStringLiteral("input"))
+                                         .toObject()
+                                         .value(QStringLiteral("sql"))
+                                         .toString()}});
+        QVERIFY2(outcome.succeeded, qPrintable(outcome.error));
+        QCOMPARE(QJsonObject::fromVariantMap(outcome.value),
+                 testCase.value(QStringLiteral("expected")).toObject());
+    }
+
+    outcome = executeDatabaseOperation(bridge, QStringLiteral("fixture-disconnect"),
+                                       QStringLiteral("databaseDisconnect"), {});
+    QVERIFY2(outcome.succeeded, qPrintable(outcome.error));
+}
+
 void TestNativeBridge::connectsToLocalMySqlAndPostgreSql()
 {
     const QString mysqlHost = qEnvironmentVariable("DEVTOOLS_TEST_MYSQL_HOST");
@@ -547,26 +806,27 @@ void TestNativeBridge::connectsToLocalMySqlAndPostgreSql()
     const QString postgresDatabase = qEnvironmentVariable("DEVTOOLS_TEST_POSTGRES_DATABASE");
     const QString postgresUsername = qEnvironmentVariable("DEVTOOLS_TEST_POSTGRES_USERNAME");
     const QString postgresPassword = qEnvironmentVariable("DEVTOOLS_TEST_POSTGRES_PASSWORD");
-    if (mysqlHost.isEmpty() || mysqlDatabase.isEmpty() || mysqlUsername.isEmpty() ||
-        postgresHost.isEmpty() || postgresDatabase.isEmpty() || postgresUsername.isEmpty()) {
-        QSKIP("Set DEVTOOLS_TEST_MYSQL_* and DEVTOOLS_TEST_POSTGRES_* to run server integration.");
+    QList<QVariantMap> connections;
+    if (!mysqlHost.isEmpty() && !mysqlDatabase.isEmpty() && !mysqlUsername.isEmpty()) {
+        connections.append({{QStringLiteral("type"), QStringLiteral("mysql")},
+                            {QStringLiteral("host"), mysqlHost},
+                            {QStringLiteral("database"), mysqlDatabase},
+                            {QStringLiteral("username"), mysqlUsername},
+                            {QStringLiteral("password"), mysqlPassword}});
+    }
+    if (!postgresHost.isEmpty() && !postgresDatabase.isEmpty() && !postgresUsername.isEmpty()) {
+        connections.append({{QStringLiteral("type"), QStringLiteral("postgres")},
+                            {QStringLiteral("host"), postgresHost},
+                            {QStringLiteral("database"), postgresDatabase},
+                            {QStringLiteral("username"), postgresUsername},
+                            {QStringLiteral("password"), postgresPassword}});
+    }
+    if (connections.isEmpty()) {
+        QSKIP("Set one DEVTOOLS_TEST_MYSQL_* or DEVTOOLS_TEST_POSTGRES_* connection.");
     }
     QTemporaryDir settingsDirectory;
     QVERIFY(settingsDirectory.isValid());
     ScopedTestSettings scopedSettings(settingsDirectory.path());
-
-    const QList<QVariantMap> connections = {
-        {{QStringLiteral("type"), QStringLiteral("QMYSQL")},
-         {QStringLiteral("host"), mysqlHost},
-         {QStringLiteral("database"), mysqlDatabase},
-         {QStringLiteral("username"), mysqlUsername},
-         {QStringLiteral("password"), mysqlPassword}},
-        {{QStringLiteral("type"), QStringLiteral("QPSQL")},
-         {QStringLiteral("host"), postgresHost},
-         {QStringLiteral("database"), postgresDatabase},
-         {QStringLiteral("username"), postgresUsername},
-         {QStringLiteral("password"), postgresPassword}},
-    };
 
     NativeBridge bridge(nullptr);
     quint64 requestNumber = 0;

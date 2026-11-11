@@ -58,7 +58,7 @@ export function AboutDialog({
             `DevTools ${info.appVersion}`,
             `Revision: ${info.revision}`,
             `Build Environment: ${info.buildEnvironment}`,
-            `Qt Version: ${info.qtVersion}`,
+            `Runtime: ${info.runtime}`,
             info.copyright,
         ].join("\n");
         runUiEffect(
@@ -79,7 +79,7 @@ export function AboutDialog({
               [locale === "ja" ? "バージョン" : "Application Version", info.appVersion],
               [locale === "ja" ? "リビジョン" : "Revision", info.revision],
               [locale === "ja" ? "ビルド環境" : "Build Environment", info.buildEnvironment],
-              [locale === "ja" ? "Qtバージョン" : "Qt Version", info.qtVersion],
+              [locale === "ja" ? "実行基盤" : "Runtime", info.runtime],
               [locale === "ja" ? "著作権" : "Copyright", info.copyright],
           ]
         : [];
