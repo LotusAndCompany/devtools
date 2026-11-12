@@ -1,0 +1,54 @@
+[
+  {
+    "name": "negative seconds",
+    "input": { "value": "-1", "source": "seconds" },
+    "expected": {
+      "seconds": "-1",
+      "milliseconds": "-1000",
+      "utc": "1969-12-31T23:59:59.000Z"
+    }
+  },
+  {
+    "name": "negative milliseconds",
+    "input": { "value": "-1", "source": "milliseconds" },
+    "expected": {
+      "seconds": "0",
+      "milliseconds": "-1",
+      "utc": "1969-12-31T23:59:59.999Z"
+    }
+  },
+  {
+    "name": "offset ISO with milliseconds",
+    "input": { "value": "2023-11-14T23:13:20.497+01:00", "source": "iso" },
+    "expected": {
+      "seconds": "1700000000",
+      "milliseconds": "1700000000497",
+      "utc": "2023-11-14T22:13:20.497Z"
+    }
+  },
+  {
+    "name": "nonexistent local time during spring DST transition",
+    "input": { "value": "2024-03-10T02:30:00", "source": "iso" },
+    "expected": {
+      "seconds": "1710055800",
+      "milliseconds": "1710055800000",
+      "utc": "2024-03-10T07:30:00.000Z"
+    },
+    "timeZone": "America/New_York"
+  },
+  {
+    "name": "ambiguous local time during fall DST transition",
+    "input": { "value": "2024-11-03T01:30:00", "source": "iso" },
+    "expected": {
+      "seconds": "1730611800",
+      "milliseconds": "1730611800000",
+      "utc": "2024-11-03T05:30:00.000Z"
+    },
+    "timeZone": "America/New_York"
+  },
+  {
+    "name": "invalid input",
+    "input": { "value": "not-a-date", "source": "iso" },
+    "errorCode": "INVALID_INPUT"
+  }
+]

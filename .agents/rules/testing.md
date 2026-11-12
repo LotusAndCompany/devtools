@@ -1,18 +1,20 @@
 ---
 paths:
-  - "tests/**"
-  - "**/test_*.cpp"
-  - "**/test_*.h"
+  - "src-tauri/**"
+  - "frontend/src/**"
+  - "tests/fixtures/**"
 ---
 
 # Testing Rules
 
-- C++ tests are disabled by default. Configure from the repository root with
-  `VCPKG_ROOT` set, the vcpkg toolchain, `arm64-osx`, and
-  `-DENABLE_UNIT_TEST=ON` before running them.
-- Register new tests in `tests/DevToolsTests.cmake` with `DevTools_add_test()`.
-- Run native tests with `ctest --test-dir build --output-on-failure`.
-- Keep core tests focused on business logic and avoid GUI dependencies unless
-  the component under test is explicitly in a `gui/` subdirectory.
-- Use `ASSERT_*` only when continuing would make the rest of the test invalid;
-  otherwise prefer `EXPECT_*`.
+- Rust unit and integration tests live with the Tauri crate in
+  src-tauri/src/; run them with
+  cargo test --manifest-path src-tauri/Cargo.toml --locked.
+- Frontend tests live beside the React feature or bridge code and use Vitest
+  with Testing Library. Run them from frontend/ with bun run --bun test.
+- Use tests/fixtures/ for shared request, image, database, and migration
+  data. Never include real credentials or user data in fixtures.
+- Keep bridge contract parity checks between the TypeScript contract and Rust
+  operation registry.
+- Exercise persistence changes for clean install, legacy migration, invalid
+  input, partial failure, retry, and preservation of the source data.

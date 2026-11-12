@@ -1,20 +1,25 @@
 {
   "name": "devtools-frontend",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:tauri": "vite --host 127.0.0.1 --mode tauri-dev",
     "build": "tsc -b && vite build",
+    "build:tauri": "tsc -b && vite build --mode tauri-build",
     "lint": "oxlint",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tauri:dev": "cd .. && frontend/node_modules/.bin/tauri dev --config src-tauri/tauri.conf.json",
+    "tauri:build": "cd .. && frontend/node_modules/.bin/tauri build --config src-tauri/tauri.conf.json"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
+    "@tauri-apps/api": "^2.12.3",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.1",
     "date-fns": "^4.4.0",
@@ -26,6 +31,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@tauri-apps/cli": "^2.12.2",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22.15.30",
     "@types/react": "^19.3.0",

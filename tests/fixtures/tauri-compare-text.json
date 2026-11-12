@@ -1,0 +1,37 @@
+[
+  {
+    "input": {
+      "left": "before\r\nremoved\r\nkept\r\n",
+      "right": "before\nadded\nkept\n"
+    },
+    "expected": {
+      "rows": [
+        { "left": "before", "right": "before", "leftChanged": false, "rightChanged": false },
+        { "left": "removed", "right": "added", "leftChanged": true, "rightChanged": true },
+        { "left": "kept", "right": "kept", "leftChanged": false, "rightChanged": false }
+      ]
+    }
+  },
+  {
+    "input": {
+      "left": "日本語\n同じ\n",
+      "right": "日本語\n追加\n同じ\n"
+    },
+    "expected": {
+      "rows": [
+        { "left": "日本語", "right": "日本語", "leftChanged": false, "rightChanged": false },
+        { "left": "", "right": "追加", "leftChanged": false, "rightChanged": true },
+        { "left": "同じ", "right": "同じ", "leftChanged": false, "rightChanged": false }
+      ]
+    }
+  },
+  {
+    "input": { "left": "", "right": "one\n\n" },
+    "expected": {
+      "rows": [
+        { "left": "", "right": "one", "leftChanged": false, "rightChanged": true },
+        { "left": "", "right": "", "leftChanged": false, "rightChanged": true }
+      ]
+    }
+  }
+]

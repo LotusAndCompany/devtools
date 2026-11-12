@@ -2,377 +2,48 @@
 
 [English version](../../CONTRIBUTING.md)
 
-DevToolsへの貢献に興味を持っていただきありがとうございます！このドキュメントでは、貢献のためのガイドラインと手順を説明します。
-
-## 目次
-
-- [行動規範](#行動規範)
-- [はじめに](#はじめに)
-- [貢献の方法](#貢献の方法)
-- [開発ガイドライン](#開発ガイドライン)
-- [プルリクエストのプロセス](#プルリクエストのプロセス)
-- [リリースプロセス](#リリースプロセス)
-
-## 行動規範
-
-このプロジェクトは[Contributor Covenant行動規範](CODE_OF_CONDUCT.md)に従います。参加することで、この規範を遵守することが期待されます。
-
 ## はじめに
 
-### 前提条件
+[行動規範](../../CODE_OF_CONDUCT.md)、[ビルド手順](../../BUILD.md)、
+[現在のアーキテクチャ](../development/architecture.md)を確認してください。
+対応環境はApple Silicon搭載のmacOS 15以降です。Tauri 2、Rust、React、
+TypeScript、Bunを使用します。
 
-貢献する前に、以下を確認してください：
+## 開発
 
-1. [README](README.md)を読む
-2. [BUILD.md](BUILD.md)に従って開発環境をセットアップ
-3. プロジェクト構造を理解する
+リポジトリのルートから実行します。
 
-### プロジェクト構造
-
-```mermaid
-flowchart TD
-    root["devtools/"]
-    root --> features["features/<br/>機能モジュール<br/>(core/, tests/)"]
-    root --> frontend["frontend/src/<br/>React・TypeScript UI<br/>(app/, features/, shared/, platform/wkwebview/)"]
-    root --> webbridge["features/web_frontend/<br/>WKWebViewとC++ブリッジ"]
-    root --> main["main/<br/>アプリケーションエントリーポイント"]
-    root --> resources["res/<br/>リソースと翻訳ファイル"]
-    root --> tests["tests/<br/>共有テストヘルパー"]
-    root --> designs["designs/<br/>UIデザインファイル (.pen)"]
-    root --> docs["docs/<br/>ドキュメント"]
-    root --> distribution["distribution/<br/>プラットフォーム固有のパッケージング"]
-```
-
-## 貢献の方法
-
-### バグの報告
-
-1. [Issues](https://github.com/LotusAndCompany/devtools/issues)で既に報告されていないか確認
-2. 報告されていない場合、バグ報告テンプレートを使用して新しいIssueを作成
-3. 以下を含めてください：
-   - バグの明確な説明
-   - 再現手順
-   - 期待される動作と実際の動作
-   - 環境情報（macOSバージョン、Qtバージョンなど）
-   - 該当する場合はスクリーンショット
-
-### 機能のリクエスト
-
-1. 既存のIssueで類似の機能リクエストがないか確認
-2. 機能リクエストテンプレートを使用して新しいIssueを作成
-3. 以下を記述してください：
-   - 解決しようとしている問題
-   - 提案する解決策
-   - 検討した代替案
-
-### コードの提出
-
-1. リポジトリをフォーク
-2. `main`から機能ブランチを作成
-3. 変更を加える
-4. 必要に応じてテストを作成または更新
-5. すべてのテストが通ることを確認
-6. プルリクエストを提出
-
-## 開発ガイドライン
-
-### コードスタイル
-
-- C++17の機能を適切に使用
-- プロジェクト内の既存のコードパターンに従う
-- 意味のある変数名と関数名を使用
-- 複雑なロジックにはコメントを追加
-
-### ローカライゼーション
-
-- React UIの文字列は、共通の `text(locale, english, japanese)` 関数で
-  英語と日本語を指定する。
-- ネイティブC++ UIの文字列は英語で記述し、`tr()` で囲む。
-- ネイティブQt UIの日本語訳は `res/dev-tools_ja_JP.ts` で管理する。
-- 英語は source 文字列を使用するため、英語用の `.ts` ファイルは追加しない
-- ネイティブQtの翻訳対象文字列が変わった場合のみ `.ts` を更新する：
-  `cmake --build build --target update_devtools_translations`
-
-### React UI のHMR
-
-Bun 1.3.14が必要です。バージョンは`frontend/package.json`で固定しています。
-インストール方法は[Bun公式ガイド](https://bun.sh/docs/installation)を参照してください。
-
-1つ目のターミナルでViteを起動します。
-
-```bash
+~~~sh
 cd frontend
 bun install --frozen-lockfile
-bun run --bun dev
-```
-
-リポジトリルートから、2つ目のターミナルでDebugアプリを起動します。
-
-```bash
-DEVTOOLS_WEB_UI_DEV_SERVER_URL=http://127.0.0.1:5173 cmake --build build --target run
-```
-
-HMRはDebugビルドでのみ利用でき、WKWebViewが受け付けるURLはこのループバックURLに限られます。同梱アセットは一時ディレクトリへ展開してWKWebViewから読み込みます。Releaseビルドでは同梱アセットを使います。詳しくは[React移行メモ](../migration/m3-react-ui.md)を参照してください。
-
-### フロントエンドの確認
-
-フロントエンドを変更した場合は、frontend/で次のコマンドを実行します。
-
-~~~bash
-bun install --frozen-lockfile
-bun run lint
-bun run format:check
-bun run --bun typecheck
-bun run --bun build
-bun run --bun test
+bun run tauri:dev
 ~~~
 
-CMakeでアプリをビルドするときも、Bunが依存関係をロックファイルから復元し、埋め込み用のフロントエンドを生成します。
+プルリクエストの前に[ビルド手順](../../BUILD.md)の確認を実行してください。
+設定や移行を変更する場合は、新規起動、旧データの取り込み、失敗、再試行、
+元データの保持を確認します。テストやfixtureに実ユーザーデータや秘密情報を
+含めないでください。
 
-### コードフォーマット
+## コードとドキュメント
 
-このプロジェクトでは、自動コードフォーマットに`clang-format`、静的解析に`clang-tidy`を使用しています。
+- ネイティブ処理は `src-tauri/`、画面処理は `frontend/src/` に置きます。
+- ブリッジ操作を変更した場合はRustの登録表、TypeScriptの共通契約、
+  対応関係の確認を更新します。
+- 画面に表示する文言は共通のローカライズ関数を使い、英語と日本語を用意します。
+- 英語版に対応する日本語版がある場合は、両方を更新します。
+- Qt、CMake、vcpkg、WKWebView用アダプター、sidecarを追加しないでください。
+- 生成物や同梱ベンダーコードを直接編集しないでください。
+- `.pen` ファイルはPencilエディターで扱い、テキストとして編集しないでください。
 
-#### セットアップ
+## プルリクエスト
 
-ツールをインストール（macOS）：
-```bash
-brew install llvm
-```
+目的に合うベースブランチから作業ブランチを作成し、利用者への変更、確認結果、
+未確認事項を記載してください。Conventional Commitとrelease-pleaseの規約に従います。
+コミット、プルリクエスト、IssueにAIツールの著者表記を加えないでください。
 
-#### 使用方法
+## リリース
 
-すべてのソースファイルをフォーマット：
-```bash
-cmake --build build --target format
-```
-
-変更なしでフォーマットをチェック：
-```bash
-cmake --build build --target format-check
-```
-
-静的解析を実行：
-```bash
-cmake --build build --target lint
-```
-
-自動修正付きで静的解析を実行：
-```bash
-cmake --build build --target lint-fix
-```
-
-#### Gitフック (pre-commit)
-
-このプロジェクトでは[pre-commit](https://pre-commit.com/)を使用してコード品質チェックを自動化しています。
-
-**インストール：**
-
-```bash
-# pre-commit をインストール
-brew install pre-commit  # macOS
-# または: pip install pre-commit
-
-# フックをセットアップ
-pre-commit install --install-hooks -t pre-commit -t pre-push
-```
-
-**フック一覧：**
-
-| ステージ | フック | 説明 |
-|---------|--------|------|
-| pre-commit | clang-format | C++コードのフォーマット |
-| pre-commit | trailing-whitespace | 末尾空白の削除 |
-| pre-commit | end-of-file-fixer | ファイル末尾の改行 |
-| pre-commit | check-added-large-files | 大きなファイルの追加を防止 |
-| pre-push | cmake-build | ビルド成功の検証 |
-
-**手動実行：**
-
-```bash
-# 全ファイルに対してすべてのフックを実行
-pre-commit run --all-files
-
-# 特定のフックを実行
-pre-commit run clang-format --all-files
-
-# 一時的にフックをスキップ
-git commit --no-verify -m "WIP: work in progress"
-git push --no-verify
-```
-
-**フックの更新：**
-
-```bash
-pre-commit autoupdate
-```
-
-#### CI (GitHub Actions)
-
-Code Qualityワークフローは、設定されたパスフィルターに一致する変更を含む
-`main`向けプルリクエストで実行されます。PRタイトルのチェックはパスに関係なく実行されます。
-
-| チェック | 実行環境 | 説明 |
-|---------|---------|------|
-| Frontend Checks | Ubuntu | Oxlint、Oxfmt、TypeScript、Viteビルド、Vitest |
-| clang-format | macOS | 変更ファイルのフォーマットチェック |
-| clang-tidy | Ubuntu | 変更ファイルの静的解析 |
-| format-suggestion | macOS | PRにフォーマット修正提案をコメント |
-| semantic-pr | Ubuntu | PRタイトルがConventional Commits形式に従っているか検証 |
-
-#### IDE連携
-
-- **Qt Creator**: 設定 > C++ > コードスタイル > `.clang-format`をインポート
-- **VS Code**: 「clangd」拡張機能をインストール、`.clang-format`が自動的に使用されます
-- **CLion**: 設定 > エディタ > コードスタイル > C/C++ > ClangFormatを有効化
-
-### 命名規則
-
-| タイプ | 規則 | 例 |
-|-------|------|-----|
-| クラス | PascalCase | `ImageResize` |
-| 関数 | camelCase | `processImage()` |
-| 変数 | snake_case | `image_width` |
-| 定数 | SCREAMING_SNAKE_CASE | `MAX_IMAGE_SIZE` |
-| ファイル | snake_case | `image_resize.cpp` |
-
-### ネイティブC++サービスの追加
-
-ツール画面はReactで実装します。画面の追加と必要なネイティブ処理との接続は
-[新しいツールの追加ガイド](../development/adding-new-tools.md)を参照してください。
-C++機能モジュールには再利用可能な処理サービスを実装します。機能ごとのQt Widgets画面は追加しません。
-
-1. 機能ディレクトリ構造を作成：
-   ```mermaid
-   flowchart TD
-       module["features/your_module/"]
-       module --> cmake["CMakeLists.txt"]
-       module --> core["core/"]
-       core --> core_files["your_service.h<br/>your_service.cpp"]
-       module --> tests["tests/"]
-       tests --> test_file["test_your_module.cpp"]
-   ```
-
-2. ルートの`CMakeLists.txt`に静的ライブラリターゲットを登録：
-   ```cmake
-   qt_add_library(${PROJECT_NAME}_your_module STATIC)
-   ```
-
-3. `features/your_module/CMakeLists.txt`にサービスのソースを列挙：
-   ```cmake
-   target_sources(${PROJECT_NAME}_your_module PRIVATE
-       core/your_service.h core/your_service.cpp
-   )
-   ```
-
-4. ルートの`CMakeLists.txt`の`MODULE_LIST`に追加：
-   ```cmake
-   set(MODULE_LIST
-       # ... 既存のモジュール
-       ${PROJECT_NAME}_your_module
-   )
-   ```
-
-5. `features/CMakeLists.txt`にモジュールを登録：
-   ```cmake
-   add_subdirectory(your_module)
-   ```
-
-### テストの追加
-
-`tests/DevToolsTests.cmake`にテストを追加：
-```cmake
-DevTools_add_test(test_your_module
-    SOURCES
-    features/your_module/tests/test_your_module.cpp
-)
-```
-
-リポジトリのルートから、アプリのビルドで使ったvcpkgツールチェーンと
-トリプレットを指定してC++テストを有効化します。
-
-```bash
-cmake -S . -B build \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
-  -DVCPKG_TARGET_TRIPLET=arm64-osx \
-  -DENABLE_UNIT_TEST=ON
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
-```
-
-### デザインファイル
-
-UIデザインファイル（`.pen`、[Pencil](https://pencil.app) 形式）は `designs/screens/` 配下に画面・ダイアログ単位で格納されています。サイドバー等の共通要素は個別ファイルから除外し、編集の影響範囲を局所化しています。
-
-ファイル構成・編集フロー・コンフリクト対応の詳細は [Design Files](../development/design-files.md) を参照してください。
-
-## プルリクエストのプロセス
-
-1. 必要に応じて**ドキュメントを更新**
-2. 新機能の**テストを作成**
-3. **CIがパス**することを確認（すべてのテストがパス、ビルドエラーなし）
-4. メンテナーに**レビューをリクエスト**
-5. **フィードバックに迅速に対応**
-6. **プルリクエストをスカッシュマージ**
-
-### PRタイトルのフォーマット
-
-[Conventional Commits](https://www.conventionalcommits.org/)形式に従った明確で説明的なタイトルを使用してください。
-タイトルはCIで自動検証されます。
-
-**ルール:**
-- subject（コロン以降）は小文字で始める（英語の場合）
-- 現在形を使用
-
-**例:**
-- `feat: add SMS QR code generation`
-- `fix: correct image rotation angle calculation`
-- `docs: update build instructions for macOS`
-- `refactor: simplify data conversion logic`
-
-### レビュープロセス
-
-1. メンテナーがPRをレビュー
-2. 変更のリクエストや質問がある場合があります
-3. 承認されると、PRがマージされます
-4. あなたの貢献はChangelogで acknowledgement されます
-
-## リリースプロセス
-
-このプロジェクトでは[release-please](https://github.com/googleapis/release-please)を使用してリリース管理を自動化しています。
-
-### 仕組み
-
-1. **スカッシュマージしたPRタイトルでバージョンが決まります：**
-   - PRタイトルが`main`上のスカッシュコミットのタイトルになります
-   - `fix:` のPRタイトル → PATCHリリース
-   - `feat:` のPRタイトル → MINORリリース
-   - PRタイトルの`feat!`または`fix!` → MAJORリリース
-
-2. **自動化ワークフロー：**
-   - `main`に変更がマージされると、release-pleaseがRelease PRを作成/更新
-   - Release PRには以下が含まれます：
-     - 更新された`CHANGELOG.md`
-     - `CMakeLists.txt`と`vcpkg.json`のバージョン更新
-   - Release PRがマージされると、GitHubリリースとタグが自動作成
-
-3. **release-pleaseが管理するファイル：**
-   - `CMakeLists.txt` - プロジェクトバージョン
-   - `vcpkg.json` - 依存関係バージョン
-   - `version.txt` - プレーンテキストバージョン
-   - `CHANGELOG.md` - リリースノート
-
-### メンテナー向け
-
-- リリース準備ができたら、自動生成されたRelease PRをレビューしてマージ
-- バージョン番号やCHANGELOGを手動で編集しないでください（release-pleaseが処理します）
-- PRタイトルはConventional Commits形式に従ってください。release-pleaseは、
-  `main`上のスカッシュコミットのタイトルからバージョンを決定します
-
-## 質問がありますか？
-
-質問がある場合は、お気軽に：
-- ディスカッション用のIssueを開く
-- メンテナーに連絡する
-
-DevToolsへの貢献ありがとうございます！
+公開用macOSインストーラーはリリースワークフローで作成し、組織のDeveloper IDで
+署名・公証して検証してから公開します。詳細は
+[インストールとリリース手順](../getting-started/installation.md)と
+[リリース条件](../migration/completion-report.md#release-gate)を参照してください。

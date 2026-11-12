@@ -1,0 +1,10 @@
+{
+  "input": {
+    "fileName": "bridge-contract.txt",
+    "text": "DevTools UTF-8 text fixture.\nこんにちは、世界。\n"
+  },
+  "expected": {
+    "fileName": "bridge-contract.txt",
+    "text": "DevTools UTF-8 text fixture.\nこんにちは、世界。\n"
+  }
+}

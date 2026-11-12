@@ -1,8 +1,8 @@
 ---
 paths:
-  - "tests/**"
-  - "**/test_*.cpp"
-  - "**/test_*.h"
+  - "src-tauri/**"
+  - "frontend/src/**"
+  - "tests/fixtures/**"
 ---
 
 # Testing Rules
