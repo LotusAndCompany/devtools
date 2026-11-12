@@ -58,8 +58,14 @@ scope.
    deleted.
 
 The release workflow is configured but has not been run with organization
-secrets. Tauri's [macOS signing guide](https://v2.tauri.app/distribute/sign/macos/)
-describes the signing and notarization setup.
+secrets. As checked on 2026-11-12, there was no draft release, the repository
+Actions secret list was empty, and the current GitHub token could not list
+organization secrets. The local keychain has an Apple Distribution identity
+but no Developer ID Application identity. The workflow therefore remains
+unverified; a TestFlight upload does not verify Developer ID signing or
+notarization for direct distribution. Tauri's
+[macOS signing guide](https://v2.tauri.app/distribute/sign/macos/) describes
+the required setup.
 
 For TestFlight, open the shared Xcode scheme and choose **Product > Archive**;
 see [macos/README.md](../../macos/README.md). The current tree produced a local
@@ -125,10 +131,10 @@ Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 | App Store Connect/TestFlight upload | Passed with warning: Xcode Organizer completed upload of arm64 app version `0.9.0` (build `18`); the app dSYM was missing for UUID `3FB0952A-6A07-3969-AFC8-C22BB7A39BE0`. |
 | Xcode Archive and dSYM | Passed locally for arm64 `0.9.0 (20)`: Apple Distribution signature verified and the app/dSYM UUIDs matched (`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). This archive was not uploaded. |
 | Third-party notices | Passed: 385 locked Rust crates and 21 production frontend packages are inventoried in `THIRD-PARTY-NOTICES.md`; the file is in the app bundle and About license view. The `objc2` redistribution question is unresolved. |
-| Manual app smoke checks | Passed: all 11 feature routes opened; image resize/save, phrase-template save, SQLite connection/table query, JSON conversion, regex, timestamp, command generation, local HTTP, Markdown preview, QR generation, and About license display were exercised. Settings persisted across replacement in the temporary app-data profile. |
+| Manual app smoke checks | Partial: all 11 feature routes opened. In the temporary app, image split/save produced four 64×64 PNGs; phrase-template save worked; SQLite table query succeeded, invalid SQL showed an error, and a later query recovered; a 1,048,560-byte JSON file converted to a valid 1,048,566-byte file; canceled saves created no output; local HTTP 404 was reported as Not Found; QR save produced a verified 168×168 PNG; and Markdown preview/export stripped script and `javascript:` content while preserving visible text. Earlier checks covered image resize, regex, timestamp, command generation, HTTP 200, and About license display. Settings persisted after replacing the app bundle in temporary app data. Finder drop and full feature parity remain unverified. |
 | Agent/workflow config | Passed: shared rules synchronized and checked; Ruby YAML parsing passed for the four GitHub workflows and CodeRabbit config. |
 | Developer ID signature/notarization for public DMG | Unverified: organization signing and notarization secrets are unavailable in this environment. |
-| Clean install/migration lifecycle | Unverified: no separate clean macOS 15 profile was used. |
+| Clean install/migration lifecycle | Unverified: no separate clean macOS 15 user profile was available on this host. |
 | Full feature parity | Unverified: all routes were opened and the listed operations were smoke-tested, but this was not a complete M6 manual regression pass. |
 | Performance | Unverified: no same-condition launch, responsiveness, workload, or app/child memory comparison was run. |
 
