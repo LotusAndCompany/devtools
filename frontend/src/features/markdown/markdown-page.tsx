@@ -7,6 +7,7 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormField } from "@/shared/components/form-field";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
@@ -49,7 +50,21 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
             text: html ? preview : markdown,
             fileType: html ? "html" : "markdown",
             suggestedName: html ? "preview.html" : "document.md",
-        });
+        }).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result)
+                        toast.add({
+                            title: text(
+                                locale,
+                                `Saved ${result.fileName}.`,
+                                `${result.fileName}を保存しました。`,
+                            ),
+                            type: "success",
+                        });
+                }),
+            ),
+        );
     const previewDocument = useMemo(() => {
         if (!preview) return "";
         const policy = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'">`;

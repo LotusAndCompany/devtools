@@ -15,6 +15,7 @@ import {
     ItemTitle,
 } from "@/shared/components/ui/item";
 import { SelectControl } from "@/shared/components/select-control";
+import { toast } from "@/shared/components/ui/toast";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import type { RegexMatch, RegexOptions } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -85,11 +86,27 @@ export function RegexPage({ locale, run }: ToolPageProps) {
     }, [pattern, input, replacement, options, settingsLoaded, run]);
     const setOption = (key: keyof RegexOptions) =>
         setOptions((current) => ({ ...current, [key]: !current[key] }));
+    const copy = (value: string) =>
+        execute("copyToClipboard", { text: value }).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result?.copied)
+                        toast.add({
+                            title: text(
+                                locale,
+                                "Copied to clipboard.",
+                                "クリップボードにコピーしました。",
+                            ),
+                            type: "success",
+                        });
+                }),
+            ),
+        );
     const copyMatches = () => {
         const plain = matches
             .map((match, index) => [index + 1, ": ", match.value, " @ ", match.offset].join(""))
             .join("\n");
-        return run("copyToClipboard", { text: plain });
+        return copy(plain);
     };
     const presets = [
         { label: "Email", pattern: "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}" },
@@ -143,7 +160,8 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                         </FormField>
                         <Button
                             variant="outline"
-                            onClick={() => runUiEffect(run("copyToClipboard", { text: pattern }))}
+                            disabled={busy}
+                            onClick={() => runUiEffect(copy(pattern))}
                         >
                             {text(locale, "Copy pattern", "パターンをコピー")}
                         </Button>
@@ -192,7 +210,7 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                             <Button
                                 variant="outline"
                                 onClick={() => runUiEffect(copyMatches())}
-                                disabled={!matches.length}
+                                disabled={!matches.length || busy}
                             >
                                 {text(locale, "Copy matches", "マッチをコピー")}
                             </Button>
@@ -269,10 +287,8 @@ export function RegexPage({ locale, run }: ToolPageProps) {
                             />
                             <Button
                                 variant="outline"
-                                onClick={() =>
-                                    runUiEffect(run("copyToClipboard", { text: replacedText }))
-                                }
-                                disabled={!replacedText}
+                                disabled={!replacedText || busy}
+                                onClick={() => runUiEffect(copy(replacedText))}
                             >
                                 {text(locale, "Copy result", "結果をコピー")}
                             </Button>

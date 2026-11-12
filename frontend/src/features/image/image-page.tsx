@@ -1,6 +1,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
 import type { ImageEditInput, ImagePreviewResult, ImageSplitInput } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -66,7 +67,18 @@ export function ImagePage({
     const save = () =>
         Effect.gen(function* () {
             const result = yield* execute("imageSave", {});
-            if (result) yield* Effect.sync(() => setFileName(result.fileName || fileName));
+            if (result)
+                yield* Effect.sync(() => {
+                    setFileName(result.fileName || fileName);
+                    toast.add({
+                        title: text(
+                            locale,
+                            `Saved ${result.fileName}.`,
+                            `${result.fileName}を保存しました。`,
+                        ),
+                        type: "success",
+                    });
+                });
         });
     const split = () => {
         const input: ImageSplitInput =
@@ -83,7 +95,21 @@ export function ImagePage({
                       cellHeight: Number(cellHeight),
                       ignoreRemainders,
                   };
-        return execute("imageSplit", input);
+        return execute("imageSplit", input).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result)
+                        toast.add({
+                            title: text(
+                                locale,
+                                "Image tiles saved.",
+                                "画像を分割して保存しました。",
+                            ),
+                            type: "success",
+                        });
+                }),
+            ),
+        );
     };
     const chooseTransparentPoint = (event: MouseEvent<HTMLImageElement>) => {
         const rect = event.currentTarget.getBoundingClientRect();

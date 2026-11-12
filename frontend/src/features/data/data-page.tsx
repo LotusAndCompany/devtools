@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { FormField } from "@/shared/components/form-field";
 import { SelectControl } from "@/shared/components/select-control";
+import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
 import type { DataFormat, JsonIndentation } from "@/shared/bridge/types";
 import { Area, Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -31,7 +32,21 @@ export function DataPage({ locale, run }: ToolPageProps) {
             text: output,
             suggestedName: "converted." + (format.startsWith("yaml") ? "yaml" : format),
             fileType: "data",
-        });
+        }).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result)
+                        toast.add({
+                            title: text(
+                                locale,
+                                `Saved ${result.fileName}.`,
+                                `${result.fileName}を保存しました。`,
+                            ),
+                            type: "success",
+                        });
+                }),
+            ),
+        );
     const clear = () => {
         setInput("");
         setOutput("");

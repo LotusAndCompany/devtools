@@ -7,6 +7,7 @@ import { FieldGroup } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectControl } from "@/shared/components/select-control";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { toast } from "@/shared/components/ui/toast";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import type { CommandFunction } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -40,6 +41,22 @@ export function CommandPage({ locale, run }: ToolPageProps) {
         }).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => setCommand(result && "command" in result ? result.command : "")),
+            ),
+        );
+    const copy = () =>
+        execute("copyToClipboard", { text: command }).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result?.copied)
+                        toast.add({
+                            title: text(
+                                locale,
+                                "Copied to clipboard.",
+                                "クリップボードにコピーしました。",
+                            ),
+                            type: "success",
+                        });
+                }),
             ),
         );
     return (
@@ -129,8 +146,8 @@ export function CommandPage({ locale, run }: ToolPageProps) {
                     <CardTitle>{text(locale, "Generated Result", "生成結果")}</CardTitle>
                     <Button
                         variant="outline"
-                        disabled={!command}
-                        onClick={() => runUiEffect(run("copyToClipboard", { text: command }))}
+                        disabled={!command || busy}
+                        onClick={() => runUiEffect(copy())}
                     >
                         {text(locale, "Copy", "コピー")}
                     </Button>

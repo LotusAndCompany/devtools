@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui
 import { DateTimeInput } from "@/shared/components/date-time-input";
 import { FormField } from "@/shared/components/form-field";
 import { Input } from "@/shared/components/ui/input";
+import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
@@ -92,7 +93,22 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
                 }),
             );
         });
-    const copy = (value: string) => run("copyToClipboard", { text: value });
+    const copy = (value: string) =>
+        execute("copyToClipboard", { text: value }).pipe(
+            Effect.tap((result) =>
+                Effect.sync(() => {
+                    if (result?.copied)
+                        toast.add({
+                            title: text(
+                                locale,
+                                "Copied to clipboard.",
+                                "クリップボードにコピーしました。",
+                            ),
+                            type: "success",
+                        });
+                }),
+            ),
+        );
     const row = (key: keyof TimestampValues, label: string, dateTime = false) => (
         <div className="timestamp-row" key={key}>
             <FormField label={label}>
@@ -123,7 +139,12 @@ export function TimestampPage({ locale, run }: ToolPageProps) {
             >
                 {text(locale, "Convert", "変換")}
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => runUiEffect(copy(values[key]))}>
+            <Button
+                variant="ghost"
+                size="sm"
+                disabled={busy}
+                onClick={() => runUiEffect(copy(values[key]))}
+            >
                 {text(locale, "Copy", "コピー")}
             </Button>
         </div>
