@@ -23,7 +23,12 @@
     gap: var(--space-12);
     color: var(--muted-foreground);
 }
-:where([data-page="qr"]) .qr-preview img {
+:where([data-page="qr"]) .qr-code-frame {
+    width: fit-content;
+    max-width: 100%;
+}
+:where([data-page="qr"]) .qr-code-frame img {
+    display: block;
     width: min(100%, 280px);
     image-rendering: pixelated;
 }

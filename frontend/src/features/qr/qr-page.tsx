@@ -7,6 +7,7 @@ import { DateTimeInput } from "@/shared/components/date-time-input";
 import { FormField } from "@/shared/components/form-field";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
+import { Empty, EmptyDescription, EmptyHeader } from "@/shared/components/ui/empty";
 import { SelectControl } from "@/shared/components/select-control";
 import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
@@ -224,12 +225,22 @@ export function QrPage({ locale, run }: ToolPageProps) {
                 <Card className="input-card">
                     <CardContent className="qr-preview">
                         {image ? (
-                            <img
-                                src={image}
-                                alt={text(locale, "Generated QR code", "生成したQRコード")}
-                            />
+                            <Card size="sm" className="qr-code-frame">
+                                <CardContent>
+                                    <img
+                                        src={image}
+                                        alt={text(locale, "Generated QR code", "生成したQRコード")}
+                                    />
+                                </CardContent>
+                            </Card>
                         ) : (
-                            <span>{text(locale, "QR code preview", "QRコードのプレビュー")}</span>
+                            <Empty className="qr-empty">
+                                <EmptyHeader>
+                                    <EmptyDescription>
+                                        {text(locale, "QR code preview", "QRコードのプレビュー")}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
                         )}
                         {content && (
                             <>
