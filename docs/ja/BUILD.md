@@ -2,226 +2,56 @@
 
 [English version](../../BUILD.md)
 
-このドキュメントでは、DevToolsをソースからビルドする方法を説明します。
+## 必要環境
 
-## 必要要件
+- macOS 15.0以降、Apple Silicon（arm64）
+- Xcode Command Line Tools
+- Rust 1.99.1（rustfmt、clippyを含む）
+- Bun 1.3.14
 
-### プラットフォーム
-- **macOS 15.0以上**（Apple Silicon / arm64専用）
+ネイティブホストはTauri 2とRustで実装されています。WebKitはmacOSが提供します。
+Qt、CMake、vcpkg、別途インストールするWebランタイムは不要です。
 
-### ツール
-- **CMake**: 3.21.1以上
-- **C++コンパイラ**: C++17対応（Clang推奨）
-- **Qt**: 6.9以上（6.9.3で検証済み。Widgets, LinguistTools, Sql, Network, Svgモジュール）
-- **vcpkg**: 依存関係管理用
+## 開発
 
-### 依存ライブラリ（vcpkg経由）
-- toml11
-- yaml-cpp
-
-### 依存ライブラリ（CMake FetchContent経由）
-- qlementine v1.4.2（Qt Widgets向けのモダンな `QStyle`、MITライセンス）
-
-qlementineはCMake構成時に `https://github.com/oclero/qlementine.git` から取得されます。
-Qt 6.8以上とCMake 3.21以上が必要です。DevToolsでは名前付きグリフのアイコンのためQt 6.9以上を
-必要とし、`DevTools_core` にリンクし、
-同梱テーマをQtリソースの `:/themes` から読み込みます。
-
-### オプション
-- **Doxygen**: 1.18以上（APIドキュメント生成用）
-- **GraphViz**: クラス図・依存関係グラフの生成用（オプション）
-- **Qt Creator**: 18.0.1以上（Qt統合IDE）
-- **Ninja**: 1.12.1以上（高速ビルドツール）
-- **Qt Installer Framework**: 4.10（アプリケーションパッケージング）
-
-## インストール
-
-### 1. Qt6のインストール
-
-#### Homebrewを使用する場合（macOSで推奨）
-```bash
-brew install qt@6
-```
-
-#### Qt Online Installerを使用する場合
-[qt.io](https://www.qt.io/download)からダウンロードし、以下のコンポーネントを含むQt 6.9以上をインストール：
-- Qt 6.9以上 for macOS
-- Qt Creator（オプション、推奨）
-
-### 2. vcpkgのインストール
-
-```bash
-# vcpkgをクローン
-git clone https://github.com/Microsoft/vcpkg.git
-cd vcpkg
-
-# ブートストラップ
-./bootstrap-vcpkg.sh
-
-# PATHに追加（永続化するにはシェルプロファイルに追加）
-export PATH="$PWD:$PATH"
-```
-
-### 3. リポジトリをクローン
-
-```bash
+~~~bash
 git clone https://github.com/LotusAndCompany/devtools.git
-cd devtools
-```
+cd devtools/frontend
+bun install --frozen-lockfile
+bun run tauri:dev
+~~~
 
-### 4. 依存関係のインストール
+## ローカルmacOSアプリバンドルのビルド
 
-```bash
-vcpkg install
-```
+~~~bash
+cd frontend
+bun run tauri:build
+~~~
 
-## ビルド
+ローカルに `DevTools.app` バンドルが作られます。TestFlightまたはMac App Store向けの
+ビルドは、共有Xcode Archiveスキームでアーカイブし、App Store Connectへアップロードします。
+手順は[macos/README.md](../../macos/README.md)を参照してください。このローカルビルドは
+アプリをアップロード・公開しません。
 
-### CMakeを使用する場合（コマンドライン）
+## テストとチェック
 
-```bash
-# ビルドディレクトリを作成
-mkdir build && cd build
+リポジトリのルートで実行します。
 
-# 構成（CMake FetchContentでqlementineも取得します）
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
+~~~bash
+cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --locked
+~~~
 
-# ビルド
-make
+frontend/で実行します。
 
-# または並列ジョブで
-make -j$(sysctl -n hw.ncpu)
-```
+~~~bash
+bun install --frozen-lockfile
+bun run lint
+bun run format:check
+bun run --bun typecheck
+bun run --bun test
+bun run --bun build
+~~~
 
-### アプリケーションの実行
-
-ビルド後、アプリケーションを起動します：
-
-```bash
-# ビルドと実行（カラー付きコンソール出力）
-cmake --build . --target run
-
-# またはバイナリを直接実行
-./DevTools.app/Contents/MacOS/DevTools
-
-# またはApp Bundleを開く
-open DevTools.app
-```
-
-ログ出力は重要度に応じて色分けされます：DEBUG=灰色, INFO=デフォルト, WARN=黄色, CRIT=赤。
-
-### Qt Creatorを使用する場合
-
-1. Qt Creatorで `CMakeLists.txt` を開く
-2. Qt Creatorの設定でvcpkgプラグインを有効にする
-3. 以下のCMake引数を追加：
-   ```
-   -DVCPKG_TARGET_TRIPLET=arm64-osx
-   ```
-4. プロジェクトを構成
-5. ビルドボタンまたは `Cmd+B` でビルド
-
-### ビルドオプション
-
-| オプション | デフォルト | 説明 |
-|-----------|-----------|------|
-| `ENABLE_UNIT_TEST` | OFF | ユニットテストを有効にする |
-| `VCPKG_TARGET_TRIPLET` | auto | Apple Siliconの場合は `arm64-osx` を設定 |
-
-qlementineのサンプルアプリケーションはプロジェクト設定で無効化しています
-（`QLEMENTINE_SANDBOX=OFF`, `QLEMENTINE_SHOWCASE=OFF`）。ビルド対象はスタイルライブラリのみです。
-
-オプション指定の例：
-```bash
-cmake .. -DENABLE_UNIT_TEST=ON -DVCPKG_TARGET_TRIPLET=arm64-osx
-```
-
-## テストの実行
-
-```bash
-# まずテストを有効化
-cmake .. -DENABLE_UNIT_TEST=ON
-
-# ビルド
-make
-
-# テスト実行
-ctest
-```
-
-## ドキュメントの生成
-
-APIドキュメントの生成にはDoxygen 1.18以上が必要です。
-
-### Doxygenのインストール
-```bash
-brew install doxygen
-```
-
-### GraphVizのインストール（オプション）
-
-GraphVizをインストールすると、クラス継承図・コラボレーション図・インクルード依存図が生成されます。
-
-```bash
-brew install graphviz
-```
-
-GraphVizがインストールされていない場合、図表なしでドキュメントが生成されます。
-
-### ドキュメントの生成
-```bash
-cd build
-make DevTools_docs
-```
-
-生成されたドキュメントは `build/doxygen/html/` に出力されます。
-
-## トラブルシューティング
-
-### CMake構成エラー
-
-1. **構文エラーの確認**: CMakeLists.txtを確認
-2. **CMakeキャッシュの削除**:
-   ```bash
-   rm -rf build/CMakeCache.txt
-   ```
-3. **ビルドディレクトリのクリーン**:
-   ```bash
-   rm -rf build && mkdir build && cd build && cmake ..
-   ```
-
-### vcpkgの問題
-
-1. **vcpkgが正しくインストールされているか確認**:
-   ```bash
-   vcpkg version
-   ```
-2. **vcpkgの更新**:
-   ```bash
-   cd /path/to/vcpkg
-   git pull
-   ./bootstrap-vcpkg.sh
-   ```
-
-### Qtが見つからない場合
-
-1. **Qt6_DIR環境変数を設定**:
-   ```bash
-   export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   ```
-2. **またはCMakeに渡す**:
-   ```bash
-   cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   ```
-
-### qlementineのFetchContentで失敗する場合
-
-qlementineのダウンロード中にCMake構成が失敗する場合は、以下を確認してください。
-
-1. `https://github.com/oclero/qlementine.git` へアクセスできることを確認する。
-2. FetchContentのキャッシュを削除して再構成する。
-   ```bash
-   rm -rf build/_deps/qlementine-*
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
-   ```
-3. 使用中のQtが6.8以上で、Svgモジュールを含んでいることを確認する。
+CIではこれらに加え、macOSアプリバンドルをビルドします。

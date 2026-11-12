@@ -1,67 +1,56 @@
 # DevTools Documentation
 
-Welcome to the DevTools documentation. This guide will help you get started, understand the features, and contribute to the project.
+## Getting started
 
-## Quick Links
+- [Installation](getting-started/installation.md) — install, update, back up,
+  recover, and uninstall the macOS app.
+- [Quick Start](getting-started/quick-start.md) — launch the app and open the
+  tools.
+- [Build instructions](../BUILD.md) — set up development and run checks.
 
-- [Installation Guide](getting-started/installation.md)
-- [Quick Start](getting-started/quick-start.md)
-- [API Reference](https://LotusAndCompany.github.io/devtools/) (Doxygen)
+## User guide
 
-## Documentation Sections
+- [Overview](user-guide/overview.md)
+- [QR code generation](user-guide/qr-code-generation.md)
+- [Image processing](user-guide/image-processing.md)
+- [Data conversion](user-guide/data-conversion.md)
+- [API testing](user-guide/api-testing.md)
+- [Markdown preview](user-guide/markdown-preview.md)
+- [Command generation](user-guide/command-execution.md)
+- [Phrase generation](user-guide/phrase-generation.md)
+- [Database management](user-guide/database-management.md)
+- [Regular expression tester](user-guide/regex-tester.md)
+- [Timestamp conversion](user-guide/timestamp-conversion.md)
+- [Diff comparison](user-guide/diff-tool.md)
 
-### Getting Started
+## Development
 
-New to DevTools? Start here:
+- [Architecture](development/architecture.md)
+- [Coding standards](development/coding-standards.md)
+- [Adding a tool](development/adding-new-tools.md)
+- [Testing](development/testing-guide.md)
+- [Localization](development/localization.md)
+- [Icons](development/icon-assets.md)
+- [Design files](development/design-files.md)
+- [AI agent harness](development/ai-agent-harness.md)
 
-- [Installation](getting-started/installation.md) - Set up your development environment
-- [Quick Start](getting-started/quick-start.md) - Get up and running in 5 minutes
+## Migration
 
-### User Guide
+- [Migration history and milestones](migration/README.md)
+- [M6 completion report](migration/completion-report.md)
 
-Learn how to use each feature:
+## Troubleshooting
 
-- [Overview](user-guide/overview.md) - Application overview and UI layout
-- [QR Code Generation](user-guide/qr-code-generation.md) - Create QR codes for text, URLs, emails, and more
-- [Image Processing](user-guide/image-processing.md) - Resize, rotate, split, and add transparency
-- [Data Conversion](user-guide/data-conversion.md) - Convert between JSON, YAML, and TOML
-- [API Testing](user-guide/api-testing.md) - Send HTTP requests and view responses
-- [Markdown Preview](user-guide/markdown-preview.md) - Edit Markdown with real-time HTML preview
-- [Command Generation](user-guide/command-execution.md) - Build Git and Docker commands from the GUI
-- [Phrase Generation](user-guide/phrase-generation.md) - Create and reuse named text templates
-- [Database Management](user-guide/database-management.md) - Connect to databases and execute SQL queries
-- [Regular Expression Tester](user-guide/regex-tester.md) - Test patterns and replacements
-- [Timestamp Conversion](user-guide/timestamp-conversion.md) - Convert between Unix timestamps, date/time, and ISO 8601
-- [Diff Comparison Tool](user-guide/diff-tool.md) - Compare two texts inline or side by side
+- [Common issues](troubleshooting/common-issues.md)
+- [FAQ](troubleshooting/faq.md)
 
-### Development
+## API reference
 
-For contributors and developers:
-
-- [Architecture](development/architecture.md) - System architecture and module structure
-- [Coding Standards](development/coding-standards.md) - Code style and naming conventions
-- [Adding New Tools](development/adding-new-tools.md) - Step-by-step guide to add new features
-- [Icon Assets](development/icon-assets.md) - Bundled icon font and license records
-- [Testing Guide](development/testing-guide.md) - Write and run tests
-- [Localization](development/localization.md) - Add and update translations
-- [Design Files](development/design-files.md) - Pencil `.pen` file layout and editing workflow
-- [AI Agent Harness](development/ai-agent-harness.md) - Cross-tool AI agent configuration
-
-### API Reference
-
-- [Doxygen API Reference](https://LotusAndCompany.github.io/devtools/)
-
-### Troubleshooting
-
-- [Common Issues](troubleshooting/common-issues.md) - Solutions to frequently encountered problems
-- [FAQ](troubleshooting/faq.md) - Frequently asked questions
-
-## External Resources
-
-- [GitHub Repository](https://github.com/LotusAndCompany/devtools)
-- [Issue Tracker](https://github.com/LotusAndCompany/devtools/issues)
-- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md)
+The Rust API reference is generated from `src-tauri/` by the documentation
+workflow: [Rust API docs](https://LotusAndCompany.github.io/devtools/).
 
 ## License
 
-DevTools is licensed under the [Apache License 2.0](../LICENSE).
+DevTools is licensed under the [Apache License 2.0](../LICENSE). Third-party
+dependency review and notices are a release gate; see the
+[M6 completion report](migration/completion-report.md#release-gate).

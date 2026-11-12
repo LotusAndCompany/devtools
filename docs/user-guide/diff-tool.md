@@ -5,7 +5,7 @@ Compare two texts and review the differences inline or side by side.
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Diff Comparison Tool** in the side menu
+2. Click **Text Diff** in the sidebar
 
 ## Interface
 

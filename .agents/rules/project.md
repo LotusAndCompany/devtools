@@ -5,65 +5,47 @@ paths:
 
 # Project Rules
 
-DevTools is a macOS desktop application built with C++17 and Qt6 Widgets.
+DevTools targets macOS 15+ on Apple Silicon. The app uses a Tauri 2 Rust
+backend and a React/TypeScript frontend with shadcn/ui and Base UI. The OS
+provides WebKit. There is no C++/Qt host, QWebChannel transport, FFI, or
+sidecar in the supported application.
 
-## Build
+## Build and checks
 
-```bash
-# Configure with CMake (vcpkg toolchain)
-cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+~~~bash
+cd frontend
+bun install --frozen-lockfile
+bun run tauri:dev
+bun run tauri:build
 
-# Build
-make -j8
+cd ..
+cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
+cargo test --manifest-path src-tauri/Cargo.toml --locked
+~~~
 
-# Build and run with console output
-cmake --build . --target run
-
-# Enable and run unit tests
-cmake .. -DENABLE_UNIT_TEST=ON
-ctest
-
-# Format check
-cmake --build . --target format-check
-
-# Static analysis
-cmake --build . --target lint
-```
+A local release build creates a macOS app bundle. Public distribution uses the
+shared Xcode Archive scheme and App Store Connect for TestFlight or Mac App
+Store release; GitHub Releases do not carry app installers.
 
 ## Architecture
 
-- `features/{feature}/core/`: business logic. Do not introduce Qt Widgets
-  dependencies here. QtCore, QtGui, QtSql, QtNetwork are allowed.
-- `features/{feature}/gui/`: Qt6 Widgets UI layer.
-- `main/`: application entry point.
-- `tests/`: shared test helpers (mock_helper, random_data, test_util).
-- `features/{feature}/tests/`: per-feature unit tests.
-- Each feature is a static library module registered in `MODULE_LIST`.
+- src-tauri/src/: Tauri commands, bridge validation, native file/database
+  services, settings, and legacy Qt settings migration.
+- frontend/src/app/, features/, and shared/: React shell, tools, shared UI,
+  typed bridge contract, and Effect helpers.
+- frontend/src/platform/tauri/: the sole frontend/native transport.
+- tests/fixtures/: shared contract, migration, image, and database fixtures.
+
+Keep native operations typed in frontend/src/shared/bridge/types.ts and
+validate them in Rust. Keep user data writes bounded and atomic, preserve
+existing data during migrations, and never store database passwords.
 
 ## Dependencies
 
-- vcpkg: toml11, yaml-cpp. See `vcpkg.json`.
-- Qt6: Core, Widgets, LinguistTools, Sql, Network.
-- Bundled vendor code: qrcodegen under `features/qr_code/core/qrcodegen.*`.
+Rust dependencies are pinned by src-tauri/Cargo.lock; frontend dependencies
+are pinned by frontend/bun.lock. Do not add Qt, CMake, vcpkg, FFI, or a
+sidecar as an application dependency.
 
-## Pre-commit Hooks
-
-Setup:
-
-```bash
-pre-commit install --install-hooks -t pre-commit -t pre-push
-```
-
-Hooks run clang-format, trailing-whitespace, EOF fixer, large file check, and
-pre-push build verification.
-
-## Agent Harness
-
-- `AGENTS.md` is the bootstrap instruction file for all AI coding tools.
-- Path-scoped, Claude Code-like rules live in `.agents/rules/`.
-- `opencode.json` loads all `.agents/rules/*.md` via the `instructions` field.
-  It is self-maintaining — no sync step required for OpenCode.
-- Tool-specific configs should import or mirror `.agents/rules/` instead of
-  duplicating guidance.
-- After editing `AGENTS.md` or `.agents/rules/*.md`, run
-  `scripts/sync-agent-rules.py` to regenerate tool-specific adapters.
+The project supports macOS only. Do not report Windows, Linux, or Intel macOS
+as supported without an explicit support-scope change and verification.

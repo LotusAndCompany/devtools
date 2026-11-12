@@ -1,210 +1,45 @@
-# Installation Guide
+# Installation and Updates
 
-This guide provides detailed instructions for setting up the DevTools development environment.
+## Supported system
 
-## System Requirements
+DevTools supports macOS 15.0 or later on Apple Silicon (arm64). Windows, Linux,
+and Intel Macs are not in the verified support scope.
 
-### Platform
-- **macOS 15.0 or later** (Apple Silicon / arm64 only)
+## Install
 
-### Required Tools
-| Tool | Version | Purpose |
-|------|---------|---------|
-| CMake | 3.21.1+ | Build system |
-| C++ Compiler | C++17 compatible | Compilation (Clang recommended) |
-| Qt | 6.9+ | GUI framework; 6.9.3 is tested; 6.9+ is required for named-glyph QIcon support |
-| vcpkg | Latest | Package management |
+Install DevTools from the
+[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
 
-### Optional Tools
-| Tool | Version | Purpose |
-|------|---------|---------|
-| Doxygen | 1.18+ | API documentation generation |
-| Qt Creator | 18.0.1+ | IDE with Qt integration |
-| Ninja | 1.12.1+ | Fast build tool |
-| Qt Installer Framework | 4.10 | Application packaging |
+## Update
 
-## Step-by-Step Installation
+Install available updates through the Mac App Store. DevTools has no in-app
+updater. Updating the app does not delete its Application Support directory;
+settings and phrase templates remain there.
 
-### 1. Install Qt6
+Before upgrading from the Qt version, make a backup of:
 
-Qt6 provides the GUI framework for DevTools.
+- the Qt settings file at ~/Library/Preferences/com.trolltech.unknown-organization.DevTools.plist
+- any user-edited phrase templates in the old content directory
 
-#### Option A: Using Homebrew (Recommended)
+On first launch, Tauri imports allowlisted preferences and database connection
+metadata. It retains the original settings in
+~/Library/Application Support/com.lotusandcompanyinc.dev-tools/migration/qsettings-source.plist.
+Database passwords are not migrated or stored; enter them again when connecting.
+SQLite security-scoped bookmarks are not migrated, so select the database file
+again. The migration keeps the source plist until users remove it themselves.
 
-```bash
-brew install qt@6
-```
+## Backup and recovery
 
-After installation, add Qt to your PATH:
+Quit the app and copy
+~/Library/Application Support/com.lotusandcompanyinc.dev-tools to a safe location
+before an upgrade. To recover, quit DevTools and restore that directory from the
+backup. If migration reports an error, do not remove the source plist or backup;
+restore the backup and report the failure with logs that contain no settings data.
 
-```bash
-# Add to ~/.zshrc or ~/.bash_profile
-export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
-```
+## Uninstall
 
-#### Option B: Using Qt Online Installer
-
-1. Download the installer from [qt.io](https://www.qt.io/download)
-2. Run the installer
-3. Select Qt 6.9 or later for macOS
-4. Optionally install Qt Creator
-
-### 2. Install vcpkg
-
-vcpkg manages C++ library dependencies.
-
-```bash
-# Clone vcpkg
-git clone https://github.com/Microsoft/vcpkg.git ~/vcpkg
-cd ~/vcpkg
-
-# Bootstrap vcpkg
-./bootstrap-vcpkg.sh
-
-# Add to PATH (add to your shell profile)
-export PATH="$HOME/vcpkg:$PATH"
-export VCPKG_ROOT="$HOME/vcpkg"
-```
-
-Verify installation:
-
-```bash
-vcpkg version
-```
-
-### 3. Install Additional Tools
-
-#### Doxygen (Optional, 1.18+)
-
-```bash
-brew install doxygen
-```
-
-#### GraphViz (Optional, for documentation diagrams)
-
-```bash
-brew install graphviz
-```
-
-#### clang-format and clang-tidy (For development)
-
-```bash
-brew install llvm
-```
-
-### 4. Clone the Repository
-
-```bash
-git clone https://github.com/LotusAndCompany/devtools.git
-cd devtools
-```
-
-### 5. Install Dependencies
-
-vcpkg will automatically install required libraries:
-
-```bash
-vcpkg install
-```
-
-This installs:
-- **toml11** - TOML parser (header-only)
-- **yaml-cpp** - YAML parser
-
-Qlementine is not installed by vcpkg in this project. CMake downloads qlementine v1.4.2
-with FetchContent during the configure step and builds it against the active Qt6
-installation.
-
-### 6. Configure and Build
-
-```bash
-# Create build directory
-mkdir build && cd build
-
-# Configure with CMake. This also downloads qlementine with FetchContent.
-cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
-
-# Build (using all available cores)
-make -j$(sysctl -n hw.ncpu)
-```
-
-### 7. Run DevTools
-
-After building, run the application:
-
-```bash
-# Build and run with colored console output (recommended).
-# This replaces older project-local processes before starting.
-cmake --build . --target run
-
-# Or run the binary directly
-./DevTools.app/Contents/MacOS/DevTools
-```
-
-Use the `run` target when iterating on the source tree. It replaces older
-project-local DevTools processes before launching the canonical binary. If a
-DevTools bundle outside the source tree is running, the target stops with an
-explicit error instead of allowing an ambiguous application-name selection.
-Separately packaged builds, such as `build-appstore`, are not used for source
-validation.
-
-## IDE Setup
-
-### Qt Creator
-
-1. Open Qt Creator
-2. Go to **Preferences > Kits**
-3. Ensure a Qt 6.9 or later kit is configured
-4. Enable the vcpkg plugin in **Preferences > CMake > vcpkg**
-5. Open `CMakeLists.txt` from the project root
-6. Add CMake argument: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
-7. Configure and build
-
-### VS Code
-
-1. Install extensions:
-   - C/C++ (Microsoft)
-   - CMake Tools
-   - clangd (optional, for better intellisense)
-
-2. Create `.vscode/settings.json`:
-   ```json
-   {
-     "cmake.configureArgs": [
-       "-DVCPKG_TARGET_TRIPLET=arm64-osx"
-     ]
-   }
-   ```
-
-3. Use the CMake Tools extension to configure and build
-
-### CLion
-
-1. Open the project folder
-2. Go to **Preferences > Build, Execution, Deployment > CMake**
-3. Add CMake option: `-DVCPKG_TARGET_TRIPLET=arm64-osx`
-4. Reload CMake project
-
-## Verifying Installation
-
-After building, verify everything works:
-
-```bash
-# Run the application
-./DevTools.app/Contents/MacOS/DevTools
-
-# Run tests (if enabled)
-cmake .. -DENABLE_UNIT_TEST=ON
-make
-ctest --output-on-failure
-```
-
-## Next Steps
-
-- [Quick Start Guide](quick-start.md) - Learn the basics
-- [Architecture Overview](../development/architecture.md) - Understand the codebase
-- [Contributing Guide](https://github.com/LotusAndCompany/devtools/blob/main/CONTRIBUTING.md) - Start contributing
-
-## Troubleshooting
-
-If you encounter issues, see [Common Issues](../troubleshooting/common-issues.md) or check the [FAQ](../troubleshooting/faq.md).
+Quit DevTools and move the app from Applications to Trash. To remove app settings
+and templates as well, separately remove
+~/Library/Application Support/com.lotusandcompanyinc.dev-tools after taking any
+needed backup. User-selected files and external databases are not removed by
+uninstalling DevTools.

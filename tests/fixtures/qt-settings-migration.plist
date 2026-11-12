@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RegexTester.flagG</key>
+	<true/>
+	<key>RegexTester.flagI</key>
+	<true/>
+	<key>RegexTester.flagM</key>
+	<false/>
+	<key>RegexTester.flagS</key>
+	<true/>
+	<key>RegexTester.flagU</key>
+	<true/>
+	<key>RegexTester.flagX</key>
+	<false/>
+	<key>RegexTester.pattern</key>
+	<string>(?&lt;日本語&gt;猫)</string>
+	<key>RegexTester.replacePattern</key>
+	<string>${日本語}</string>
+	<key>RegexTester.testText</key>
+	<string>🍣猫</string>
+	<key>db_tool.connectionHistory</key>
+	<array>
+		<string>{"type":"QSQLITE","host":"","database":"/Users/example/data.sqlite","username":"","displayName":"SQLite: data.sqlite","securityScopedBookmark":"bookmark-sentinel","password":"password-sentinel","futureField":"must-not-copy"}</string>
+		<string>{"type":"QPSQL","host":"db.example","database":"dev","username":"alice","displayName":"PostgreSQL: alice@db.example/dev","password":"password-sentinel","futureField":"must-not-copy"}</string>
+	</array>
+	<key>general.lastUsedTool</key>
+	<integer>4</integer>
+	<key>general.showLastToolOnStartup</key>
+	<true/>
+	<key>general.showSidemenuOnStartup</key>
+	<false/>
+	<key>general.theme</key>
+	<string>dark</string>
+	<key>general.unknownPreference</key>
+	<string>must-not-copy</string>
+	<key>language</key>
+	<string>ja_JP</string>
+	<key>window.alwaysOnTop</key>
+	<true/>
+	<key>window.height</key>
+	<integer>800</integer>
+	<key>window.rememberPosition</key>
+	<false/>
+	<key>window.rememberSize</key>
+	<true/>
+	<key>window.width</key>
+	<integer>1280</integer>
+	<key>window.x</key>
+	<integer>12</integer>
+	<key>window.y</key>
+	<integer>34</integer>
+</dict>
+</plist>

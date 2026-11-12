@@ -6,7 +6,7 @@ DevTools.
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Timestamp Conversion** in the side menu
+2. Click **Timestamp Conversion** in the sidebar
 
 ## Interface
 

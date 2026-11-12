@@ -8,17 +8,9 @@
       "include-component-in-tag": false,
       "extra-files": [
         {
-          "type": "generic",
-          "path": "CMakeLists.txt"
-        },
-        {
           "type": "json",
-          "path": "vcpkg.json",
-          "jsonpath": "$.version-string"
-        },
-        {
-          "type": "generic",
-          "path": "version.txt"
+          "path": "frontend/package.json",
+          "jsonpath": "$.version"
         }
       ]
     }

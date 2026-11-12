@@ -1,342 +1,36 @@
 # Common Issues
 
-This document lists common issues and their solutions.
+## Bun or Rust version mismatch
 
-## Build Issues
+Use Bun 1.3.14 and Rust 1.99.1 with rustfmt and clippy. Run
+`bun install --frozen-lockfile` from `frontend/`; run Cargo commands from the
+repository root with `--manifest-path src-tauri/Cargo.toml`.
 
-### CMake Configuration Errors
+## The app does not start in development
 
-#### Qt Not Found
+Check that Xcode Command Line Tools are installed, dependencies finished
+installing, and port 5173 is available. Start the Tauri application with
+`bun run tauri:dev` from `frontend/`. The frontend's `bun run dev` command
+alone starts only the Vite server.
 
-**Error:**
-```
-Could not find a package configuration file provided by "Qt6"
-```
+## macOS blocks a locally built app
 
-**Solution:**
+A local app bundle is for development and may not have the distribution
+signature used for App Store releases. Install the supported public version
+from the [Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
+Do not bypass macOS security prompts for an unverified build.
 
-1. Install Qt6:
-   ```bash
-   brew install qt@6
-   ```
+## Legacy settings migration reports an error
 
-2. Set Qt6_DIR:
-   ```bash
-   export Qt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   cmake .. -DQt6_DIR=/opt/homebrew/lib/cmake/Qt6
-   ```
+Keep the source plist and the app data backup. Quit DevTools, restore the
+backup if needed, then retry after resolving the reported issue. Do not include
+the plist, database passwords, or personal connection details in a bug report.
 
-#### vcpkg Packages Not Found
+## Database connection fails
 
-**Error:**
-```
-Could not find a package configuration file provided by "yaml-cpp"
-```
+Check the server address, port, database name, and account. Credentials are
+entered again after migration; the app does not import saved passwords.
+SQLite files with old security-scoped bookmarks must be selected again.
 
-**Solution:**
-
-1. Install vcpkg packages:
-   ```bash
-   vcpkg install
-   ```
-
-2. Check vcpkg is in PATH:
-   ```bash
-   vcpkg version
-   ```
-
-3. Specify toolchain file:
-   ```bash
-   cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
-   ```
-
-### Compilation Errors
-
-#### Linker Errors
-
-**Error:**
-```
-Undefined symbols for architecture arm64
-```
-
-**Solution:**
-
-1. Check module is in MODULE_LIST
-2. Check dependencies are linked:
-   ```cmake
-   target_link_libraries(${PROJECT_NAME}_module PUBLIC
-       required_library
-   )
-   ```
-
-### Build Performance
-
-#### Slow Compilation
-
-**Solution:**
-
-Use parallel builds:
-```bash
-make -j$(sysctl -n hw.ncpu)
-```
-
-#### Frequent Rebuilds
-
-**Solution:**
-
-Clean and rebuild:
-```bash
-rm -rf build
-mkdir build && cd build
-cmake ..
-make
-```
-
-## Runtime Issues
-
-### Application Won't Start
-
-#### Missing Qt Libraries
-
-**Error:**
-```
-Library not loaded: @rpath/QtCore.framework
-```
-
-**Solution:**
-
-Run macdeployqt:
-```bash
-macdeployqt DevTools.app
-```
-
-#### Wrong Architecture
-
-**Error:**
-```
-Cannot be opened because the developer cannot be verified
-```
-
-**Solution:**
-
-1. Check architecture matches:
-   ```bash
-   file DevTools.app/Contents/MacOS/DevTools
-   ```
-
-2. Rebuild with correct triplet:
-   ```bash
-   cmake .. -DVCPKG_TARGET_TRIPLET=arm64-osx
-   ```
-
-### Feature-Specific Issues
-
-#### QR Code Generation Fails
-
-**Symptoms:**
-- QR code not generated
-- Empty image
-
-**Solutions:**
-
-1. Check input is not empty
-2. Check input is not too long (QR codes have size limits)
-3. Try simpler content first
-
-#### Image Processing Fails
-
-**Symptoms:**
-- Image not loaded
-- Processing produces black image
-
-**Solutions:**
-
-1. Check file format is supported (PNG, JPEG, BMP)
-2. Check file is not corrupted
-3. Check file permissions
-
-#### Data Conversion Fails
-
-**Symptoms:**
-- Conversion error message
-- Empty output
-
-**Solutions:**
-
-1. Validate input syntax:
-   - JSON: Check brackets, quotes, commas
-   - YAML: Check indentation (use spaces, not tabs)
-   - TOML: Check key=value format
-
-2. Check for special characters
-3. Try simpler input first
-
-#### API Testing No Response
-
-**Symptoms:**
-- Request hangs
-- Connection refused
-
-**Solutions:**
-
-1. Check URL is correct (include https://)
-2. Check internet connection
-3. Check firewall settings
-4. Verify the API server is running
-
-#### Command Generation Does Not Produce a Result
-
-**Symptoms:**
-- The generated command area is empty
-- The **Generate command** button is unavailable
-
-**Solutions:**
-
-1. Select a command category and command
-2. Select an option when one is available
-3. Enter the requested value when the input field is shown
-4. The tool generates command text; execute it in a terminal yourself
-
-#### Database Connection Failed
-
-**Symptoms:**
-- "Connection Failed" error message
-- Cannot connect to database
-
-**Solutions:**
-
-1. **SQLite**: Verify the file path is correct and the file is a valid SQLite database
-2. **MySQL/PostgreSQL**: Check hostname, port, username, and password
-3. **Server not running**: Ensure the database server is running and accessible
-4. **Driver not found**: Ensure the Qt SQL driver plugin (QSQLITE, QMYSQL, QPSQL) is installed
-
-#### Database Tables Not Showing
-
-**Symptoms:**
-- Tables panel is empty after connecting
-
-**Solutions:**
-
-1. Click the **Refresh** button in the toolbar
-2. Verify the database contains tables
-3. Check that the connection is active (SQL and Refresh buttons should be enabled)
-
-## UI Issues
-
-### Text Truncation
-
-**Symptoms:**
-- Labels cut off
-- Buttons too small
-
-**Solutions:**
-
-1. Resize window
-2. Check display scaling settings
-3. Report bug with screenshot
-
-### Theme Not Applied
-
-**Symptoms:**
-- Icons wrong color
-- Incorrect appearance
-- Widgets look like the platform default style instead of qlementine
-
-**Solutions:**
-
-1. Change the macOS appearance and verify DevTools follows the system light/dark mode.
-2. If the appearance does not update, restart DevTools and try again.
-3. Confirm the theme resources exist in the build: `:/themes/light.json` and
-   `:/themes/dark.json` are registered through `res/application.qrc`.
-4. Confirm the Material Symbols font resource `:/fonts/MaterialSymbolsOutlined.ttf` is registered
-   by `res/application.qrc`.
-5. If the app uses the default Qt style, reconfigure the build so qlementine is fetched and
-   linked into `DevTools_core`.
-
-### Language Not Changed
-
-**Symptoms:**
-- UI still in old language
-
-**Solutions:**
-
-1. Click **Apply** or **OK** after changing the language in **DevTools > Settings**.
-2. If the UI does not update, close and reopen the application.
-
-## Installation Issues
-
-### vcpkg Bootstrap Fails
-
-**Error:**
-```
-bootstrap-vcpkg.sh: Permission denied
-```
-
-**Solution:**
-
-```bash
-chmod +x bootstrap-vcpkg.sh
-./bootstrap-vcpkg.sh
-```
-
-### Homebrew Qt Issues
-
-**Error:**
-```
-qt@6 is keg-only
-```
-
-**Solution:**
-
-Link or set path:
-```bash
-brew link qt@6
-# Or
-export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
-```
-
-## Test Issues
-
-### Tests Not Found
-
-**Symptoms:**
-- ctest shows no tests
-
-**Solution:**
-
-Enable tests:
-```bash
-cmake .. -DENABLE_UNIT_TEST=ON
-make
-```
-
-### Qt Tests Crash
-
-**Symptoms:**
-- SIGSEGV in Qt test
-
-**Solution:**
-
-Ensure QApplication is created in test fixture:
-```cpp
-static QApplication* app_;
-```
-
-## Getting More Help
-
-If your issue is not listed:
-
-1. Search [GitHub Issues](https://github.com/LotusAndCompany/devtools/issues)
-2. Check [FAQ](faq.md)
-3. Create a new issue with:
-   - DevTools version
-   - macOS version
-   - Steps to reproduce
-   - Error messages
-   - Screenshots if applicable
-
-## Related Documentation
-
-- [Installation](../getting-started/installation.md) - Setup guide
-- [FAQ](faq.md) - Frequently asked questions
-- [Build Instructions](https://github.com/LotusAndCompany/devtools/blob/main/BUILD.md) - Detailed build guide
+For more support questions, see the [FAQ](faq.md) and
+[installation and recovery guide](../getting-started/installation.md).

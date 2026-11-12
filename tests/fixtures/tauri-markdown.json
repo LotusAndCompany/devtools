@@ -1,0 +1,7 @@
+{
+  "markdown": "# 日本語見出し\n\n[安全なリンク](https://example.com)\n\n[危険なリンク](javascript:alert(1))\n\n<img src=\"https://example.com/pixel.png\" onerror=\"alert(1)\">\n\n<script>alert(1)</script>",
+  "requiredHtml": ["日本語見出し", "https://example.com"],
+  "forbiddenHtml": ["<script", "onerror="],
+  "qtExpectedHtml": ["href=\"javascript:"],
+  "tauriForbiddenHtml": ["href=\"javascript:"]
+}

@@ -4,11 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'core/**'
-      - 'gui/**'
+      - 'src-tauri/**'
       - 'docs/**'
-      - 'doxygen/**'
-      - 'CMakeLists.txt'
       - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
@@ -16,79 +13,29 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-env:
-  DOXYGEN_VERSION: '1.18.0'
-  # SHA256 of doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz; update together with DOXYGEN_VERSION
-  DOXYGEN_SHA256: '14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90'
-
 jobs:
   build:
-    name: Build Doxygen HTML
-    runs-on: ubuntu-latest
+    name: Build Rust API docs
+    runs-on: macos-15
     permissions:
       contents: read
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install build tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ninja-build graphviz
+      - name: Install Rust
+        run: rustup toolchain install 1.99.1 --profile minimal --component rustfmt
 
-      - name: Install Doxygen
-        env:
-          DOXYGEN_VERSION: ${{ env.DOXYGEN_VERSION }}
-          DOXYGEN_SHA256: ${{ env.DOXYGEN_SHA256 }}
-        run: |
-          set -euxo pipefail
-          TEMP_DIR=$(mktemp -d)
-          trap 'rm -rf "$TEMP_DIR"' EXIT
-          # Use the GitHub Release asset mirror instead of doxygen.nl, which is
-          # behind Cloudflare and intermittently returns 403 to GitHub runner IPs.
-          DOXYGEN_TAG="Release_${DOXYGEN_VERSION//./_}"
-          curl -fsSL "https://github.com/doxygen/doxygen/releases/download/${DOXYGEN_TAG}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz" \
-            -o "${TEMP_DIR}/doxygen.tar.gz"
-          echo "${DOXYGEN_SHA256}  ${TEMP_DIR}/doxygen.tar.gz" | sha256sum -c -
-          sudo tar -xz -C /opt -f "${TEMP_DIR}/doxygen.tar.gz"
-          echo "/opt/doxygen-${DOXYGEN_VERSION}/bin" >> "$GITHUB_PATH"
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125 # v4
-        with:
-          version: '6.9.3'
-          host: 'linux'
-          target: 'desktop'
-
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@b1a0dd252f06b9e25b3c022a9a03bd7a427fb6a2 # v11.6
-        with:
-          vcpkgGitCommitId: '10b7a178346f3f0abef60cecd5130e295afd8da4'
-
-      - name: Configure CMake
-        env:
-          # Disable vcpkg GHA binary cache: run-vcpkg v11.6 sets
-          # VCPKG_BINARY_SOURCES=clear;x-gha,readwrite but no longer exports
-          # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
-          # fail. Falling back to "clear" rebuilds ports on every run.
-          VCPKG_BINARY_SOURCES: clear
-        run: |
-          cmake -B build \
-            -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-
-      - name: Generate Doxygen HTML
-        run: cmake --build build --target DevTools_docs
+      - name: Generate Rust API docs
+        run: cargo doc --locked --no-deps --manifest-path src-tauri/Cargo.toml
 
       - name: Verify HTML output
-        run: test -f build/doxygen/html/index.html
+        run: test -f src-tauri/target/doc/devtools_tauri_lib/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          path: build/doxygen/html
+          path: src-tauri/target/doc
 
   deploy:
     name: Deploy to GitHub Pages
@@ -101,7 +48,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0

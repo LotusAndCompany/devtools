@@ -2,164 +2,58 @@
 
 [English README](../../README.md)
 
-DevToolsは、開発に使うさまざまなツールを、ひとつの使いやすいデスクトップアプリケーションにまとめたものです。複数のWebサービスを使い分けることなく、開発に必要なユーティリティをひとつのアプリケーションで利用できます。
-
-<!-- TODO: スクリーンショットを追加 -->
-<!-- ![DevToolsのスクリーンショット](docs/images/screenshot.png) -->
+開発者向けのデスクトップツール集です。Tauri 2、Rust、shadcn/ui と
+Base UI を使った React/TypeScript UI で構成し、WebKit は macOS が提供します。
 
 ## 機能
 
-### QRコード生成
-
-- **テキスト**: 任意のテキストからQRコードを生成
-- **URL**: WebサイトのリンクをQRコード化
-- **メール**: mailto:形式のQRコードを生成
-- **電話番号**: 電話番号用のtel:形式のQRコードを生成
-- **SMS**: SMS送信用のQRコードを生成
-- **Wi-Fi**: Wi-Fi接続情報をQRコード化
-- **連絡先**: vCard形式の連絡先をQRコード化
-- **カレンダー**: カレンダー予定をQRコード化
-- **位置情報**: 位置情報をQRコード化
-
-### 画像処理
-
-- **リサイズ**: 画像を指定したサイズに拡大・縮小
-- **回転**: 画像を任意の角度で回転
-- **分割**: 画像を複数のパーツに分割
-- **透過**: 指定した色を透明化
-
-### データ変換
-
-- **JSON**、**YAML**、**TOML**形式を相互変換
-- 構文検証とフォーマット
-
-### APIテスト
-
-- HTTPリクエスト（GET、POST、PUT、DELETEなど）を送信
-- レスポンスを読み取り専用のテキストとして表示
-
-### Markdownプレビュー
-
-- Markdownを編集し、HTMLプレビューをリアルタイムで確認
-
-### 正規表現テスター
-
-- 正規表現でテキストを検索し、マッチ結果と置換結果を確認
-
-### 差分比較ツール
-
-- 2つのテキストを行単位で比較
-- 差分をインラインまたは左右並列で表示
-
-### コマンド生成
-
-- GUIでGit、Docker、Docker Composeのコマンドを組み立て
-- 生成したコマンドをコピー
-
-### データベース管理
-
-- **SQLite**、**MySQL**、**PostgreSQL**に接続
-- テーブルの閲覧とデータの確認
-- タブ形式のインターフェースでSQLクエリを実行
-
-### フレーズ生成
-
-- 名前付きのテキストテンプレートを作成・再利用
-
-### タイムスタンプ変換
-
-- UNIXタイムスタンプ（秒・ミリ秒）、ローカル日時、UTC日時、ISO 8601（UTC・ローカルオフセット）を相互変換
-- いずれかの行を編集して**変換**を押すと、他の全ての行に反映
-- **現在時刻**で全行に現在時刻を設定、**コピー**で各行の値をコピー
+- QRコード生成
+- 画像の編集・分割
+- JSON、YAML、TOMLの変換
+- HTTPリクエスト
+- Markdownプレビューとエクスポート
+- コマンド生成
+- SQLite、MySQL、PostgreSQLの操作
+- フレーズテンプレート、正規表現、タイムスタンプ、テキスト差分
 
 ## 必要環境
 
-- **OS**: macOS 15.0以降（Apple Silicon / arm64のみ）
-- **Qt**: 6.9以上（6.9.3で検証済み。Material Symbolsの名前付きグリフに必要）
-- **CMake**: 3.21.1以降
-- **C++コンパイラ**: C++17対応
+- macOS 15.0以降、Apple Silicon（arm64）
+- Xcode Command Line Tools
+- Rust 1.99.1（rustfmt、clippyを含む）
+- Bun 1.3.14
+
+Qt、CMake、vcpkg、QWebChannel、FFI、Sidecarには依存しません。
 
 ## クイックスタート
 
-```bash
-# リポジトリをクローン
+~~~bash
 git clone https://github.com/LotusAndCompany/devtools.git
-cd devtools
+cd devtools/frontend
+bun install --frozen-lockfile
+bun run tauri:dev
+~~~
 
-# vcpkgで依存関係をインストール
-vcpkg install
+ローカルのmacOSアプリバンドルを作るには次を実行します。
 
-# CMakeで構成
-mkdir build && cd build
-cmake ..
+~~~bash
+bun run tauri:build
+~~~
 
-# ビルド
-make
-
-# ビルドして実行
-cmake --build . --target run
-```
-
-詳しいビルド手順は[BUILD.md](BUILD.md)を参照してください。
+公開版のインストールと更新は[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12)から行えます。
+Xcode ArchiveとApp Store Connectへのアップロード手順は[macos/README.md](../../macos/README.md)、
+開発者向けビルド・テスト手順は[BUILD.md](BUILD.md)を参照してください。
 
 ## ドキュメント
 
-### クイックリンク
-
 - [ドキュメント一覧](../README.md)
-- [クイックスタート](../getting-started/quick-start.md)
-- [インストールガイド](../getting-started/installation.md)
-
-### 詳細ドキュメント
-
-- [ユーザーガイド](../user-guide/overview.md) - 各機能の使い方
-- [開発者向けガイド](../development/architecture.md) - コントリビューター向け
-- [アイコン資産](../development/icon-assets.md) - Material Symbolsアイコンの追加方法
-- [APIドキュメント](https://LotusAndCompany.github.io/devtools/)（Doxygen）
-
-### その他のリソース
-
-- [ビルド手順](BUILD.md)
+- [ユーザーガイド](../user-guide/overview.md)
+- [開発アーキテクチャ](../development/architecture.md)
 - [貢献ガイド](CONTRIBUTING.md)
-- [トラブルシューティング](../troubleshooting/common-issues.md) / [FAQ](../troubleshooting/faq.md)
-
-## 貢献
-
-貢献を歓迎します。詳しくは[貢献ガイド](CONTRIBUTING.md)を参照してください。
-
-- バグの報告方法
-- 機能リクエストの方法
-- プルリクエストの提出方法
-- コーディングスタイルのガイドライン
-
-## セキュリティ
-
-セキュリティ上の脆弱性については、[セキュリティポリシー](SECURITY.md)を参照してください。
+- [移行完了レポート](../migration/completion-report.md)
 
 ## ライセンス
 
-このプロジェクトはApache License 2.0でライセンスされています。詳しくは[LICENSE](../../LICENSE)を参照してください。
-
-### サードパーティライセンス
-
-DevToolsは以下のサードパーティライブラリを使用しています。
-
-| ライブラリ | ライセンス |
-|-----------|-----------|
-| Qt6 | LGPL v3 |
-| toml11 | MIT |
-| yaml-cpp | MIT |
-| qlementine | MIT |
-| qrcodegen | MIT |
-| Material Symbols | Apache 2.0 |
-
-## 謝辞
-
-- [Qt Project](https://www.qt.io/) - 優れたクロスプラットフォームフレームワーク
-- [Qlementine](https://github.com/oclero/qlementine) - Qt Widgets向けのモダンなスタイル
-- [Project Nayuki](https://www.nayuki.io/) - QRコード生成ライブラリ
-- DevToolsのすべてのコントリビューターとユーザー
-
----
-
-[Lotus&Company Inc.](https://lotusandcompanyinc.com/)が開発しています。
+DevToolsのソースコードはApache License 2.0です。Rustとフロントエンドの依存関係は
+それぞれのlockfileで管理します。公開前にRelease担当者が依存ライセンスを確認します。
+M6の確認状況は[移行完了レポート](../migration/completion-report.md)を参照してください。
