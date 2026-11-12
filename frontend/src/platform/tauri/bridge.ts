@@ -36,6 +36,72 @@ function failedEvent(requestId: string, error: unknown): BridgeEvent {
     };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isRequestId(value: unknown): value is string {
+    return typeof value === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(value);
+}
+
+function parseBridgeEvent(value: unknown): BridgeEvent | undefined {
+    if (!isRecord(value)) return;
+
+    switch (value.type) {
+        case "started":
+            return isRequestId(value.requestId) && typeof value.operation === "string"
+                ? { type: "started", requestId: value.requestId, operation: value.operation }
+                : undefined;
+        case "progress":
+            return isRequestId(value.requestId) &&
+                typeof value.percent === "number" &&
+                Number.isFinite(value.percent) &&
+                typeof value.message === "string"
+                ? {
+                      type: "progress",
+                      requestId: value.requestId,
+                      percent: value.percent,
+                      message: value.message,
+                  }
+                : undefined;
+        case "completed":
+            return isRequestId(value.requestId) && "result" in value
+                ? { type: "completed", requestId: value.requestId, result: value.result }
+                : undefined;
+        case "failed":
+            return isRequestId(value.requestId) &&
+                isRecord(value.error) &&
+                typeof value.error.code === "string" &&
+                typeof value.error.message === "string"
+                ? {
+                      type: "failed",
+                      requestId: value.requestId,
+                      error: { code: value.error.code, message: value.error.message },
+                  }
+                : undefined;
+        case "cancelled":
+            return isRequestId(value.requestId)
+                ? { type: "cancelled", requestId: value.requestId }
+                : undefined;
+        case "imageDropAvailable":
+            return { type: "imageDropAvailable" };
+        case "navigate":
+            return typeof value.route === "string"
+                ? { type: "navigate", route: value.route }
+                : undefined;
+        default:
+            return undefined;
+    }
+}
+
+function invalidEvent(requestId: string): BridgeEvent {
+    return {
+        type: "failed",
+        requestId,
+        error: { code: "INVALID_RESPONSE", message: "Native bridge returned an invalid event." },
+    };
+}
+
 export function connectTauriBridge(): Effect.Effect<NativeBridge, BridgeConnectionError> {
     return Effect.callback<NativeBridge, BridgeConnectionError>((resume, signal) => {
         let settled = false;
@@ -56,8 +122,14 @@ export function connectTauriBridge(): Effect.Effect<NativeBridge, BridgeConnecti
             resume(effect);
         };
 
-        void listen<BridgeEvent>(EVENT_NAME, ({ payload }) => {
-            for (const listener of listeners) listener(payload);
+        void listen<unknown>(EVENT_NAME, ({ payload }) => {
+            const event = parseBridgeEvent(payload);
+            if (event) {
+                for (const listener of listeners) listener(event);
+            } else if (isRecord(payload) && isRequestId(payload.requestId)) {
+                const failure = invalidEvent(payload.requestId);
+                for (const listener of listeners) listener(failure);
+            }
         }).then(
             (stopListening) => {
                 unlisten = stopListening;

@@ -7,6 +7,8 @@
     "core:event:allow-listen",
     "core:event:allow-unlisten",
     "core:app:allow-set-app-theme",
-    "core:window:allow-show"
+    "core:window:allow-show",
+    "allow-start-operation",
+    "allow-cancel-operation"
   ]
 }

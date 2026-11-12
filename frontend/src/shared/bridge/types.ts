@@ -326,7 +326,7 @@ export type OperationRequest<Name extends OperationName = OperationName> = {
 export type BridgeEvent =
     | { type: "started"; requestId: string; operation: string }
     | { type: "progress"; requestId: string; percent: number; message: string }
-    | { type: "completed"; requestId: string; result: Record<string, unknown> }
+    | { type: "completed"; requestId: string; result: unknown }
     | { type: "failed"; requestId: string; error: BridgeError }
     | { type: "cancelled"; requestId: string }
     | { type: "imageDropAvailable" }

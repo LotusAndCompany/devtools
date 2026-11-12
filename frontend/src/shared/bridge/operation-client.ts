@@ -7,6 +7,7 @@ import {
     type OperationRequest,
 } from "@/shared/bridge/types";
 import type { NativeBridge } from "@/shared/bridge/native-bridge";
+import { isOperationOutput } from "@/shared/bridge/operation-output";
 
 export function runNativeOperation<Name extends OperationName>(
     native: NativeBridge,
@@ -46,8 +47,16 @@ export function runNativeOperation<Name extends OperationName>(
             try {
                 unsubscribe = native.subscribe((event) => {
                     if (event.type === "completed" && event.requestId === request.requestId) {
-                        // Transport results have no runtime schema metadata; this is the typed boundary.
-                        finish(Effect.succeed(event.result as OperationOutput<Name>));
+                        finish(
+                            isOperationOutput(request.operation, event.result)
+                                ? Effect.succeed(event.result)
+                                : Effect.fail(
+                                      new NativeOperationError(
+                                          "Native bridge returned an invalid operation result.",
+                                          "INVALID_RESPONSE",
+                                      ),
+                                  ),
+                        );
                     } else if (event.type === "failed" && event.requestId === request.requestId) {
                         finish(
                             Effect.fail(
