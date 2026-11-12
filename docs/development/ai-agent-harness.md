@@ -27,7 +27,7 @@ submitting changes to the agent harness.
 | Rule | Purpose |
 |---|---|
 | `project.md` | Tauri architecture, build, dependencies, and CI |
-| `frontend.md` | React and Tauri bridge boundaries |
+| `frontend.md` | UI conventions, React architecture, and Tauri bridge boundaries |
 | `testing.md` | Rust and frontend tests |
 | `i18n.md` | English and Japanese UI copy |
 | `docs.md` | Current documentation and historical migration reports |
@@ -38,3 +38,6 @@ submitting changes to the agent harness.
 The shared rules are the source of truth. Keep tool-specific configuration
 limited to command permissions, review settings, and other tool-specific
 behavior.
+
+For component, layout, shadcn CLI, and styling examples, read the
+[UI development guide](ui-development.md).

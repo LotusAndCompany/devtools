@@ -17,7 +17,8 @@ This file is intentionally short. Detailed path-scoped guidance lives in
 ## Rule Index
 
 - .agents/rules/project.md: architecture, build, dependencies, and CI
-- .agents/rules/frontend.md: React and Tauri bridge boundaries
+- .agents/rules/frontend.md: UI conventions, React architecture, and Tauri
+  bridge boundaries
 - .agents/rules/testing.md: Rust and frontend tests
 - .agents/rules/i18n.md: English/Japanese UI text
 - .agents/rules/docs.md: documentation language and accuracy

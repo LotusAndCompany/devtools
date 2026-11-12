@@ -18,6 +18,8 @@
 - Use the project's shared components and localization helper.
 - Keep visible strings available in English and Japanese.
 - Lock dependencies in `frontend/bun.lock`.
+- Follow the [UI development guide](ui-development.md) for shadcn CLI usage,
+  component composition, layout, styling, and feedback patterns.
 
 ## Documentation and generated files
 

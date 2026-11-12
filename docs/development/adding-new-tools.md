@@ -2,10 +2,20 @@
 
 ## Add a frontend-only tool
 
-1. Add the screen and feature-local components under `frontend/src/features/`.
-2. Register its title, icon, component, and tool ID in the app tool registry.
-3. Add English and Japanese UI strings with the shared localization helper.
-4. Add focused component or utility tests and update the user guide.
+Read the [UI development guide](ui-development.md) before implementing the
+screen. It describes the shared primitives, layout conventions, feature CSS,
+and shadcn CLI workflow.
+
+1. Add the screen, feature-local components, and styles under
+   `frontend/src/features/` in a feature-specific directory.
+2. Reuse shared UI from `frontend/src/shared/components/` and register the
+   tool's title, icon, component, and ID in the app tool registry.
+3. If adding a missing shadcn component, use the project CLI workflow in the
+   UI development guide and review its source output.
+4. Register feature CSS in `frontend/src/shared/styles/index.css`, scope it to
+   the tool's data-page value, and use the shared theme tokens.
+5. Add English and Japanese UI strings with the shared localization helper.
+   Add focused tests and update the user guide when behavior changes.
 
 ## Add a native operation
 

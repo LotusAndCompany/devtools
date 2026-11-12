@@ -27,6 +27,7 @@
 
 - [Architecture](development/architecture.md)
 - [Coding standards](development/coding-standards.md)
+- [UI development](development/ui-development.md)
 - [Adding a tool](development/adding-new-tools.md)
 - [Testing](development/testing-guide.md)
 - [Localization](development/localization.md)

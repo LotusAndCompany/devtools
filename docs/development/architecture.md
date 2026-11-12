@@ -11,7 +11,8 @@ or sidecar process.
 |---|---|
 | Window, commands, file dialogs | Tauri 2 |
 | Native feature processing and persistence | Rust in `src-tauri/src/` |
-| Screens, navigation, and shared UI | React/TypeScript in `frontend/src/` |
+| Screens and navigation | React/TypeScript in `frontend/src/` |
+| UI primitives and styling | shadcn/ui on Base UI, Tailwind CSS v4, shared CSS tokens |
 | UI localization | English and Japanese text in the React source |
 | Packaging | Tauri `.app` bundle archived with Xcode for App Store Connect |
 
@@ -20,6 +21,13 @@ navigation, and tool registration live under `frontend/src/app/`. Feature
 screens are under `frontend/src/features/`; shared UI and bridge contracts
 are under `frontend/src/shared/`. The only native transport is
 `frontend/src/platform/tauri/`.
+
+The shadcn CLI configuration is in `frontend/components.json`. Shared UI
+primitives live in `frontend/src/shared/components/ui/`; app-specific reusable
+components live in `frontend/src/shared/components/`. Global theme tokens and
+layout styles are under `frontend/src/shared/styles/`. See the
+[UI development guide](ui-development.md) for component, layout, CLI, and
+styling conventions.
 
 Rust command registration and application setup are in
 `src-tauri/src/lib.rs`; feature operations are in `src-tauri/src/m5.rs`.
