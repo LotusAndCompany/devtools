@@ -2,12 +2,13 @@
 
 **Status:** The Tauri-only implementation and local CI checks pass on
 `feature/issue-137-integration` (PR #147), based on
-`feature/issue-136-tauri-migration`. An Xcode Archive path builds a signed
-arm64 archive with a matching dSYM, and third-party notices are bundled and
-shown in About. DevTools' public distribution channel is the Mac App Store;
-no DMG has been publicly distributed. The Tauri version is an update to that
-existing channel and is not yet publicly released. Dependency-license review,
-clean-install lifecycle checks, and performance comparisons remain outstanding.
+`feature/issue-136-tauri-migration`. The Xcode Archive path produced a signed
+arm64 archive with a matching dSYM in prior validation. DevTools' public
+distribution channel is the Mac App Store; no DMG has been publicly
+distributed. The Tauri version is an update to that existing channel and is
+not yet publicly released. The dependency-license source review is complete;
+verification of the current archive, clean-install lifecycle checks, and
+performance comparisons remain outstanding.
 
 ## Scope delivered
 
@@ -37,10 +38,11 @@ scope.
 
 1. For local development, follow [BUILD.md](../../BUILD.md); its
    `bun run tauri:build` command creates a local macOS app bundle.
-2. Before publicly releasing the Tauri update, complete the
-   dependency-license review described in the License gate below. The current
-   notice inventory is prepared and bundled, but its `objc2` redistribution
-   question remains open.
+2. Before publicly releasing the Tauri update, verify that the release archive
+   contains the current notice files and that the About License tab renders
+   them. The dependency-license source review and company distribution approval
+   are recorded in the License review below. The upstream `objc2` note remains
+   documented there for transparency.
 3. Use the shared Xcode Archive scheme described in
    [macos/README.md](../../macos/README.md), then upload the archive through
    Xcode Organizer to App Store Connect. Use TestFlight for beta distribution;
@@ -57,11 +59,11 @@ scope.
 No public DMG workflow is part of the release path. The App Store archive is
 signed with the Apple Distribution certificate; Developer ID signing and
 notarization apply only to a separate direct-distribution channel, which
-DevTools does not use. The current tree produced a local arm64 `0.9.0 (20)`
+DevTools does not use. A prior validation produced a local arm64 `0.9.0 (20)`
 archive with a valid Apple Distribution signature and a matching app/dSYM UUID
-(`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). The bundled notice file's SHA-256
-also matches the repository copy. This validation archive has not been
-uploaded to App Store Connect.
+(`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). Its bundled notice hash matched the
+repository copy at that checkpoint. The archive has not been uploaded to App
+Store Connect, and it predates the current notice and About changes.
 
 ## App Store Connect / TestFlight
 
@@ -127,8 +129,8 @@ Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 | App Store Connect/TestFlight upload | Passed with warning: Xcode Organizer completed upload of arm64 app version `0.9.0` (build `18`); the app dSYM was missing for UUID `3FB0952A-6A07-3969-AFC8-C22BB7A39BE0`. |
 | Xcode Archive and dSYM | Passed locally for arm64 `0.9.0 (20)`: Apple Distribution signature verified and the app/dSYM UUIDs matched (`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). This archive was not uploaded. |
 | Tauri App Store release | Pending: the public listing still shows version `0.8.0`; build `18` was uploaded to App Store Connect but the Tauri update has not been publicly released. |
-| Third-party notices | Passed: 385 locked Rust crates and 21 production frontend packages are inventoried in `THIRD-PARTY-NOTICES.md`; the file is in the app bundle and About license view. The `objc2` redistribution question is unresolved. |
-| Manual app smoke checks | Partial: all 11 feature routes opened. In the temporary app, image split/save produced four 64×64 PNGs; phrase-template save worked; SQLite table query succeeded, invalid SQL showed an error, and a later query recovered; a 1,048,560-byte JSON file converted to a valid 1,048,566-byte file; canceled saves created no output; local HTTP 404 was reported as Not Found; QR save produced a verified 168×168 PNG; and Markdown preview/export stripped script and `javascript:` content while preserving visible text. Earlier checks covered image resize, regex, timestamp, command generation, HTTP 200, and About license display. Settings persisted after replacing the app bundle in temporary app data. Finder drop and full feature parity remain unverified. |
+| Third-party notices | Source review completed for 365 Rust dependency rows and 21 production frontend packages; package metadata and available license texts matched their sources. The source configuration includes `LICENSE` and `THIRD-PARTY-NOTICES.md`; About renders the notice Markdown in a scrollable React region and routes HTTPS links through the system opener. The current source changes have not been rebuilt into an Xcode Archive; see [licensing review](../licensing-review.md). |
+| Manual app smoke checks | Partial: all 11 feature routes opened. In the temporary app, image split/save produced four 64×64 PNGs; phrase-template save worked; SQLite table query succeeded, invalid SQL showed an error, and a later query recovered; a 1,048,560-byte JSON file converted to a valid 1,048,566-byte file; canceled saves created no output; local HTTP 404 was reported as Not Found; QR save produced a verified 168×168 PNG; and Markdown preview/export stripped script and `javascript:` content while preserving visible text. Earlier checks covered image resize, regex, timestamp, command generation, HTTP 200, and About license display. The current UI review attached to the installed `/Applications/DevTools.app`, so scrolling, external-link opening, and the initial render in the dev build remain unverified. Settings persisted after replacing the app bundle in temporary app data. Finder drop and full feature parity remain unverified. |
 | Agent/workflow config | Shared rules were synchronized after this follow-up; workflow parsing and CI have not been rerun for these edits. |
 | Clean install/migration lifecycle | Unverified: no separate clean macOS 15 user profile was available on this host. |
 | Full feature parity | Unverified: all routes were opened and the listed operations were smoke-tested, but this was not a complete M6 manual regression pass. |
@@ -153,34 +155,31 @@ than the deployed M0 Qt bundle, but those checkpoints differ in build system,
 dependencies, OS patch version, and packaging method. Treat that comparison
 as directional only.
 
-## License gate
+## License review
 
 The application license is Apache-2.0 in [LICENSE](../../LICENSE). The former
 Qt LGPL, toml11, yaml-cpp, and qrcodegen notices were removed because those
 components are no longer app dependencies. The current inventory is in
-[`THIRD-PARTY-NOTICES.md`](../../THIRD-PARTY-NOTICES.md); the bundled app and
-About license view both include it.
+[`THIRD-PARTY-NOTICES.md`](../../THIRD-PARTY-NOTICES.md). The Tauri source
+configuration includes it as an app resource, and About renders its Markdown.
+The current source has not been rebuilt into an Xcode Archive.
 
-Before submitting a public Mac App Store release:
+The company approved distribution, as communicated on 2026-11-13. The source
+review records the inventory, source-text checks, and remaining archive and
+scope checks in [licensing-review.md](../licensing-review.md). It retains the
+upstream `objc2` note for transparency.
 
-1. Complete legal review of the exact Rust and frontend dependency sets in
-   `src-tauri/Cargo.lock` and `frontend/bun.lock`, including transitive
-   dependencies, package metadata, upstream terms, and NOTICE requirements.
-2. Resolve the upstream `objc2` note that its bindings derive from Apple SDKs
-   and redistribution implications are unclear. This notice inventory records
-   the issue but does not resolve it.
-3. Recheck the lockfile hashes and notice contents whenever either lockfile
-   changes, then record the review result before uploading the release build
-   to App Store Connect.
+Recheck the lockfile hashes, package closure, and notice contents whenever
+either lockfile changes. Confirm the resulting archive contains the updated
+notice resources before uploading a release build to App Store Connect.
 
-The inventory includes 385 Rust crates and 21 frontend production packages,
-with lockfile hashes recorded in the notice file. The notices are packaged
-and visible in About, but legal approval is outstanding. Keep the public
-release gate closed until that review and the other release checks are complete.
+The inventory contains 365 Rust crates and 21 frontend production packages,
+with lockfile hashes recorded in the notice file. See the licensing review
+for source-check results and remaining unconfirmed items.
 
 ## Reproduction
 
-The passing local package checks used:
+The earlier passing local package checks used:
 
 ~~~sh
 CI=true bun run tauri:build -- --target aarch64-apple-darwin --bundles app

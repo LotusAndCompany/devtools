@@ -17,6 +17,10 @@ export function setNativeTheme(theme: ApplicationSettings["theme"]): Promise<voi
     return setTauriAppTheme(theme === "system" ? null : theme);
 }
 
+export function openExternalUrl(url: string): Promise<void> {
+    return invoke<void>("plugin:opener|open_url", { url, with: null });
+}
+
 export async function showMainWindow(theme: ApplicationSettings["theme"]): Promise<void> {
     await setNativeTheme(theme).catch(() => {});
     await getCurrentWindow().show();

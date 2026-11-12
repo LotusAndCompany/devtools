@@ -6,7 +6,7 @@ import { AppShell } from "./app-shell";
 import { ToolStage } from "./tool-stage";
 import { pageForToolId, tools, type PageId } from "./tool-registry";
 import { useDroppedImage, useNativeBridge } from "./use-native-bridge";
-import { setNativeTheme, showMainWindow } from "@/platform/tauri/bridge";
+import { openExternalUrl, setNativeTheme, showMainWindow } from "@/platform/tauri/bridge";
 import type { ApplicationSettings } from "@/shared/bridge/types";
 import type { Locale } from "@/shared/types";
 
@@ -125,7 +125,13 @@ function App() {
                     onNavigate={openPage}
                 />
             </AppShell>
-            <AboutDialog open={aboutOpen} onOpenChange={setAboutOpen} locale={locale} run={run} />
+            <AboutDialog
+                open={aboutOpen}
+                onOpenChange={setAboutOpen}
+                locale={locale}
+                run={run}
+                openExternalUrl={openExternalUrl}
+            />
             <SettingsDialog
                 open={settingsOpen}
                 onOpenChange={setSettingsOpen}

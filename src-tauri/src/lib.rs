@@ -2773,7 +2773,7 @@ fn execute_operation(
         "databaseSelectFile" => database_select_file(app, state, cancelled),
         "getAboutInfo" => {
             let license_text = format!(
-                "{}\n\n{}",
+                "## DevTools application license (`Apache-2.0`)\n\n```text\n{}\n```\n\n{}",
                 include_str!("../../LICENSE"),
                 include_str!("../../THIRD-PARTY-NOTICES.md")
             );
@@ -3074,6 +3074,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             migrate_legacy_qsettings(app.handle()).map_err(|error| {
                 eprintln!("Qt settings migration failed: {}", error.code);

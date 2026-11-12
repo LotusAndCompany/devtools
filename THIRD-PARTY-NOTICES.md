@@ -1,14 +1,16 @@
 # Third-party notices
 
-These notices cover the Rust normal-dependency closure resolved for `aarch64-apple-darwin` from `src-tauri/Cargo.lock` and the production dependency closure of `frontend/package.json` / `frontend/bun.lock`. The inventory contains 385 Rust crates and 21 frontend packages at the lockfile versions recorded below. The Rust list excludes build-only and development-only dependencies.
+These notices cover the 365 Rust normal dependencies selected for `aarch64-apple-darwin` and the 21-package production frontend dependency closure at the locked versions recorded below. The Rust list excludes build-only, development-only, and unselected lockfile packages.
 
 `license` values are transcribed from package metadata. Package license and notice texts are included after line-ending and trailing-whitespace normalization; only byte-identical normalized texts are deduplicated. For Rust crates whose published archives omitted a license file, exact upstream license files at the crate source commit are included where available. The declared SPDX license text is included for `plist` and `selectors`, whose source repositories and published archives did not provide license text files. The SPDX license expression remains visible in the package index.
 
-- `src-tauri/Cargo.lock` SHA-256: `d7d6ab39ce657bd5ff97df1467f967f1218ff1cad79d5cd999876514be5bd6ea`
+- `src-tauri/Cargo.lock` SHA-256: `0a7fca841b7673909f6fe8502d41488a41d14305f993e03daac695b4229a1274`
 - `frontend/bun.lock` SHA-256: `eae0f6e21317e407947a7f5a6d80e3af1e5f3fa65fc05bfb1dd584f0fdb8a587`
 - Canonical SPDX license text source: [SPDX License List data](https://github.com/spdx/license-list-data/tree/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text).
 
-**Review note:** the upstream `objc2` `LICENSE.md` says these bindings are derived from Apple SDKs and that redistribution implications are unclear. That upstream note is reproduced below. This inventory does not resolve that question; keep public distribution gated pending review.
+**Upstream note:** the `objc2` `LICENSE.md` says these bindings are derived from Apple SDKs and that redistribution implications are unclear. That note is reproduced below for transparency.
+
+Source archives are linked for each MPL-2.0 package so recipients can obtain the corresponding source code.
 
 ## Locked package inventory
 
@@ -40,7 +42,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `block2` | 0.6.2 | `MIT` | [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT | [upstream source](https://github.com/madsmtm/objc2/blob/b4167b582b2f75f9a1be75495c41b765344fd03c/LICENSE.md) |
 | Rust | `brotli` | 9.1.1 | `BSD-3-Clause AND MIT` | [L076](#l076) LICENSE.MIT; [L218](#l218) LICENSE.BSD-3-Clause | crate package files |
 | Rust | `brotli-decompressor` | 6.3.1 | `BSD-3-Clause/MIT` | [L218](#l218) LICENSE | crate package files |
-| Rust | `bs58` | 0.5.1 | `MIT/Apache-2.0` | [L082](#l082) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `bytemuck` | 1.25.2 | `Zlib OR Apache-2.0 OR MIT` | [L149](#l149) LICENSE-ZLIB; [L183](#l183) LICENSE-MIT; [L254](#l254) LICENSE-APACHE | crate package files |
 | Rust | `byteorder` | 1.5.0 | `Unlicense OR MIT` | [L003](#l003) COPYING; [L023](#l023) LICENSE-MIT; [L143](#l143) UNLICENSE | crate package files |
 | Rust | `byteorder-lite` | 0.1.0 | `Unlicense OR MIT` | [L023](#l023) LICENSE-MIT; [L143](#l143) UNLICENSE | crate package files |
@@ -50,7 +51,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `cargo_metadata` | 0.19.2 | `MIT` | [L046](#l046) LICENSE-MIT | crate package files |
 | Rust | `cfb` | 0.14.0 | `MIT` | [L262](#l262) LICENSE | crate package files |
 | Rust | `cfg-if` | 1.0.5 | `MIT OR Apache-2.0` | [L072](#l072) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
-| Rust | `chacha20` | 0.10.2 | `MIT OR Apache-2.0` | [L194](#l194) LICENSE-APACHE; [L212](#l212) LICENSE-MIT | crate package files |
 | Rust | `chrono` | 0.4.45 | `MIT OR Apache-2.0` | [L174](#l174) LICENSE.txt | crate package files |
 | Rust | `color_quant` | 1.1.0 | `MIT` | [L102](#l102) LICENSE | crate package files |
 | Rust | `const-oid` | 0.9.6 | `Apache-2.0 OR MIT` | [L194](#l194) LICENSE-APACHE; [L215](#l215) LICENSE-MIT | crate package files |
@@ -67,9 +67,9 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `crossbeam-queue` | 0.3.14 | `MIT OR Apache-2.0` | [L099](#l099) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `crossbeam-utils` | 0.8.23 | `MIT OR Apache-2.0` | [L099](#l099) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `crypto-common` | 0.1.7 | `MIT OR Apache-2.0` | [L068](#l068) LICENSE-MIT; [L194](#l194) LICENSE-APACHE | crate package files |
-| Rust | `cssparser` | 0.37.0 | `MPL-2.0` | [L282](#l282) LICENSE | crate package files |
-| Rust | `cssparser` | 0.38.0 | `MPL-2.0` | [L282](#l282) LICENSE | crate package files |
-| Rust | `cssparser-macros` | 0.7.1 | `MPL-2.0` | [L282](#l282) LICENSE | crate package files |
+| Rust | `cssparser` | 0.37.0 | `MPL-2.0` | [L282](#l282) LICENSE | [source archive](https://crates.io/api/v1/crates/cssparser/0.37.0/download) |
+| Rust | `cssparser` | 0.38.0 | `MPL-2.0` | [L282](#l282) LICENSE | [source archive](https://crates.io/api/v1/crates/cssparser/0.38.0/download) |
+| Rust | `cssparser-macros` | 0.7.1 | `MPL-2.0` | [L282](#l282) LICENSE | [source archive](https://crates.io/api/v1/crates/cssparser-macros/0.7.1/download) |
 | Rust | `ctor` | 1.0.13 | `Apache-2.0 OR MIT` | [L193](#l193) LICENSE-APACHE; [L216](#l216) LICENSE-MIT | crate package files |
 | Rust | `darling` | 0.24.1 | `MIT` | [L166](#l166) LICENSE | crate package files |
 | Rust | `darling_core` | 0.24.1 | `MIT` | [L166](#l166) LICENSE | crate package files |
@@ -87,7 +87,7 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `dotenvy` | 0.15.7 | `MIT` | [L070](#l070) LICENSE | crate package files |
 | Rust | `dpi` | 0.1.2 | `Apache-2.0 AND MIT` | [L124](#l124) LICENSE; [L186](#l186) LICENSE-LIBM-MIT | crate package files |
 | Rust | `dtoa` | 1.0.11 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
-| Rust | `dtoa-short` | 0.3.5 | `MPL-2.0` | [L037](#l037) LICENSE | crate package files |
+| Rust | `dtoa-short` | 0.3.5 | `MPL-2.0` | [L037](#l037) LICENSE | [source archive](https://crates.io/api/v1/crates/dtoa-short/0.3.5/download) |
 | Rust | `dunce` | 1.0.5 | `CC0-1.0 OR MIT-0 OR Apache-2.0` | [L188](#l188) LICENSE | crate package files |
 | Rust | `dyn-clone` | 1.0.20 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
 | Rust | `either` | 1.19.0 | `MIT OR Apache-2.0` | [L133](#l133) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
@@ -166,8 +166,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `infer` | 0.22.0 | `MIT` | [L053](#l053) LICENSE | crate package files |
 | Rust | `ipnet` | 2.12.2 | `MIT OR Apache-2.0` | [L090](#l090) LICENSE-MIT; [L153](#l153) LICENSE-APACHE | crate package files |
 | Rust | `itoa` | 1.0.19 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
-| Rust | `jiff` | 0.2.42 | `Unlicense OR MIT` | [L003](#l003) COPYING; [L023](#l023) LICENSE-MIT; [L143](#l143) UNLICENSE | crate package files |
-| Rust | `jiff-core` | 0.1.4 | `Unlicense OR MIT` | [L003](#l003) COPYING; [L023](#l023) LICENSE-MIT; [L143](#l143) UNLICENSE | crate package files |
 | Rust | `json-patch` | 4.2.0 | `MIT/Apache-2.0` | [L154](#l154) LICENSE-MIT; [L208](#l208) LICENSE-APACHE | crate package files |
 | Rust | `jsonptr` | 0.7.1 | `MIT OR Apache-2.0` | [L059](#l059) LICENSE-MIT; [L060](#l060) LICENSE-APACHE | crate package files |
 | Rust | `keyboard-types` | 0.8.3 | `MIT OR Apache-2.0` | [L064](#l064) LICENSE-MIT; [L134](#l134) LICENSE-APACHE | crate package files |
@@ -178,7 +176,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `litemap` | 0.8.3 | `Unicode-3.0` | [L273](#l273) LICENSE | crate package files |
 | Rust | `lock_api` | 0.4.14 | `MIT OR Apache-2.0` | [L189](#l189) LICENSE-APACHE; [L228](#l228) LICENSE-MIT | crate package files |
 | Rust | `log` | 0.4.35 | `MIT OR Apache-2.0` | [L114](#l114) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
-| Rust | `lru-slab` | 0.1.3 | `MIT OR Apache-2.0 OR Zlib` | [L012](#l012) LICENSE-ZLIB; [L028](#l028) LICENSE-MIT; [L234](#l234) LICENSE-APACHE | crate package files |
 | Rust | `maplit` | 1.0.2 | `MIT/Apache-2.0` | [L133](#l133) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `markup5ever` | 0.39.0 | `MIT OR Apache-2.0` | [L151](#l151) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `markup5ever` | 0.40.0 | `MIT OR Apache-2.0` | [L151](#l151) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
@@ -205,11 +202,11 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `objc2-encode` | 4.1.0 | `MIT` | [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT | [upstream source](https://github.com/madsmtm/objc2/blob/8d214f5477365ffcbcbb7de058c86ed9a518efb7/LICENSE.md) |
 | Rust | `objc2-exception-helper` | 0.1.1 | `Zlib OR Apache-2.0 OR MIT` | [L009](#l009) SPDX Apache-2.0; [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT; [L217](#l217) SPDX Zlib | [upstream source](https://github.com/madsmtm/objc2/blob/8d214f5477365ffcbcbb7de058c86ed9a518efb7/LICENSE.md) |
 | Rust | `objc2-foundation` | 0.3.2 | `MIT` | [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT | [upstream source](https://github.com/madsmtm/objc2/blob/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/LICENSE.md) |
-| Rust | `objc2-io-surface` | 0.3.2 | `Zlib OR Apache-2.0 OR MIT` | [L009](#l009) SPDX Apache-2.0; [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT; [L217](#l217) SPDX Zlib | [upstream source](https://github.com/madsmtm/objc2/blob/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/LICENSE.md) |
 | Rust | `objc2-quartz-core` | 0.3.2 | `Zlib OR Apache-2.0 OR MIT` | [L009](#l009) SPDX Apache-2.0; [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT; [L217](#l217) SPDX Zlib | [upstream source](https://github.com/madsmtm/objc2/blob/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/LICENSE.md) |
 | Rust | `objc2-web-kit` | 0.3.2 | `Zlib OR Apache-2.0 OR MIT` | [L009](#l009) SPDX Apache-2.0; [L145](#l145) LICENSE.md; [L202](#l202) SPDX MIT; [L217](#l217) SPDX Zlib | [upstream source](https://github.com/madsmtm/objc2/blob/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/LICENSE.md) |
 | Rust | `once_cell` | 1.21.4 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
-| Rust | `option-ext` | 0.2.0 | `MPL-2.0` | [L118](#l118) LICENSE.txt | crate package files |
+| Rust | `open` | 5.4.5 | `MIT` | [L286](#l286) LICENSE.md | crate package files |
+| Rust | `option-ext` | 0.2.0 | `MPL-2.0` | [L118](#l118) LICENSE.txt | [source archive](https://crates.io/api/v1/crates/option-ext/0.2.0/download) |
 | Rust | `parking` | 2.2.1 | `Apache-2.0 OR MIT` | [L046](#l046) LICENSE-MIT; [L176](#l176) LICENSE-THIRD-PARTY; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `parking_lot` | 0.12.5 | `MIT OR Apache-2.0` | [L189](#l189) LICENSE-APACHE; [L228](#l228) LICENSE-MIT | crate package files |
 | Rust | `parking_lot_core` | 0.9.12 | `MIT OR Apache-2.0` | [L189](#l189) LICENSE-APACHE; [L228](#l228) LICENSE-MIT | crate package files |
@@ -218,9 +215,7 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `phf` | 0.13.1 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `phf` | 0.14.0 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `phf_generator` | 0.13.1 | `MIT` | [L015](#l015) LICENSE | crate package files |
-| Rust | `phf_generator` | 0.14.0 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `phf_macros` | 0.13.1 | `MIT` | [L015](#l015) LICENSE | crate package files |
-| Rust | `phf_macros` | 0.14.0 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `phf_shared` | 0.13.1 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `phf_shared` | 0.14.0 | `MIT` | [L015](#l015) LICENSE | crate package files |
 | Rust | `pin-project-lite` | 0.2.17 | `Apache-2.0 OR MIT` | [L020](#l020) LICENSE-APACHE; [L046](#l046) LICENSE-MIT | crate package files |
@@ -239,19 +234,11 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `qrcode` | 0.14.1 | `MIT OR Apache-2.0` | [L144](#l144) LICENSE-MIT.txt; [L234](#l234) LICENSE-APACHE.txt | crate package files |
 | Rust | `quick-error` | 2.0.1 | `MIT/Apache-2.0` | [L007](#l007) LICENSE-MIT; [L222](#l222) LICENSE-APACHE | crate package files |
 | Rust | `quick-xml` | 0.42.0 | `MIT` | [L270](#l270) LICENSE-MIT.md | crate package files |
-| Rust | `quinn` | 0.11.12 | `MIT OR Apache-2.0` | [L091](#l091) LICENSE-MIT; [L223](#l223) LICENSE-APACHE | crate package files |
-| Rust | `quinn-proto` | 0.11.19 | `MIT OR Apache-2.0` | [L091](#l091) LICENSE-MIT; [L223](#l223) LICENSE-APACHE | crate package files |
-| Rust | `quinn-udp` | 0.5.16 | `MIT OR Apache-2.0` | [L091](#l091) LICENSE-MIT; [L223](#l223) LICENSE-APACHE | crate package files |
 | Rust | `quote` | 1.0.47 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
-| Rust | `rand` | 0.10.3 | `MIT OR Apache-2.0` | [L038](#l038) LICENSE-MIT; [L069](#l069) LICENSE-APACHE; [L170](#l170) COPYRIGHT | crate package files |
 | Rust | `rand` | 0.8.8 | `MIT OR Apache-2.0` | [L038](#l038) LICENSE-MIT; [L069](#l069) LICENSE-APACHE; [L170](#l170) COPYRIGHT | crate package files |
 | Rust | `rand_chacha` | 0.3.1 | `MIT OR Apache-2.0` | [L038](#l038) LICENSE-MIT; [L170](#l170) COPYRIGHT; [L195](#l195) LICENSE-APACHE | crate package files |
-| Rust | `rand_core` | 0.10.1 | `MIT OR Apache-2.0` | [L125](#l125) LICENSE-APACHE; [L161](#l161) LICENSE-MIT; [L173](#l173) COPYRIGHT | crate package files |
 | Rust | `rand_core` | 0.6.4 | `MIT OR Apache-2.0` | [L038](#l038) LICENSE-MIT; [L125](#l125) LICENSE-APACHE; [L170](#l170) COPYRIGHT | crate package files |
-| Rust | `rand_pcg` | 0.10.2 | `MIT OR Apache-2.0` | [L042](#l042) LICENSE-MIT; [L125](#l125) LICENSE-APACHE; [L170](#l170) COPYRIGHT | crate package files |
 | Rust | `raw-window-handle` | 0.6.2 | `MIT OR Apache-2.0 OR Zlib` | [L020](#l020) LICENSE-APACHE.md; [L180](#l180) LICENSE-MIT.md; [L199](#l199) LICENSE-ZLIB.md | crate package files |
-| Rust | `ref-cast` | 1.0.27 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
-| Rust | `ref-cast-impl` | 1.0.27 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
 | Rust | `regex` | 1.13.1 | `MIT OR Apache-2.0` | [L114](#l114) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `regex-automata` | 0.4.18 | `MIT OR Apache-2.0` | [L114](#l114) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `regex-syntax` | 0.8.11 | `MIT OR Apache-2.0` | [L114](#l114) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
@@ -268,13 +255,11 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `ryu` | 1.0.23 | `Apache-2.0 OR BSL-1.0` | [L113](#l113) LICENSE-APACHE; [L229](#l229) LICENSE-BOOST | crate package files |
 | Rust | `same-file` | 1.0.6 | `Unlicense/MIT` | [L003](#l003) COPYING; [L143](#l143) UNLICENSE; [L230](#l230) LICENSE-MIT | crate package files |
 | Rust | `schemars` | 0.8.22 | `MIT` | [L032](#l032) LICENSE | crate package files |
-| Rust | `schemars` | 0.9.0 | `MIT` | [L032](#l032) LICENSE | crate package files |
-| Rust | `schemars` | 1.2.3 | `MIT` | [L032](#l032) LICENSE | crate package files |
 | Rust | `schemars_derive` | 0.8.22 | `MIT` | [L032](#l032) LICENSE | crate package files |
 | Rust | `scopeguard` | 1.2.0 | `MIT OR Apache-2.0` | [L189](#l189) LICENSE-APACHE; [L283](#l283) LICENSE-MIT | crate package files |
 | Rust | `security-framework` | 3.7.0 | `MIT OR Apache-2.0` | [L172](#l172) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `security-framework-sys` | 2.17.0 | `MIT OR Apache-2.0` | [L172](#l172) LICENSE-MIT; [L189](#l189) LICENSE-APACHE | crate package files |
-| Rust | `selectors` | 0.38.0 | `MPL-2.0` | [L118](#l118) SPDX MPL-2.0 | [upstream source](https://github.com/servo/stylo/tree/572ecba2d1600e7c3d490586692a209faf703baa) |
+| Rust | `selectors` | 0.38.0 | `MPL-2.0` | [L118](#l118) SPDX MPL-2.0 | [source archive](https://crates.io/api/v1/crates/selectors/0.38.0/download); [upstream source](https://github.com/servo/stylo/tree/572ecba2d1600e7c3d490586692a209faf703baa) |
 | Rust | `semver` | 1.0.28 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
 | Rust | `serde` | 1.0.229 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
 | Rust | `serde-saphyr` | 2.1.1 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
@@ -304,8 +289,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `spki` | 0.7.3 | `Apache-2.0 OR MIT` | [L194](#l194) LICENSE-APACHE; [L227](#l227) LICENSE-MIT | crate package files |
 | Rust | `sqlx` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
 | Rust | `sqlx-core` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
-| Rust | `sqlx-macros` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
-| Rust | `sqlx-macros-core` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
 | Rust | `sqlx-mysql` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
 | Rust | `sqlx-postgres` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
 | Rust | `sqlx-sqlite` | 0.8.6 | `MIT OR Apache-2.0` | [L085](#l085) LICENSE-MIT; [L179](#l179) LICENSE-APACHE | crate package files |
@@ -327,6 +310,7 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `tauri-plugin-clipboard-manager` | 2.5.0 | `Apache-2.0 OR MIT` | [L019](#l019) LICENSE_APACHE-2.0; [L156](#l156) LICENSE_MIT; [L261](#l261) LICENSE.spdx | crate package files |
 | Rust | `tauri-plugin-dialog` | 2.8.4 | `Apache-2.0 OR MIT` | [L019](#l019) LICENSE_APACHE-2.0; [L156](#l156) LICENSE_MIT; [L261](#l261) LICENSE.spdx | crate package files |
 | Rust | `tauri-plugin-fs` | 2.7.1 | `Apache-2.0 OR MIT` | [L019](#l019) LICENSE_APACHE-2.0; [L156](#l156) LICENSE_MIT; [L261](#l261) LICENSE.spdx | crate package files |
+| Rust | `tauri-plugin-opener` | 2.7.3 | `Apache-2.0 OR MIT` | [L019](#l019) LICENSE_APACHE-2.0; [L156](#l156) LICENSE_MIT; [L261](#l261) LICENSE.spdx | crate package files |
 | Rust | `tauri-runtime` | 2.12.2 | `Apache-2.0 OR MIT` | [L020](#l020) LICENSE-APACHE-2.0; [L182](#l182) LICENSE-MIT | crate package files |
 | Rust | `tauri-runtime-wry` | 2.12.3 | `Apache-2.0 OR MIT` | [L020](#l020) LICENSE-APACHE-2.0; [L182](#l182) LICENSE-MIT | crate package files |
 | Rust | `tauri-utils` | 2.10.2 | `Apache-2.0 OR MIT` | [L020](#l020) LICENSE-APACHE-2.0; [L182](#l182) LICENSE-MIT | crate package files |
@@ -356,7 +340,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `tracing` | 0.1.44 | `MIT` | [L155](#l155) LICENSE | crate package files |
 | Rust | `tracing-attributes` | 0.1.31 | `MIT` | [L155](#l155) LICENSE | crate package files |
 | Rust | `tracing-core` | 0.1.36 | `MIT` | [L155](#l155) LICENSE | crate package files |
-| Rust | `tray-icon` | 0.25.1 | `MIT OR Apache-2.0` | [L058](#l058) LICENSE-MIT; [L122](#l122) LICENSE.spdx; [L189](#l189) LICENSE-APACHE | crate package files |
 | Rust | `try-lock` | 0.2.5 | `MIT` | [L225](#l225) LICENSE | crate package files |
 | Rust | `typeid` | 1.0.3 | `MIT OR Apache-2.0` | [L046](#l046) LICENSE-MIT; [L113](#l113) LICENSE-APACHE | crate package files |
 | Rust | `typenum` | 1.20.1 | `MIT OR Apache-2.0` | [L096](#l096) LICENSE-APACHE; [L192](#l192) LICENSE-MIT; [L247](#l247) LICENSE | crate package files |
@@ -395,7 +378,6 @@ These notices cover the Rust normal-dependency closure resolved for `aarch64-app
 | Rust | `zerotrie` | 0.2.5 | `Unicode-3.0` | [L273](#l273) LICENSE | crate package files |
 | Rust | `zerovec` | 0.11.9 | `Unicode-3.0` | [L273](#l273) LICENSE | crate package files |
 | Rust | `zerovec-derive` | 0.11.7 | `Unicode-3.0` | [L273](#l273) LICENSE | crate package files |
-| Rust | `zlib-rs` | 0.6.8 | `Zlib` | [L256](#l256) LICENSE | crate package files |
 | Rust | `zmij` | 1.0.23 | `MIT` | [L046](#l046) LICENSE-MIT | crate package files |
 | Rust | `zune-core` | 0.5.3 | `MIT OR Apache-2.0 OR Zlib` | [L223](#l223) LICENSE-APACHE; [L236](#l236) LICENSE-ZLIB; [L239](#l239) LICENSE-MIT | crate package files |
 | Rust | `zune-jpeg` | 0.5.15 | `MIT OR Apache-2.0 OR Zlib` | [L223](#l223) LICENSE-APACHE; [L236](#l236) LICENSE-ZLIB; [L239](#l239) LICENSE-MIT | crate package files |
@@ -438,14 +420,10 @@ These crate archives omitted a license text file. The author field and source re
 | `objc2-encode` | 4.1.0 | Mads Marquart <mads@marquart.dk> | `MIT` |
 | `objc2-exception-helper` | 0.1.1 | Mads Marquart <mads@marquart.dk> | `Zlib OR Apache-2.0 OR MIT` |
 | `objc2-foundation` | 0.3.2 | Not listed in Cargo metadata | `MIT` |
-| `objc2-io-surface` | 0.3.2 | Not listed in Cargo metadata | `Zlib OR Apache-2.0 OR MIT` |
 | `objc2-quartz-core` | 0.3.2 | Not listed in Cargo metadata | `Zlib OR Apache-2.0 OR MIT` |
 | `objc2-web-kit` | 0.3.2 | Not listed in Cargo metadata | `Zlib OR Apache-2.0 OR MIT` |
 | `plist` | 1.10.3 | Ed Barnard <eabarnard@gmail.com> | `MIT` |
 | `selectors` | 0.38.0 | The Servo Project Developers | `MPL-2.0` |
-
-## License and notice texts
-
 
 ## License and notice texts
 
@@ -1195,30 +1173,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-```
-
-### L012
-
-```text
-Copyright (c) 2024 The lru-slab Developers
-
-This software is provided 'as-is', without any express or implied warranty. In
-no event will the authors be held liable for any damages arising from the use of
-this software.
-
-Permission is granted to anyone to use this software for any purpose, including
-commercial applications, and to alter it and redistribute it freely, subject to
-the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim
-   that you wrote the original software. If you use this software in a product, an
-   acknowledgment in the product documentation would be appreciated but is not
-   required.
-
-2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution.
 ```
 
 ### L013
@@ -2074,18 +2028,6 @@ This project is licensed under either of
    http://opensource.org/licenses/MIT)
 
 at your option.
-```
-
-### L028
-
-```text
-Copyright (c) 2024 The lru-slab Developers
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ### L029
@@ -2954,37 +2896,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
-### L042
-
-```text
-Copyright (c) 2014-2017 Melissa O'Neill and PCG Project contributors
-Copyright 2018 Developers of the Rand project
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
 ```
 
 ### L043
@@ -5334,31 +5245,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### L082
-
-```text
-MIT License
-Copyright (c) 2016 The roaring-rs developers.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
 ### L083
 
 ```text
@@ -6103,18 +5989,6 @@ limitations under the License.
 
 ```text
 Copyright 2017 Juniper Networks, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
-### L091
-
-```text
-Copyright (c) 2018 The quinn Developers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -8191,30 +8065,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-```
-
-### L122
-
-```text
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-PackageName: tray-icon
-DataFormat: SPDXRef-1
-PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
-PackageHomePage: https://tauri.app
-PackageLicenseDeclared: Apache-2.0
-PackageLicenseDeclared: MIT
-PackageCopyrightText: 2020-2022, The Tauri Programme in the Commons Conservancy
-PackageSummary: <text>Create tray icons for desktop applications.
-                </text>
-PackageComment: <text>The package includes the following libraries; see
-Relationship information.
-                </text>
-Created: 2022-12-05T09:00:00Z
-PackageDownloadLocation: git://github.com/tauri-apps/tray-icon
-PackageDownloadLocation: git+https://github.com/tauri-apps/tray-icon.git
-PackageDownloadLocation: git+ssh://github.com/tauri-apps/tray-icon.git
-Creator: Person: Daniel Thompson-Yvetot
 ```
 
 ### L123
@@ -10761,36 +10611,6 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 ```
 
-### L161
-
-```text
-Copyright (c) 2018-2026 The Rand Project Developers
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-```
-
 ### L162
 
 ```text
@@ -11621,20 +11441,6 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
-### L173
-
-```text
-Copyrights in the Rand project are retained by their contributors. No
-copyright assignment is required to contribute to the Rand project.
-
-For full authorship information, see the version control history.
-
-Except as otherwise noted (below and/or in individual files), Rand is
-licensed under the Apache License, Version 2.0 <LICENSE-APACHE> or
-<http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-<LICENSE-MIT> or <http://opensource.org/licenses/MIT>, at your option.
 ```
 
 ### L174
@@ -15259,36 +15065,6 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
 
-### L212
-
-```text
-Copyright (c) 2019-2026 The RustCrypto Project Developers
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-```
-
 ### L213
 
 ```text
@@ -17878,30 +17654,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### L256
-
-```text
-(C) 2024 Trifecta Tech Foundation
-
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not
-   claim that you wrote the original software. If you use this software
-   in a product, an acknowledgment in the product documentation would be
-   appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution.
-```
-
 ### L257
 
 ```text
@@ -19218,4 +18970,34 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
+```
+
+### L286
+
+```text
+The MIT License (MIT)
+=====================
+
+Copyright © `2015` `Sebastian Thiel`
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the “Software”), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 ```

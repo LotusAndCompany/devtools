@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./components.css";
+@import "./markdown-preview.css";
 @import "@/features/image/styles.css";
 @import "@/features/phrase/styles.css";
 @import "@/features/http/styles.css";

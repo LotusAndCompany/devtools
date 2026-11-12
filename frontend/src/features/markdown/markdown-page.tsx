@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Effect } from "effect";
-import previewStyles from "./preview.css?inline";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Checkbox } from "@/shared/components/ui/checkbox";
@@ -9,6 +8,10 @@ import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
+import {
+    applyMarkdownPreviewTheme,
+    watchMarkdownPreviewTheme,
+} from "@/shared/markdown-preview-theme";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
 import type { ToolPageProps } from "@/shared/types";
 
@@ -81,28 +84,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
             scroller.scrollTop = (editor.scrollTop / editorRange) * previewRange;
         }
     }, [syncScroll]);
-    const applyPreviewTheme = useCallback(() => {
-        const iframeDocument = previewRef.current?.contentDocument;
-        if (!iframeDocument?.head) return;
-
-        const rootStyles = getComputedStyle(document.documentElement);
-        const color = (name: string) => rootStyles.getPropertyValue(name).trim();
-        const previewTokens = new Set(
-            Array.from(previewStyles.matchAll(/var\((--[\w-]+)/g), ([, token]) => token),
-        );
-        const tokenDeclarations = Array.from(previewTokens, (token) => {
-            const value = color(token);
-            return value ? `${token}: ${value};` : "";
-        })
-            .filter(Boolean)
-            .join("\n");
-        const style =
-            iframeDocument.getElementById("devtools-preview-theme") ??
-            iframeDocument.createElement("style");
-        style.id = "devtools-preview-theme";
-        style.textContent = `:root { color-scheme: ${rootStyles.colorScheme}; ${tokenDeclarations} }\n${previewStyles}`;
-        if (!style.parentElement) iframeDocument.head.appendChild(style);
-    }, []);
+    const applyPreviewTheme = useCallback(() => applyMarkdownPreviewTheme(previewRef.current), []);
     const attachPreviewScroll = useCallback(() => {
         previewScrollCleanup.current?.();
         previewScrollCleanup.current = null;
@@ -126,20 +108,7 @@ export function MarkdownPage({ locale, run }: ToolPageProps) {
         attachPreviewScroll();
         return () => previewScrollCleanup.current?.();
     }, [attachPreviewScroll]);
-    useEffect(() => {
-        const observer = new MutationObserver(applyPreviewTheme);
-        observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ["data-theme"],
-        });
-        const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
-        colorScheme.addEventListener("change", applyPreviewTheme);
-        applyPreviewTheme();
-        return () => {
-            observer.disconnect();
-            colorScheme.removeEventListener("change", applyPreviewTheme);
-        };
-    }, [applyPreviewTheme]);
+    useEffect(() => watchMarkdownPreviewTheme(applyPreviewTheme), [applyPreviewTheme]);
     return (
         <div className="tool-page">
             <Heading title={text(locale, "Markdown Preview", "Markdownプレビュー")} />

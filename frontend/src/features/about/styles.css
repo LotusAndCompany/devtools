@@ -18,12 +18,6 @@
     font-size: var(--font-size-label);
 }
 
-.about-tabs {
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-popup);
-    overflow: hidden;
-}
-
 .about-panel {
     min-height: 250px;
     padding: var(--space-16);
@@ -75,12 +69,30 @@
     margin-top: var(--space-12);
 }
 
-.license-text {
+.license-scroll-area {
     width: 100%;
-    min-height: 340px;
-    resize: vertical;
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-micro);
+    height: clamp(240px, 55vh, 560px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--card);
+}
+
+.license-scroll-area .markdown-preview-content {
+    overflow-wrap: anywhere;
+}
+
+.license-scroll-area .markdown-preview-content pre {
+    white-space: pre-wrap;
+}
+
+.license-scroll-area .markdown-preview-content table {
+    width: 100%;
+}
+
+.license-status {
+    margin: 0;
+    padding: var(--space-12);
+    color: var(--muted-foreground);
 }
 
 @media (max-width: 900px) {

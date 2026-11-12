@@ -9,6 +9,12 @@
     "core:app:allow-set-app-theme",
     "core:window:allow-show",
     "allow-start-operation",
-    "allow-cancel-operation"
+    "allow-cancel-operation",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        { "url": "https://*" }
+      ]
+    }
   ]
 }
