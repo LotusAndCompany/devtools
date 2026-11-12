@@ -86,7 +86,6 @@ export function useNativeBridge({
             if (!mounted) return;
             native = connected;
             unsubscribe = connected.subscribe(onEvent);
-            yield* Effect.sync(() => setBridge(connected));
 
             const [droppedImageResult, settings] = yield* Effect.all(
                 [
@@ -104,7 +103,12 @@ export function useNativeBridge({
             if (mounted && droppedImageResult.found) {
                 yield* Effect.sync(() => onDroppedImage(droppedImageResult));
             }
-            if (mounted) yield* Effect.sync(() => onStartupSettings(settings));
+            if (mounted) {
+                yield* Effect.sync(() => {
+                    onStartupSettings(settings);
+                    setBridge(connected);
+                });
+            }
         }).pipe(
             Effect.catch((cause) =>
                 Effect.sync(() => {
@@ -153,7 +157,7 @@ export function useNativeBridge({
         // oxlint-disable-next-line react/exhaustive-effect-dependencies -- runWithBridge is stable
     }, [activePage, bridge, runWithBridge]);
 
-    return { run };
+    return { run, startupReady: bridge !== null || bridgeError !== null };
 }
 
 export function useDroppedImage(

@@ -3,5 +3,10 @@
   "identifier": "main-capability",
   "description": "Events for the trusted DevTools React window",
   "windows": ["main"],
-  "permissions": ["core:event:allow-listen", "core:event:allow-unlisten"]
+  "permissions": [
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
+    "core:app:allow-set-app-theme",
+    "core:window:allow-show"
+  ]
 }

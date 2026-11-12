@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AboutDialog } from "@/features/about";
 import { SettingsDialog } from "@/features/settings";
 import { AppShell } from "./app-shell";
 import { ToolStage } from "./tool-stage";
 import { pageForToolId, tools, type PageId } from "./tool-registry";
 import { useDroppedImage, useNativeBridge } from "./use-native-bridge";
+import { setNativeTheme, showMainWindow } from "@/platform/tauri/bridge";
 import type { ApplicationSettings } from "@/shared/bridge/types";
 import type { Locale } from "@/shared/types";
 
@@ -18,6 +19,7 @@ function App() {
     const [databaseNavigationVersion, setDatabaseNavigationVersion] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
+    const mainWindowShown = useRef(false);
 
     const openPage = useCallback((page: PageId) => setActivePage(page), []);
     const onNavigate = useCallback(
@@ -63,7 +65,7 @@ function App() {
         [onNavigate],
     );
     const [droppedImage, acceptDroppedImage, clearDroppedImage] = useDroppedImage(openPage);
-    const { run } = useNativeBridge({
+    const { run, startupReady } = useNativeBridge({
         locale,
         activePage,
         onNavigate,
@@ -74,9 +76,31 @@ function App() {
     useEffect(() => {
         document.documentElement.lang = locale === "ja" ? "ja" : "en";
     }, [locale]);
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.documentElement.dataset.theme = theme;
     }, [theme]);
+    useEffect(() => {
+        if (startupReady) {
+            const update = mainWindowShown.current
+                ? setNativeTheme(theme)
+                : showMainWindow(theme).then(() => {
+                      mainWindowShown.current = true;
+                  });
+            void update.catch(() => {});
+            return;
+        }
+        // shortcut: reveal with the system theme if startup settings stall; remove when startup settings has a bounded timeout.
+        const startupFallback = window.setTimeout(
+            () =>
+                void showMainWindow(theme)
+                    .then(() => {
+                        mainWindowShown.current = true;
+                    })
+                    .catch(() => {}),
+            3000,
+        );
+        return () => window.clearTimeout(startupFallback);
+    }, [startupReady, theme]);
 
     return (
         <>

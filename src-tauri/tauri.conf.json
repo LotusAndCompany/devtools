@@ -16,6 +16,7 @@
         "title": "DevTools",
         "width": 1280,
         "height": 800,
+        "visible": false,
         "minWidth": 860,
         "minHeight": 520
       }

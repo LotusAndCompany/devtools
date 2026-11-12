@@ -1,14 +1,26 @@
+import { setTheme as setTauriAppTheme } from "@tauri-apps/api/app";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Effect } from "effect";
 import { BridgeConnectionError, type NativeBridge } from "@/shared/bridge/native-bridge";
 import {
     BRIDGE_CONTRACT_VERSION,
+    type ApplicationSettings,
     type BridgeEvent,
     type OperationRequest,
 } from "@/shared/bridge/types";
 
 const EVENT_NAME = "native-bridge";
+
+export function setNativeTheme(theme: ApplicationSettings["theme"]): Promise<void> {
+    return setTauriAppTheme(theme === "system" ? null : theme);
+}
+
+export async function showMainWindow(theme: ApplicationSettings["theme"]): Promise<void> {
+    await setNativeTheme(theme).catch(() => {});
+    await getCurrentWindow().show();
+}
 
 function failedEvent(requestId: string, error: unknown): BridgeEvent {
     const message = error instanceof Error ? error.message : String(error);
