@@ -12,7 +12,6 @@ interface PhraseEditorProps {
     busy: boolean;
     filename: string;
     error: string;
-    message: string;
     onTitleChange: (value: string) => void;
     onContentChange: (value: string) => void;
     onSave: () => void;
@@ -28,7 +27,6 @@ export function PhraseEditor({
     busy,
     filename,
     error,
-    message,
     onTitleChange,
     onContentChange,
     onSave,
@@ -59,12 +57,7 @@ export function PhraseEditor({
                         {text(locale, "Delete", "削除")}
                     </Button>
                 </div>
-                <OutputMessage
-                    locale={locale}
-                    error={error}
-                    message={message}
-                    onDismiss={onDismissError}
-                />
+                <OutputMessage locale={locale} error={error} onDismiss={onDismissError} />
             </CardContent>
         </Card>
     );

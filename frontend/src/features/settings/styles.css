@@ -23,12 +23,6 @@
     font-size: var(--font-size-label);
     cursor: pointer;
 }
-.settings-actions [role="status"] {
-    flex: 1;
-    color: var(--muted-foreground);
-    font-size: var(--font-size-caption);
-}
-
 [data-slot="dialog-content"][data-size="medium"] .settings-page {
     max-width: none;
     margin: 0;

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Effect } from "effect";
 import { FormField } from "@/shared/components/form-field";
-import { MessageDialog } from "@/shared/components/message-dialog";
-import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import { FeedbackAlert } from "@/shared/components/feedback-alert";
 import { Textarea } from "@/shared/components/ui/textarea";
 import {
     OperationCancelledError,
@@ -78,30 +77,20 @@ export function Area({
 export function OutputMessage({
     locale,
     error,
-    message,
     onDismiss,
 }: {
     locale: Locale;
     error: string;
-    message?: string;
     onDismiss: () => void;
 }) {
+    if (!error) return null;
+
     return (
-        <>
-            {message && !error && (
-                <Alert role="status" className="operation-message success">
-                    <AlertDescription>{message}</AlertDescription>
-                </Alert>
-            )}
-            <MessageDialog
-                open={Boolean(error)}
-                onOpenChange={(open) => {
-                    if (!open) onDismiss();
-                }}
-                title={text(locale, "Error", "エラー")}
-                description={error}
-                closeLabel={text(locale, "OK", "閉じる")}
-            />
-        </>
+        <FeedbackAlert
+            title={text(locale, "Operation failed", "処理に失敗しました")}
+            description={error}
+            onDismiss={onDismiss}
+            dismissLabel={text(locale, "Dismiss", "閉じる")}
+        />
     );
 }

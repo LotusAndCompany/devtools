@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { PhraseTemplate } from "@/shared/bridge/types";
+import { toast } from "@/shared/components/ui/toast";
 import { createOperationRunner } from "@/test/operation-runner";
 import { PhrasePage } from "./phrase-page";
 
@@ -23,6 +24,7 @@ describe("PhrasePage", () => {
                 return { deleted: true };
             },
         });
+        const addToast = vi.spyOn(toast, "add");
 
         render(<PhrasePage locale="en" run={run} active />);
         fireEvent.change(screen.getByLabelText("Title"), {
@@ -33,7 +35,12 @@ describe("PhrasePage", () => {
         });
         fireEvent.click(screen.getByRole("button", { name: /Save template/ }));
 
-        expect(await screen.findByText("Template saved.")).toBeTruthy();
+        await waitFor(() =>
+            expect(addToast).toHaveBeenCalledWith({
+                title: "Template saved.",
+                type: "success",
+            }),
+        );
         await waitFor(() => expect(screen.getByText("Greeting")).toBeTruthy());
         expect(saved).toEqual({
             filename: "greeting.txt",

@@ -3,6 +3,7 @@ import { Effect } from "effect";
 import { PhraseConfirmationDialogs } from "./phrase-confirmation-dialogs";
 import { PhraseEditor } from "./phrase-editor";
 import { PhraseList } from "./phrase-list";
+import { toast } from "@/shared/components/ui/toast";
 import { forkUiEffect, runUiEffect } from "@/shared/effect";
 import type { PhraseTemplate } from "@/shared/bridge/types";
 import { Heading, text, useOperation } from "@/shared/tool-page";
@@ -17,7 +18,6 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [savedDraft, setSavedDraft] = useState<PhraseDraft | null>(null);
-    const [message, setMessage] = useState("");
     const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
     const [unsavedDialogOpen, setUnsavedDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -60,7 +60,6 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
             setContent(nextDraft.content);
             setSavedDraft(nextDraft);
         }
-        setMessage("");
     };
     const requestAction = (action: PendingAction) => {
         if (action.type === "select" && action.item.filename === filename) return;
@@ -84,7 +83,10 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
             yield* Effect.sync(() => {
                 setFilename(result.filename);
                 setSavedDraft(nextDraft);
-                setMessage(text(locale, "Template saved.", "定型文を保存しました。"));
+                toast.add({
+                    title: text(locale, "Template saved.", "定型文を保存しました。"),
+                    type: "success",
+                });
             });
             yield* refresh();
             return true;
@@ -99,7 +101,10 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
                     setTitle("");
                     setContent("");
                     setSavedDraft(null);
-                    setMessage(text(locale, "Template deleted.", "定型文を削除しました。"));
+                    toast.add({
+                        title: text(locale, "Template deleted.", "定型文を削除しました。"),
+                        type: "success",
+                    });
                 });
                 yield* refresh();
             }
@@ -107,17 +112,18 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
     const copy = () =>
         execute("copyToClipboard", { text: content }).pipe(
             Effect.tap((result) =>
-                Effect.sync(() =>
-                    setMessage(
-                        result?.copied
-                            ? text(
-                                  locale,
-                                  "Copied to clipboard.",
-                                  "クリップボードにコピーしました。",
-                              )
-                            : "",
-                    ),
-                ),
+                Effect.sync(() => {
+                    if (result?.copied) {
+                        toast.add({
+                            title: text(
+                                locale,
+                                "Copied to clipboard.",
+                                "クリップボードにコピーしました。",
+                            ),
+                            type: "success",
+                        });
+                    }
+                }),
             ),
         );
     const continueWithoutSaving = () => {
@@ -190,7 +196,6 @@ export function PhrasePage({ locale, run, active }: ToolPageProps) {
                     busy={busy}
                     filename={filename}
                     error={error}
-                    message={message}
                     onTitleChange={setTitle}
                     onContentChange={setContent}
                     onSave={() => runUiEffect(save())}

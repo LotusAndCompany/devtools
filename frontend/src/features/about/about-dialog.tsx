@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
-import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import { FeedbackAlert } from "@/shared/components/feedback-alert";
+import { toast } from "@/shared/components/ui/toast";
 import {
     Dialog,
     DialogClose,
@@ -32,7 +33,6 @@ export function AboutDialog({
 }) {
     const [info, setInfo] = useState<AboutInfo | null>(null);
     const [error, setError] = useState("");
-    const [message, setMessage] = useState("");
 
     useEffect(() => {
         if (!open) return;
@@ -61,14 +61,20 @@ export function AboutDialog({
             `Runtime: ${info.runtime}`,
             info.copyright,
         ].join("\n");
+        setError("");
         runUiEffect(
             run("copyToClipboard", { text: summary }).pipe(
                 Effect.tap(() =>
-                    Effect.sync(() => setMessage(locale === "ja" ? "コピーしました。" : "Copied.")),
+                    Effect.sync(() =>
+                        toast.add({
+                            title: locale === "ja" ? "コピーしました。" : "Copied.",
+                            type: "success",
+                        }),
+                    ),
                 ),
                 Effect.catch((reason) =>
                     Effect.sync(() =>
-                        setMessage(reason instanceof Error ? reason.message : String(reason)),
+                        setError(reason instanceof Error ? reason.message : String(reason)),
                     ),
                 ),
             ),
@@ -115,9 +121,12 @@ export function AboutDialog({
                             <strong>DevTools</strong>
                         </div>
                         {error && (
-                            <Alert variant="destructive" className="operation-message error">
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
+                            <FeedbackAlert
+                                title={
+                                    locale === "ja" ? "アプリ情報エラー" : "About information error"
+                                }
+                                description={error}
+                            />
                         )}
                         <dl className="about-metadata">
                             {metadata.map(([label, value]) => (
@@ -128,11 +137,6 @@ export function AboutDialog({
                             ))}
                         </dl>
                         <div className="about-actions">
-                            {message && (
-                                <Alert role="status" className="about-status">
-                                    <AlertDescription>{message}</AlertDescription>
-                                </Alert>
-                            )}
                             <Button variant="outline" onClick={copy} disabled={!info}>
                                 {locale === "ja" ? "コピー" : "Copy"}
                             </Button>

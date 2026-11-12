@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AboutDialog } from "@/features/about";
 import { SettingsDialog } from "@/features/settings";
+import { Toaster } from "@/shared/components/ui/toast";
 import { AppShell } from "./app-shell";
 import { ToolStage } from "./tool-stage";
 import { pageForToolId, tools, type PageId } from "./tool-registry";
@@ -133,6 +134,7 @@ function App() {
                 onLocaleChange={setLocale}
                 onThemeChange={setTheme}
             />
+            <Toaster closeLabel={locale === "ja" ? "通知を閉じる" : "Dismiss notification"} />
         </>
     );
 }

@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Empty, EmptyDescription, EmptyHeader } from "@/shared/components/ui/empty";
 import { FormField } from "@/shared/components/form-field";
+import { FeedbackAlert } from "@/shared/components/feedback-alert";
 import { Input } from "@/shared/components/ui/input";
 import { SelectControl } from "@/shared/components/select-control";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
@@ -229,10 +230,15 @@ export function HttpPage({ locale, run }: ToolPageProps) {
                         {response ? (
                             <>
                                 {response.errorCode !== 0 && response.error && (
-                                    <p className="text-destructive text-sm" role="alert">
-                                        {text(locale, "Request error", "リクエストエラー")} (
-                                        {String(response.errorCode)}): {response.error}
-                                    </p>
+                                    <FeedbackAlert
+                                        title={
+                                            text(locale, "Request error", "リクエストエラー") +
+                                            " (" +
+                                            String(response.errorCode) +
+                                            ")"
+                                        }
+                                        description={response.error}
+                                    />
                                 )}
                                 <Area
                                     label={text(locale, "Response body", "レスポンス本文")}

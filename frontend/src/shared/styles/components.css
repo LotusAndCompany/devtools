@@ -159,25 +159,12 @@
     font-size: var(--font-size-caption);
 }
 
-.operation-message {
+.feedback-message {
     margin: var(--space-12) 0;
 }
 
-.operation-message [data-slot="alert-description"] {
-    color: inherit;
+.feedback-message [data-slot="alert-description"] {
     font-size: var(--font-size-caption);
-}
-
-.operation-message.success {
-    background: color-mix(in srgb, var(--success) 12%, var(--card));
-    color: var(--success);
-    border-color: color-mix(in srgb, var(--success) 30%, var(--border));
-}
-
-.operation-message.error {
-    background: color-mix(in oklab, var(--destructive) 12%, var(--card));
-    color: var(--destructive);
-    border-color: color-mix(in oklab, var(--destructive) 30%, var(--border));
 }
 
 .result-grid {

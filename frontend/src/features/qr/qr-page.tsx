@@ -8,6 +8,7 @@ import { FormField } from "@/shared/components/form-field";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { SelectControl } from "@/shared/components/select-control";
+import { toast } from "@/shared/components/ui/toast";
 import { runUiEffect } from "@/shared/effect";
 import type { QrCodeType } from "@/shared/bridge/types";
 import { Heading, OutputMessage, text, useOperation } from "@/shared/tool-page";
@@ -52,11 +53,9 @@ export function QrPage({ locale, run }: ToolPageProps) {
     } | null>(null);
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");
-    const [message, setMessage] = useState("");
     const fields = qrFields[type] ?? [];
     const generate = () =>
         Effect.gen(function* () {
-            yield* Effect.sync(() => setMessage(""));
             const result = yield* execute("generateQr", { type, parameters });
             if (result) {
                 yield* Effect.sync(() => {
@@ -77,14 +76,16 @@ export function QrPage({ locale, run }: ToolPageProps) {
         setGeneratedInput(null);
         setContent("");
         setImage("");
-        setMessage("");
     };
     const copy = () =>
         execute("copyToClipboard", { imageDataUrl: image }).pipe(
             Effect.tap((result) =>
                 Effect.sync(() => {
                     if (result)
-                        setMessage(text(locale, "QR image copied.", "QR画像をコピーしました。"));
+                        toast.add({
+                            title: text(locale, "QR image copied.", "QR画像をコピーしました。"),
+                            type: "success",
+                        });
                 }),
             ),
         );
@@ -94,13 +95,14 @@ export function QrPage({ locale, run }: ToolPageProps) {
                   Effect.tap((result) =>
                       Effect.sync(() => {
                           if (result)
-                              setMessage(
-                                  text(
+                              toast.add({
+                                  title: text(
                                       locale,
-                                      `Saved ${String(result.fileName ?? "QR image")}.`,
-                                      `${String(result.fileName ?? "QR画像")}を保存しました。`,
+                                      "Saved " + String(result.fileName ?? "QR image") + ".",
+                                      String(result.fileName ?? "QR画像") + "を保存しました。",
                                   ),
-                              );
+                                  type: "success",
+                              });
                       }),
                   ),
               )
@@ -126,7 +128,6 @@ export function QrPage({ locale, run }: ToolPageProps) {
                                     setGeneratedInput(null);
                                     setContent("");
                                     setImage("");
-                                    setMessage("");
                                 }}
                                 options={[
                                     { value: "text", label: "Text" },
@@ -254,12 +255,7 @@ export function QrPage({ locale, run }: ToolPageProps) {
                     </CardContent>
                 </Card>
             </div>
-            <OutputMessage
-                locale={locale}
-                error={error}
-                message={message}
-                onDismiss={() => setError("")}
-            />
+            <OutputMessage locale={locale} error={error} onDismiss={() => setError("")} />
         </div>
     );
 }

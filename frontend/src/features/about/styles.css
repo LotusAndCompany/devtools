@@ -75,11 +75,6 @@
     margin-top: var(--space-12);
 }
 
-.about-actions [role="status"] {
-    flex: 1;
-    margin: 0;
-}
-
 .license-text {
     width: 100%;
     min-height: 340px;

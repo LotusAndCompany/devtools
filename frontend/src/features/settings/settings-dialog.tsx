@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Effect } from "effect";
 import { Button } from "@/shared/components/ui/button";
+import { FeedbackAlert } from "@/shared/components/feedback-alert";
+import { toast } from "@/shared/components/ui/toast";
 import {
     Dialog,
     DialogClose,
@@ -11,7 +13,6 @@ import {
     DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { FormField } from "@/shared/components/form-field";
-import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { SelectControl } from "@/shared/components/select-control";
 import { Switch } from "@/shared/components/ui/switch";
@@ -123,6 +124,10 @@ function SettingsForm({
                 Effect.tap(() =>
                     Effect.sync(() => {
                         const nextLocale = settings.language === "ja_JP" ? "ja" : "en";
+                        toast.add({
+                            title: locale === "ja" ? "設定を保存しました。" : "Settings saved.",
+                            type: "success",
+                        });
                         onLocaleChange(nextLocale);
                         onThemeChange(settings.theme);
                         onClose();
@@ -191,9 +196,10 @@ function SettingsForm({
                     </Field>
                 ))}
             {error && (
-                <Alert variant="destructive" className="operation-message error">
-                    <AlertDescription>{error}</AlertDescription>
-                </Alert>
+                <FeedbackAlert
+                    title={locale === "ja" ? "設定エラー" : "Settings error"}
+                    description={error}
+                />
             )}
             <DialogFooter className="settings-actions">
                 <DialogClose render={<Button variant="outline" disabled={saving} />}>
