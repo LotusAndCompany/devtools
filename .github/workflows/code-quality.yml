@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   checks:
-    name: Rust, React, and macOS bundle
+    name: Rust, React, and macOS app bundle
     runs-on: macos-15
     steps:
       - name: Checkout repository
@@ -48,6 +48,6 @@ jobs:
       - name: Run Rust tests
         run: cargo test --manifest-path src-tauri/Cargo.toml --locked --quiet
 
-      - name: Build macOS DMG
+      - name: Build macOS app bundle
         working-directory: frontend
-        run: bun run tauri:build -- --target aarch64-apple-darwin
+        run: bun run tauri:build -- --target aarch64-apple-darwin --bundles app

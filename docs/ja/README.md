@@ -34,13 +34,14 @@ bun install --frozen-lockfile
 bun run tauri:dev
 ~~~
 
-ローカルDMGを作るには次を実行します。
+ローカルのmacOSアプリバンドルを作るには次を実行します。
 
 ~~~bash
 bun run tauri:build
 ~~~
 
-インストール、署名、更新方法は[インストールガイド](../getting-started/installation.md)を、
+公開版のインストールと更新は[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12)から行えます。
+Xcode ArchiveとApp Store Connectへのアップロード手順は[macos/README.md](../../macos/README.md)、
 開発者向けビルド・テスト手順は[BUILD.md](BUILD.md)を参照してください。
 
 ## ドキュメント

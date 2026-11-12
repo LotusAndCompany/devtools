@@ -7,19 +7,14 @@ and Intel Macs are not in the verified support scope.
 
 ## Install
 
-1. Download the DMG attached to the latest published GitHub release.
-2. Open the DMG and drag DevTools to Applications.
-3. Eject the mounted image and launch DevTools from Applications.
-
-Public release DMGs are signed with the organization's Apple Developer ID and
-notarized before upload. A release without those credentials must not be
-published as a supported installer.
+Install DevTools from the
+[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
 
 ## Update
 
-Download the newer signed DMG, quit DevTools, and replace the existing app in
-Applications. Do not delete the app's Application Support directory; settings
-and phrase templates live there. The app does not use an automatic updater.
+Install available updates through the Mac App Store. DevTools has no in-app
+updater. Updating the app does not delete its Application Support directory;
+settings and phrase templates remain there.
 
 Before upgrading from the Qt version, make a backup of:
 

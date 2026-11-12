@@ -24,8 +24,9 @@ cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D w
 cargo test --manifest-path src-tauri/Cargo.toml --locked
 ~~~
 
-A local release build creates a macOS DMG. Signed distribution uses the
-macOS Release workflow and its Apple signing/notarization secrets.
+A local release build creates a macOS app bundle. Public distribution uses the
+shared Xcode Archive scheme and App Store Connect for TestFlight or Mac App
+Store release; GitHub Releases do not carry app installers.
 
 ## Architecture
 

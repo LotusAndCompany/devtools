@@ -13,7 +13,7 @@ or sidecar process.
 | Native feature processing and persistence | Rust in `src-tauri/src/` |
 | Screens, navigation, and shared UI | React/TypeScript in `frontend/src/` |
 | UI localization | English and Japanese text in the React source |
-| Packaging | Tauri DMG bundle for macOS arm64 |
+| Packaging | Tauri `.app` bundle archived with Xcode for App Store Connect |
 
 The React application starts in `frontend/src/main.tsx`. Shell composition,
 navigation, and tool registration live under `frontend/src/app/`. Feature
@@ -42,7 +42,8 @@ for backup and recovery steps.
 ## Build and distribution
 
 Use `bun run tauri:dev` for development and `bun run tauri:build` to create a
-local DMG. Pull request CI runs Rust and frontend checks and builds the macOS
-bundle. Public distribution requires the release workflow, Developer ID
-signing, Apple notarization, and validation. The app has no automatic updater;
-users install updates from a newer signed DMG.
+local macOS app bundle. Pull request CI runs Rust and frontend checks and
+builds the app bundle. Public releases go through the shared Xcode Archive
+scheme and App Store Connect, with TestFlight for beta testing and App Review
+before App Store release. The app has no in-app updater; users install updates
+through the Mac App Store.

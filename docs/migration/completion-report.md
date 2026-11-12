@@ -2,10 +2,11 @@
 
 **Status:** The Tauri-only implementation and local CI checks pass on
 `feature/issue-137-integration` (PR #147), based on
-`feature/issue-136-tauri-migration`. An Xcode Archive path now builds a
-signed arm64 archive with a matching dSYM, and third-party notices are bundled
-and shown in About. M6 is not ready for public release: dependency-license
-review, Developer ID signing and notarization for direct DMG distribution,
+`feature/issue-136-tauri-migration`. An Xcode Archive path builds a signed
+arm64 archive with a matching dSYM, and third-party notices are bundled and
+shown in About. DevTools' public distribution channel is the Mac App Store;
+no DMG has been publicly distributed. The Tauri version is an update to that
+existing channel and is not yet publicly released. Dependency-license review,
 clean-install lifecycle checks, and performance comparisons remain outstanding.
 
 ## Scope delivered
@@ -23,56 +24,44 @@ clean-install lifecycle checks, and performance comparisons remain outstanding.
 - Replaced current development, build, test, contributor, and troubleshooting
   instructions with the Tauri-only path. Removed C++ formatting and CMake
   build hooks.
-- Added macOS arm64 CI for Rust, React, contract tests, and DMG packaging; added
-  Rust/TypeScript CodeQL and Rustdoc deployment.
-- Added a manual release-candidate workflow. It packages an existing draft
-  release, verifies the signed arm64 app, verifies and notarizes the DMG, then
-  uploads the artifact to the draft. The release manager publishes only after
-  the draft and release checks pass.
+- Added macOS arm64 CI for Rust, React, contract tests, and Tauri app bundle
+  packaging; added Rust/TypeScript CodeQL and Rustdoc deployment.
+- Added a shared Xcode Archive scheme and build script for App Store Connect
+  uploads, including a UUID-checked dSYM for the Apple Distribution-signed app.
 
 The supported target is macOS 15 or later on Apple Silicon (arm64). Windows,
 Linux, and Intel Macs have not been validated and are outside this release
 scope.
 
-## Build, signing, update, recovery, and uninstall
+## Build, App Store submission, update, recovery, and uninstall
 
-1. For local development, follow [BUILD.md](../../BUILD.md). A local
-   `bun run tauri:build` bundle is unsigned when Apple signing credentials are
-   absent.
-2. Before creating a draft release, complete the dependency-license review
-   described in the License gate below. The current notice inventory is
-   prepared and bundled, but its `objc2` redistribution question remains open.
-3. Store the Apple Developer ID certificate, certificate password, Apple ID,
-   app-specific password, and team ID in GitHub Actions secrets. Dispatch the
-   macOS Release Candidate workflow with the existing draft release tag.
-4. The workflow builds an arm64 app, verifies its signature and architecture,
-   creates a DMG, checks the disk image, staples and validates notarization,
-   and uploads the DMG to the draft. Do not publish if any step fails.
-5. Users update by quitting DevTools, downloading the newer signed DMG, and
-   replacing the app in Applications. There is no automatic updater.
-6. Before upgrading, copy
+1. For local development, follow [BUILD.md](../../BUILD.md); its
+   `bun run tauri:build` command creates a local macOS app bundle.
+2. Before publicly releasing the Tauri update, complete the
+   dependency-license review described in the License gate below. The current
+   notice inventory is prepared and bundled, but its `objc2` redistribution
+   question remains open.
+3. Use the shared Xcode Archive scheme described in
+   [macos/README.md](../../macos/README.md), then upload the archive through
+   Xcode Organizer to App Store Connect. Use TestFlight for beta distribution;
+   submit the public update for App Review.
+4. Users install and update DevTools through the Mac App Store. The app has no
+   in-app updater.
+5. Before upgrading, copy
    `~/Library/Application Support/com.lotusandcompanyinc.dev-tools` to a safe
    location. Restore it to recover settings and app data.
-7. To uninstall, remove DevTools from Applications. Remove that Application
+6. To uninstall, remove DevTools from Applications. Remove that Application
    Support directory separately only if settings and templates should also be
    deleted.
 
-The release workflow is configured but has not been run with organization
-secrets. As checked on 2026-11-12, there was no draft release, the repository
-Actions secret list was empty, and the current GitHub token could not list
-organization secrets. The local keychain has an Apple Distribution identity
-but no Developer ID Application identity. The workflow therefore remains
-unverified; a TestFlight upload does not verify Developer ID signing or
-notarization for direct distribution. Tauri's
-[macOS signing guide](https://v2.tauri.app/distribute/sign/macos/) describes
-the required setup.
-
-For TestFlight, open the shared Xcode scheme and choose **Product > Archive**;
-see [macos/README.md](../../macos/README.md). The current tree produced a local
-arm64 `0.9.0 (20)` archive with a valid Apple Distribution signature and a
-matching app/dSYM UUID (`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). The bundled
-notice file's SHA-256 also matches the repository copy. This validation
-archive has not been uploaded to App Store Connect.
+No public DMG workflow is part of the release path. The App Store archive is
+signed with the Apple Distribution certificate; Developer ID signing and
+notarization apply only to a separate direct-distribution channel, which
+DevTools does not use. The current tree produced a local arm64 `0.9.0 (20)`
+archive with a valid Apple Distribution signature and a matching app/dSYM UUID
+(`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). The bundled notice file's SHA-256
+also matches the repository copy. This validation archive has not been
+uploaded to App Store Connect.
 
 ## App Store Connect / TestFlight
 
@@ -89,6 +78,10 @@ could not produce a matching dSYM. The repository now provides a repeatable
 Xcode scheme and build script that generate and UUID-check a dSYM before Xcode
 signs the app. The local build `20` archive verifies that path; it has not been
 uploaded, so only build `18` has a confirmed App Store Connect upload.
+
+The public App Store listing still shows version `0.8.0`; uploading build `18`
+to App Store Connect did not publish the Tauri update. The migrated `0.9.0`
+version remains pending App Review and public release.
 
 ## Legacy data migration
 
@@ -115,6 +108,9 @@ retry, and uninstall have not been independently exercised.
 
 ## Verification evidence
 
+The evidence below records the M6 validation before this App Store-only
+follow-up. The updated bundle target and CI workflow have not been rerun.
+
 Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 
 | Area | Result |
@@ -127,13 +123,13 @@ Environment: macOS 26.7.2, arm64; Rust/Cargo 1.99.1; Bun 1.3.14.
 | Frontend | Passed: lint, format check, typecheck, all 20 tests, and production build. |
 | Bridge contract | Passed as part of the frontend tests: all 31 TypeScript operation names match the Rust registry. |
 | Tauri app | Passed: app bundle built for `aarch64-apple-darwin`; executable is arm64; identifier is `com.lotusandcompanyinc.dev-tools`; version is `0.9.0`; minimum OS is `15.0`. |
-| Local DMG | Passed: unsigned `DevTools_0.9.0_aarch64.dmg` created; `hdiutil verify` reported a valid checksum. |
+| Local DMG experiment | Passed as an unpublished packaging experiment: unsigned `DevTools_0.9.0_aarch64.dmg` created and verified with `hdiutil`. No DMG was publicly released; it is not part of the distribution path. |
 | App Store Connect/TestFlight upload | Passed with warning: Xcode Organizer completed upload of arm64 app version `0.9.0` (build `18`); the app dSYM was missing for UUID `3FB0952A-6A07-3969-AFC8-C22BB7A39BE0`. |
 | Xcode Archive and dSYM | Passed locally for arm64 `0.9.0 (20)`: Apple Distribution signature verified and the app/dSYM UUIDs matched (`BC30C782-78E2-392D-B35D-E7DB717ADFB6`). This archive was not uploaded. |
+| Tauri App Store release | Pending: the public listing still shows version `0.8.0`; build `18` was uploaded to App Store Connect but the Tauri update has not been publicly released. |
 | Third-party notices | Passed: 385 locked Rust crates and 21 production frontend packages are inventoried in `THIRD-PARTY-NOTICES.md`; the file is in the app bundle and About license view. The `objc2` redistribution question is unresolved. |
 | Manual app smoke checks | Partial: all 11 feature routes opened. In the temporary app, image split/save produced four 64×64 PNGs; phrase-template save worked; SQLite table query succeeded, invalid SQL showed an error, and a later query recovered; a 1,048,560-byte JSON file converted to a valid 1,048,566-byte file; canceled saves created no output; local HTTP 404 was reported as Not Found; QR save produced a verified 168×168 PNG; and Markdown preview/export stripped script and `javascript:` content while preserving visible text. Earlier checks covered image resize, regex, timestamp, command generation, HTTP 200, and About license display. Settings persisted after replacing the app bundle in temporary app data. Finder drop and full feature parity remain unverified. |
-| Agent/workflow config | Passed: shared rules synchronized and checked; Ruby YAML parsing passed for the four GitHub workflows and CodeRabbit config. |
-| Developer ID signature/notarization for public DMG | Unverified: organization signing and notarization secrets are unavailable in this environment. |
+| Agent/workflow config | Shared rules were synchronized after this follow-up; workflow parsing and CI have not been rerun for these edits. |
 | Clean install/migration lifecycle | Unverified: no separate clean macOS 15 user profile was available on this host. |
 | Full feature parity | Unverified: all routes were opened and the listed operations were smoke-tested, but this was not a complete M6 manual regression pass. |
 | Performance | Unverified: no same-condition launch, responsiveness, workload, or app/child memory comparison was run. |
@@ -144,10 +140,9 @@ made in this migration.
 
 ## Package size
 
-The local arm64 build reported an uncompressed app bundle of 29.50 MiB and a
-compressed DMG of 12.76 MiB (13,064 KiB on disk). The app's directory occupied
-30,212 KiB. The generated app's bundle identifier, version, minimum macOS
-version, and arm64 executable were inspected.
+The local arm64 build reported an uncompressed app bundle of 29.50 MiB. The
+app's directory occupied 30,212 KiB. The generated app's bundle identifier,
+version, minimum macOS version, and arm64 executable were inspected.
 
 M5 recorded a Tauri app bundle of 29.52 MiB. That is a comparable Tauri bundle
 measurement; the 0.02 MiB difference is within packaging variation.
@@ -156,7 +151,7 @@ M0 recorded a Qt app bundle of 18,084 KiB before dependency deployment and
 107,516 KiB after deployment. M6's app directory is about 72% smaller on disk
 than the deployed M0 Qt bundle, but those checkpoints differ in build system,
 dependencies, OS patch version, and packaging method. Treat that comparison
-as directional only. M0 produced no compatible compressed DMG measurement.
+as directional only.
 
 ## License gate
 
@@ -166,7 +161,7 @@ components are no longer app dependencies. The current inventory is in
 [`THIRD-PARTY-NOTICES.md`](../../THIRD-PARTY-NOTICES.md); the bundled app and
 About license view both include it.
 
-Before public distribution:
+Before submitting a public Mac App Store release:
 
 1. Complete legal review of the exact Rust and frontend dependency sets in
    `src-tauri/Cargo.lock` and `frontend/bun.lock`, including transitive
@@ -175,8 +170,8 @@ Before public distribution:
    and redistribution implications are unclear. This notice inventory records
    the issue but does not resolve it.
 3. Recheck the lockfile hashes and notice contents whenever either lockfile
-   changes, then record the review result in the release checklist before
-   creating the draft release.
+   changes, then record the review result before uploading the release build
+   to App Store Connect.
 
 The inventory includes 385 Rust crates and 21 frontend production packages,
 with lockfile hashes recorded in the notice file. The notices are packaged
@@ -189,9 +184,7 @@ The passing local package checks used:
 
 ~~~sh
 CI=true bun run tauri:build -- --target aarch64-apple-darwin --bundles app
-CI=true frontend/node_modules/.bin/tauri bundle --config src-tauri/tauri.conf.json --target aarch64-apple-darwin --bundles dmg
-hdiutil verify src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/DevTools_0.9.0_aarch64.dmg
 ~~~
 
-The app bundle is removed by Tauri after DMG creation, so the release workflow
-verifies the app in the app-only build step before creating the DMG.
+The App Store submission artifact is the Xcode Archive produced by the shared
+scheme; GitHub Releases do not carry an app installer.

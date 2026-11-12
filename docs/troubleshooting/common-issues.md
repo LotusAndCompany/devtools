@@ -15,10 +15,10 @@ alone starts only the Vite server.
 
 ## macOS blocks a locally built app
 
-A local DMG built without Apple credentials is unsigned and is intended for
-development only. Public users should install the signed and notarized DMG from
-a published GitHub release. Do not bypass macOS security prompts for an
-unverified installer.
+A local app bundle is for development and may not have the distribution
+signature used for App Store releases. Install the supported public version
+from the [Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
+Do not bypass macOS security prompts for an unverified build.
 
 ## Legacy settings migration reports an error
 

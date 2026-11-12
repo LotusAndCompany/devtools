@@ -46,7 +46,8 @@ attribution to commits, pull requests, or issues.
 
 ## Releases
 
-A public macOS installer must be built from the release workflow, signed with
-the organization's Developer ID, notarized, and verified before publishing.
-See [installation and release](docs/getting-started/installation.md) and the
-[release gate](docs/migration/completion-report.md#release-gate).
+Public releases are distributed through the Mac App Store. Create an archive
+with the shared Xcode scheme and upload it to App Store Connect; use TestFlight
+for beta distribution and submit the release for App Review. See
+[macos/README.md](macos/README.md) and the
+[release checks](docs/migration/completion-report.md#license-gate).

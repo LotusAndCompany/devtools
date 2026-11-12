@@ -32,6 +32,6 @@ belong in `tests/fixtures/`; keep credentials and real user data out of them.
 
 Migration changes need evidence for a fresh profile, legacy input, malformed or
 partial input, retry, backup restoration, and preservation of the source.
-Before a public release, follow the clean-install, update, recovery,
-uninstallation, signing, notarization, and dependency-license gates in the
-[completion report](../migration/completion-report.md).
+Before an App Store release, follow the clean-install, update, recovery,
+uninstallation, App Store Connect archive, and dependency-license checks in
+the [completion report](../migration/completion-report.md).

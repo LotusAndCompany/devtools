@@ -43,7 +43,7 @@ bun run tauri:dev
 
 ## リリース
 
-公開用macOSインストーラーはリリースワークフローで作成し、組織のDeveloper IDで
-署名・公証して検証してから公開します。詳細は
-[インストールとリリース手順](../getting-started/installation.md)と
-[リリース条件](../migration/completion-report.md#release-gate)を参照してください。
+公開版はMac App Storeから配布します。共有Xcodeスキームでアーカイブを作成し、
+App Store Connectへアップロードします。ベータ配布にはTestFlightを使い、公開時は
+App Reviewへ提出します。手順は[macos/README.md](../../macos/README.md)と
+[リリース前の確認](../migration/completion-report.md#license-gate)を参照してください。

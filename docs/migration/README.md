@@ -32,4 +32,5 @@ they are not instructions for the current build.
 | M6: remove Qt and establish Tauri-only distribution | Implemented on this branch; acceptance evidence incomplete | [M6 completion report](completion-report.md) |
 
 M6 is not a release sign-off until the unverified clean-machine, migration,
-distribution, performance, and dependency-license checks in its report pass.
+App Store distribution, performance, and dependency-license checks in its
+report pass.

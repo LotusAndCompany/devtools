@@ -21,17 +21,17 @@ bun install --frozen-lockfile
 bun run tauri:dev
 ~~~
 
-## Build a DMG
+## Build a local macOS app bundle
 
 ~~~bash
 cd frontend
 bun run tauri:build
 ~~~
 
-Without Apple credentials this produces an unsigned local DMG. The release
-workflow requires an Apple Developer signing certificate and notarization
-credentials before it uploads a public installer. See the
-[installation and release guide](docs/getting-started/installation.md).
+This creates a local `DevTools.app` bundle. To prepare a build for TestFlight
+or the Mac App Store, use the shared Xcode Archive scheme and upload it through
+App Store Connect as described in [macos/README.md](macos/README.md). The local
+bundle build does not upload or publish an app.
 
 ## Tests and checks
 
@@ -54,4 +54,4 @@ bun run --bun test
 bun run --bun build
 ~~~
 
-The CI workflow also runs bun run tauri:build on macOS to produce the DMG.
+The CI workflow also builds the macOS app bundle.

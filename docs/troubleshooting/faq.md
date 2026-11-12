@@ -13,9 +13,9 @@ sidecar runtime.
 
 ## How do I update?
 
-Download a newer signed DMG from the published GitHub release, quit DevTools,
-and replace the app in Applications. There is no in-app automatic updater.
-Keep the app data folder when updating.
+Install available updates through the
+[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
+There is no in-app updater. Keep the app data folder when updating.
 
 ## Are database passwords migrated?
 

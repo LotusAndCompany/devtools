@@ -35,15 +35,17 @@ bun install --frozen-lockfile
 bun run tauri:dev
 ~~~
 
-Build a local DMG with:
+Build a local macOS app bundle with:
 
 ~~~bash
 bun run tauri:build
 ~~~
 
-For installation, release signing, and update guidance, see the
-[installation guide](docs/getting-started/installation.md). For contributor
-build and test commands, see [BUILD.md](BUILD.md).
+Install and update the public release through the
+[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
+For the Xcode Archive and App Store Connect process, see
+[macos/README.md](macos/README.md). For contributor build and test commands,
+see [BUILD.md](BUILD.md).
 
 ## Documentation
 

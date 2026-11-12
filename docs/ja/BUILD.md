@@ -21,16 +21,17 @@ bun install --frozen-lockfile
 bun run tauri:dev
 ~~~
 
-## DMGのビルド
+## ローカルmacOSアプリバンドルのビルド
 
 ~~~bash
 cd frontend
 bun run tauri:build
 ~~~
 
-Appleの認証情報を設定していない場合は、署名なしのローカルDMGが作られます。
-公開インストーラーは署名証明書と公証用認証情報をRelease workflowに設定してから作成します。
-詳細は[インストール・リリースガイド](../getting-started/installation.md)を参照してください。
+ローカルに `DevTools.app` バンドルが作られます。TestFlightまたはMac App Store向けの
+ビルドは、共有Xcode Archiveスキームでアーカイブし、App Store Connectへアップロードします。
+手順は[macos/README.md](../../macos/README.md)を参照してください。このローカルビルドは
+アプリをアップロード・公開しません。
 
 ## テストとチェック
 
@@ -53,4 +54,4 @@ bun run --bun test
 bun run --bun build
 ~~~
 
-CIではこれらに加え、macOS上で bun run tauri:build を実行してDMGを作ります。
+CIではこれらに加え、macOSアプリバンドルをビルドします。

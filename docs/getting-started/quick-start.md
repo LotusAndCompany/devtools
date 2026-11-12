@@ -10,5 +10,7 @@ bun install --frozen-lockfile
 bun run tauri:dev
 ~~~
 
-To build a local DMG, run bun run tauri:build from frontend/. For the public
-signed installer and upgrade steps, see the [installation guide](installation.md).
+To build a local macOS app bundle, run `bun run tauri:build` from `frontend/`.
+Install and update the public release through the
+[Mac App Store](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12).
+For App Store Connect archives, see [macos/README.md](../../macos/README.md).

@@ -1,9 +1,10 @@
-# Xcode Archive for TestFlight
+# Xcode Archive for Mac App Store and TestFlight
 
 Open `DevToolsArchive.xcodeproj` and choose the shared `DevTools Archive` scheme. Set
 the run destination to `Any Mac`, then choose **Product > Archive**. Xcode
 signs the archive with the configured Apple Distribution certificate and
-opens it in Organizer.
+opens it in Organizer. Upload the archive to App Store Connect, then distribute
+it through TestFlight or submit it for Mac App Store review.
 
 The build phase invokes the Tauri release build for Apple Silicon with Rust
 line-table debug information enabled. It runs `dsymutil`, checks that the
