@@ -18,7 +18,7 @@ concurrency:
 jobs:
   clang-format:
     name: Check Code Formatting
-    runs-on: macos-14
+    runs-on: macos-15
     permissions:
       contents: read
 
@@ -103,6 +103,8 @@ jobs:
           # ACTIONS_RUNTIME_TOKEN/ACTIONS_CACHE_URL, causing vcpkg install to
           # fail. Falling back to "clear" rebuilds ports on every run.
           VCPKG_BINARY_SOURCES: clear
+          # yaml-cpp 0.8.0 declares CMake 3.4; CMake 4 requires policy version 3.5.
+          CMAKE_POLICY_VERSION_MINIMUM: '3.5'
         run: |
           cmake -B build \
             -G Ninja \
@@ -139,7 +141,7 @@ jobs:
 
   format-suggestion:
     name: Format Suggestions (PR Comment)
-    runs-on: macos-14
+    runs-on: macos-15
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
