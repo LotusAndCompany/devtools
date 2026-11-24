@@ -11,6 +11,7 @@
 #include <QString>
 #include <QTextBrowser>
 #include <QTextEdit>
+#include <QTranslator>
 #include <QtTest>
 
 #include <oclero/qlementine/style/QlementineStyle.hpp>
@@ -52,6 +53,21 @@ bool anyViewContains(const QList<QTextBrowser *> &views, const QString &text)
     });
 }
 
+class JwtErrorTranslator final : public QTranslator
+{
+public:
+    bool isEmpty() const override { return false; }
+
+    QString translate(const char *context, const char *source, const char *, int) const override
+    {
+        if (qstrcmp(context, "JwtDecoder") == 0 &&
+            qstrcmp(source, "Failed to Base64URL-decode") == 0) {
+            return QStringLiteral("Base64URLのデコードに失敗しました");
+        }
+        return {};
+    }
+};
+
 /// 配下のいずれかのウィジェットのスタイルシートが指定の色名を含むか
 bool anyStyleSheetContains(const QWidget &root, const QColor &color)
 {
@@ -70,6 +86,8 @@ class TestJwtDecoderGUI : public QObject
 
 private slots:
     static void test_panes_updateOnInput();
+    static void test_signature_copyContainsOnlySignature();
+    static void test_decodeError_updatesOnLanguageChange();
     void test_scrollPosition_isKeptWhileIdle();
     // NOTE: アプリ全体のスタイルを差し替えるため、必ず最後に実行する
     static void test_colors_followTheme();
@@ -109,6 +127,43 @@ void TestJwtDecoderGUI::test_panes_updateOnInput()
 
     QVERIFY(anyViewContains(views, "Failed to Base64URL-decode"));
     QVERIFY(anyViewContains(views, "\"a\""));
+}
+
+void TestJwtDecoderGUI::test_signature_copyContainsOnlySignature()
+{
+    JwtDecoderGUI gui(new JwtDecoder());
+    auto *input = gui.findChild<QTextEdit *>();
+    QVERIFY(input != nullptr);
+    const QString signature = QStringLiteral("dummy-signature");
+    input->setPlainText(QStringLiteral("e30.e30.") + signature);
+
+    const auto views = gui.findChildren<QTextBrowser *>();
+    QCOMPARE(views.size(), 3);
+    QTRY_VERIFY(anyViewContains(views, signature));
+    const auto signature_view = std::find_if(
+        views.cbegin(), views.cend(),
+        [&signature](const auto *view) { return view->toPlainText().contains(signature); });
+    QVERIFY(signature_view != views.cend());
+    (*signature_view)->selectAll();
+    QCOMPARE((*signature_view)->textCursor().selectedText(), signature);
+}
+
+void TestJwtDecoderGUI::test_decodeError_updatesOnLanguageChange()
+{
+    JwtDecoderGUI gui(new JwtDecoder());
+    auto *input = gui.findChild<QTextEdit *>();
+    QVERIFY(input != nullptr);
+    input->setPlainText(QStringLiteral("e30.!!!.sig"));
+
+    const auto views = gui.findChildren<QTextBrowser *>();
+    QTRY_VERIFY(anyViewContains(views, QStringLiteral("Failed to Base64URL-decode")));
+
+    JwtErrorTranslator translator;
+    QVERIFY(QApplication::installTranslator(&translator));
+    QTRY_VERIFY(anyViewContains(views, QStringLiteral("Base64URLのデコードに失敗しました")));
+
+    QVERIFY(QApplication::removeTranslator(&translator));
+    QTRY_VERIFY(anyViewContains(views, QStringLiteral("Failed to Base64URL-decode")));
 }
 
 void TestJwtDecoderGUI::test_scrollPosition_isKeptWhileIdle()

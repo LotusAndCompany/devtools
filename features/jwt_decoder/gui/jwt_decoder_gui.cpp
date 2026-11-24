@@ -105,6 +105,10 @@ void JwtDecoderGUI::buildUi()
     headerPane = buildPane();
     payloadPane = buildPane();
     signaturePane = buildPane();
+    signature_hint = captionLabel(signaturePane.widget);
+    signature_hint->setWordWrap(true);
+    signature_hint->hide();
+    signaturePane.widget->layout()->addWidget(signature_hint);
 
     headerHighlighter = new JsonHighlighter(headerPane.view->document());
     payloadHighlighter = new JsonHighlighter(payloadPane.view->document());
@@ -243,6 +247,7 @@ void JwtDecoderGUI::retranslateUi()
     headerPane.label->setText(tr("Header"));
     payloadPane.label->setText(tr("Payload"));
     signaturePane.label->setText(tr("Signature"));
+    signature_hint->setText(tr("Shown as the raw Base64URL string."));
 
     // 値が無いことはプレースホルダで示す (本文に書くと全選択コピーに混ざるため)
     headerPane.view->setPlaceholderText(tr("No data"));
@@ -250,6 +255,9 @@ void JwtDecoderGUI::retranslateUi()
     signaturePane.view->setPlaceholderText(tr("No data"));
 
     // ペインの注記と本文は状態に依存するため、まとめて再生成する
+    if (decoder != nullptr) {
+        decoder->decode();
+    }
     updateViews();
 }
 
@@ -274,6 +282,8 @@ void JwtDecoderGUI::applyPalette()
     setDotStyle(headerPane.dot, jwtPalette.segmentHeader);
     setDotStyle(payloadPane.dot, jwtPalette.segmentPayload);
     setDotStyle(signaturePane.dot, jwtPalette.segmentSignature);
+    signature_hint->setStyleSheet(
+        QStringLiteral("color: %1;").arg(jwtPalette.secondaryText.name(QColor::HexRgb)));
 
     segmentHighlighter->setPalette(jwtPalette);
     headerHighlighter->setPalette(jwtPalette);
@@ -347,6 +357,7 @@ void JwtDecoderGUI::updateViews()
         showEmpty(headerPane);
         showEmpty(payloadPane);
         showEmpty(signaturePane);
+        signature_hint->hide();
         return;
     }
 
@@ -373,6 +384,7 @@ void JwtDecoderGUI::showSignature()
     const QString signature = decoder->signature();
 
     signaturePane.note->setText(tr("Not decoded · not verified"));
+    signature_hint->setVisible(!signature.isEmpty());
 
     // 2 パートの JWS では署名が無い。プレースホルダに任せる
     if (signature.isEmpty()) {
@@ -380,10 +392,7 @@ void JwtDecoderGUI::showSignature()
         return;
     }
 
-    signaturePane.view->setHtml(
-        coloredHtml(signature, jwtPalette.segmentSignature) +
-        QStringLiteral("<p>%1</p>")
-            .arg(coloredHtml(tr("Shown as the raw Base64URL string."), jwtPalette.secondaryText)));
+    signaturePane.view->setHtml(coloredHtml(signature, jwtPalette.segmentSignature));
 }
 
 void JwtDecoderGUI::showEmpty(const Pane &pane)

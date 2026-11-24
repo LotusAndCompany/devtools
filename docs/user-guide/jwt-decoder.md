@@ -66,8 +66,8 @@ A token without a signature (`header.payload`) is accepted. The signature pane s
 | Situation | What you see |
 |-----------|--------------|
 | Fewer than two parts, or more than three | An **Invalid JWT structure** banner below the input; all three panes show **No data** |
-| A segment is not valid Base64URL | That pane shows **Decode failed** with **Failed to Base64URL-decode**; the segment turns red in the input |
-| A segment decodes but is not JSON | That pane shows **Decode failed** with **Invalid JSON** |
+| The header or payload is not valid Base64URL | That pane shows **Decode failed** with **Failed to Base64URL-decode**; the segment turns red in the input |
+| The header or payload decodes but is not JSON | That pane shows **Decode failed** with **Invalid JSON** |
 
 Base64URL padding is optional, as required by the JWT specification.
 

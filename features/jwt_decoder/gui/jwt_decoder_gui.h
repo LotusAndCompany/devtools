@@ -86,6 +86,7 @@ private:
     Pane headerPane;
     Pane payloadPane;
     Pane signaturePane;
+    QLabel *signature_hint = nullptr;
 
     JwtSegmentHighlighter *segmentHighlighter = nullptr; ///< 入力欄のセグメント色分け
     JsonHighlighter *headerHighlighter = nullptr;        ///< ヘッダー JSON の色分け
