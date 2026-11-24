@@ -6,7 +6,7 @@
 
 - macOS 15.0 or later on Apple Silicon (arm64)
 - Xcode Command Line Tools
-- Rust 1.99.1 with rustfmt and clippy
+- Rust 1.100.0 with rustfmt and clippy
 - Bun 1.3.14
 
 The native host is Tauri 2 with Rust. macOS provides WebKit. The app build

@@ -20,7 +20,7 @@ Base UI を使った React/TypeScript UI で構成し、WebKit は macOS が提�
 
 - macOS 15.0以降、Apple Silicon（arm64）
 - Xcode Command Line Tools
-- Rust 1.99.1（rustfmt、clippyを含む）
+- Rust 1.100.0（rustfmt、clippyを含む）
 - Bun 1.3.14
 
 Qt、CMake、vcpkg、QWebChannel、FFI、Sidecarには依存しません。

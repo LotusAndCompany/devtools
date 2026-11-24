@@ -20,7 +20,7 @@ Rust backend, and a React/TypeScript frontend. macOS supplies WebKit.
 
 - macOS 15.0 or later on Apple Silicon (arm64)
 - Xcode Command Line Tools
-- Rust 1.99.1 with rustfmt and clippy
+- Rust 1.100.0 with rustfmt and clippy
 - Bun 1.3.14
 
 The app build no longer uses Qt, CMake, the vcpkg package manager,

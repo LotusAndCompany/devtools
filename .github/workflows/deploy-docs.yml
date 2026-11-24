@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Rust
-        run: rustup toolchain install 1.99.1 --profile minimal --component rustfmt
+        run: rustup toolchain install 1.100.0 --profile minimal --component rustfmt
 
       - name: Generate Rust API docs
         run: cargo doc --locked --no-deps --manifest-path src-tauri/Cargo.toml

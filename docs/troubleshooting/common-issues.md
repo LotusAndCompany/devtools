@@ -2,7 +2,7 @@
 
 ## Bun or Rust version mismatch
 
-Use Bun 1.3.14 and Rust 1.99.1 with rustfmt and clippy. Run
+Use Bun 1.3.14 and Rust 1.100.0 with rustfmt and clippy. Run
 `bun install --frozen-lockfile` from `frontend/`; run Cargo commands from the
 repository root with `--manifest-path src-tauri/Cargo.toml`.
 
