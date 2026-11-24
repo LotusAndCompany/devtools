@@ -1,6 +1,6 @@
 #include "command.h"
 
-#include "command_function.h"
+#include "features/command/core/command_service.h"
 #include "features/framework/gui/design_system.h"
 
 #include <QApplication>
@@ -16,8 +16,6 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-#include <algorithm>
 
 Command::Command(QWidget *parent) : QWidget(parent)
 {
@@ -193,193 +191,27 @@ void Command::changeEvent(QEvent *event)
     }
 }
 
-QList<CommandFunction> getGitCommands()
-{
-    return {
-        CommandFunction("git add", Command::tr("Add changes"),
-                        {
-                            CommandOption(Command::tr("None"), true, Command::tr("Path"), false),
-                        }),
-        CommandFunction("git commit", Command::tr("Create a commit"),
-                        {CommandOption(Command::tr("None"), false, "", false),
-                         CommandOption("-m", true, Command::tr("Message"), true),
-                         CommandOption("-a", false, "", false)}),
-        CommandFunction("git log", Command::tr("Show commit history"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("git status", Command::tr("Show branch status"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("git diff", Command::tr("Show differences"),
-                        {
-                            CommandOption(Command::tr("None"), true, Command::tr("Target"), false),
-                        }),
-        CommandFunction("git merge", Command::tr("Merge"),
-                        {CommandOption(Command::tr("None"), false, "", false),
-                         CommandOption("--abort", false, "", false)}),
-        CommandFunction(
-            "git remote", Command::tr("Remote"),
-            {CommandOption("-v", false, "", false),
-             CommandOption("set-url", true, Command::tr("Remote name and URL"), false)})};
-}
-
-QList<CommandFunction> getDockerCommands()
-{
-    return {
-        CommandFunction("docker build", Command::tr("Build"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                            CommandOption("-t", true, Command::tr("Name and tag"), false),
-                            CommandOption("-f", true, Command::tr("File"), false),
-                        }),
-        CommandFunction("docker images", Command::tr("List images"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                            CommandOption("--all", false, "", false),
-                            CommandOption("--quiet", false, "", false),
-                        }),
-        CommandFunction("docker run", Command::tr("Create and run a container"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction("docker image prune", Command::tr("Remove unused images"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker exec", Command::tr("Run a command in a running container"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction("docker pull", Command::tr("Download an image from a repository"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction("docker push", Command::tr("Push an image to a repository"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction(
-            "docker logs", Command::tr("Show logs"),
-            {
-                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
-            }),
-        CommandFunction(
-            "docker stop", Command::tr("Stop a container"),
-            {
-                CommandOption(Command::tr("None"), true, Command::tr("Container"), false),
-            }),
-        CommandFunction("docker rm", Command::tr("Remove a stopped container"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction("docker rmi", Command::tr("Remove an image"),
-                        {
-                            CommandOption(Command::tr("None"), true, "", false),
-                        }),
-        CommandFunction("docker network ls", Command::tr("List created networks"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker volume ls", Command::tr("List created volumes"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-    };
-}
-
-QList<CommandFunction> getDockerComposeCommands()
-{
-    return {
-        CommandFunction("docker compose build", Command::tr("Build services"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose exec", Command::tr("Run a command in a running container"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose up", Command::tr("Start containers"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose down",
-                        Command::tr("Stop containers and remove related resources"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose restart", Command::tr("Restart containers"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose stop", Command::tr("Stop containers"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose logs", Command::tr("Show container logs"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose ps", Command::tr("Show container status"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose start", Command::tr("Start stopped services"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-        CommandFunction("docker compose kill", Command::tr("Force stop containers"),
-                        {
-                            CommandOption(Command::tr("None"), false, "", false),
-                        }),
-    };
-}
-
 void Command::selectedCategory()
 {
     const int selectedIndex = category_list->currentIndex();
 
     functions_list->clear();
 
-    QList<CommandFunction> commandList;
-    QStringList commandNames;
-
-    switch (selectedIndex) {
-    case 1:
-        commandList = getGitCommands();
-        for (const CommandFunction &cmd : std::as_const(commandList)) {
-            commandNames.append(cmd.getName() + " " + cmd.getDescription());
-        }
-        functions_list->addItems(commandNames);
-        functions_label->setVisible(true);
-        functions_list->setVisible(true);
-        functions_list->setEnabled(true);
-        break;
-    case 2:
-        commandList = getDockerCommands();
-        for (const CommandFunction &cmd : std::as_const(commandList)) {
-            commandNames.append(cmd.getName() + " " + cmd.getDescription());
-        }
-        functions_list->addItems(commandNames);
-        functions_label->setVisible(true);
-        functions_list->setVisible(true);
-        functions_list->setEnabled(true);
-        break;
-    case 3:
-        commandList = getDockerComposeCommands();
-        for (const CommandFunction &cmd : std::as_const(commandList)) {
-            commandNames.append(cmd.getName() + " " + cmd.getDescription());
-        }
-        functions_list->addItems(commandNames);
-        functions_label->setVisible(true);
-        functions_list->setVisible(true);
-        functions_list->setEnabled(true);
-        break;
-    default:
+    const QList<CommandFunction> commandList =
+        CommandService::functions(static_cast<CommandCategory>(selectedIndex));
+    if (commandList.isEmpty()) {
         reset();
-        break;
+        return;
     }
+
+    QStringList commandNames;
+    for (const CommandFunction &cmd : commandList) {
+        commandNames.append(cmd.getName() + " " + cmd.getDescription());
+    }
+    functions_list->addItems(commandNames);
+    functions_label->setVisible(true);
+    functions_list->setVisible(true);
+    functions_list->setEnabled(true);
 }
 
 void Command::selectedFunction()
@@ -389,24 +221,9 @@ void Command::selectedFunction()
     option_list->setVisible(false);
     option_list->setEnabled(false);
 
-    const int selectedCategoryIndex = category_list->currentIndex();
     const int selectedFunctionsIndex = functions_list->currentIndex();
-
-    QList<CommandFunction> commandList;
-
-    switch (selectedCategoryIndex) {
-    case 1:
-        commandList = getGitCommands();
-        break;
-    case 2:
-        commandList = getDockerCommands();
-        break;
-    case 3:
-        commandList = getDockerComposeCommands();
-        break;
-    default:
-        break;
-    }
+    const QList<CommandFunction> commandList =
+        CommandService::functions(static_cast<CommandCategory>(category_list->currentIndex()));
 
     if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
         return;
@@ -431,25 +248,10 @@ void Command::selectedFunction()
 
 void Command::selectedOption()
 {
-    const int selectedCategoryIndex = category_list->currentIndex();
     const int selectedFunctionsIndex = functions_list->currentIndex();
     const int selectedOptionIndex = option_list->currentIndex();
-
-    QList<CommandFunction> commandList;
-
-    switch (selectedCategoryIndex) {
-    case 1:
-        commandList = getGitCommands();
-        break;
-    case 2:
-        commandList = getDockerCommands();
-        break;
-    case 3:
-        commandList = getDockerComposeCommands();
-        break;
-    default:
-        break;
-    }
+    const QList<CommandFunction> commandList =
+        CommandService::functions(static_cast<CommandCategory>(category_list->currentIndex()));
     if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
         return;
     }
@@ -498,19 +300,6 @@ void Command::clear()
     text_browser->clear();
 }
 
-bool containsNoQuotes(const QString &str)
-{
-    QString const quotes = "\"'`";
-
-    // NOLINTNEXTLINE(readability-use-anyofallof)
-    for (const QChar &quote : quotes) {
-        if (str.contains(quote)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 void showErrorAlert()
 {
     QMessageBox::critical(nullptr, Command::tr("Error"),
@@ -519,52 +308,13 @@ void showErrorAlert()
 
 void Command::generate()
 {
-    const int selectedCategoryIndex = category_list->currentIndex();
-    const int selectedFunctionsIndex = functions_list->currentIndex();
-    const int selectedOptionIndex = option_list->currentIndex();
-
-    QList<CommandFunction> commandList;
-    switch (selectedCategoryIndex) {
-    case 1:
-        commandList = getGitCommands();
-        break;
-    case 2:
-        commandList = getDockerCommands();
-        break;
-    case 3:
-        commandList = getDockerComposeCommands();
-        break;
-    default:
-        break;
-    }
-    if (selectedFunctionsIndex < 0 || selectedFunctionsIndex >= commandList.size()) {
-        return;
-    }
-
-    QList<CommandOption> optionList = commandList[selectedFunctionsIndex].getOptions();
-    if (selectedOptionIndex < 0 || selectedOptionIndex >= optionList.size()) {
-        return;
-    }
-
-    const CommandOption &option = optionList[selectedOptionIndex];
-
-    const QString value1 = text_edit->text();
-
-    if (!containsNoQuotes(value1)) {
+    const CommandGenerationResult result = CommandService::generate(
+        static_cast<CommandCategory>(category_list->currentIndex()), functions_list->currentIndex(),
+        option_list->currentIndex(), text_edit->text());
+    if (result.error == CommandGenerationError::InvalidValue) {
         showErrorAlert();
-    } else {
-        QString command = commandList[selectedFunctionsIndex].getName();
-        if (option_list->isEnabled() && option.getName() != tr("None")) {
-            command += " " + option.getName();
-        }
-        if (option.isRequired() || text_edit->isVisible()) {
-            if (option.isRequiredQuotes()) {
-                command += " \"" + value1 + "\"";
-            } else {
-                command += " " + value1;
-            }
-        }
-        text_browser->setPlainText(command);
+    } else if (result.error == CommandGenerationError::None) {
+        text_browser->setPlainText(result.command);
     }
 }
 

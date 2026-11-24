@@ -45,7 +45,9 @@ private slots:
     void onPastePressed();
     void onClearPressed();
     void onLoadPressed();
+    void loadFileSelected(const QString &fileName);
     void onSavePressed();
+    void saveFileSelected(const QString &fileName);
     void onCopyPressed();
 
 private:

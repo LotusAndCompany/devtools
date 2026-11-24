@@ -1,22 +1,16 @@
 #include "api_tool.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/http_request/core/http_service.h"
 
-#include <QAuthenticator>
 #include <QComboBox>
-#include <QDateTime>
 #include <QEvent>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QLabel>
 #include <QLineEdit>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSizePolicy>
@@ -25,9 +19,11 @@
 #include <QTableView>
 #include <QVBoxLayout>
 
+#include <exception>
+
 api_tool::api_tool(QWidget *parent)
     : QFrame(parent)
-    , network_manager(new QNetworkAccessManager(this))
+    , http_service(new HttpService(this))
     , params_model(new QStandardItemModel(this))
 {
     buildUi();
@@ -35,8 +31,7 @@ api_tool::api_tool(QWidget *parent)
     setupResponseView();
 
     connect(send_button, &QPushButton::clicked, this, &api_tool::handleSendButtonClick);
-    connect(network_manager, &QNetworkAccessManager::finished, this,
-            &api_tool::handleNetworkReplyFinished);
+    connect(http_service, &HttpService::finished, this, &api_tool::handleNetworkReplyFinished);
     connect(params_model, &QStandardItemModel::itemChanged, this, &api_tool::updateUrlFromParams);
 
     qDebug() << "api_tool UI setup complete";
@@ -136,41 +131,11 @@ void api_tool::setupParametersTable()
 
 void api_tool::handleSendButtonClick()
 {
-    qDebug() << "Button clicked";
-
-    request_start_time = QDateTime::currentMSecsSinceEpoch();
-
-    QString const username = username_edit->text();
-    QString const password = password_edit->text();
-
-    QString const selectedMethod = QStringList{QStringLiteral("GET"), QStringLiteral("POST"),
-                                               QStringLiteral("PUT"), QStringLiteral("DELETE")}
-                                       .at(method_combo->currentIndex());
-    QString const url = url_edit->text();
-    QNetworkRequest request((QUrl(url)));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    if (!username.isEmpty() && !password.isEmpty()) {
-        QString const credentials = username + ":" + password;
-        QByteArray const data = credentials.toLocal8Bit().toBase64();
-        request.setRawHeader("Authorization", "Basic " + data);
-    }
-
-    QByteArray payload;
-    if (selectedMethod == "POST" || selectedMethod == "PUT") {
-        QString const bodyText = body_edit->toPlainText();
-        payload = bodyText.toUtf8();
-    }
-
-    if (selectedMethod == "GET") {
-        network_manager->get(request);
-    } else if (selectedMethod == "POST") {
-        network_manager->post(request, payload);
-    } else if (selectedMethod == "PUT") {
-        network_manager->put(request, payload);
-    } else if (selectedMethod == "DELETE") {
-        network_manager->deleteResource(request);
-    }
+    const QString method = QStringList{QStringLiteral("GET"), QStringLiteral("POST"),
+                                       QStringLiteral("PUT"), QStringLiteral("DELETE")}
+                               .at(method_combo->currentIndex());
+    http_service->send({method, url_edit->text(), username_edit->text(), password_edit->text(),
+                        body_edit->toPlainText()});
 }
 
 void api_tool::setupResponseView()
@@ -245,74 +210,39 @@ QString formatDataSize(qint64 bytes)
     }
 }
 
-void api_tool::handleNetworkReplyFinished(QNetworkReply *reply)
+void api_tool::handleNetworkReplyFinished(const HttpResponse &response)
 {
     try {
-        if (reply == nullptr) {
-            qCritical() << "Received a null reply object.";
-            return;
-        }
-
-        qint64 const responseTime = QDateTime::currentMSecsSinceEpoch() - request_start_time;
-        qDebug() << "Handling network reply, elapsed time:" << responseTime << "ms";
-
-        QByteArray const responseData = reply->readAll();
-        qint64 const dataSize = responseData.size();
-        qDebug() << "Response size:" << dataSize << "bytes";
-
-        int const statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        QString const statusText =
-            reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-        qDebug() << "Status code:" << statusCode << (statusText.isEmpty() ? "" : statusText);
-
-        QString responseText;
-        if (reply->error() == QNetworkReply::NoError) {
-            responseText = QString::fromUtf8(responseData);
+        QString response_text;
+        if (response.isSuccess()) {
+            response_text = QString::fromUtf8(response.body);
         } else {
-            responseText = tr("Error: ") + reply->errorString();
+            response_text = tr("Error: ") + response.error_message;
         }
-        QString const formattedSize = formatDataSize(dataSize);
-
-        QString const statusInfo = tr("Status: %1 %2 Time: %3ms Size: %4")
-                                       .arg(statusCode)
-                                       .arg(statusText.isEmpty() ? tr("Error") : statusText)
-                                       .arg(responseTime)
-                                       .arg(formattedSize);
-        status_label->setText(statusInfo);
-
-        response_edit->setPlainText(responseText);
-
+        QString const status_info =
+            tr("Status: %1 %2 Time: %3ms Size: %4")
+                .arg(response.status_code)
+                .arg(response.reason.isEmpty() ? tr("Error") : response.reason)
+                .arg(response.elapsed_ms)
+                .arg(formatDataSize(response.body.size()));
+        status_label->setText(status_info);
+        response_edit->setPlainText(response_text);
     } catch (const std::exception &e) {
         qCritical() << "Exception caught during response handling:" << e.what();
     } catch (...) {
         qCritical() << "Unknown exception caught during response handling.";
     }
-
-    reply->deleteLater();
 }
 
 void api_tool::updateUrlFromParams()
 {
-    QString baseUrl = url_edit->text().split('?').at(0);
-    QString queryString;
-
+    QList<QPair<QString, QString>> parameters;
     for (int row = 0; row < params_model->rowCount(); ++row) {
         QString const key =
             (params_model->item(row, 0) != nullptr) ? params_model->item(row, 0)->text() : "";
         QString const value =
             (params_model->item(row, 1) != nullptr) ? params_model->item(row, 1)->text() : "";
-
-        if (!key.isEmpty()) {
-            if (!queryString.isEmpty()) {
-                queryString.append('&');
-            }
-            queryString.append(QUrl::toPercentEncoding(key) + '=' + QUrl::toPercentEncoding(value));
-        }
+        parameters.append({key, value});
     }
-
-    if (!queryString.isEmpty()) {
-        baseUrl.append('?').append(queryString);
-    }
-
-    url_edit->setText(baseUrl);
+    url_edit->setText(HttpService::urlWithParameters(url_edit->text(), parameters));
 }

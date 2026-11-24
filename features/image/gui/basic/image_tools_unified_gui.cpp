@@ -2,6 +2,7 @@
 
 #include "features/framework/gui/design_system.h"
 #include "features/framework/gui/icon_utils.h"
+#include "features/image/core/image_processing_service.h"
 #include "features/image/gui/basic/control.h"
 #include "features/image/gui/transparent/color_sample.h"
 #include "features/image/gui/transparent/image_view_for_image_transparent.h"
@@ -11,11 +12,9 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QDir>
 #include <QDoubleSpinBox>
 #include <QEvent>
 #include <QFileDialog>
-#include <QFileInfo>
 #include <QFormLayout>
 #include <QFrame>
 #include <QGridLayout>
@@ -25,45 +24,16 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QQueue>
 #include <QRadioButton>
 #include <QScrollArea>
 #include <QSignalBlocker>
 #include <QSizePolicy>
 #include <QSpinBox>
 #include <QVBoxLayout>
-#include <QVector3D>
-#include <QVector>
 
 #include <algorithm>
-#include <array>
-#include <cmath>
 
 namespace {
-constexpr double M_TAU = 2.0 * M_PI;
-
-struct DivisionPlan
-{
-    int xCount = 0;
-    int yCount = 0;
-    double stepW = 0.0;
-    double stepH = 0.0;
-};
-
-int countByCellSizeForPlan(int source, int cell, bool ignoreRemainders)
-{
-    if (source <= 0 || cell <= 0) {
-        return 0;
-    }
-
-    const int base = source / cell;
-    if (ignoreRemainders || (source % cell == 0)) {
-        return base;
-    }
-
-    return base + 1;
-}
-
 QSpinBox *buildPixelSpinBox(QWidget *parent)
 {
     auto *spin = new QSpinBox(parent);
@@ -365,55 +335,6 @@ void buildUiArea(Ui::ImageToolsUnifiedGUI *ui, QWidget *parent, QHBoxLayout *roo
     rootLayout->addWidget(toolPane, DevTools::Ui::Metrics::SIDE_PANEL_STRETCH);
 }
 
-DivisionPlan buildDivisionPlan(const Ui::ImageToolsUnifiedGUI *ui, bool useDivisionMode,
-                               int sourceW, int sourceH)
-{
-    DivisionPlan plan;
-    if (useDivisionMode) {
-        plan.xCount = std::max(1, ui->hDivValue->value());
-        plan.yCount = std::max(1, ui->vDivValue->value());
-        plan.stepW = static_cast<double>(sourceW) / plan.xCount;
-        plan.stepH = static_cast<double>(sourceH) / plan.yCount;
-        return plan;
-    }
-
-    const int cellW = std::max(1, ui->cellWidthValue->value());
-    const int cellH = std::max(1, ui->cellHeightValue->value());
-    plan.xCount = countByCellSizeForPlan(sourceW, cellW, ui->ignoreRemainders->isChecked());
-    plan.yCount = countByCellSizeForPlan(sourceH, cellH, ui->ignoreRemainders->isChecked());
-    plan.stepW = cellW;
-    plan.stepH = cellH;
-    return plan;
-}
-
-QRect divisionRect(const Ui::ImageToolsUnifiedGUI *ui, const DivisionPlan &plan, int x, int y,
-                   int sourceW, int sourceH)
-{
-    int left = static_cast<int>(std::floor(x * plan.stepW));
-    int top = static_cast<int>(std::floor(y * plan.stepH));
-    int right = static_cast<int>(std::floor((x + 1) * plan.stepW));
-    int bottom = static_cast<int>(std::floor((y + 1) * plan.stepH));
-
-    if (!ui->ignoreRemainders->isChecked()) {
-        if (x == plan.xCount - 1) {
-            right = sourceW;
-        }
-        if (y == plan.yCount - 1) {
-            bottom = sourceH;
-        }
-    }
-
-    left = std::clamp(left, 0, sourceW);
-    top = std::clamp(top, 0, sourceH);
-    right = std::clamp(right, 0, sourceW);
-    bottom = std::clamp(bottom, 0, sourceH);
-
-    if (right <= left || bottom <= top) {
-        return {};
-    }
-
-    return {left, top, right - left, bottom - top};
-}
 } // namespace
 
 ImageToolsUnifiedGUI::ImageToolsUnifiedGUI(QWidget *parent)
@@ -572,14 +493,14 @@ void ImageToolsUnifiedGUI::refreshSizeInputs()
 
 void ImageToolsUnifiedGUI::onLoadImageSelected(const QString &path)
 {
-    const QImage loaded(path);
+    const QImage loaded = ImageProcessingService::load(path);
     if (loaded.isNull()) {
         QMessageBox::critical(this, tr("Load Failed"), tr("Failed to load the image."));
         return;
     }
 
     loadedFilePath = path;
-    originalImage = loaded.convertToFormat(QImage::Format_RGBA8888);
+    originalImage = loaded;
     currentImage = originalImage;
 
     refreshPreview(true);
@@ -591,7 +512,7 @@ void ImageToolsUnifiedGUI::onSaveImageSelected(const QString &path)
         return;
     }
 
-    if (!currentImage.save(path)) {
+    if (!ImageProcessingService::save(currentImage, path)) {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save the image."));
     }
 }
@@ -606,36 +527,16 @@ void ImageToolsUnifiedGUI::onResetButtonClicked()
     refreshPreview();
 }
 
-void ImageToolsUnifiedGUI::applyResize(const QSize &targetSize)
-{
-    if (!hasImage()) {
-        return;
-    }
-    if (targetSize.isEmpty()) {
-        return;
-    }
-
-    currentImage = currentImage.scaled(
-        targetSize, Qt::IgnoreAspectRatio,
-        ui->smoothScaling->isChecked() ? Qt::SmoothTransformation : Qt::FastTransformation);
-    refreshPreview();
-}
-
 void ImageToolsUnifiedGUI::onApplyResizeBySizeClicked()
 {
     if (!hasImage()) {
         return;
     }
 
-    const int width = ui->widthValue->value();
-    int height = ui->heightValue->value();
-
-    if (keepAspectRatio) {
-        const double ratio = static_cast<double>(currentImage.width()) / currentImage.height();
-        height = static_cast<int>(std::round(width / ratio));
-    }
-
-    applyResize({width, height});
+    currentImage = ImageProcessingService::resizeBySize(currentImage, ui->widthValue->value(),
+                                                        ui->heightValue->value(), keepAspectRatio,
+                                                        ui->smoothScaling->isChecked());
+    refreshPreview();
 }
 
 void ImageToolsUnifiedGUI::onApplyResizeByScaleClicked()
@@ -644,12 +545,10 @@ void ImageToolsUnifiedGUI::onApplyResizeByScaleClicked()
         return;
     }
 
-    const double sx = ui->hScaleValue->value() / 100.0;
-    const double sy = keepAspectRatio ? sx : ui->vScaleValue->value() / 100.0;
-    const int width = std::max(1, static_cast<int>(std::round(currentImage.width() * sx)));
-    const int height = std::max(1, static_cast<int>(std::round(currentImage.height() * sy)));
-
-    applyResize({width, height});
+    currentImage = ImageProcessingService::resizeByScale(currentImage, ui->hScaleValue->value(),
+                                                         ui->vScaleValue->value(), keepAspectRatio,
+                                                         ui->smoothScaling->isChecked());
+    refreshPreview();
 }
 
 void ImageToolsUnifiedGUI::onKeepAspectRatioChanged(Qt::CheckState state)
@@ -663,9 +562,7 @@ void ImageToolsUnifiedGUI::onRotateLeftButtonClicked()
         return;
     }
 
-    QTransform t;
-    t.rotate(-90);
-    currentImage = currentImage.transformed(t, Qt::SmoothTransformation);
+    currentImage = ImageProcessingService::rotateLeft(currentImage);
     refreshPreview();
 }
 
@@ -675,9 +572,7 @@ void ImageToolsUnifiedGUI::onRotateRightButtonClicked()
         return;
     }
 
-    QTransform t;
-    t.rotate(90);
-    currentImage = currentImage.transformed(t, Qt::SmoothTransformation);
+    currentImage = ImageProcessingService::rotateRight(currentImage);
     refreshPreview();
 }
 
@@ -687,11 +582,7 @@ void ImageToolsUnifiedGUI::onFlipHorizontalButtonClicked()
         return;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    currentImage = currentImage.flipped(Qt::Horizontal);
-#else
-    currentImage = currentImage.mirrored(true, false);
-#endif
+    currentImage = ImageProcessingService::flip(currentImage, ImageFlipDirection::Horizontal);
     refreshPreview();
 }
 
@@ -701,11 +592,7 @@ void ImageToolsUnifiedGUI::onFlipVerticalButtonClicked()
         return;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    currentImage = currentImage.flipped(Qt::Vertical);
-#else
-    currentImage = currentImage.mirrored(false, true);
-#endif
+    currentImage = ImageProcessingService::flip(currentImage, ImageFlipDirection::Vertical);
     refreshPreview();
 }
 
@@ -731,166 +618,12 @@ void ImageToolsUnifiedGUI::onToleranceValueChanged(double tolerance)
 
 void ImageToolsUnifiedGUI::onTransparencyValueChanged(double transparency)
 {
-    const double clamped = std::clamp(transparency, 0.0, 1.0);
-    transparentOpacity = static_cast<uint8_t>(255 * (1.0 - clamped));
+    transparentOpacity = ImageProcessingService::alphaForTransparency(transparency);
 }
 
 void ImageToolsUnifiedGUI::onContiguousAreaCheckStateChanged(Qt::CheckState state)
 {
     onlyContiguousArea = (state == Qt::CheckState::Checked);
-}
-
-double ImageToolsUnifiedGUI::colorDiffSquaredRgb(const QColor &a, const QColor &b)
-{
-    const double dr = a.redF() - b.redF();
-    const double dg = a.greenF() - b.greenF();
-    const double db = a.blueF() - b.blueF();
-    return (dr * dr) + (dg * dg) + (db * db);
-}
-
-double ImageToolsUnifiedGUI::colorDiffSquaredHsv(const QColor &a, const QColor &b)
-{
-    QVector3D va;
-    if (a.hsvHueF() < 0) {
-        va = QVector3D(0, 0, a.valueF());
-    } else {
-        va = QVector3D(static_cast<float>(a.hsvSaturationF() * cos(M_TAU * a.hsvHueF())),
-                       static_cast<float>(a.hsvSaturationF() * sin(M_TAU * a.hsvHueF())),
-                       a.valueF());
-    }
-
-    QVector3D vb;
-    if (b.hsvHueF() < 0) {
-        vb = QVector3D(0, 0, b.valueF());
-    } else {
-        vb = QVector3D(static_cast<float>(b.hsvSaturationF() * cos(M_TAU * b.hsvHueF())),
-                       static_cast<float>(b.hsvSaturationF() * sin(M_TAU * b.hsvHueF())),
-                       b.valueF());
-    }
-
-    return (vb - va).lengthSquared();
-}
-
-double ImageToolsUnifiedGUI::colorDiffSquaredHsl(const QColor &a, const QColor &b)
-{
-    QVector3D va;
-    if (a.hslHueF() < 0) {
-        va = QVector3D(0, 0, a.lightnessF());
-    } else {
-        va = QVector3D(static_cast<float>(a.hslSaturationF() * cos(M_TAU * a.hslHueF())),
-                       static_cast<float>(a.hslSaturationF() * sin(M_TAU * a.hslHueF())),
-                       a.lightnessF());
-    }
-
-    QVector3D vb;
-    if (b.hslHueF() < 0) {
-        vb = QVector3D(0, 0, b.lightnessF());
-    } else {
-        vb = QVector3D(static_cast<float>(b.hslSaturationF() * cos(M_TAU * b.hslHueF())),
-                       static_cast<float>(b.hslSaturationF() * sin(M_TAU * b.hslHueF())),
-                       b.lightnessF());
-    }
-
-    return (vb - va).lengthSquared();
-}
-
-double ImageToolsUnifiedGUI::maxColorDiffSquared(QColor::Spec spec)
-{
-    switch (spec) {
-    case QColor::Spec::Rgb:
-        return 3.0;
-    case QColor::Spec::Hsv:
-    case QColor::Spec::Hsl:
-        return 4.0;
-    default:
-        return 3.0;
-    }
-}
-
-bool ImageToolsUnifiedGUI::isTransparentTarget(const QColor &source, const QColor &target,
-                                               QColor::Spec spec, double tolerance)
-{
-    const QColor a = source.convertTo(spec);
-    const QColor b = target.convertTo(spec);
-    double diff = 0.0;
-    switch (spec) {
-    case QColor::Spec::Rgb:
-        diff = colorDiffSquaredRgb(a, b);
-        break;
-    case QColor::Spec::Hsv:
-        diff = colorDiffSquaredHsv(a, b);
-        break;
-    case QColor::Spec::Hsl:
-        diff = colorDiffSquaredHsl(a, b);
-        break;
-    default:
-        diff = colorDiffSquaredRgb(a, b);
-        break;
-    }
-
-    return diff <= (maxColorDiffSquared(spec) * tolerance * tolerance);
-}
-
-void ImageToolsUnifiedGUI::applyTransparentByColor(const QColor &targetColor)
-{
-    for (int y = 0; y < currentImage.height(); y++) {
-        for (int x = 0; x < currentImage.width(); x++) {
-            QColor source = currentImage.pixelColor(x, y);
-            if (isTransparentTarget(source, targetColor, transparentColorSpec,
-                                    transparentTolerance)) {
-                source.setAlpha(transparentOpacity);
-                currentImage.setPixelColor(x, y, source);
-            }
-        }
-    }
-}
-
-void ImageToolsUnifiedGUI::applyTransparentByFloodFill(const QPoint &start)
-{
-    if (!currentImage.valid(start)) {
-        return;
-    }
-
-    const QColor targetColor = currentImage.pixelColor(start);
-    QVector<bool> visited(static_cast<qsizetype>(currentImage.width()) * currentImage.height(),
-                          false);
-    auto index = [this](int x, int y) {
-        return (static_cast<qsizetype>(y) * static_cast<qsizetype>(currentImage.width())) + x;
-    };
-
-    QQueue<QPoint> queue;
-    queue.enqueue(start);
-    visited[index(start.x(), start.y())] = true;
-
-    while (!queue.isEmpty()) {
-        const QPoint p = queue.dequeue();
-        QColor source = currentImage.pixelColor(p);
-        source.setAlpha(transparentOpacity);
-        currentImage.setPixelColor(p, source);
-
-        const std::array<QPoint, 4> neighbors = {
-            QPoint(p.x() + 1, p.y()),
-            QPoint(p.x() - 1, p.y()),
-            QPoint(p.x(), p.y() + 1),
-            QPoint(p.x(), p.y() - 1),
-        };
-        for (const QPoint &n : neighbors) {
-            if (!currentImage.valid(n)) {
-                continue;
-            }
-
-            const qsizetype i = index(n.x(), n.y());
-            if (visited[i]) {
-                continue;
-            }
-            visited[i] = true;
-
-            if (isTransparentTarget(currentImage.pixelColor(n), targetColor, transparentColorSpec,
-                                    transparentTolerance)) {
-                queue.enqueue(n);
-            }
-        }
-    }
 }
 
 void ImageToolsUnifiedGUI::applyTransparencyAt(const QPoint &point, const QColor &color)
@@ -900,11 +633,9 @@ void ImageToolsUnifiedGUI::applyTransparencyAt(const QPoint &point, const QColor
     }
 
     ui->colorSample->setColor(color);
-    if (onlyContiguousArea) {
-        applyTransparentByFloodFill(point);
-    } else {
-        applyTransparentByColor(color);
-    }
+    currentImage = ImageProcessingService::makeTransparent(
+        currentImage, point, color, transparentColorSpec, transparentTolerance, transparentOpacity,
+        onlyContiguousArea);
 
     refreshPreview();
 }
@@ -926,71 +657,6 @@ void ImageToolsUnifiedGUI::onDivisionModeClicked(QAbstractButton *button)
     }
 }
 
-int ImageToolsUnifiedGUI::countByCellSize(int source, int cell, bool ignoreRemainders)
-{
-    if (source <= 0 || cell <= 0) {
-        return 0;
-    }
-
-    const int base = source / cell;
-    if (ignoreRemainders || (source % cell == 0)) {
-        return base;
-    }
-    return base + 1;
-}
-
-QString ImageToolsUnifiedGUI::outputSuffix() const
-{
-    if (loadedFilePath.isEmpty()) {
-        return QStringLiteral("png");
-    }
-
-    const QFileInfo info(loadedFilePath);
-    const QString suffix = info.suffix();
-    return suffix.isEmpty() ? QStringLiteral("png") : suffix;
-}
-
-bool ImageToolsUnifiedGUI::saveDividedImages(const QString &folderPath) const
-{
-    if (currentImage.isNull() || folderPath.isEmpty()) {
-        return false;
-    }
-
-    const int sourceW = currentImage.width();
-    const int sourceH = currentImage.height();
-    if (sourceW <= 0 || sourceH <= 0) {
-        return false;
-    }
-
-    const DivisionPlan plan =
-        buildDivisionPlan(ui, divisionMode == DivisionMode::DIVISION, sourceW, sourceH);
-
-    if (plan.xCount <= 0 || plan.yCount <= 0) {
-        return false;
-    }
-
-    const QFileInfo info(loadedFilePath);
-    const QString baseName = info.baseName().isEmpty() ? QStringLiteral("image") : info.baseName();
-    const QString suffix = outputSuffix();
-    const QDir dir(folderPath);
-
-    bool result = true;
-    for (int y = 0; y < plan.yCount; y++) {
-        for (int x = 0; x < plan.xCount; x++) {
-            const QRect rect = divisionRect(ui, plan, x, y, sourceW, sourceH);
-            if (rect.isEmpty()) {
-                continue;
-            }
-
-            const QString path =
-                dir.filePath(baseName + QStringLiteral("_%1_%2.").arg(x).arg(y) + suffix);
-            result = result && currentImage.copy(rect).save(path);
-        }
-    }
-
-    return result;
-}
-
 void ImageToolsUnifiedGUI::onSaveDividedButtonClicked()
 {
     if (!hasImage()) {
@@ -1002,7 +668,16 @@ void ImageToolsUnifiedGUI::onSaveDividedButtonClicked()
         return;
     }
 
-    if (!saveDividedImages(folderPath)) {
+    ImageSplitOptions options;
+    options.mode = divisionMode == DivisionMode::DIVISION ? ImageSplitMode::DivisionCount
+                                                          : ImageSplitMode::CellSize;
+    options.horizontalDivisions = ui->hDivValue->value();
+    options.verticalDivisions = ui->vDivValue->value();
+    options.cellWidth = ui->cellWidthValue->value();
+    options.cellHeight = ui->cellHeightValue->value();
+    options.ignoreRemainders = ui->ignoreRemainders->isChecked();
+    if (!ImageProcessingService::saveDividedImages(currentImage, loadedFilePath, folderPath,
+                                                   options)) {
         QMessageBox::critical(this, tr("Save Failed"), tr("Failed to save divided images."));
     }
 }

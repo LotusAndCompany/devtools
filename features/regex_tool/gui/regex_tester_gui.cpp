@@ -1,6 +1,8 @@
 #include "features/regex_tool/gui/regex_tester_gui.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/regex_tool/core/regex_evaluation_service.h"
+#include "features/regex_tool/core/regex_settings_repository.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -12,143 +14,15 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
-#include <QMutexLocker>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QSettings>
 #include <QSplitter>
-#include <QTextStream>
 #include <QToolButton>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
 namespace devtools {
-
-namespace {
-
-/**
- * @brief 正規表現のマッチを収集する（中断要求を随時確認する）
- */
-QVector<MatchResult> collectMatches(const QRegularExpression &re, const QString &text, bool global)
-{
-    QVector<MatchResult> matches;
-    const QStringList capture_group_names = re.namedCaptureGroups();
-
-    if (global) {
-        QRegularExpressionMatchIterator i = re.globalMatch(text);
-        int match_index = 0;
-        while (i.hasNext()) {
-            if (QThread::currentThread()->isInterruptionRequested()) {
-                return matches;
-            }
-            const QRegularExpressionMatch match = i.next();
-            MatchResult res;
-            res.index = match_index++;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
-
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.name = capture_group_names.value(j);
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
-        }
-    } else {
-        const QRegularExpressionMatch match = re.match(text);
-        if (match.hasMatch()) {
-            MatchResult res;
-            res.index = 0;
-            res.offset = match.capturedStart();
-            res.length = match.capturedLength();
-
-            for (int j = 0; j <= match.lastCapturedIndex(); ++j) {
-                CaptureGroup group;
-                group.index = j;
-                group.name = capture_group_names.value(j);
-                group.value = match.captured(j);
-                group.offset = match.capturedStart(j);
-                group.length = match.capturedLength(j);
-                res.groups.append(group);
-            }
-            matches.append(res);
-        }
-    }
-
-    return matches;
-}
-
-} // namespace
-
-// ============================================================================
-// RegexWorker Implementation
-// ============================================================================
-
-RegexWorker::RegexWorker(QObject *parent)
-    : QThread(parent)
-    , m_requestId(0)
-    , m_options(QRegularExpression::NoPatternOption)
-    , m_global(true)
-{}
-
-void RegexWorker::setParams(int requestId, const QString &pattern, const QString &text,
-                            const QString &replacePattern,
-                            QRegularExpression::PatternOptions options, bool global)
-{
-    const QMutexLocker locker(&m_mutex);
-    m_requestId = requestId;
-    m_pattern = pattern;
-    m_text = text;
-    m_replacePattern = replacePattern;
-    m_options = options;
-    m_global = global;
-}
-
-void RegexWorker::run()
-{
-    int requestId;
-    QString pattern;
-    QString text;
-    QString replacePattern;
-    QRegularExpression::PatternOptions options;
-    bool global;
-    {
-        const QMutexLocker locker(&m_mutex);
-        requestId = m_requestId;
-        pattern = m_pattern;
-        text = m_text;
-        replacePattern = m_replacePattern;
-        options = m_options;
-        global = m_global;
-    }
-
-    if (pattern.isEmpty()) {
-        emit finishedMatching(requestId, QVector<MatchResult>(), text, true, QString());
-        return;
-    }
-
-    const QRegularExpression re(pattern, options);
-    if (!re.isValid()) {
-        emit finishedMatching(requestId, QVector<MatchResult>(), text, false, re.errorString());
-        return;
-    }
-
-    const QVector<MatchResult> matches = collectMatches(re, text, global);
-
-    if (isInterruptionRequested()) {
-        return;
-    }
-
-    // Execute replace using custom ECMA-like substitution
-    const QString replacedText = RegexTool::replace(pattern, text, replacePattern, options, global);
-
-    emit finishedMatching(requestId, matches, replacedText, true, QString());
-}
 
 // ============================================================================
 // RegexHighlighter Implementation
@@ -195,8 +69,7 @@ RegexTesterGUI::RegexTesterGUI(QWidget *parent) : GuiTool(parent)
 {
     m_debounceTimer = new QTimer(this);
     m_debounceTimer->setSingleShot(true);
-    m_watchdogTimer = new QTimer(this);
-    m_watchdogTimer->setSingleShot(true);
+    m_evaluationService = new RegexEvaluationService(this);
 
     setupUi();
     m_highlighter = new RegexHighlighter(m_testTextEdit->document());
@@ -209,13 +82,6 @@ RegexTesterGUI::RegexTesterGUI(QWidget *parent) : GuiTool(parent)
 RegexTesterGUI::~RegexTesterGUI()
 {
     saveSettings();
-    if (m_worker != nullptr) {
-        m_worker->disconnect(this);
-        m_worker->requestInterruption();
-        m_worker->wait();
-        delete m_worker;
-        m_worker = nullptr;
-    }
 }
 
 void RegexTesterGUI::setupUi()
@@ -252,6 +118,7 @@ QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 
     // Pattern Edit
     m_patternEdit = new QLineEdit(leftWidget);
+    m_patternEdit->setObjectName(QStringLiteral("regexPattern"));
     m_patternEdit->setPlaceholderText(tr("Regular Expression Pattern"));
     DevTools::Ui::configureCodeLineEdit(m_patternEdit);
     leftLayout->addWidget(m_patternEdit);
@@ -275,6 +142,7 @@ QWidget *RegexTesterGUI::setupLeftPane(QWidget *parent)
 
     // Test Text Edit
     m_testTextEdit = new QPlainTextEdit(leftWidget);
+    m_testTextEdit->setObjectName(QStringLiteral("regexTestText"));
     m_testTextEdit->setPlaceholderText(tr("Enter text to test against..."));
     DevTools::Ui::configureCodeEditor(m_testTextEdit);
     leftLayout->addWidget(m_testTextEdit, 2);
@@ -306,6 +174,7 @@ void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
     auto *const replaceRow = new QHBoxLayout();
     DevTools::Ui::applyInlineLayout(replaceRow);
     m_replacePatternEdit = new QLineEdit(parent);
+    m_replacePatternEdit->setObjectName(QStringLiteral("regexReplacement"));
     m_replacePatternEdit->setPlaceholderText(tr("Replacement String"));
     DevTools::Ui::configureCodeLineEdit(m_replacePatternEdit);
     replaceRow->addWidget(m_replacePatternEdit, 1);
@@ -325,6 +194,7 @@ void RegexTesterGUI::setupReplaceSection(QWidget *parent, QVBoxLayout *layout)
 void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
 {
     m_flagG = new QToolButton(parent);
+    m_flagG->setObjectName(QStringLiteral("regexFlagGlobal"));
     m_flagG->setText("g");
     m_flagG->setCheckable(true);
     m_flagG->setChecked(true);
@@ -333,6 +203,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagG);
 
     m_flagI = new QToolButton(parent);
+    m_flagI->setObjectName(QStringLiteral("regexFlagCaseInsensitive"));
     m_flagI->setText("i");
     m_flagI->setCheckable(true);
     m_flagI->setToolTip(tr("Case Insensitive"));
@@ -340,6 +211,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagI);
 
     m_flagM = new QToolButton(parent);
+    m_flagM->setObjectName(QStringLiteral("regexFlagMultiline"));
     m_flagM->setText("m");
     m_flagM->setCheckable(true);
     m_flagM->setToolTip(tr("Multiline"));
@@ -347,6 +219,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagM);
 
     m_flagS = new QToolButton(parent);
+    m_flagS->setObjectName(QStringLiteral("regexFlagDotMatchesEverything"));
     m_flagS->setText("s");
     m_flagS->setCheckable(true);
     m_flagS->setToolTip(tr("Dot matches all (Singleline)"));
@@ -354,6 +227,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagS);
 
     m_flagU = new QToolButton(parent);
+    m_flagU->setObjectName(QStringLiteral("regexFlagUnicodeProperties"));
     m_flagU->setText("u");
     m_flagU->setCheckable(true);
     m_flagU->setToolTip(tr("Unicode"));
@@ -361,6 +235,7 @@ void RegexTesterGUI::setupFlagButtons(QWidget *parent, QHBoxLayout *layout)
     layout->addWidget(m_flagU);
 
     m_flagX = new QToolButton(parent);
+    m_flagX->setObjectName(QStringLiteral("regexFlagExtendedSyntax"));
     m_flagX->setText("x");
     m_flagX->setCheckable(true);
     m_flagX->setToolTip(tr("Extended (ignore whitespace in pattern)"));
@@ -550,58 +425,46 @@ void RegexTesterGUI::setupConnections()
 
     // Timer connections
     connect(m_debounceTimer, &QTimer::timeout, this, &RegexTesterGUI::updateResults);
-    connect(m_watchdogTimer, &QTimer::timeout, this, &RegexTesterGUI::onWatchdogTimeout);
+    connect(m_evaluationService, &RegexEvaluationService::matchingFinished, this,
+            &RegexTesterGUI::onMatchingFinished);
+    connect(m_evaluationService, &RegexEvaluationService::evaluationTimedOut, this,
+            &RegexTesterGUI::onWatchdogTimeout);
 }
 
 void RegexTesterGUI::loadSettings()
 {
-    const QSettings settings;
-    m_patternEdit->setText(settings.value("RegexTester/pattern", "").toString());
-    m_testTextEdit->setPlainText(settings.value("RegexTester/testText", "").toString());
-    m_replacePatternEdit->setText(settings.value("RegexTester/replacePattern", "").toString());
-
-    m_flagG->setChecked(settings.value("RegexTester/flagG", true).toBool());
-    m_flagI->setChecked(settings.value("RegexTester/flagI", false).toBool());
-    m_flagM->setChecked(settings.value("RegexTester/flagM", false).toBool());
-    m_flagS->setChecked(settings.value("RegexTester/flagS", false).toBool());
-    m_flagU->setChecked(settings.value("RegexTester/flagU", false).toBool());
-    m_flagX->setChecked(settings.value("RegexTester/flagX", false).toBool());
+    const RegexSettings settings = RegexSettingsRepository().read();
+    m_patternEdit->setText(settings.pattern);
+    m_testTextEdit->setPlainText(settings.testText);
+    m_replacePatternEdit->setText(settings.replacePattern);
+    m_flagG->setChecked(settings.global);
+    m_flagI->setChecked(settings.caseInsensitive);
+    m_flagM->setChecked(settings.multiline);
+    m_flagS->setChecked(settings.dotMatchesEverything);
+    m_flagU->setChecked(settings.useUnicodeProperties);
+    m_flagX->setChecked(settings.extendedPatternSyntax);
 }
 
 void RegexTesterGUI::saveSettings()
 {
-    QSettings settings;
-    settings.setValue("RegexTester/pattern", m_patternEdit->text());
-    settings.setValue("RegexTester/testText", m_testTextEdit->toPlainText());
-    settings.setValue("RegexTester/replacePattern", m_replacePatternEdit->text());
-
-    settings.setValue("RegexTester/flagG", m_flagG->isChecked());
-    settings.setValue("RegexTester/flagI", m_flagI->isChecked());
-    settings.setValue("RegexTester/flagM", m_flagM->isChecked());
-    settings.setValue("RegexTester/flagS", m_flagS->isChecked());
-    settings.setValue("RegexTester/flagU", m_flagU->isChecked());
-    settings.setValue("RegexTester/flagX", m_flagX->isChecked());
+    RegexSettings settings;
+    settings.pattern = m_patternEdit->text();
+    settings.testText = m_testTextEdit->toPlainText();
+    settings.replacePattern = m_replacePatternEdit->text();
+    settings.global = m_flagG->isChecked();
+    settings.caseInsensitive = m_flagI->isChecked();
+    settings.multiline = m_flagM->isChecked();
+    settings.dotMatchesEverything = m_flagS->isChecked();
+    settings.useUnicodeProperties = m_flagU->isChecked();
+    settings.extendedPatternSyntax = m_flagX->isChecked();
+    RegexSettingsRepository().save(settings);
 }
 
 QRegularExpression::PatternOptions RegexTesterGUI::currentOptions() const
 {
-    QRegularExpression::PatternOptions options = QRegularExpression::NoPatternOption;
-    if (m_flagI->isChecked()) {
-        options |= QRegularExpression::CaseInsensitiveOption;
-    }
-    if (m_flagM->isChecked()) {
-        options |= QRegularExpression::MultilineOption;
-    }
-    if (m_flagS->isChecked()) {
-        options |= QRegularExpression::DotMatchesEverythingOption;
-    }
-    if (m_flagU->isChecked()) {
-        options |= QRegularExpression::UseUnicodePropertiesOption;
-    }
-    if (m_flagX->isChecked()) {
-        options |= QRegularExpression::ExtendedPatternSyntaxOption;
-    }
-    return options;
+    return RegexTool::patternOptions(m_flagI->isChecked(), m_flagM->isChecked(),
+                                     m_flagS->isChecked(), m_flagU->isChecked(),
+                                     m_flagX->isChecked());
 }
 
 void RegexTesterGUI::triggerUpdate()
@@ -612,47 +475,25 @@ void RegexTesterGUI::triggerUpdate()
 void RegexTesterGUI::updateResults()
 {
     m_debounceTimer->stop();
-    m_watchdogTimer->stop();
-
-    // Abandon the previous worker without blocking the GUI thread. It stops
-    // cooperatively at its next interruption check and is deleted via the
-    // finished signal once it completes.
-    if (m_worker != nullptr) {
-        m_worker->requestInterruption();
-        m_worker = nullptr;
-    }
 
     const QString pattern = m_patternEdit->text();
     const QString text = m_testTextEdit->toPlainText();
     const QString replacePattern = m_replacePatternEdit->text();
     const auto options = currentOptions();
     bool const global = m_flagG->isChecked();
-    const int requestId = ++m_requestId;
-
-    auto *const worker = new RegexWorker;
-    m_worker = worker;
-    connect(worker, &RegexWorker::finishedMatching, this, &RegexTesterGUI::onMatchingFinished);
-    connect(worker, &QThread::finished, this, [this, worker] {
-        if (m_worker == worker) {
-            m_worker = nullptr;
-        }
-        worker->deleteLater();
-    });
-    worker->setParams(requestId, pattern, text, replacePattern, options, global);
-    worker->start();
-    m_watchdogTimer->start(500); // 500ms limit
+    m_evaluationService->evaluate(pattern, text, replacePattern, options, global);
 }
 
 void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult> &matches,
                                         const QString &replacedText, bool isValid,
                                         const QString &errorStr)
 {
-    // Discard stale notifications from abandoned workers.
-    if (requestId != m_requestId) {
+    Q_UNUSED(requestId)
+
+    if (!isValid && errorStr == QStringLiteral("Regular expression match limit exceeded.")) {
+        onWatchdogTimeout(requestId);
         return;
     }
-
-    m_watchdogTimer->stop();
 
     if (!isValid) {
         m_errorLabel->setText(tr("Syntax Error: %1").arg(errorStr));
@@ -673,15 +514,9 @@ void RegexTesterGUI::onMatchingFinished(int requestId, const QVector<MatchResult
     }
 }
 
-void RegexTesterGUI::onWatchdogTimeout()
+void RegexTesterGUI::onWatchdogTimeout(int requestId)
 {
-    m_watchdogTimer->stop();
-
-    // Invalidate queued results even if the worker stopped before this slot ran.
-    ++m_requestId;
-    if (m_worker != nullptr && m_worker->isRunning()) {
-        m_worker->requestInterruption();
-    }
+    Q_UNUSED(requestId)
 
     m_errorLabel->setText(tr("Error: Evaluation timed out (catastrophic backtracking detected)"));
     m_errorLabel->show();
@@ -762,31 +597,9 @@ void RegexTesterGUI::copyMatches()
         return;
     }
 
-    QString result;
-    QTextStream stream(&result);
-    stream << tr("Match Results (Count: %1)").arg(m_lastMatches.size()) << "\n\n";
-
-    for (const auto &match : m_lastMatches) {
-        QString const matchStr = m_testTextEdit->toPlainText().mid(match.offset, match.length);
-        stream << tr("Match %1: \"%2\" [%3, %4]\n")
-                      .arg(match.index + 1)
-                      .arg(matchStr)
-                      .arg(match.offset)
-                      .arg(match.offset + match.length);
-        for (int i = 1; i < match.groups.size(); ++i) {
-            const auto &group = match.groups.at(i);
-            const QString groupIdentifier =
-                group.name.isEmpty() ? QString::number(group.index)
-                                     : QString("%1 (%2)").arg(group.index).arg(group.name);
-            stream << tr("  Group %1: \"%2\" [%3, %4]\n")
-                          .arg(groupIdentifier)
-                          .arg(group.value)
-                          .arg(group.offset)
-                          .arg(group.offset + group.length);
-        }
-        stream << "\n";
-    }
-
+    const QString result = RegexTool::formatMatchesForClipboard(
+        m_lastMatches, m_testTextEdit->toPlainText(), tr("Match Results (Count: %1)"),
+        tr("Match %1: \"%2\" [%3, %4]\n"), tr("  Group %1: \"%2\" [%3, %4]\n"));
     QApplication::clipboard()->setText(result);
 }
 

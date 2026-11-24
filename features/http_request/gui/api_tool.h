@@ -10,8 +10,8 @@ class QGroupBox;
 class QHBoxLayout;
 class QLabel;
 class QLineEdit;
-class QNetworkAccessManager;
-class QNetworkReply;
+class HttpService;
+struct HttpResponse;
 class QPushButton;
 class QStandardItemModel;
 class QTabWidget;
@@ -52,9 +52,9 @@ private slots:
     void handleSendButtonClick();
     /**
      * @brief ネットワークリプライが完了したときの処理
-     * @param reply ネットワークリプライ
+     * @param response HTTP response data
      */
-    void handleNetworkReplyFinished(QNetworkReply *reply);
+    void handleNetworkReplyFinished(const HttpResponse &response);
     /**
      * @brief パラメータからURLを更新する
      */
@@ -92,8 +92,8 @@ private:
     /// オプションとレスポンスを中央で等分するレイアウト
     QHBoxLayout *content_layout{};
 
-    /// ネットワークアクセスマネージャ
-    QNetworkAccessManager *network_manager;
+    /// HTTP request service
+    HttpService *http_service;
     /// 文字列リスト
     QStringList list;
     /// パラメータテーブルのモデル
@@ -104,8 +104,6 @@ private:
     QLabel *status_label{};
     QLabel *username_label{};
     QLabel *password_label{};
-    /// リクエスト開始時刻
-    qint64 request_start_time{};
 
 protected:
     void changeEvent(QEvent *event) override;

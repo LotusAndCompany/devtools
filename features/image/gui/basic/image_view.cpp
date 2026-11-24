@@ -1,13 +1,12 @@
 #include "image_view.h"
 
 #include "features/framework/gui/design_system.h"
+#include "features/image/core/image_processing_service.h"
 
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QEvent>
-#include <QFileInfo>
 #include <QGridLayout>
-#include <QImageReader>
 #include <QLabel>
 #include <QMimeData>
 #include <QScrollArea>
@@ -31,11 +30,7 @@ QString droppedImagePath(const QMimeData *mimeData)
         }
 
         const QString path = url.toLocalFile();
-        if (!QFileInfo(path).isFile()) {
-            continue;
-        }
-
-        if (!QImageReader::imageFormat(path).isEmpty()) {
+        if (ImageProcessingService::isReadableImageFile(path)) {
             return path;
         }
     }

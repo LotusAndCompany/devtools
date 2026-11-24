@@ -2,6 +2,7 @@
 
 target_sources(DevTools_command PRIVATE
     gui/command.h gui/command.cpp
-    gui/command_function.h
-    gui/command_option.h
+    core/command_service.cpp core/command_service.h
+    core/command_function.h
+    core/command_option.h
 )

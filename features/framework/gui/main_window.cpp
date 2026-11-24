@@ -2,6 +2,8 @@
 
 #include "contents_area.h"
 #include "design_system.h"
+#include "features/framework/core/application_settings_service.h"
+#include "features/framework/core/local_file_selection_service.h"
 #include "gui_application.h"
 #include "icon_utils.h"
 #include "menubar/about_devtools_dialog.h"
@@ -12,7 +14,6 @@
 #include <QCloseEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QKeySequence>
@@ -20,10 +21,8 @@
 #include <QMenuBar>
 #include <QMimeData>
 #include <QPushButton>
-#include <QSettings>
 #include <QStyle>
 #include <QTranslator>
-#include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -59,25 +58,11 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "SettingsDialog signals connected successfully";
 
     // Always on topボタンの初期状態を設定から読み込み
-    QSettings settings;
-    bool const alwaysOnTop = settings.value("window/alwaysOnTop", false).toBool();
-    m_windowAlwaysOnTopButton->setChecked(alwaysOnTop);
-
-    // 初回起動時のデフォルト値を書き込む
-    if (!settings.contains("general/showSidemenuOnStartup")) {
-        settings.setValue("general/showSidemenuOnStartup", true);
-    }
-    if (!settings.contains("general/showLastToolOnStartup")) {
-        settings.setValue("general/showLastToolOnStartup", false);
-    }
-
-    bool const showSidebarOnStartup =
-        settings.value("general/showSidemenuOnStartup", true).toBool();
-    setSidemenuHidden(!showSidebarOnStartup);
-    bool const showLastToolOnStartup =
-        settings.value("general/showLastToolOnStartup", false).toBool();
-    if (showLastToolOnStartup) {
-        const int lastToolValue = settings.value("general/lastUsedTool", -1).toInt();
+    const ApplicationSettings settings = ApplicationSettingsService().read();
+    m_windowAlwaysOnTopButton->setChecked(settings.alwaysOnTop);
+    setSidemenuHidden(!settings.showSidemenuOnStartup);
+    if (settings.showLastToolOnStartup) {
+        const int lastToolValue = settings.lastUsedTool;
         if (lastToolValue > Sidemenu::ID_MIN &&
             lastToolValue < static_cast<int>(Sidemenu::ID::MAX)) {
             m_sidemenu->selectItem(static_cast<Sidemenu::ID>(lastToolValue));
@@ -90,15 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     // ウィンドウサイズと位置を保存
-    QSettings settings;
-    if (settings.value("window/rememberSize", true).toBool()) {
-        settings.setValue("window/width", width());
-        settings.setValue("window/height", height());
-    }
-    if (settings.value("window/rememberPosition", true).toBool()) {
-        settings.setValue("window/x", x());
-        settings.setValue("window/y", y());
-    }
+    ApplicationSettingsService().saveWindowGeometry(width(), height(), x(), y());
 }
 
 void MainWindow::setupCentralWidget()
@@ -189,15 +166,7 @@ void MainWindow::retranslateUi()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     // ウィンドウサイズと位置を保存（macOSでは隠すだけなので、ここで保存）
-    QSettings settings;
-    if (settings.value("window/rememberSize", true).toBool()) {
-        settings.setValue("window/width", width());
-        settings.setValue("window/height", height());
-    }
-    if (settings.value("window/rememberPosition", true).toBool()) {
-        settings.setValue("window/x", x());
-        settings.setValue("window/y", y());
-    }
+    ApplicationSettingsService().saveWindowGeometry(width(), height(), x(), y());
 
     event->ignore();
     hide();
@@ -282,35 +251,14 @@ void MainWindow::setSidemenuHidden(bool hide)
     }
 }
 
-bool MainWindow::isSQLiteFilePath(const QString &filePath)
-{
-    QFileInfo const fileInfo(filePath);
-    if (!fileInfo.exists() || !fileInfo.isFile()) {
-        return false;
-    }
-
-    const QString suffix = fileInfo.suffix().toLower();
-    return suffix == "db" || suffix == "sqlite" || suffix == "sqlite3";
-}
-
 QString MainWindow::droppedSQLiteFilePath(const QMimeData *mimeData)
 {
     if (mimeData == nullptr || !mimeData->hasUrls()) {
         return {};
     }
-
-    for (const QUrl &url : mimeData->urls()) {
-        if (!url.isLocalFile()) {
-            continue;
-        }
-
-        const QString filePath = url.toLocalFile();
-        if (isSQLiteFilePath(filePath)) {
-            return filePath;
-        }
-    }
-
-    return {};
+    return LocalFileSelectionService::firstExistingLocalFile(
+        mimeData->urls(),
+        {QStringLiteral("db"), QStringLiteral("sqlite"), QStringLiteral("sqlite3")});
 }
 
 void MainWindow::onSidemenuVisibilityButtonClicked()
@@ -326,8 +274,7 @@ void MainWindow::onWindowAlwaysOnTopButtonToggled(bool checked)
     show();
 
     // 設定に保存
-    QSettings settings;
-    settings.setValue("window/alwaysOnTop", checked);
+    ApplicationSettingsService().saveAlwaysOnTop(checked);
 }
 
 void MainWindow::onLanguageChanged(const QString &languageCode)
@@ -351,6 +298,5 @@ void MainWindow::onLanguageChanged(const QString &languageCode)
 
 void MainWindow::onSidemenuItemSelected(Sidemenu::ID id)
 {
-    QSettings settings;
-    settings.setValue("general/lastUsedTool", static_cast<int>(id));
+    ApplicationSettingsService().saveLastUsedTool(static_cast<int>(id));
 }

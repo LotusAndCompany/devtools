@@ -1,6 +1,7 @@
 #include "settings_dialog.h"
 
 #include "../design_system.h"
+#include "features/framework/core/application_settings_service.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -10,7 +11,6 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-#include <QSettings>
 #include <QShowEvent>
 #include <QTabWidget>
 #include <QVBoxLayout>
@@ -166,10 +166,10 @@ void SettingsDialog::loadSettings()
         language_combo_box->setItemData(1, QStringLiteral("ja_JP"));
     }
 
-    QSettings settings;
+    const ApplicationSettings settings = ApplicationSettingsService().read();
 
     // 言語設定
-    QString const language = settings.value("language", "en").toString();
+    QString const language = settings.language;
     qDebug() << "Loading language setting:" << language;
 
     qDebug() << "Language combo box has" << language_combo_box->count() << "items";
@@ -188,68 +188,49 @@ void SettingsDialog::loadSettings()
     }
 
     // サイドバー設定
-    const QString showSidebarKey = QStringLiteral("general/showSidemenuOnStartup");
-    if (!settings.contains(showSidebarKey)) {
-        settings.setValue(showSidebarKey, true);
-    }
-    bool const showSidebarOnStartup = settings.value(showSidebarKey, true).toBool();
-    show_sidebar_on_startup_check_box->setChecked(showSidebarOnStartup);
-
-    const QString showLastToolKey = QStringLiteral("general/showLastToolOnStartup");
-    if (!settings.contains(showLastToolKey)) {
-        settings.setValue(showLastToolKey, false);
-    }
-    bool const showLastToolOnStartup = settings.value(showLastToolKey, false).toBool();
-    show_last_tool_on_startup_check_box->setChecked(showLastToolOnStartup);
+    show_sidebar_on_startup_check_box->setChecked(settings.showSidemenuOnStartup);
+    show_last_tool_on_startup_check_box->setChecked(settings.showLastToolOnStartup);
 
     // ウィンドウ設定
-    bool alwaysOnTop = false;
+    bool alwaysOnTop = settings.alwaysOnTop;
     if (parentWidget() != nullptr) {
-        alwaysOnTop = ((parentWidget()->windowFlags() & Qt::WindowStaysOnTopHint) != 0U);
-    }
-    if (!alwaysOnTop) {
-        alwaysOnTop = settings.value("window/alwaysOnTop", false).toBool();
+        if ((parentWidget()->windowFlags() & Qt::WindowStaysOnTopHint) != 0U) {
+            alwaysOnTop = true;
+        }
     }
     always_on_top_check_box->setChecked(alwaysOnTop);
 
-    bool const rememberWindowSize = settings.value("window/rememberSize", true).toBool();
-    remember_window_size_check_box->setChecked(rememberWindowSize);
-
-    bool const rememberWindowPosition = settings.value("window/rememberPosition", true).toBool();
-    remember_window_position_check_box->setChecked(rememberWindowPosition);
+    remember_window_size_check_box->setChecked(settings.rememberWindowSize);
+    remember_window_position_check_box->setChecked(settings.rememberWindowPosition);
 
     qDebug() << "SettingsDialog::loadSettings() completed";
 }
 
 void SettingsDialog::saveSettings()
 {
-    QSettings settings;
+    ApplicationSettingsService settings;
+    ApplicationSettings values = settings.read();
 
     // 言語設定
     QString const language = language_combo_box->currentData().toString();
-    QString const currentLanguage = settings.value("language", "en").toString();
+    QString const currentLanguage = values.language;
     qDebug() << "SettingsDialog::saveSettings - Language change:" << currentLanguage << "->"
              << language;
-    settings.setValue("language", language);
+    values.language = language;
     if (language != currentLanguage) {
         qDebug() << "Emitting languageChanged signal for:" << language;
         emit languageChanged(language);
     }
 
     // サイドバー設定
-    const QString showSidebarKey = QStringLiteral("general/showSidemenuOnStartup");
-    bool const showSidebarOnStartup = show_sidebar_on_startup_check_box->isChecked();
-    settings.setValue(showSidebarKey, showSidebarOnStartup);
-
-    const QString showLastToolKey = QStringLiteral("general/showLastToolOnStartup");
-    bool const showLastToolOnStartup = show_last_tool_on_startup_check_box->isChecked();
-    settings.setValue(showLastToolKey, showLastToolOnStartup);
+    values.showSidemenuOnStartup = show_sidebar_on_startup_check_box->isChecked();
+    values.showLastToolOnStartup = show_last_tool_on_startup_check_box->isChecked();
 
     // ウィンドウ設定
     bool const alwaysOnTop = always_on_top_check_box->isChecked();
-    settings.setValue("window/alwaysOnTop", alwaysOnTop);
-    settings.setValue("window/rememberSize", remember_window_size_check_box->isChecked());
-    settings.setValue("window/rememberPosition", remember_window_position_check_box->isChecked());
+    values.alwaysOnTop = alwaysOnTop;
+    values.rememberWindowSize = remember_window_size_check_box->isChecked();
+    values.rememberWindowPosition = remember_window_position_check_box->isChecked();
 
     // Always on topを即座に適用
     if (parentWidget() != nullptr) {
@@ -257,7 +238,7 @@ void SettingsDialog::saveSettings()
         parentWidget()->show();
     }
 
-    settings.sync();
+    settings.savePreferences(values);
     qDebug() << "SettingsDialog::saveSettings completed";
 }
 

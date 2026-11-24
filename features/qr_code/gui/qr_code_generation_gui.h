@@ -2,6 +2,7 @@
 #define QR_CODE_GENERATION_GUI_H
 
 #include "features/framework/gui/gui_tool.h"
+#include "features/qr_code/core/qr_validation.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -80,11 +81,6 @@ private slots:
     void updateGenerateButtonState();
 
 private:
-    /**
-     * @brief QRコードのタイプを定義する列挙体
-     */
-    enum class QRCodeType : uint8_t { Text, Url, Email, Phone, Sms, Wifi, Contact, Calendar, Geo };
-
     /**
      * @brief UIを構築する
      */
@@ -190,6 +186,7 @@ private:
      * @return バリデーション成功時は `true`
      */
     bool validateCurrentType();
+    QVariantMap parameterValues() const;
     /**
      * @brief バリデーションエラーを表示する
      * @param fieldKey フィールドキー
@@ -200,13 +197,6 @@ private:
      * @brief すべてのバリデーションエラーをクリアする
      */
     void clearValidationErrors();
-    /**
-     * @brief 電話番号が有効かどうかを検証する
-     * @param phone 検証する電話番号
-     * @return 有効な場合は `true`
-     */
-    static bool isValidPhoneNumber(const QString &phone);
-
     /// 生成されたQRコード画像を保持
     QImage currentQRImage;
 

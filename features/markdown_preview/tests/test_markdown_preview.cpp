@@ -1,4 +1,4 @@
-#include "features/markdown_preview/core/markdown_preview.h"
+#include "features/markdown_preview/core/markdown_service.h"
 
 #include <QDir>
 #include <QFile>
@@ -16,6 +16,7 @@ private slots:
     static void test_readFile();
     static void test_readFile_notFound();
     static void test_writeFile();
+    static void test_renderHtml();
     static void test_exportHtml();
 };
 
@@ -33,7 +34,7 @@ void TestMarkdownPreview::test_readFile()
         stream << content;
     }
 
-    const std::optional<QString> result = MarkdownPreview::readFile(path);
+    const std::optional<QString> result = MarkdownService::readFile(path);
     QVERIFY(result.has_value());
     QCOMPARE(result.value(), content);
 }
@@ -43,7 +44,7 @@ void TestMarkdownPreview::test_readFile_notFound()
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
 
-    const std::optional<QString> result = MarkdownPreview::readFile(dir.filePath("missing.md"));
+    const std::optional<QString> result = MarkdownService::readFile(dir.filePath("missing.md"));
     QVERIFY(!result.has_value());
 }
 
@@ -55,12 +56,21 @@ void TestMarkdownPreview::test_writeFile()
     const QString path = dir.filePath("out.md");
     const QString content = "- item 1\n- item 2\n";
 
-    QVERIFY(MarkdownPreview::writeFile(path, content));
+    QVERIFY(MarkdownService::writeFile(path, content));
 
     QFile file(path);
     QVERIFY(file.open(QIODevice::ReadOnly | QIODevice::Text));
     QTextStream stream(&file);
     QCOMPARE(stream.readAll(), content);
+}
+
+void TestMarkdownPreview::test_renderHtml()
+{
+    const QString html = MarkdownService::renderHtml("# Heading\n\n**strong** and *emphasis*");
+    QVERIFY(html.contains("<h1"));
+    QVERIFY(html.contains("Heading"));
+    QVERIFY(html.contains("strong"));
+    QVERIFY(html.contains("emphasis"));
 }
 
 void TestMarkdownPreview::test_exportHtml()
@@ -70,7 +80,7 @@ void TestMarkdownPreview::test_exportHtml()
 
     const QString path = dir.filePath("out.html");
 
-    QVERIFY(MarkdownPreview::exportHtml(path, "# hi"));
+    QVERIFY(MarkdownService::exportHtml(path, "# hi"));
 
     QFile file(path);
     QVERIFY(file.open(QIODevice::ReadOnly | QIODevice::Text));

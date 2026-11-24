@@ -45,6 +45,11 @@ struct MatchResult
 class RegexTool
 {
 public:
+    static QRegularExpression::PatternOptions patternOptions(bool caseInsensitive, bool multiline,
+                                                             bool dotMatchesEverything,
+                                                             bool useUnicodeProperties,
+                                                             bool extendedPatternSyntax);
+
     /**
      * @brief 正規表現にマッチするか確認し、結果を返す
      * @param pattern 正規表現パターン
@@ -66,6 +71,19 @@ public:
      */
     static QString replace(const QString &pattern, const QString &text, const QString &replacement,
                            QRegularExpression::PatternOptions options, bool global = true);
+
+    /**
+     * @brief Build the localized plain-text representation used by Copy Matches
+     * @param matches Match results to format
+     * @param text Original input text
+     * @param headerFormat Localized header format with one `%1` placeholder
+     * @param matchFormat Localized match format with `%1` to `%4` placeholders
+     * @param groupFormat Localized capture-group format with `%1` to `%4` placeholders
+     */
+    static QString formatMatchesForClipboard(const QVector<MatchResult> &matches,
+                                             const QString &text, const QString &headerFormat,
+                                             const QString &matchFormat,
+                                             const QString &groupFormat);
 };
 
 } // namespace devtools

@@ -4,7 +4,10 @@ This guide explains how to write and run tests for DevTools.
 
 ## Overview
 
-DevTools uses Google Test (gtest) for unit testing. Tests are organized by module and cover both core logic and GUI components.
+DevTools uses Qt Test. Tests are organized by feature and cover core services,
+processing, and GUI behavior. Test cases are methods on a `QObject` test class;
+`QTEST_GUILESS_MAIN` starts a `QCoreApplication` for tests without widgets, and
+`QTEST_MAIN` starts a `QApplication` for widget tests.
 
 ## Test Structure
 
@@ -46,38 +49,38 @@ ctest --output-on-failure
 ### Basic Test Structure
 
 ```cpp
-#include <gtest/gtest.h>
 #include "features/your_module/core/your_class.h"
 
-namespace devtools {
+#include <QtTest>
 
-// Test fixture for shared setup
-class MyClassTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        // Setup before each test
-        instance_ = std::make_unique<MyClass>();
-    }
-    
-    void TearDown() override {
-        // Cleanup after each test
-    }
-    
-    std::unique_ptr<MyClass> instance_;
+class TestMyClass : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void init();
+    void cleanup();
+    void methodReturnsExpectedValue();
 };
 
-// Test case using fixture
-TEST_F(MyClassTest, MethodReturnsExpectedValue) {
-    EXPECT_EQ(instance_->method(), expected_value);
+void TestMyClass::init()
+{
+    // Set up state before each test method.
 }
 
-// Standalone test (no fixture)
-TEST(MyClassSimpleTest, BasicFunctionality) {
-    MyClass obj;
-    ASSERT_TRUE(obj.isValid());
+void TestMyClass::cleanup()
+{
+    // Release state after each test method when needed.
 }
 
-}  // namespace devtools
+void TestMyClass::methodReturnsExpectedValue()
+{
+    MyClass object;
+    QCOMPARE(object.method(), expected_value);
+}
+
+QTEST_GUILESS_MAIN(TestMyClass)
+#include "test_my_class.moc"
 ```
 
 ### UI Consistency Tests
@@ -109,29 +112,37 @@ the shared helper or adding a screen-specific exception.
 
 ### Test Macros
 
-| Macro | Description |
-|-------|-------------|
-| `EXPECT_EQ(a, b)` | Expect equal (continue on failure) |
-| `EXPECT_NE(a, b)` | Expect not equal |
-| `EXPECT_TRUE(x)` | Expect true |
-| `EXPECT_FALSE(x)` | Expect false |
-| `EXPECT_THROW(stmt, exception)` | Expect exception |
-| `ASSERT_*` | Same as EXPECT but stops on failure |
+| Qt Test macro | Description |
+|---------------|-------------|
+| `QCOMPARE(actual, expected)` | Compare values and report both values on failure |
+| `QVERIFY(condition)` | Check a condition; stop the current test method on failure |
+| `QVERIFY2(condition, message)` | Check a condition with a custom failure message |
+| `QVERIFY_EXCEPTION_THROWN(expression, Exception)` | Check that an expression throws the given exception |
+| `QSKIP(message)` | Skip the current test method |
 
 ### Testing Exceptions
 
 ```cpp
 #include "features/framework/core/exception/invalid_argument_exception.h"
 
-TEST(ValidationTest, ThrowsOnInvalidInput) {
-    MyClass obj;
-    EXPECT_THROW(obj.process(-1), InvalidArgumentException);
+#include <QtTest>
+
+class TestValidation : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void rejectsInvalidInput();
+};
+
+void TestValidation::rejectsInvalidInput()
+{
+    MyClass object;
+    QVERIFY_EXCEPTION_THROWN(object.process(-1), InvalidArgumentException);
 }
 
-TEST(ValidationTest, DoesNotThrowOnValidInput) {
-    MyClass obj;
-    EXPECT_NO_THROW(obj.process(1));
-}
+QTEST_GUILESS_MAIN(TestValidation)
+#include "test_validation.moc"
 ```
 
 ### Testing with Qt Types
@@ -139,19 +150,26 @@ TEST(ValidationTest, DoesNotThrowOnValidInput) {
 ```cpp
 #include <QString>
 #include <QImage>
+#include <QtTest>
 
-TEST(ImageTest, LoadsValidImage) {
-    QImage image("test_image.png");
-    ASSERT_FALSE(image.isNull());
-    EXPECT_EQ(image.width(), 100);
-    EXPECT_EQ(image.height(), 100);
+class TestImage : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void loadsValidImage();
+};
+
+void TestImage::loadsValidImage()
+{
+    const QImage image(100, 50, QImage::Format_ARGB32);
+    QVERIFY(!image.isNull());
+    QCOMPARE(image.width(), 100);
+    QCOMPARE(image.height(), 50);
 }
 
-TEST(StringTest, ProcessesQString) {
-    QString input = "test";
-    QString result = processString(input);
-    EXPECT_EQ(result.toStdString(), "TEST");
-}
+QTEST_GUILESS_MAIN(TestImage)
+#include "test_image.moc"
 ```
 
 ## Test Categories
@@ -162,24 +180,35 @@ Test business logic without GUI dependencies:
 
 ```cpp
 // features/data_conversion/tests/test_json_parser.cpp
-#include <gtest/gtest.h>
 #include "features/data_conversion/core/parser/json_parser.h"
 
-namespace devtools {
+#include <QtTest>
 
-TEST(JsonParserTest, ParsesValidJson) {
+class TestJsonParser : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void parsesValidJson();
+    void rejectsInvalidJson();
+};
+
+void TestJsonParser::parsesValidJson()
+{
     JsonParser parser;
     auto result = parser.parse("{\"key\": \"value\"}");
-    ASSERT_TRUE(result.has_value());
+    QVERIFY(result.has_value());
 }
 
-TEST(JsonParserTest, FailsOnInvalidJson) {
+void TestJsonParser::rejectsInvalidJson()
+{
     JsonParser parser;
     auto result = parser.parse("not json");
-    ASSERT_FALSE(result.has_value());
+    QVERIFY(!result.has_value());
 }
 
-}  // namespace devtools
+QTEST_GUILESS_MAIN(TestJsonParser)
+#include "test_json_parser.moc"
 ```
 
 ### GUI Tests
@@ -188,106 +217,104 @@ Test GUI components (limited without display):
 
 ```cpp
 // features/framework/tests/test_main_window.cpp
-#include <gtest/gtest.h>
-#include <QApplication>
 #include "features/framework/gui/main_window.h"
 
-namespace devtools {
+#include <QtTest>
 
-class MainWindowTest : public ::testing::Test {
-protected:
-    static void SetUpTestSuite() {
-        // QApplication needed for widget tests
-        int argc = 0;
-        app_ = new QApplication(argc, nullptr);
-    }
-    
-    static void TearDownTestSuite() {
-        delete app_;
-    }
-    
-    static QApplication* app_;
+class TestMainWindow : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void canBeCreated();
 };
 
-QApplication* MainWindowTest::app_ = nullptr;
-
-TEST_F(MainWindowTest, CanBeCreated) {
+void TestMainWindow::canBeCreated()
+{
     MainWindow window;
-    EXPECT_NE(window.windowTitle(), QString());
+    QVERIFY(!window.windowTitle().isEmpty());
 }
 
-}  // namespace devtools
+QTEST_MAIN(TestMainWindow)
+#include "test_main_window.moc"
 ```
+
+Set `QT_QPA_PLATFORM=offscreen` when running widget tests in an environment
+without a display.
 
 ## Registering Tests
 
 Add tests to `tests/DevToolsTests.cmake`:
 
 ```cmake
-# Macro definition
-macro(DevTools_add_test test_name)
-    set(options)
-    set(one_value_args)
-    set(multi_value_args SOURCES LIBRARIES)
-    cmake_parse_arguments(TEST "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
-    
-    add_executable(${test_name} ${TEST_SOURCES})
-    target_link_libraries(${test_name} PRIVATE
-        GTest::gtest
-        GTest::gtest_main
-        ${APPLICATION_LINK_MODULES}
-        ${TEST_LIBRARIES}
-    )
-    add_test(NAME ${test_name} COMMAND ${test_name})
-endmacro()
-
-# Register your test
+# A test that uses feature libraries and shared test helpers.
 DevTools_add_test(test_your_module
     SOURCES
     features/your_module/tests/test_your_module.cpp
 )
+
+# A service test compiled without the shared GUI/test library.
+DevTools_add_test(test_your_service CORE_ONLY
+    SOURCES
+    features/your_module/tests/test_your_service.cpp
+    features/your_module/core/your_service.cpp
+)
+
+# Add only the Qt module required by the service implementation, if needed.
+target_link_libraries(test_your_service PRIVATE Qt6::Network)
 ```
+
+`DevTools_add_test` is defined in `tests/DevToolsTests.cmake`. The default
+path links the shared test library and application feature modules. Use
+`CORE_ONLY` for a test that compiles service source files directly without that
+library; the helper then links only Qt Core and Qt Test. Add any other required
+Qt module, such as Qt Gui, Network, or Sql, with `target_link_libraries()` after
+the registration. Include the service implementation source in `SOURCES`.
 
 ## Test Helpers
 
 ### Mock Helper
 
+`tests/mock_helper.h` provides `Test::FunctionMock<Signature>`. It can replace
+a function's behavior and record its call count and arguments:
+
 ```cpp
-// tests/mock_helper.h
-#include <QString>
+#include "tests/mock_helper.h"
 
-namespace devtools::test {
+#include <QtTest>
 
-QString createTempFile(const QString& content);
-void deleteTempFile(const QString& path);
-
-}  // namespace devtools::test
+Test::FunctionMock<int(int)> mock([](int value) { return value + 1; });
+QCOMPARE(mock(2), 3);
+QCOMPARE(mock.count(), size_t(1));
 ```
 
 ### Random Data Generator
 
-```cpp
-// tests/random_data.h
-#include <QString>
-
-namespace devtools::test {
-
-QString randomString(int length);
-QByteArray randomBytes(int size);
-
-}  // namespace devtools::test
-```
-
-Usage:
+`tests/random_data.h` provides `Test::RandomData`. Pass a seed when repeatable
+input is useful:
 
 ```cpp
 #include "tests/random_data.h"
 
-TEST(ProcessorTest, HandlesRandomInput) {
-    QString input = test::randomString(100);
-    MyProcessor processor;
-    EXPECT_NO_THROW(processor.process(input));
+#include <QtTest>
+
+class TestProcessor : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void handlesRandomInput();
+};
+
+void TestProcessor::handlesRandomInput()
+{
+    Test::RandomData random(123);
+    const QString input = random.nextQString(100);
+    QCOMPARE(input.size(), 100);
 }
+
+QTEST_GUILESS_MAIN(TestProcessor)
+#include "test_processor.moc"
 ```
 
 ## Running Tests
@@ -309,14 +336,14 @@ ctest -R test_json_parser
 ./test_json_parser
 ```
 
-### Run with Filters
+### Run Selected Test Methods
 
 ```bash
-# Run tests matching pattern
-./test_your_module --gtest_filter="*Parser*"
+# List test methods in a Qt Test executable
+./test_your_module -functions
 
-# Run single test
-./test_your_module --gtest_filter="JsonParserTest.ParsesValidJson"
+# Run one test method
+./test_your_module parsesValidJson
 ```
 
 ### Verbose Output
@@ -325,8 +352,11 @@ ctest -R test_json_parser
 # CMake verbose
 ctest --output-on-failure
 
-# GTest verbose
-./test_your_module --gtest_output=xml:results.xml
+# Qt Test verbose output
+./test_your_module -v1
+
+# Write a JUnit XML report
+./test_your_module -o results.xml,junitxml
 ```
 
 ## Best Practices
@@ -334,10 +364,16 @@ ctest --output-on-failure
 ### Test Naming
 
 ```cpp
-// Pattern: TestSuite, DescriptiveTestName
-TEST(ImageResizer, ScalesDownLargeImages)
-TEST(ImageResizer, PreservesAspectRatioWhenRequested)
-TEST(ImageResizer, ThrowsOnNegativeDimensions)
+// Use a Test-prefixed QObject class and descriptive test method names.
+class TestImageResizer : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void scalesDownLargeImages();
+    void preservesAspectRatioWhenRequested();
+    void rejectsNegativeDimensions();
+};
 ```
 
 ### Test Organization
@@ -382,8 +418,8 @@ GitHub Actions workflow checks:
 
 ### Qt Tests Crash
 
-1. Ensure QApplication is created
-2. Use test fixture with SetUpTestSuite
+1. Use `QTEST_MAIN` for widget tests and `QTEST_GUILESS_MAIN` for tests without widgets
+2. Set `QT_QPA_PLATFORM=offscreen` when no display is available
 3. Check for missing Qt plugins
 
 ### Flaky Tests

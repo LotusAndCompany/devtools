@@ -161,23 +161,9 @@ private:
 
     void refreshPreview(bool resetScale = false);
     void refreshSizeInputs();
-    void applyResize(const QSize &targetSize);
     [[nodiscard]] bool hasImage() const;
 
-    static double colorDiffSquaredRgb(const QColor &a, const QColor &b);
-    static double colorDiffSquaredHsv(const QColor &a, const QColor &b);
-    static double colorDiffSquaredHsl(const QColor &a, const QColor &b);
-    static double maxColorDiffSquared(QColor::Spec spec);
-    static bool isTransparentTarget(const QColor &source, const QColor &target, QColor::Spec spec,
-                                    double tolerance);
-
-    void applyTransparentByColor(const QColor &targetColor);
-    void applyTransparentByFloodFill(const QPoint &start);
     void applyTransparencyAt(const QPoint &point, const QColor &color);
-
-    [[nodiscard]] bool saveDividedImages(const QString &folderPath) const;
-    static int countByCellSize(int source, int cell, bool ignoreRemainders);
-    [[nodiscard]] QString outputSuffix() const;
 
     void changeEvent(QEvent *event) override;
     void retranslateUi();
