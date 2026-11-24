@@ -144,6 +144,18 @@ DevTools_add_test(test_diff_tool CORE_ONLY
 )
 target_link_libraries(test_diff_tool PRIVATE DevTools_core)
 
+# core/jwt_decoder
+DevTools_add_test(test_jwt_decoder
+    SOURCES
+    features/jwt_decoder/tests/test_jwt_decoder.cpp
+)
+
+# gui/jwt_decoder
+DevTools_add_test(test_jwt_decoder_gui
+    SOURCES
+    features/jwt_decoder/tests/test_jwt_decoder_gui.cpp
+)
+
 # core/iamge
 DevTools_add_test(test_basic_image_io
     SOURCES

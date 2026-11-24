@@ -72,6 +72,7 @@ Sidemenu::Sidemenu(QWidget *parent) : QWidget(parent), buttonGroup(new QButtonGr
     registerItem(ID::QR_CODE_GENERATION);
     registerItem(ID::MARKDOWN_PREVIEW);
     registerItem(ID::DIFF_TOOL);
+    registerItem(ID::JWT_DECODER);
     registerItem(ID::DB_TOOL);
     registerItem(ID::TIMESTAMP_CONVERSION);
     registerItem(ID::REGEX_TESTER);
@@ -129,6 +130,8 @@ QIcon Sidemenu::icon(Sidemenu::ID id)
         return IconUtils::themedIcon(QStringLiteral("regular_expression"));
     case ID::DIFF_TOOL:
         return IconUtils::themedIcon(QStringLiteral("difference"));
+    case ID::JWT_DECODER:
+        return IconUtils::themedIcon(QStringLiteral("key"));
 
     default:
         throw UnderDevelopmentException();

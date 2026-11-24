@@ -10,6 +10,8 @@
 #include "features/framework/gui/welcome_page.h"
 #include "features/http_request/gui/api_tool.h"
 #include "features/image/gui/basic/image_tools_unified_gui.h"
+#include "features/jwt_decoder/core/jwt_decoder.h"
+#include "features/jwt_decoder/gui/jwt_decoder_gui.h"
 #include "features/markdown_preview/core/markdown_preview.h"
 #include "features/markdown_preview/gui/markdown_preview_gui.h"
 #include "features/phrase_generation/gui/phrase_generation.h"
@@ -105,6 +107,9 @@ void ContentsArea::changeContent(Sidemenu::ID id)
         break;
     case Sidemenu::ID::DIFF_TOOL:
         content = new DiffToolGUI(new DiffTool(), this);
+        break;
+    case Sidemenu::ID::JWT_DECODER:
+        content = new JwtDecoderGUI(new JwtDecoder(), this);
         break;
     default:
         // NOTE: signal/slotでは例外を投げるべきではない

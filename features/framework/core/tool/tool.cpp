@@ -90,6 +90,8 @@ Tool::Translatable Tool::translatable(ID id)
             tr("Diff Comparison Tool"),
             tr("Compare two texts and show the differences"),
         };
+    case ID::JWT_DECODER:
+        return Translatable{tr("JWT Decoder"), tr("Decode JSON Web Tokens")};
     default:
         throw UnderDevelopmentException();
     }

@@ -45,6 +45,7 @@ It is not an exhaustive list of glyphs used in examples or tests.
 | Timestamp conversion | `schedule` |
 | Regular expression tester | `regular_expression` |
 | Diff tool | `difference` |
+| JWT decoder | `key` |
 | Open file | `file_open` |
 | Save | `save` |
 | Copy | `content_copy` |

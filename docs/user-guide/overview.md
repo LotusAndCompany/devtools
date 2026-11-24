@@ -15,6 +15,7 @@ DevTools eliminates the need for multiple web services by providing all essentia
 | [Data Conversion](data-conversion.md) | Convert between JSON, YAML, and TOML formats |
 | [API Testing](api-testing.md) | Send HTTP requests and view responses |
 | [Markdown Preview](markdown-preview.md) | Edit Markdown with real-time HTML preview |
+| [JWT Decoder](jwt-decoder.md) | Decode JSON Web Tokens and inspect their claims |
 | [Command Generation](command-execution.md) | Build Git and Docker commands from the GUI |
 | [Phrase Generation](phrase-generation.md) | Create and reuse text templates |
 | [Database Management](database-management.md) | Connect to databases and execute SQL queries |
