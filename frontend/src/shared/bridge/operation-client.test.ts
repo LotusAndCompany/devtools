@@ -44,12 +44,12 @@ describe("native operation effects", () => {
 
     it("resolves when the native operation completes", async () => {
         const { bridge } = createBridge((emit) =>
-            emit({ type: "completed", requestId: request.requestId, result: { output: "{}" } }),
+            emit({ type: "completed", requestId: request.requestId, result: { text: "{}" } }),
         );
 
         await expect(
             Effect.runPromise(runNativeOperation(bridge, request, "Cancelled", onPendingChange)),
-        ).resolves.toEqual({ output: "{}" });
+        ).resolves.toEqual({ text: "{}" });
         expect(pendingChanges).toEqual([
             [request.requestId, true],
             [request.requestId, false],
