@@ -5,13 +5,14 @@
 ## Supported Versions
 
 Security updates are provided for supported DevTools releases. Check the
-[GitHub Releases](https://github.com/LotusAndCompany/devtools/releases) page
-for the current support status.
+[Mac App Store listing](https://apps.apple.com/jp/app/devtools/id6736692957?mt=12)
+for the current public version. GitHub Releases may contain source and release
+notes; they are not an app download source.
 
 **Version Support Policy:**
-- The latest stable release receives security updates.
-- Versions marked as pre-release or draft on GitHub Releases are not supported.
-- Once a new stable release is published, the previous release may receive critical security fixes for 30 days.
+- The latest stable version on the Mac App Store receives security updates.
+- TestFlight builds and GitHub pre-releases or drafts are not supported stable versions.
+- Once a newer stable version appears on the Mac App Store, the previous version may receive critical security fixes for 30 days.
 
 ## Reporting a Vulnerability
 
@@ -60,9 +61,9 @@ Please include the following information in your report:
 
 When using DevTools:
 
-1. **Keep Updated**: Always use the latest version
-2. **Download from Official Sources**: Only download from the official GitHub repository
-3. **Verify Integrity**: Check file hashes when available
+1. **Keep Updated**: Install available updates through the Mac App Store
+2. **Use the Official Source**: Install DevTools from its Mac App Store listing
+3. **Verify Publisher**: Confirm the publisher is LOTUS&COMPANY.INC.
 4. **Report Issues**: If you notice suspicious behavior, please report it
 
 ## Scope
@@ -70,7 +71,8 @@ When using DevTools:
 This security policy applies to:
 
 - The DevTools application
-- Official releases on GitHub
+- The DevTools app distributed through the Mac App Store
+- Source and release notes published on GitHub
 - Documentation and related files in this repository
 
 ## Out of Scope

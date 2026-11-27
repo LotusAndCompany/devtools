@@ -1,0 +1,144 @@
+[
+  {
+    "name": "unicode offsets and numbered replacement",
+    "input": {
+      "pattern": "(猫)",
+      "text": "🍣猫猫",
+      "replacement": "$1!",
+      "global": true,
+      "caseInsensitive": false,
+      "multiline": false,
+      "dotMatchesEverything": false,
+      "useUnicodeProperties": true,
+      "extendedPatternSyntax": false
+    },
+    "expected": {
+      "matches": [
+        {
+          "index": 0,
+          "offset": 2,
+          "length": 1,
+          "value": "猫",
+          "groups": [
+            { "index": 0, "name": "", "value": "猫", "offset": 2, "length": 1 },
+            { "index": 1, "name": "", "value": "猫", "offset": 2, "length": 1 }
+          ]
+        },
+        {
+          "index": 1,
+          "offset": 3,
+          "length": 1,
+          "value": "猫",
+          "groups": [
+            { "index": 0, "name": "", "value": "猫", "offset": 3, "length": 1 },
+            { "index": 1, "name": "", "value": "猫", "offset": 3, "length": 1 }
+          ]
+        }
+      ],
+      "replacedText": "🍣猫!猫!"
+    }
+  },
+  {
+    "name": "named capture and single replacement",
+    "input": {
+      "pattern": "(?<name>猫)",
+      "text": "x猫猫",
+      "replacement": "<$<name>>",
+      "global": false,
+      "caseInsensitive": false,
+      "multiline": false,
+      "dotMatchesEverything": false,
+      "useUnicodeProperties": true,
+      "extendedPatternSyntax": false
+    },
+    "expected": {
+      "matches": [
+        {
+          "index": 0,
+          "offset": 1,
+          "length": 1,
+          "value": "猫",
+          "groups": [
+            { "index": 0, "name": "", "value": "猫", "offset": 1, "length": 1 },
+            { "index": 1, "name": "name", "value": "猫", "offset": 1, "length": 1 }
+          ]
+        }
+      ],
+      "replacedText": "x<猫>猫"
+    }
+  },
+  {
+    "name": "case insensitive multiline extended syntax",
+    "input": {
+      "pattern": "^ foo $",
+      "text": "Foo\nbar\nFOO",
+      "replacement": "[$&]",
+      "global": true,
+      "caseInsensitive": true,
+      "multiline": true,
+      "dotMatchesEverything": false,
+      "useUnicodeProperties": false,
+      "extendedPatternSyntax": true
+    },
+    "expected": {
+      "matches": [
+        {
+          "index": 0,
+          "offset": 0,
+          "length": 3,
+          "value": "Foo",
+          "groups": [{ "index": 0, "name": "", "value": "Foo", "offset": 0, "length": 3 }]
+        },
+        {
+          "index": 1,
+          "offset": 8,
+          "length": 3,
+          "value": "FOO",
+          "groups": [{ "index": 0, "name": "", "value": "FOO", "offset": 8, "length": 3 }]
+        }
+      ],
+      "replacedText": "[Foo]\nbar\n[FOO]"
+    }
+  },
+  {
+    "name": "lookbehind and dot matches line breaks",
+    "input": {
+      "pattern": "(?<=猫)a.b",
+      "text": "猫a\nb",
+      "replacement": "ok",
+      "global": true,
+      "caseInsensitive": false,
+      "multiline": false,
+      "dotMatchesEverything": true,
+      "useUnicodeProperties": true,
+      "extendedPatternSyntax": false
+    },
+    "expected": {
+      "matches": [
+        {
+          "index": 0,
+          "offset": 1,
+          "length": 3,
+          "value": "a\nb",
+          "groups": [{ "index": 0, "name": "", "value": "a\nb", "offset": 1, "length": 3 }]
+        }
+      ],
+      "replacedText": "猫ok"
+    }
+  },
+  {
+    "name": "invalid syntax reports the shared error code",
+    "input": {
+      "pattern": "[",
+      "text": "text",
+      "replacement": "x",
+      "global": true,
+      "caseInsensitive": false,
+      "multiline": false,
+      "dotMatchesEverything": false,
+      "useUnicodeProperties": false,
+      "extendedPatternSyntax": false
+    },
+    "errorCode": "INVALID_INPUT"
+  }
+]

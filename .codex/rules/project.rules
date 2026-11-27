@@ -1,67 +1,29 @@
-# Project-level command execution rules for OpenAI Codex
+# Project-level command rules for Codex
 # Format: Starlark prefix_rule() — see https://developers.openai.com/codex/rules
 
-# --- Build and development (allow) ---
-
 prefix_rule(
-    pattern = ["cmake"],
+    pattern = ["bun"],
     decision = "allow",
-    justification = "CMake configure and build commands",
+    justification = "Tauri frontend development, checks, and packaging",
 )
 
 prefix_rule(
-    pattern = ["make"],
+    pattern = ["cargo"],
     decision = "allow",
-    justification = "Build via make",
-)
-
-prefix_rule(
-    pattern = ["ctest"],
-    decision = "allow",
-    justification = "Run unit tests",
-)
-
-prefix_rule(
-    pattern = ["ninja"],
-    decision = "allow",
-    justification = "Build via ninja",
-)
-
-# --- Code quality (allow) ---
-
-prefix_rule(
-    pattern = ["clang-format"],
-    decision = "allow",
-    justification = "Code formatting",
-)
-
-prefix_rule(
-    pattern = ["clang-tidy"],
-    decision = "allow",
-    justification = "Static analysis",
+    justification = "Rust formatting, linting, tests, and documentation",
 )
 
 prefix_rule(
     pattern = ["pre-commit"],
     decision = "allow",
-    justification = "Run pre-commit hooks",
-)
-
-# --- i18n (allow) ---
-
-prefix_rule(
-    pattern = ["/opt/homebrew/bin/lupdate"],
-    decision = "allow",
-    justification = "Update Qt translation files",
+    justification = "Repository quality hooks",
 )
 
 prefix_rule(
-    pattern = ["/opt/homebrew/bin/lrelease"],
+    pattern = ["python3", "scripts/sync-agent-rules.py"],
     decision = "allow",
-    justification = "Compile Qt translation files",
+    justification = "Regenerate tool-specific adapters from shared agent rules",
 )
-
-# --- Read-only git (allow) ---
 
 prefix_rule(
     pattern = ["git", "status"],
@@ -84,10 +46,8 @@ prefix_rule(
 prefix_rule(
     pattern = ["git", "branch"],
     decision = "allow",
-    justification = "List or manage branches",
+    justification = "View or manage branches",
 )
-
-# --- Git write operations (prompt) ---
 
 prefix_rule(
     pattern = ["git", "add"],
@@ -104,10 +64,8 @@ prefix_rule(
 prefix_rule(
     pattern = ["git", "push"],
     decision = "prompt",
-    justification = "Push to remote — confirm branch and target",
+    justification = "Push branch to a remote",
 )
-
-# --- Destructive operations (forbidden) ---
 
 prefix_rule(
     pattern = ["git", "push", "--force"],
@@ -118,7 +76,7 @@ prefix_rule(
 prefix_rule(
     pattern = ["git", "push", "-f"],
     decision = "forbidden",
-    justification = "Force push shorthand — equally dangerous",
+    justification = "Force push can overwrite remote history",
 )
 
 prefix_rule(

@@ -1,194 +1,59 @@
 # Image Processing
 
-DevTools provides several image processing tools including resize, rotation, division (splitting), and transparency features.
+Use Image Editor to resize, rotate, flip, make a color transparent, or split an
+image.
 
-## Overview
+## Open and save an image
 
-The Image Processing module allows you to perform common image manipulations without needing external software or web services.
+1. Select **Image Editor** from the sidebar.
+2. Click **Open image** or drop an image into the application window.
+3. Review the image in the preview.
+4. Click **Save image** to choose a destination for the current result.
+5. Click **Reset** to restore the original image.
 
-## Accessing the Tools
-
-1. Launch DevTools
-2. Click **Image** in the side menu
-3. Select the desired tool tab: Resize, Rotate, Split, or Transparency
-
-## Supported Formats
-
-### Input Formats
-- PNG
-- JPEG / JPG
-- BMP
-- GIF
-- TIFF
-
-### Output Formats
-- PNG (recommended for transparency)
-- JPEG (for photos without transparency)
+The editor works on one image at a time.
 
 ## Resize
 
-Scale images to specific dimensions.
+The Resize card supports target dimensions and independent horizontal and
+vertical scale percentages.
 
-### How to Use
+1. Enter the target **Width (px)** and **Height (px)**, or set the scale
+   percentages.
+2. Select **Keep aspect ratio** to preserve the image proportions.
+3. Select **Smooth scaling** if you want smoother resampling.
+4. Click **Apply size** or **Apply scale**.
 
-1. Select the **Resize** tab
-2. Click **Open Image** to load an image
-3. Set the target dimensions:
-   - **Width**: Target width in pixels
-   - **Height**: Target height in pixels
-4. Optionally check **Keep Aspect Ratio**
-5. Click **Resize**
-6. Save the result
+## Rotate and flip
 
-### Options
+The Rotate and flip card provides **Rotate left**, **Rotate right**,
+**Flip horizontal**, and **Flip vertical**. The rotation controls turn the
+image in 90-degree steps.
 
-| Option | Description |
-|--------|-------------|
-| Keep Aspect Ratio | Maintains proportions; only one dimension needs to be set |
-| Width | Target width in pixels |
-| Height | Target height in pixels |
+## Make a color transparent
 
-### Tips
+1. Set **Color mode** to RGB, HSL, or HSV.
+2. Set **Tolerance (0–1)** and **Transparency (0–1)**.
+3. Select **Only connected pixels** to limit the change to the connected area.
+4. Click the pixel to change in the image preview.
 
-- Use **Keep Aspect Ratio** to prevent image distortion
-- Enter only width or height when maintaining ratio; the other will calculate automatically
+The change is applied when you click the preview.
 
-## Rotate
+## Split an image
 
-Rotate images by any angle.
+1. Select **Number of parts** or **Cell size** in **Split by**.
+2. For Number of parts, set **Columns** and **Rows**. For Cell size, set
+   **Cell width** and **Cell height**.
+3. Select **Ignore remainder pixels** if the split should omit pixels that do
+   not fill a complete part.
+4. Click **Choose folder and split**, then choose an output folder.
 
-### How to Use
+## Supported formats
 
-1. Select the **Rotate** tab
-2. Click **Open Image** to load an image
-3. Enter the rotation angle in degrees
-4. Select rotation direction (clockwise/counter-clockwise)
-5. Click **Rotate**
-6. Save the result
-
-### Options
-
-| Option | Description |
-|--------|-------------|
-| Angle | Rotation angle in degrees (0-360) |
-| Direction | Clockwise or counter-clockwise |
-
-### Quick Rotations
-
-Common rotation buttons may be available:
-- **90° CW**: Rotate 90 degrees clockwise
-- **90° CCW**: Rotate 90 degrees counter-clockwise
-- **180°**: Flip upside down
-
-### Tips
-
-- Rotating by angles other than 90/180/270 may result in empty corners
-- The canvas may expand to fit the rotated image
-
-## Split (Division)
-
-Split an image into multiple equal parts.
-
-### How to Use
-
-1. Select the **Split** tab
-2. Click **Open Image** to load an image
-3. Set the grid dimensions:
-   - **Columns**: Number of horizontal divisions
-   - **Rows**: Number of vertical divisions
-4. Click **Split**
-5. Save the resulting parts
-
-### Options
-
-| Option | Description |
-|--------|-------------|
-| Columns | Number of horizontal parts (1-10) |
-| Rows | Number of vertical parts (1-10) |
-
-### Output
-
-- Multiple images are generated
-- Files are numbered sequentially (e.g., image_1.png, image_2.png, ...)
-- Order: left-to-right, top-to-bottom
-
-### Use Cases
-
-- Creating sprite sheets
-- Breaking large images into tiles
-- Social media grid posts (3x3 for Instagram)
-
-## Transparency
-
-Make specific colors transparent in an image.
-
-### How to Use
-
-1. Select the **Transparency** tab
-2. Click **Open Image** to load an image
-3. Select the color to make transparent:
-   - Use the **color picker** to select from the image
-   - Or enter a specific color value
-4. Adjust **tolerance** for similar colors
-5. Click **Apply**
-6. Save as PNG (required for transparency)
-
-### Options
-
-| Option | Description |
-|--------|-------------|
-| Target Color | The color to make transparent |
-| Tolerance | How similar colors must be (0 = exact match, higher = more colors) |
-
-### Tips
-
-- Always save as PNG to preserve transparency
-- JPEG does not support transparency
-- Lower tolerance for precise color matching
-- Higher tolerance for gradient edges
-
-### Common Use Cases
-
-- Remove white backgrounds
-- Remove solid color backgrounds
-- Create transparent logos
-
-## Batch Processing
-
-Currently, DevTools processes one image at a time. For batch processing:
-
-1. Process images one by one
-2. Use consistent settings across images
-
-## Image Quality
-
-### Resolution
-- DevTools preserves original resolution where possible
-- Upscaling may reduce quality
-
-### Compression
-- PNG: Lossless compression
-- JPEG: Lossy compression (smaller files, some quality loss)
-
-## Troubleshooting
-
-### Image Not Loading
-
-1. **Check format**: Ensure file is a supported format
-2. **Check file**: File may be corrupted
-3. **Check permissions**: File may be read-protected
-
-### Quality Loss After Processing
-
-1. **Use PNG**: PNG is lossless; JPEG loses quality
-2. **Avoid multiple saves**: Each JPEG save reduces quality
-3. **Work from originals**: Keep original files
-
-### Transparency Not Working
-
-1. **Save as PNG**: JPEG doesn't support transparency
-2. **Check tolerance**: May be too low to capture color variations
-3. **Pick exact color**: Use color picker on the image
+The **Open image** dialog filters PNG, JPEG, BMP, GIF, and WebP files. The
+application also accepts image formats supported by the installed Qt image
+plugins. The save dialog uses the format indicated by the filename extension;
+PNG preserves transparency, while JPEG does not.
 
 ## Related Documentation
 

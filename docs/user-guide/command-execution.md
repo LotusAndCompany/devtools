@@ -11,7 +11,7 @@ text; it does not execute commands.
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Command Generation** in the side menu
+2. Click **Command Generation** in the sidebar
 
 ## Interface
 

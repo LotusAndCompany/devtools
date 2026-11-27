@@ -1,0 +1,86 @@
+[
+  {
+    "name": "rotate-right",
+    "action": "rotate-right",
+    "width": 2,
+    "height": 2,
+    "sourcePixels": [[255, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [255, 255, 0, 255]],
+    "expectedPixels": [[0, 255, 0, 255], [255, 0, 0, 255], [255, 255, 0, 255], [0, 0, 255, 255]]
+  },
+  {
+    "name": "rotate-left",
+    "action": "rotate-left",
+    "width": 2,
+    "height": 2,
+    "sourcePixels": [[255, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [255, 255, 0, 255]],
+    "expectedPixels": [[0, 0, 255, 255], [255, 255, 0, 255], [255, 0, 0, 255], [0, 255, 0, 255]]
+  },
+  {
+    "name": "flip-horizontal",
+    "action": "flip-horizontal",
+    "width": 2,
+    "height": 2,
+    "sourcePixels": [[255, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [255, 255, 0, 255]],
+    "expectedPixels": [[0, 0, 255, 255], [255, 0, 0, 255], [255, 255, 0, 255], [0, 255, 0, 255]]
+  },
+  {
+    "name": "flip-vertical",
+    "action": "flip-vertical",
+    "width": 2,
+    "height": 2,
+    "sourcePixels": [[255, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [255, 255, 0, 255]],
+    "expectedPixels": [[0, 255, 0, 255], [255, 255, 0, 255], [255, 0, 0, 255], [0, 0, 255, 255]]
+  },
+  {
+    "name": "resize-nearest",
+    "action": "resize-size",
+    "width": 2,
+    "height": 2,
+    "outputWidth": 4,
+    "outputHeight": 4,
+    "sourcePixels": [[255, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [255, 255, 0, 255]],
+    "parameters": {"width": 4, "height": 4, "keepAspectRatio": false, "smoothScaling": false},
+    "expectedPixels": [[255, 0, 0, 255], [255, 0, 0, 255], [0, 0, 255, 255], [0, 0, 255, 255], [255, 0, 0, 255], [255, 0, 0, 255], [0, 0, 255, 255], [0, 0, 255, 255], [0, 255, 0, 255], [0, 255, 0, 255], [255, 255, 0, 255], [255, 255, 0, 255], [0, 255, 0, 255], [0, 255, 0, 255], [255, 255, 0, 255], [255, 255, 0, 255]]
+  },
+  {
+    "name": "transparent-rgb-global",
+    "action": "transparent",
+    "width": 4,
+    "height": 1,
+    "sourcePixels": [[255, 0, 0, 255], [250, 0, 0, 255], [0, 0, 255, 255], [255, 0, 0, 255]],
+    "parameters": {"x": 0, "y": 0, "colorMode": "rgb", "tolerance": 0.05, "transparency": 0.5, "contiguousOnly": false},
+    "expectedPixels": [[255, 0, 0, 127], [250, 0, 0, 127], [0, 0, 255, 255], [255, 0, 0, 127]]
+  },
+  {
+    "name": "transparent-hsl-global",
+    "action": "transparent",
+    "width": 4,
+    "height": 1,
+    "sourcePixels": [[255, 0, 0, 255], [250, 0, 0, 255], [0, 0, 255, 255], [255, 0, 0, 255]],
+    "parameters": {"x": 0, "y": 0, "colorMode": "hsl", "tolerance": 0.05, "transparency": 0.5, "contiguousOnly": false},
+    "expectedPixels": [[255, 0, 0, 127], [250, 0, 0, 127], [0, 0, 255, 255], [255, 0, 0, 127]]
+  },
+  {
+    "name": "transparent-hsv-contiguous",
+    "action": "transparent",
+    "width": 4,
+    "height": 1,
+    "sourcePixels": [[255, 0, 0, 255], [250, 0, 0, 255], [0, 0, 255, 255], [255, 0, 0, 255]],
+    "parameters": {"x": 0, "y": 0, "colorMode": "hsv", "tolerance": 0.05, "transparency": 0.75, "contiguousOnly": true},
+    "expectedPixels": [[255, 0, 0, 63], [250, 0, 0, 63], [0, 0, 255, 255], [255, 0, 0, 255]]
+  },
+  {
+    "name": "split-division-remainders",
+    "action": "split",
+    "width": 5,
+    "height": 3,
+    "sourcePixels": [[0, 0, 255, 255], [10, 0, 245, 255], [20, 0, 235, 255], [30, 0, 225, 255], [40, 0, 215, 255], [50, 0, 205, 255], [60, 0, 195, 255], [70, 0, 185, 255], [80, 0, 175, 255], [90, 0, 165, 255], [100, 0, 155, 255], [110, 0, 145, 255], [120, 0, 135, 255], [130, 0, 125, 255], [140, 0, 115, 255]],
+    "parameters": {"mode": "division", "horizontalDivisions": 2, "verticalDivisions": 2, "ignoreRemainders": false},
+    "expectedParts": [
+      {"name": "sample_0_0.png", "width": 2, "height": 1, "pixels": [[0, 0, 255, 255], [10, 0, 245, 255]]},
+      {"name": "sample_1_0.png", "width": 3, "height": 1, "pixels": [[20, 0, 235, 255], [30, 0, 225, 255], [40, 0, 215, 255]]},
+      {"name": "sample_0_1.png", "width": 2, "height": 2, "pixels": [[50, 0, 205, 255], [60, 0, 195, 255], [100, 0, 155, 255], [110, 0, 145, 255]]},
+      {"name": "sample_1_1.png", "width": 3, "height": 2, "pixels": [[70, 0, 185, 255], [80, 0, 175, 255], [90, 0, 165, 255], [120, 0, 135, 255], [130, 0, 125, 255], [140, 0, 115, 255]]}
+    ]
+  }
+]

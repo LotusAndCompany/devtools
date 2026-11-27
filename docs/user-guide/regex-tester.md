@@ -6,21 +6,21 @@ DevTools.
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Regex Tester** in the side menu
+2. Click **Regex Tester** in the sidebar
 
 ## Interface
 
 - **Preset pattern**: Start with a built-in email, URL, IPv4, date, phone, or
   UUID pattern
 - **Regular expression pattern**: Enter the pattern to test
-- **Flags**: Toggle global, case-insensitive, multiline, singleline, Unicode,
-  and extended matching
+- **Flags**: Toggle global, case-insensitive, multiline, dot-matches-newline,
+  Unicode, and extended matching
 - **Test text**: Enter the text to search
 - **Replacement string**: Enter replacement text
 - **Matches**: Review each match and its position; capture groups are included
   when available
 - **Quick Reference**: Browse common regular-expression tokens and
-  double-click a token to insert it into the pattern
+  click a token to insert it into the pattern
 
 ## How to Use
 

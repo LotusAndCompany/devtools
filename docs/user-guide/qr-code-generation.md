@@ -1,4 +1,4 @@
-# QR Code Generation
+# QR Code
 
 Generate QR codes for various types of content including text, URLs, emails, phone numbers, SMS messages, and geographic locations.
 
@@ -9,7 +9,7 @@ The QR Code Generator creates scannable QR codes that can encode different types
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **QR Code Generation** in the side menu
+2. Click **QR Code** in the sidebar
 
 ## QR Code Types
 
@@ -18,7 +18,7 @@ The QR Code Generator creates scannable QR codes that can encode different types
 Generate QR codes containing plain text.
 
 **How to use:**
-1. Select **Text** from the **QR Code Type** selector
+1. Select **Text** from **QR type**
 2. Enter your text in the input field
 3. Click **Generate**
 
@@ -32,7 +32,7 @@ Generate QR codes containing plain text.
 Create QR codes that open websites when scanned.
 
 **How to use:**
-1. Select **URL** from the **QR Code Type** selector
+1. Select **URL** from **QR type**
 2. Enter the full URL (including `https://`)
 3. Click **Generate**
 
@@ -48,7 +48,7 @@ https://github.com/LotusAndCompany/devtools
 Generate QR codes that compose emails when scanned.
 
 **How to use:**
-1. Select **Email** from the **QR Code Type** selector
+1. Select **Email** from **QR type**
 2. Enter the recipient email address
 3. Click **Generate**
 
@@ -67,7 +67,7 @@ mailto:email@example.com
 Create QR codes that initiate phone calls when scanned.
 
 **How to use:**
-1. Select **Phone** from the **QR Code Type** selector
+1. Select **Phone** from **QR type**
 2. Enter the phone number
 3. Click **Generate**
 
@@ -85,7 +85,7 @@ tel:+1234567890
 Generate QR codes that compose SMS messages when scanned.
 
 **How to use:**
-1. Select **SMS** from the **QR Code Type** selector
+1. Select **SMS** from **QR type**
 2. Enter the phone number
 3. Enter the message body
 4. Click **Generate**
@@ -103,9 +103,10 @@ SMSTO:+1234567890:Your message here
 
 ### Wi-Fi
 
-Create a QR code containing a Wi-Fi network name, password, and security
-type. Select **WiFi**, enter the SSID and password, choose **WPA**, **WEP**,
-or **nopass**, and click **Generate**.
+Create a QR code for a wireless network. Select **Wi-Fi**, enter the SSID and
+password if required, choose **WPA**, **WEP**, or **None**, and click
+**Generate**. Select **Hidden network** for a network that does not broadcast
+its name.
 
 ### Contact
 
@@ -123,7 +124,7 @@ the start time.
 Create QR codes that open map applications with a specific location.
 
 **How to use:**
-1. Select **Geo Location** from the **QR Code Type** selector
+1. Select **Location** from **QR type**
 2. Enter latitude and longitude
 3. Click **Generate**
 
@@ -147,11 +148,11 @@ geo:35.6762,139.6503
 
 After generating a QR code:
 
-1. Click **Save Image** below the QR code
+1. Click **Save image** below the QR code
 2. Choose a location and filename
 3. The image is saved as PNG
 
-Use **Copy Image** to copy the generated QR code to the clipboard.
+Use **Copy image** to copy the generated QR code to the clipboard.
 
 ## QR Code Size and Quality
 
@@ -184,7 +185,7 @@ Use **Copy Image** to copy the generated QR code to the clipboard.
 
 ### Wrong Action When Scanned
 
-1. **Verify format**: Check that the correct tab was selected
+1. **Verify type**: Check that the correct option is selected in **QR type**
 2. **Check content**: Ensure no typos in URLs, emails, etc.
 3. **Regenerate**: Create a new QR code
 

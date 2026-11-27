@@ -9,7 +9,7 @@ The Markdown Preview tool helps developers write documentation, README files, an
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **Markdown Preview** in the side menu
+2. Click **Markdown Preview** in the sidebar
 
 ## Interface Overview
 

@@ -1,0 +1,18 @@
+[
+  {
+    "input": { "text": "{\"b\":2,\"a\":{\"enabled\":true},\"items\":[1,null,\"日本語\"]}", "indentation": "2" },
+    "expected": "{\n  \"a\": {\n    \"enabled\": true\n  },\n  \"b\": 2,\n  \"items\": [\n    1,\n    null,\n    \"日本語\"\n  ]\n}\n"
+  },
+  {
+    "input": { "text": "{\"b\":2,\"a\":{\"enabled\":true},\"items\":[1,null,\"日本語\"]}", "indentation": "4" },
+    "expected": "{\n    \"a\": {\n        \"enabled\": true\n    },\n    \"b\": 2,\n    \"items\": [\n        1,\n        null,\n        \"日本語\"\n    ]\n}\n"
+  },
+  {
+    "input": { "text": "{\"b\":2,\"a\":{\"enabled\":true},\"items\":[1,null,\"日本語\"]}", "indentation": "tab" },
+    "expected": "{\n\t\"a\": {\n\t\t\"enabled\": true\n\t},\n\t\"b\": 2,\n\t\"items\": [\n\t\t1,\n\t\tnull,\n\t\t\"日本語\"\n\t]\n}\n"
+  },
+  {
+    "input": { "text": "{\"b\":2,\"a\":{\"enabled\":true},\"items\":[1,null,\"日本語\"]}", "indentation": "minified" },
+    "expected": "{\"a\":{\"enabled\":true},\"b\":2,\"items\":[1,null,\"日本語\"]}"
+  }
+]

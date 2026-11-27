@@ -1,7 +1,12 @@
 # Design Files
 
-UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under `designs/screens/`.
-Some screens are design-only and are not available in the current application yet.
+UI design files (`.pen`, [Pencil](https://pencil.app) format) are stored under
+`designs/screens/`. Most designs correspond to the current React tool screens;
+the Color Converter design is not part of the 11 tools currently in the app.
+Use the [user guide overview](../user-guide/overview.md) as the current tool
+inventory. Design files are visual references; implement screens with the
+shared components and styling conventions in the
+[UI development guide](ui-development.md).
 
 ## File Layout
 
@@ -35,7 +40,11 @@ One file per screen (or per related dialog group). The sidebar and other shared 
 
 ## Reusable Components
 
-Shared UI primitives (buttons, inputs, checkboxes, tabs, radios) are **not** kept inline in each screen file. When you need a primitive while editing, recreate it in-file as needed or extract a shared library file in a follow-up PR.
+Pencil objects are visual shapes, not React components. For the React
+implementation, reuse the primitives in
+`frontend/src/shared/components/ui/` and app-specific components in
+`frontend/src/shared/components/`. Keep screen-specific composition inside its
+feature; only promote a component to shared UI when multiple features use it.
 
 ## Git Handling
 

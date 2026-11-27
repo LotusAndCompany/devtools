@@ -1,0 +1,13 @@
+[
+  {
+    "input": {
+      "sql": "SELECT 9223372036854775807 AS value, '日本語' AS label, NULL AS optional"
+    },
+    "expected": {
+      "columns": ["value", "label", "optional"],
+      "rows": [["9223372036854775807", "日本語", null]],
+      "truncated": false,
+      "affectedRows": 0
+    }
+  }
+]

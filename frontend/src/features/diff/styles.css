@@ -1,0 +1,79 @@
+:where([data-page="diff"]) .diff-table {
+    overflow: auto;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-surface);
+    background: var(--card);
+}
+:where([data-page="diff"]) .diff-table table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+:where([data-page="diff"]) .diff-table th {
+    padding: var(--space-4) var(--space-8);
+    border-bottom: var(--border-width) solid var(--border);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    text-align: left;
+}
+:where([data-page="diff"]) .diff-table th + th,
+:where([data-page="diff"]) .diff-row td + td {
+    border-left: var(--border-width) solid var(--border);
+}
+:where([data-page="diff"]) .diff-row {
+    border-bottom: var(--border-width) solid var(--border);
+}
+:where([data-page="diff"]) .diff-row:last-child {
+    border-bottom: 0;
+}
+:where([data-page="diff"]) .diff-row td {
+    vertical-align: top;
+}
+:where([data-page="diff"]) .diff-row code {
+    display: block;
+    min-height: 27px;
+    padding: var(--space-4) var(--space-8);
+    overflow-wrap: anywhere;
+    font: var(--font-size-caption) / var(--line-height-code) var(--font-family-mono);
+}
+:where([data-page="diff"]) .diff-row .removed {
+    background: var(--diff-removed);
+}
+:where([data-page="diff"]) .diff-row .added {
+    background: var(--diff-added);
+}
+
+:where([data-page="diff"]) .diff-editors {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12);
+}
+
+:where([data-page="diff"]) .diff-editors .code-area {
+    min-height: 220px;
+}
+
+:where([data-page="diff"]) .diff-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+:where([data-page="diff"]) .diff-result-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12);
+    margin-bottom: var(--space-8);
+}
+
+:where([data-page="diff"]) .diff-view-field {
+    flex: 0 0 170px;
+}
+
+@media (max-width: 820px) {
+    :where([data-page="diff"]) .diff-editors {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

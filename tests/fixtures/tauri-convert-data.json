@@ -1,0 +1,66 @@
+[
+  {
+    "input": {
+      "input": "{\"value\":9007199254740993}",
+      "format": "json",
+      "indentation": "minified"
+    },
+    "expected": {"message":"","output":"{\"value\":9007199254740993}"}
+  },
+  {
+    "input": {
+      "input": "date = 1979-05-27T07:32:00Z",
+      "format": "json",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"{\n  \"date\": \"1979-05-27T07:32:00.000+00:00\"\n}\n"}
+  },
+  {
+    "input": {
+      "input": "date: 1979-05-27",
+      "format": "json",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"{\n  \"date\": \"1979-05-27\"\n}\n"}
+  },
+  {
+    "input": {
+      "input": "date: !custom hello",
+      "format": "json",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"{\n  \"date\": \"hello\"\n}\n"}
+  },
+  {
+    "input": {
+      "input": "{name: 日本語}",
+      "format": "json",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"{\n  \"name\": \"日本語\"\n}\n"}
+  },
+  {
+    "input": {
+      "input": "count: 42\nenabled: true\nnothing: null",
+      "format": "json",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"{\n  \"count\": \"42\",\n  \"enabled\": \"true\",\n  \"nothing\": null\n}\n"}
+  },
+  {
+    "input": {
+      "input": "{\"drop\":null,\"items\":[1,null,2],\"keep\":true}",
+      "format": "toml",
+      "indentation": "2"
+    },
+    "expected": {"message":"ignore null value of key: drop\nignore null value in array: items","output":"keep = true\nitems = [\n  1,\n  2,\n]\n"}
+  },
+  {
+    "input": {
+      "input": "{\"enabled\":true,\"items\":[1,2],\"name\":\"日本語\"}",
+      "format": "yaml-block",
+      "indentation": "2"
+    },
+    "expected": {"message":"","output":"enabled: true\nitems:\n  - 1\n  - 2\nname: 日本語\n"}
+  }
+]

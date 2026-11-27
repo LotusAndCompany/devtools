@@ -9,7 +9,7 @@ The API Testing tool allows developers to quickly test REST APIs, debug endpoint
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **HTTP Request** in the side menu
+2. Click **HTTP Request** in the sidebar
 
 ## Interface Overview
 
@@ -17,8 +17,8 @@ The API Testing interface consists of:
 
 1. **Request bar**: Choose the HTTP method, enter the endpoint URL, and send
    the request
-2. **Options**: Configure query parameters, basic authentication, or a request
-   body in the corresponding tabs
+2. **Request options**: Use the Parameters, Authentication, Headers, and Body
+   tabs
 3. **Response area**: View the status, timing, size, and response body
 
 ## Supported HTTP Methods
@@ -28,7 +28,7 @@ The API Testing interface consists of:
 | GET | Retrieve data | No |
 | POST | Create new resource | Yes |
 | PUT | Update/replace resource | Yes |
-| DELETE | Remove resource | Optional |
+| DELETE | Remove resource | No |
 
 ## Making Requests
 
@@ -60,9 +60,8 @@ when sending the request.
 
 ## Query Parameters
 
-Open the **Parameters** tab under **Options** and enter keys, values, and
-descriptions in the table. Query parameters are appended to the URL as they
-are edited.
+Open the **Parameters** tab and enter up to 10 query-parameter rows. The
+parameters are added to the request URL when you click **Send**.
 
 ## Authentication
 

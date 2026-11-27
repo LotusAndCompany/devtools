@@ -1,0 +1,43 @@
+:where([data-page="timestamp"]) .timestamp-groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-12);
+}
+
+:where([data-page="timestamp"]) .timestamp-group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+:where([data-page="timestamp"]) .timestamp-group [data-slot="card-content"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+:where([data-page="timestamp"]) .timestamp-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+:where([data-page="timestamp"]) .timestamp-row [data-slot="field"] {
+    min-width: 0;
+}
+
+:where([data-page="timestamp"]) .timestamp-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+}
+
+@media (max-width: 820px) {
+    :where([data-page="timestamp"]) .timestamp-groups {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

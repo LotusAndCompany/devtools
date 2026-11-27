@@ -9,46 +9,40 @@ The Database Management tool provides a graphical interface for connecting to SQ
 ## Accessing the Tool
 
 1. Launch DevTools
-2. Click **DB Tool** in the side menu
-
-If there is no connection history and no database connection has been made in the current session, the Connection Selector dialog opens automatically.
+2. Click **Database** in the sidebar
 
 ## Interface Overview
 
 The Database Management interface consists of:
 
-1. **Toolbar**: Action buttons for database operations
-   - **Refresh** button: Reload the table list
-   - **DB Connection Settings** button: Open the connection settings dialog
-   - **SQL** button: Add a new SQL query tab
-2. **Tables** panel (left): Displays a list of tables in the connected database
-3. **Query** panel (right): Tabbed area for SQL queries and table views
+1. **Toolbar**: Shows the active connection and provides **Disconnect**,
+   **Refresh**, **Connection settings**, and **New SQL**
+2. **Tables** panel (left): Lists tables in the connected database
+3. **SQL workspace** (right): Holds one or more query tabs, each with an editor
+   and a results table
 
-> **Note:** The Refresh and SQL buttons are disabled until a database connection is established.
+The initial SQL tab is available before connecting. **Execute** and **Refresh**
+remain disabled until a connection is established.
 
 ## Connecting to a Database
 
 ### Using Connection History
 
-When you click **DB Connection Settings**, the Connection Selector dialog opens:
+Click **Connection settings** to open the connection dialog:
 
-1. Select a previously used connection from the **Connection History** list
-2. The connection is established automatically
-3. The dialog closes and tables are loaded
+1. Click **Connect** next to a saved connection in **Recent connections**
+2. The dialog closes after the connection succeeds
+3. The table list appears in the **Tables** panel
 
-You can also:
-- Click the **Delete** button next to a connection to remove it from history
-- Click **New Connection** to create a new connection
-- Click **Close** to dismiss the dialog
+Click **Close** to dismiss the dialog.
 
 ### Creating a New Connection
 
-1. Click **DB Connection Settings** in the toolbar
-2. Click **New Connection** in the Connection Selector
-3. Select the **Database Type** from the dropdown
-4. Fill in the required connection fields (see below)
-5. Click **Connect**
-6. A success message confirms the connection
+1. Click **Connection settings** in the toolbar
+2. Select the **Database type**
+3. Fill in the required connection fields (see below)
+4. Click **Connect**
+5. The dialog closes and the active connection appears in the toolbar
 
 ## Supported Databases
 
@@ -66,7 +60,7 @@ You can also:
 |-------|-------------|----------|
 | Database Name | Path to the `.db`, `.sqlite`, or `.sqlite3` file | Yes |
 
-- Use the **Browse...** button to select a database file via file dialog
+- Use **Choose SQLite file** to select a database file
 - No host, username, or password required
 
 #### MySQL / PostgreSQL
@@ -82,20 +76,19 @@ You can also:
 
 Once connected to a database:
 
-1. The **Tables** panel displays all tables in the database
-2. Click a table name to open it in a new tab
-3. The table data is displayed in a tabular view
-4. Use the **Refresh** button within the tab to reload table data
-5. Use the toolbar **Refresh** button to reload the table list
+1. The **Tables** panel displays the available tables
+2. Click a table name to put a SELECT statement for it in the active SQL editor
+3. Click **Execute** to display the query results below the editor
+4. Use **Refresh** in the toolbar to reload the table list
 
-Tabs are identified by table name only, not by database connection. If you switch to a different database that has a table with the same name, the existing tab will be selected, but its content may still reflect the previous connection.
+Results are limited to the first 1,000 rows.
 
 ## Executing SQL Queries
 
 ### Adding a Query Tab
 
-1. Click the **SQL** button in the toolbar
-2. A new query tab opens (named "Query 1", "Query 2", etc.)
+1. Click **New SQL** in the toolbar
+2. A new SQL tab opens
 
 ### Running a Query
 
@@ -107,7 +100,7 @@ Tabs are identified by table name only, not by database connection. If you switc
 
 - Tabs can be closed by clicking the **×** button on each tab
 - Multiple query tabs can be open simultaneously
-- Table view tabs and query tabs coexist in the same tab area
+- Each tab contains a SQL editor and its query results
 
 ### Example Queries
 
